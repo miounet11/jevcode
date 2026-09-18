@@ -11,14 +11,13 @@ const t = useTranslations(lang);
 const current = Astro.url.pathname;
 
 const navItems = [
-  { href: `/${lang}/docs/`, label: t('nav.docs') },
-  { href: `/${lang}/patterns/`, label: t('nav.patterns') },
-  { href: `/${lang}/ecosystem/`, label: t('nav.ecosystem') },
-  { href: `/${lang}/demos/`, label: t('nav.demos') },
+  { href: `/${lang}/introduction/`, label: t('nav.docs'), match: ['/introduction/', '/quickstart/', '/concepts/', '/primitives/', '/sdk/'] },
+  { href: `/${lang}/patterns/`, label: t('nav.patterns'), match: ['/patterns/'] },
+  { href: `/${lang}/cases/use-case-map/`, label: t('nav.ecosystem'), match: ['/cases/'] },
 ];
 
-function isActive(href: string) {
-  return current === href || current.startsWith(href.replace(/\/$/, '/'));
+function isActive(href: string, match: string[]) {
+  return current === href || match.some((m) => current.includes(m));
 }
 ---
 
@@ -32,7 +31,7 @@ function isActive(href: string) {
 
     <nav class="nav" aria-label="Main">
       {navItems.map((item) => (
-        <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+        <a href={item.href} aria-current={isActive(item.href, item.match) ? 'page' : undefined}>{item.label}</a>
       ))}
     </nav>
 
