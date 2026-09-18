@@ -275,6 +275,29 @@ img {
   flex-wrap: wrap;
 }
 
+/* ---------- 配图 ---------- */
+
+.figure {
+  margin: 28px 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  line-height: 0;
+}
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.figure--hero {
+  margin: 40px 0 0;
+  max-width: 860px;
+}
+.figure--doc {
+  margin: 0 0 32px;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

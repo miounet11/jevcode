@@ -1,0 +1,32 @@
+---
+import type { Figure } from '../data/images';
+import { figureAlt } from '../data/images';
+
+export interface Props {
+  fig: Figure;
+  lang: string;
+  /** 是否优先加载（首屏图片用 true） */
+  priority?: boolean;
+  class?: string;
+}
+
+const { fig, lang, priority = false, class: klass = '' } = Astro.props;
+const alt = figureAlt(fig, lang);
+const loading = priority ? 'eager' : 'lazy';
+const fetchpriority = priority ? 'high' : 'auto';
+---
+
+<figure class={`figure ${klass}`}>
+  <picture>
+    <source srcset={`/${fig.src}.webp`} type="image/webp" />
+    <img
+      src={`/${fig.src}.png`}
+      alt={alt}
+      width={fig.width}
+      height={fig.height}
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchpriority}
+    />
+  </picture>
+</figure>

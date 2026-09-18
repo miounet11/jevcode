@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { languages, useTranslations, type Lang } from '../../i18n/ui';
 import { primitiveCards, patternCards, sectionTitle } from '../../data/site';
+import Figure from '../../components/Figure.astro';
+import { heroFigure } from '../../data/images';
 
 export function getStaticPaths() {
   return (Object.keys(languages) as Lang[]).map((lang) => ({ params: { lang } }));
@@ -22,10 +24,10 @@ const stats = [
 ];
 
 const quickLinks = [
-  { href: `/${lang}/introduction/`, label: lang === 'zh' ? '认识 Jev' : 'What is Jev' },
-  { href: `/${lang}/quickstart/`, label: lang === 'zh' ? '5 分钟上手' : 'Quick start' },
-  { href: `/${lang}/primitives/`, label: lang === 'zh' ? '问题原语' : 'Primitives' },
-  { href: `/${lang}/patterns/`, label: lang === 'zh' ? '架构模式' : 'Patterns' },
+  { href: `/${lang}/introduction/`, label: t('home.link.whatIs') },
+  { href: `/${lang}/quickstart/`, label: t('home.link.quickstart') },
+  { href: `/${lang}/primitives/`, label: t('home.link.primitives') },
+  { href: `/${lang}/patterns/`, label: t('home.link.patterns') },
 ];
 
 const path = `/${lang}/`;
@@ -44,6 +46,7 @@ const path = `/${lang}/`;
         <a class="btn btn--primary" href={`/${lang}/introduction/`}>{t('home.hero.cta')} →</a>
         <a class="btn btn--ghost" href={`/${lang}/patterns/`}>{t('home.hero.cta2')}</a>
       </div>
+      <Figure fig={heroFigure} lang={lang} priority class="figure--hero" />
     </div>
   </section>
 
@@ -109,9 +112,7 @@ const path = `/${lang}/`;
         ))}
       </div>
       <p style="margin-top:26px;color:var(--fg-dim);font-size:14.5px;">
-        {lang === 'zh'
-          ? `当前已收录 ${docsCount} 篇中文文档。`
-          : `${docsCount} documents available in this language.`}
+        {t('home.docCount').replace('{n}', String(docsCount))}
       </p>
     </div>
   </section>
