@@ -547,6 +547,25 @@ img {
   color: var(--fg-dim);
   margin-bottom: 30px;
 }
+/* 机翻来源提示：低调但可见，避免读者把机翻内容当成官方译文 */
+.doc__translated {
+  font-size: 12.5px;
+  color: var(--fg-dim);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent-border);
+  border-radius: 5px;
+  padding: 8px 12px;
+  margin: 0 0 14px;
+}
+.doc__translated::before {
+  content: 'i18n · ';
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
 .tag {
   font-family: var(--font-mono);
   font-size: 11.5px;

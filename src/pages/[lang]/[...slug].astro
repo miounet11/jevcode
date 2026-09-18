@@ -4,7 +4,7 @@ import type { MarkdownHeading } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 import Toc from '../../components/Toc.astro';
-import { languages, useTranslations, type Lang } from '../../i18n/ui';
+import { languages, htmlLangMap, useTranslations, type Lang } from '../../i18n/ui';
 import { sections, sectionTitle } from '../../data/site';
 import Figure from '../../components/Figure.astro';
 import { figureForDoc } from '../../data/images';
@@ -84,6 +84,16 @@ const toHref = (e: (typeof navSource)[number]) => `/${lang}/${norm(e.id)}/`;
 const breadcrumbSection = sectionTitle(entry.data.section, lang);
 const filteredHeadings = (headings as MarkdownHeading[]).filter((h) => h.depth === 2 || h.depth === 3);
 const figure = figureForDoc(norm(id));
+
+// 机翻标注：把 frontmatter 里的 translatedFrom 渲染为可见提示，避免被当成官方译文。
+// 用 BCP-47 码（如 zh-CN）而非语言自称，避免在非中文页面漏出汉字。
+const sourceLangLabel = entry.data.translatedFrom
+  ? (htmlLangMap as Record<string, string>)[entry.data.translatedFrom] ??
+    entry.data.translatedFrom
+  : undefined;
+const translatedNotice = sourceLangLabel
+  ? t('docs.translated').replace('{lang}', sourceLangLabel)
+  : undefined;
 ---
 
 <BaseLayout lang={lang} title={entry.data.title} description={entry.data.description} path={path}>
@@ -97,6 +107,12 @@ const figure = figureForDoc(norm(id));
 
       <h1 class="doc__title">{entry.data.title}</h1>
       <p class="doc__desc">{entry.data.description}</p>
+
+      {translatedNotice && (
+        <p class="doc__translated" role="note">
+          {translatedNotice}
+        </p>
+      )}
 
       {(entry.data.tags.length > 0 || entry.data.source || isFallback) && (
         <div class="doc__meta">

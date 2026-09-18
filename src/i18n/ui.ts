@@ -60,6 +60,7 @@ export const ui = {
     'docs.next': '下一篇',
     'docs.readMore': '阅读全文',
     'docs.source': '内容来源',
+    'docs.translated': '本文由机器翻译自 {lang}，未经人工校对，仅供快速参考。',
     'docs.empty': '该文档的当前语言版本尚未完成，以下为默认语言内容。',
     'lang.switch': '切换语言',
     'footer.legal': '本站为社区维护的技术资料站，与 TypeSafe AI 无隶属关系。',
@@ -112,6 +113,8 @@ export const ui = {
     'docs.next': 'Next',
     'docs.readMore': 'Read more',
     'docs.source': 'Source',
+    'docs.translated':
+      'Machine-translated from {lang}, not proofread. For quick reference only.',
     'docs.empty':
       'This page is not yet available in your language. Showing the default language.',
     'lang.switch': 'Switch language',
@@ -163,6 +166,7 @@ export const ui = {
     'docs.next': '次へ',
     'docs.readMore': '続きを読む',
     'docs.source': 'ソース',
+    'docs.translated': '本文は{lang}からの機械翻訳です。校正は未実施で、参考情報としてのみご利用ください。',
     'docs.empty': 'このページは現在、あなたの言語では利用できません。デフォルトの言語を表示しています。',
     'lang.switch': '言語を切り替える',
     'footer.legal': 'コミュニティで維持管理されている技術リソースです。TypeSafe AIとは関係ありません。',
@@ -213,6 +217,7 @@ export const ui = {
     'docs.next': '다음',
     'docs.readMore': '더 보기',
     'docs.source': '소스',
+    'docs.translated': '이 문서는 {lang}에서 기계 번역되었으며 교정되지 않았습니다. 빠른 참고용으로만 사용하세요.',
     'docs.empty': '이 페이지는 아직 해당 언어로 제공되지 않습니다. 기본 언어로 표시합니다.',
     'lang.switch': '언어 전환',
     'footer.legal': '커뮤니티에서 관리하는 기술 자료입니다. TypeSafe AI와 관련이 없습니다.',
@@ -265,6 +270,8 @@ export const ui = {
     'docs.next': 'Nächste',
     'docs.readMore': 'Mehr lesen',
     'docs.source': 'Quelle',
+    'docs.translated':
+      'Maschinell aus {lang} übersetzt, nicht lektoriert. Nur als Kurzreferenz geeignet.',
     'docs.empty':
       'Diese Seite ist in Ihrer Sprache noch nicht verfügbar. Es wird die Standardsprache angezeigt.',
     'lang.switch': 'Sprache wechseln',
@@ -319,6 +326,8 @@ export const ui = {
     'docs.next': 'Suivant',
     'docs.readMore': 'Lire la suite',
     'docs.source': 'Source',
+    'docs.translated':
+      'Traduit automatiquement depuis le {lang}, non relu. À utiliser comme référence rapide uniquement.',
     'docs.empty':
       'Cette page n\'est pas encore disponible dans votre langue. La langue par défaut est affichée.',
     'lang.switch': 'Changer de langue',
@@ -373,6 +382,8 @@ export const ui = {
     'docs.next': 'Siguiente',
     'docs.readMore': 'Leer más',
     'docs.source': 'Fuente',
+    'docs.translated':
+      'Traducido automáticamente del {lang}, sin revisión. Solo como referencia rápida.',
     'docs.empty':
       'Esta página aún no está disponible en tu idioma. Se muestra el idioma predeterminado.',
     'lang.switch': 'Cambiar idioma',
@@ -426,6 +437,8 @@ export const ui = {
     'docs.next': 'Próximo',
     'docs.readMore': 'Leia mais',
     'docs.source': 'Fonte',
+    'docs.translated':
+      'Traduzido automaticamente do {lang}, sem revisão. Apenas como referência rápida.',
     'docs.empty':
       'Esta página ainda não está disponível no seu idioma. Exibindo o idioma padrão.',
     'lang.switch': 'Alterar idioma',

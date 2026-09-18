@@ -17,6 +17,8 @@ const docs = defineCollection({
     tags: z.array(z.string()).default([]),
     /** 是否为官方文档的改写/聚合 */
     source: z.string().optional(),
+    /** 该篇由哪种语言机器翻译而来，取值形如 'zh'；用于页面上标注，避免被当成官方译文 */
+    translatedFrom: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });
