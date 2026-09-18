@@ -9,3 +9,12 @@ build/
 .idea/
 .vscode/
 *.log
+
+# 本地工具链与运行时产物（含内网地址与凭据，不入公开仓库）
+.pipeline/
+.clavue/worktrees/
+.clavue/runs/
+.clavue/coordination/
+
+# 抓取原文的原始 HTML 与批量 md（已整理为 .research/*.md 扁平版并入库，避免重复 1.4MB）
+.research/official/

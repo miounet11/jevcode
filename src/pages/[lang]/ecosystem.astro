@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import { languages, useTranslations, type Lang } from '../../i18n/ui';
+import { projectsByCategory, projects } from '../../data/ecosystem';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const path = '/ecosystem/';
+const t = useTranslations(lang);
+const groups = projectsByCategory();
+
+const totalStars = projects.reduce((sum, p) => sum + p.stars, 0);
+const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
+
+const copy =
+  lang === 'zh'
+    ? {
+        title: '社区生态',
+        lead: '围绕 Jev 与 TypeSafe System One 模型构建的公开项目。按用途分类，数据采集自 GitHub 公开仓库。',
+        statProjects: '收录项目',
+        statStars: '合计 stars',
+        statCategories: '分类',
+        snapshot: '快照日期 2026-09-18，stars 会随时间变化。',
+        forks: 'forks',
+      }
+    : {
+        title: 'Ecosystem',
+        lead: 'Public projects built around Jev and the TypeSafe System One model, grouped by what they do. Data collected from public GitHub repositories.',
+        statProjects: 'Projects',
+        statStars: 'Combined stars',
+        statCategories: 'Categories',
+        snapshot: 'Snapshot taken 2026-09-18; star counts drift over time.',
+        forks: 'forks',
+      };
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+  <div class="wrap docs-shell">
+    <Sidebar lang={lang} />
+
+    <main class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> / {t('nav.ecosystem')}
+      </p>
+
+      <h1 class="doc__title">{copy.title}</h1>
+      <p class="doc__desc">{copy.lead}</p>
+
+      <div class="stats__grid">
+        <div class="stat">
+          <div class="stat__num">{projects.length}</div>
+          <div class="stat__label">{copy.statProjects}</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">{fmt(totalStars)}</div>
+          <div class="stat__label">{copy.statStars}</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">{groups.length}</div>
+          <div class="stat__label">{copy.statCategories}</div>
+        </div>
+      </div>
+
+      {
+        groups.map(({ category, items }) => (
+          <section class="eco">
+            <div class="section__head">
+              <h2 class="section__title">{category.title[lang]}</h2>
+              <p class="section__lead">{category.lead[lang]}</p>
+            </div>
+            <div class="grid grid--2">
+              {items.map((p) => (
+                <a class="card eco__card" href={p.url} target="_blank" rel="noopener noreferrer">
+                  <div class="eco__head">
+                    <span class="eco__repo">{p.repo}</span>
+                    <span class="eco__stars">★ {fmt(p.stars)}</span>
+                  </div>
+                  <p class="card__desc">{p.desc[lang]}</p>
+                  <div class="eco__meta">
+                    {p.language && <span class="tag">{p.language}</span>}
+                    {p.license && <span class="tag">{p.license}</span>}
+                    <span class="tag">
+                      {copy.forks} {p.forks}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+
+      <p class="eco__snapshot">{copy.snapshot}</p>
+    </main>
+  </div>
+</BaseLayout>

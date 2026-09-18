@@ -42,6 +42,16 @@ const grouped = sections
             </li>
           );
         })}
+        {group.key === 'cases' && (
+          <li>
+            <a
+              href={`/${lang}/ecosystem/`}
+              aria-current={current === `/${lang}/ecosystem/` ? 'page' : undefined}
+            >
+              {lang === 'zh' ? '社区生态项目' : 'Community ecosystem'}
+            </a>
+          </li>
+        )}
       </ul>
     </div>
   ))}

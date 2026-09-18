@@ -847,3 +847,51 @@ img {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   生态页
+   ============================================================ */
+.eco {
+  margin-top: 40px;
+}
+.eco__card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.eco__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+.eco__repo {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fg);
+  word-break: break-all;
+}
+.eco__card:hover .eco__repo {
+  color: var(--accent);
+}
+.eco__stars {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--amber);
+  white-space: nowrap;
+}
+.eco__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.eco__snapshot {
+  margin-top: 44px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--fg-dim);
+}

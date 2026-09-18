@@ -13,7 +13,7 @@ const current = Astro.url.pathname;
 const navItems = [
   { href: `/${lang}/introduction/`, label: t('nav.docs'), match: ['/introduction/', '/quickstart/', '/concepts/', '/primitives/', '/sdk/'] },
   { href: `/${lang}/patterns/`, label: t('nav.patterns'), match: ['/patterns/'] },
-  { href: `/${lang}/cases/use-case-map/`, label: t('nav.ecosystem'), match: ['/cases/'] },
+  { href: `/${lang}/ecosystem/`, label: t('nav.ecosystem'), match: ['/ecosystem/', '/cases/'] },
 ];
 
 function isActive(href: string, match: string[]) {

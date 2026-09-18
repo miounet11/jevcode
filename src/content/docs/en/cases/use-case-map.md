@@ -13,6 +13,8 @@ Find the scenario closest to your business, see which primitives others use and 
 
 Each scenario below gives: **what it solves** → **which primitives** → **real projects**.
 
+> For the **full project index grouped by category** (with star counts and language tags), see [Community ecosystem](/en/ecosystem/).
+
 ## Classification & routing
 
 **Problem**: a request arrives and must be sorted into a category, then dispatched to a handler.
