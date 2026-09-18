@@ -1,4 +1,51 @@
 ---
 import { defaultLang } from '../i18n/ui';
-return Astro.redirect(`/${defaultLang}/`, 302);
+
+// 根路径跳转到默认语言。
+//
+// 注意：站点是 output: 'static'，Astro.redirect() 在静态构建下无法产生真正的
+// HTTP 302，只会生成一个带延迟的 meta refresh 空白页，深色主题下会白屏闪烁。
+// 因此这里手写一个「零延迟 + 深色样式」的兜底页：
+//   - 主站由 nginx 的 `location = /` 直接 302，浏览器不会看到本页
+//   - 其他托管方式（本地预览、静态托管）则由本页立即跳转
+const target = `/${defaultLang}/`;
 ---
+
+<!doctype html>
+<html lang={defaultLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JevCode</title>
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={new URL(target, Astro.site).href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline define:vars={{ target }}>
+      // 优先于 meta refresh，消除任何可见的中间态
+      location.replace(target);
+    </script>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #08090c;
+        color: #9aa3b2;
+        font-family: ui-sans-serif, system-ui, -apple-system, 'PingFang SC',
+          'Microsoft YaHei', sans-serif;
+        font-size: 13px;
+      }
+      a {
+        color: #2dd4bf;
+      }
+    </style>
+  </head>
+  <body>
+    <p>正在进入站点… <a href={target}>如果没有自动跳转，请点击这里</a></p>
+  </body>
+</html>

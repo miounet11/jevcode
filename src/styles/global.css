@@ -137,16 +137,13 @@ img {
 .brand:hover {
   text-decoration: none;
 }
+/* 与 favicon.svg 共用同一份资产：页头品牌与浏览器标签页始终一致 */
 .brand__mark {
   width: 26px;
   height: 26px;
-  border-radius: 7px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--violet) 100%);
-  display: grid;
-  place-items: center;
-  font-size: 13px;
-  font-weight: 800;
-  color: #05130f;
+  display: block;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 7px rgba(45, 212, 191, 0.24));
 }
 .brand__sub {
   color: var(--fg-dim);
