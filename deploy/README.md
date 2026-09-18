@@ -6,10 +6,15 @@
 | :--- | :--- |
 | **服务器** | `23.95.243.52`（RackNerd，Ubuntu 24.04 LTS，10 核 / 7.8G / 144G） |
 | **SSH** | `root@23.95.243.52:22`，已配置密钥登录（`~/.ssh/id_ed25519`） |
-| **域名** | `www.jevcode.ai`（Cloudflare 代理）、`jevcode.ai`（裸域） |
+| **域名** | `www.jevcode.ai`（Cloudflare 代理，已上线）；`jevcode.ai` 裸域待解析 |
 | **站点根** | `/var/www/jevcode/current` |
-| **Web 服务器** | nginx 1.24.0 |
-| **证书** | Let's Encrypt，Cloudflare DNS-01 校验 |
+| **Web 服务器** | nginx 1.24.0（注意：不支持 `http2 on;` 语法，需用 `listen 443 ssl http2`） |
+| **边缘证书** | Cloudflare 自动管理（LE 签发，自动续期） |
+| **源站证书** | `/etc/nginx/ssl/jevcode.{crt,key}`，当前自签，待换 Origin 证书 |
+
+## 上线状态
+
+`https://www.jevcode.ai` 已可访问，44 个页面全部 200。HTTP 自动 301 跳转 HTTPS。
 
 服务器上已有其他站点，本配置用显式 `server_name` 精确匹配，不与之冲突：
 
@@ -40,40 +45,54 @@
 4. 用 DNS-01 校验签发证书
 5. 切换为完整 HTTPS 配置
 
-## 证书签发
+## 证书
 
-因为 `www.jevcode.ai` 走 Cloudflare 代理（橙云），HTTP-01 校验会被 Cloudflare 拦截，所以采用 **DNS-01 校验**。
+站点走 Cloudflare 代理，涉及**两段 TLS**，各自独立：
 
-### 创建 Cloudflare API Token
-
-1. Cloudflare 控制台 → 右上角头像 → **My Profile** → **API Tokens**
-2. **Create Token** → 使用 **Edit zone DNS** 模板
-3. Permissions：`Zone` → `DNS` → `Edit`
-4. Zone Resources：`Include` → `Specific zone` → `jevcode.ai`
-5. 创建并复制 Token（仅显示一次）
-
-### 写入服务器凭证
-
-```bash
-ssh root@23.95.243.52
-mkdir -p ~/.secrets/certbot
-cat > ~/.secrets/certbot/cloudflare.ini <<'INI'
-dns_cloudflare_api_token = <你的_TOKEN>
-INI
-chmod 600 ~/.secrets/certbot/cloudflare.ini
+```
+用户 ←─①─→ Cloudflare ←─②─→ 源站 (23.95.243.52)
+     边缘证书           源站证书
 ```
 
-### 签发
+### ① 边缘证书（用户侧）
+
+由 **Cloudflare 自动管理**，无需任何操作：
+
+- 当前为 Cloudflare Universal SSL，Let's Encrypt 签发，`CN=jevcode.ai`
+- 覆盖 `jevcode.ai` 和 `*.jevcode.ai`
+- 自动续期
+
+### ② 源站证书（Cloudflare 回源侧）
+
+源站证书路径固定为：
+
+```
+/etc/nginx/ssl/jevcode.crt
+/etc/nginx/ssl/jevcode.key
+```
+
+**当前为自签证书**，因此 Cloudflare 的 SSL/TLS 模式必须设为 **Full**（不能是 strict，因为自签证书无法通过校验）。
+
+**推荐升级为 Cloudflare Origin Certificate**，这样可以使用 Full (strict)：
+
+1. Cloudflare 控制台 → 选择 `jevcode.ai` 域名 → **SSL/TLS** → **Origin Server**
+2. **Create Certificate**，Hostnames 填 `www.jevcode.ai` 和 `jevcode.ai`
+3. 有效期选 15 年，创建后复制 **Certificate** 和 **Private Key**
+4. 保存成本地文件，然后运行：
 
 ```bash
-certbot certonly \
-  --dns-cloudflare \
-  --dns-cloudflare-credentials ~/.secrets/certbot/cloudflare.ini \
-  --dns-cloudflare-propagation-seconds 30 \
-  -d www.jevcode.ai -d jevcode.ai \
-  --non-interactive --agree-tos \
-  --email admin@jevcode.ai
+./deploy/install-origin-cert.sh ~/Downloads/jevcode.crt ~/Downloads/jevcode.key
 ```
+
+脚本会校验证书与私钥匹配、备份原自签证书、替换并 reload nginx。
+
+5. 回到 Cloudflare，把 **SSL/TLS → Overview** 的加密模式改为 **Full (strict)**
+
+Origin Certificate 由 Cloudflare 签发，有效期 15 年，无需续期。
+
+### 为何不用 certbot + Let's Encrypt
+
+站点走 Cloudflare 代理（橙云），HTTP-01 校验会被 Cloudflare 拦截，必须用 DNS-01 校验（需 Cloudflare API Token）。同时 LE 证书有效期仅 90 天需持续续期。Origin Certificate 更简单且免维护。
 
 ## 日常部署
 
