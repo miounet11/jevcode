@@ -2,10 +2,19 @@
 
 ## 现状
 
-- **站点**：Astro 7 静态站，44 个页面（zh/en 各 20 篇文档 + 首页 + 404）
-- **目标服务器**：`155.94.154.13`（Ubuntu，已有 nginx/1.24.0）
-- **域名**：`www.jevcode.ai`（Cloudflare 托管 DNS，已解析——CDN 回源指向服务器）
-- **裸域**：`jevcode.ai` 尚未解析
+| 项 | 值 |
+| :--- | :--- |
+| **服务器** | `23.95.243.52`（RackNerd，Ubuntu 24.04 LTS，10 核 / 7.8G / 144G） |
+| **SSH** | `root@23.95.243.52:22`，已配置密钥登录（`~/.ssh/id_ed25519`） |
+| **域名** | `www.jevcode.ai`（Cloudflare 代理）、`jevcode.ai`（裸域） |
+| **站点根** | `/var/www/jevcode/current` |
+| **Web 服务器** | nginx 1.24.0 |
+| **证书** | Let's Encrypt，Cloudflare DNS-01 校验 |
+
+服务器上已有其他站点，本配置用显式 `server_name` 精确匹配，不与之冲突：
+
+- `xiaoshuo` → `:80` default_server（`server_name _`）→ 反代 `127.0.0.1:8788`
+- `manhua-kaifa` → `:18765` → 反代 `127.0.0.1:8765`
 
 ## 部署架构
 
@@ -14,46 +23,56 @@
 ```
 /var/www/jevcode/
 ├── releases/
-│   ├── 20260918-161000/     ← 每次部署一个新目录
-│   ├── 20260918-152000/     ← 保留最近 5 个
+│   ├── 20260918-082229/     ← 每次部署一个新目录
 │   └── placeholder/         ← 首次部署前的占位
 ├── shared/
 │   └── previous_release     ← 上一个版本路径，用于回滚
-└── current -> releases/20260918-161000/   ← nginx 指向这里
+└── current -> releases/20260918-082229/   ← nginx 指向这里
 ```
 
-**为什么这么做**：切换 `current` 软链是原子操作，部署过程中站点不会出现半成品状态；出问题把软链指回上一个版本即可，秒级回滚。
+切换 `current` 软链是原子操作，部署过程中站点不会出现半成品状态；出问题把软链指回上一个版本即可，秒级回滚。
 
-## 首次部署
+## 首次部署（已完成）
 
-### 1. 确认前置条件
+1. 上传构建产物到 `/var/www/jevcode/releases/<时间戳>`
+2. 创建 `current` 软链
+3. 安装 nginx 配置（HTTP-only，等待证书）
+4. 用 DNS-01 校验签发证书
+5. 切换为完整 HTTPS 配置
 
-- DNS：`www.jevcode.ai` 已解析到 `155.94.154.13`
-- 服务器 80 端口可从公网访问（certbot 校验需要）
-- 本机能 SSH 到服务器
+## 证书签发
 
-> **注意 SSH 访问**：服务器只开放了 80/443，22 端口对本机不通。这通常是云厂商安全组或服务器防火墙的白名单限制。需要先把你的出口 IP 加入白名单，或确认 SSH 端口号。
+因为 `www.jevcode.ai` 走 Cloudflare 代理（橙云），HTTP-01 校验会被 Cloudflare 拦截，所以采用 **DNS-01 校验**。
 
-### 2. 上传配置并初始化
+### 创建 Cloudflare API Token
+
+1. Cloudflare 控制台 → 右上角头像 → **My Profile** → **API Tokens**
+2. **Create Token** → 使用 **Edit zone DNS** 模板
+3. Permissions：`Zone` → `DNS` → `Edit`
+4. Zone Resources：`Include` → `Specific zone` → `jevcode.ai`
+5. 创建并复制 Token（仅显示一次）
+
+### 写入服务器凭证
 
 ```bash
-# 上传 nginx 配置
-scp deploy/nginx/jevcode.conf root@155.94.154.13:/tmp/jevcode.conf
-
-# 在服务器上运行初始化（创建目录、装 nginx 配置、签证书）
-ssh root@155.94.154.13 'bash -s' < deploy/bootstrap.sh
+ssh root@23.95.243.52
+mkdir -p ~/.secrets/certbot
+cat > ~/.secrets/certbot/cloudflare.ini <<'INI'
+dns_cloudflare_api_token = <你的_TOKEN>
+INI
+chmod 600 ~/.secrets/certbot/cloudflare.ini
 ```
 
-`bootstrap.sh` 会：
-1. 创建 `/var/www/jevcode/{releases,shared}` 和一个占位版本
-2. 安装 nginx 站点配置（证书不存在时先用 HTTP-only 版本，供 certbot 校验）
-3. 用 certbot 申请 `www.jevcode.ai` + `jevcode.ai` 的证书
-4. 切换到完整 HTTPS 配置，并配置自动续期
-
-### 3. 部署站点
+### 签发
 
 ```bash
-./deploy/deploy.sh
+certbot certonly \
+  --dns-cloudflare \
+  --dns-cloudflare-credentials ~/.secrets/certbot/cloudflare.ini \
+  --dns-cloudflare-propagation-seconds 30 \
+  -d www.jevcode.ai -d jevcode.ai \
+  --non-interactive --agree-tos \
+  --email admin@jevcode.ai
 ```
 
 ## 日常部署
@@ -67,17 +86,17 @@ ssh root@155.94.154.13 'bash -s' < deploy/bootstrap.sh
 ## 回滚
 
 ```bash
-ssh root@155.94.154.13 '
+ssh root@23.95.243.52 '
   ln -sfn $(cat /var/www/jevcode/shared/previous_release) /var/www/jevcode/current.tmp &&
   mv -Tf /var/www/jevcode/current.tmp /var/www/jevcode/current &&
   systemctl reload nginx'
 ```
 
-或者直接指向某个具体版本：
+或指向具体版本：
 
 ```bash
-ssh root@155.94.154.13 '
-  ln -sfn /var/www/jevcode/releases/20260918-152000 /var/www/jevcode/current.tmp &&
+ssh root@23.95.243.52 '
+  ln -sfn /var/www/jevcode/releases/20260918-082229 /var/www/jevcode/current.tmp &&
   mv -Tf /var/www/jevcode/current.tmp /var/www/jevcode/current &&
   systemctl reload nginx'
 ```
@@ -88,19 +107,30 @@ ssh root@155.94.154.13 '
 
 | 变量 | 默认值 | 说明 |
 | :--- | :--- | :--- |
-| `JEVCODE_SSH_HOST` | `root@155.94.154.13` | SSH 目标 |
+| `JEVCODE_SSH_HOST` | `root@23.95.243.52` | SSH 目标 |
 | `JEVCODE_SSH_PORT` | `22` | SSH 端口 |
 | `JEVCODE_SSH_KEY` | `~/.ssh/id_ed25519` | 私钥路径 |
 | `JEVCODE_REMOTE_ROOT` | `/var/www/jevcode` | 服务器上的站点根目录 |
 
-## 注意事项
+## Cloudflare 注意事项
 
-**Cloudflare 代理。** `www.jevcode.ai` 走 Cloudflare，这意味着：
-- 源站证书只需对 Cloudflare 有效，certbot 签 Let's Encrypt 即可
-- Cloudflare 侧的 SSL 模式建议设为 **Full (strict)**，避免回源明文
-- 站点更新后可能需要在 Cloudflare 控制台清除缓存，否则 HTML 更新不立即生效
-- 如果你希望 certbot 的 HTTP 校验通过，需要确保 Cloudflare 对 `/.well-known/acme-challenge/` 不拦截（默认放行）
+**回源地址。** `www.jevcode.ai` 的 A 记录必须指向 `23.95.243.52`。若仍指向旧服务器会出现 **521 源站不可达**。
 
-**裸域 `jevcode.ai` 尚未解析。** 如果要启用裸域跳转到 www，需要先在 Cloudflare 添加 A 记录指向 `155.94.154.13`（或 CNAME 到 www）。
+**SSL 模式。** 建议设为 **Full (strict)**。源站使用 Let's Encrypt 有效证书，满足 strict 要求。
 
-**certbot 邮箱。** `bootstrap.sh` 里用的是 `admin@jevcode.ai` 占位，首次运行前请改成你的真实邮箱。
+**缓存。** 站点更新后如遇 HTML 未更新，在 Cloudflare 控制台清除缓存，或使用开发模式。nginx 已对 HTML 设置 `must-revalidate`，但 Cloudflare 边缘仍可能缓存。
+
+**DNS-01 不受代理影响。** DNS 校验写入 TXT 记录，因此即使橙云开启也能正常签发。
+
+**裸域 `jevcode.ai`。** 需要单独添加 A 记录指向 `23.95.243.52`，否则裸域跳转 www 的配置不会生效。
+
+## 安全建议
+
+- 服务器 root 密码已在对话中明文出现，建议尽快改密：`passwd root`
+- 考虑禁用密码登录，仅保留密钥（确认密钥可用后再操作）：
+  ```
+  # /etc/ssh/sshd_config
+  PasswordAuthentication no
+  PermitRootLogin prohibit-password
+  ```
+  然后 `systemctl restart ssh`

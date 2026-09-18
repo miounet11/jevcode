@@ -16,7 +16,7 @@
 set -euo pipefail
 
 # ---------- 配置 ----------
-SSH_HOST="${JEVCODE_SSH_HOST:-root@155.94.154.13}"
+SSH_HOST="${JEVCODE_SSH_HOST:-root@23.95.243.52}"
 SSH_PORT="${JEVCODE_SSH_PORT:-22}"
 SSH_KEY="${JEVCODE_SSH_KEY:-$HOME/.ssh/id_ed25519}"
 REMOTE_ROOT="${JEVCODE_REMOTE_ROOT:-/var/www/jevcode}"
