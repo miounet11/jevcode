@@ -19,25 +19,23 @@ const year = new Date().getFullYear();
       </div>
 
       <div class="footer__col">
-        <h4>{lang === 'zh' ? '官方资源' : 'Official'}</h4>
+        <h4>{t('footer.official')}</h4>
         <ul>
           <li><a href={site.official} rel="noopener" target="_blank">typesafe.ai</a></li>
           <li><a href={site.docs} rel="noopener" target="_blank">docs.typesafe.ai</a></li>
           <li>
-            <a href={site.repo} rel="noopener" target="_blank">
-              {lang === 'zh' ? '生态项目清单' : 'Ecosystem list'}
-            </a>
+            <a href={`/${lang}/ecosystem/`}>{t('footer.ecosystemList')}</a>
           </li>
         </ul>
       </div>
 
       <div class="footer__col">
-        <h4>{lang === 'zh' ? '本站' : 'This site'}</h4>
+        <h4>{t('footer.thisSite')}</h4>
         <ul>
           <li><a href={`/${lang}/introduction/`}>{t('nav.docs')}</a></li>
           <li><a href={`/${lang}/patterns/`}>{t('nav.patterns')}</a></li>
           <li><a href={`/${lang}/cases/use-case-map/`}>{t('nav.ecosystem')}</a></li>
-          <li><a href={`/${lang}/sdk/`}>{lang === 'zh' ? 'SDK 集成' : 'SDKs'}</a></li>
+          <li><a href={`/${lang}/sdk/`}>{t('footer.sdks')}</a></li>
         </ul>
       </div>
     </div>

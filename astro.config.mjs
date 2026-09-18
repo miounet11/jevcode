@@ -13,13 +13,19 @@ export default defineConfig({
 
   i18n: {
     defaultLocale: 'zh',
-    locales: ['zh', 'en'],
+    locales: ['zh', 'en', 'ja', 'ko', 'de', 'fr', 'es', 'pt'],
     routing: {
       prefixDefaultLocale: true,
       redirectToDefaultLocale: false,
     },
     fallback: {
       en: 'zh',
+      ja: 'en',
+      ko: 'en',
+      de: 'en',
+      fr: 'en',
+      es: 'en',
+      pt: 'en',
     },
   },
 
@@ -38,6 +44,12 @@ export default defineConfig({
         locales: {
           zh: 'zh-CN',
           en: 'en',
+          ja: 'ja',
+          ko: 'ko',
+          de: 'de',
+          fr: 'fr',
+          es: 'es',
+          pt: 'pt',
         },
       },
     }),

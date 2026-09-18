@@ -1,5 +1,5 @@
 ---
-import { languages, useTranslations, switchLangPath, type Lang } from '../i18n/ui';
+import { languages, useTranslations, switchLangPath, htmlLangMap, type Lang } from '../i18n/ui';
 
 export interface Props {
   lang: Lang;
@@ -26,7 +26,7 @@ function isActive(href: string, match: string[]) {
     <a href={`/${lang}/`} class="brand">
       <span class="brand__mark">J</span>
       JevCode
-      <span class="brand__sub">Jev 技术解决方案</span>
+      <span class="brand__sub">{t('site.tagline')}</span>
     </a>
 
     <nav class="nav" aria-label="Main">
@@ -39,7 +39,7 @@ function isActive(href: string, match: string[]) {
       {(Object.keys(languages) as Lang[]).map((l) => (
         <a
           href={switchLangPath(current, l)}
-          hreflang={l === 'zh' ? 'zh-CN' : 'en'}
+          hreflang={htmlLangMap[l]}
           aria-current={l === lang ? 'true' : undefined}
           title={languages[l].label}
         >

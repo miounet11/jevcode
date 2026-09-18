@@ -1,13 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import { sectionTitle, sections } from '../data/site';
-import type { Lang } from '../i18n/ui';
+import { useTranslations, type Lang } from '../i18n/ui';
 
 export interface Props {
   lang: Lang;
   currentId?: string;
 }
 const { lang, currentId } = Astro.props;
+const t = useTranslations(lang);
 const current = Astro.url.pathname;
 
 const all = await getCollection('docs', ({ data }) => !data.draft);
@@ -48,7 +49,7 @@ const grouped = sections
               href={`/${lang}/ecosystem/`}
               aria-current={current === `/${lang}/ecosystem/` ? 'page' : undefined}
             >
-              {lang === 'zh' ? '社区生态项目' : 'Community ecosystem'}
+              {t('sidebar.community')}
             </a>
           </li>
         )}
