@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { defaultLang } from '../i18n/ui';
+
+const lang = defaultLang;
+const path = '/404/';
+
+const links = [
+  { href: `/${lang}/`, label: '返回首页' },
+  { href: `/${lang}/docs/`, label: '文档' },
+  { href: `/${lang}/primitives/`, label: '问题原语' },
+  { href: `/${lang}/patterns/`, label: '架构模式' },
+];
+---
+
+<BaseLayout lang={lang} title="页面不存在 / Page not found" path={path}>
+  <section class="section" style="min-height:62vh;display:grid;place-items:center;">
+    <div class="wrap" style="text-align:center;max-width:640px;">
+      <p class="eyebrow" style="margin-inline:auto;">404</p>
+      <h1 style="font-size:clamp(28px,4vw,42px);letter-spacing:-0.03em;margin:22px 0 14px;">
+        页面不存在
+      </h1>
+      <p style="color:var(--fg-muted);font-size:17px;margin:0 0 32px;">
+        这个地址没有对应内容。Page not found — this address has no content.
+      </p>
+      <div class="cta-row" style="justify-content:center;flex-wrap:wrap;">
+        {links.map((l) => (
+          <a class="btn btn--ghost" href={l.href}>{l.label}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
