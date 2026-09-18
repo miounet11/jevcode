@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, useTranslations, type Lang } from '../../i18n/ui';
+import { primitiveCards, patternCards, sectionTitle } from '../../data/site';
+
+export function getStaticPaths() {
+  return (Object.keys(languages) as Lang[]).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+
+const all = await getCollection('docs', ({ data }) => !data.draft);
+const docsCount = all.filter((e) => e.id.startsWith(`${lang}/`)).length || all.length;
+
+const stats = [
+  { num: '2+', label: t('home.stats.models') },
+  { num: '3', label: t('home.stats.primitives') },
+  { num: '4+', label: t('home.stats.patterns') },
+  { num: '20+', label: t('home.stats.cases') },
+];
+
+const quickLinks = [
+  { href: `/${lang}/introduction/`, label: lang === 'zh' ? '认识 Jev' : 'What is Jev' },
+  { href: `/${lang}/quickstart/`, label: lang === 'zh' ? '5 分钟上手' : 'Quick start' },
+  { href: `/${lang}/primitives/`, label: lang === 'zh' ? '问题原语' : 'Primitives' },
+  { href: `/${lang}/patterns/`, label: lang === 'zh' ? '架构模式' : 'Patterns' },
+];
+
+const path = `/${lang}/`;
+---
+
+<BaseLayout lang={lang} title={t('site.name')} path={path}>
+  <section class="hero">
+    <div class="wrap hero__inner">
+      <p class="eyebrow">
+        <span class="eyebrow__dot"></span>
+        {t('home.hero.eyebrow')}
+      </p>
+      <h1>{t('home.hero.title')}</h1>
+      <p class="hero__lead">{t('home.hero.lead')}</p>
+      <div class="cta-row">
+        <a class="btn btn--primary" href={`/${lang}/introduction/`}>{t('home.hero.cta')} →</a>
+        <a class="btn btn--ghost" href={`/${lang}/patterns/`}>{t('home.hero.cta2')}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="wrap">
+      <div class="stats__grid">
+        {stats.map((s) => (
+          <div class="stat">
+            <div class="stat__num">{s.num}</div>
+            <div class="stat__label">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 class="section__title">{t('home.section.primitives.title')}</h2>
+        <p class="section__lead">{t('home.section.primitives.lead')}</p>
+      </div>
+      <div class="grid grid--3">
+        {primitiveCards.map((p) => (
+          <a class="card" href={`/${lang}/primitives/${p.slug}/`}>
+            <span class="card__badge">{p.label}</span>
+            <h3 class="card__title">{p.tagline[lang]}</h3>
+            <p class="card__desc">{p.desc[lang]}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 class="section__title">{t('home.section.patterns.title')}</h2>
+        <p class="section__lead">{t('home.section.patterns.lead')}</p>
+      </div>
+      <div class="grid grid--2">
+        {patternCards.map((p) => (
+          <a class="card" href={`/${lang}/patterns/${p.slug}/`}>
+            <h3 class="card__title">{p.title[lang]}</h3>
+            <p class="card__desc">{p.desc[lang]}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 class="section__title">{t('home.section.ecosystem.title')}</h2>
+        <p class="section__lead">{t('home.section.ecosystem.lead')}</p>
+      </div>
+      <div class="grid grid--4">
+        {quickLinks.map((q) => (
+          <a class="card" href={q.href}>
+            <h3 class="card__title" style="margin:0">{q.label}</h3>
+          </a>
+        ))}
+      </div>
+      <p style="margin-top:26px;color:var(--fg-dim);font-size:14.5px;">
+        {lang === 'zh'
+          ? `当前已收录 ${docsCount} 篇中文文档。`
+          : `${docsCount} documents available in this language.`}
+      </p>
+    </div>
+  </section>
+</BaseLayout>

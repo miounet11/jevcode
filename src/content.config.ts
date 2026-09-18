@@ -1,0 +1,24 @@
+import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
+
+/**
+ * 文档集合。
+ * 文件位于 src/content/docs/<lang>/<slug>.md，id 形如 `zh/primitives/choice`。
+ * 语言从 id 的第一段解析。
+ */
+const docs = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/docs' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    /** 侧边栏分组 key，对应 src/data/site.ts 中的 section */
+    section: z.string(),
+    order: z.number().default(100),
+    tags: z.array(z.string()).default([]),
+    /** 是否为官方文档的改写/聚合 */
+    source: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { docs };

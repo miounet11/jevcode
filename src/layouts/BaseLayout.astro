@@ -1,0 +1,61 @@
+---
+import { languages, useTranslations, defaultLang, type Lang } from '../i18n/ui';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+export interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  /** 用于 hreflang 与 canonical */
+  path: string;
+  /** 是否输出 docs 双栏布局（由页面自行放置内容） */
+  wide?: boolean;
+}
+
+const { lang, title, description, path, wide = false } = Astro.props;
+const t = useTranslations(lang);
+const siteName = t('site.name');
+const fullTitle = title === siteName ? `${siteName} — ${t('site.tagline')}` : `${title} | ${siteName}`;
+const desc = description ?? t('site.description');
+
+const canonical = new URL(path, Astro.site).href;
+const altPaths: Record<string, string> = {};
+for (const l of Object.keys(languages) as Lang[]) {
+  altPaths[l] = new URL(`/${l}${path.replace(/^\/(zh|en)/, '')}`, Astro.site).href;
+}
+
+const htmlLang = lang === 'zh' ? 'zh-CN' : 'en';
+---
+
+<!doctype html>
+<html lang={htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    {Object.entries(altPaths).map(([l, href]) => (
+      <link rel="alternate" hreflang={l === 'zh' ? 'zh-CN' : 'en'} href={href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={altPaths[defaultLang]} />
+    <meta name="theme-color" content="#08090c" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">{lang === 'zh' ? '跳到主要内容' : 'Skip to content'}</a>
+    <Header lang={lang} path={path} />
+    <main id="main" class={wide ? '' : ''}>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

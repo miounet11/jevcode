@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import { sectionTitle, sections } from '../data/site';
+import type { Lang } from '../i18n/ui';
+
+export interface Props {
+  lang: Lang;
+  currentId?: string;
+}
+const { lang, currentId } = Astro.props;
+const current = Astro.url.pathname;
+
+const all = await getCollection('docs', ({ data }) => !data.draft);
+const mine = all.filter((e) => e.id.startsWith(`${lang}/`));
+
+const grouped = sections
+  .map(({ key, order }) => ({
+    key,
+    order,
+    title: sectionTitle(key, lang),
+    items: mine
+      .filter((e) => e.data.section === key)
+      .sort((a, b) => a.data.order - b.data.order),
+  }))
+  .filter((g) => g.items.length > 0);
+---
+
+<aside class="sidebar" aria-label="Docs">
+  {grouped.map((group) => (
+    <div class="sidebar__group">
+      <p class="sidebar__group-title">{group.title}</p>
+      <ul class="sidebar__list">
+        {group.items.map((entry) => {
+          const slug = entry.id.replace(`${lang}/`, '');
+          const href = `/${lang}/${slug}/`;
+          const active = currentId === entry.id || current === href;
+          return (
+            <li>
+              <a href={href} aria-current={active ? 'page' : undefined}>
+                {entry.data.title}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ))}
+</aside>

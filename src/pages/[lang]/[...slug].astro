@@ -1,0 +1,136 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import Toc from '../../components/Toc.astro';
+import { languages, useTranslations, type Lang } from '../../i18n/ui';
+import { sections, sectionTitle } from '../../data/site';
+
+export async function getStaticPaths() {
+  const all = await getCollection('docs', ({ data }) => !data.draft);
+
+  const paths: Array<{
+    params: { lang: string; slug: string | undefined };
+    props: { id: string; fallbackId?: string };
+  }> = [];
+
+  // 每种语言各自生成，缺内容时回退到默认语言
+  for (const lang of Object.keys(languages) as Lang[]) {
+    const mine = all.filter((e) => e.id.startsWith(`${lang}/`));
+    const seen = new Set<string>();
+
+    for (const entry of mine) {
+      const slug = entry.id.slice(lang.length + 1).replace(/\/index$/, '');
+      // 空 slug 表示该语言的根路径，由 [lang]/index.astro 负责
+      if (!slug || seen.has(slug)) continue;
+      seen.add(slug);
+      paths.push({
+        params: { lang, slug },
+        props: { id: entry.id },
+      });
+    }
+
+    // 默认语言的条目在其他语言缺失时也生成（回退）
+    if (lang !== 'zh') {
+      const zh = all.filter((e) => e.id.startsWith('zh/'));
+      for (const entry of zh) {
+        const slug = entry.id.slice(3).replace(/\/index$/, '');
+        if (!slug || seen.has(slug)) continue;
+        seen.add(slug);
+        paths.push({
+          params: { lang, slug },
+          props: { id: entry.id, fallbackId: entry.id },
+        });
+      }
+    }
+  }
+
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { id, fallbackId } = Astro.props as { id: string; fallbackId?: string };
+const t = useTranslations(lang);
+
+const all = await getCollection('docs');
+const entry = all.find((e) => e.id === id)!;
+const isFallback = Boolean(fallbackId) && fallbackId === id && id.startsWith('zh/') && lang !== 'zh';
+
+const { Content, headings } = await render(entry);
+
+const slug = entry.id.replace(/^[a-z-]+\//, '').replace(/\/index$/, '');
+const path = `/${lang}/${slug}/`;
+
+// 取默认语言条目用于「上一篇/下一篇」与文档导航
+const navSource = all
+  .filter((e) => e.id.startsWith(`${lang}/`) || (isFallback && e.id.startsWith('zh/')))
+  .filter((e) => e.data.section !== 'cases')
+  .sort((a, b) => {
+    const sa = sections.findIndex((s) => s.key === a.data.section);
+    const sb = sections.findIndex((s) => s.key === b.data.section);
+    return sa - sb || a.data.order - b.data.order;
+  });
+
+// 语言无关的 slug 比较，避免回退时错位
+const norm = (i: string) => i.replace(/^[a-z-]+\//, '').replace(/\/index$/, '');
+const idx = navSource.findIndex((e) => norm(e.id) === norm(id));
+const prev = idx > 0 ? navSource[idx - 1] : undefined;
+const next = idx >= 0 && idx < navSource.length - 1 ? navSource[idx + 1] : undefined;
+const toHref = (e: (typeof navSource)[number]) => `/${lang}/${norm(e.id)}/`;
+
+const breadcrumbSection = sectionTitle(entry.data.section, lang);
+const filteredHeadings = (headings as MarkdownHeading[]).filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout lang={lang} title={entry.data.title} description={entry.data.description} path={path}>
+  <div class="wrap docs-shell">
+    <Sidebar lang={lang} currentId={isFallback ? id : entry.id} />
+
+    <article class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> / {breadcrumbSection}
+      </p>
+
+      <h1 class="doc__title">{entry.data.title}</h1>
+      <p class="doc__desc">{entry.data.description}</p>
+
+      {(entry.data.tags.length > 0 || entry.data.source || isFallback) && (
+        <div class="doc__meta">
+          {isFallback && <span>{t('docs.empty')}</span>}
+          {entry.data.source && (
+            <span>
+              {t('docs.source')}: <code>{entry.data.source}</code>
+            </span>
+          )}
+          {entry.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      {(prev || next) && (
+        <nav class="pager" aria-label="Pagination">
+          {prev ? (
+            <a class="pager__link" href={toHref(prev)}>
+              <div class="pager__dir">← {t('docs.prev')}</div>
+              <div class="pager__name">{prev.data.title}</div>
+            </a>
+          ) : (
+            <span></span>
+          )}
+          {next && (
+            <a class="pager__link pager__link--next" href={toHref(next)}>
+              <div class="pager__dir">{t('docs.next')} →</div>
+              <div class="pager__name">{next.data.title}</div>
+            </a>
+          )}
+        </nav>
+      )}
+    </article>
+
+    <Toc headings={filteredHeadings} title={t('docs.toc')} />
+  </div>
+</BaseLayout>

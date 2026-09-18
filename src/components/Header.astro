@@ -1,0 +1,52 @@
+---
+import { languages, useTranslations, switchLangPath, type Lang } from '../i18n/ui';
+
+export interface Props {
+  lang: Lang;
+  path: string;
+}
+
+const { lang, path } = Astro.props;
+const t = useTranslations(lang);
+const current = Astro.url.pathname;
+
+const navItems = [
+  { href: `/${lang}/docs/`, label: t('nav.docs') },
+  { href: `/${lang}/patterns/`, label: t('nav.patterns') },
+  { href: `/${lang}/ecosystem/`, label: t('nav.ecosystem') },
+  { href: `/${lang}/demos/`, label: t('nav.demos') },
+];
+
+function isActive(href: string) {
+  return current === href || current.startsWith(href.replace(/\/$/, '/'));
+}
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a href={`/${lang}/`} class="brand">
+      <span class="brand__mark">J</span>
+      JevCode
+      <span class="brand__sub">Jev 技术解决方案</span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      {navItems.map((item) => (
+        <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="lang-switch" role="group" aria-label={t('lang.switch')}>
+      {(Object.keys(languages) as Lang[]).map((l) => (
+        <a
+          href={switchLangPath(current, l)}
+          hreflang={l === 'zh' ? 'zh-CN' : 'en'}
+          aria-current={l === lang ? 'true' : undefined}
+          title={languages[l].label}
+        >
+          {languages[l].short}
+        </a>
+      ))}
+    </div>
+  </div>
+</header>

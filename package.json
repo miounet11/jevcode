@@ -1,0 +1,17 @@
+{
+  "name": "jevcode",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JevCode — Jev (TypeSafe System One) 技术解决方案与最佳实践聚合站",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "7.3.3"
+  }
+}

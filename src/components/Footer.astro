@@ -1,0 +1,50 @@
+---
+import { useTranslations, type Lang } from '../i18n/ui';
+import { site } from '../data/site';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__col">
+        <h4>{t('site.name')}</h4>
+        <p style="margin:0;max-width:44ch;line-height:1.7;">{t('site.description')}</p>
+      </div>
+
+      <div class="footer__col">
+        <h4>{lang === 'zh' ? '官方资源' : 'Official'}</h4>
+        <ul>
+          <li><a href={site.official} rel="noopener" target="_blank">typesafe.ai</a></li>
+          <li><a href={site.docs} rel="noopener" target="_blank">docs.typesafe.ai</a></li>
+          <li>
+            <a href={site.repo} rel="noopener" target="_blank">
+              {lang === 'zh' ? '生态项目清单' : 'Ecosystem list'}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>{lang === 'zh' ? '本站' : 'This site'}</h4>
+        <ul>
+          <li><a href={`/${lang}/docs/`}>{t('nav.docs')}</a></li>
+          <li><a href={`/${lang}/patterns/`}>{t('nav.patterns')}</a></li>
+          <li><a href={`/${lang}/ecosystem/`}>{t('nav.ecosystem')}</a></li>
+          <li><a href={`/${lang}/demos/`}>{t('nav.demos')}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© {year} {t('site.name')}. {t('footer.rights')}</span>
+      <span>{t('footer.legal')} · {t('footer.builtWith')}</span>
+    </div>
+  </div>
+</footer>
