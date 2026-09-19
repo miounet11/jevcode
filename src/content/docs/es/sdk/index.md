@@ -12,11 +12,11 @@ translatedFrom: zh
 
 | Método | Adecuado para | Características |
 | :--- | :--- | :--- |
-| [Python SDK](/zh/sdk/python/) | Servicios backend, pipelines de datos, procesamiento por lotes | Clientes síncronos/asíncronos, entrada tipada, reintento automático |
-| [JavaScript SDK](/zh/sdk/javascript/) | Servicios Node.js, aplicaciones full-stack | Inferencia de tipos TypeScript, el tipo de respuesta se deriva automáticamente de la pregunta |
+| [Python SDK](/es/sdk/python/) | Servicios backend, pipelines de datos, procesamiento por lotes | Clientes síncronos/asíncronos, entrada tipada, reintento automático |
+| [JavaScript SDK](/es/sdk/javascript/) | Servicios Node.js, aplicaciones full-stack | Inferencia de tipos TypeScript, el tipo de respuesta se deriva automáticamente de la pregunta |
 | HTTP API | Otros lenguajes, integración ligera | POST directo, requiere gestionar manualmente los reintentos y la limitación de tasa |
 
-Si tu equipo cuenta con un agente de codificación con IA que escribe el código de integración, se recomienda instalar primero la [habilidad para agentes TypeSafe](/zh/sdk/agent-skill/), para que el agente conozca la forma exacta de las solicitudes y respuestas, evitando que escriba código basándose en suposiciones.
+Si tu equipo cuenta con un agente de codificación con IA que escribe el código de integración, se recomienda instalar primero la [habilidad para agentes TypeSafe](/es/sdk/agent-skill/), para que el agente conozca la forma exacta de las solicitudes y respuestas, evitando que escriba código basándose en suposiciones.
 
 ## Convenciones comunes
 
@@ -44,7 +44,7 @@ Si no utilizas un SDK, debes gestionar por tu cuenta dos aspectos que los SDK ya
 
 ## Relacionado
 
-- [Python SDK](/zh/sdk/python/)
-- [JavaScript SDK](/zh/sdk/javascript/)
-- [Agent skill](/zh/sdk/agent-skill/)
-- [Inicio rápido en 5 minutos](/zh/quickstart/) — Ejemplo completo y funcional
+- [Python SDK](/es/sdk/python/)
+- [JavaScript SDK](/es/sdk/javascript/)
+- [Agent skill](/es/sdk/agent-skill/)
+- [Inicio rápido en 5 minutos](/es/quickstart/) — Ejemplo completo y funcional

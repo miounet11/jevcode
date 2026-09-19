@@ -91,5 +91,5 @@ Der SDK wiederholt Anfragen standardmäßig gemäß einer Backoff-Strategie und 
 ## Weiterführende Links
 
 - [Vollständige Python SDK API-Referenz](https://docs.typesafe.ai/sdk/python/api/clients/async/client)
-- [Schnellstart in 5 Minuten](/zh/quickstart/)
-- [Fan-Out Parallel](/zh/patterns/fan-out/) — Stellen Sie mehrere Fragen gleichzeitig
+- [Schnellstart in 5 Minuten](/de/quickstart/)
+- [Fan-Out Parallel](/de/patterns/fan-out/) — Stellen Sie mehrere Fragen gleichzeitig

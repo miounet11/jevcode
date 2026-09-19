@@ -14,7 +14,7 @@ Primeiro, identifique o cenário mais próximo do seu negócio. Observe quais pr
 
 Cada cenário abaixo apresenta: **Qual problema resolver** → **Quais primitivas usar** → **Projeto real**.
 
-> Para ver o **índice completo de projetos da comunidade organizados por categoria** (com contagem de estrelas e etiquetas de linguagem), consulte [Ecossistema da Comunidade](/zh/ecosystem/).
+> Para ver o **índice completo de projetos da comunidade organizados por categoria** (com contagem de estrelas e etiquetas de linguagem), consulte [Ecossistema da Comunidade](/pt/ecosystem/).
 
 ## Classificação e Roteamento
 
@@ -36,7 +36,7 @@ Cada cenário abaixo apresenta: **Qual problema resolver** → **Quais primitiva
 
 **Problema**: É necessário classificar um conjunto de itens por relevância, qualidade ou critérios multidimensionais.
 
-**Primitivas**: Score, combinado com [pontuação composta](/zh/patterns/composite-scoring/) para integrar múltiplas dimensões.
+**Primitivas**: Score, combinado com [pontuação composta](/pt/patterns/composite-scoring/) para integrar múltiplas dimensões.
 
 **Projetos reais**:
 
@@ -134,6 +134,6 @@ A TypeSafe oficial resume os casos de uso em quatro grandes direções, que vale
 
 ## Relacionado
 
-- [Padrões de Arquitetura](/zh/patterns/) — Os padrões genéricos por trás desses casos
-- [Primitivas de Problema](/zh/primitives/) — Como escolher as primitivas
+- [Padrões de Arquitetura](/pt/patterns/) — Os padrões genéricos por trás desses casos
+- [Primitivas de Problema](/pt/primitives/) — Como escolher as primitivas
 - [Lista completa do awesome-jev](https://github.com/yibie/awesome-jev) — Lista contínua de projetos da comunidade

@@ -16,7 +16,7 @@ Wenn die Antwort auf einem **kontinuierlichen Spektrum** liegt, das durch eine R
 - Wie zufrieden ist ein Kunde?
 - Wie tiefgehend sind die Python-Kenntnisse eines Bewerbers?
 
-Wenn die Antwort aus einer festen Auswahl von Optionen besteht und zwischen diesen Optionen **keine Ordnungsbeziehung** besteht, verwenden Sie [Choice](/zh/primitives/choice/); handelt es sich um eine Ja/Nein-Frage, verwenden Sie [Noul](/zh/primitives/noul/).
+Wenn die Antwort aus einer festen Auswahl von Optionen besteht und zwischen diesen Optionen **keine Ordnungsbeziehung** besteht, verwenden Sie [Choice](/de/primitives/choice/); handelt es sich um eine Ja/Nein-Frage, verwenden Sie [Noul](/de/primitives/noul/).
 
 Typische Beispielprobleme:
 
@@ -97,11 +97,11 @@ Der Zweck von `legend` ist es, den Rückgabewert selbsterklärend zu machen: Sie
 
 **Konzentrieren Sie sich auf `confidence` und nicht nur auf `score`.** Ein niedriges Score-Konfidenzniveau deutet normalerweise darauf hin, dass die Stufendefinitionen mehrdeutig sind, die Skala multidimensional ist oder die `state`-Informationen unzureichend sind. In diesem Fall ist die richtige Reaktion die Verbesserung der Stufendefinitionen, anstatt einen willkürlichen Wert zu erzwingen.
 
-**Im Ranking-Kontext ist `Score` das primäre Primitive.** Relevanz-Ranking, Qualitätsbewertungen und Risikoklassifizierungen eignen sich gut für `Score`, kombiniert mit dem [Composite Scoring Pattern](/zh/patterns/composite-scoring/), um mehrere Dimensionen gewichtet zu kombinieren.
+**Im Ranking-Kontext ist `Score` das primäre Primitive.** Relevanz-Ranking, Qualitätsbewertungen und Risikoklassifizierungen eignen sich gut für `Score`, kombiniert mit dem [Composite Scoring Pattern](/de/patterns/composite-scoring/), um mehrere Dimensionen gewichtet zu kombinieren.
 
 ## Verwandt
 
-- [Choice](/zh/primitives/choice/) — Ungeordnete feste Optionen
-- [Noul](/zh/primitives/noul/) — Ja/Nein-Wahrscheinlichkeiten
-- [Composite Scoring Pattern](/zh/patterns/composite-scoring/) — Gewichtung und Synthese mehrerer Dimensionen
-- [Confidence](/zh/concepts/confidence/) — Was bedeutet ein niedriges Konfidenzniveau?
+- [Choice](/de/primitives/choice/) — Ungeordnete feste Optionen
+- [Noul](/de/primitives/noul/) — Ja/Nein-Wahrscheinlichkeiten
+- [Composite Scoring Pattern](/de/patterns/composite-scoring/) — Gewichtung und Synthese mehrerer Dimensionen
+- [Confidence](/de/concepts/confidence/) — Was bedeutet ein niedriges Konfidenzniveau?

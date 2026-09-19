@@ -114,6 +114,6 @@ Noul의 `criteria`는 선택 사항입니다. 예/아니오의 경계가 미묘�
 
 ## 관련 문서
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) / [Noul](/zh/primitives/noul/)
-- [Fan-out 패턴](/zh/patterns/fan-out/) — 대량의 질문을 한 번의 요청에 패키징
+- [Choice](/ko/primitives/choice/) / [Score](/ko/primitives/score/) / [Noul](/ko/primitives/noul/)
+- [Fan-out 패턴](/ko/patterns/fan-out/) — 대량의 질문을 한 번의 요청에 패키징
 - [System One 시스템 구축 방법](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) — 공식 전체 워크플로우

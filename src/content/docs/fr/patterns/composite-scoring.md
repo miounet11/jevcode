@@ -75,6 +75,6 @@ Une pratique utile consiste à marquer un candidat comme « nécessitant une vé
 
 ## Liens connexes
 
-- [Score](/zh/primitives/score/) — La primitive de base de ce模式
-- [Fan-out parallèle](/zh/patterns/fan-out/) — Demander toutes les dimensions en une seule fois
-- [Confiance](/zh/concepts/confidence/) — Gérer les scores de dimensions peu fiables
+- [Score](/fr/primitives/score/) — La primitive de base de ce模式
+- [Fan-out parallèle](/fr/patterns/fan-out/) — Demander toutes les dimensions en une seule fois
+- [Confiance](/fr/concepts/confidence/) — Gérer les scores de dimensions peu fiables

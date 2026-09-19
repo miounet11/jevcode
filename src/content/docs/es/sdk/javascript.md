@@ -80,6 +80,6 @@ Si deseas conocer todas las opciones y sus valores predeterminados, consulta el 
 
 ## Relacionado
 
-- [Inicio rápido en 5 minutos](/zh/quickstart/)
-- [Primitivas de preguntas](/zh/primitives/) — Formas de construir los tres tipos de preguntas
-- [Fan-out paralelo](/zh/patterns/fan-out/) — Realizar múltiples preguntas en una sola llamada
+- [Inicio rápido en 5 minutos](/es/quickstart/)
+- [Primitivas de preguntas](/es/primitives/) — Formas de construir los tres tipos de preguntas
+- [Fan-out paralelo](/es/patterns/fan-out/) — Realizar múltiples preguntas en una sola llamada

@@ -80,6 +80,6 @@ SDK는 ESM, CommonJS, TypeScript 선언 파일 세 가지 빌드 산출물을 �
 
 ## 관련 문서
 
-- [5분 퀵스타트](/zh/quickstart/)
-- [질문 원시 타입](/zh/primitives/) — 세 가지 질문 생성 방식
-- [Fan-out 병렬 처리](/zh/patterns/fan-out/) — 한 번에 여러 질문하기
+- [5분 퀵스타트](/ko/quickstart/)
+- [질문 원시 타입](/ko/primitives/) — 세 가지 질문 생성 방식
+- [Fan-out 병렬 처리](/ko/patterns/fan-out/) — 한 번에 여러 질문하기

@@ -61,11 +61,11 @@ is_billing = response.nouls["billing"].noul  # float, 0..1
 
 ## 信頼度：モデルに「不明」と言わせる
 
-System One モデルの回答には [confidence](/zh/concepts/confidence/) が含まれるため、いつ直接実行し、いつ人間のレビューや推論モデルへのアップグレードを行うかを決定できます。これは信頼できるシステムを構築する基盤です。**不確実性を正直に表現できないシステムは、信頼されることはできません**。
+System One モデルの回答には [confidence](/ja/concepts/confidence/) が含まれるため、いつ直接実行し、いつ人間のレビューや推論モデルへのアップグレードを行うかを決定できます。これは信頼できるシステムを構築する基盤です。**不確実性を正直に表現できないシステムは、信頼されることはできません**。
 
 ## 呼び出し方法
 
-クライアント [SDK](/zh/sdk/) または HTTP API を介して呼び出します。
+クライアント [SDK](/ja/sdk/) または HTTP API を介して呼び出します。
 
 ```http
 POST https://api.typesafe.ai/v1/systemone
@@ -75,7 +75,7 @@ POST https://api.typesafe.ai/v1/systemone
 
 ## 関連資料
 
-- [State](/zh/concepts/state/) — モデルに渡すコンテキストの整理方法
-- [問題プリミティブ](/zh/primitives/) — 3種類の型付き問題
-- [アーキテクチャパターン](/zh/patterns/) — 本番環境での呼び出しの組織化方法
+- [State](/ja/concepts/state/) — モデルに渡すコンテキストの整理方法
+- [問題プリミティブ](/ja/primitives/) — 3種類の型付き問題
+- [アーキテクチャパターン](/ja/patterns/) — 本番環境での呼び出しの組織化方法
 - [System One システムの構築方法](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) — 公式の完全なワークフローガイド

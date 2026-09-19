@@ -72,6 +72,6 @@ Si une décision **n'a aucune conséquence en cas d'erreur** (par exemple, étiq
 
 ## Liés
 
-- [Confiance](/zh/concepts/confidence/) — Relation entre la confiance et les probabilités
-- [Routage d'intention](/zh/patterns/intent-routing/) — Souvent utilisé conjointement avec le routage par confiance
-- [Score composite](/zh/patterns/composite-scoring/) — Gestion de la confiance dans les scénarios de classement
+- [Confiance](/fr/concepts/confidence/) — Relation entre la confiance et les probabilités
+- [Routage d'intention](/fr/patterns/intent-routing/) — Souvent utilisé conjointement avec le routage par confiance
+- [Score composite](/fr/patterns/composite-scoring/) — Gestion de la confiance dans les scénarios de classement

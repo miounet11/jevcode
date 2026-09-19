@@ -80,6 +80,6 @@ Pour connaître toutes les options et leurs valeurs par défaut, consultez le [c
 
 ## Liens connexes
 
-- [Démarrage rapide](/zh/quickstart/)
-- [Primitives de questions](/zh/primitives/) — Façons de construire les trois types de questions
-- [Fan-out parallèle](/zh/patterns/fan-out/) — Poser plusieurs questions en une seule fois
+- [Démarrage rapide](/fr/quickstart/)
+- [Primitives de questions](/fr/primitives/) — Façons de construire les trois types de questions
+- [Fan-out parallèle](/fr/patterns/fan-out/) — Poser plusieurs questions en une seule fois

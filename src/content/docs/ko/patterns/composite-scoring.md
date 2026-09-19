@@ -75,6 +75,6 @@ em_score = (0.15 * py) + (0.40 * lead) + (0.20 * arch) + (0.25 * general)
 
 ## 관련 항목
 
-- [Score](/zh/primitives/score/) — 본 패턴의 기본 원시 데이터
-- [Fan-out 병렬 처리](/zh/patterns/fan-out/) — 한 번의 호출로 모든 차원 질문하기
-- [Confidence](/zh/concepts/confidence/) — 신뢰할 수 없는 차원 점수 처리
+- [Score](/ko/primitives/score/) — 본 패턴의 기본 원시 데이터
+- [Fan-out 병렬 처리](/ko/patterns/fan-out/) — 한 번의 호출로 모든 차원 질문하기
+- [Confidence](/ko/concepts/confidence/) — 신뢰할 수 없는 차원 점수 처리

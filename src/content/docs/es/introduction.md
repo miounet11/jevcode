@@ -46,9 +46,9 @@ El valor devuelto es uno de `billing` / `technical` / `sales`, junto con un nive
 
 Todas las decisiones se reducen a tres tipos de preguntas. Esta es la abstracción central de Jev; comprenderlas es comprender todo el sistema:
 
-- **[Choice](/zh/primitives/choice/)** — Selecciona una opción de entre un conjunto de candidatos mutuamente excluyentes. Se utiliza para la identificación de intenciones, el enrutamiento de tickets y la selección de acciones.
-- **[Score](/zh/primitives/score/)** — Asigna una puntuación según una escala o criterios de evaluación. Se utiliza para la clasificación por relevancia, la evaluación de calidad y la clasificación de riesgos.
-- **[Noul](/zh/primitives/noul/)** — Responde a una pregunta de sí/no, devolviendo la probabilidad de que la respuesta sea «sí». Se utiliza para la validación de contenido, la verificación de afirmaciones y los guardrails.
+- **[Choice](/es/primitives/choice/)** — Selecciona una opción de entre un conjunto de candidatos mutuamente excluyentes. Se utiliza para la identificación de intenciones, el enrutamiento de tickets y la selección de acciones.
+- **[Score](/es/primitives/score/)** — Asigna una puntuación según una escala o criterios de evaluación. Se utiliza para la clasificación por relevancia, la evaluación de calidad y la clasificación de riesgos.
+- **[Noul](/es/primitives/noul/)** — Responde a una pregunta de sí/no, devolviendo la probabilidad de que la respuesta sea «sí». Se utiliza para la validación de contenido, la verificación de afirmaciones y los guardrails.
 
 En una sola solicitud se pueden combinar estos tres tipos de preguntas. El modelo lee el estado una sola vez y luego evalúa todas las preguntas en paralelo.
 
@@ -63,6 +63,6 @@ En la práctica, es común utilizar System One en abundancia dentro de la cadena
 
 ## Siguientes pasos
 
-- [Inicio rápido en 5 minutos](/zh/quickstart/) — Obtén tu clave de API y realiza tu primera llamada
-- [Conceptos clave](/zh/concepts/system-one/) — Comprende System One y los modelos de estado
-- [Patrones de arquitectura](/zh/patterns/) — Descubre cómo organizar estas llamadas en entornos de producción
+- [Inicio rápido en 5 minutos](/es/quickstart/) — Obtén tu clave de API y realiza tu primera llamada
+- [Conceptos clave](/es/concepts/system-one/) — Comprende System One y los modelos de estado
+- [Patrones de arquitectura](/es/patterns/) — Descubre cómo organizar estas llamadas en entornos de producción

@@ -16,7 +16,7 @@ Use o Noul quando a resposta for **sim ou não**. Por exemplo:
 - Este currículo menciona experiência com sistemas distribuídos?
 - Este comentário contém informações de identificação pessoal?
 
-Se a resposta for uma entre um conjunto de opções, use [Choice](/zh/primitives/choice/); se for uma posição em um espectro, use [Score](/zh/primitives/score/).
+Se a resposta for uma entre um conjunto de opções, use [Choice](/pt/primitives/choice/); se for uma posição em um espectro, use [Score](/pt/primitives/score/).
 
 Exemplos típicos de perguntas:
 
@@ -94,13 +94,13 @@ Esta é uma diferença importante entre o Noul e os outros dois primitivos: **o 
 
 **Defina um critério claro de julgamento.** Por exemplo, com "Is the candidate strong in Python?" (O candidato é forte em Python?): é necessário definir primeiro o que significa ser "forte". Uma definição vaga torna as probabilidades difíceis de interpretar.
 
-**0.5 não equivale a "nível médio".** Este é o erro mais comum: 0.5 indica que o modelo não consegue distinguir entre sim ou não, e não "metade do nível". Para medir o grau de proficiência de uma habilidade, use [Score](/zh/primitives/score/) para pontuar em níveis bem definidos.
+**0.5 não equivale a "nível médio".** Este é o erro mais comum: 0.5 indica que o modelo não consegue distinguir entre sim ou não, e não "metade do nível". Para medir o grau de proficiência de uma habilidade, use [Score](/pt/primitives/score/) para pontuar em níveis bem definidos.
 
 **Você pode formular as instruções como afirmações a serem avaliadas quanto à veracidade.** Além de perguntas, você também pode escrever as instruções como uma afirmação para que o modelo avalie sua veracidade. Por exemplo, para o fato de "o cliente estar solicitando um reembolso", ao escrever como uma afirmação, um valor próximo de 1 indica que a afirmação é verdadeira. **Vale a pena testar ambas as formulações com seus próprios dados.**
 
 ## Relacionado
 
-- [Choice](/zh/primitives/choice/) — Opções fixas não ordenadas
-- [Score](/zh/primitives/score/) — Pontuação em uma escala ordenada
-- [Confiança](/zh/concepts/confidence/) — Por que o Noul não possui confidence
+- [Choice](/pt/primitives/choice/) — Opções fixas não ordenadas
+- [Score](/pt/primitives/score/) — Pontuação em uma escala ordenada
+- [Confiança](/pt/concepts/confidence/) — Por que o Noul não possui confidence
 - [Uso do Noul em barreiras de segurança](https://docs.typesafe.ai/patterns) — Biblioteca de padrões oficiais

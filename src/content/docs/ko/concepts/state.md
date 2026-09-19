@@ -12,7 +12,7 @@ translatedFrom: zh
 
 **State**는 System One 모델이 평가하도록 요청하는 내용입니다. 이는 고객 서비스 메시지, 텍스트 조각, 또는 현재 애플리케이션의 상태일 수 있습니다. 이를 API 요청의 `state` 필드에 넣고, 질문과 함께 전달합니다.
 
-각 요청에서는 **하나의 state**를 사용하여 **하나 이상의 질문**을 평가합니다. 모든 질문은 동일한 state를 보며, **독립적으로** 평가됩니다. 하나의 요청 내에서 [Choice](/zh/primitives/choice/), [Score](/zh/primitives/score/), [Noul](/zh/primitives/noul/) 질문을 혼합하여 사용할 수 있습니다.
+각 요청에서는 **하나의 state**를 사용하여 **하나 이상의 질문**을 평가합니다. 모든 질문은 동일한 state를 보며, **독립적으로** 평가됩니다. 하나의 요청 내에서 [Choice](/ko/primitives/choice/), [Score](/ko/primitives/score/), [Noul](/ko/primitives/noul/) 질문을 혼합하여 사용할 수 있습니다.
 
 ## 세 가지 형태
 
@@ -89,11 +89,11 @@ Jev는 **순수 텍스트**를 받습니다. state는 문자열, JSON 객체 또
 
 - 단일 요청 컨텍스트는 64k 토큰을 덮습니다: `state`와 **모든** 질문을 포함합니다.
 - 32k 토큰: `state`와 **가장 긴 하나의** 질문을 덮습니다.
-- 모델은 state를 한 번만 읽은 후 모든 질문을 병렬로 평가합니다. 따라서 여러 질문을 하나의 요청에 패키징하면 추가 지연 비용이 거의 발생하지 않습니다—[Fan-out 패턴](/zh/patterns/fan-out/) 참조.
+- 모델은 state를 한 번만 읽은 후 모든 질문을 병렬로 평가합니다. 따라서 여러 질문을 하나의 요청에 패키징하면 추가 지연 비용이 거의 발생하지 않습니다—[Fan-out 패턴](/ko/patterns/fan-out/) 참조.
 - 정확도는 state의 길이에 따라 변할 수 있으며, 공식 문서의 `Jev 1.13 jaggedness` 섹션에서 이를 다룹니다.
 
 ## 관련 항목
 
-- [질문 원시 타입](/zh/primitives/) — instructions와 criteria를 사용하여 질문을 구성하는 방법
-- [신뢰도](/zh/concepts/confidence/) — 반환값을 사용하여 동작 제어
+- [질문 원시 타입](/ko/primitives/) — instructions와 criteria를 사용하여 질문을 구성하는 방법
+- [신뢰도](/ko/concepts/confidence/) — 반환값을 사용하여 동작 제어
 - [API 참조](https://docs.typesafe.ai/api) — 요청 스키마

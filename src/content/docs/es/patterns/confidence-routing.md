@@ -72,6 +72,6 @@ Si una decisión **no tiene consecuencias negativas en caso de error** (por ejem
 
 ## Relacionado
 
-- [Confianza](/zh/concepts/confidence/) — relación entre la confianza y las probabilidades
-- [Enrutamiento por intención](/zh/patterns/intent-routing/) — suele utilizarse junto con el enrutamiento por confianza
-- [Puntuación compuesta](/zh/patterns/composite-scoring/) — manejo de la confianza en escenarios de clasificación
+- [Confianza](/es/concepts/confidence/) — relación entre la confianza y las probabilidades
+- [Enrutamiento por intención](/es/patterns/intent-routing/) — suele utilizarse junto con el enrutamiento por confianza
+- [Puntuación compuesta](/es/patterns/composite-scoring/) — manejo de la confianza en escenarios de clasificación

@@ -14,16 +14,16 @@ O TypeSafe foi projetado para ser **incorporado a sistemas maiores**, onde atua 
 
 Isso significa não tentar resolver um problema de negócios complexo com uma única chamada. Em vez disso, divida-o em várias julgamentos independentes e combine-os usando seu próprio código. A lógica de composição no código é determinística, testável e ajustável — esta é a fonte da confiabilidade.
 
-Antes de ler esta seção, certifique-se de compreender os [Primitivos de Prompt](/zh/primitives/) e o [Conceito de Confiança](/zh/concepts/confidence/).
+Antes de ler esta seção, certifique-se de compreender os [Primitivos de Prompt](/pt/primitives/) e o [Conceito de Confiança](/pt/concepts/confidence/).
 
 ## Quatro Padrões
 
 | Padrão | O que faz | Benefícios |
 | :--- | :--- | :--- |
-| [Fan-out Paralelo](/zh/patterns/fan-out/) | Envia muitas perguntas (incluindo especulativas) em uma única chamada; o código decide quais são relevantes | Custo, Velocidade |
-| [Roteamento por Confiança](/zh/patterns/confidence-routing/) | Usa a confiança como um segundo eixo de decisão para construir sistemas mais seguros | Confiabilidade, Segurança |
-| [Pontuação Composta](/zh/patterns/composite-scoring/) | Combina múltiplas dimensões de análise em uma única pontuação | Custo, Confiabilidade, Velocidade |
-| [Roteamento por Intent](/zh/patterns/intent-routing/) | Classifica a intenção do usuário e roteia para o processador adequado | Custo, Velocidade |
+| [Fan-out Paralelo](/pt/patterns/fan-out/) | Envia muitas perguntas (incluindo especulativas) em uma única chamada; o código decide quais são relevantes | Custo, Velocidade |
+| [Roteamento por Confiança](/pt/patterns/confidence-routing/) | Usa a confiança como um segundo eixo de decisão para construir sistemas mais seguros | Confiabilidade, Segurança |
+| [Pontuação Composta](/pt/patterns/composite-scoring/) | Combina múltiplas dimensões de análise em uma única pontuação | Custo, Confiabilidade, Velocidade |
+| [Roteamento por Intent](/pt/patterns/intent-routing/) | Classifica a intenção do usuário e roteia para o processador adequado | Custo, Velocidade |
 
 ## Como Eles Funcionam em Conjunto
 
@@ -53,6 +53,6 @@ O **Roteamento por Intent** geralmente vem primeiro, pois determina quais fluxos
 
 ## Relacionado
 
-- [Primitivos de Prompt](/zh/primitives/) — Conhecimento prévio necessário
-- [Conceito de Confiança](/zh/concepts/confidence/) — Conhecimento prévio necessário
-- [Casos de Uso no Ecossistema](/zh/cases/use-case-map/) — Como projetos reais utilizam esses padrões
+- [Primitivos de Prompt](/pt/primitives/) — Conhecimento prévio necessário
+- [Conceito de Confiança](/pt/concepts/confidence/) — Conhecimento prévio necessário
+- [Casos de Uso no Ecossistema](/pt/cases/use-case-map/) — Como projetos reais utilizam esses padrões

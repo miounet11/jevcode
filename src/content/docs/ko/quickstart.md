@@ -167,7 +167,7 @@ TS SDK의 큰 장점 중 하나는 **답변의 타입이 질문으로부터 자�
 
 ## 다음 단계
 
-- [Choice 원시 타입](/zh/primitives/choice/) — 분류 및 라우팅의 기초
-- [Score 원시 타입](/zh/primitives/score/) — 점수 매기기 및 정렬
-- [Noul 원시 타입](/zh/primitives/noul/) — 검증 및 가드레일
-- [신뢰도](/zh/concepts/confidence/) — 신뢰도를 사용하여 시스템 동작 제어
+- [Choice 원시 타입](/ko/primitives/choice/) — 분류 및 라우팅의 기초
+- [Score 원시 타입](/ko/primitives/score/) — 점수 매기기 및 정렬
+- [Noul 원시 타입](/ko/primitives/noul/) — 검증 및 가드레일
+- [신뢰도](/ko/concepts/confidence/) — 신뢰도를 사용하여 시스템 동작 제어

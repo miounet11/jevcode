@@ -16,7 +16,7 @@ Utilisez `Choice` lorsque la réponse se situe dans **un ensemble fixe d'options
 - À quelle catégorie appartient un produit
 - Dans quel langage est écrit ce code
 
-Si la réponse correspond à une position sur un spectre continu, utilisez [Score](/zh/primitives/score/) ; s'il s'agit d'une réponse binaire (oui/non), utilisez [Noul](/zh/primitives/noul/).
+Si la réponse correspond à une position sur un spectre continu, utilisez [Score](/fr/primitives/score/) ; s'il s'agit d'une réponse binaire (oui/non), utilisez [Noul](/fr/primitives/noul/).
 
 Exemples de questions typiques :
 
@@ -93,7 +93,7 @@ print(response.answers["department"].choice)
 | `probabilities` | Distribution de probabilité pour chaque option |
 | `confidence` | Valeur résumant la concentration de cette distribution, comprise entre 0 et 1 |
 
-`probabilities` constitue la matière première nécessaire pour définir des métriques plus utiles selon vos besoins — consultez la section [Confiance](/zh/concepts/confidence/) pour plus de détails.
+`probabilities` constitue la matière première nécessaire pour définir des métriques plus utiles selon vos besoins — consultez la section [Confiance](/fr/concepts/confidence/) pour plus de détails.
 
 ## Points d'attention
 
@@ -109,7 +109,7 @@ print(response.answers["department"].choice)
 
 ## Liens connexes
 
-- [Score](/zh/primitives/score/) — Évaluation sur une échelle ordonnée
-- [Noul](/zh/primitives/noul/) — Probabilité Oui/Non
-- [Motif de routage d'intention](/zh/patterns/intent-routing/) — L'utilisation la plus courante de `Choice` en production
-- [Confiance](/zh/concepts/confidence/) — Contrôle du comportement à l'aide de `probabilities` et `confidence`
+- [Score](/fr/primitives/score/) — Évaluation sur une échelle ordonnée
+- [Noul](/fr/primitives/noul/) — Probabilité Oui/Non
+- [Motif de routage d'intention](/fr/patterns/intent-routing/) — L'utilisation la plus courante de `Choice` en production
+- [Confiance](/fr/concepts/confidence/) — Contrôle du comportement à l'aide de `probabilities` et `confidence`

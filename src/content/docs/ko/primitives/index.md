@@ -19,9 +19,9 @@ TypeSafe의 원어(primitive)는 코드에서 조합하는 작은 타입화된 �
 
 | 유형 | 답변 내용 | 반환 값 |
 | :--- | :--- | :--- |
-| [Choice](/zh/primitives/choice/) | 이 옵션 중 무엇을 선택할 것인가? | `choice`, `probabilities`, `confidence` |
-| [Score](/zh/primitives/score/) | 어느 등급에 해당하는가? | `score`, `legend`, `probabilities`, `confidence` |
-| [Noul](/zh/primitives/noul/) | 이것이 사실인가? | `noul`(0에서 1 사이) |
+| [Choice](/ko/primitives/choice/) | 이 옵션 중 무엇을 선택할 것인가? | `choice`, `probabilities`, `confidence` |
+| [Score](/ko/primitives/score/) | 어느 등급에 해당하는가? | `score`, `legend`, `probabilities`, `confidence` |
+| [Noul](/ko/primitives/noul/) | 이것이 사실인가? | `noul`(0에서 1 사이) |
 
 하나의 질문만 할 수도 있고, 여러 질문을 한 번에 보낼 수도 있습니다. 각 질문은 독립적으로 평가됩니다.
 
@@ -79,6 +79,6 @@ TypeSafe의 원어(primitive)는 코드에서 조합하는 작은 타입화된 �
 
 ## 심화 학습
 
-- [원어 심화 사용법](/zh/primitives/advanced/) — criteria 작성법, 표현 기법, 경계 처리
-- [Fan-out 패턴](/zh/patterns/fan-out/) — 대량의 질문을 한 번의 요청에 패키징하는 방법
-- [신뢰도](/zh/concepts/confidence/) — `confidence` 및 `probabilities`를 사용하여 동작 제어
+- [원어 심화 사용법](/ko/primitives/advanced/) — criteria 작성법, 표현 기법, 경계 처리
+- [Fan-out 패턴](/ko/patterns/fan-out/) — 대량의 질문을 한 번의 요청에 패키징하는 방법
+- [신뢰도](/ko/concepts/confidence/) — `confidence` 및 `probabilities`를 사용하여 동작 제어

@@ -16,7 +16,7 @@ Verwenden Sie `Choice`, wenn die Antwort auf **eine feste Menge sich gegenseitig
 - Zu welcher Kategorie gehört das Produkt?
 - In welcher Sprache ist dieser Code geschrieben?
 
-Wenn die Antwort eine Position auf einem kontinuierlichen Spektrum ist, verwenden Sie [Score](/zh/primitives/score/); wenn es sich um eine einfache Ja/Nein-Entscheidung handelt, verwenden Sie [Noul](/zh/primitives/noul/).
+Wenn die Antwort eine Position auf einem kontinuierlichen Spektrum ist, verwenden Sie [Score](/de/primitives/score/); wenn es sich um eine einfache Ja/Nein-Entscheidung handelt, verwenden Sie [Noul](/de/primitives/noul/).
 
 Typische Fragebeispiele:
 
@@ -93,7 +93,7 @@ print(response.answers["department"].choice)
 | `probabilities` | Die Wahrscheinlichkeitsverteilung über jede Option |
 | `confidence` | Ein aggregierter Wert für die Konzentration dieser Verteilung, zwischen 0 und 1 |
 
-`probabilities` sind die Rohdaten, die Sie benötigen, um eigene, aussagekräftigere Metriken zu definieren – weitere Einzelheiten finden Sie unter [Confidence](/zh/concepts/confidence/).
+`probabilities` sind die Rohdaten, die Sie benötigen, um eigene, aussagekräftigere Metriken zu definieren – weitere Einzelheiten finden Sie unter [Confidence](/de/concepts/confidence/).
 
 ## Best Practices
 
@@ -109,7 +109,7 @@ print(response.answers["department"].choice)
 
 ## Verwandt
 
-- [Score](/zh/primitives/score/) — Bewertung auf einer geordneten Skala
-- [Noul](/zh/primitives/noul/) — Ja/Nein-Wahrscheinlichkeit
-- [Intent Routing Pattern](/zh/patterns/intent-routing/) — Die häufigste Produktionsanwendung für Choice
-- [Confidence](/zh/concepts/confidence/) — Steuerung des Verhaltens mit `probabilities` und `confidence`
+- [Score](/de/primitives/score/) — Bewertung auf einer geordneten Skala
+- [Noul](/de/primitives/noul/) — Ja/Nein-Wahrscheinlichkeit
+- [Intent Routing Pattern](/de/patterns/intent-routing/) — Die häufigste Produktionsanwendung für Choice
+- [Confidence](/de/concepts/confidence/) — Steuerung des Verhaltens mit `probabilities` und `confidence`

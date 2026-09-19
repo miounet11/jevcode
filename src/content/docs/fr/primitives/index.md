@@ -19,9 +19,9 @@ Vous combinez ces réponses dans votre code pour prendre des décisions. Il exis
 
 | Type | Ce qu'il évalue | Retourne |
 | :--- | :--- | :--- |
-| [Choice](/zh/primitives/choice/) | Quelle option choisir ? | `choice`, `probabilities`, `confidence` |
-| [Score](/zh/primitives/score/) | Dans quelle catégorie se situe-t-il ? | `score`, `legend`, `probabilities`, `confidence` |
-| [Noul](/zh/primitives/noul/) | Est-ce vrai ? | `noul` (de 0 à 1) |
+| [Choice](/fr/primitives/choice/) | Quelle option choisir ? | `choice`, `probabilities`, `confidence` |
+| [Score](/fr/primitives/score/) | Dans quelle catégorie se situe-t-il ? | `score`, `legend`, `probabilities`, `confidence` |
+| [Noul](/fr/primitives/noul/) | Est-ce vrai ? | `noul` (de 0 à 1) |
 
 Vous pouvez poser une seule question ou en envoyer plusieurs en une fois. Chaque question est évaluée indépendamment.
 
@@ -79,6 +79,6 @@ Un seul appel renvoie trois réponses indépendantes. Le code effectue un routag
 
 ## Aller plus loin
 
-- [Utilisations avancées des primitives](/zh/primitives/advanced/) — comment rédiger les critères, astuces de formulation, gestion des cas limites
-- [Motif Fan-out](/zh/patterns/fan-out/) — comment regrouper un grand nombre de questions dans une seule requête
-- [Confiance](/zh/concepts/confidence/) — comment utiliser `confidence` et `probabilities` pour contrôler le comportement
+- [Utilisations avancées des primitives](/fr/primitives/advanced/) — comment rédiger les critères, astuces de formulation, gestion des cas limites
+- [Motif Fan-out](/fr/patterns/fan-out/) — comment regrouper un grand nombre de questions dans une seule requête
+- [Confiance](/fr/concepts/confidence/) — comment utiliser `confidence` et `probabilities` pour contrôler le comportement

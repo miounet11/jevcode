@@ -12,7 +12,7 @@ translatedFrom: zh
 
 **State** (Estado) es lo que le pides al modelo de System One que evalúe. Puede ser un mensaje de atención al cliente, un fragmento de texto o el estado actual de tu aplicación. Lo incluyes en el campo `state` de la solicitud de la API junto con las preguntas que deseas formular.
 
-Cada solicitud evalúa **un solo state** contra **una o varias preguntas**. Todas las preguntas ven el mismo state y se evalúan de forma **independiente**. Puedes mezclar preguntas de tipo [Choice](/zh/primitives/choice/), [Score](/zh/primitives/score/) y [Noul](/zh/primitives/noul/) en una única solicitud.
+Cada solicitud evalúa **un solo state** contra **una o varias preguntas**. Todas las preguntas ven el mismo state y se evalúan de forma **independiente**. Puedes mezclar preguntas de tipo [Choice](/es/primitives/choice/), [Score](/es/primitives/score/) y [Noul](/es/primitives/noul/) en una única solicitud.
 
 ## Tres formas
 
@@ -89,11 +89,11 @@ Este último punto es especialmente importante para los usuarios chinos: si tu n
 
 - Contexto por solicitud de 64k tokens: cubre el `state` más **todas** las preguntas.
 - 32k tokens: cubre el `state` más **la pregunta más larga**.
-- El modelo lee el state una sola vez y luego evalúa todas las preguntas en paralelo. Por lo tanto, empaquetar varias preguntas en una sola solicitud tiene casi cero coste adicional en latencia; consulta el [patrón de fan-out](/zh/patterns/fan-out/).
+- El modelo lee el state una sola vez y luego evalúa todas las preguntas en paralelo. Por lo tanto, empaquetar varias preguntas en una sola solicitud tiene casi cero coste adicional en latencia; consulta el [patrón de fan-out](/es/patterns/fan-out/).
 - La precisión puede variar a medida que crece el state; hay una discusión específica al respecto en la sección `Jev 1.13 jaggedness`.
 
 ## Relacionado
 
-- [Primitivas de pregunta](/zh/primitives/) — Cómo organizar las preguntas con instrucciones y criterios
-- [Confianza](/zh/concepts/confidence/) — Controla el comportamiento mediante los valores devueltos
+- [Primitivas de pregunta](/es/primitives/) — Cómo organizar las preguntas con instrucciones y criterios
+- [Confianza](/es/concepts/confidence/) — Controla el comportamiento mediante los valores devueltos
 - [Referencia de la API](https://docs.typesafe.ai/api) — Esquema de la solicitud

@@ -14,16 +14,16 @@ TypeSafe wurde so konzipiert, dass es **in größere Systeme eingebettet** wird,
 
 Das bedeutet, dass Sie nicht versuchen sollten, eine komplexe geschäftliche Fragestellung mit einem einzigen Aufruf zu lösen. Stattdessen sollten Sie diese in mehrere unabhängige Urteile aufteilen und diese anschließend mit Ihrem eigenen Code kombinieren. Die Kombinationslogik im Code ist deterministisch, testbar und feinjustierbar – genau das ist die Quelle der Zuverlässigkeit.
 
-Bevor Sie diesen Abschnitt lesen, sollten Sie bitte die [Primitives für Fragen](/zh/primitives/) und [Konfidenz](/zh/concepts/confidence/) verstanden haben.
+Bevor Sie diesen Abschnitt lesen, sollten Sie bitte die [Primitives für Fragen](/de/primitives/) und [Konfidenz](/de/concepts/confidence/) verstanden haben.
 
 ## Vier Muster
 
 | Muster | Funktion | Nutzen |
 | :--- | :--- | :--- |
-| [Fan-Out Parallel](/zh/patterns/fan-out/) | Sendet viele Fragen (inklusive hypothetischer) in einem einzigen Aufruf; der Code entscheidet, welche relevant sind | Kosten, Geschwindigkeit |
-| [Konfidenz-Routing](/zh/patterns/confidence-routing/) | Nutzt Konfidenz als zweite Entscheidungsachse, um sicherere Systeme zu构建en | Zuverlässigkeit, Sicherheit |
-| [Composite Scoring](/zh/patterns/composite-scoring/) | Führt mehrere Analyse-Dimensionen zu einem einzigen Score zusammen | Kosten, Zuverlässigkeit, Geschwindigkeit |
-| [Intent-Routing](/zh/patterns/intent-routing/) | Klassifiziert die Benutzerabsicht und leitet sie an den passenden Prozessor weiter | Kosten, Geschwindigkeit |
+| [Fan-Out Parallel](/de/patterns/fan-out/) | Sendet viele Fragen (inklusive hypothetischer) in einem einzigen Aufruf; der Code entscheidet, welche relevant sind | Kosten, Geschwindigkeit |
+| [Konfidenz-Routing](/de/patterns/confidence-routing/) | Nutzt Konfidenz als zweite Entscheidungsachse, um sicherere Systeme zu构建en | Zuverlässigkeit, Sicherheit |
+| [Composite Scoring](/de/patterns/composite-scoring/) | Führt mehrere Analyse-Dimensionen zu einem einzigen Score zusammen | Kosten, Zuverlässigkeit, Geschwindigkeit |
+| [Intent-Routing](/de/patterns/intent-routing/) | Klassifiziert die Benutzerabsicht und leitet sie an den passenden Prozessor weiter | Kosten, Geschwindigkeit |
 
 ## Wie sie zusammenarbeiten
 
@@ -53,6 +53,6 @@ Benutzeranfrage
 
 ## Verwandte Themen
 
-- [Primitives für Fragen](/zh/primitives/) — Vorwissen erforderlich
-- [Konfidenz](/zh/concepts/confidence/) — Vorwissen erforderlich
-- [Ökosystem-Fälle](/zh/cases/use-case-map/) — Wie reale Projekte diese Muster einsetzen
+- [Primitives für Fragen](/de/primitives/) — Vorwissen erforderlich
+- [Konfidenz](/de/concepts/confidence/) — Vorwissen erforderlich
+- [Ökosystem-Fälle](/de/cases/use-case-map/) — Wie reale Projekte diese Muster einsetzen

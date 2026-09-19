@@ -19,9 +19,9 @@ Sie kombinieren diese Antworten in Ihrem Code, um Entscheidungen zu treffen. Es 
 
 | Typ | Fragetyp | Rückgabe |
 | :--- | :--- | :--- |
-| [Choice](/zh/primitives/choice/) | Welche dieser Optionen? | `choice`, `probabilities`, `confidence` |
-| [Score](/zh/primitives/score/) | In welche Kategorie fällt es? | `score`, `legend`, `probabilities`, `confidence` |
-| [Noul](/zh/primitives/noul/) | Ist dies wahr? | `noul` (0 bis 1) |
+| [Choice](/de/primitives/choice/) | Welche dieser Optionen? | `choice`, `probabilities`, `confidence` |
+| [Score](/de/primitives/score/) | In welche Kategorie fällt es? | `score`, `legend`, `probabilities`, `confidence` |
+| [Noul](/de/primitives/noul/) | Ist dies wahr? | `noul` (0 bis 1) |
 
 Sie können eine einzelne Frage stellen oder mehrere auf einmal senden. Jede Frage wird unabhängig ausgewertet.
 
@@ -79,6 +79,6 @@ Ein einzelner Aufruf gibt drei unabhängige Antworten zurück. Der Code leitet b
 
 ## Fortgeschrittenes
 
-- [Erweiterte Verwendung von Primitives](/zh/primitives/advanced/) – Schreibweise der Kriterien, Formulierungstechniken, Behandlung von Randfällen
-- [Fan-Out-Muster](/zh/patterns/fan-out/) – Wie Sie eine große Anzahl von Fragen in eine einzelne Anfrage packen
-- [Vertrauen](/zh/concepts/confidence/) – Steuerung des Verhaltens mit `confidence` und `probabilities`
+- [Erweiterte Verwendung von Primitives](/de/primitives/advanced/) – Schreibweise der Kriterien, Formulierungstechniken, Behandlung von Randfällen
+- [Fan-Out-Muster](/de/patterns/fan-out/) – Wie Sie eine große Anzahl von Fragen in eine einzelne Anfrage packen
+- [Vertrauen](/de/concepts/confidence/) – Steuerung des Verhaltens mit `confidence` und `probabilities`

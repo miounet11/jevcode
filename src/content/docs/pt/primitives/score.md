@@ -16,7 +16,7 @@ Use o Score quando a resposta estiver em um **contínuo que pode ser descrito po
 - O nível de satisfação de um cliente
 - A profundidade da experiência em Python de um candidato
 
-Se a resposta for um conjunto de opções fixas e não houver **relação de ordem** entre as opções, use [Choice](/zh/primitives/choice/); se for apenas sim ou não, use [Noul](/zh/primitives/noul/).
+Se a resposta for um conjunto de opções fixas e não houver **relação de ordem** entre as opções, use [Choice](/pt/primitives/choice/); se for apenas sim ou não, use [Noul](/pt/primitives/noul/).
 
 Exemplos típicos de perguntas:
 
@@ -97,11 +97,11 @@ O papel do `legend` é tornar a resposta autoexplicativa: você não precisa man
 
 **Observe o `confidence` em vez de olhar apenas para o `score`.** Um score com baixa confiança geralmente significa que as definições das faixas são ambíguas, a dimensão é multidimensional ou as informações do `state` são insuficientes. A resposta correta nesse caso é melhorar as definições das faixas, em vez de forçar a obtenção de um valor.
 
-**Em cenários de classificação, o Score é o principal primitivo.** Classificação por relevância, avaliação de qualidade e分级 de risco são adequados para o uso do Score, combinados com o [Padrão de Pontuação Composta](/zh/patterns/composite-scoring/) para ponderar e combinar múltiplas dimensões.
+**Em cenários de classificação, o Score é o principal primitivo.** Classificação por relevância, avaliação de qualidade e分级 de risco são adequados para o uso do Score, combinados com o [Padrão de Pontuação Composta](/pt/patterns/composite-scoring/) para ponderar e combinar múltiplas dimensões.
 
 ## Relacionado
 
-- [Choice](/zh/primitives/choice/) — Opções fixas sem ordem
-- [Noul](/zh/primitives/noul/) — Probabilidade de sim/não
-- [Padrão de Pontuação Composta](/zh/patterns/composite-scoring/) — Síntese ponderada de múltiplas dimensões
-- [Confiança](/zh/concepts/confidence/) — O que significa baixa confiança
+- [Choice](/pt/primitives/choice/) — Opções fixas sem ordem
+- [Noul](/pt/primitives/noul/) — Probabilidade de sim/não
+- [Padrão de Pontuação Composta](/pt/patterns/composite-scoring/) — Síntese ponderada de múltiplas dimensões
+- [Confiança](/pt/concepts/confidence/) — O que significa baixa confiança

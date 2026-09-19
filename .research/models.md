@@ -102,4 +102,4 @@ Jev is not trained on customer requests or responses. See [Legal](/legal) for th
   </Expandable>
 </ResponseField>
 
-See the [Python](/sdk/python/api/clients/sync/models) and [JavaScript](/sdk/javascript/api/interfaces/Models) SDK references for the full method signatures.
+See the [Python](/sdk/python/api/clients/sync#typesafe_sdk.Models.list) and [JavaScript](/sdk/javascript/api/interfaces/Models) SDK references for the full method signatures.

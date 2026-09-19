@@ -16,7 +16,7 @@ translatedFrom: zh
 - 고객의 만족도
 - 후보자의 Python 경험 수준
 
-답변이 고정된 옵션 집합이며 옵션 간에 **순서 관계가 없는** 경우 [Choice](/zh/primitives/choice/)를 사용하십시오. 단순히 예/아니오인 경우 [Noul](/zh/primitives/noul/)을 사용하십시오.
+답변이 고정된 옵션 집합이며 옵션 간에 **순서 관계가 없는** 경우 [Choice](/ko/primitives/choice/)를 사용하십시오. 단순히 예/아니오인 경우 [Noul](/ko/primitives/noul/)을 사용하십시오.
 
 대표적인 질문 예시:
 
@@ -97,11 +97,11 @@ print(response.answers["bug_severity"].score)
 
 **`score`만 보지 말고 `confidence`에 주목하십시오.** `Score`의 신뢰도가 낮다는 것은 일반적으로 단계 정의에 모호함이 있거나, 척도가 다차원적이거나, `state` 정보가 부족함을 의미합니다. 이때 올바른 대응은 값을 무리하게 추출하는 것이 아니라 단계 정의를 개선하는 것입니다.
 
-**순위 매기기 시나리오에서 Score는 주요 원리입니다.** 관련성 순위 매기기, 품질 평가, 위험 등급 분류 등은 모두 `Score`에 적합하며, 여러 차원을 가중치 합산하여 결합하는 [Composite Scoring Pattern](/zh/patterns/composite-scoring/)과 함께 사용하면 좋습니다.
+**순위 매기기 시나리오에서 Score는 주요 원리입니다.** 관련성 순위 매기기, 품질 평가, 위험 등급 분류 등은 모두 `Score`에 적합하며, 여러 차원을 가중치 합산하여 결합하는 [Composite Scoring Pattern](/ko/patterns/composite-scoring/)과 함께 사용하면 좋습니다.
 
 ## 관련 문서
 
-- [Choice](/zh/primitives/choice/) — 순서가 없는 고정 옵션
-- [Noul](/zh/primitives/noul/) — 예/아니오 확률
-- [Composite Scoring Pattern](/zh/patterns/composite-scoring/) — 다차원 가중치 합성
-- [Confidence](/zh/concepts/confidence/) — 낮은 신뢰도의 의미
+- [Choice](/ko/primitives/choice/) — 순서가 없는 고정 옵션
+- [Noul](/ko/primitives/noul/) — 예/아니오 확률
+- [Composite Scoring Pattern](/ko/patterns/composite-scoring/) — 다차원 가중치 합성
+- [Confidence](/ko/concepts/confidence/) — 낮은 신뢰도의 의미

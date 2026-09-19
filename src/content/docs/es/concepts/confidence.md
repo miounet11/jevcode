@@ -100,6 +100,6 @@ Por ejemplo, la diferencia de probabilidad (margen) entre dos opciones candidata
 
 ## Relacionado
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) — Los dos primitivos que incluyen confidence
-- [Noul](/zh/primitives/noul/) — No incluye confidence, su valor es la probabilidad en sí misma
-- [Patrón de enrutamiento por confianza](/zh/patterns/confidence-routing/) — Utiliza la confianza como señal de enrutamiento en el flujo de trabajo
+- [Choice](/es/primitives/choice/) / [Score](/es/primitives/score/) — Los dos primitivos que incluyen confidence
+- [Noul](/es/primitives/noul/) — No incluye confidence, su valor es la probabilidad en sí misma
+- [Patrón de enrutamiento por confianza](/es/patterns/confidence-routing/) — Utiliza la confianza como señal de enrutamiento en el flujo de trabajo

@@ -167,7 +167,7 @@ Restricción clave: **la respuesta siempre se encuentra dentro de las opciones q
 
 ## Siguientes pasos
 
-- [Primitiva Choice](/zh/primitives/choice/) — Base para clasificación y enrutamiento
-- [Primitiva Score](/zh/primitives/score/) — Puntuación y ordenación
-- [Primitiva Noul](/zh/primitives/noul/) — Validación y barreras de seguridad
-- [Confianza](/zh/concepts/confidence/) — Controla el comportamiento del sistema mediante la confianza
+- [Primitiva Choice](/es/primitives/choice/) — Base para clasificación y enrutamiento
+- [Primitiva Score](/es/primitives/score/) — Puntuación y ordenación
+- [Primitiva Noul](/es/primitives/noul/) — Validación y barreras de seguridad
+- [Confianza](/es/concepts/confidence/) — Controla el comportamiento del sistema mediante la confianza

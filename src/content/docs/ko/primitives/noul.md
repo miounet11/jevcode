@@ -16,7 +16,7 @@ translatedFrom: zh
 - 이 이력서에 분산 시스템 경험이 언급되어 있는가?
 - 이 댓글에 개인식별정보(PII)가 포함되어 있는가?
 
-답변이 여러 옵션 중 하나여야 한다면 [Choice](/zh/primitives/choice/)를 사용하고, 특정 척도 상의 위치를 나타내야 한다면 [Score](/zh/primitives/score/)를 사용하십시오.
+답변이 여러 옵션 중 하나여야 한다면 [Choice](/ko/primitives/choice/)를 사용하고, 특정 척도 상의 위치를 나타내야 한다면 [Score](/ko/primitives/score/)를 사용하십시오.
 
 대표적인 질문 예시:
 
@@ -94,13 +94,13 @@ print(response.nouls["is_human_escalation"].noul)
 
 **명확한 판단 기준을 정의하십시오.** 「Is the candidate strong in Python?」(후보자가 Python에서 우수한가?)를 예로 들면: 「우수하다」의 정의를 먼저 정의해야 합니다. 정의가 불분명하면 확률 해석이 어려워집니다.
 
-**0.5는 「중간 수준」을 의미하지 않습니다.** 이는 가장 흔한 오용 사례입니다. 0.5는 모델이 예와 아니오를 구분할 수 없음을 의미할 뿐, 「중간 정도의 수준」을 의미하지 않습니다. 기술의 숙련도를 측정하려면 [Score](/zh/primitives/score/)를 사용하여 정의된 등급에서 점수를 매겨야 합니다.
+**0.5는 「중간 수준」을 의미하지 않습니다.** 이는 가장 흔한 오용 사례입니다. 0.5는 모델이 예와 아니오를 구분할 수 없음을 의미할 뿐, 「중간 정도의 수준」을 의미하지 않습니다. 기술의 숙련도를 측정하려면 [Score](/ko/primitives/score/)를 사용하여 정의된 등급에서 점수를 매겨야 합니다.
 
 **지시문을 평가할 진위 여부를 가진 진술문으로 작성할 수 있습니다.** 의문문 외에도 지시문을 모델이 진위 여부를 평가해야 하는 진술문으로 작성할 수 있습니다. 예를 들어 「고객이 환불을 요청하고 있다」라는 내용에 대해 진술문으로 작성할 경우, 1에 가까운 값은 해당 진술이 참임을 나타냅니다. **두 가지 문구 방식 모두 자체 데이터를 사용하여 테스트해 보기를 권장합니다.**
 
 ## 관련 문서
 
-- [Choice](/zh/primitives/choice/) — 순서가 없는 고정된 옵션
-- [Score](/zh/primitives/score/) — 순서가 있는 척도에서의 점수
-- [신뢰도](/zh/concepts/confidence/) — Noul에 confidence가 없는 이유
+- [Choice](/ko/primitives/choice/) — 순서가 없는 고정된 옵션
+- [Score](/ko/primitives/score/) — 순서가 있는 척도에서의 점수
+- [신뢰도](/ko/concepts/confidence/) — Noul에 confidence가 없는 이유
 - [가드레일에서의 Noul 활용](https://docs.typesafe.ai/patterns) — 공식 패턴 라이브러리

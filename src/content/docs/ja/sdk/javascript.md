@@ -80,6 +80,6 @@ SDK は ESM、CommonJS、TypeScript 宣言ファイルの3つのビルド产物�
 
 ## 関連リンク
 
-- [5分で始める](/zh/quickstart/)
-- [質問プリミティブ](/zh/primitives/) — 3種類の質問の構築方法
-- [ファンアウト並列処理](/zh/patterns/fan-out/) — 一度に複数の質問を行う
+- [5分で始める](/ja/quickstart/)
+- [質問プリミティブ](/ja/primitives/) — 3種類の質問の構築方法
+- [ファンアウト並列処理](/ja/patterns/fan-out/) — 一度に複数の質問を行う

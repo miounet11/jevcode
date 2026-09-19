@@ -114,6 +114,6 @@ Há um cookbook oficial de Classificação Hierárquica que demonstra uma traves
 
 ## Relacionado
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) / [Noul](/zh/primitives/noul/)
-- [Padrão Fan-out](/zh/patterns/fan-out/) — Agrupar muitas perguntas em uma única solicitação
+- [Choice](/pt/primitives/choice/) / [Score](/pt/primitives/score/) / [Noul](/pt/primitives/noul/)
+- [Padrão Fan-out](/pt/patterns/fan-out/) — Agrupar muitas perguntas em uma única solicitação
 - [Como construir sistemas System One](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) — Fluxo de trabalho completo oficial

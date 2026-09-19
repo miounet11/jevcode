@@ -90,7 +90,7 @@ La clé réside dans le fait de **réserver les traitements coûteux aux requêt
 
 Supposons que 70 % des messages du service client soient de type `order_status`, qui peuvent être résolus par une simple requête de base de données. Si tous les messages sont envoyés au modèle de langage (LLM) en premier, vous payez le coût élevé du LLM pour ces 70 %, alors qu'ils n'en avaient pas besoin. Effectuer une classification Choice peu coûteuse en premier permet de dévier ce trafic.
 
-C'est ici qu'intervient le [pattern Fan-out](/zh/patterns/fan-out/) : on pose toutes les questions nécessaires (classification, sévérité, demande de remboursement, émotion, etc.) en une seule fois, car poser plusieurs questions n'impacte pas la vitesse.
+C'est ici qu'intervient le [pattern Fan-out](/fr/patterns/fan-out/) : on pose toutes les questions nécessaires (classification, sévérité, demande de remboursement, émotion, etc.) en une seule fois, car poser plusieurs questions n'impacte pas la vitesse.
 
 ## Points de conception
 
@@ -98,15 +98,15 @@ C'est ici qu'intervient le [pattern Fan-out](/zh/patterns/fan-out/) : on pose to
 
 **La granularité de la classification détermine la complexité du système.** Trop de catégories rendent le routage indistinct ; trop peu réduit le nombre d'échantillons par catégorie, ce qui diminue la précision. Commencez par 4 à 6 catégories.
 
-**Envoyez les jugements spéculatifs en parallèle.** Dans l'exemple ci-dessus, `bug_severity` et `has_reproducible_steps` ne sont pertinents que pour certaines intentions, et `refund_requested` ne l'est que dans le contexte des remboursements. Les envoyer tous en amont a un coût quasi nul. C'est là toute la valeur du [Fan-out parallèle](/zh/patterns/fan-out/).
+**Envoyez les jugements spéculatifs en parallèle.** Dans l'exemple ci-dessus, `bug_severity` et `has_reproducible_steps` ne sont pertinents que pour certaines intentions, et `refund_requested` ne l'est que dans le contexte des remboursements. Les envoyer tous en amont a un coût quasi nul. C'est là toute la valeur du [Fan-out parallèle](/fr/patterns/fan-out/).
 
-**Utilisez la confiance pour un contrôle secondaire.** Si `intent.confidence` est faible, cela signifie que la classification elle-même est peu fiable. Dans ce cas, il ne faut pas router aveuglément, mais plutôt transférer à un humain ou demander des clarifications. Voir [Routage basé sur la confiance](/zh/patterns/confidence-routing/).
+**Utilisez la confiance pour un contrôle secondaire.** Si `intent.confidence` est faible, cela signifie que la classification elle-même est peu fiable. Dans ce cas, il ne faut pas router aveuglément, mais plutôt transférer à un humain ou demander des clarifications. Voir [Routage basé sur la confiance](/fr/patterns/confidence-routing/).
 
 **Conservez une catégorie de repli.** Ajoutez une option telle que `other` à la classification pour que les requêtes ne correspondant à aucun type de processeur aient une destination, au lieu d'être forcées dans la catégorie la plus proche.
 
 ## Liés
 
-- [Choice](/zh/primitives/choice/) — La primitive de base de ce pattern
-- [Fan-out parallèle](/zh/patterns/fan-out/) — Poser toutes les questions d'aide en une seule fois
-- [Routage basé sur la confiance](/zh/patterns/confidence-routing/) — Que faire lorsque la classification est peu fiable
-- [Composite Scoring](/zh/patterns/composite-scoring/) — Pattern complémentaire pour les besoins de classement
+- [Choice](/fr/primitives/choice/) — La primitive de base de ce pattern
+- [Fan-out parallèle](/fr/patterns/fan-out/) — Poser toutes les questions d'aide en une seule fois
+- [Routage basé sur la confiance](/fr/patterns/confidence-routing/) — Que faire lorsque la classification est peu fiable
+- [Composite Scoring](/fr/patterns/composite-scoring/) — Pattern complémentaire pour les besoins de classement

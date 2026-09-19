@@ -75,6 +75,6 @@ Eine bewährte Praxis ist: Wenn die Konfidenz einer hochgewichteten Dimension un
 
 ## Verwandt
 
-- [Score](/zh/primitives/score/) — Die grundlegende Primitive dieses Musters
-- [Fan-Out](/zh/patterns/fan-out/) — Abfrage aller Dimensionen in einem Schritt
-- [Confidence](/zh/concepts/confidence/) — Umgang mit unzuverlässigen Dimension-Scores
+- [Score](/de/primitives/score/) — Die grundlegende Primitive dieses Musters
+- [Fan-Out](/de/patterns/fan-out/) — Abfrage aller Dimensionen in einem Schritt
+- [Confidence](/de/concepts/confidence/) — Umgang mit unzuverlässigen Dimension-Scores

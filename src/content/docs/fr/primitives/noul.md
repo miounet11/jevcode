@@ -16,7 +16,7 @@ Utilisez Noul lorsque la réponse est **oui ou non**. Par exemple :
 - Ce CV mentionne-t-il une expérience en systèmes distribués ?
 - Ce commentaire contient-il des informations d'identification personnelle ?
 
-Si la réponse fait partie d'un ensemble d'options, utilisez [Choice](/zh/primitives/choice/) ; si elle correspond à une position sur un spectre, utilisez [Score](/zh/primitives/score/).
+Si la réponse fait partie d'un ensemble d'options, utilisez [Choice](/fr/primitives/choice/) ; si elle correspond à une position sur un spectre, utilisez [Score](/fr/primitives/score/).
 
 Exemples de questions typiques :
 
@@ -94,13 +94,13 @@ C'est une différence importante entre Noul et les deux autres primitives : **No
 
 **Définissez un critère d'évaluation clair.** Prenons l'exemple de « Is the candidate strong in Python? » (Le candidat est-il fort en Python ?) : il faut d'abord définir ce que signifie « fort ». Une définition imprécise rendra les probabilités difficiles à interpréter.
 
-**0,5 ne signifie pas « niveau moyen ».** C'est l'erreur la plus courante : 0,5 indique que le modèle ne parvient pas à distinguer entre « oui » et « non », et non qu'il y a « la moitié du niveau ». Pour mesurer le degré de maîtrise d'une compétence, utilisez [Score](/zh/primitives/score/) pour attribuer des points sur des paliers définis.
+**0,5 ne signifie pas « niveau moyen ».** C'est l'erreur la plus courante : 0,5 indique que le modèle ne parvient pas à distinguer entre « oui » et « non », et non qu'il y a « la moitié du niveau ». Pour mesurer le degré de maîtrise d'une compétence, utilisez [Score](/fr/primitives/score/) pour attribuer des points sur des paliers définis.
 
 **Vous pouvez formuler les instructions sous forme d'énoncés à évaluer pour leur véracité.** Outre les questions, vous pouvez également rédiger les instructions sous forme d'énoncés que le modèle doit évaluer quant à leur véracité. Par exemple, pour l'énoncé « Le client demande un remboursement », une valeur proche de 1 indique que l'énoncé est vrai. **Il est conseillé d'essayer les deux formulations avec vos propres données.**
 
 ## Liés
 
-- [Choice](/zh/primitives/choice/) — Options fixes non ordonnées
-- [Score](/zh/primitives/score/) — Évaluation sur une échelle ordonnée
-- [Confiance](/zh/concepts/confidence/) — Pourquoi Noul n'a pas de champ confidence
+- [Choice](/fr/primitives/choice/) — Options fixes non ordonnées
+- [Score](/fr/primitives/score/) — Évaluation sur une échelle ordonnée
+- [Confiance](/fr/concepts/confidence/) — Pourquoi Noul n'a pas de champ confidence
 - [Application de Noul dans les garde-fous](https://docs.typesafe.ai/patterns) — Bibliothèque de modèles officiels

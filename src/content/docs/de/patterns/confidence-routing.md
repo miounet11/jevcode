@@ -72,6 +72,6 @@ Wenn eine Entscheidung **keine Konsequenzen hat, wenn sie falsch ist** (z. B. da
 
 ## Verwandt
 
-- [Konfidenz](/zh/concepts/confidence/) — Das Verhältnis zwischen Konfidenz und Wahrscheinlichkeiten
-- [Absichtsrouting](/zh/patterns/intent-routing/) — Wird häufig in Kombination mit Konfidenz-Routing verwendet
-- [Kompositbewertung](/zh/patterns/composite-scoring/) — Umgang mit Konfidenz in Szenarien der Ranglistenbildung
+- [Konfidenz](/de/concepts/confidence/) — Das Verhältnis zwischen Konfidenz und Wahrscheinlichkeiten
+- [Absichtsrouting](/de/patterns/intent-routing/) — Wird häufig in Kombination mit Konfidenz-Routing verwendet
+- [Kompositbewertung](/de/patterns/composite-scoring/) — Umgang mit Konfidenz in Szenarien der Ranglistenbildung

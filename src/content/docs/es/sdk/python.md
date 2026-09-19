@@ -91,5 +91,5 @@ El SDK reintentará automáticamente siguiendo una estrategia de retroceso (back
 ## Relacionado
 
 - [Referencia completa de la API del SDK de Python](https://docs.typesafe.ai/sdk/python/api/clients/async/client)
-- [Inicio rápido en 5 minutos](/zh/quickstart/)
-- [Fan-out paralelo](/zh/patterns/fan-out/) — Haz múltiples preguntas a la vez
+- [Inicio rápido en 5 minutos](/es/quickstart/)
+- [Fan-out paralelo](/es/patterns/fan-out/) — Haz múltiples preguntas a la vez

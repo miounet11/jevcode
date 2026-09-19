@@ -109,10 +109,10 @@ if frustration.score > 1.5:
 
 **Distingue entre «especulativo» e «redundante».** Perguntas especulativas são aquelas que têm um significado claro **mesmo sob outros ramos**. Se a resposta a uma pergunta nunca for lida em nenhum ramo, não é especulativa, é desperdício — embora o custo seja baixo, isso torna o código confuso.
 
-**Combina com roteamento por confiança.** O Fan-out resolve «o que perguntar», e o roteamento por confiança resolve «em que acreditar». A combinação dos dois é uma forma comum em sistemas de produção: vê o exemplo do banco de voz no [roteamento por confiança](/zh/patterns/confidence-routing/).
+**Combina com roteamento por confiança.** O Fan-out resolve «o que perguntar», e o roteamento por confiança resolve «em que acreditar». A combinação dos dois é uma forma comum em sistemas de produção: vê o exemplo do banco de voz no [roteamento por confiança](/pt/patterns/confidence-routing/).
 
 ## Relacionados
 
-- [Primitivos de Pergunta](/zh/primitives/) — Independência e perguntas especulativas
-- [State](/zh/concepts/state/) — Orçamento de contexto e organização do state
-- [Roteamento por Confiança](/zh/patterns/confidence-routing/) — O segundo eixo de decisão
+- [Primitivos de Pergunta](/pt/primitives/) — Independência e perguntas especulativas
+- [State](/pt/concepts/state/) — Orçamento de contexto e organização do state
+- [Roteamento por Confiança](/pt/patterns/confidence-routing/) — O segundo eixo de decisão

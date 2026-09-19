@@ -167,7 +167,7 @@ Restrição chave: **a resposta sempre cai dentro das opções fornecidas por vo
 
 ## Próximos passos
 
-- [Primitivo Choice](/zh/primitives/choice/) — Base para classificação e roteamento
-- [Primitivo Score](/zh/primitives/score/) — Pontuação e ordenação
-- [Primitivo Noul](/zh/primitives/noul/) — Validação e barreiras de segurança
-- [Confiança](/zh/concepts/confidence/) — Controle do comportamento do sistema usando confiança
+- [Primitivo Choice](/pt/primitives/choice/) — Base para classificação e roteamento
+- [Primitivo Score](/pt/primitives/score/) — Pontuação e ordenação
+- [Primitivo Noul](/pt/primitives/noul/) — Validação e barreiras de segurança
+- [Confiança](/pt/concepts/confidence/) — Controle do comportamento do sistema usando confiança

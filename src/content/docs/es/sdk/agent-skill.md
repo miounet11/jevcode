@@ -10,7 +10,7 @@ translatedFrom: zh
 
 ## ¿Qué problema resuelve esta habilidad
 
-La habilidad de agente TypeSafe proporciona a tu agente de codificación de IA el contexto completo de la API TypeSafe: tres tipos de [problemas](/zh/primitives/), [patrones](/zh/patterns/) de arquitectura y mejores prácticas para la evaluación organizacional.
+La habilidad de agente TypeSafe proporciona a tu agente de codificación de IA el contexto completo de la API TypeSafe: tres tipos de [problemas](/es/primitives/), [patrones](/es/patterns/) de arquitectura y mejores prácticas para la evaluación organizacional.
 
 **Por qué es necesaria**: Un agente sin la habilidad escribirá campos de solicitud y respuesta basándose en suposiciones, generando llamadas a la API que parecen razonables pero que en realidad no existen. Este es el patrón de fallo más común al integrar una nueva API con agentes de codificación.
 
@@ -120,6 +120,6 @@ Normalmente se debe a que la habilidad está desactualizada. Actualiza siguiendo
 
 ## Relacionado
 
-- [Resumen del SDK](/zh/sdk/) — SDK de Python y JS
-- [Primitivas de problemas](/zh/primitives/) — Los tres tipos de problemas que el agente debe entender
-- [Confianza](/zh/concepts/confidence/) — Cómo configurar los umbrales
+- [Resumen del SDK](/es/sdk/) — SDK de Python y JS
+- [Primitivas de problemas](/es/primitives/) — Los tres tipos de problemas que el agente debe entender
+- [Confianza](/es/concepts/confidence/) — Cómo configurar los umbrales

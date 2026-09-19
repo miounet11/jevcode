@@ -19,9 +19,9 @@ TypeSafe の原語（プリミティブ）は、コード内で組み合わせ�
 
 | タイプ | 回答内容 | 返却値 |
 | :--- | :--- | :--- |
-| [Choice](/zh/primitives/choice/) | どの選択肢を選ぶか？ | `choice`, `probabilities`, `confidence` |
-| [Score](/zh/primitives/score/) | どの段階に該当するか？ | `score`, `legend`, `probabilities`, `confidence` |
-| [Noul](/zh/primitives/noul/) | これは真か？ | `noul`（0 から 1） |
+| [Choice](/ja/primitives/choice/) | どの選択肢を選ぶか？ | `choice`, `probabilities`, `confidence` |
+| [Score](/ja/primitives/score/) | どの段階に該当するか？ | `score`, `legend`, `probabilities`, `confidence` |
+| [Noul](/ja/primitives/noul/) | これは真か？ | `noul`（0 から 1） |
 
 1つの質問だけを投げることも、一度に複数の質問を送信することもできます。各質問は独立して評価されます。
 
@@ -79,6 +79,6 @@ TypeSafe の原語（プリミティブ）は、コード内で組み合わせ�
 
 ## 上級者向け
 
-- [原語の上級用法](/zh/primitives/advanced/) — criteria の書き方、表現のテクニック、境界ケースの処理
-- [ファンアウトパターン](/zh/patterns/fan-out/) — 大量の質問を1つのリクエストにパックする方法
-- [信頼度](/zh/concepts/confidence/) — `confidence` と `probabilities` を使用して動作を制御する
+- [原語の上級用法](/ja/primitives/advanced/) — criteria の書き方、表現のテクニック、境界ケースの処理
+- [ファンアウトパターン](/ja/patterns/fan-out/) — 大量の質問を1つのリクエストにパックする方法
+- [信頼度](/ja/concepts/confidence/) — `confidence` と `probabilities` を使用して動作を制御する

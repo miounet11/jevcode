@@ -61,11 +61,11 @@ Der Rückgabewert des zweiten Ansatzes ist ein deterministischer Typ innerhalb d
 
 ## Konfidenz: Das Modell kann „Ich bin unsicher“ sagen
 
-Die Antworten der System One-Modelle enthalten zudem [confidence](/zh/concepts/confidence/), sodass Sie entscheiden können, wann Sie direkt ausführen und wann Sie auf menschliche Überprüfung oder ein reasoning-Modell zurückgreifen. Dies ist die Grundlage für den Aufbau vertrauenswürdiger Systeme – **ein System, das Unsicherheit nicht ehrlich ausdrücken kann, kann nicht vertraut werden**.
+Die Antworten der System One-Modelle enthalten zudem [confidence](/de/concepts/confidence/), sodass Sie entscheiden können, wann Sie direkt ausführen und wann Sie auf menschliche Überprüfung oder ein reasoning-Modell zurückgreifen. Dies ist die Grundlage für den Aufbau vertrauenswürdiger Systeme – **ein System, das Unsicherheit nicht ehrlich ausdrücken kann, kann nicht vertraut werden**.
 
 ## Aufrufmethode
 
-Über das Client-[SDK](/zh/sdk/) oder die HTTP-API aufrufen:
+Über das Client-[SDK](/de/sdk/) oder die HTTP-API aufrufen:
 
 ```http
 POST https://api.typesafe.ai/v1/systemone
@@ -75,7 +75,7 @@ Das Feld `model` in der Anfrage wählt das spezifische Modell aus. Der Standard-
 
 ## Weiterführende Literatur
 
-- [State](/zh/concepts/state/) – Wie Sie den Kontext für das Modell organisieren
-- [Frage-Primitiven](/zh/primitives/) – Drei Arten von typisierten Fragen
-- [Architekturmuster](/zh/patterns/) – Organisation dieser Aufrufe in Produktionsumgebungen
+- [State](/de/concepts/state/) – Wie Sie den Kontext für das Modell organisieren
+- [Frage-Primitiven](/de/primitives/) – Drei Arten von typisierten Fragen
+- [Architekturmuster](/de/patterns/) – Organisation dieser Aufrufe in Produktionsumgebungen
 - [So erstellen Sie System-One-Systeme](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) – Offizielle umfassende Anleitung zu Workflows

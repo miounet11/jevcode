@@ -100,6 +100,6 @@ elif action.choice == "approve_transfer":
 
 ## 関連
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) — confidence を持つ2つのプリミティブ
-- [Noul](/zh/primitives/noul/) — confidence を持たず、そのものが確率値
-- [信頼度ルーティングパターン](/zh/patterns/confidence-routing/) — 信頼度をパイプラインルーティングシグナルとして使用する
+- [Choice](/ja/primitives/choice/) / [Score](/ja/primitives/score/) — confidence を持つ2つのプリミティブ
+- [Noul](/ja/primitives/noul/) — confidence を持たず、そのものが確率値
+- [信頼度ルーティングパターン](/ja/patterns/confidence-routing/) — 信頼度をパイプラインルーティングシグナルとして使用する

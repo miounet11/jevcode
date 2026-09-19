@@ -14,16 +14,16 @@ TypeSafe está diseñado para ser **incorporado en sistemas más amplios** con e
 
 Esto significa que no debes intentar resolver un problema empresarial complejo con una sola llamada; en su lugar, divídelo en varias decisiones independientes y combínalas mediante tu propio código. La lógica de combinación en el código es determinista, testeable y ajustable; esta es precisamente la fuente de la fiabilidad.
 
-Antes de leer esta sección, asegúrate de comprender los [Primitivos de Prompt](/zh/primitives/) y la [Confianza](/zh/concepts/confidence/).
+Antes de leer esta sección, asegúrate de comprender los [Primitivos de Prompt](/es/primitives/) y la [Confianza](/es/concepts/confidence/).
 
 ## Cuatro patrones
 
 | Patrón | Qué hace | Beneficio |
 | :--- | :--- | :--- |
-| [Fan-out paralelo](/zh/patterns/fan-out/) | Envía muchas preguntas (incluyendo especulativas) en una sola llamada; el código determina cuáles son relevantes | Coste, velocidad |
-| [Enrutamiento por confianza](/zh/patterns/confidence-routing/) | Utiliza la confianza como un segundo eje de decisión para construir sistemas más seguros | Fiabilidad, seguridad |
-| [Puntuación compuesta](/zh/patterns/composite-scoring/) | Combina múltiples dimensiones de análisis en una única puntuación | Coste, fiabilidad, velocidad |
-| [Enrutamiento por intención](/zh/patterns/intent-routing/) | Clasifica la intención del usuario y la enruta hacia el procesador adecuado | Coste, velocidad |
+| [Fan-out paralelo](/es/patterns/fan-out/) | Envía muchas preguntas (incluyendo especulativas) en una sola llamada; el código determina cuáles son relevantes | Coste, velocidad |
+| [Enrutamiento por confianza](/es/patterns/confidence-routing/) | Utiliza la confianza como un segundo eje de decisión para construir sistemas más seguros | Fiabilidad, seguridad |
+| [Puntuación compuesta](/es/patterns/composite-scoring/) | Combina múltiples dimensiones de análisis en una única puntuación | Coste, fiabilidad, velocidad |
+| [Enrutamiento por intención](/es/patterns/intent-routing/) | Clasifica la intención del usuario y la enruta hacia el procesador adecuado | Coste, velocidad |
 
 ## Cómo interactúan
 
@@ -53,6 +53,6 @@ El **enrutamiento por intención** suele ir al principio, ya que determina qué 
 
 ## Relacionado
 
-- [Primitivos de Prompt](/zh/primitives/) — Conocimiento previo
-- [Confianza](/zh/concepts/confidence/) — Conocimiento previo
-- [Casos de uso en el ecosistema](/zh/cases/use-case-map/) — Cómo se utilizan estos patrones en proyectos reales
+- [Primitivos de Prompt](/es/primitives/) — Conocimiento previo
+- [Confianza](/es/concepts/confidence/) — Conocimiento previo
+- [Casos de uso en el ecosistema](/es/cases/use-case-map/) — Cómo se utilizan estos patrones en proyectos reales

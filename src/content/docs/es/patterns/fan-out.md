@@ -109,10 +109,10 @@ if frustration.score > 1.5:
 
 **Distingue entre «especulativo» y «redundante».** Las preguntas especulativas son aquellas que tienen un **significado claro incluso bajo otras ramas**. Si la respuesta a una pregunta nunca la leerás en ninguna rama, no se llama especulativa, sino desperdicio: aunque el costo es bajo, desordena el código.
 
-**Úsalo junto con el enrutamiento por confianza.** El fan-out resuelve «qué preguntar», y el enrutamiento por confianza resuelve «en qué creer». La combinación de ambos es una forma común en sistemas de producción: consulta el ejemplo de banco de voz en [enrutamiento por confianza](/zh/patterns/confidence-routing/).
+**Úsalo junto con el enrutamiento por confianza.** El fan-out resuelve «qué preguntar», y el enrutamiento por confianza resuelve «en qué creer». La combinación de ambos es una forma común en sistemas de producción: consulta el ejemplo de banco de voz en [enrutamiento por confianza](/es/patterns/confidence-routing/).
 
 ## Relacionado
 
-- [Primitivas de pregunta](/zh/primitives/) — Independencia y preguntas especulativas
-- [State](/zh/concepts/state/) — Presupuesto de contexto y organización del estado
-- [Enrutamiento por confianza](/zh/patterns/confidence-routing/) — El segundo eje de decisión
+- [Primitivas de pregunta](/es/primitives/) — Independencia y preguntas especulativas
+- [State](/es/concepts/state/) — Presupuesto de contexto y organización del estado
+- [Enrutamiento por confianza](/es/patterns/confidence-routing/) — El segundo eje de decisión

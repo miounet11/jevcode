@@ -167,7 +167,7 @@ TS SDK の大きな利点は、**回答の型が質問から自動的に推論�
 
 ## 次のステップ
 
-- [Choice 原語](/zh/primitives/choice/) — 分類とルーティングの基礎
-- [Score 原語](/zh/primitives/score/) — スコアリングとソート
-- [Noul 原語](/zh/primitives/noul/) — 検証とガードレール
-- [信頼度](/zh/concepts/confidence/) — 信頼度を使用してシステム動作を制御する
+- [Choice 原語](/ja/primitives/choice/) — 分類とルーティングの基礎
+- [Score 原語](/ja/primitives/score/) — スコアリングとソート
+- [Noul 原語](/ja/primitives/noul/) — 検証とガードレール
+- [信頼度](/ja/concepts/confidence/) — 信頼度を使用してシステム動作を制御する

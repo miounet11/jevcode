@@ -114,6 +114,6 @@ Noul の `criteria` はオプションです。はい/いいえの境界が微�
 
 ## 関連
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) / [Noul](/zh/primitives/noul/)
-- [ファンアウトパターン](/zh/patterns/fan-out/) — 大量の問題を1つのリクエストにパックする
+- [Choice](/ja/primitives/choice/) / [Score](/ja/primitives/score/) / [Noul](/ja/primitives/noul/)
+- [ファンアウトパターン](/ja/patterns/fan-out/) — 大量の問題を1つのリクエストにパックする
 - [System One システムの構築方法](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) — 公式の完全なワークフロー

@@ -14,7 +14,7 @@ Identifiez d'abord le scénario le plus proche de votre activité, observez quel
 
 Chaque scénario ci-dessous présente la structure suivante : **Problème résolu** → **Primitive utilisée** → **Projet réel**.
 
-> Pour consulter **l'index complet des projets communautaires classés par catégorie** (avec nombre d'étoiles et étiquettes de langage), consultez [Écosystème communautaire](/zh/ecosystem/).
+> Pour consulter **l'index complet des projets communautaires classés par catégorie** (avec nombre d'étoiles et étiquettes de langage), consultez [Écosystème communautaire](/fr/ecosystem/).
 
 ## Classification et routage
 
@@ -36,7 +36,7 @@ Chaque scénario ci-dessous présente la structure suivante : **Problème résol
 
 **Problème** : Il est nécessaire de classer un ensemble d'éléments selon la pertinence, la qualité ou des critères multidimensionnels.
 
-**Primitive** : Score, combiné avec la [notation composite](/zh/patterns/composite-scoring/) pour fusionner les dimensions multiples.
+**Primitive** : Score, combiné avec la [notation composite](/fr/patterns/composite-scoring/) pour fusionner les dimensions multiples.
 
 **Projets réels** :
 
@@ -134,6 +134,6 @@ TypeSafe regroupe les cas d'utilisation en quatre grandes directions, qu'il conv
 
 ## Liens connexes
 
-- [Modèles d'architecture](/zh/patterns/) — Les modèles génériques sous-jacents à ces cas
-- [Primitives de problème](/zh/primitives/) — Méthodes de sélection des primitives
+- [Modèles d'architecture](/fr/patterns/) — Les modèles génériques sous-jacents à ces cas
+- [Primitives de problème](/fr/primitives/) — Méthodes de sélection des primitives
 - [Liste complète awesome-jev](https://github.com/yibie/awesome-jev) — Liste mise à jour en continu des projets communautaires

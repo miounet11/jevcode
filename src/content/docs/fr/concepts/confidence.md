@@ -100,6 +100,6 @@ Par exemple, la marge de probabilité entre deux options candidates peut être p
 
 ## Liens connexes
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) — Les deux primitives avec confiance
-- [Noul](/zh/primitives/noul/) — Sans confiance, c'est une probabilité en soi
-- [Motif de routage par confiance](/zh/patterns/confidence-routing/) — Utilisation de la confiance comme signal de routage dans le pipeline
+- [Choice](/fr/primitives/choice/) / [Score](/fr/primitives/score/) — Les deux primitives avec confiance
+- [Noul](/fr/primitives/noul/) — Sans confiance, c'est une probabilité en soi
+- [Motif de routage par confiance](/fr/patterns/confidence-routing/) — Utilisation de la confiance comme signal de routage dans le pipeline

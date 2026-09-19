@@ -6,7 +6,7 @@ export interface Props {
   path: string;
 }
 
-const { lang, path } = Astro.props;
+const { lang } = Astro.props;
 const t = useTranslations(lang);
 const current = Astro.url.pathname;
 

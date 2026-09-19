@@ -167,7 +167,7 @@ Contrainte clé : **la réponse se situe toujours dans les options que vous avez
 
 ## Prochaines étapes
 
-- [Primitif Choice](/zh/primitives/choice/) — Base de la classification et du routage
-- [Primitif Score](/zh/primitives/score/) — Évaluation et classement
-- [Primitif Noul](/zh/primitives/noul/) — Validation et garde-fou
-- [Confiance](/zh/concepts/confidence/) — Utilisation de la confiance pour contrôler le comportement du système
+- [Primitif Choice](/fr/primitives/choice/) — Base de la classification et du routage
+- [Primitif Score](/fr/primitives/score/) — Évaluation et classement
+- [Primitif Noul](/fr/primitives/noul/) — Validation et garde-fou
+- [Confiance](/fr/concepts/confidence/) — Utilisation de la confiance pour contrôler le comportement du système

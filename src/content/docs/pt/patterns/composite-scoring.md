@@ -75,6 +75,6 @@ Uma prática útil é: se a confiança de uma dimensão de alto peso estiver aba
 
 ## Relacionado
 
-- [Score](/zh/primitives/score/) — O primitivo fundamental deste padrão
-- [Fan-out Paralelo](/zh/patterns/fan-out/) — Perguntar todas as dimensões de uma vez
-- [Confiança](/zh/concepts/confidence/) — Lidar com pontuações de dimensões não confiáveis
+- [Score](/pt/primitives/score/) — O primitivo fundamental deste padrão
+- [Fan-out Paralelo](/pt/patterns/fan-out/) — Perguntar todas as dimensões de uma vez
+- [Confiança](/pt/concepts/confidence/) — Lidar com pontuações de dimensões não confiáveis

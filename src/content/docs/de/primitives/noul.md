@@ -16,7 +16,7 @@ Verwenden Sie Noul, wenn die Antwort eine **Ja-oder-Nein-Entscheidung** ist. Bei
 - Erwähnt dieser Lebenslauf Erfahrung mit verteilten Systemen?
 - Enthält dieser Kommentar personenbezogene Daten?
 
-Wenn die Antwort aus einer Gruppe von Optionen besteht, verwenden Sie [Choice](/zh/primitives/choice/); wenn es sich um eine Position auf einem Spektrum handelt, verwenden Sie [Score](/zh/primitives/score/).
+Wenn die Antwort aus einer Gruppe von Optionen besteht, verwenden Sie [Choice](/de/primitives/choice/); wenn es sich um eine Position auf einem Spektrum handelt, verwenden Sie [Score](/de/primitives/score/).
 
 Beispiele für typische Fragen:
 
@@ -94,13 +94,13 @@ Dies ist ein wichtiger Unterschied zwischen Noul und den beiden anderen Primitiv
 
 **Definieren Sie einen klaren Beurteilungsmaßstab.** Nehmen wir das Beispiel „Is the candidate strong in Python?“ (Ist der Kandidat stark in Python?): Sie müssen zuerst definieren, was „stark“ bedeutet. Eine unklare Definition macht die Wahrscheinlichkeiten schwer interpretierbar.
 
-**0.5 bedeutet nicht „mittleres Niveau“.** Dies ist der häufigste Missbrauch: 0.5 bedeutet, dass das Modell zwischen Ja und Nein nicht unterscheiden kann, nicht „ein halbes Niveau“. Um die Tiefe einer Fähigkeit zu messen, sollten Sie [Score](/zh/primitives/score/) verwenden, um auf definierten Stufen zu punkten.
+**0.5 bedeutet nicht „mittleres Niveau“.** Dies ist der häufigste Missbrauch: 0.5 bedeutet, dass das Modell zwischen Ja und Nein nicht unterscheiden kann, nicht „ein halbes Niveau“. Um die Tiefe einer Fähigkeit zu messen, sollten Sie [Score](/de/primitives/score/) verwenden, um auf definierten Stufen zu punkten.
 
 **Sie können Anweisungen als auszuwertende wahre oder falsche Aussagen formulieren.** Neben Fragen können Sie Anweisungen auch als Aussagen formulieren, deren Wahrheit das Modell bewerten soll. Zum Beispiel für die Tatsache „Der Kunde fordert eine Rückerstattung“. Bei einer Aussage bedeutet ein Wert nahe 1, dass die Aussage wahr ist. **Es lohnt sich, beide Formulierungen mit Ihren eigenen Daten auszuprobieren.**
 
 ## Verwandt
 
-- [Choice](/zh/primitives/choice/) — Ungeordnete, feste Optionen
-- [Score](/zh/primitives/score/) — Bewertung auf einer geordneten Skala
-- [Confidence](/zh/concepts/confidence/) — Warum Noul kein confidence hat
+- [Choice](/de/primitives/choice/) — Ungeordnete, feste Optionen
+- [Score](/de/primitives/score/) — Bewertung auf einer geordneten Skala
+- [Confidence](/de/concepts/confidence/) — Warum Noul kein confidence hat
 - [Noul in Guardrails](https://docs.typesafe.ai/patterns) — Offizielle Musterbibliothek

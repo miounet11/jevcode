@@ -91,5 +91,5 @@ SDK はデフォルトで指数関数的バックオフ戦略でリトライを�
 ## 関連
 
 - [Python SDK 完全 API リファレンス](https://docs.typesafe.ai/sdk/python/api/clients/async/client)
-- [5分で始める](/zh/quickstart/)
-- [ファンアウト並列処理](/zh/patterns/fan-out/) — 一度に複数の質問を行う
+- [5分で始める](/ja/quickstart/)
+- [ファンアウト並列処理](/ja/patterns/fan-out/) — 一度に複数の質問を行う

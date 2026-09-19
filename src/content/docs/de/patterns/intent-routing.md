@@ -90,7 +90,7 @@ Der Schlüssel liegt darin, **die teure Verarbeitung für Anfragen aufzubewahren
 
 Angenommen, 70 % der Kundenservice-Nachrichten sind vom Typ `order_status` und können durch eine einzelne Datenbankabfrage gelöst werden. Wenn alle Nachrichten zuerst an ein großes Modell gesendet werden, zahlen Sie für diese 70 % die Kosten des großen Modells, obwohl sie dies nicht benötigen. Eine einmalige, kostengünstige Choice-Klassifizierung kann diesen Teil des Datenverkehrs abfangen.
 
-Hier kommt genau das [Fan-Out-Muster](/zh/patterns/fan-out/) zum Einsatz: Klassifizierung, Schweregrad, ob eine Rückerstattung angefordert wird, Stimmung und andere Entscheidungen werden in einem einzigen Schritt abgefragt, da zusätzliche Abfragen keine Geschwindigkeitskosten verursachen.
+Hier kommt genau das [Fan-Out-Muster](/de/patterns/fan-out/) zum Einsatz: Klassifizierung, Schweregrad, ob eine Rückerstattung angefordert wird, Stimmung und andere Entscheidungen werden in einem einzigen Schritt abgefragt, da zusätzliche Abfragen keine Geschwindigkeitskosten verursachen.
 
 ## Design-Hinweise
 
@@ -98,15 +98,15 @@ Hier kommt genau das [Fan-Out-Muster](/zh/patterns/fan-out/) zum Einsatz: Klassi
 
 **Die Granularität der Klassifizierung bestimmt die Systemkomplexität.** Zu wenige Kategorien führen zu einer fehlenden Unterscheidbarkeit im Routing; zu viele Kategorien verringern die Stichprobengröße pro Kategorie und senken die Genauigkeit. Beginnen Sie mit 4–6 Kategorien.
 
-**Spekulative Entscheidungen gemeinsam senden.** Die im obigen Beispiel genannten `bug_severity` und `has_reproducible_steps` sind nur bei bestimmten Absichten relevant, `refund_requested` nur in Rückerstattungsszenarien. Durch das vorzeitige Senden aller Werte entstehen nahezu keine Kosten. Dies ist der Wert des [Fan-Out-Parallelismus](/zh/patterns/fan-out/).
+**Spekulative Entscheidungen gemeinsam senden.** Die im obigen Beispiel genannten `bug_severity` und `has_reproducible_steps` sind nur bei bestimmten Absichten relevant, `refund_requested` nur in Rückerstattungsszenarien. Durch das vorzeitige Senden aller Werte entstehen nahezu keine Kosten. Dies ist der Wert des [Fan-Out-Parallelismus](/de/patterns/fan-out/).
 
-**Kombinieren Sie mit Konfidenz für eine sekundäre Gate-Logik.** Wenn `intent.confidence` niedrig ist, ist die Klassifizierung selbst unzuverlässig. In diesem Fall sollte nicht blindlings geroutet werden, sondern stattdessen ein menschlicher Agent eingeschaltet oder um Klärung gebeten werden. Weitere Einzelheiten finden Sie unter [Konfidenz-Routing](/zh/patterns/confidence-routing/).
+**Kombinieren Sie mit Konfidenz für eine sekundäre Gate-Logik.** Wenn `intent.confidence` niedrig ist, ist die Klassifizierung selbst unzuverlässig. In diesem Fall sollte nicht blindlings geroutet werden, sondern stattdessen ein menschlicher Agent eingeschaltet oder um Klärung gebeten werden. Weitere Einzelheiten finden Sie unter [Konfidenz-Routing](/de/patterns/confidence-routing/).
 
 **Behalten Sie eine Fallback-Kategorie bei.** Fügen Sie der Klassifizierung Optionen wie `other` hinzu, damit Anfragen, die zu keiner Prozessorart passen, einen Zielort haben, anstatt in die nächstliegende Kategorie gezwungen zu werden.
 
 ## Verwandt
 
-- [Choice](/zh/primitives/choice/) — Die grundlegende Primitive dieses Musters
-- [Fan-Out-Parallelismus](/zh/patterns/fan-out/) — Abfrage aller Hilfsentscheidungen in einem Schritt
-- [Konfidenz-Routing](/zh/patterns/confidence-routing/) — Was tun, wenn die Klassifizierung unzuverlässig ist
-- [Composite Scoring](/zh/patterns/composite-scoring/) — Ergänzendes Muster für Sortieranforderungen
+- [Choice](/de/primitives/choice/) — Die grundlegende Primitive dieses Musters
+- [Fan-Out-Parallelismus](/de/patterns/fan-out/) — Abfrage aller Hilfsentscheidungen in einem Schritt
+- [Konfidenz-Routing](/de/patterns/confidence-routing/) — Was tun, wenn die Klassifizierung unzuverlässig ist
+- [Composite Scoring](/de/patterns/composite-scoring/) — Ergänzendes Muster für Sortieranforderungen

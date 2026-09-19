@@ -19,9 +19,9 @@ Combinas estas respuestas en tu código para tomar decisiones. Existen tres tipo
 
 | Tipo | ¿Qué responde? | Devuelve |
 | :--- | :--- | :--- |
-| [Choice](/zh/primitives/choice/) | ¿Cuál de estas opciones? | `choice`, `probabilities`, `confidence` |
-| [Score](/zh/primitives/score/) | ¿En qué categoría cae? | `score`, `legend`, `probabilities`, `confidence` |
-| [Noul](/zh/primitives/noul/) | ¿Es esto verdadero? | `noul` (0 a 1) |
+| [Choice](/es/primitives/choice/) | ¿Cuál de estas opciones? | `choice`, `probabilities`, `confidence` |
+| [Score](/es/primitives/score/) | ¿En qué categoría cae? | `score`, `legend`, `probabilities`, `confidence` |
+| [Noul](/es/primitives/noul/) | ¿Es esto verdadero? | `noul` (0 a 1) |
 
 Puedes hacer una sola pregunta o enviar varias a la vez. Cada pregunta se evalúa de forma independiente.
 
@@ -79,6 +79,6 @@ Una sola llamada devuelve tres respuestas independientes. El código dirige el f
 
 ## Avanzado
 
-- [Uso avanzado de primitivos](/zh/primitives/advanced/) — Cómo escribir criterios, técnicas de redacción y manejo de casos límite
-- [Patrón de dispersión (fan-out)](/zh/patterns/fan-out/) — Cómo agrupar muchas preguntas en una sola solicitud
-- [Confianza](/zh/concepts/confidence/) — Controla el comportamiento usando `confidence` y `probabilities`
+- [Uso avanzado de primitivos](/es/primitives/advanced/) — Cómo escribir criterios, técnicas de redacción y manejo de casos límite
+- [Patrón de dispersión (fan-out)](/es/patterns/fan-out/) — Cómo agrupar muchas preguntas en una sola solicitud
+- [Confianza](/es/concepts/confidence/) — Controla el comportamiento usando `confidence` y `probabilities`

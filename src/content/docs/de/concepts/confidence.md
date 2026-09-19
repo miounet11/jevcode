@@ -100,6 +100,6 @@ Zum Beispiel kann die Wahrscheinlichkeitsdifferenz (Margin) zwischen zwei Kandid
 
 ## Verwandte Themen
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) — Die beiden Primitiven mit Konfidenz
-- [Noul](/zh/primitives/noul/) — Ohne Konfidenz, selbst ein Wahrscheinlichkeitswert
-- [Konfidenz-Routing-Muster](/zh/patterns/confidence-routing/) — Konfidenz als Routing-Signal in der Pipeline verwenden
+- [Choice](/de/primitives/choice/) / [Score](/de/primitives/score/) — Die beiden Primitiven mit Konfidenz
+- [Noul](/de/primitives/noul/) — Ohne Konfidenz, selbst ein Wahrscheinlichkeitswert
+- [Konfidenz-Routing-Muster](/de/patterns/confidence-routing/) — Konfidenz als Routing-Signal in der Pipeline verwenden

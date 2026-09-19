@@ -80,6 +80,6 @@ Wenn Sie alle Optionen und Standardwerte kennenlernen möchten, können Sie die 
 
 ## Verwandte Themen
 
-- [Schnellstart in 5 Minuten](/zh/quickstart/)
-- [Fragetypen (Primitives)](/zh/primitives/) — Wie man die drei Arten von Fragen erstellt
-- [Fan-Out Parallelisierung](/zh/patterns/fan-out/) — Stellen Sie mehrere Fragen auf einmal
+- [Schnellstart in 5 Minuten](/de/quickstart/)
+- [Fragetypen (Primitives)](/de/primitives/) — Wie man die drei Arten von Fragen erstellt
+- [Fan-Out Parallelisierung](/de/patterns/fan-out/) — Stellen Sie mehrere Fragen auf einmal

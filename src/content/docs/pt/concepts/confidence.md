@@ -100,6 +100,6 @@ Por exemplo, a margem de probabilidade entre duas opções candidatas pode refle
 
 ## Relacionado
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) — Os dois primitivos com confidence
-- [Noul](/zh/primitives/noul/) — Sem confidence, é por si só uma probabilidade
-- [Padrão de roteamento por confiança](/zh/patterns/confidence-routing/) — Usando a confiança como sinal de roteamento de fluxo
+- [Choice](/pt/primitives/choice/) / [Score](/pt/primitives/score/) — Os dois primitivos com confidence
+- [Noul](/pt/primitives/noul/) — Sem confidence, é por si só uma probabilidade
+- [Padrão de roteamento por confiança](/pt/patterns/confidence-routing/) — Usando a confiança como sinal de roteamento de fluxo

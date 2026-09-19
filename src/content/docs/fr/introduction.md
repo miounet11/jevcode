@@ -46,9 +46,9 @@ La valeur de retour est l'une des suivantes : `billing` / `technical` / `sales`,
 
 Toutes les décisions se résument à trois types de questions. Il s'agit de l'abstraction centrale de Jev ; les comprendre, c'est comprendre l'ensemble du système :
 
-- **[Choice](/zh/primitives/choice/)** — Sélectionner une option parmi un ensemble de candidats mutuellement exclusifs. Utilisé pour la reconnaissance d'intention, le routage des tickets, le choix d'actions.
-- **[Score](/zh/primitives/score/)** — Noter selon une échelle ou des critères de notation. Utilisé pour le classement par pertinence, l'évaluation de la qualité, la catégorisation des risques.
-- **[Noul](/zh/primitives/noul/)** — Répondre à une question par oui ou non, en retournant la probabilité que la réponse soit « oui ». Utilisé pour la validation de contenu, la vérification d'assertions, les garde-fous.
+- **[Choice](/fr/primitives/choice/)** — Sélectionner une option parmi un ensemble de candidats mutuellement exclusifs. Utilisé pour la reconnaissance d'intention, le routage des tickets, le choix d'actions.
+- **[Score](/fr/primitives/score/)** — Noter selon une échelle ou des critères de notation. Utilisé pour le classement par pertinence, l'évaluation de la qualité, la catégorisation des risques.
+- **[Noul](/fr/primitives/noul/)** — Répondre à une question par oui ou non, en retournant la probabilité que la réponse soit « oui ». Utilisé pour la validation de contenu, la vérification d'assertions, les garde-fous.
 
 Une seule requête peut mélanger ces trois types de questions. Le modèle lit l'état une seule fois, puis évalue toutes les questions en parallèle.
 
@@ -63,6 +63,6 @@ Dans la pratique, il est courant d'utiliser massivement System One dans les cha�
 
 ## Prochaines étapes
 
-- [Démarrage rapide en 5 minutes](/zh/quickstart/) — Obtenir votre clé API et effectuer votre première invocation
-- [Concepts clés](/zh/concepts/system-one/) — Comprendre System One et les modèles d'état
-- [Architectures](/zh/patterns/) — Voir comment organiser ces invocations en environnement de production
+- [Démarrage rapide en 5 minutes](/fr/quickstart/) — Obtenir votre clé API et effectuer votre première invocation
+- [Concepts clés](/fr/concepts/system-one/) — Comprendre System One et les modèles d'état
+- [Architectures](/fr/patterns/) — Voir comment organiser ces invocations en environnement de production

@@ -12,11 +12,11 @@ translatedFrom: zh
 
 | Methode | Geeignet für | Merkmale |
 | :--- | :--- | :--- |
-| [Python SDK](/zh/sdk/python/) | Backend-Dienste, Datenpipelines, Batch-Verarbeitung | Synchroner/Asynchroner Client, typisierte Eingaben, automatische Wiederholung |
-| [JavaScript SDK](/zh/sdk/javascript/) | Node.js-Dienste, Full-Stack-Anwendungen | TypeScript-Typableitung, Antworttypen werden automatisch aus der Frage abgeleitet |
+| [Python SDK](/de/sdk/python/) | Backend-Dienste, Datenpipelines, Batch-Verarbeitung | Synchroner/Asynchroner Client, typisierte Eingaben, automatische Wiederholung |
+| [JavaScript SDK](/de/sdk/javascript/) | Node.js-Dienste, Full-Stack-Anwendungen | TypeScript-Typableitung, Antworttypen werden automatisch aus der Frage abgeleitet |
 | HTTP API | Andere Sprachen, leichte Integration | Direktes POST, Wiederholung und Drosselung müssen selbst verarbeitet werden |
 
-Wenn in Ihrem Team KI-Coding-Agents den Integrationscode schreiben, wird empfohlen, zuerst das [TypeSafe agent skill](/zh/sdk/agent-skill/) zu installieren. Dadurch weiß der Agent über die genaue Struktur von Anfrage und Antwort Bescheid und vermeidet es, Code basierend auf Vermutungen zu schreiben.
+Wenn in Ihrem Team KI-Coding-Agents den Integrationscode schreiben, wird empfohlen, zuerst das [TypeSafe agent skill](/de/sdk/agent-skill/) zu installieren. Dadurch weiß der Agent über die genaue Struktur von Anfrage und Antwort Bescheid und vermeidet es, Code basierend auf Vermutungen zu schreiben.
 
 ## Gemeinsame Konventionen
 
@@ -44,7 +44,7 @@ Wenn Sie kein SDK verwenden, müssen Sie zwei Dinge selbst behandeln, die im SDK
 
 ## Verwandte Themen
 
-- [Python SDK](/zh/sdk/python/)
-- [JavaScript SDK](/zh/sdk/javascript/)
-- [Agent skill](/zh/sdk/agent-skill/)
-- [Schnellstart in 5 Minuten](/zh/quickstart/) — Vollständiges, lauffähiges Beispiel
+- [Python SDK](/de/sdk/python/)
+- [JavaScript SDK](/de/sdk/javascript/)
+- [Agent skill](/de/sdk/agent-skill/)
+- [Schnellstart in 5 Minuten](/de/quickstart/) — Vollständiges, lauffähiges Beispiel

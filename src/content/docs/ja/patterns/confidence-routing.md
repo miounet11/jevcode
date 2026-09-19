@@ -72,6 +72,6 @@ elif action.choice == "approve_transfer":
 
 ## 関連
 
-- [信頼度](/zh/concepts/confidence/) — confidence と probabilities の関係
-- [意図ルーティング](/zh/patterns/intent-routing/) — 通常は信頼度ルーティングと組み合わせて使用される
-- [複合スコアリング](/zh/patterns/composite-scoring/) — ソーティング（順位付け）シーンにおける信頼度の処理
+- [信頼度](/ja/concepts/confidence/) — confidence と probabilities の関係
+- [意図ルーティング](/ja/patterns/intent-routing/) — 通常は信頼度ルーティングと組み合わせて使用される
+- [複合スコアリング](/ja/patterns/composite-scoring/) — ソーティング（順位付け）シーンにおける信頼度の処理

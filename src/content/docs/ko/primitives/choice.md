@@ -16,7 +16,7 @@ translatedFrom: zh
 - 상품이 어떤 카테고리에 속하는가
 - 이 코드는 어떤 언어로 작성되었는가
 
-답변이 연속적인 스펙트럼 위의 위치라면 [Score](/zh/primitives/score/)를 사용하고, 단순히 예/아니면 [Noul](/zh/primitives/noul/)을 사용하십시오.
+답변이 연속적인 스펙트럼 위의 위치라면 [Score](/ko/primitives/score/)를 사용하고, 단순히 예/아니면 [Noul](/ko/primitives/noul/)을 사용하십시오.
 
 대표적인 질문 예시:
 
@@ -93,7 +93,7 @@ print(response.answers["department"].choice)
 | `probabilities` | 각 옵션에 대한 확률 분포 |
 | `confidence` | 해당 분포의 집중도를 나타내는 요약 값, 0에서 1 사이 |
 
-`probabilities`는 사용자가 더 유용한 지표를 정의하는 데 필요한 원자재입니다. 자세한 내용은 [신뢰도](/zh/concepts/confidence/)를 참조하십시오.
+`probabilities`는 사용자가 더 유용한 지표를 정의하는 데 필요한 원자재입니다. 자세한 내용은 [신뢰도](/ko/concepts/confidence/)를 참조하십시오.
 
 ## 사용 팁
 
@@ -109,7 +109,7 @@ print(response.answers["department"].choice)
 
 ## 관련 문서
 
-- [Score](/zh/primitives/score/) — 순서가 있는 척도에서의 점수
-- [Noul](/zh/primitives/noul/) — 예/아니오 확률
-- [의도 라우팅 패턴](/zh/patterns/intent-routing/) — Choice의 가장 일반적인 프로덕션 사용 사례
-- [신뢰도](/zh/concepts/confidence/) — `probabilities`와 `confidence`를 사용하여 동작 제어
+- [Score](/ko/primitives/score/) — 순서가 있는 척도에서의 점수
+- [Noul](/ko/primitives/noul/) — 예/아니오 확률
+- [의도 라우팅 패턴](/ko/patterns/intent-routing/) — Choice의 가장 일반적인 프로덕션 사용 사례
+- [신뢰도](/ko/concepts/confidence/) — `probabilities`와 `confidence`를 사용하여 동작 제어

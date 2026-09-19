@@ -1,4 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+// astro:content 的 z 重导出已废弃（Astro 8 移除），改用 astro/zod
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 /**

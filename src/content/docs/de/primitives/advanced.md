@@ -114,6 +114,6 @@ Es gibt ein offizielles Hierarchical Classification Cookbook, das eine ähnliche
 
 ## Verwandte Themen
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) / [Noul](/zh/primitives/noul/)
-- [Fan-Out-Muster](/zh/patterns/fan-out/) – Bündeln Sie viele Fragen in einer einzigen Anfrage
+- [Choice](/de/primitives/choice/) / [Score](/de/primitives/score/) / [Noul](/de/primitives/noul/)
+- [Fan-Out-Muster](/de/patterns/fan-out/) – Bündeln Sie viele Fragen in einer einzigen Anfrage
 - [So erstellen Sie ein System-One-System](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) – Der offizielle vollständige Workflow

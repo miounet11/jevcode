@@ -75,6 +75,6 @@ em_score = (0.15 * py) + (0.40 * lead) + (0.20 * arch) + (0.25 * general)
 
 ## 関連
 
-- [Score](/zh/primitives/score/) — このパターンの基本プリミティブ
-- [Fan-out](/zh/patterns/fan-out/) — 1回の呼び出しで全次元を問いかける
-- [Confidence](/zh/concepts/confidence/) — 信頼性の低い次元スコアへの対処
+- [Score](/ja/primitives/score/) — このパターンの基本プリミティブ
+- [Fan-out](/ja/patterns/fan-out/) — 1回の呼び出しで全次元を問いかける
+- [Confidence](/ja/concepts/confidence/) — 信頼性の低い次元スコアへの対処

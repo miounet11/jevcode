@@ -91,5 +91,5 @@ SDK는 기본적으로 지수 백오프(exponential backoff) 전략으로 재시
 ## 관련
 
 - [Python SDK 전체 API 참조](https://docs.typesafe.ai/sdk/python/api/clients/async/client)
-- [5분 시작하기](/zh/quickstart/)
-- [Fan-out 병렬 처리](/zh/patterns/fan-out/) — 한 번에 여러 질문하기
+- [5분 시작하기](/ko/quickstart/)
+- [Fan-out 병렬 처리](/ko/patterns/fan-out/) — 한 번에 여러 질문하기

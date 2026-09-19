@@ -167,7 +167,7 @@ Wichtige Einschränkung: **Die Antwort liegt immer innerhalb der von Ihnen vorge
 
 ## Nächste Schritte
 
-- [Choice-Primitiv](/zh/primitives/choice/) — Grundlage für Klassifizierung und Routing
-- [Score-Primitiv](/zh/primitives/score/) — Bewertung und Sortierung
-- [Noul-Primitiv](/zh/primitives/noul/) — Validierung und Schutzmechanismen
-- [Konfidenz](/zh/concepts/confidence/) — Steuerung des Systemverhaltens mittels Konfidenz
+- [Choice-Primitiv](/de/primitives/choice/) — Grundlage für Klassifizierung und Routing
+- [Score-Primitiv](/de/primitives/score/) — Bewertung und Sortierung
+- [Noul-Primitiv](/de/primitives/noul/) — Validierung und Schutzmechanismen
+- [Konfidenz](/de/concepts/confidence/) — Steuerung des Systemverhaltens mittels Konfidenz

@@ -10,7 +10,7 @@ translatedFrom: zh
 
 ## Dieses Skill löst folgendes Problem
 
-Das TypeSafe-Agent-Skill bietet Ihrem KI-Codierungs-Agenten den vollständigen Kontext der TypeSafe-API: drei Kategorien von [Problemtypen](/zh/primitives/), architektonische [Muster](/zh/patterns/) und bewährte Praktiken für die Bewertung durch Ihre Organisation.
+Das TypeSafe-Agent-Skill bietet Ihrem KI-Codierungs-Agenten den vollständigen Kontext der TypeSafe-API: drei Kategorien von [Problemtypen](/de/primitives/), architektonische [Muster](/de/patterns/) und bewährte Praktiken für die Bewertung durch Ihre Organisation.
 
 **Warum ist es erforderlich?** Ein Agent ohne Skill erstellt Anfragen- und Antwortfelder auf Basis von Vermutungen, was zu API-Aufrufen führt, die zwar plausibel aussehen, aber in der Realität nicht existieren. Dies ist das häufigste Fehlermuster bei der Integration neuer APIs durch Codierungs-Agenten.
 
@@ -120,6 +120,6 @@ Dies ist meist auf ein veraltetes Skill zurückzuführen. Aktualisieren Sie das 
 
 ## Weiterführende Informationen
 
-- [SDK-Übersicht](/zh/sdk/) — Python- und JS-SDK
-- [Problem-Primitiven](/zh/primitives/) — Die drei Problemarten, die der Agent verstehen muss
-- [Konfidenz](/zh/concepts/confidence/) — Wie Schwellenwerte festgelegt werden
+- [SDK-Übersicht](/de/sdk/) — Python- und JS-SDK
+- [Problem-Primitiven](/de/primitives/) — Die drei Problemarten, die der Agent verstehen muss
+- [Konfidenz](/de/concepts/confidence/) — Wie Schwellenwerte festgelegt werden

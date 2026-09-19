@@ -75,6 +75,6 @@ Una práctica útil es: si la confianza de una dimensión de alto peso está por
 
 ## Relacionado
 
-- [Score](/zh/primitives/score/) — La primitiva base de este patrón
-- [Fan-out paralelo](/zh/patterns/fan-out/) — Preguntar por todas las dimensiones en una sola llamada
-- [Confianza](/zh/concepts/confidence/) — Manejo de puntuaciones de dimensión poco fiables
+- [Score](/es/primitives/score/) — La primitiva base de este patrón
+- [Fan-out paralelo](/es/patterns/fan-out/) — Preguntar por todas las dimensiones en una sola llamada
+- [Confianza](/es/concepts/confidence/) — Manejo de puntuaciones de dimensión poco fiables

@@ -12,11 +12,11 @@ translatedFrom: zh
 
 | Método | Aplicável a | Características |
 | :--- | :--- | :--- |
-| [Python SDK](/zh/sdk/python/) | Serviços backend, pipelines de dados, processamento em lote | Clientes síncronos/assíncronos, entrada tipada, retry automático |
-| [JavaScript SDK](/zh/sdk/javascript/) | Serviços Node.js, aplicações full-stack | Inferência de tipos TypeScript, tipo da resposta inferido automaticamente a partir da pergunta |
+| [Python SDK](/pt/sdk/python/) | Serviços backend, pipelines de dados, processamento em lote | Clientes síncronos/assíncronos, entrada tipada, retry automático |
+| [JavaScript SDK](/pt/sdk/javascript/) | Serviços Node.js, aplicações full-stack | Inferência de tipos TypeScript, tipo da resposta inferido automaticamente a partir da pergunta |
 | HTTP API | Outras linguagens, integração leve | POST direto, requer tratamento manual de retry e limitação de taxa |
 
-Se sua equipe utiliza agentes de codificação com IA para escrever o código de integração, recomendamos instalar primeiro a [TypeSafe agent skill](/zh/sdk/agent-skill/), para que o agente conheça a forma exata das requisições e respostas, evitando que ele escreva código baseado em suposições.
+Se sua equipe utiliza agentes de codificação com IA para escrever o código de integração, recomendamos instalar primeiro a [TypeSafe agent skill](/pt/sdk/agent-skill/), para que o agente conheça a forma exata das requisições e respostas, evitando que ele escreva código baseado em suposições.
 
 ## Convenções comuns
 
@@ -44,7 +44,7 @@ Se você não utilizar o SDK, precisará lidar manualmente com duas funcionalida
 
 ## Relacionados
 
-- [Python SDK](/zh/sdk/python/)
-- [JavaScript SDK](/zh/sdk/javascript/)
-- [Agent skill](/zh/sdk/agent-skill/)
-- [Introdução em 5 minutos](/zh/quickstart/) — exemplo completo e executável
+- [Python SDK](/pt/sdk/python/)
+- [JavaScript SDK](/pt/sdk/javascript/)
+- [Agent skill](/pt/sdk/agent-skill/)
+- [Introdução em 5 minutos](/pt/quickstart/) — exemplo completo e executável

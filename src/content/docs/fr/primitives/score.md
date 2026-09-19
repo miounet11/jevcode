@@ -16,7 +16,7 @@ Utilisez `Score` lorsque la réponse se situe sur un **spectre continu que vous 
 - Le niveau de satisfaction d'un client
 - La profondeur de l'expertise Python d'un candidat
 
-Si la réponse est un ensemble d'options fixes et que ces options n'ont **aucune relation d'ordre** entre elles, utilisez [Choice](/zh/primitives/choice/) ; s'il s'agit simplement d'un oui/non, utilisez [Noul](/zh/primitives/noul/).
+Si la réponse est un ensemble d'options fixes et que ces options n'ont **aucune relation d'ordre** entre elles, utilisez [Choice](/fr/primitives/choice/) ; s'il s'agit simplement d'un oui/non, utilisez [Noul](/fr/primitives/noul/).
 
 Exemples de questions typiques :
 
@@ -97,11 +97,11 @@ Le rôle de `legend` est de rendre la valeur de retour auto-explicative : vous n
 
 **Concentrez-vous sur `confidence` plutôt que de ne regarder que `score`.** Une faible confiance dans le Score indique généralement que les définitions des niveaux sont ambiguës, que la dimension est multidimensionnelle, ou que les informations d'état (`state`) sont insuffisantes. Dans ce cas, la bonne réaction est d'améliorer les définitions des niveaux, plutôt que de forcer la prise d'une valeur.
 
-**Dans les scénarios de classement, `Score` est le prisme principal.** Le classement par pertinence, l'évaluation de la qualité et la catégorisation des risques conviennent bien à l'utilisation de `Score`, combiné au [pattern de score composite](/zh/patterns/composite-scoring/) pour fusionner pondéralement plusieurs dimensions.
+**Dans les scénarios de classement, `Score` est le prisme principal.** Le classement par pertinence, l'évaluation de la qualité et la catégorisation des risques conviennent bien à l'utilisation de `Score`, combiné au [pattern de score composite](/fr/patterns/composite-scoring/) pour fusionner pondéralement plusieurs dimensions.
 
 ## Liens connexes
 
-- [Choice](/zh/primitives/choice/) — Options fixes non ordonnées
-- [Noul](/zh/primitives/noul/) — Probabilités oui/non
-- [Pattern de score composite](/zh/patterns/composite-scoring/) — Synthèse pondérée multidimensionnelle
-- [Confiance](/zh/concepts/confidence/) — Que signifie une faible confiance
+- [Choice](/fr/primitives/choice/) — Options fixes non ordonnées
+- [Noul](/fr/primitives/noul/) — Probabilités oui/non
+- [Pattern de score composite](/fr/patterns/composite-scoring/) — Synthèse pondérée multidimensionnelle
+- [Confiance](/fr/concepts/confidence/) — Que signifie une faible confiance

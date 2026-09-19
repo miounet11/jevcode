@@ -109,10 +109,10 @@ if frustration.score > 1.5:
 
 **Unterscheiden Sie zwischen „spekulativ“ und „redundant“.** Spekulative Fragen sind solche, die **auch unter anderen Zweigen eine klare Semantik haben**. Wenn die Antwort auf eine Frage in keinem Zweig gelesen wird, ist sie keine spekulative Frage, sondern Verschwendung – auch wenn die Kosten gering sind, macht sie den Code unübersichtlich.
 
-**Kombinieren Sie mit Konfidenz.** Fan-out löst das Problem „Was fragen?“, und Konfidenz-Routing löst das Problem „Wem vertrauen?“. Die Kombination beider ist eine gängige Form für Produktionssysteme: Siehe das Beispiel für die Sprachbank im Abschnitt [Konfidenz-Routing](/zh/patterns/confidence-routing/).
+**Kombinieren Sie mit Konfidenz.** Fan-out löst das Problem „Was fragen?“, und Konfidenz-Routing löst das Problem „Wem vertrauen?“. Die Kombination beider ist eine gängige Form für Produktionssysteme: Siehe das Beispiel für die Sprachbank im Abschnitt [Konfidenz-Routing](/de/patterns/confidence-routing/).
 
 ## Verwandt
 
-- [Question Primitives](/zh/primitives/) — Unabhängigkeit und spekulative Fragen
-- [State](/zh/concepts/state/) — Kontextbudget und Zustandorganisation
-- [Confidence Routing](/zh/patterns/confidence-routing/) — Die zweite Entscheidungsachse
+- [Question Primitives](/de/primitives/) — Unabhängigkeit und spekulative Fragen
+- [State](/de/concepts/state/) — Kontextbudget und Zustandorganisation
+- [Confidence Routing](/de/patterns/confidence-routing/) — Die zweite Entscheidungsachse

@@ -14,7 +14,7 @@ Finden Sie zunächst die Szene, die Ihrem Geschäft am nächsten kommt, sehen Si
 
 Für jede der folgenden Szenarien werden angegeben: **Welches Problem wird gelöst** → **Welche Primitiven werden verwendet** → **Echt-Projekt-Beispiel**.
 
-> Um den **vollständigen Projektindex nach Kategorien sortiert** (mit Star-Anzahl und Sprach-Tags) zu sehen, siehe [Community-Ökosystem-Projekte](/zh/ecosystem/).
+> Um den **vollständigen Projektindex nach Kategorien sortiert** (mit Star-Anzahl und Sprach-Tags) zu sehen, siehe [Community-Ökosystem-Projekte](/de/ecosystem/).
 
 ## Klassifizierung und Routing
 
@@ -36,7 +36,7 @@ Für jede der folgenden Szenarien werden angegeben: **Welches Problem wird gelö
 
 **Problem**: Eine Gruppe von Elementen muss nach Relevanz, Qualität oder multidimensionalen Kriterien sortiert werden.
 
-**Primitive**: Score, kombiniert mit [Composite Scoring](/zh/patterns/composite-scoring/), um mehrere Dimensionen zusammenzuführen.
+**Primitive**: Score, kombiniert mit [Composite Scoring](/de/patterns/composite-scoring/), um mehrere Dimensionen zusammenzuführen.
 
 **Echt-Projekt-Beispiel**:
 
@@ -134,6 +134,6 @@ TypSafe fasst die Anwendungsfälle in vier große Richtungen zusammen, die beim 
 
 ## Verwandt
 
-- [Architekturmuster](/zh/patterns/) — Die allgemeinen Muster hinter diesen Beispielen
-- [Problem-Primitiven](/zh/primitives/) — Methoden zur Auswahl der Primitiven
+- [Architekturmuster](/de/patterns/) — Die allgemeinen Muster hinter diesen Beispielen
+- [Problem-Primitiven](/de/primitives/) — Methoden zur Auswahl der Primitiven
 - [awesome-jev vollständige Liste](https://github.com/yibie/awesome-jev) — Die ständig aktualisierte Liste der Community-Projekte

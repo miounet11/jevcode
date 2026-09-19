@@ -91,5 +91,5 @@ Le SDK tente automatiquement de nouvelles requêtes selon une stratégie de back
 ## Liens connexes
 
 - [Référence complète de l'API du SDK Python](https://docs.typesafe.ai/sdk/python/api/clients/async/client)
-- [Démarrage rapide en 5 minutes](/zh/quickstart/)
-- [Fan-out parallèle](/zh/patterns/fan-out/) — Posez plusieurs questions en une seule fois
+- [Démarrage rapide en 5 minutes](/fr/quickstart/)
+- [Fan-out parallèle](/fr/patterns/fan-out/) — Posez plusieurs questions en une seule fois

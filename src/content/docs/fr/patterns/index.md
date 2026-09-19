@@ -14,16 +14,16 @@ TypeSafe est conçu pour être **intégré à un système plus large** afin de p
 
 Cela signifie qu'il ne faut pas essayer de résoudre un problème métier complexe en une seule invocation, mais plutôt le décomposer en plusieurs jugements indépendants, puis les combiner via votre propre code. La logique de composition dans le code est déterministe, testable et ajustable : c'est là que réside la fiabilité.
 
-Avant de lire cette section, veuillez vous assurer de comprendre les [Primitives de requête](/zh/primitives/) et la [Confiance](/zh/concepts/confidence/).
+Avant de lire cette section, veuillez vous assurer de comprendre les [Primitives de requête](/fr/primitives/) et la [Confiance](/fr/concepts/confidence/).
 
 ## Quatre modèles
 
 | Modèle | Description | Avantages |
 | :--- | :--- | :--- |
-| [Fan-out parallèle](/zh/patterns/fan-out/) | Envoi d'un grand nombre de questions (y compris hypothétiques) en une seule invocation ; le code détermine lesquelles sont pertinentes | Coût, vitesse |
-| [Routage par confiance](/zh/patterns/confidence-routing/) | Utilisation de la confiance comme deuxième axe de décision pour construire des systèmes plus sûrs | Fiabilité, sécurité |
-| [Score composite](/zh/patterns/composite-scoring/) | Fusion de plusieurs dimensions d'analyse en un score unique | Coût, fiabilité, vitesse |
-| [Routage par intention](/zh/patterns/intent-routing/) | Classification de l'intention de l'utilisateur et routage vers le processeur approprié | Coût, vitesse |
+| [Fan-out parallèle](/fr/patterns/fan-out/) | Envoi d'un grand nombre de questions (y compris hypothétiques) en une seule invocation ; le code détermine lesquelles sont pertinentes | Coût, vitesse |
+| [Routage par confiance](/fr/patterns/confidence-routing/) | Utilisation de la confiance comme deuxième axe de décision pour construire des systèmes plus sûrs | Fiabilité, sécurité |
+| [Score composite](/fr/patterns/composite-scoring/) | Fusion de plusieurs dimensions d'analyse en un score unique | Coût, fiabilité, vitesse |
+| [Routage par intention](/fr/patterns/intent-routing/) | Classification de l'intention de l'utilisateur et routage vers le processeur approprié | Coût, vitesse |
 
 ## Comment ils interagissent
 
@@ -53,6 +53,6 @@ Le **routage par intention** se situe généralement en premier, car il détermi
 
 ## Liens connexes
 
-- [Primitives de requête](/zh/primitives/) — Connaissances préalables
-- [Confiance](/zh/concepts/confidence/) — Connaissances préalables
-- [Cas d'utilisation dans l'écosystème](/zh/cases/use-case-map/) — Comment ces modèles sont appliqués dans des projets réels
+- [Primitives de requête](/fr/primitives/) — Connaissances préalables
+- [Confiance](/fr/concepts/confidence/) — Connaissances préalables
+- [Cas d'utilisation dans l'écosystème](/fr/cases/use-case-map/) — Comment ces modèles sont appliqués dans des projets réels

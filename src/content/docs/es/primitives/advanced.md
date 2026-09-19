@@ -114,6 +114,6 @@ Existe un cookbook oficial de Clasificación Jerárquica que muestra un recorrid
 
 ## Relacionado
 
-- [Choice](/zh/primitives/choice/) / [Score](/zh/primitives/score/) / [Noul](/zh/primitives/noul/)
-- [Patrón de fan-out](/zh/patterns/fan-out/) — Agrupar muchas preguntas en una sola solicitud
+- [Choice](/es/primitives/choice/) / [Score](/es/primitives/score/) / [Noul](/es/primitives/noul/)
+- [Patrón de fan-out](/es/patterns/fan-out/) — Agrupar muchas preguntas en una sola solicitud
 - [Cómo construir sistemas con System One](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) — Flujo de trabajo completo oficial

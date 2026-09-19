@@ -16,7 +16,7 @@ translatedFrom: zh
 - 商品がどのカテゴリに属するか
 - このコードはどの言語で書かれているか
 
-回答が連続的な尺度上の位置である場合は [Score](/zh/primitives/score/) を、単なる Yes/No の場合は [Noul](/zh/primitives/noul/) を使用します。
+回答が連続的な尺度上の位置である場合は [Score](/ja/primitives/score/) を、単なる Yes/No の場合は [Noul](/ja/primitives/noul/) を使用します。
 
 典型的な質問の例：
 
@@ -93,7 +93,7 @@ print(response.answers["department"].choice)
 | `probabilities` | 各選択肢上の確率分布 |
 | `confidence` | その分布の集中度を要約した値。0 から 1 の範囲 |
 
-`probabilities` は、独自に定義したより有用な指標を作成するための原材料となります。詳細は[信頼度](/zh/concepts/confidence/)をご覧ください。
+`probabilities` は、独自に定義したより有用な指標を作成するための原材料となります。詳細は[信頼度](/ja/concepts/confidence/)をご覧ください。
 
 ## 使用上のポイント
 
@@ -109,7 +109,7 @@ print(response.answers["department"].choice)
 
 ## 関連
 
-- [Score](/zh/primitives/score/) — 順序付き尺度上のスコアリング
-- [Noul](/zh/primitives/noul/) — Yes/No の確率
-- [意図ルーティングパターン](/zh/patterns/intent-routing/) — Choice の最も一般的なプロダクションでの使用例
-- [信頼度](/zh/concepts/confidence/) — `probabilities` と `confidence` を使用して動作を制御する
+- [Score](/ja/primitives/score/) — 順序付き尺度上のスコアリング
+- [Noul](/ja/primitives/noul/) — Yes/No の確率
+- [意図ルーティングパターン](/ja/patterns/intent-routing/) — Choice の最も一般的なプロダクションでの使用例
+- [信頼度](/ja/concepts/confidence/) — `probabilities` と `confidence` を使用して動作を制御する

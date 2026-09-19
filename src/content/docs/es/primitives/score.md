@@ -16,7 +16,7 @@ Utiliza **Score** cuando la respuesta se sitúe en un **espectro continuo que pu
 - El nivel de satisfacción de un cliente
 - La profundidad de la experiencia en Python de un candidato
 
-Si la respuesta es un conjunto de opciones fijas y entre ellas **no existe una relación de orden**, utiliza [Choice](/zh/primitives/choice/); si la respuesta es simplemente sí o no, utiliza [Noul](/zh/primitives/noul/).
+Si la respuesta es un conjunto de opciones fijas y entre ellas **no existe una relación de orden**, utiliza [Choice](/es/primitives/choice/); si la respuesta es simplemente sí o no, utiliza [Noul](/es/primitives/noul/).
 
 Ejemplos de preguntas típicas:
 
@@ -97,11 +97,11 @@ El propósito de `legend` es hacer que la respuesta sea autodescriptiva: no nece
 
 **Presta atención a `confidence` en lugar de solo mirar `score`.** Una baja confianza en Score suele significar que las definiciones de las categorías son ambiguas, que la escala es multidimensional o que la información del estado es insuficiente. En estos casos, la respuesta correcta es mejorar las definiciones de las categorías, en lugar de forzar un valor.
 
-**Score es el primitivo principal para escenarios de clasificación.** El ordenamiento por relevancia, la evaluación de calidad y la clasificación de riesgos son adecuados para usar Score, combinado con el [patrón de puntuación compuesta](/zh/patterns/composite-scoring/) para ponderar y combinar múltiples dimensiones.
+**Score es el primitivo principal para escenarios de clasificación.** El ordenamiento por relevancia, la evaluación de calidad y la clasificación de riesgos son adecuados para usar Score, combinado con el [patrón de puntuación compuesta](/es/patterns/composite-scoring/) para ponderar y combinar múltiples dimensiones.
 
 ## Relacionado
 
-- [Choice](/zh/primitives/choice/) — Opciones fijas sin orden
-- [Noul](/zh/primitives/noul/) — Probabilidad de sí/no
-- [Patrón de puntuación compuesta](/zh/patterns/composite-scoring/) — Síntesis ponderada de múltiples dimensiones
-- [Confianza](/zh/concepts/confidence/) — Qué significa una baja confianza
+- [Choice](/es/primitives/choice/) — Opciones fijas sin orden
+- [Noul](/es/primitives/noul/) — Probabilidad de sí/no
+- [Patrón de puntuación compuesta](/es/patterns/composite-scoring/) — Síntesis ponderada de múltiples dimensiones
+- [Confianza](/es/concepts/confidence/) — Qué significa una baja confianza

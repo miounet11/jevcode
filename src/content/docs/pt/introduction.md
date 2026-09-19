@@ -46,9 +46,9 @@ O valor de retorno é uma das opções `billing` / `technical` / `sales`, além 
 
 Todas as decisões se resumem a três tipos de perguntas. Esta é a abstração central do Jev; entendê-las é entender todo o sistema:
 
-- **[Choice](/zh/primitives/choice/)** — Escolha uma opção de um conjunto de candidatos mutuamente exclusivos. Usado para reconhecimento de intenção, roteamento de tickets e seleção de ações.
-- **[Score](/zh/primitives/score/)** — Pontuação baseada em uma escala ou critérios de avaliação. Usado para ordenação por relevância, avaliação de qualidade e classificação de riscos.
-- **[Noul](/zh/primitives/noul/)** — Responde a uma pergunta do tipo sim/não, retornando a probabilidade de a resposta ser "sim". Usado para validação de conteúdo, verificação de asserções e barreiras de segurança.
+- **[Choice](/pt/primitives/choice/)** — Escolha uma opção de um conjunto de candidatos mutuamente exclusivos. Usado para reconhecimento de intenção, roteamento de tickets e seleção de ações.
+- **[Score](/pt/primitives/score/)** — Pontuação baseada em uma escala ou critérios de avaliação. Usado para ordenação por relevância, avaliação de qualidade e classificação de riscos.
+- **[Noul](/pt/primitives/noul/)** — Responde a uma pergunta do tipo sim/não, retornando a probabilidade de a resposta ser "sim". Usado para validação de conteúdo, verificação de asserções e barreiras de segurança.
 
 Uma única solicitação pode combinar esses três tipos de perguntas. O modelo lê o estado uma única vez e avalia todas as perguntas em paralelo.
 
@@ -63,6 +63,6 @@ Na prática, é comum usar o System One em grande escala nas linhas de produçã
 
 ## Próximos passos
 
-- [Introdução em 5 minutos](/zh/quickstart/) — Obtenha sua chave de API e execute sua primeira chamada
-- [Conceitos principais](/zh/concepts/system-one/) — Entenda o System One e os modelos de estado
-- [Padrões de arquitetura](/zh/patterns/) — Veja como organizar essas chamadas em ambientes de produção
+- [Introdução em 5 minutos](/pt/quickstart/) — Obtenha sua chave de API e execute sua primeira chamada
+- [Conceitos principais](/pt/concepts/system-one/) — Entenda o System One e os modelos de estado
+- [Padrões de arquitetura](/pt/patterns/) — Veja como organizar essas chamadas em ambientes de produção

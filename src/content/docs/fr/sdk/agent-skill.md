@@ -10,7 +10,7 @@ translatedFrom: zh
 
 ## Ce problème que résout ce skill
 
-Le skill TypeSafe fournit à votre agent de codage IA le contexte complet de l'API TypeSafe : trois types de [problèmes](/zh/primitives/), des [modèles](/zh/patterns/) d'architecture, ainsi que les meilleures pratiques pour l'évaluation organisationnelle.
+Le skill TypeSafe fournit à votre agent de codage IA le contexte complet de l'API TypeSafe : trois types de [problèmes](/fr/primitives/), des [modèles](/fr/patterns/) d'architecture, ainsi que les meilleures pratiques pour l'évaluation organisationnelle.
 
 **Pourquoi est-il nécessaire** : Sans ce skill, les agents rédigent des requêtes et des champs de réponse par devinette, générant des appels d'API qui semblent plausibles mais n'existent pas réellement. Il s'agit du mode d'échec le plus courant lors de l'intégration d'une nouvelle API par un agent de codage.
 
@@ -120,6 +120,6 @@ C'est généralement dû à un skill obsolète. Mettez à jour comme indiqué ci
 
 ## Liens connexes
 
-- [Aperçu du SDK](/zh/sdk/) — SDK Python et JS
-- [Primitives de problème](/zh/primitives/) — Les trois types de problèmes que l'agent doit comprendre
-- [Confiance](/zh/concepts/confidence/) — Comment définir les seuils
+- [Aperçu du SDK](/fr/sdk/) — SDK Python et JS
+- [Primitives de problème](/fr/primitives/) — Les trois types de problèmes que l'agent doit comprendre
+- [Confiance](/fr/concepts/confidence/) — Comment définir les seuils

@@ -10,7 +10,7 @@ translatedFrom: zh
 
 ## 이 스킬이 해결하는 문제
 
-TypeSafe 에이전트 스킬은 AI 코딩 에이전트에게 TypeSafe API의 전체 컨텍스트를 제공합니다: 세 가지 [문제 유형](/zh/primitives/), 아키텍처 [패턴](/zh/patterns/), 그리고 조직 평가의 모범 사례.
+TypeSafe 에이전트 스킬은 AI 코딩 에이전트에게 TypeSafe API의 전체 컨텍스트를 제공합니다: 세 가지 [문제 유형](/ko/primitives/), 아키텍처 [패턴](/ko/patterns/), 그리고 조직 평가의 모범 사례.
 
 **필요한 이유**: 스킬이 없는 에이전트는 추측에 기반하여 요청 및 응답 필드를 작성하므로, 합리적으로 보이지만 실제로 존재하지 않는 API 호출을 생성합니다. 이는 코딩 에이전트가 새로운 API를 통합할 때 가장 흔히 발생하는 실패 패턴입니다.
 
@@ -120,6 +120,6 @@ Claude Code 플러그인에서는 `/typesafe:typesafe-ai`를 직접 호출하고
 
 ## 관련
 
-- [SDK 개요](/zh/sdk/) — Python 및 JS SDK
-- [문제 원시 데이터](/zh/primitives/) — 에이전트가 이해해야 할 세 가지 문제
-- [신뢰도](/zh/concepts/confidence/) — 임계값 설정 방법
+- [SDK 개요](/ko/sdk/) — Python 및 JS SDK
+- [문제 원시 데이터](/ko/primitives/) — 에이전트가 이해해야 할 세 가지 문제
+- [신뢰도](/ko/concepts/confidence/) — 임계값 설정 방법

@@ -16,7 +16,7 @@ Utiliza `Choice` cuando la respuesta cae dentro de **un conjunto fijo de opcione
 - A qué categoría pertenece un producto
 - En qué lenguaje está escrito este fragmento de código
 
-Si la respuesta es una posición en un espectro continuo, utiliza [Score](/zh/primitives/score/); si es simplemente sí o no, utiliza [Noul](/zh/primitives/noul/).
+Si la respuesta es una posición en un espectro continuo, utiliza [Score](/es/primitives/score/); si es simplemente sí o no, utiliza [Noul](/es/primitives/noul/).
 
 Ejemplos típicos de preguntas:
 
@@ -93,7 +93,7 @@ print(response.answers["department"].choice)
 | `probabilities` | La distribución de probabilidad para cada opción |
 | `confidence` | Un valor resumido de la concentración de esa distribución, entre 0 y 1 |
 
-`probabilities` es la materia prima necesaria para definir métricas más útiles por tu cuenta; consulta [Confianza](/zh/concepts/confidence/) para más detalles.
+`probabilities` es la materia prima necesaria para definir métricas más útiles por tu cuenta; consulta [Confianza](/es/concepts/confidence/) para más detalles.
 
 ## Puntos clave de uso
 
@@ -109,7 +109,7 @@ print(response.answers["department"].choice)
 
 ## Relacionado
 
-- [Score](/zh/primitives/score/) — Puntuación en una escala ordenada
-- [Noul](/zh/primitives/noul/) — Probabilidad de sí/no
-- [Patrón de enrutamiento de intenciones](/zh/patterns/intent-routing/) — El uso más común de Choice en producción
-- [Confianza](/zh/concepts/confidence/) — Controla el comportamiento usando `probabilities` y `confidence`
+- [Score](/es/primitives/score/) — Puntuación en una escala ordenada
+- [Noul](/es/primitives/noul/) — Probabilidad de sí/no
+- [Patrón de enrutamiento de intenciones](/es/patterns/intent-routing/) — El uso más común de Choice en producción
+- [Confianza](/es/concepts/confidence/) — Controla el comportamiento usando `probabilities` y `confidence`

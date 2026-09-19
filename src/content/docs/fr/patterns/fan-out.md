@@ -109,10 +109,10 @@ if frustration.score > 1.5:
 
 **Distinguez « spéculatif » de « redondant ».** Une question spéculative est une question qui a **un sens clair** même dans d'autres branches. Si vous ne lisez jamais la réponse à une question, quelle que soit la branche, ce n'est pas spéculatif, c'est un gaspillage — bien que le coût soit faible, cela alourdit le code.
 
-**Associez-le au routage par confiance (confidence).** Le fan-out résout le « quoi demander », le routage par confiance résout le « à quel point croire ». Leur combinaison est une forme courante dans les systèmes de production : voir l'exemple de la banque vocale dans [le routage par confiance](/zh/patterns/confidence-routing/).
+**Associez-le au routage par confiance (confidence).** Le fan-out résout le « quoi demander », le routage par confiance résout le « à quel point croire ». Leur combinaison est une forme courante dans les systèmes de production : voir l'exemple de la banque vocale dans [le routage par confiance](/fr/patterns/confidence-routing/).
 
 ## Liens connexes
 
-- [Primitives de question](/zh/primitives/) — Indépendance et questions spéculatives
-- [State](/zh/concepts/state/) — Budget de contexte et organisation de l'état (state)
-- [Routage par confiance](/zh/patterns/confidence-routing/) — Deuxième axe de décision
+- [Primitives de question](/fr/primitives/) — Indépendance et questions spéculatives
+- [State](/fr/concepts/state/) — Budget de contexte et organisation de l'état (state)
+- [Routage par confiance](/fr/patterns/confidence-routing/) — Deuxième axe de décision

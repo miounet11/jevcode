@@ -33,10 +33,15 @@ export async function getStaticPaths() {
       });
     }
 
-    // 默认语言的条目在其他语言缺失时也生成（回退）
-    if (lang !== 'zh') {
-      const zh = all.filter((e) => e.id.startsWith('zh/'));
-      for (const entry of zh) {
+    // 其他语言缺失时回退到默认语言。
+    //
+    // 回退源必须是**机器可读**的英文版，不能回退到 zh：zh 正文是机翻中文，
+    // 回退后 ja/ko/de/fr/es/pt 页面会出现「日文页面里整段中文」，
+    // 而页面标注却说「本文由机器翻译自 en」——语言与标注对不上。
+    // 一律回退 en，非中文读者至少能读懂英文，标注也与实际来源一致。
+    if (lang !== 'en') {
+      const en = all.filter((e) => e.id.startsWith('en/'));
+      for (const entry of en) {
         const slug = entry.id.slice(3).replace(/\/index$/, '');
         if (!slug || seen.has(slug)) continue;
         seen.add(slug);
@@ -57,7 +62,8 @@ const t = useTranslations(lang);
 
 const all = await getCollection('docs');
 const entry = all.find((e) => e.id === id)!;
-const isFallback = Boolean(fallbackId) && fallbackId === id && id.startsWith('zh/') && lang !== 'zh';
+// 回退标记：非 en 页面用了 en 的条目（见 getStaticPaths 中的回退源说明）
+const isFallback = Boolean(fallbackId) && fallbackId === id && id.startsWith('en/') && lang !== 'en';
 
 const { Content, headings } = await render(entry);
 
@@ -66,7 +72,7 @@ const path = `/${lang}/${slug}/`;
 
 // 取默认语言条目用于「上一篇/下一篇」与文档导航
 const navSource = all
-  .filter((e) => e.id.startsWith(`${lang}/`) || (isFallback && e.id.startsWith('zh/')))
+  .filter((e) => e.id.startsWith(`${lang}/`) || (isFallback && e.id.startsWith('en/')))
   .filter((e) => e.data.section !== 'cases')
   .sort((a, b) => {
     const sa = sections.findIndex((s) => s.key === a.data.section);

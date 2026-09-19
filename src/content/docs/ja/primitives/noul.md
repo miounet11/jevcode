@@ -16,7 +16,7 @@ translatedFrom: zh
 - この履歴書には分散システムに関する経験が記載されていますか？
 - このコメントには個人識別情報（PII）が含まれていますか？
 
-答えが選択肢のいずれかである場合は [Choice](/zh/primitives/choice/) を、特定の尺度上の位置である場合は [Score](/zh/primitives/score/) を使用します。
+答えが選択肢のいずれかである場合は [Choice](/ja/primitives/choice/) を、特定の尺度上の位置である場合は [Score](/ja/primitives/score/) を使用します。
 
 典型的な質問の例：
 
@@ -94,13 +94,13 @@ print(response.nouls["is_human_escalation"].noul)
 
 **明確な判断基準を定義してください。** 「Is the candidate strong in Python?」（候補者は Python で強力なスキルを持っていますか？）を例にとると、「強力」とは何を指すのかを事前に定義する必要があります。定義が不明確だと、確率の解釈が困難になります。
 
-**0.5 は「中程度」を意味しません。** これは最も一般的な誤用です。0.5 は、モデルが「はい」と「いいえ」を区別できないことを示しており、「半分の中程度」を意味するものではありません。スキルの深さを測定する場合は、[Score](/zh/primitives/score/) を使用して、定義された段階でスコアリングを行う必要があります。
+**0.5 は「中程度」を意味しません。** これは最も一般的な誤用です。0.5 は、モデルが「はい」と「いいえ」を区別できないことを示しており、「半分の中程度」を意味するものではありません。スキルの深さを測定する場合は、[Score](/ja/primitives/score/) を使用して、定義された段階でスコアリングを行う必要があります。
 
 **指示を真偽を評価すべき陈述文として記述することもできます。** 疑問文だけでなく、指示を陈述文として記述し、モデルにその真偽を評価させることもできます。例えば、「顧客が返金を求めている」という事象について、陈述文として記述した場合、1 に近い値はその陈述が真であることを示します。**両方の表現方法は、独自のデータで試す価値があります。**
 
 ## 関連情報
 
-- [Choice](/zh/primitives/choice/) — 順序のない固定された選択肢
-- [Score](/zh/primitives/score/) — 順序のある尺度でのスコアリング
-- [信頼度](/zh/concepts/confidence/) — Noul に confidence がない理由
+- [Choice](/ja/primitives/choice/) — 順序のない固定された選択肢
+- [Score](/ja/primitives/score/) — 順序のある尺度でのスコアリング
+- [信頼度](/ja/concepts/confidence/) — Noul に confidence がない理由
 - [ガードレールにおける Noul の適用](https://docs.typesafe.ai/patterns) — 公式パターンライブラリ

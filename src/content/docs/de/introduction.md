@@ -46,9 +46,9 @@ Der Rückgabewert ist einer von `billing` / `technical` / `sales` sowie eine Kon
 
 Alle Entscheidungen lassen sich auf drei Fragetypen reduzieren. Dies ist die Kernabstraktion von Jev; ihr Verständnis bedeutet, das gesamte System zu verstehen:
 
-- **[Choice](/zh/primitives/choice/)** — Wählt eine Option aus einer Menge sich gegenseitig ausschließender Kandidaten. Wird für Intent-Erkennung, Ticket-Routing und Aktionsauswahl verwendet.
-- **[Score](/zh/primitives/score/)** — Vergibt eine Punktzahl basierend auf einer Skala oder Bewertungsmaßstab. Wird für Relevanz-Ranking, Qualitätsbewertung und Risikoklassifizierung verwendet.
-- **[Noul](/zh/primitives/noul/)** — Beantwortet eine Ja/Nein-Frage und gibt die Wahrscheinlichkeit für die Antwort „Ja“ zurück. Wird für Inhaltsvalidierung, Assert-Prüfungen und Guardrails verwendet.
+- **[Choice](/de/primitives/choice/)** — Wählt eine Option aus einer Menge sich gegenseitig ausschließender Kandidaten. Wird für Intent-Erkennung, Ticket-Routing und Aktionsauswahl verwendet.
+- **[Score](/de/primitives/score/)** — Vergibt eine Punktzahl basierend auf einer Skala oder Bewertungsmaßstab. Wird für Relevanz-Ranking, Qualitätsbewertung und Risikoklassifizierung verwendet.
+- **[Noul](/de/primitives/noul/)** — Beantwortet eine Ja/Nein-Frage und gibt die Wahrscheinlichkeit für die Antwort „Ja“ zurück. Wird für Inhaltsvalidierung, Assert-Prüfungen und Guardrails verwendet.
 
 In einer einzelnen Anfrage können diese drei Fragetypen gemischt werden. Das Modell liest den Status nur einmal und bewertet dann alle Fragen parallel.
 
@@ -63,6 +63,6 @@ In der Praxis ist es üblich, in der Prozesskette häufig System One für schnel
 
 ## Nächste Schritte
 
-- [5-Minuten-Einführung](/zh/quickstart/) — API-Key erhalten und den ersten Aufruf ausführen
-- [Kernkonzepte](/zh/concepts/system-one/) — Verständnis von System One und Statusmodellen
-- [Architekturmuster](/zh/patterns/) — Sehen Sie, wie diese Aufrufe in Produktionsumgebungen organisiert werden
+- [5-Minuten-Einführung](/de/quickstart/) — API-Key erhalten und den ersten Aufruf ausführen
+- [Kernkonzepte](/de/concepts/system-one/) — Verständnis von System One und Statusmodellen
+- [Architekturmuster](/de/patterns/) — Sehen Sie, wie diese Aufrufe in Produktionsumgebungen organisiert werden

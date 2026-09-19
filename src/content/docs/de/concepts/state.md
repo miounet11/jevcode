@@ -12,7 +12,7 @@ translatedFrom: zh
 
 **State** ist das, was Sie das System-One-Modell bewerten lassen. Es kann eine Kundenservice-Nachricht, ein Textabschnitt oder der aktuelle Zustand Ihrer Anwendung sein. Sie geben ihn im `state`-Feld der API-Anfrage zusammen mit der Frage, die Sie stellen möchten, an.
 
-Bei jeder Anfrage wird **ein State** zur Bewertung von **einer oder mehreren Fragen** verwendet. Alle Fragen sehen denselben State und werden **unabhängig** voneinander ausgewertet. Sie können in einer einzigen Anfrage [Choice](/zh/primitives/choice/)-, [Score](/zh/primitives/score/)- und [Noul](/zh/primitives/noul/)-Fragen mischen.
+Bei jeder Anfrage wird **ein State** zur Bewertung von **einer oder mehreren Fragen** verwendet. Alle Fragen sehen denselben State und werden **unabhängig** voneinander ausgewertet. Sie können in einer einzigen Anfrage [Choice](/de/primitives/choice/)-, [Score](/de/primitives/score/)- und [Noul](/de/primitives/noul/)-Fragen mischen.
 
 ## Drei Formen
 
@@ -89,11 +89,11 @@ Der letzte Punkt ist insbesondere für chinesischsprachige Nutzer wichtig: Wenn 
 
 - 64k Tokens pro Anfrage für den Kontext: Dies deckt `state` plus **alle** Fragen ab.
 - 32k Tokens: Dies deckt `state` plus **die längste Frage** ab.
-- Das Modell liest den State nur einmal und bewertet dann alle Fragen parallel. Daher verursacht das Bündeln mehrerer Fragen in einer Anfrage fast keine zusätzlichen Verzögerungskosten – siehe [Fan-Out-Muster](/zh/patterns/fan-out/).
+- Das Modell liest den State nur einmal und bewertet dann alle Fragen parallel. Daher verursacht das Bündeln mehrerer Fragen in einer Anfrage fast keine zusätzlichen Verzögerungskosten – siehe [Fan-Out-Muster](/de/patterns/fan-out/).
 - Die Genauigkeit variiert mit der Größe des States; dies wird im Abschnitt `Jev 1.13 jaggedness` ausführlich erörtert.
 
 ## Verwandte Themen
 
-- [Frage-Primitiven](/zh/primitives/) — Wie Sie Fragen mit Anweisungen und Kriterien organisieren
-- [Konfidenz](/zh/concepts/confidence/) — Steuerung des Verhaltens anhand der Rückgabewerte
+- [Frage-Primitiven](/de/primitives/) — Wie Sie Fragen mit Anweisungen und Kriterien organisieren
+- [Konfidenz](/de/concepts/confidence/) — Steuerung des Verhaltens anhand der Rückgabewerte
 - [API-Referenz](https://docs.typesafe.ai/api) — Anforderungsschema

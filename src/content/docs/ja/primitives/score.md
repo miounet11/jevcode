@@ -16,7 +16,7 @@ translatedFrom: zh
 - 顧客の満足度
 - 候補者の Python 経験の深さ
 
-回答が順序関係のない固定された選択肢のセットである場合は [Choice](/zh/primitives/choice/) を使用し、単なる Yes/No の場合は [Noul](/zh/primitives/noul/) を使用します。
+回答が順序関係のない固定された選択肢のセットである場合は [Choice](/ja/primitives/choice/) を使用し、単なる Yes/No の場合は [Noul](/ja/primitives/noul/) を使用します。
 
 典型的な質問の例：
 
@@ -97,11 +97,11 @@ print(response.answers["bug_severity"].score)
 
 **`score` だけでなく `confidence` にも注目してください。** `Score` の信頼度が低い場合、通常は段階の定義に曖昧さがある、尺度が多面的である、または state の情報が不足していることを意味します。そのような場合、正しい対応は値を無理やり決定することではなく、段階の定義を改善することです。
 
-**ソート（順序付け）の場面では Score が主力プリミティブとなります。** 関連性のソート、品質評価、リスク分级には Score が適しており、[コンポジットスコアリングパターン](/zh/patterns/composite-scoring/) を組み合わせて複数の次元を重み付けして統合することができます。
+**ソート（順序付け）の場面では Score が主力プリミティブとなります。** 関連性のソート、品質評価、リスク分级には Score が適しており、[コンポジットスコアリングパターン](/ja/patterns/composite-scoring/) を組み合わせて複数の次元を重み付けして統合することができます。
 
 ## 関連
 
-- [Choice](/zh/primitives/choice/) — 順序のない固定された選択肢
-- [Noul](/zh/primitives/noul/) — Yes/No の確率
-- [コンポジットスコアリングパターン](/zh/patterns/composite-scoring/) — 多次元重み付け合成
-- [信頼度](/zh/concepts/confidence/) — 信頼度が低いことの意味
+- [Choice](/ja/primitives/choice/) — 順序のない固定された選択肢
+- [Noul](/ja/primitives/noul/) — Yes/No の確率
+- [コンポジットスコアリングパターン](/ja/patterns/composite-scoring/) — 多次元重み付け合成
+- [信頼度](/ja/concepts/confidence/) — 信頼度が低いことの意味

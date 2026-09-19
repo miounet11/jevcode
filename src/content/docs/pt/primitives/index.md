@@ -19,9 +19,9 @@ Você combina essas respostas no código para tomar decisões. Existem três tip
 
 | Tipo | O que responde | Retorna |
 | :--- | :--- | :--- |
-| [Choice](/zh/primitives/choice/) | Qual opção escolher? | `choice`, `probabilities`, `confidence` |
-| [Score](/zh/primitives/score/) | Em qual categoria se encaixa? | `score`, `legend`, `probabilities`, `confidence` |
-| [Noul](/zh/primitives/noul/) | Isso é verdadeiro? | `noul` (0 a 1) |
+| [Choice](/pt/primitives/choice/) | Qual opção escolher? | `choice`, `probabilities`, `confidence` |
+| [Score](/pt/primitives/score/) | Em qual categoria se encaixa? | `score`, `legend`, `probabilities`, `confidence` |
+| [Noul](/pt/primitives/noul/) | Isso é verdadeiro? | `noul` (0 a 1) |
 
 Você pode fazer apenas uma pergunta ou enviar várias de uma vez. Cada pergunta é avaliada independentemente.
 
@@ -79,6 +79,6 @@ Uma única chamada retorna três respostas independentes. O código faz a roteam
 
 ## Avançado
 
-- [Uso avançado de primitivas](/zh/primitives/advanced/) — Como escrever `criteria`, técnicas de redação e tratamento de casos limite
-- [Padrão Fan-out](/zh/patterns/fan-out/) — Como agrupar muitas perguntas em uma única solicitação
-- [Confiança](/zh/concepts/confidence/) — Como usar `confidence` e `probabilities` para controlar o comportamento
+- [Uso avançado de primitivas](/pt/primitives/advanced/) — Como escrever `criteria`, técnicas de redação e tratamento de casos limite
+- [Padrão Fan-out](/pt/patterns/fan-out/) — Como agrupar muitas perguntas em uma única solicitação
+- [Confiança](/pt/concepts/confidence/) — Como usar `confidence` e `probabilities` para controlar o comportamento

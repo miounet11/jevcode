@@ -12,11 +12,11 @@ translatedFrom: zh
 
 | 方法 | 用途 | 特徴 |
 | :--- | :--- | :--- |
-| [Python SDK](/zh/sdk/python/) | バックエンドサービス、データパイプライン、バッチ処理 | 同期/非同期クライアント、型付き入力、自動リトライ |
-| [JavaScript SDK](/zh/sdk/javascript/) | Node.js サービス、フルスタックアプリケーション | TypeScript 型推論、回答の型は質問から自動推論 |
+| [Python SDK](/ja/sdk/python/) | バックエンドサービス、データパイプライン、バッチ処理 | 同期/非同期クライアント、型付き入力、自動リトライ |
+| [JavaScript SDK](/ja/sdk/javascript/) | Node.js サービス、フルスタックアプリケーション | TypeScript 型推論、回答の型は質問から自動推論 |
 | HTTP API | 他の言語、軽量な統合 | 直接 POST 送信、リトライとレート制限の処理は自前で実装する必要あり |
 
-チームに AI コーディングエージェントが統合コードを記述している場合、まず [TypeSafe エージェントスキル](/zh/sdk/agent-skill/) をインストールすることを推奨します。これにより、エージェントはリクエストとレスポンスの正確な形状を把握でき、推測に基づいたコード記述を避けることができます。
+チームに AI コーディングエージェントが統合コードを記述している場合、まず [TypeSafe エージェントスキル](/ja/sdk/agent-skill/) をインストールすることを推奨します。これにより、エージェントはリクエストとレスポンスの正確な形状を把握でき、推測に基づいたコード記述を避けることができます。
 
 ## 共通の規約
 
@@ -44,7 +44,7 @@ SDK を使用しない場合、SDK に既に組み込まれている以下の 2 
 
 ## 関連リンク
 
-- [Python SDK](/zh/sdk/python/)
-- [JavaScript SDK](/zh/sdk/javascript/)
-- [エージェントスキル](/zh/sdk/agent-skill/)
-- [5 分で始める](/zh/quickstart/) — 完全な動作例
+- [Python SDK](/ja/sdk/python/)
+- [JavaScript SDK](/ja/sdk/javascript/)
+- [エージェントスキル](/ja/sdk/agent-skill/)
+- [5 分で始める](/ja/quickstart/) — 完全な動作例

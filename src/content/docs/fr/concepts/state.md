@@ -12,7 +12,7 @@ translatedFrom: zh
 
 Le **State** (État) est ce que vous demandez au modèle System One d'évaluer. Il peut s'agir d'un message de service client, d'un extrait de texte ou de l'état actuel de votre application. Vous l'insérez dans le champ `state` de la requête API, conjointement avec la question que vous souhaitez poser.
 
-Chaque requête évalue **un seul state** pour **une ou plusieurs questions**. Toutes les questions voient le même state et sont évaluées de manière **indépendante**. Vous pouvez mélanger les questions de type [Choice](/zh/primitives/choice/), [Score](/zh/primitives/score/) et [Noul](/zh/primitives/noul/) dans une seule requête.
+Chaque requête évalue **un seul state** pour **une ou plusieurs questions**. Toutes les questions voient le même state et sont évaluées de manière **indépendante**. Vous pouvez mélanger les questions de type [Choice](/fr/primitives/choice/), [Score](/fr/primitives/score/) et [Noul](/fr/primitives/noul/) dans une seule requête.
 
 ## Trois formes
 
@@ -89,11 +89,11 @@ Ce dernier point est particulièrement important pour les utilisateurs chinois :
 
 - Contexte par requête de 64k tokens : couvre le `state` ainsi que **toutes** les questions.
 - 32k tokens : couvre le `state` ainsi que **la question la plus longue**.
-- Le modèle lit le state une seule fois, puis évalue toutes les questions en parallèle. Par conséquent, regrouper plusieurs questions dans une seule requête n'entraîne pratiquement aucun coût supplémentaire en termes de latence — voir le [pattern Fan-out](/zh/patterns/fan-out/).
+- Le modèle lit le state une seule fois, puis évalue toutes les questions en parallèle. Par conséquent, regrouper plusieurs questions dans une seule requête n'entraîne pratiquement aucun coût supplémentaire en termes de latence — voir le [pattern Fan-out](/fr/patterns/fan-out/).
 - La précision varie à mesure que le state grandit ; une discussion spécifique est menée dans la section `Jev 1.13 jaggedness`.
 
 ## Liens connexes
 
-- [Primitives de question](/zh/primitives/) — Comment organiser les questions avec des instructions et des critères
-- [Confiance](/zh/concepts/confidence/) — Contrôler le comportement à l'aide des valeurs de retour
+- [Primitives de question](/fr/primitives/) — Comment organiser les questions avec des instructions et des critères
+- [Confiance](/fr/concepts/confidence/) — Contrôler le comportement à l'aide des valeurs de retour
 - [Référence API](https://docs.typesafe.ai/api) — Schéma de requête

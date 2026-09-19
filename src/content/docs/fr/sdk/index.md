@@ -12,11 +12,11 @@ translatedFrom: zh
 
 | Méthode | Utilisation | Caractéristiques |
 | :--- | :--- | :--- |
-| [Python SDK](/zh/sdk/python/) | Services backend, pipelines de données, traitement par lots | Clients synchrones/asynchrones, entrées typées, retry automatique |
-| [JavaScript SDK](/zh/sdk/javascript/) | Services Node.js, applications full-stack | Inférence de types TypeScript, le type de la réponse est déduit automatiquement à partir de la question |
+| [Python SDK](/fr/sdk/python/) | Services backend, pipelines de données, traitement par lots | Clients synchrones/asynchrones, entrées typées, retry automatique |
+| [JavaScript SDK](/fr/sdk/javascript/) | Services Node.js, applications full-stack | Inférence de types TypeScript, le type de la réponse est déduit automatiquement à partir de la question |
 | HTTP API | Autres langages, intégration légère | POST direct, gestion manuelle du retry et de la limitation de débit |
 
-Si votre équipe utilise des agents de codage IA pour écrire le code d'intégration, il est recommandé d'installer au préalable [l'agent skill TypeSafe](/zh/sdk/agent-skill/). Cela permet à l'agent de connaître la forme exacte des requêtes et des réponses, évitant ainsi qu'il n'écrive du code par pure conjecture.
+Si votre équipe utilise des agents de codage IA pour écrire le code d'intégration, il est recommandé d'installer au préalable [l'agent skill TypeSafe](/fr/sdk/agent-skill/). Cela permet à l'agent de connaître la forme exacte des requêtes et des réponses, évitant ainsi qu'il n'écrive du code par pure conjecture.
 
 ## Conventions communes
 
@@ -44,7 +44,7 @@ Si vous n'utilisez pas de SDK, vous devez gérer vous-même deux aspects que le 
 
 ## Liens connexes
 
-- [Python SDK](/zh/sdk/python/)
-- [JavaScript SDK](/zh/sdk/javascript/)
-- [Agent skill](/zh/sdk/agent-skill/)
-- [Démarrage rapide en 5 minutes](/zh/quickstart/) — Exemples complets et fonctionnels
+- [Python SDK](/fr/sdk/python/)
+- [JavaScript SDK](/fr/sdk/javascript/)
+- [Agent skill](/fr/sdk/agent-skill/)
+- [Démarrage rapide en 5 minutes](/fr/quickstart/) — Exemples complets et fonctionnels

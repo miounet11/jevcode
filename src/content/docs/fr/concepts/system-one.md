@@ -61,11 +61,11 @@ La valeur de retour de la seconde approche est un type déterminé dans son doma
 
 ## Confiance : permettre au modèle de dire « Je ne suis pas sûr »
 
-Les réponses des modèles System One incluent également une [confiance](/zh/concepts/confidence/), ce qui vous permet de décider quand exécuter directement, quand escalader vers un opérateur humain ou vers un modèle de raisonnement. C'est la base de la construction de systèmes fiables — **si un système ne peut pas exprimer honnêtement son incertitude, il ne peut pas être fiable**.
+Les réponses des modèles System One incluent également une [confiance](/fr/concepts/confidence/), ce qui vous permet de décider quand exécuter directement, quand escalader vers un opérateur humain ou vers un modèle de raisonnement. C'est la base de la construction de systèmes fiables — **si un système ne peut pas exprimer honnêtement son incertitude, il ne peut pas être fiable**.
 
 ## Comment appeler l'API
 
-Via le [SDK](/zh/sdk/) client ou l'API HTTP :
+Via le [SDK](/fr/sdk/) client ou l'API HTTP :
 
 ```http
 POST https://api.typesafe.ai/v1/systemone
@@ -75,7 +75,7 @@ Le champ `model` dans la requête permet de sélectionner le modèle spécifique
 
 ## Pour aller plus loin
 
-- [State](/zh/concepts/state/) — Comment organiser le contexte transmis au modèle
-- [Primitives de question](/zh/primitives/) — Les trois types de questions typées
-- [Modèles d'architecture](/zh/patterns/) — Comment organiser ces appels en environnement de production
+- [State](/fr/concepts/state/) — Comment organiser le contexte transmis au modèle
+- [Primitives de question](/fr/primitives/) — Les trois types de questions typées
+- [Modèles d'architecture](/fr/patterns/) — Comment organiser ces appels en environnement de production
 - [Comment construire des systèmes System One](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) — Guide complet des flux de travail officiels
