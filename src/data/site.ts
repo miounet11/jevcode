@@ -259,3 +259,60 @@ export const site = {
   official: 'https://typesafe.ai/',
   docs: 'https://docs.typesafe.ai/',
 };
+
+/**
+ * 友链站点。
+ *
+ * 定位描述取自各站首页的 title/description（2026-09-19 实采），不臆造。
+ * 按约定只链首页：站点的 /downloads、/releases 等深层路径会随版本变动，
+ * 链首页最不容易失效。
+ */
+export interface Partner {
+  name: string;
+  url: string;
+  /** 一句话定位 */
+  desc: { zh: string; en: string };
+}
+
+export const partners: Partner[] = [
+  {
+    name: 'Clavue',
+    url: 'https://www.clavue.com/',
+    desc: {
+      zh: 'AI 平台，含 imux macOS 工作台与 Clavue GUI / CLI',
+      en: 'AI platform with the imux macOS workbench and Clavue GUI / CLI',
+    },
+  },
+  {
+    name: 'imux',
+    url: 'https://www.iccjk.com/',
+    desc: {
+      zh: 'macOS 多智能体协作工作台，统一调度多种 CLI',
+      en: 'macOS workbench for multi-agent collaboration across CLIs',
+    },
+  },
+  {
+    name: '有声',
+    url: 'https://www.imiaoda.cn/',
+    desc: {
+      zh: 'AI 有声书与 ASMR，每日更新连载',
+      en: 'AI audiobooks and ASMR, with daily-updated serials',
+    },
+  },
+  {
+    name: '喵哒',
+    url: 'https://www.miaoda.vip/',
+    desc: {
+      zh: 'AI 音乐工作室，一句话写成可听的歌',
+      en: 'AI music studio — turn one sentence into a listenable song',
+    },
+  },
+  {
+    name: 'GrokCode',
+    url: 'https://www.grokcode.cn/',
+    desc: {
+      zh: 'AI 卡网比价、中转站评测与模型天梯',
+      en: 'Price comparison, relay-station reviews and model leaderboards',
+    },
+  },
+];

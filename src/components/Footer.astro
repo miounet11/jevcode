@@ -1,6 +1,6 @@
 ---
 import { useTranslations, type Lang } from '../i18n/ui';
-import { site } from '../data/site';
+import { site, partners } from '../data/site';
 
 export interface Props {
   lang: Lang;
@@ -8,6 +8,9 @@ export interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const year = new Date().getFullYear();
+
+// 友链描述只提供 zh/en，其余语言回退到 en
+const partnerDesc = (p: (typeof partners)[number]) => (lang === 'zh' ? p.desc.zh : p.desc.en);
 ---
 
 <footer class="site-footer">
@@ -36,6 +39,17 @@ const year = new Date().getFullYear();
           <li><a href={`/${lang}/patterns/`}>{t('nav.patterns')}</a></li>
           <li><a href={`/${lang}/cases/use-case-map/`}>{t('nav.ecosystem')}</a></li>
           <li><a href={`/${lang}/sdk/`}>{t('footer.sdks')}</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>{t('footer.partners')}</h4>
+        <ul class="footer__partners">
+          {partners.map((p) => (
+            <li>
+              <a href={p.url} rel="noopener" target="_blank" title={partnerDesc(p)}>{p.name}</a>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
