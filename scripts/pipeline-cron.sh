@@ -33,6 +33,19 @@ fi
 cd "$REPO"
 mkdir -p "$LOG_DIR"
 
+# 告警：cron 日志默认没人看，失败必须留下显眼痕迹
+# 区分「真失败」（ALERT-*）与「按设计跳过」（SKIPPED-*），避免告警疲劳
+mark() {
+  local prefix="$1" msg="$2"
+  local f="$LOG_DIR/$prefix-$(date -u +%F).txt"
+  {
+    echo "$msg"
+    echo "时间：$(date -u +%FT%TZ)"
+    echo "查看：tail -50 $LOG_DIR/cron.log"
+  } > "$f"
+  echo "[cron] $prefix 写入 $f"
+}
+
 echo "===== $(date -u +%FT%TZ) cron cycle ====="
 
 # 环境变量
@@ -54,12 +67,14 @@ if [[ ! -f .env ]] || [[ -z "${TYPESAFE_API_KEY:-}" ]]; then
 fi
 if [[ "${FAILED:-0}" == "1" ]]; then
   echo "[cron] 前置检查未通过，中止本轮"
+  mark ALERT "管线前置检查失败：缺少依赖或环境变量"
   exit 1
 fi
 
 # 只在干净工作区跑（避免把手工未提交改动卷进自动发布）
 if [[ -n "$(git status --porcelain)" ]]; then
   echo "[cron] 工作区不干净，跳过本轮（避免卷入手工改动）"
+  mark SKIPPED "管线跳过整轮：工作区不干净（存在未提交改动）"
   exit 0
 fi
 
