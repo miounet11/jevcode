@@ -1,0 +1,57 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "release_verified": {
+      "type": "noul",
+      "noul": 0.83
+    },
+    "loop_close": {
+      "type": "noul",
+      "noul": 0.84
+    },
+    "final_quality_concern": {
+      "type": "choice",
+      "choice": "other",
+      "confidence": 0.42,
+      "probabilities": {
+        "none": 0.39,
+        "og_meta": 0.02,
+        "search_robots": 0.04,
+        "other": 0.54,
+        "push_commits": 0.01
+      }
+    },
+    "next_session_priority": {
+      "type": "choice",
+      "choice": "comparison_articles",
+      "confidence": 0.4,
+      "probabilities": {
+        "comparison_articles": 0.55,
+        "seo_polish": 0,
+        "translations_ja": 0.37,
+        "monitor": 0.08
+      }
+    },
+    "session_success_score": {
+      "type": "score",
+      "score": 2.95,
+      "confidence": 0.95,
+      "legend": {
+        "0": "Wasted",
+        "1": "Marginal",
+        "2": "Productive",
+        "3": "Highly productive"
+      },
+      "probabilities": {
+        "0": 0,
+        "1": 0,
+        "2": 0.05,
+        "3": 0.95
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 1073,
+    "output_tokens": 161
+  }
+}
