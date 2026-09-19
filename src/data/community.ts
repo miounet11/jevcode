@@ -27,7 +27,7 @@ export interface PulseEntry {
 }
 
 /** 内容分类（我们自己的体系，不是原集合的） */
-export const pulseCategories = [
+export const pulseCategories: { key: string; title: Record<string, string>; match: RegExp }[] = [
   {
     key: 'demos',
     title: { zh: '演示与实验', en: 'Demos & experiments' },
