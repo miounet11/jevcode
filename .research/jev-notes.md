@@ -87,3 +87,33 @@ fan-out 模式下单轮决策 1 次请求、2–5 秒返回。
 Jev 判定：本轮会话在两个已验证的发布后**收尾**。
 机翻 cookbook 留作下个会话，按 staged_1_lang（ja 先行 18 文件）
 + 人工抽查 2–3 篇的质量门槛推进，不批量免审发布。
+
+## 轮 7–8 — 会话 2：信任修补与工具化（2026-09-20）
+
+### 轮 7（本会话做什么）
+- 约束修正：Jev 是判断模型，**不能生成译文**，机翻 cookbook 需外部工具 → 轮 6 计划改道
+- work_this_session：**prep_and_trust 0.99**（缺口检查器 + 信任修补）
+- 翻译骨架有用 0.83；机翻横幅价值 0.73；fallback 边角修补 0.55（暂缓）
+- continue_after_done 0.41（做完即收）
+- release_bar **1.65/4**：build + check + link check + 线上抽查
+
+### 执行
+- `scripts/i18n-gaps.mjs`：清单/JSON/骨架三模式，缺口 **19 文件 × 6 语言 = 114 条**
+  （18 cases + sdk/http-api），exit 1 可作 CI 卡点
+- 信任修补：zh 官方文档译文 21 处补 `translatedFrom: en`；
+  use-case-map 溯源修正（**zh 原创，en 是译本**）
+- Release `20260919-165044` 上线
+
+### 轮 8（验收与收尾）
+- release_verified **0.83** ✓
+- loop_close **0.84** ✓ —— 循环关闭
+- final_quality_concern：other 0.42（低置信）→ 逐项自查：
+  og:title/description/image/url 全齐；robots.txt 无 pagefind 屏蔽；
+  git push 完成——无遗留 other
+- next_session_priority：**comparison_articles 0.55**（对比文章系列）
+  超过 translations_ja 0.37 —— 下会话先写「Jev vs 生成式栈」对比系列
+- session_success **2.95/3 Highly productive**（conf 0.95）
+
+### 发布门槛全过（本轮）
+astro check 0/0/0 · 16025 内链零断 · 线上 zh/quickstart 机翻标注正确渲染 ·
+en/use-case-map 200 · 工作区干净 · 已推送 origin/main
