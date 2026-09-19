@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 import { languages, useTranslations, type Lang } from '../../i18n/ui';
-import { projectsByCategory, projects } from '../../data/ecosystem';
+import { projectsByCategory, projects, dataAsOf } from '../../data/ecosystem';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -24,7 +24,7 @@ const copy =
         statProjects: '收录项目',
         statStars: '合计 stars',
         statCategories: '分类',
-        snapshot: '快照日期 2026-09-18，stars 会随时间变化。',
+        snapshot: `快照日期 ${dataAsOf}，stars 会随时间变化。`,
         forks: 'forks',
       }
     : {
@@ -33,7 +33,7 @@ const copy =
         statProjects: 'Projects',
         statStars: 'Combined stars',
         statCategories: 'Categories',
-        snapshot: 'Snapshot taken 2026-09-18; star counts drift over time.',
+        snapshot: `Snapshot taken ${dataAsOf}; star counts drift over time.`,
         forks: 'forks',
       };
 ---

@@ -83,8 +83,15 @@ if (CHECK || changes.length === 0) {
   process.exit(0);
 }
 
-// 写回 ecosystem.ts：逐 repo 更新 stars/forks
+// 写回 ecosystem.ts：逐 repo 更新 stars/forks + dataAsOf 日期戳
 let out = src;
+const today = new Date().toISOString().slice(0, 10);
+const dateRe = /export const dataAsOf = '[^']*'/;
+if (dateRe.test(out)) {
+  out = out.replace(dateRe, `export const dataAsOf = '${today}'`);
+} else {
+  out = out.replace("import type { Lang } from '../i18n/ui';", `import type { Lang } from '../i18n/ui';\n\n/** 数据快照日期（fetch-ecosystem.mjs 自动维护） */\nexport const dataAsOf = '${today}';`);
+}
 for (const d of data) {
   if (!d.fresh || d.gone) continue;
   const re = new RegExp(`(repo: '${d.repo.replace(/\//g, '\\/')}',[\\s\\S]*?\\n    stars: )\\d+(,\\s*\\n    forks: )\\d+(,)`);

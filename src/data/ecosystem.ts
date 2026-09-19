@@ -5,6 +5,9 @@
 
 import type { Lang } from '../i18n/ui';
 
+/** 数据快照日期（fetch-ecosystem.mjs 自动维护） */
+export const dataAsOf = '2026-09-20';
+
 export interface Project {
   /** owner/repo */
   repo: string;
