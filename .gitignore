@@ -10,11 +10,18 @@ build/
 .vscode/
 *.log
 
-# 本地工具链与运行时产物（含内网地址与凭据，不入公开仓库）
-.pipeline/
-.clavue/worktrees/
-.clavue/runs/
-.clavue/coordination/
-
 # 抓取原文的原始 HTML 与批量 md（已整理为 .research/*.md 扁平版并入库，避免重复 1.4MB）
 .research/official/
+
+# ---------- 以下路径含内网地址或凭据，禁止入库 ----------
+#
+# 本仓库是 public。llm.py 含内网集群地址，img.py 含内网地址与明文口令，
+# 因此 .pipeline/ 整体排除，不做文件名级豁免——一旦开了口子，后续很容易
+# 误把含凭据的脚本一并提交。处理管线若需共享，应另建不含内网信息的仓库。
+.pipeline/
+
+# 会话工作产物（规划草稿含内网地址，曾在 main 上泄漏过，见提交记录）
+.clavue/plans/
+.clavue/runs/
+.clavue/coordination/
+.clavue/worktrees/
