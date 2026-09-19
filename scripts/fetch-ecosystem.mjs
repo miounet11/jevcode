@@ -1,0 +1,96 @@
+#!/usr/bin/env node
+/**
+ * 生态数据抓取：从 GitHub API 刷新 src/data/ecosystem.ts 中所有仓库的
+ * stars / forks / language / license / topics / archived 状态。
+ *
+ * 用法：node scripts/fetch-ecosystem.mjs [--check]
+ *   --check 只输出 diff（shell-friendly），不写文件
+ *
+ * 依赖：GITHUB_TOKEN 环境变量（无 token 也能跑，但限额 60/h）。
+ */
+
+import { readFileSync, writeFileSync } from 'node:fs';
+
+const CHECK = process.argv.includes('--check');
+const TOKEN = process.env.GITHUB_TOKEN;
+
+const src = readFileSync('src/data/ecosystem.ts', 'utf8');
+const repos = [...src.matchAll(/repo: '([^']+)'/g)].map((m) => m[1]);
+console.error(`发现 ${repos.length} 个仓库`);
+
+async function fetchOne(repo, attempt = 1) {
+  const res = await fetch(`https://api.github.com/repos/${repo}`, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'User-Agent': 'jevcode-pipeline',
+      ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
+    },
+  });
+  if (res.status === 404) return { repo, gone: true };
+  if (res.status === 403 || res.status === 429) {
+    if (attempt <= 3) {
+      // rate limit：等 reset 或退避
+      const reset = Number(res.headers.get('x-ratelimit-reset') ?? 0);
+      const wait = reset ? Math.min(Math.max(reset * 1000 - Date.now(), 1000), 3600_000) : attempt * 5000;
+      console.error(`  ${repo}: 限流，等 ${Math.round(wait / 1000)}s`);
+      await new Promise((r) => setTimeout(r, wait));
+      return fetchOne(repo, attempt + 1);
+    }
+    throw new Error(`${repo}: rate limited after retries`);
+  }
+  if (!res.ok) throw new Error(`${repo}: HTTP ${res.status}`);
+  return res.json();
+}
+
+const changes = [];
+const results = [];
+for (const repo of repos) {
+  const j = await fetchOne(repo);
+  if (j.gone) {
+    changes.push({ repo, kind: 'gone' });
+    results.push(null);
+    continue;
+  }
+  results.push(j);
+  if (j.archived) changes.push({ repo, kind: 'archived' });
+}
+
+// 与现有值 diff（stars/forks）
+const oldStars = [...src.matchAll(/repo: '([^']+)',[\s\S]*?stars: (\d+)/g)];
+// 上面贪婪问题，改为逐 repo 查找
+const oldMap = {};
+for (const repo of repos) {
+  const m = src.match(new RegExp(`repo: '${repo}',[\\s\\S]*?\\n    stars: (\\d+),\\s*\\n    forks: (\\d+)`));
+  if (m) oldMap[repo] = { stars: Number(m[1]), forks: Number(m[2]) };
+}
+
+const data = repos.map((repo, i) => ({ repo, ...oldMap[repo], fresh: results[i] }));
+let updated = 0;
+for (const d of data) {
+  if (!d.fresh) continue;
+  if (d.stars !== d.fresh.stargazers_count || d.forks !== d.fresh.forks_count) {
+    changes.push({
+      repo: d.repo,
+      kind: 'stats',
+      stars: `${d.stars ?? '?'} -> ${d.fresh.stargazers_count}`,
+      forks: `${d.forks ?? '?'} -> ${d.fresh.forks_count}`,
+    });
+  }
+}
+
+if (CHECK || changes.length === 0) {
+  console.log(JSON.stringify({ repo_count: repos.length, changes }, null, 2));
+  process.exit(0);
+}
+
+// 写回 ecosystem.ts：逐 repo 更新 stars/forks
+let out = src;
+for (const d of data) {
+  if (!d.fresh || d.gone) continue;
+  const re = new RegExp(`(repo: '${d.repo.replace(/\//g, '\\/')}',[\\s\\S]*?\\n    stars: )\\d+(,\\s*\\n    forks: )\\d+(,)`);
+  const next = out.replace(re, `$1${d.fresh.stargazers_count}$2${d.fresh.forks_count}$3`);
+  if (next !== out) updated++;
+  out = next;
+}
+writeFileSync('src/data/ecosystem.ts', out);
+console.log(JSON.stringify({ repo_count: repos.length, files_updated: 1, stat_entries_updated: updated, changes }, null, 2));

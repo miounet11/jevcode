@@ -1,0 +1,66 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "batching_policy": {
+      "type": "choice",
+      "choice": "batch_by_magnitude",
+      "confidence": 0.49,
+      "probabilities": {
+        "never_batch": 0.05,
+        "batch_by_age": 0,
+        "batch_by_magnitude": 0.62,
+        "both": 0.33
+      }
+    },
+    "magnitude_threshold": {
+      "type": "score",
+      "score": 1.64,
+      "confidence": 0.25,
+      "legend": {
+        "0": "+2% or any new repo",
+        "1": "+5%",
+        "2": "+10%",
+        "3": "+20%"
+      },
+      "probabilities": {
+        "0": 0.19,
+        "1": 0.18,
+        "2": 0.44,
+        "3": 0.19
+      }
+    },
+    "auto_deploy_final": {
+      "type": "noul",
+      "noul": 0.51
+    },
+    "scheduler_final": {
+      "type": "choice",
+      "choice": "vps_cron",
+      "confidence": 0.28,
+      "probabilities": {
+        "github_actions_pr": 0.42,
+        "vps_cron": 0.46,
+        "github_actions_full": 0.12,
+        "local_cron": 0
+      }
+    },
+    "stale_data_display": {
+      "type": "choice",
+      "choice": "date_stamp",
+      "confidence": 1,
+      "probabilities": {
+        "date_stamp": 1,
+        "no_stamp": 0,
+        "live_widget": 0
+      }
+    },
+    "gate1_instructions_tuning": {
+      "type": "noul",
+      "noul": 0.52
+    }
+  },
+  "usage": {
+    "input_tokens": 1392,
+    "output_tokens": 213
+  }
+}

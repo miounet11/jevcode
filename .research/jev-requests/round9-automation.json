@@ -1,0 +1,63 @@
+{
+  "state": "JevCode automation design, round 9. The operator wants the site to 'flow': scheduled jobs that periodically (1) fetch/crawl new source material (official docs updates from docs.typesafe.ai, ecosystem GitHub star counts, new community projects), (2) prepare updated/new content, (3) use Jev to JUDGE what content to publish, where it belongs (which section/language), and WHEN to publish it, then (4) auto-deploy approved items. Current infrastructure facts: static Astro site on a VPS with atomic symlink deploys; repo is PUBLIC on GitHub (miounet11/jevcode) with Actions available; the deploy requires SSH to the VPS which Actions cannot do without storing the SSH key as a repo secret; local machine (macOS, has cron) has full deploy capability and the TYPESAFE_API_KEY in .env; content is markdown in src/content/docs with 8 languages; ecosystem data (stars) was last collected 2026-09-18, one day ago. Jev's role: it is a judgment model (typed noul/choice/score outputs, no prose generation) — suitable for gatekeeping decisions like 'is this update worth publishing', 'is this draft ready', 'what category does this belong to', NOT for writing content. Design questions follow.",
+  "model": "jev-latest",
+  "questions": {
+    "scheduler_choice": {
+      "type": "choice",
+      "instructions": "Where should the scheduled pipeline run?",
+      "criteria": {
+        "local_cron": "macOS launchd/cron on the operator's machine: has SSH key, API key, deploy access; simplest; runs only when machine is on",
+        "github_actions": "GitHub Actions scheduled workflow: runs in cloud reliably; needs repo secrets (API key) but CANNOT deploy to VPS without adding an SSH secret too",
+        "vps_cron": "Cron on the VPS itself: always-on, has the site; needs API key copied there and the repo cloned there; deploy is local symlink switch",
+        "hybrid": "GitHub Actions for fetch+judge+commit, VPS-side hook (or manual pull) for deploy"
+      }
+    },
+    "pipeline_stages": {
+      "type": "choice",
+      "instructions": "Which pipeline stages should be automated in v1?",
+      "criteria": {
+        "stars_only": "V1 = ecosystem star refresh only (mechanical data update, no editorial judgment needed)",
+        "stars_plus_detect": "V1 = star refresh + change detection on docs.typesafe.ai (diff the llms.txt index and page hashes) + Jev gate on whether changes are worth a content update",
+        "full_loop": "V1 = fetch + Jev gate + content prep + Jev publish-when gate + auto deploy, all stages",
+        "content_drafts": "V1 = Jev-judged publishing of human-prepared content drafts only (no crawling)"
+      }
+    },
+    "jev_gate_design": {
+      "type": "choice",
+      "instructions": "How should Jev be used in the publish gate?",
+      "criteria": {
+        "two_stage": "Two Jev calls: gate-1 at intake (is this change significant enough to publish? noul + category choice), gate-2 at release (is the assembled release coherent? noul + score) — matches the model's typed-judgment strengths",
+        "single_gate": "One Jev call at release time only: publish/hold/escalate choice over a release manifest",
+        "scoring_only": "Jev scores every candidate 0-3 on value; items above threshold auto-publish, borderline queued for human review",
+        "no_auto_publish": "Jev only ranks/prioritizes; publishing is always human-triggered"
+      }
+    },
+    "auto_deploy_safety": {
+      "type": "noul",
+      "instructions": "Should a fully-gated pipeline be allowed to auto-deploy to production without a human click?",
+      "criteria": {
+        "true": "Yes: mechanical gates (build+check+links) plus Jev gates are enough for data updates (stars) and doc syncs",
+        "false": "No: keep a human approval step for production deploys"
+      }
+    },
+    "frequency": {
+      "type": "choice",
+      "instructions": "What cadence for the scheduled runs?",
+      "criteria": {
+        "daily": "Daily fetch+gate cycle, deploy when gated changes accumulate",
+        "twice_weekly": "Every 3-4 days: less noise, batches changes",
+        "weekly": "Weekly: simplest, fine for a small doc site",
+        "hourly_stars": "Hourly star refresh + weekly content cycle"
+      }
+    },
+    "where_new_content_lands": {
+      "type": "choice",
+      "instructions": "When new material passes the gate, where should it land first?",
+      "criteria": {
+        "en_first": "EN version first (en is the canonical fallback source), other languages fill in later via translation flow",
+        "zh_en_same": "zh and en together (the two full languages), others follow",
+        "branch_pr": "Automated branch + PR, merged after gates, so everything is reviewable in git history"
+      }
+    }
+  }
+}

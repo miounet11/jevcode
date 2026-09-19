@@ -1,0 +1,67 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "scheduler_choice": {
+      "type": "choice",
+      "choice": "vps_cron",
+      "confidence": 0.41,
+      "probabilities": {
+        "github_actions": 0.02,
+        "local_cron": 0.13,
+        "vps_cron": 0.55,
+        "hybrid": 0.3
+      }
+    },
+    "pipeline_stages": {
+      "type": "choice",
+      "choice": "stars_plus_detect",
+      "confidence": 0.74,
+      "probabilities": {
+        "stars_only": 0.13,
+        "stars_plus_detect": 0.8,
+        "full_loop": 0.04,
+        "content_drafts": 0.03
+      }
+    },
+    "jev_gate_design": {
+      "type": "choice",
+      "choice": "two_stage",
+      "confidence": 0.92,
+      "probabilities": {
+        "single_gate": 0.05,
+        "no_auto_publish": 0,
+        "scoring_only": 0,
+        "two_stage": 0.95
+      }
+    },
+    "auto_deploy_safety": {
+      "type": "noul",
+      "noul": 0.49
+    },
+    "frequency": {
+      "type": "choice",
+      "choice": "daily",
+      "confidence": 0.88,
+      "probabilities": {
+        "twice_weekly": 0.02,
+        "weekly": 0.02,
+        "hourly_stars": 0.05,
+        "daily": 0.91
+      }
+    },
+    "where_new_content_lands": {
+      "type": "choice",
+      "choice": "branch_pr",
+      "confidence": 0.63,
+      "probabilities": {
+        "branch_pr": 0.76,
+        "en_first": 0.24,
+        "zh_en_same": 0
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 1423,
+    "output_tokens": 275
+  }
+}

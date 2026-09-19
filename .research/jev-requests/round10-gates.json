@@ -1,0 +1,56 @@
+{
+  "state": "JevCode pipeline gate tuning, round 10. The automated pipeline (scripts/pipeline.mjs) is built and working end-to-end: fetch GitHub ecosystem data, Jev gate-1 (worth publishing? where?), commit, build, astro check, full internal link check, Jev gate-2 (release ready? risk?), push, atomic deploy, jsonl audit log. Design came from round 9: scheduler vps_cron 0.41 (weak, hybrid was 0.30), stages stars_plus_detect 0.74, two_stage Jev gates 0.95, auto_deploy_safety 0.49 (undecided), frequency daily 0.88, landing branch_pr 0.63. PROBLEM DISCOVERED IN TESTING: gate-1 currently judges raw star-count deltas and returns worth=0.08-0.18 (HOLD) for small changes (e.g. 4 repos changed by 1-5 stars overnight after a big refresh was already applied manually today: 603/318/324/4026 stars already live from this session's manual run). So the gate is behaving correctly-ish (small deltas are indeed not release-worthy), but this creates a question about batching: should the pipeline batch small changes until a threshold, instead of rejecting them? Also the fresh fetch just found 4 repos moved 1-5 stars beyond what was manually committed — trivial. Current deployed ecosystem data is from today's manual refresh (already the largest jump: e.g. one repo 1979 -> 4026). Questions: how should gate-1 handle batching of small deltas? What threshold logic? Should auto-deploy be enabled for gate-approved releases (round 9 was 0.49, still undecided)? Where should cron actually run (vps vs local vs github actions — round 9 gave vps_cron only 0.41 over hybrid 0.30)?",
+  "model": "jev-latest",
+  "questions": {
+    "batching_policy": {
+      "type": "choice",
+      "instructions": "How should gate-1 handle small star-count deltas that individually fail the worth-publishing threshold?",
+      "criteria": {
+        "batch_by_magnitude": "Accumulate deltas in a pending state; release when cumulative change magnitude crosses a threshold (e.g. any repo +10% or total +50 stars since last release)",
+        "batch_by_age": "Accumulate and release whatever exists at the weekly boundary (max staleness 7 days), regardless of magnitude",
+        "both": "Release when EITHER magnitude threshold OR 7-day staleness is crossed, whichever first",
+        "never_batch": "Never batch; each daily cycle publishes only if that day's delta alone is significant"
+      }
+    },
+    "magnitude_threshold": {
+      "type": "score",
+      "instructions": "If magnitude-based: what minimum per-repo relative change justifies an immediate release?",
+      "criteria": ["+2% or any new repo", "+5%", "+10%", "+20%"]
+    },
+    "auto_deploy_final": {
+      "type": "noul",
+      "instructions": "Final call now that gates are implemented and tested: should gate-approved releases auto-deploy to production without human click? (round 9 was 0.49)",
+      "criteria": {
+        "true": "Yes: data-only updates with build+check+link+two-Jev-gate protection may auto-deploy",
+        "false": "No: keep human approval for production"
+      }
+    },
+    "scheduler_final": {
+      "type": "choice",
+      "instructions": "Where should the cron actually run? (round 9: vps_cron 0.41, hybrid 0.30 — weak signal)",
+      "criteria": {
+        "vps_cron": "VPS cron: always-on, repo cloned there, API key on server, local symlink deploy",
+        "local_cron": "Operator's mac: has everything already; misses runs when asleep",
+        "github_actions_pr": "GitHub Actions: fetch+gates+commit+PR; deploy stays manual/vps pull",
+        "github_actions_full": "GitHub Actions with SSH secret for full auto-deploy"
+      }
+    },
+    "stale_data_display": {
+      "type": "choice",
+      "instructions": "How should the site display star data freshness given a batching policy?",
+      "criteria": {
+        "date_stamp": "Show 'data as of <date>' on the ecosystem page, auto-updated per release",
+        "no_stamp": "No stamp; numbers are understood to be approximate",
+        "live_widget": "Client-side live fetch of stars on page load (rate-limit and privacy concerns)"
+      }
+    },
+    "gate1_instructions_tuning": {
+      "type": "noul",
+      "instructions": "Should gate-1's worth-publishing question be rewritten to explicitly reference the batching policy (so it judges 'should this batch release now' rather than 'is this delta significant')?",
+      "criteria": {
+        "true": "Yes: gate should evaluate the batch + staleness together",
+        "false": "No: keep gate as pure significance judge; batching logic in code"
+      }
+    }
+  }
+}
