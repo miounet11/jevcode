@@ -1,4 +1,5 @@
 ---
+translatedFrom: zh
 title: Use-case map & ecosystem
 description: A map of Jev use cases by scenario, with real production projects. See which primitives others reach for, and where.
 section: cases

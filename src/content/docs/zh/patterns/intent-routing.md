@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 意图路由
 description: 分类进来的请求，把每一个路由到最合适的处理器：确定性逻辑、专用 LLM，或人工。
 section: patterns

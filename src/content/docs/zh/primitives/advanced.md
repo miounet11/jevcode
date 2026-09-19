@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 结构化问题
 description: instructions 与 criteria 都接受 JSON 结构。System One 模型被训练来理解结构，善用它可以显著提升复杂判断的准确性。
 section: primitives

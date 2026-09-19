@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: Choice
 description: Choice 从一组固定选项中选出一个。答案是选中项、每个选项的概率以及置信度。
 section: primitives

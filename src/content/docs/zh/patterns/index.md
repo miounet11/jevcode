@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 架构模式
 description: 用 TypeSafe 构建系统的架构模式。学会以「离散的原子决策」来思考，是发挥它全部价值的关键。
 section: patterns

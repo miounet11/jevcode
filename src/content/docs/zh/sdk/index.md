@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: SDK 与集成
 description: 官方客户端 SDK、HTTP API 的选择，以及给 AI 编码代理用的 skill。
 section: sdk

@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 问题原语总览
 description: Choice、Score、Noul 三类类型化问题，它们各自返回什么，以及如何选择。
 section: primitives

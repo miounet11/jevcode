@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 置信度
 description: confidence 是从概率分布推导出的统计量。理解它与 probabilities 的关系，以及如何让阈值随风险缩放。
 section: concepts

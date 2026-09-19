@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: Agent Skill
 description: 把 TypeSafe skill 装进 Claude Code、Codex 等编码代理，让它获得 API 的完整上下文，而不是靠猜。
 section: sdk

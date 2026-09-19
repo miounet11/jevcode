@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: Python SDK
 description: 安装 typesafe-sdk，用同步或异步客户端调用 System One API。
 section: sdk

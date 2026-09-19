@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: Noul
 description: Noul 让模型评估一个是/否问题，返回答案为「是」的概率。它本身就是 0 到 1 的数值，不带单独的 confidence。
 section: primitives

@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 5 分钟上手
 description: 拿到 API key，用 cURL 或 SDK 跑通第一次 Jev 调用，并理解返回值结构。
 section: start

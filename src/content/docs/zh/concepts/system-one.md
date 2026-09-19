@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: System One 模型
 description: System One 是一类为「快速、结构化决策」而构建的模型。Jev 是第一个，它的输出可以被软件直接消费。
 section: concepts

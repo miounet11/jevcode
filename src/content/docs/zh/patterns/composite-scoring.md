@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 组合评分
 description: 把复杂判断拆成原子分数，用你完全掌控的权重在代码里合并。
 section: patterns

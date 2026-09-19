@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: State（状态）
 description: State 是你要模型评估的内容。理解它的三种形态、如何组织上下文，以及语言支持上的限制。
 section: concepts

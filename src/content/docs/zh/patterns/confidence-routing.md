@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 置信度路由
 description: 把置信度当作第二个决策轴。答案告诉你「是什么」，置信度告诉你「是否该执行」。
 section: patterns

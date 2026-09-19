@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 扇出并行
 description: 在一次调用里发送大量问题（包括推测性的），再由代码决定哪些是相关的。
 section: patterns

@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: JavaScript / TypeScript SDK
 description: 安装 @typesafe-ai/sdk，用自动类型推导的客户端调用 System One API。
 section: sdk

@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: Score
 description: Score 按有序的描述性档位给内容打分。答案是分数、每档概率以及置信度，且分数可以落在两档之间。
 section: primitives

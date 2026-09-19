@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: 认识 Jev
 description: Jev 是 TypeSafe 的旗舰模型，也是第一个 System One 模型。它把非结构化状态和类型化问题变成软件可以直接使用的类型化决策。
 section: start

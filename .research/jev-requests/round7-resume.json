@@ -1,0 +1,54 @@
+{
+  "state": "JevCode loop resumption, round 7. New session. Previous state: two production releases live (playground + pagefind search, both verified). Round 6 decided the loop would end for that session, with a pre-planned next step: cookbook i18n staged as 'staged_1_lang' (0.53) — translate the 18 zh/en-only case cookbooks into ONE language first (ja suggested, 18 files), with a quality gate of human spot-checking 2-3 files per language (spot_check 0.42 / full_review 0.46 in round 6), mechanical gates (build + link integrity + frontmatter schema), then deploy stage 1, then decide whether to roll out to the other 5 languages. Translation execution consideration: the translator available to this pipeline is Jev itself? No — Jev is a judgment/evaluation model, NOT a generative translation model; it returns typed judgments (noul/choice/score), it cannot produce translated prose. So the actual translation must come from either (a) the operator's own generative tooling outside this pipeline, or (b) manual writing. This is a real constraint that round 6 did not know. Given that constraint, the options for this session's loop change. Candidate work items now: A) operator provides translations externally later — meanwhile this session does the mechanical prep: verify which of the 19 EN case files (use-case-map.md already exists in ja) are missing in ja/ko/de/fr/es/pt, write a translation checklist script, and a per-file frontmatter template (translatedFrom: en) so translations drop in cleanly; B) trust/i18n fixes (round 1: 1.63/3 moderately damaging machine-translation trust; round 4 candidate 0.54): add a machine-translated notice banner to pages whose frontmatter says translatedFrom, plus fix the remaining i18n fallback edge cases (round 4: 0.34); C) comparison article series 'Jev vs generative LLM stack' (round 1: 0.62) — original content, only feasible if written manually since Jev cannot generate prose; D) small polish: playground page is not in the sitemap nav on the homepage quick links; add it; E) stop the loop, nothing worth doing until human content is provided. Questions below ask Jev to pick this session's work given the corrected constraint that no machine translation of prose is available in-pipeline.",
+  "model": "jev-latest",
+  "questions": {
+    "work_this_session": {
+      "type": "choice",
+      "instructions": "Given Jev cannot generate prose translations (it is a judgment model), what should this session's loop work on?",
+      "criteria": {
+        "prep_and_trust": "A+B: mechanical i18n prep (gap checklist script, frontmatter template) + machine-translated notice banner + fallback edge fixes",
+        "trust_only": "B only: trust pass (translatedFrom banner) + fallback fixes",
+        "comparison_articles": "C: draft comparison articles manually (operator writes, pipeline integrates)",
+        "polish_only": "D only: small nav/sitemap polish",
+        "stop": "E: stop the loop until human content is available"
+      }
+    },
+    "translated_banner_value": {
+      "type": "noul",
+      "instructions": "Is a visible 'machine-translated from English original' banner on translatedFrom pages worth implementing now (round 1 scored translation trust risk 1.63/3)?",
+      "criteria": {
+        "true": "Yes: transparency raises trust and is cheap",
+        "false": "No: defer"
+      }
+    },
+    "fallback_fix_urgency": {
+      "type": "noul",
+      "instructions": "Are the i18n fallback edge cases (ja/ko/de/fr/es/pt missing 19 of 39 pages, falling back to English content under a /{lang}/ URL) urgent to fix this session beyond the existing isFallback marker?",
+      "criteria": {
+        "true": "Yes: the URL-language/content-language mismatch is actively confusing",
+        "false": "No: existing fallback marker is enough for now"
+      }
+    },
+    "gap_checklist_useful": {
+      "type": "noul",
+      "instructions": "Is a mechanical gap-checklist script (which files x which languages are missing, with frontmatter template output) a useful artifact for the translation workflow?",
+      "criteria": {
+        "true": "Yes: it makes the human/external translation step drop-in",
+        "false": "No: over-engineering for 18 files"
+      }
+    },
+    "continue_after_done": {
+      "type": "noul",
+      "instructions": "After this session's chosen work is deployed and verified, should the loop continue with MORE work in the same session?",
+      "criteria": {
+        "true": "Yes: continue looping",
+        "false": "No: deploy, verify, close the session loop"
+      }
+    },
+    "release_bar": {
+      "type": "score",
+      "instructions": "What verification bar must this session's changes clear before deploying?",
+      "criteria": ["Build passes only", "Build + type check + link check", "Build + check + link + live spot-verification of changed pages", "Full regression on all 8 languages"]
+    }
+  }
+}

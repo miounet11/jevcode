@@ -1,0 +1,54 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "work_this_session": {
+      "type": "choice",
+      "choice": "prep_and_trust",
+      "confidence": 0.99,
+      "probabilities": {
+        "stop": 0.01,
+        "comparison_articles": 0,
+        "trust_only": 0,
+        "polish_only": 0,
+        "prep_and_trust": 0.99
+      }
+    },
+    "translated_banner_value": {
+      "type": "noul",
+      "noul": 0.73
+    },
+    "fallback_fix_urgency": {
+      "type": "noul",
+      "noul": 0.55
+    },
+    "gap_checklist_useful": {
+      "type": "noul",
+      "noul": 0.83
+    },
+    "continue_after_done": {
+      "type": "noul",
+      "noul": 0.41
+    },
+    "release_bar": {
+      "type": "score",
+      "score": 1.65,
+      "confidence": 0.64,
+      "legend": {
+        "0": "Build passes only",
+        "1": "Build + type check + link check",
+        "2": "Build + check + link + live spot-verification of changed pages",
+        "3": "Full regression on all 8 languages"
+      },
+      "probabilities": {
+        "0": 0.04,
+        "1": 0.28,
+        "2": 0.68,
+        "3": 0
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 1380,
+    "output_tokens": 156
+  }
+}

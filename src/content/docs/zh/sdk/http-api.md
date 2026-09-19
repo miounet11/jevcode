@@ -1,4 +1,5 @@
 ---
+translatedFrom: en
 title: HTTP API 参考
 description: 直接调用 TypeSafe 评估端点：请求结构、noul / choice / score 三类问题、响应形状与错误处理。
 section: sdk
