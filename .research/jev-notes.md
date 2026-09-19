@@ -1,31 +1,58 @@
-# Jev 实测记录（本地工具链）
+# Jev 迭代决策记录（fan-out 实测）
 
-本文件记录用本地 `scripts/jev-client.mjs` 调用 Jev API 的**实测**结果，
-供建站决策参考。API 细节见 `.research/api-verified.md`（已实测验证）。
+三轮 fan-out 评估，每轮一个请求、多个原子问题。模型 `jev-latest`（jev-1.13.0）。
+所有请求 JSON 见会话 /tmp；本文件只记结论与置信度。
 
-## 端点与凭据
+## 轮 1 — 站点方向基线
 
-- `POST https://api.typesafe.ai/v1/systemone`，Bearer 鉴权
-- key 放在 `.env`（已 gitignore），`TYPESAFE_API_KEY=...`
-- 模型：`jev-latest`（解析为 `jev-1.13.0`）
+| 问题 | 判定 |
+|---|---|
+| 受众是开发者 | **0.95** 是 |
+| 搜索功能高价值 | 0.86 |
+| 交互式示例高价值 | 0.81 |
+| 原创分析文章高价值 | 0.62 |
+| 对比页高价值 | 0.62 |
+| 最大缺口 | **interactivity 0.75**（其次 findability 0.16） |
+| 机翻内容损害可信度 | 1.63/3（略偏 Moderate） |
 
-## 实测记录
+结论：受众明确是开发者；「体验类」缺口最大。
 
-### 2026-09-19: 冒烟测试（jev-client.mjs 自测）
+## 轮 2 — 迭代主题选择
 
-```json
-{"is_urgent":{"type":"noul","noul":0.93},
- "severity":{"type":"score","score":1.87,"confidence":0.81,
-   "probabilities":{"0":0,"1":0.13,"2":0.87}}}
-```
+| 问题 | 判定 |
+|---|---|
+| 迭代主题 | **experience 0.94**（findability 0.06，trust/content 0） |
+| 基建 vs 内容权重 | **3.03/4 Mostly infra**（confidence 0.92） |
+| Playground 实现方式 | **mocked_samples 置信度 1.0**（serverless_proxy 0，完全排除） |
+| 搜索价值 | 0.65；信任修补 0.54；对比文章 0.33；i18n 修补 0.34 |
 
-观察：
+结论：本轮做「体验基建」，playground 用预录真实响应、纯静态、零密钥风险。
 
-1. **判别稳定**：同一个 state 两次调用（curl 冒烟 + client 自测），
-   `noul` 均为 0.93，`score` 1.89→1.87，判别方向一致，波动 <0.05。
-2. **fan-out 可行**：两种题型混在一个请求里 200，各答各的。
-3. **输出免费**：输出 tokens 不计费，多问原子问题的成本只体现在输入端
-   （$42/Btok），对站内评估这种短文本场景成本可忽略。
-4. **zsh 陷阱**：`curl -d '...\\!...'` 里 `\!` 会被 zsh 的 history 扩展
-   搞坏，产生 `Invalid \escape` JSON 错误。用文件传 body（`--data-binary @file`）
-   可避开。
+## 轮 3 — Playground 设计
+
+| 问题 | 判定 |
+|---|---|
+| 场景数量 | **5 个**（3 原语 + 2 管线案例），five 0.80 |
+| 关联 case 文档 | 0.58，弱倾向关联 |
+| 最佳 UI 表达 | **生成式输出 vs Jev 类型化判定并排对比**，gen_vs_judge 0.89 |
+| 输入可编辑 | 0.57，接近五五开 → 保守处理：编辑后明确标注响应为缓存样本 |
+| 导航位置 | **顶部导航**，top_nav 0.69（hero_cta 0.27） |
+| 诚实标注缓存样本 | **0.85 关键**，必须显式标注 |
+
+## 汇总决策
+
+本轮迭代（体验基建）：
+
+1. **Playground 页**（`/[lang]/playground/`）：5 个场景（noul/choice/score 三个原语
+   + composite/fan-out 两个管线案例），每场景展示「生成式模型会怎么写 vs Jev 返回
+   什么」并排对比，概率条 + 数值，附「响应为预录真实样本」标注。
+2. **场景尾部链接对应 cookbook 文档**（弱关联决策，成本极低顺手做）。
+3. **顶部导航加入 Playground 入口**（全部 8 语言）。
+4. 输入可编辑，但响应不变时打上「cached sample」标记，不假装实时推理。
+
+暂缓：搜索（下轮做）、对比文章系列、i18n 边角修补。
+
+## 成本记录
+
+三轮共 input ~3.4k tokens + 自测若干，合计不足 $0.001（$42/Btok）。
+fan-out 模式下单轮决策 1 次请求、2–5 秒返回。
