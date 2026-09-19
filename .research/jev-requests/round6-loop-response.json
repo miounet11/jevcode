@@ -1,0 +1,75 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "continue_now": {
+      "type": "noul",
+      "noul": 0.25
+    },
+    "bulk_translation_risk": {
+      "type": "score",
+      "score": 3.17,
+      "confidence": 0.85,
+      "legend": {
+        "0": "Negligible",
+        "1": "Low",
+        "2": "Moderate",
+        "3": "High",
+        "4": "Unacceptable"
+      },
+      "probabilities": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0.83,
+        "4": 0.17
+      }
+    },
+    "staged_translation": {
+      "type": "choice",
+      "choice": "staged_1_lang",
+      "confidence": 0.37,
+      "probabilities": {
+        "staged_6": 0.41,
+        "staged_1_lang": 0.53,
+        "all_108_once": 0,
+        "no_translate": 0.06
+      }
+    },
+    "translation_quality_gate": {
+      "type": "choice",
+      "choice": "full_review",
+      "confidence": 0.29,
+      "probabilities": {
+        "spot_check": 0.42,
+        "link_check_only": 0.01,
+        "jev_check": 0.11,
+        "full_review": 0.45999999999999996
+      }
+    },
+    "session_complete_after_this": {
+      "type": "noul",
+      "noul": 0.65
+    },
+    "release_worthiness": {
+      "type": "score",
+      "score": 1.98,
+      "confidence": 0.81,
+      "legend": {
+        "0": "Incomplete/incoherent",
+        "1": "Rough but shippable",
+        "2": "Solid release",
+        "3": "Excellent release"
+      },
+      "probabilities": {
+        "0": 0,
+        "1": 0.1,
+        "2": 0.81,
+        "3": 0.08
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 1374,
+    "output_tokens": 183
+  }
+}
