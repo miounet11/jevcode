@@ -48,26 +48,33 @@ mark() {
 
 echo "===== $(date -u +%FT%TZ) cron cycle ====="
 
-# 环境变量
-set -a
-source .env
-set +a
-export GITHUB_TOKEN="${GITHUB_TOKEN:-$(gh auth token 2>/dev/null || true)}"
-
-# 前置检查：cron 环境下缺依赖会静默失败，这里显式报错
+# 前置检查必须早于 source .env：set -e 下 source 缺失文件会直接中止，
+# 导致后面的告警分支永远走不到（实测：exit 1 但无 ALERT，故障静默）。
 for bin in node npm git gh; do
   if ! command -v "$bin" >/dev/null 2>&1; then
     echo "[cron] 致命：找不到 $bin（PATH=$PATH）"
     FAILED=1
   fi
 done
-if [[ ! -f .env ]] || [[ -z "${TYPESAFE_API_KEY:-}" ]]; then
-  echo "[cron] 致命：.env 缺失或 TYPESAFE_API_KEY 未设置"
+if [[ ! -f .env ]]; then
+  echo "[cron] 致命：.env 不存在"
   FAILED=1
 fi
 if [[ "${FAILED:-0}" == "1" ]]; then
   echo "[cron] 前置检查未通过，中止本轮"
-  mark ALERT "管线前置检查失败：缺少依赖或环境变量"
+  mark ALERT "管线前置检查失败：缺少依赖或 .env"
+  exit 1
+fi
+
+# 环境变量（.env 已确认存在）
+set -a
+source .env
+set +a
+export GITHUB_TOKEN="${GITHUB_TOKEN:-$(gh auth token 2>/dev/null || true)}"
+
+if [[ -z "${TYPESAFE_API_KEY:-}" ]]; then
+  echo "[cron] 致命：TYPESAFE_API_KEY 未设置"
+  mark ALERT "管线前置检查失败：TYPESAFE_API_KEY 未设置"
   exit 1
 fi
 
