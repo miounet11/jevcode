@@ -8,13 +8,13 @@
     },
     "yibie/awesome-jev": {
       "base": 325,
-      "current": 336,
-      "rel": 0.033846153846153845
+      "current": 365,
+      "rel": 0.12307692307692308
     },
     "thruwire/foreman": {
       "base": 354,
-      "current": 368,
-      "rel": 0.03954802259887006
+      "current": 384,
+      "rel": 0.0847457627118644
     },
     "devagrawal09/jev-review": {
       "base": 325,
@@ -28,8 +28,8 @@
     },
     "tamaratran/fast-jev-compaction": {
       "base": 4027,
-      "current": 4058,
-      "rel": 0.007698038241867395
+      "current": 4204,
+      "rel": 0.043953315122920285
     },
     "Anil-matcha/awesome-jev-by-typesafe": {
       "base": 603,
