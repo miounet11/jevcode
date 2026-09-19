@@ -189,8 +189,10 @@ try {
 }
 if (buildOk) {
   try {
-    const checkOut = run('npm run check 2>&1 | tail -3');
-    checkOk = /0 errors/.test(checkOut);
+    // 注意不能用 tail -3：astro check 末尾是 0 errors / 0 warnings / 0 hints + 空行，
+    // tail -3 会恰好切掉 "- 0 errors" 行导致永远 check=false（实测踩坑）。
+    const checkOut = run('npm run check 2>&1');
+    checkOk = /- 0 errors/.test(checkOut) && !/error ts\(/.test(checkOut);
   } catch {
     checkOk = false;
   }
