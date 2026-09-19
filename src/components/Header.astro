@@ -20,6 +20,17 @@ const navItems = [
 function isActive(href: string, match: string[]) {
   return current === href || match.some((m) => current.includes(m));
 }
+
+const searchUi = {
+  zh: { label: '搜索', placeholder: '搜索文档…' },
+  en: { label: 'Search', placeholder: 'Search docs…' },
+  ja: { label: '検索', placeholder: 'ドキュメントを検索…' },
+  ko: { label: '검색', placeholder: '문서 검색…' },
+  de: { label: 'Suche', placeholder: 'Dokumente suchen…' },
+  fr: { label: 'Recherche', placeholder: 'Rechercher dans la doc…' },
+  es: { label: 'Buscar', placeholder: 'Buscar en la documentación…' },
+  pt: { label: 'Buscar', placeholder: 'Pesquisar na documentação…' },
+} as const;
 ---
 
 <header class="site-header">
@@ -36,17 +47,244 @@ function isActive(href: string, match: string[]) {
       ))}
     </nav>
 
-    <div class="lang-switch" role="group" aria-label={t('lang.switch')}>
-      {(Object.keys(languages) as Lang[]).map((l) => (
-        <a
-          href={switchLangPath(current, l)}
-          hreflang={htmlLangMap[l]}
-          aria-current={l === lang ? 'true' : undefined}
-          title={languages[l].label}
-        >
-          {languages[l].short}
-        </a>
-      ))}
+    <div class="site-header__actions">
+      <button type="button" class="search-toggle" data-search-open aria-label={searchUi[lang].label} title={searchUi[lang].label}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+        </svg>
+        <span class="search-toggle__label">{searchUi[lang].placeholder}</span>
+      </button>
+
+      <div class="lang-switch" role="group" aria-label={t('lang.switch')}>
+        {(Object.keys(languages) as Lang[]).map((l) => (
+          <a
+            href={switchLangPath(current, l)}
+            hreflang={htmlLangMap[l]}
+            aria-current={l === lang ? 'true' : undefined}
+            title={languages[l].label}
+          >
+            {languages[l].short}
+          </a>
+        ))}
+      </div>
     </div>
   </div>
+
+  <dialog class="search-modal" data-search-modal>
+    <div class="search-modal__panel">
+      <div class="search-modal__input">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+        </svg>
+        <input type="search" data-search-input placeholder={searchUi[lang].placeholder} aria-label={searchUi[lang].label} autocomplete="off" />
+        <button type="button" class="search-modal__close" data-search-close aria-label="Esc">Esc</button>
+      </div>
+      <div class="search-modal__results" data-search-results></div>
+    </div>
+  </dialog>
 </header>
+
+<script>
+  const modal = document.querySelector<HTMLDialogElement>('[data-search-modal]');
+  const input = document.querySelector<HTMLInputElement>('[data-search-input]');
+  const results = document.querySelector<HTMLElement>('[data-search-results]');
+  const openBtns = document.querySelectorAll<HTMLButtonElement>('[data-search-open]');
+
+  let pagefind: any;
+
+  async function ensurePagefind() {
+    if (!pagefind) {
+      // pagefind 资产只在构建产物里，不在源码依赖图里；用变量路径绕过 Vite 静态解析
+      const url = '/pagefind/pagefind.js';
+      pagefind = await import(/* @vite-ignore */ url);
+    }
+    return pagefind;
+  }
+
+  function open() {
+    modal?.showModal();
+    // dialog 打开后 focus input；Chrome 需要 rAF
+    requestAnimationFrame(() => input?.focus());
+  }
+
+  function close() {
+    modal?.close();
+  }
+
+  openBtns.forEach((b) => b.addEventListener('click', open));
+  modal?.querySelector('[data-search-close]')?.addEventListener('click', close);
+  modal?.addEventListener('click', (e) => {
+    // 点击遮罩（panel 之外）关闭
+    if (e.target === modal) close();
+  });
+
+  let debounceTimer: number | undefined;
+  let activeQuery: any;
+  input?.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const q = input.value.trim();
+    if (!q) {
+      if (results) results.innerHTML = '';
+      return;
+    }
+    debounceTimer = window.setTimeout(async () => {
+      const pf = await ensurePagefind();
+      if (activeQuery) activeQuery.cancel();
+      activeQuery = pf.search(q, { excerptLength: 12 });
+      const res = await activeQuery;
+      if (!results) return;
+      if (res.results.length === 0) {
+        results.textContent = '—';
+        results.classList.add('is-empty');
+        return;
+      }
+      results.classList.remove('is-empty');
+      const five = res.results.slice(0, 8);
+      const nodes = await Promise.all(five.map((r: any) => r.data()));
+      results.innerHTML = '';
+      for (const d of nodes) {
+        const a = document.createElement('a');
+        a.href = d.url;
+        a.className = 'search-result';
+        a.innerHTML = `<span class="search-result__title"></span><span class="search-result__excerpt"></span>`;
+        (a.firstElementChild as HTMLElement).textContent = d.meta.title ?? d.url;
+        (a.lastElementChild as HTMLElement).innerHTML = d.excerpt;
+        a.addEventListener('click', close);
+        results.appendChild(a);
+      }
+    }, 160);
+  });
+</script>
+
+<style>
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-left: auto;
+  }
+  .search-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-code);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--fg-dim);
+    padding: 5px 12px;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+  }
+  .search-toggle:hover {
+    color: var(--fg-muted);
+    border-color: var(--accent-border);
+  }
+  .search-toggle__label {
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  @media (max-width: 760px) {
+    .search-toggle__label {
+      display: none;
+    }
+  }
+
+  .search-modal {
+    border: none;
+    padding: 0;
+    background: transparent;
+    max-width: 680px;
+    width: calc(100% - 32px);
+    margin: 12vh auto auto;
+    overflow: visible;
+  }
+  .search-modal::backdrop {
+    background: rgb(0 0 0 / 0.55);
+    backdrop-filter: blur(2px);
+  }
+  .search-modal__panel {
+    background: var(--bg-elev);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 18px 50px rgb(0 0 0 / 0.45);
+    overflow: hidden;
+  }
+  .search-modal__input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--fg-dim);
+  }
+  .search-modal__input input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--fg);
+    font-size: 15px;
+  }
+  .search-modal__input input::placeholder {
+    color: var(--fg-dim);
+  }
+  .search-modal__close {
+    background: var(--bg-code);
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 3px 8px;
+    cursor: pointer;
+  }
+  .search-modal__results {
+    max-height: 56vh;
+    overflow-y: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+  }
+  .search-modal__results.is-empty {
+    color: var(--fg-dim);
+    text-align: center;
+    padding: 22px;
+    font-size: 13px;
+  }
+  .search-result {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+  .search-result:hover {
+    background: var(--bg-code);
+  }
+  .search-result__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg);
+  }
+  .search-result__excerpt {
+    font-size: 12.5px;
+    color: var(--fg-muted);
+    line-height: 1.5;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .search-result__excerpt :is(mark) {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+</style>

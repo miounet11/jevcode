@@ -10,11 +10,9 @@ export interface Props {
   description?: string;
   /** 用于 hreflang 与 canonical */
   path: string;
-  /** 是否输出 docs 双栏布局（由页面自行放置内容） */
-  wide?: boolean;
 }
 
-const { lang, title, description, path, wide = false } = Astro.props;
+const { lang, title, description, path } = Astro.props;
 const t = useTranslations(lang);
 const siteName = t('site.name');
 const fullTitle = title === siteName ? `${siteName} — ${t('site.tagline')}` : `${title} | ${siteName}`;
@@ -62,7 +60,7 @@ const ogImage = new URL('/img/og.png', Astro.site).href;
   <body>
     <a href="#main" class="skip-link">{t('a11y.skip')}</a>
     <Header lang={lang} path={path} />
-    <main id="main" class={wide ? '' : ''}>
+    <main id="main" data-pagefind-body>
       <slot />
     </main>
     <Footer lang={lang} />

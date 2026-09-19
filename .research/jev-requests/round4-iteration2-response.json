@@ -1,0 +1,53 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "deploy_now": {
+      "type": "noul",
+      "noul": 0.81
+    },
+    "iteration2_theme": {
+      "type": "choice",
+      "choice": "search",
+      "confidence": 0.34,
+      "probabilities": {
+        "trust_i18n": 0.01,
+        "comparison_articles": 0.01,
+        "search": 0.5,
+        "content_depth": 0.48
+      }
+    },
+    "search_tech": {
+      "type": "choice",
+      "choice": "pagefind",
+      "confidence": 0.95,
+      "probabilities": {
+        "pagefind": 0.96,
+        "fuse_js": 0.03,
+        "defer_search": 0.01
+      }
+    },
+    "more_content_loop": {
+      "type": "noul",
+      "noul": 0.42
+    },
+    "release_ready": {
+      "type": "noul",
+      "noul": 0.54
+    },
+    "content_gap_next": {
+      "type": "choice",
+      "choice": "cookbook_i18n",
+      "confidence": 0.92,
+      "probabilities": {
+        "cookbook_i18n": 0.94,
+        "video_visuals": 0,
+        "comparison_seo": 0.05,
+        "api_examples": 0.01
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 1276,
+    "output_tokens": 210
+  }
+}

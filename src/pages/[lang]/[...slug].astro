@@ -111,7 +111,7 @@ const translatedNotice = sourceLangLabel
         <a href={`/${lang}/`}>{t('site.name')}</a> / {breadcrumbSection}
       </p>
 
-      <h1 class="doc__title">{entry.data.title}</h1>
+      <h1 class="doc__title" data-pagefind-meta="title">{entry.data.title}</h1>
       <p class="doc__desc">{entry.data.description}</p>
 
       {translatedNotice && (

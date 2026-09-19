@@ -1,0 +1,67 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "tie_break": {
+      "type": "choice",
+      "choice": "search_first",
+      "confidence": 0.82,
+      "probabilities": {
+        "cookbook_i18n_first": 0.12,
+        "both_same_release": 0.01,
+        "neither_new_urgent": 0,
+        "search_first": 0.87
+      }
+    },
+    "pagefind_serving": {
+      "type": "choice",
+      "choice": "static_modal",
+      "confidence": 0.57,
+      "probabilities": {
+        "header_and_page": 0.16,
+        "skip": 0.01,
+        "static_modal": 0.68,
+        "dedicated_page": 0.15
+      }
+    },
+    "cookbook_translation_scope": {
+      "type": "choice",
+      "choice": "all_18_all_6",
+      "confidence": 0.86,
+      "probabilities": {
+        "all_18_all_6": 0.89,
+        "top_traffic_first": 0.02,
+        "playground_referenced_first": 0.09,
+        "defer": 0
+      }
+    },
+    "translation_review": {
+      "type": "noul",
+      "noul": 0.37
+    },
+    "deploy_cadence": {
+      "type": "score",
+      "score": 1.61,
+      "confidence": 0.14,
+      "legend": {
+        "0": "Batch infrequently (many iterations per release)",
+        "1": "Per-iteration release",
+        "2": "Per-work-item release",
+        "3": "Continuously (every verified change)"
+      },
+      "probabilities": {
+        "0": 0.12,
+        "1": 0.45,
+        "2": 0.13,
+        "3": 0.3
+      }
+    },
+    "loop_continue": {
+      "type": "noul",
+      "noul": 0.55
+    }
+  },
+  "usage": {
+    "input_tokens": 1432,
+    "output_tokens": 234
+  }
+}

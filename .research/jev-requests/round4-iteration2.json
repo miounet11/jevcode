@@ -1,0 +1,59 @@
+{
+  "state": "JevCode iteration planning, round 4 (post-playground). Previous rounds decided: iteration 1 = experience infra, which shipped as /{lang}/playground/ with 5 scenarios (noul/choice/score/composite/fanout), pre-recorded real jev-1.13.0 responses, gen-vs-judgment side-by-side, top nav entry in all 8 languages, all internal links verified zero-404, astro check clean, 338 pages built. Now deciding iteration 2. Previously deferred candidates: S1 client-side search (Jev scored value 0.86 in round 1 but not chosen for iteration 1); W4 comparison article series 'Jev vs generative LLM stack' (0.62/0.33); W3 machine-translation trust pass (0.54); W6 i18n fallback edge fixes (0.34). New candidate: N1 deploy the current state to production now (site runs on a VPS with atomic symlink deploy, previously deployed version is older and lacks: en-fallback change, 36 new case docs, playground). N2 content depth: the 5 playground scenarios reference cookbook pages; 2 of them (llm-guardrails, parallel-questions) exist only in zh/en, other 6 languages fall back to English. N3 SEO: sitemap exists, but no per-page structured data for the playground. Constraints: solo dev, static site, want to ship a release this session then decide whether to add more content in a follow-up loop. Questions: Should we deploy now before starting iteration 2 work, or bundle iteration 2 features into the same release? What should iteration 2 be?",
+  "model": "jev-latest",
+  "questions": {
+    "deploy_now": {
+      "type": "noul",
+      "instructions": "Should the current state (playground + 36 case docs + fallback fix) be deployed to production now, before starting iteration 2 work?",
+      "criteria": {
+        "true": "Yes: current state is verified (0 errors, zero broken links); shipping it derisks and shortens feedback loop",
+        "false": "No: hold and bundle iteration 2 features into one release"
+      }
+    },
+    "iteration2_theme": {
+      "type": "choice",
+      "instructions": "What should iteration 2 focus on?",
+      "criteria": {
+        "search": "Client-side search (pagefind/fuse.js) across all 39 doc pages, all languages",
+        "content_depth": "Translate remaining cookbook pages referenced by playground to all 8 languages (llm-guardrails, parallel-questions, etc.)",
+        "comparison_articles": "Original 'Jev vs generative stack' comparison series",
+        "trust_i18n": "Machine-translation notice + fallback edge fixes"
+      }
+    },
+    "search_tech": {
+      "type": "choice",
+      "instructions": "If search is chosen: which technical approach for a static Astro 7 site with 8 languages and 338 pages?",
+      "criteria": {
+        "pagefind": "Pagefind: static indexer, automatic language handling, zero runtime cost, standard for static docs sites",
+        "fuse_js": "fuse.js: bundle a JSON index, client-side fuzzy search, more custom UI control",
+        "defer_search": "Defer search to iteration 3"
+      }
+    },
+    "more_content_loop": {
+      "type": "noul",
+      "instructions": "After deploying this release, is it worth continuing the content loop (translating playground-referenced cookbooks to remaining languages) in the same session?",
+      "criteria": {
+        "true": "Yes: referenced pages are user-visible entry points; mixed-language fallback hurts",
+        "false": "No: stop after this release, evaluate next session"
+      }
+    },
+    "release_ready": {
+      "type": "noul",
+      "instructions": "Is the current state release-ready for production as-is?",
+      "criteria": {
+        "true": "Yes: build clean, links verified, types clean, canonical/hreflang correct",
+        "false": "No: something specific blocks release"
+      }
+    },
+    "content_gap_next": {
+      "type": "choice",
+      "instructions": "Beyond the candidates above, what content gap is most worth filling next?",
+      "criteria": {
+        "cookbook_i18n": "The 18 new case cookbooks exist only in zh/en; other 6 languages see English fallback",
+        "comparison_seo": "Comparison/decision content attracts evaluators via search",
+        "video_visuals": "Diagrams/visual explainers for judgment vs generation",
+        "api_examples": "More SDK code examples per primitive (curl/python/node)"
+      }
+    }
+  }
+}
