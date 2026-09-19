@@ -1,0 +1,82 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "ingest_approach": {
+      "type": "choice",
+      "choice": "gated_with_attribution",
+      "confidence": 0.99,
+      "probabilities": {
+        "full_replication": 0,
+        "credited_collection": 0,
+        "gated_with_attribution": 0.99,
+        "signal_only": 0.01
+      }
+    },
+    "value_gate": {
+      "type": "choice",
+      "choice": "jev_per_entry",
+      "confidence": 0.73,
+      "probabilities": {
+        "views_threshold": 0.08,
+        "has_project_link": 0.12,
+        "no_gate": 0,
+        "jev_per_entry": 0.8
+      }
+    },
+    "content_placement": {
+      "type": "choice",
+      "choice": "community_page",
+      "confidence": 0.57,
+      "probabilities": {
+        "merge_ecosystem": 0.32,
+        "blog_section": 0,
+        "nowhere": 0,
+        "community_page": 0.68
+      }
+    },
+    "translation_handling": {
+      "type": "choice",
+      "choice": "own_summaries",
+      "confidence": 0.99,
+      "probabilities": {
+        "copy_their_zh": 0,
+        "own_summaries": 1,
+        "excerpt_en_zh_note": 0,
+        "show_en_only": 0
+      }
+    },
+    "refresh_strategy": {
+      "type": "choice",
+      "choice": "pipeline_extension",
+      "confidence": 0.29,
+      "probabilities": {
+        "not_applicable": 0.04,
+        "pipeline_extension": 0.53,
+        "manual_batches": 0.43
+      }
+    },
+    "legal_risk": {
+      "type": "score",
+      "score": 0.94,
+      "confidence": 0.83,
+      "legend": {
+        "0": "Negligible",
+        "1": "Low",
+        "2": "Moderate",
+        "3": "High",
+        "4": "Do not do it"
+      },
+      "probabilities": {
+        "0": 0.13,
+        "1": 0.8,
+        "2": 0.06,
+        "3": 0.01,
+        "4": 0
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 1542,
+    "output_tokens": 286
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "state": "JevCode content acquisition decision, round 11. The operator found a QMuse-hosted page titled 'JEV 模型，正在被用来做什么' (what Jev is being used for) — a curated collection of 202 Twitter/X posts about Jev use cases, built by someone else on the QMuse platform. The full dataset has been extracted from the page's JS bundle: 202 tweet entries, each with author, date (2026-09-15 to 09-18), original English text, machine translation to zh-CN (low quality in places, e.g. mistranslating a metaphor as '犹太民主党把我送进了兔子洞'), engagement metrics (views 4 to 34.6M), links, media, hashtags. The operator wants to: replicate the creative concept, do large-scale inclusion of this content, ideally replicate the whole site's content. Legal/ethical considerations: the underlying tweets are public posts by their authors; the collection itself is someone else's curated work (selection and arrangement has compilation copyright in some jurisdictions); the zh translations in the bundle are machine translations of others' tweets. JevCode already has a docs/recipes site; a 'community pulse / what people are building with Jev' section is strategically adjacent to the existing ecosystem page (GitHub projects) — round 1 rated ecosystem content highly. Options: A) build our own tweet-collection page ingesting the extracted 202 tweets verbatim (full replication); B) build a community-pulse page but only using entries that pass a value gate (e.g. views >= threshold or contains a project link), with attribution to original authors and links back to the original tweets, not replicating the collection's translations (write our own zh summaries); C) do not ingest tweets at all; instead use the dataset only as a signal for what content to write ourselves (original articles about the top use cases); D) ingest with full attribution including 'collection source' credit to the QMuse page. Also: where should such content live on JevCode, and what Jev gate should apply per-entry?",
+  "model": "jev-latest",
+  "questions": {
+    "ingest_approach": {
+      "type": "choice",
+      "instructions": "How should JevCode use the extracted 202-tweet collection?",
+      "criteria": {
+        "gated_with_attribution": "B: ingest only entries passing a value gate, each shown with author attribution + link to original tweet; write our own zh summaries instead of copying their machine translations",
+        "full_replication": "A: replicate all 202 entries verbatim including their zh machine translations (fastest, closest to operator request)",
+        "signal_only": "C: use only as research signal for writing original articles; no tweet display on site",
+        "credited_collection": "D: like B but also credit the QMuse collection page as the discovery source"
+      }
+    },
+    "value_gate": {
+      "type": "choice",
+      "instructions": "If ingesting: what per-entry value gate should apply?",
+      "criteria": {
+        "views_threshold": "Engagement threshold: e.g. views >= 10000 or likes >= 100",
+        "jev_per_entry": "Jev judgment per entry: relevance-to-developers noul + quality score + categorization choice (fan-out, one request for the whole batch per ~40 entries)",
+        "has_project_link": "Only entries containing a project/demo link (35 of 202 qualify)",
+        "no_gate": "No gate: take all 202"
+      }
+    },
+    "content_placement": {
+      "type": "choice",
+      "instructions": "Where should this content live on JevCode?",
+      "criteria": {
+        "community_page": "New '/{lang}/community/' page: curated feed of what people build with Jev, alongside ecosystem page",
+        "merge_ecosystem": "Merge into existing ecosystem page as a new 'from the community' section",
+        "blog_section": "New blog/pulse section with per-entry detail pages",
+        "nowhere": "Do not publish this content type"
+      }
+    },
+    "translation_handling": {
+      "type": "choice",
+      "instructions": "How to handle zh display of English tweets?",
+      "criteria": {
+        "own_summaries": "Write our own concise zh one-line summaries per entry (original work, no copying their translations)",
+        "show_en_only": "Show original English text only, no translation",
+        "copy_their_zh": "Copy the zh machine translations from the bundle (includes known mistranslations)",
+        "excerpt_en_zh_note": "Show English original with a '英文原文' label; no translation attempt"
+      }
+    },
+    "refresh_strategy": {
+      "type": "choice",
+      "instructions": "Should this become part of the automated pipeline (scheduled refresh of new tweets)?",
+      "criteria": {
+        "manual_batches": "Manual re-harvest when operator provides a new bundle; Jev gates each batch",
+        "pipeline_extension": "Extend scripts/pipeline.mjs with a community-refresh stage (source: operator-provided bundles, since X API is not free)",
+        "not_applicable": "No refresh needed (one-time feature)"
+      }
+    },
+    "legal_risk": {
+      "type": "score",
+      "instructions": "Rate the legal/ethical risk of the chosen approach (attribution + own summaries + value gate, replicating the IDEA but not the collection's expression):",
+      "criteria": ["Negligible", "Low", "Moderate", "High", "Do not do it"]
+    }
+  }
+}
