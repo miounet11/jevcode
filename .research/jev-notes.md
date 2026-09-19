@@ -56,3 +56,34 @@
 
 三轮共 input ~3.4k tokens + 自测若干，合计不足 $0.001（$42/Btok）。
 fan-out 模式下单轮决策 1 次请求、2–5 秒返回。
+
+## 轮 4–6 — 迭代 2 与循环控制（2026-09-19 深夜）
+
+### 轮 4（部署与迭代 2 主题）
+- deploy_now **0.81** → 已执行：release `20260919-154519` 上线并验证 200
+- iteration2：search 0.50 vs content 0.48（conf 0.34）——真持平，未强行裁决
+- search tech：pagefind **0.95**（fuse.js 0.03）
+- content_gap：cookbook_i18n **0.94**
+
+### 轮 5（打破僵局）
+- tie_break：**search_first 0.87**
+- pagefind UI：static_modal 0.68（header 全页搜索模态）
+- cookbook 范围：all_18_all_6 0.89（若做）
+- 机翻免审发布：0.37（不认可）
+- 发布节奏：per-iteration 1.61/3
+- loop_continue 0.55
+
+执行：pagefind 搜索已实现、验证、发布 `20260919-155831`（线上索引实测命中 zh 3/3、en 3/3）。
+
+### 轮 6（停止/继续裁决）
+- continue_now **0.25 —— Jev 明确说不继续**
+- bulk_translation_risk **3.17/4 High**（conf 0.85）：一次性发布 108 个免审机翻文件风险高
+- 若要做：staged_1_lang 0.53（先一种语言 18 个文件）而非 36 文件一批
+- 质量门槛：full_review 0.46 / spot_check 0.42 —— 倾向人工审核，**今晚不做**
+- session_complete_after_this **0.65**：stage 1 后即收
+- 当前 release 评价：**2.0/3 Solid release**（conf 0.81）
+
+### 循环结论
+Jev 判定：本轮会话在两个已验证的发布后**收尾**。
+机翻 cookbook 留作下个会话，按 staged_1_lang（ja 先行 18 文件）
++ 人工抽查 2–3 篇的质量门槛推进，不批量免审发布。
