@@ -1,0 +1,70 @@
+{
+  "state": "Context for planning JevCode (jevcode.ai), a bilingual zh/en developer hub for Jev, the TypeSafe System One judgment model. Baseline evaluation already done by Jev: audience is developers (0.95); top directions by value: search 0.86, interactive examples 0.81, original analysis 0.62, comparison pages 0.62; biggest gap: interactivity (0.75) then findability (0.16); machine-translation risk: moderately damaging (1.63/3). We are choosing the next development iteration. Candidate work items: W1 client-side search over all doc pages (lunr/pagefind style, works offline, no server); W2 interactive playground page where visitors paste a text snippet, pick question types (noul/choice/score) from presets, and see a mocked judgment result rendered as probability bars (no API key exposure, results come from a small bundled sample set OR a serverless proxy); W3 trust pass: machine-translated pages get a visible 'machine-translated, see English original' banner plus a language switcher link; W4 comparison article series 'Jev vs generative LLM stack for classification' with honest tradeoffs; W5 glossary page unifying terminology across 8 languages; W6 fix remaining i18n fallback edge cases (ja/ko/de/fr/es/pt fall back to en for 19 of 39 pages). Constraints: one developer, static Astro site, no server backend, want measurable user value per week of work. Rank the top 3 work items by expected user value per effort and explain the ranking.",
+  "model": "jev-latest",
+  "questions": {
+    "w1_search_value": {
+      "type": "noul",
+      "instructions": "Is W1 (client-side search) the highest user-value-per-effort item?",
+      "criteria": {
+        "true": "Yes: high daily utility for a 39-page docs site, low implementation risk",
+        "false": "No: other items beat it on value or effort"
+      }
+    },
+    "w2_playground_value": {
+      "type": "noul",
+      "instructions": "Is W2 (interactive playground with mocked or proxied judgments) among the top 3 items by value-per-effort?",
+      "criteria": {
+        "true": "Yes: it demonstrates the core product idea (judgment vs generation) viscerally",
+        "false": "No: too costly or gimmicky for a static site"
+      }
+    },
+    "w3_trust_value": {
+      "type": "noul",
+      "instructions": "Is W3 (machine-translation trust pass) among the top 3 items by value-per-effort?",
+      "criteria": {
+        "true": "Yes: trust directly affects whether readers return and cite the site",
+        "false": "No: existing translatedFrom notice is sufficient"
+      }
+    },
+    "w4_comparison_value": {
+      "type": "noul",
+      "instructions": "Is W4 (comparison article series) among the top 3 items by value-per-effort?",
+      "criteria": {
+        "true": "Yes: strong SEO pull and decision-stage value",
+        "false": "No: lower priority than infrastructure items"
+      }
+    },
+    "w6_fallback_value": {
+      "type": "noul",
+      "instructions": "Is W6 (fixing i18n fallback edge cases) urgent enough to be top 3?",
+      "criteria": {
+        "true": "Yes: broken/mixed-language pages actively harm the site",
+        "false": "No: fallback already works for the main cases"
+      }
+    },
+    "playground_mock_vs_proxy": {
+      "type": "choice",
+      "instructions": "For W2, which implementation approach fits a static site best?",
+      "criteria": {
+        "mocked_samples": "Bundled sample inputs and recorded real API responses; fully static, zero cost, no key risk",
+        "serverless_proxy": "A serverless function holds the key and forwards requests; real but live, cost and abuse risks",
+        "skip_playground": "Skip the playground entirely this iteration"
+      }
+    },
+    "iteration_focus": {
+      "type": "choice",
+      "instructions": "If only ONE theme could define this iteration, which should it be?",
+      "criteria": {
+        "findability": "Search + navigation: help users find the 39 pages that exist",
+        "experience": "Interactive experience: let users feel what judgment models do",
+        "trust": "Credibility: translation honesty, correct fallbacks, provenance",
+        "content": "Original content: analysis articles and comparisons"
+      }
+    },
+    "content_vs_infra_this_iteration": {
+      "type": "score",
+      "instructions": "For THIS iteration, how much should infrastructure (search, playground, i18n fixes) outweigh new content (articles, comparisons)?",
+      "criteria": ["All content, no infra", "Mostly content", "Balanced", "Mostly infra", "All infra"]
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "emotional_intensity": {
+      "type": "score",
+      "score": 1.82,
+      "confidence": 0.74,
+      "legend": {
+        "0": "Calm and factual",
+        "1": "Frustrated but professional",
+        "2": "Angry or escalating"
+      },
+      "probabilities": {
+        "0": 0,
+        "1": 0.18,
+        "2": 0.82
+      }
+    },
+    "business_impact": {
+      "type": "score",
+      "score": 2,
+      "confidence": 1,
+      "legend": {
+        "0": "No material impact",
+        "1": "Degraded operations",
+        "2": "Revenue-blocking outage"
+      },
+      "probabilities": {
+        "0": 0,
+        "1": 0,
+        "2": 1
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 397,
+    "output_tokens": 37
+  }
+}

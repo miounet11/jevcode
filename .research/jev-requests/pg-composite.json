@@ -1,0 +1,16 @@
+{
+  "state": "We are a paying customer on the Enterprise plan. The API has been returning 500s since this morning and our checkout is completely down. We are losing thousands of dollars per hour. This is unacceptable.",
+  "model": "jev-latest",
+  "questions": {
+    "emotional_intensity": {
+      "type": "score",
+      "instructions": "How emotionally intense is this message?",
+      "criteria": ["Calm and factual", "Frustrated but professional", "Angry or escalating"]
+    },
+    "business_impact": {
+      "type": "score",
+      "instructions": "How severe is the business impact described?",
+      "criteria": ["No material impact", "Degraded operations", "Revenue-blocking outage"]
+    }
+  }
+}

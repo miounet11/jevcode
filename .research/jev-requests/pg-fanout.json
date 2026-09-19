@@ -1,0 +1,24 @@
+{
+  "state": "Hey, quick question — we trialed Jev last quarter with the eval harness. Does the JevCode enterprise plan include SOC 2 report access? Also the invoice PDF from March has the wrong billing address on it, can someone fix and resend? Thanks!",
+  "model": "jev-latest",
+  "questions": {
+    "request_type": {
+      "type": "choice",
+      "instructions": "What kind of request is this?",
+      "criteria": {
+        "sales_question": "Asking about plans, pricing, compliance, or contracts",
+        "billing_issue": "Payment, invoice, or refund matters",
+        "technical_support": "Something is broken or needs troubleshooting"
+      }
+    },
+    "is_existing_customer": {
+      "type": "noul",
+      "instructions": "Does the writer appear to be an existing customer?"
+    },
+    "tone_politeness": {
+      "type": "score",
+      "instructions": "How courteous is the tone overall?",
+      "criteria": ["Blunt or rude", "Neutral", "Warm and appreciative"]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "request_type": {
+      "type": "choice",
+      "choice": "sales_question",
+      "confidence": 0.25,
+      "probabilities": {
+        "technical_support": 0,
+        "sales_question": 0.5,
+        "billing_issue": 0.5
+      }
+    },
+    "is_existing_customer": {
+      "type": "noul",
+      "noul": 0.86
+    },
+    "tone_politeness": {
+      "type": "score",
+      "score": 1.74,
+      "confidence": 0.61,
+      "legend": {
+        "0": "Blunt or rude",
+        "1": "Neutral",
+        "2": "Warm and appreciative"
+      },
+      "probabilities": {
+        "0": 0,
+        "1": 0.26,
+        "2": 0.74
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 459,
+    "output_tokens": 78
+  }
+}

@@ -1,0 +1,415 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, type Lang } from '../../i18n/ui';
+import { scenarios } from '../../data/playground';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+
+const primitiveBadge: Record<string, Record<Lang, string>> = {
+  noul: { zh: '原语 · Noul', en: 'Primitive · Noul', ja: 'プリミティブ・Noul', ko: '프리미티브 · Noul', de: 'Primitiv · Noul', fr: 'Primitive · Noul', es: 'Primitiva · Noul', pt: 'Primitiva · Noul' },
+  choice: { zh: '原语 · Choice', en: 'Primitive · Choice', ja: 'プリミティブ・Choice', ko: '프리미티브 · Choice', de: 'Primitiv · Choice', fr: 'Primitive · Choice', es: 'Primitiva · Choice', pt: 'Primitiva · Choice' },
+  score: { zh: '原语 · Score', en: 'Primitive · Score', ja: 'プリミティブ・Score', ko: '프리미티브 · Score', de: 'Primitiv · Score', fr: 'Primitive · Score', es: 'Primitiva · Score', pt: 'Primitiva · Score' },
+  pipeline: { zh: '管线模式', en: 'Pipeline pattern', ja: 'パイプラインパターン', ko: '파이프라인 패턴', de: 'Pipeline-Muster', fr: 'Pattern de pipeline', es: 'Patrón de pipeline', pt: 'Padrão de pipeline' },
+};
+
+const ui = {
+  title: {
+    zh: 'Playground：亲手感受判断模型',
+    en: 'Playground: feel what a judgment model does',
+    ja: 'Playground：判断モデルを体験する',
+    ko: 'Playground: 판단 모델을 직접 느끼다',
+    de: 'Playground: Fühlen Sie, was ein Beurteilungsmodell tut',
+    fr: 'Playground : ressentez ce que fait un modèle de jugement',
+    es: 'Playground: siente lo que hace un modelo de juicio',
+    pt: 'Playground: sinta o que um modelo de juízo faz',
+  },
+  lead: {
+    zh: '同一个输入，左边是生成式模型的典型输出，右边是 Jev 返回的类型化判定。所有响应均为预录的真实 API 结果（jev-1.13.0），标注了真实的 token 用量。修改输入试试——响应不会变，它属于录制时的原始输入。',
+    en: 'Same input: on the left, a generative model\'s typical output; on the right, Jev\'s typed judgment. All responses are pre-recorded real API results (jev-1.13.0) with actual token usage. Try editing the input — the response stays fixed, it belongs to the original recorded input.',
+    ja: '同じ入力に対して、左は生成モデルの典型的な出力、右はJevが返す型付きの判断です。すべての応答は録画済みの実際のAPI結果（jev-1.13.0）で、実際のトークン使用量付きです。入力を編集してみてください。応答は固定で、録画時の元の入力に対するものです。',
+    ko: '동일한 입력에 대해 왼쪽은 생성 모델의 전형적인 출력, 오른쪽은 Jev가 반환하는 타입화된 판단입니다. 모든 응답은 사전 녹화된 실제 API 결과(jev-1.13.0)이며 실제 토큰 사용량이 표시됩니다. 입력을 수정해 보세요. 응답은 고정되어 있으며 녹화 당시의 원본 입력에 대한 것입니다.',
+    de: 'Bei derselben Eingabe: links eine typische Ausgabe eines generativen Modells, rechts Jevs typisiertes Urteil. Alle Antworten sind vorab aufgezeichnete echte API-Ergebnisse (jev-1.13.0) mit tatsächlicher Token-Nutzung. Bearbeiten Sie die Eingabe — die Antwort bleibt fix, sie gehört zur ursprünglich aufgezeichneten Eingabe.',
+    fr: 'Pour la même entrée : à gauche, la sortie typique d\'un modèle génératif ; à droite, le jugement typé de Jev. Toutes les réponses sont des résultats d\'API réels pré-enregistrés (jev-1.13.0), avec l\'usage réel de tokens. Modifiez l\'entrée — la réponse reste fixe, elle appartient à l\'entrée enregistrée à l\'origine.',
+    es: 'Con la misma entrada: a la izquierda, la salida típica de un modelo generativo; a la derecha, el juicio tipado de Jev. Todas las respuestas son resultados reales de la API pregrabados (jev-1.13.0) con el uso real de tokens. Edita la entrada — la respuesta no cambia: pertenece a la entrada original grabada.',
+    pt: 'Com a mesma entrada: à esquerda, a saída típica de um modelo generativo; à direita, o juízo tipado do Jev. Todas as respostas são resultados reais da API pré-gravados (jev-1.13.0) com o uso real de tokens. Edite a entrada — a resposta permanece fixa, pertence à entrada original gravada.',
+  },
+  cachedBadge: {
+    zh: '预录响应 · 非实时推理',
+    en: 'Pre-recorded · not live inference',
+    ja: '録画済み応答・リアルタイム推論ではない',
+    ko: '사전 녹화 응답 · 실시간 추론 아님',
+    de: 'Voraufgezeichnet · keine Live-Inferenz',
+    fr: 'Pré-enregistré · pas d\'inférence en direct',
+    es: 'Pregrabado · no es inferencia en vivo',
+    pt: 'Pré-gravado · não é inferência ao vivo',
+  },
+  stateLabel: {
+    zh: 'state（输入，可编辑）',
+    en: 'state (input, editable)',
+    ja: 'state（入力、編集可能）',
+    ko: 'state(입력, 편집 가능)',
+    de: 'state (Eingabe, editierbar)',
+    fr: 'state (entrée, modifiable)',
+    es: 'state (entrada, editable)',
+    pt: 'state (entrada, editável)',
+  },
+  requestLabel: {
+    zh: 'questions（发出的请求）',
+    en: 'questions (the request)',
+    ja: 'questions（送信されるリクエスト）',
+    ko: 'questions(전송되는 요청)',
+    de: 'questions (die Anfrage)',
+    fr: 'questions (la requête)',
+    es: 'questions (la solicitud)',
+    pt: 'questions (o pedido)',
+  },
+  genLabel: {
+    zh: '生成式模型会输出',
+    en: 'A generative model would output',
+    ja: '生成モデルの出力',
+    ko: '생성 모델의 출력',
+    de: 'Ein generatives Modell würde ausgeben',
+    fr: 'Un modèle génératif produirait',
+    es: 'Un modelo generativo produciría',
+    pt: 'Um modelo generativo produziria',
+  },
+  jevLabel: {
+    zh: 'Jev 返回',
+    en: 'Jev returns',
+    ja: 'Jevの返答',
+    ko: 'Jev의 반환',
+    de: 'Jev gibt zurück',
+    fr: 'Jev renvoie',
+    es: 'Jev devuelve',
+    pt: 'Jev devolve',
+  },
+  readMore: {
+    zh: '阅读完整做法',
+    en: 'Read the full cookbook',
+    ja: '完全なレシピを読む',
+    ko: '전체 쿡북 읽기',
+    de: 'Das vollständige Cookbook lesen',
+    fr: 'Lire le cookbook complet',
+    es: 'Leer el cookbook completo',
+    pt: 'Ler o cookbook completo',
+  },
+  usageLabel: {
+    zh: '本次调用',
+    en: 'This call',
+    ja: 'この呼び出し',
+    ko: '이 호출',
+    de: 'Dieser Aufruf',
+    fr: 'Cet appel',
+    es: 'Esta llamada',
+    pt: 'Esta chamada',
+  },
+  tokens: {
+    zh: 'input tokens（输出免费）',
+    en: 'input tokens (output is free)',
+    ja: '入力トークン（出力は無料）',
+    ko: '입력 토큰(출력은 무료)',
+    de: 'Eingabe-Tokens (Ausgabe ist kostenlos)',
+    fr: 'tokens d\'entrée (la sortie est gratuite)',
+    es: 'tokens de entrada (la salida es gratis)',
+    pt: 'tokens de entrada (a saída é gratuita)',
+  },
+} as const;
+---
+
+<BaseLayout lang={lang} title={ui.title[lang]} description={ui.lead[lang].slice(0, 150)} path={`/${lang}/playground/`}>
+  <section class="section">
+    <div class="wrap">
+      <div class="section__head">
+        <h1 class="section__title">{ui.title[lang]}</h1>
+        <p class="section__lead">{ui.lead[lang]}</p>
+      </div>
+
+      <div class="pg">
+        {scenarios.map((s) => (
+          <article class="pg__scenario" id={s.id}>
+            <header class="pg__head">
+              <span class="card__badge">{primitiveBadge[s.primitive][lang]}</span>
+              <h2 class="pg__title">{s.title[lang]}</h2>
+              <p class="pg__lead">{s.lead[lang]}</p>
+            </header>
+
+            <div class="pg__io">
+              <div class="pg__panel">
+                <div class="pg__label">
+                  <label for={`state-${s.id}`}>{ui.stateLabel[lang]}</label>
+                </div>
+                <textarea id={`state-${s.id}`} class="pg__state" rows="4" spellcheck="false">{s.state}</textarea>
+                <details class="pg__req">
+                  <summary>{ui.requestLabel[lang]}</summary>
+                  <pre><code>{JSON.stringify(s.request, null, 2)}</code></pre>
+                </details>
+              </div>
+
+              <div class="pg__panel pg__panel--gen">
+                <div class="pg__label">{ui.genLabel[lang]}</div>
+                <p class="pg__gen">{s.genSample}</p>
+              </div>
+            </div>
+
+            <div class="pg__verdict">
+              <div class="pg__verdict-head">
+                <span class="pg__label pg__label--jev">{ui.jevLabel[lang]}</span>
+                <span class="pg__cached" title={ui.cachedBadge[lang]}>{ui.cachedBadge[lang]}</span>
+              </div>
+              <div class="pg__answer">{s.answerLine[lang]}</div>
+              <ul class="pg__bars">
+                {s.bars.map((b) => (
+                  <li class="pg__bar">
+                    <span class="pg__bar-label">{b.label[lang]}</span>
+                    <span class="pg__bar-track"><span class="pg__bar-fill" style={`width: ${Math.round(b.p * 100)}%`} /></span>
+                    <span class="pg__bar-val">{b.p.toFixed(2)}</span>
+                  </li>
+                ))}
+              </ul>
+              <pre class="pg__json"><code>{JSON.stringify(s.response, null, 2)}</code></pre>
+              <div class="pg__meta">
+                <span class="pg__usage">{ui.usageLabel[lang]}: {s.usage.input_tokens} {ui.tokens[lang]} · {s.usage.output_tokens} output</span>
+              </div>
+              <div class="pg__links">
+                {s.docLinks.map((d) => (
+                  <a class="pg__link" href={`/${lang}${d.href}`}>{d.label[lang]} →</a>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pg {
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+  }
+  .pg__scenario {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 30px 28px;
+    scroll-margin-top: 96px;
+  }
+  .pg__head {
+    margin-bottom: 22px;
+  }
+  .pg__title {
+    margin: 0 0 8px;
+    font-size: 21px;
+    letter-spacing: -0.01em;
+  }
+  .pg__lead {
+    margin: 0;
+    color: var(--fg-muted);
+    max-width: 72ch;
+    font-size: 14.5px;
+  }
+
+  .pg__io {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 860px) {
+    .pg__io {
+      grid-template-columns: 1fr;
+    }
+  }
+  .pg__panel {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pg__panel--gen {
+    border-style: dashed;
+  }
+  .pg__label {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+  .pg__label--jev {
+    color: var(--accent);
+  }
+  .pg__state {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 10px 12px;
+    resize: vertical;
+  }
+  .pg__state:focus {
+    outline: 2px solid var(--accent-border);
+    border-color: var(--accent-border);
+  }
+  .pg__req {
+    font-size: 12.5px;
+    color: var(--fg-muted);
+  }
+  .pg__req summary {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--fg-dim);
+  }
+  .pg__req pre {
+    margin: 8px 0 0;
+    padding: 10px;
+    background: var(--bg);
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+  .pg__req code {
+    font-size: 11.5px;
+  }
+  .pg__gen {
+    margin: 0;
+    color: var(--fg-muted);
+    font-size: 13.5px;
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .pg__verdict {
+    border: 1px solid var(--accent-border);
+    background: var(--accent-soft);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .pg__verdict-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .pg__cached {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--fg-dim);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    padding: 2px 10px;
+    white-space: nowrap;
+  }
+  .pg__answer {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .pg__bars {
+    list-style: none;
+    margin: 0 0 14px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pg__bar {
+    display: grid;
+    grid-template-columns: minmax(140px, 240px) 1fr 52px;
+    align-items: center;
+    gap: 12px;
+  }
+  @media (max-width: 640px) {
+    .pg__bar {
+      grid-template-columns: 1fr 64px;
+      grid-template-areas: 'label label' 'track val';
+    }
+    .pg__bar-label {
+      grid-area: label;
+    }
+    .pg__bar-track {
+      grid-area: track;
+    }
+    .pg__bar-val {
+      grid-area: val;
+    }
+  }
+  .pg__bar-label {
+    font-size: 12.5px;
+    color: var(--fg-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pg__bar-track {
+    display: block;
+    height: 10px;
+    background: var(--bg-code);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .pg__bar-fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-strong), var(--accent));
+    border-radius: 999px;
+  }
+  .pg__bar-val {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-muted);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .pg__json {
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+  .pg__json code {
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--fg-muted);
+  }
+  .pg__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .pg__usage {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--fg-dim);
+  }
+  .pg__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .pg__link {
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+</style>

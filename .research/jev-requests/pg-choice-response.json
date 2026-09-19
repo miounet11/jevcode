@@ -1,0 +1,20 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "intent": {
+      "type": "choice",
+      "choice": "bug_report",
+      "confidence": 1,
+      "probabilities": {
+        "bug_report": 1,
+        "how_to_question": 0,
+        "feature_request": 0,
+        "other": 0
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 389,
+    "output_tokens": 50
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "state": "Hey team, the export button on the reports page throws a 500 every time I click it on Safari. Happens on both my laptop and phone. Any fix coming?",
+  "model": "jev-latest",
+  "questions": {
+    "intent": {
+      "type": "choice",
+      "instructions": "What is the primary intent of this message?",
+      "criteria": {
+        "bug_report": "Reporting something broken",
+        "feature_request": "Asking for new functionality",
+        "how_to_question": "Asking how to do something",
+        "other": "None of the above"
+      }
+    }
+  }
+}

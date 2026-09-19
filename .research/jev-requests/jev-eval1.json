@@ -1,0 +1,58 @@
+{
+  "state": "Site: JevCode (jevcode.ai), a Chinese-and-English bilingual aggregation site for Jev, the TypeSafe System One model. It aggregates: (1) translated official documentation from docs.typesafe.ai (concepts, primitives, patterns, SDK, API reference) in 8 languages (zh en ja ko de fr es pt); (2) cookbook-style case studies showing how to use Noul/Choice/Score question primitives in real pipelines (autoformat, rerank, guardrails, classification); (3) a community ecosystem index of GitHub projects using Jev, with star counts; (4) original analysis articles in Chinese about when to use judgment models vs generative models. Content count: 39 doc pages per language for zh and en, 20 for others with English fallback. The site is built with Astro static site generation. Current state: homepage is a hero plus card grids (primitives, patterns, quick links). Question: For a developer-facing documentation/aggregation site like this, what makes it GOOD vs mediocre from a content architecture standpoint? Evaluate these candidate directions: A) deeper original analysis articles vs B) staying a translation/aggregation hub; C) adding runnable interactive code examples; D) search functionality; E) comparison pages (Jev vs traditional LLM stacks). Give a verdict on which 2-3 directions to prioritize and why.",
+  "model": "jev-latest",
+  "questions": {
+    "dir_analysis_articles": {
+      "type": "noul",
+      "instructions": "Is prioritizing deeper original analysis articles (original Chinese-language analysis of when to use judgment models) a high-value direction for this site?",
+      "criteria": {
+        "true": "High value: original analysis differentiates the site and attracts repeat visits",
+        "false": "Low value: aggregation and translation already suffice, original analysis is not worth prioritizing"
+      }
+    },
+    "dir_interactive_examples": {
+      "type": "noul",
+      "instructions": "Is adding runnable interactive code examples a high-value direction?",
+      "criteria": {
+        "true": "High value: developers strongly value runnable examples",
+        "false": "Low value: static code blocks are sufficient"
+      }
+    },
+    "dir_search": {
+      "type": "noul",
+      "instructions": "Is adding search functionality a high-value direction?",
+      "criteria": {
+        "true": "High value: essential for content discovery on a docs site",
+        "false": "Low value: navigation is sufficient without search"
+      }
+    },
+    "dir_comparison_pages": {
+      "type": "noul",
+      "instructions": "Are comparison pages (Jev vs traditional LLM stacks) a high-value direction?",
+      "criteria": {
+        "true": "High value: buyers/evaluators actively search for comparisons",
+        "false": "Low value: comparisons add little over existing docs"
+      }
+    },
+    "audience_is_developer_first": {
+      "type": "noul",
+      "instructions": "Is the primary audience of this site developers evaluating or building with Jev?"
+    },
+    "biggest_gap": {
+      "type": "choice",
+      "instructions": "What is the single biggest gap of this site right now?",
+      "criteria": {
+        "original_content": "Lacks original analysis; too much is translated/aggregated",
+        "findability": "Content is hard to discover/navigate; needs search",
+        "trust": "Machine-translated content undermines trust and credibility",
+        "interactivity": "Content is static; lacks runnable examples",
+        "breadth": "Missing topic coverage compared to what users need"
+      }
+    },
+    "translated_content_risk": {
+      "type": "score",
+      "instructions": "How much does relying on machine-translated content undermine this site's credibility?",
+      "criteria": ["Not at all", "Slightly", "Moderately", "Severely"]
+    }
+  }
+}

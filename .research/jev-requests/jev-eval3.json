@@ -1,0 +1,58 @@
+{
+  "state": "JevCode site iteration planning, round 3. Prior Jev rounds concluded: iteration focus = experience (0.94); infra-heavy iteration (3.0/4); playground should use bundled mocked samples (1.0 confidence, no serverless proxy); search valued 0.65; trust pass 0.54; comparison articles 0.33. The site is a static Astro 7 site, 8 languages (zh en ja ko de fr es pt), 39 docs in zh/en, 20 in others with en fallback, plus ecosystem page and case studies. Decided direction: build an interactive 'judgment playground' page where visitors experience Jev's evaluation model hands-on using pre-recorded real API responses. Now designing the playground page itself. Design questions: (1) How many demo scenarios should it have? Options: 3, 5, or 8. (2) Should scenarios be tied to the site's existing case-study pages (e.g. autoformat, rerank, guardrails) so the playground doubles as an index? (3) What UI elements best show 'judgment vs generation'? Options: probability bars per option, animated confidence gauge, side-by-side 'generative rewrite' vs 'judgment answer', or before/after text diff. (4) Should visitors be able to edit the input text of a scenario, with the response staying mocked (clearly labeled as cached/sample), or keep inputs fixed for honesty? (5) Where should the playground live in the site nav? Options: top nav item on all languages, linked only from the case-studies section, or as the hero CTA on the homepage.",
+  "model": "jev-latest",
+  "questions": {
+    "scenario_count": {
+      "type": "choice",
+      "instructions": "How many demo scenarios should the playground ship with?",
+      "criteria": {
+        "three": "3 scenarios: one per primitive (noul, choice, score) — minimal, focused",
+        "five": "5 scenarios: 3 primitives plus 2 pipeline cases (composite, fan-out)",
+        "eight": "8 scenarios: mirror the case-study taxonomy fully"
+      }
+    },
+    "tie_to_case_studies": {
+      "type": "noul",
+      "instructions": "Should scenarios link to their corresponding case-study doc pages so the playground doubles as an entry index?",
+      "criteria": {
+        "true": "Yes: each scenario ends with 'read the full cookbook' links",
+        "false": "No: keep the playground self-contained"
+      }
+    },
+    "best_ui_element": {
+      "type": "choice",
+      "instructions": "Which UI element best communicates 'judgment, not generation' to a first-time visitor?",
+      "criteria": {
+        "prob_bars": "Probability bars per option with numeric values",
+        "confidence_gauge": "Animated confidence gauge dial",
+        "gen_vs_judge": "Side-by-side: what a generative model would output vs Jev's typed judgment",
+        "text_diff": "Before/after text transformation diff"
+      }
+    },
+    "editable_inputs": {
+      "type": "noul",
+      "instructions": "Should visitors be able to edit scenario inputs while responses stay clearly-labeled cached samples?",
+      "criteria": {
+        "true": "Yes, editable inputs with honest 'cached sample' labeling; encourages play",
+        "false": "No, fixed inputs; avoids confusion when the answer does not match the edited input"
+      }
+    },
+    "nav_placement": {
+      "type": "choice",
+      "instructions": "Where should the playground live in site navigation?",
+      "criteria": {
+        "top_nav": "Top nav item on all languages: maximum discoverability",
+        "cases_section": "Linked from the case-studies section only: contextual",
+        "hero_cta": "Homepage hero CTA: 'try it' as the first thing visitors see"
+      }
+    },
+    "honesty_labeling_critical": {
+      "type": "noul",
+      "instructions": "Is it critical that mocked responses be explicitly labeled as pre-recorded samples (not live inference)?",
+      "criteria": {
+        "true": "Yes: unlabeled mocks would mislead developers and damage trust",
+        "false": "No: a subtle disclaimer suffices"
+      }
+    }
+  }
+}
