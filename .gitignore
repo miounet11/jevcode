@@ -25,3 +25,8 @@ build/
 .clavue/runs/
 .clavue/coordination/
 .clavue/worktrees/
+
+# 管线运行日志（机器生成，不纳入版本控制）
+.research/pipeline-logs/
+.research/pipeline-state/
+.research/qmuse/
