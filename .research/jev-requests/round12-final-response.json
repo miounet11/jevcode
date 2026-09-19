@@ -1,0 +1,66 @@
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "release_verified": {
+      "type": "noul",
+      "noul": 0.56
+    },
+    "hype_filter_adequacy": {
+      "type": "noul",
+      "noul": 0.7
+    },
+    "loop_close": {
+      "type": "noul",
+      "noul": 0.54
+    },
+    "cron_dependency_risk": {
+      "type": "score",
+      "score": 1.81,
+      "confidence": 0.53,
+      "legend": {
+        "0": "Negligible: missed runs are harmless",
+        "1": "Low: batches accumulate, catch-up on next run",
+        "2": "Moderate: consider moving to VPS/GHA soon",
+        "3": "High: fix before relying on it"
+      },
+      "probabilities": {
+        "0": 0,
+        "1": 0.33,
+        "2": 0.53,
+        "3": 0.14
+      }
+    },
+    "tweet_liability": {
+      "type": "score",
+      "score": 0.91,
+      "confidence": 0.72,
+      "legend": {
+        "0": "Negligible",
+        "1": "Low",
+        "2": "Moderate",
+        "3": "High"
+      },
+      "probabilities": {
+        "0": 0.18,
+        "1": 0.73,
+        "2": 0.09,
+        "3": 0
+      }
+    },
+    "next_session_priority": {
+      "type": "choice",
+      "choice": "pipeline_vps",
+      "confidence": 0.78,
+      "probabilities": {
+        "community_polish": 0.17,
+        "cookbook_ja": 0,
+        "pipeline_vps": 0.83,
+        "comparison_articles": 0
+      }
+    }
+  },
+  "usage": {
+    "input_tokens": 1127,
+    "output_tokens": 146
+  }
+}

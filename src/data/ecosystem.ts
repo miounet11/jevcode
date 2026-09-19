@@ -5,9 +5,6 @@
 
 import type { Lang } from '../i18n/ui';
 
-/** 数据快照日期（fetch-ecosystem.mjs 自动维护） */
-export const dataAsOf = '2026-09-20';
-
 export interface Project {
   /** owner/repo */
   repo: string;
@@ -116,8 +113,8 @@ export const projects: Project[] = [
       es: 'Casos de uso, patrones, prompts y código de inicio respaldados por evidencia: la colección de recursos Jev más amplia.',
       pt: 'Casos de uso, padrões, prompts e código inicial respaldados por evidências — a coleção mais ampla de recursos Jev.',
     },
-    stars: 603,
-    forks: 113,
+    stars: 605,
+    forks: 114,
     language: 'Python',
     license: 'MIT',
     topics: ['agent-workflows', 'classification', 'confidence-aware-ai', 'decision-intelligence'],
@@ -136,8 +133,8 @@ export const projects: Project[] = [
       es: 'Lista curada de recursos oficiales y proyectos comunitarios para TypeSafe, modelos System One y Jev.',
       pt: 'Lista curada de recursos oficiais e projetos da comunidade para TypeSafe, modelos System One e Jev.',
     },
-    stars: 321,
-    forks: 50,
+    stars: 322,
+    forks: 51,
     language: 'CSS',
     license: 'MIT',
     topics: ['ai-agents', 'awesome-list', 'structured-output'],
@@ -156,8 +153,8 @@ export const projects: Project[] = [
       es: 'Una lista curada de proyectos públicos, integraciones y discusiones construidas sobre Jev.',
       pt: 'Uma lista curada de projetos públicos, integrações e discussões construídos sobre Jev.',
     },
-    stars: 330,
-    forks: 52,
+    stars: 336,
+    forks: 55,
     language: 'Python',
     license: null,
     topics: ['awesome-list', 'llm'],
@@ -176,7 +173,7 @@ export const projects: Project[] = [
       es: 'Un agente TypeSafe/Jev que juega Super Mario Bros. a partir del estado estructurado del emulador.',
       pt: 'Um agente TypeSafe/Jev que joga Super Mario Bros. a partir do estado estruturado do emulador.',
     },
-    stars: 278,
+    stars: 279,
     forks: 27,
     language: 'Python',
     license: null,
@@ -196,7 +193,7 @@ export const projects: Project[] = [
       es: 'Foreman de Fábrica de Software basado en el modelo Jev TypeSafe.',
       pt: 'Foreman de Fábrica de Software baseado no modelo Jev TypeSafe.',
     },
-    stars: 362,
+    stars: 368,
     forks: 24,
     language: 'Python',
     license: 'MIT',
@@ -216,8 +213,8 @@ export const projects: Project[] = [
       es: 'Un flujo de trabajo de revisión de código por etapas y un panel local construidos con TypeSafe Jev.',
       pt: 'Um fluxo de trabalho de revisão de código em etapas e um painel local construídos com TypeSafe Jev.',
     },
-    stars: 326,
-    forks: 19,
+    stars: 331,
+    forks: 20,
     language: 'TypeScript',
     license: 'MIT',
     topics: ['code-review', 'typesafe-ai'],
@@ -236,7 +233,7 @@ export const projects: Project[] = [
       es: 'Haz preguntas a tus tablas de Postgres en lenguaje natural: una extensión de PostgreSQL impulsada por Jev.',
       pt: 'Faça perguntas às suas tabelas Postgres em linguagem natural — uma extensão PostgreSQL alimentada por Jev.',
     },
-    stars: 205,
+    stars: 207,
     forks: 11,
     language: 'Python',
     license: null,
@@ -336,7 +333,7 @@ export const projects: Project[] = [
       es: 'Plugin de Claude Code que reemplaza los resúmenes de compresión con decisiones Jev: cada llamada a herramienta se puntúa en una sola solicitud rápida, las obsoletas se descartan y el contenido se mantiene intacto.',
       pt: 'Plugin Claude Code que substitui resumos de compactação por decisões Jev — cada chamada de ferramenta pontuada em uma única solicitação rápida, as obsoletas descartadas, o conteúdo mantido integralmente.',
     },
-    stars: 4039,
+    stars: 4058,
     forks: 213,
     language: 'TypeScript',
     license: 'MIT',

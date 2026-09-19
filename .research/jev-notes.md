@@ -117,3 +117,42 @@ Jev 判定：本轮会话在两个已验证的发布后**收尾**。
 ### 发布门槛全过（本轮）
 astro check 0/0/0 · 16025 内链零断 · 线上 zh/quickstart 机翻标注正确渲染 ·
 en/use-case-map 200 · 工作区干净 · 已推送 origin/main
+
+## 轮 9–12 — 自动化管线与社区脉搏（2026-09-20）
+
+### 轮 9（自动化架构）
+- 调度 vps_cron 0.46 vs gha-pr 0.42（低置信）→ 实选本机 cron（零迁移成本）
+- 阶段 stars_plus_detect 0.74；**two_stage 双门 0.95**；daily 0.88；branch_pr 0.63
+
+### 轮 10（批量与门槛）
+- **batch_by_magnitude 0.62**：小增量累积，任一仓库 +10% 触发
+- 阈值 +10%（score 1.64≈2/4，低置信 0.25，保守取高档）
+- date_stamp 1.0（生态页日期戳）；auto_deploy 0.51（放行）
+- 门 1 改为评估「累积批次+过期」而非单日 delta
+
+### 轮 11（QMuse 复刻，用户需求）
+- **gated_with_attribution 0.99**：创意可复刻，表达不复刻
+- 自己写摘要 **own_summaries 1.0**：绝不复制对方机翻（有严重误译）
+- jev_per_entry 0.73 价值门；community_page 0.68 独立页
+- 法律风险自评 **Low 0.80**
+
+### 轮 12（验收）
+- release_verified 0.56（弱通过）；hype 过滤可接受 0.70
+- loop_close 0.54 —— 关闭（弱多数）
+- cron 依赖本机风险 1.81/3（Moderate，53% 概率）：批次会累积，错过无害
+- 推文内容责任 0.91/4 Low
+- **下会话优先级：pipeline_vps 0.83** —— 管线迁 VPS/GHA 保常开
+
+### 执行记录
+- scripts/fetch-ecosystem.mjs + pipeline.mjs（双 Jev 门）+ pipeline-cron.sh
+  （每日 09:30 已装 crontab，脏工作区保护，--install/--uninstall）
+- 实测：6 仓库 0.3%-2.3% 增量正确累积不发布；生态数据手动刷新一次
+- 生态页 dataAsOf 日期戳自动维护
+- 社区脉搏页 /{lang}/community/：202 条提取 → Jev 6 批门控 → 143 条收录
+  （署名+原推回链+项目链接，4 分类自动归组），8 语言导航
+- Release 20260919-165044（信任修补+i18n 工具）、20260919-185434（社区页）
+- 验证：astro check 0/0/0 · 16522 内链零断 · 线上 zh/en/pt 200
+
+### 下会话（Jev 已排定）
+1. **pipeline_vps 0.83**：管线迁 VPS 或 GHA（常开可靠性）
+2. comparison_articles 0.55、community_polish 0.17、cookbook_ja 0

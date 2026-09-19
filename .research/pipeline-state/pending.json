@@ -3,33 +3,43 @@
   "pending": {
     "AbdelStark/awesome-typesafe": {
       "base": 319,
-      "current": 321,
-      "rel": 0.006269592476489028
+      "current": 322,
+      "rel": 0.009404388714733543
     },
     "yibie/awesome-jev": {
       "base": 325,
-      "current": 330,
-      "rel": 0.015384615384615385
+      "current": 336,
+      "rel": 0.033846153846153845
     },
     "thruwire/foreman": {
       "base": 354,
-      "current": 362,
-      "rel": 0.022598870056497175
+      "current": 368,
+      "rel": 0.03954802259887006
     },
     "devagrawal09/jev-review": {
       "base": 325,
-      "current": 326,
-      "rel": 0.003076923076923077
+      "current": 331,
+      "rel": 0.018461538461538463
     },
     "realZachi/pg-jev": {
       "base": 204,
-      "current": 205,
-      "rel": 0.004901960784313725
+      "current": 207,
+      "rel": 0.014705882352941176
     },
     "tamaratran/fast-jev-compaction": {
       "base": 4027,
-      "current": 4039,
-      "rel": 0.0029798857710454435
+      "current": 4058,
+      "rel": 0.007698038241867395
+    },
+    "Anil-matcha/awesome-jev-by-typesafe": {
+      "base": 603,
+      "current": 605,
+      "rel": 0.003316749585406302
+    },
+    "fhshaik/typesafe-mario": {
+      "base": 278,
+      "current": 279,
+      "rel": 0.0035971223021582736
     }
   }
 }
