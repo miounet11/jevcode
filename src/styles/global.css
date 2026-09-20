@@ -944,6 +944,25 @@ img {
   gap: 6px;
   margin-top: 12px;
 }
+.eco__decision {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent-border);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+.eco__decision-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 3px;
+}
 .eco__snapshot {
   margin-top: 44px;
   padding-top: 18px;

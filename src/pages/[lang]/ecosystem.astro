@@ -80,6 +80,12 @@ const copy =
                     <span class="eco__stars">★ {fmt(p.stars)}</span>
                   </div>
                   <p class="card__desc">{p.desc[lang]}</p>
+                  {p.decisionPoint && (
+                    <p class="eco__decision">
+                      <span class="eco__decision-label">Jev 在这里做什么</span>
+                      {p.decisionPoint[lang] ?? p.decisionPoint.en}
+                    </p>
+                  )}
                   <div class="eco__meta">
                     {p.language && <span class="tag">{p.language}</span>}
                     {p.license && <span class="tag">{p.license}</span>}

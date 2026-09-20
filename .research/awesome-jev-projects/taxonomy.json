@@ -1,0 +1,203 @@
+[
+  {
+    "category": "Browser & OS Action",
+    "patterns": [
+      "browser automation",
+      "accessibility tree",
+      "DOM element",
+      "desktop agent",
+      "computer use"
+    ],
+    "summary": "帮你操作浏览器或电脑，把每一步变成可选择的动作。",
+    "decision": "根据界面状态选择下一步动作或目标；本地执行器负责操作。",
+    "benefit": "让界面选择与执行分开，便于检查每一步。",
+    "tags": [
+      "Automation",
+      "Agent"
+    ]
+  },
+  {
+    "category": "Routing & Cost Optimization",
+    "patterns": [
+      "model rout",
+      "cheaper model",
+      "cost optim",
+      "reasoning effort"
+    ],
+    "summary": "先判断任务难度，再选择要调用的模型。",
+    "decision": "给任务分类或评估难度，由本地策略决定模型与处理路径。",
+    "benefit": "按任务分配模型资源；具体成本收益需看项目测试。",
+    "tags": [
+      "Model Router",
+      "Cost Optimization"
+    ]
+  },
+  {
+    "category": "Context GC & Filter",
+    "patterns": [
+      "context pruning",
+      "context garbage",
+      "log filter",
+      "token sav",
+      "context window"
+    ],
+    "summary": "从日志和上下文里挑出当前真正需要的内容。",
+    "decision": "判断内容是否相关，由本地阈值决定保留或过滤。",
+    "benefit": "减少后续处理的冗余信息。",
+    "tags": [
+      "Context",
+      "Filter"
+    ]
+  },
+  {
+    "category": "Codebase & Graph Pathfinding",
+    "patterns": [
+      "code review",
+      "code navigation",
+      "knowledge graph",
+      "neo4j",
+      "codebase search"
+    ],
+    "summary": "在代码或图谱中缩小需要查看的范围。",
+    "decision": "评估候选代码或关系与目标的相关程度，选择下一条路径。",
+    "benefit": "把下一步调查集中到更相关的证据上。",
+    "tags": [
+      "Code",
+      "Navigation"
+    ]
+  },
+  {
+    "category": "MCP & Integrations",
+    "patterns": [
+      "mcp server",
+      "model context protocol",
+      "mcp tool",
+      "mcp integration"
+    ],
+    "summary": "把 Jev 的结构化判断做成 Agent 可调用的工具。",
+    "decision": "通过工具接口提供选择、评分或概率判断。",
+    "benefit": "让现有 Agent 通过通用接口使用 Jev。",
+    "tags": [
+      "MCP",
+      "Integration"
+    ]
+  },
+  {
+    "category": "High-Frequency & Simulation",
+    "patterns": [
+      "fps game",
+      "first.person shooter",
+      "simulation",
+      "game loop",
+      "game agent"
+    ],
+    "summary": "让 Jev 在游戏或模拟里选择下一步行动。",
+    "decision": "读取当前状态，在可用动作中做选择。",
+    "benefit": "在连续交互中观察决策效果；频率依实际运行而定。",
+    "tags": [
+      "Simulation",
+      "Real-time AI"
+    ]
+  },
+  {
+    "category": "Domain & Vertical Tools",
+    "patterns": [
+      "defi",
+      "liquidity",
+      "compliance",
+      "trading",
+      "audit"
+    ],
+    "summary": "把结构化判断接进具体行业的工作流程。",
+    "decision": "评估业务状态，给出供本地规则参考的分类或风险分数。",
+    "benefit": "增加一组可记录、可对照的判断信号。",
+    "tags": [
+      "Domain Tools"
+    ]
+  },
+  {
+    "category": "CLI & Pipelines",
+    "patterns": [
+      "command.line",
+      "unix pipe",
+      "cli tool",
+      "bash",
+      "command line interface"
+    ],
+    "summary": "在终端和自动化脚本中加入文本判断。",
+    "decision": "对输入文本做分类或打分，交给本地规则继续处理。",
+    "benefit": "把语义判断接到已有的命令行工作流。",
+    "tags": [
+      "CLI",
+      "Pipelines"
+    ]
+  },
+  {
+    "category": "Security & Guardrails",
+    "patterns": [
+      "prompt injection",
+      "content moderation",
+      "guardrails",
+      "safety gate",
+      "content safety"
+    ],
+    "summary": "在内容进入下一步之前，先检查风险。",
+    "decision": "评估内容是否满足安全或证据要求，由本地策略放行或拦截。",
+    "benefit": "给现有流程增加可检查的判断环节。",
+    "tags": [
+      "Security",
+      "Guardrails"
+    ]
+  },
+  {
+    "category": "SDK & Decision Frameworks",
+    "patterns": [
+      "sdk",
+      "api client",
+      "client library",
+      "type.safe schema",
+      "zod"
+    ],
+    "summary": "把 Jev 的调用和返回值封装成可复用的代码接口。",
+    "decision": "由业务代码定义问题，客户端负责提交 Jev 请求并解析结构化结果。",
+    "benefit": "在现有程序中复用接入代码，减少重复处理接口细节。",
+    "tags": [
+      "SDK",
+      "Integration"
+    ]
+  },
+  {
+    "category": "Data & Search",
+    "patterns": [
+      "postgres",
+      "semantic search",
+      "sql extension",
+      "dataframe",
+      "rerank"
+    ],
+    "summary": "从表格、数据库或搜索结果里挑出与问题相关的内容。",
+    "decision": "给候选记录判断相关性或打分，再由本地程序筛选和排序。",
+    "benefit": "把语义判断接进已有的数据查询流程。",
+    "tags": [
+      "Data",
+      "Search"
+    ]
+  },
+  {
+    "category": "Creative Tools",
+    "patterns": [
+      "midi",
+      "music",
+      "ui generat",
+      "composition",
+      "creative"
+    ],
+    "summary": "从已有元素中做选择，组合出音乐或界面。",
+    "decision": "在有限的素材或组件候选中选择，并由本地程序呈现结果。",
+    "benefit": "保留可编辑的组成部分与决策过程。",
+    "tags": [
+      "Creative",
+      "Composition"
+    ]
+  }
+]
