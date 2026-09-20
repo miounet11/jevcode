@@ -172,7 +172,14 @@ if (!trigger) {
   writeLog('accumulating', { pending });
   process.exit(0);
 }
-const g1 = await gate1(fetchReport, pending, trigger);
+let g1;
+try {
+  g1 = await gate1(fetchReport, pending, trigger);
+} catch (err) {
+  say(`gate1 FAILED (${err.message}) — 还原抓取写入`);
+  restoreFetched();
+  process.exit(1);
+}
 const worth = g1.worth_publishing.noul >= 0.5;
 const placement = g1.placement.choice;
 say(`gate1: worth=${g1.worth_publishing.noul} placement=${placement}`);
@@ -228,7 +235,14 @@ if (!buildOk || !checkOk) {
   process.exit(1);
 }
 const changes = run('git log -1 --stat --oneline').trim().split('\n').slice(0, 5).join('; ');
-const g2 = await gate2(buildOk, checkOk, linkReport, changes);
+let g2;
+try {
+  g2 = await gate2(buildOk, checkOk, linkReport, changes);
+} catch (err) {
+  say(`gate2 FAILED (${err.message}) — 还原抓取写入`);
+  restoreFetched();
+  process.exit(1);
+}
 const ready = g2.release_ready.noul >= 0.5;
 say(`gate2: ready=${g2.release_ready.noul} risk=${g2.risk.score}/3 (conf ${g2.risk.confidence})`);
 writeLog('gate2', { gate2: g2 });
