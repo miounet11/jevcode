@@ -59,6 +59,63 @@ Jev 是 TypeSafe 的 System One 决策模型：你给它**状态 + 类型化问�
 > 仅经结构与构建校验，**未经人工逐篇校对**。欢迎通过 PR 修正术语与措辞；
 > 存在歧义时以中文 / 英文原文及官方文档为准。
 
+## 自动化发布管线（Jev 做守门人）
+
+本站的特色：**发布什么、何时发布、是否合格，由 Jev 判断**。整个循环对其他「判断模型 + 静态站」项目可直接参考：
+
+```
+每日 09:30（cron）
+  │
+  ├─ 1. 抓取        scripts/fetch-ecosystem.mjs
+  │     GitHub API 刷新 12 个跟踪仓库的 stars/forks/archived
+  │
+  ├─ 2. 批量累积     小于 +10% 的变化攒着不发，避免琐碎发布
+  │     （任一仓库相对增量 ≥ +10% 才触发，批次状态在 pending.json）
+  │
+  ├─ 3. Jev 门 ①    值得发布吗？（noul）→ 发到哪里？（choice）
+  │
+  ├─ 4. 机械验证     astro build + astro check + 全量内链检查（16,522 链接）
+  │
+  ├─ 5. Jev 门 ②    release 合格吗？（noul）→ 风险几分？（score 0-3）
+  │
+  ├─ 6. 发布         commit → push → 原子软链部署（秒级回滚）
+  │
+  └─ 7. 留痕         .research/pipeline-logs/*.jsonl 审计日志
+                      失败写 ALERT-*.txt，按设计跳过写 SKIPPED-*.txt
+```
+
+### 设计原则（踩过的坑）
+
+1. **判断与生成分离**：Jev 只做门控（该不该/哪里/几时/风险），不生成内容——
+   这是判断模型的正确定位。已归档的 13 次调用共 13,565 input tokens
+   （输出 token 免费），按 $42/Btok 计约 **$0.0006**；单次响应 2–5 秒。
+2. **cron PATH 陷阱**：macOS cron 的 PATH 不含 `/opt/homebrew/bin`，必须在
+   脚本内显式 export 或 crontab 行内联，否则 node/npm/gh 全找不到。
+3. **运行时产物必须脱离 git 跟踪**：管线自己写日志/状态会把工作区弄脏，
+   触发「脏区保护」后**永久跳过**——自锁死循环。光写 gitignore 不够，
+   已跟踪过的文件要 `git rm --cached` 才真正脱离。
+4. **退出码要取真值**：`if ! cmd; then code=$?` 取到的是取反后的值（恒 0）。
+5. **告警分两级**：真失败（ALERT）与按设计跳过（SKIPPED）分开留痕，
+   否则日常跳过会淹没真故障。
+6. **机械门输出别用管道截断**：`npm run check | tail -3` 恰好切掉
+   `- 0 errors` 行导致永远误判失败——捕获全量再正则。
+7. **非发布路径要还原抓取写入**：fetch 每次写回已跟踪的 ecosystem.ts，
+   累积/HOLD/无变化等路径必须 `git checkout --` 还原，Jev 门异常
+   （如 402 余额耗尽）同样要还原，否则下一轮脏区跳过。
+
+### 文件索引
+
+| 文件 | 职责 |
+| :--- | :--- |
+| [`scripts/pipeline.mjs`](./scripts/pipeline.mjs) | 主流程：抓取→累积→双 Jev 门→验证→部署 |
+| [`scripts/pipeline-cron.sh`](./scripts/pipeline-cron.sh) | cron 包装：PATH 修复、前置检查、脏区保护、ALERT/SKIPPED |
+| [`scripts/fetch-ecosystem.mjs`](./scripts/fetch-ecosystem.mjs) | GitHub 抓取 + 写回 ecosystem.ts（含限流退避） |
+| [`scripts/run-jev.mjs`](./scripts/run-jev.mjs) | Jev API 通用调用器（读 JSON 请求→输出响应） |
+| [`scripts/i18n-gaps.mjs`](./scripts/i18n-gaps.mjs) | 翻译缺口检查（清单/JSON/骨架，CI 卡点） |
+| [`scripts/test-search.mjs`](./scripts/test-search.mjs) | pagefind 索引搜索回归测试 |
+| [`.research/jev-requests/`](./.research/jev-requests/) | Jev 决策的请求/响应存档（12 轮决策 + 4 组 playground 预录） |
+| [`.research/jev-notes.md`](./.research/jev-notes.md) | 决策笔记：每轮问题、判定、执行结果 |
+
 ## 内容结构
 
 ```
