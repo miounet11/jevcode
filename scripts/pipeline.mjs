@@ -33,6 +33,21 @@ function say(msg) {
   log.push(msg);
 }
 
+/** 抓取会写回这个【已跟踪】文件；非发布路径必须还原，否则脏工作区
+ *  会让 cron 的脏区保护在下一轮永久跳过（自锁死循环，实测复现）。 */
+const FETCHED_FILE = 'src/data/ecosystem.ts';
+function restoreFetched() {
+  if (SKIP_FETCH) return;
+  try {
+    if (run(`git status --porcelain -- ${FETCHED_FILE}`).trim()) {
+      run(`git checkout -- ${FETCHED_FILE}`);
+      say(`restored ${FETCHED_FILE}（未发布路径，还原抓取写入）`);
+    }
+  } catch (err) {
+    say(`WARN 还原 ${FETCHED_FILE} 失败: ${err.message}`);
+  }
+}
+
 function run(cmd, opts = {}) {
   return execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...opts });
 }
@@ -143,6 +158,7 @@ if (!SKIP_FETCH) {
 // 2. 门 1（含批量累积）
 if (fetchReport.changes.length === 0 && !SKIP_FETCH) {
   say('gate1: no changes, nothing to do');
+  restoreFetched();
   writeLog('skipped-no-changes');
   process.exit(0);
 }
@@ -152,6 +168,7 @@ savePending(pending);
 say(`pending batch: ${Object.keys(pending.pending).length} repos, trigger=${trigger}`);
 if (!trigger) {
   say('gate1: below magnitude threshold, accumulating');
+  restoreFetched();
   writeLog('accumulating', { pending });
   process.exit(0);
 }
@@ -162,6 +179,7 @@ say(`gate1: worth=${g1.worth_publishing.noul} placement=${placement}`);
 writeLog('gate1', { fetchReport, pending, trigger, gate1: g1 });
 if (!worth || placement === 'defer') {
   say('gate1: HOLD — not publishing this cycle');
+  restoreFetched();
   process.exit(0);
 }
 
@@ -169,6 +187,7 @@ if (!worth || placement === 'defer') {
 const dirty = run('git status --porcelain').trim();
 if (!dry_has_changes(dirty)) {
   say('no uncommitted changes after fetch; nothing to release');
+  restoreFetched();
   process.exit(0);
 }
 if (!DRY) {
@@ -204,6 +223,7 @@ say(`build=${buildOk} check=${checkOk} links=${linkReport}`);
 // 5. 门 2
 if (!buildOk || !checkOk) {
   say('gate2 skipped: mechanical gates failed');
+  restoreFetched();
   writeLog('gate2-skipped-mech-fail', { buildOk, checkOk });
   process.exit(1);
 }
@@ -215,6 +235,7 @@ writeLog('gate2', { gate2: g2 });
 
 if (!ready) {
   say('gate2: HOLD — release blocked by Jev');
+  restoreFetched();
   process.exit(1);
 }
 
