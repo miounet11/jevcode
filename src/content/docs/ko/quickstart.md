@@ -90,7 +90,7 @@ curl -X POST https://api.typesafe.ai/v1/systemone \
 
 SDK는 기본적으로 환경 변수에서 `TYPESAFE_API_KEY`를 읽으며, `jev-latest`를 기본 호출 대상으로 설정합니다.
 
-### Python
+### 파이썬
 
 ```bash
 pip install typesafe-sdk     # 또는 uv add typesafe-sdk

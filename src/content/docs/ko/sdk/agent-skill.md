@@ -16,7 +16,7 @@ TypeSafe 에이전트 스킬은 AI 코딩 에이전트에게 TypeSafe API의 전
 
 ## 설치
 
-### Claude Code
+### 클로드 코드
 
 ```bash
 claude plugin marketplace add typesafe-ai/skills
