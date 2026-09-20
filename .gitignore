@@ -30,3 +30,6 @@ build/
 .research/pipeline-logs/
 .research/pipeline-state/
 .research/qmuse/
+
+__pycache__/
+*.pyc
