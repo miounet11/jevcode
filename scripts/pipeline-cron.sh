@@ -72,10 +72,18 @@ source .env
 set +a
 export GITHUB_TOKEN="${GITHUB_TOKEN:-$(gh auth token 2>/dev/null || true)}"
 
-if [[ -z "${TYPESAFE_API_KEY:-}" ]]; then
-  echo "[cron] 致命：TYPESAFE_API_KEY 未设置"
-  mark ALERT "管线前置检查失败：TYPESAFE_API_KEY 未设置"
-  exit 1
+if [[ "${JUDGE_BACKEND:-clavue}" == "jev" ]]; then
+  if [[ -z "${TYPESAFE_API_KEY:-}" ]]; then
+    echo "[cron] 致命：TYPESAFE_API_KEY 未设置（JUDGE_BACKEND=jev）"
+    mark ALERT "管线前置检查失败：TYPESAFE_API_KEY 未设置"
+    exit 1
+  fi
+else
+  if [[ -z "${CLAVUE_API_KEYS:-}" ]]; then
+    echo "[cron] 致命：CLAVUE_API_KEYS 未设置（本地 judge 后端）"
+    mark ALERT "管线前置检查失败：CLAVUE_API_KEYS 未设置"
+    exit 1
+  fi
 fi
 
 # 只在干净工作区跑（避免把手工未提交改动卷进自动发布）

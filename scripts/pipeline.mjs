@@ -11,7 +11,11 @@
  *   --dry-run    跑全流程但不 commit/不 deploy（验证用）
  *   --skip-fetch 跳过抓取（调试门与部署段）
  *
- * 环境变量：TYPESAFE_API_KEY（必需）、GITHUB_TOKEN（可选，抓取限流用）。
+ * 环境变量：
+ *   CLAVUE_API_KEYS  本地 clavue-jev 判定 key（逗号分隔，默认后端）
+ *   CLAVUE_URL       判定服务地址（默认 https://api.clavue.com/v1/judge）
+ *   JUDGE_BACKEND    clavue（默认）| jev（需 TYPESAFE_API_KEY）
+ *   GITHUB_TOKEN     可选，抓取限流用
  */
 
 import { execSync } from 'node:child_process';
@@ -20,11 +24,22 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 const DRY = process.argv.includes('--dry-run');
 const SKIP_FETCH = process.argv.includes('--skip-fetch');
 const PENDING_FILE = '.research/pipeline-state/pending.json';
-const KEY = process.env.TYPESAFE_API_KEY;
-if (!KEY) {
-  console.error('缺少 TYPESAFE_API_KEY');
+
+// 门控后端：默认本地 clavue-jev（Jev 余额 402 时无缝切换）。
+//   JUDGE_BACKEND=jev    用 TypeSafe Jev（需 TYPESAFE_API_KEY）
+//   JUDGE_BACKEND=clavue 用本地 clavue-jev（需 CLAVUE_API_KEYS，默认）
+const JUDGE_BACKEND = process.env.JUDGE_BACKEND ?? 'clavue';
+const CLAVUE_URL = process.env.CLAVUE_URL ?? 'https://api.clavue.com/v1/judge';
+const CLAVUE_KEYS = (process.env.CLAVUE_API_KEYS ?? '').split(',').filter(Boolean);
+if (JUDGE_BACKEND === 'clavue' && CLAVUE_KEYS.length === 0) {
+  console.error('缺少 CLAVUE_API_KEYS（本地 judge 后端）');
   process.exit(1);
 }
+if (JUDGE_BACKEND === 'jev' && !process.env.TYPESAFE_API_KEY) {
+  console.error('缺少 TYPESAFE_API_KEY（Jev 后端）');
+  process.exit(1);
+}
+let keyCursor = 0;
 
 const log = [];
 const t0 = Date.now();
@@ -52,14 +67,65 @@ function run(cmd, opts = {}) {
   return execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...opts });
 }
 
-async function jev(state, questions) {
+/** 门控后端抽象：对外统一返回 Jev 风格的 answers（每问 noul/choice/score）。
+ *  内部按 JUDGE_BACKEND 分流到 TypeSafe Jev 或本地 clavue-jev。 */
+async function judge(state, questions) {
+  if (JUDGE_BACKEND === 'jev') {
+    return judgeViaJev(state, questions);
+  }
+  return judgeViaClavue(state, questions);
+}
+
+async function judgeViaJev(state, questions) {
   const res = await fetch('https://api.typesafe.ai/v1/systemone', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${KEY}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${process.env.TYPESAFE_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ state, model: 'jev-latest', questions }),
   });
   if (!res.ok) throw new Error(`jev HTTP ${res.status}`);
   return (await res.json()).answers;
+}
+
+async function clavueOnce(question, context, choices) {
+  const key = CLAVUE_KEYS[keyCursor % CLAVUE_KEYS.length];
+  keyCursor += 1;
+  const res = await fetch(CLAVUE_URL, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, context, choices }),
+  });
+  if (res.status === 401) throw new Error('clavue 401（token 无效）');
+  if (!res.ok) throw new Error(`clavue HTTP ${res.status}`);
+  return res.json();
+}
+
+async function judgeViaClavue(state, questions) {
+  const answers = {};
+  for (const [name, q] of Object.entries(questions)) {
+    let question, choices;
+    if (q.type === 'noul') {
+      // noul → yes/no，取 "yes" 概率
+      question = q.instructions;
+      choices = ['no', 'yes'];
+    } else {
+      // choice / score → 选项列表
+      question = q.instructions;
+      choices = Array.isArray(q.criteria) ? q.criteria : Object.keys(q.criteria);
+    }
+    const r = await clavueOnce(question, state, choices);
+    if (q.type === 'noul') {
+      answers[name] = { type: 'noul', noul: r.probabilities?.['yes'] ?? (r.choice === 'yes' ? 1 : 0) };
+    } else {
+      const choice = r.choice;
+      const idx = Array.isArray(q.criteria) ? q.criteria.indexOf(choice) : Object.keys(q.criteria).indexOf(choice);
+      if (q.type === 'score') {
+        answers[name] = { type: 'score', score: idx, confidence: r.probabilities?.[choice] ?? 1, legend: Object.fromEntries(choices.map((c, i) => [i, c])), probabilities: Object.fromEntries(choices.map((c, i) => [i, r.probabilities?.[c] ?? 0])) };
+      } else {
+        answers[name] = { type: 'choice', choice, confidence: r.probabilities?.[choice] ?? 1, probabilities: r.probabilities ?? {} };
+      }
+    }
+  }
+  return answers;
 }
 
 // ---------- 门 1：intake ----------
@@ -108,7 +174,7 @@ async function gate1(fetchReport, pending, trigger) {
   const pendingSummary = Object.entries(pending.pending)
     .map(([repo, v]) => `${repo}: ${(v.rel * 100).toFixed(1)}%${v.kind ? ` (${v.kind})` : ''}`)
     .join('; ');
-  return jev(
+  return judge(
     `Site JevCode ecosystem refresh, daily cycle. Today's fetch saw ${fetchReport.changes.length} changed repos. Accumulated pending batch since last release: ${pendingSummary}. The site shows these numbers on the /{lang}/ecosystem/ page with a 'data as of <date>' stamp. Code-level trigger (any repo >= +10% change or a repo gone/archived) is currently ${trigger ? 'REACHED' : 'NOT reached'}. Decide whether to publish the accumulated batch now.`,
     {
       worth_publishing: {
@@ -127,7 +193,7 @@ async function gate1(fetchReport, pending, trigger) {
 
 // ---------- 门 2：release ----------
 async function gate2(buildOk, checkOk, linkReport, changes) {
-  return jev(
+  return judge(
     `JevCode release readiness. Build: ${buildOk}. Type check: ${checkOk}. Internal links: ${linkReport}. Changes in release: ${changes}. Deploy is an atomic symlink switch with instant rollback. Decide: is this release coherent and safe to go live?`,
     {
       release_ready: {
