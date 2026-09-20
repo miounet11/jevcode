@@ -22,7 +22,7 @@ const DRY = process.argv.includes('--dry');
 const ECO = 'src/data/ecosystem.ts';
 const ref = JSON.parse(readFileSync('.research/awesome-jev-projects/projects.json', 'utf8'));
 const eco = readFileSync(ECO, 'utf8');
-const known = new Set([...eco.matchAll(/repo: '([^']+)'/g)].map((m) => m[1].toLowerCase()));
+const known = new Set([...eco.matchAll(/repo:\s*['"]([^'"]+)['"]/g)].map((m) => m[1].toLowerCase()));
 
 // 参考站分类 → 本站 category key
 const CATEGORY_MAP = {
