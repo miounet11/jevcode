@@ -30,22 +30,27 @@ export interface PulseEntry {
 export const pulseCategories: { key: string; title: Record<string, string>; match: RegExp }[] = [
   {
     key: 'demos',
-    title: { zh: '演示与实验', en: 'Demos & experiments' },
+    title: { zh: '演示与实验', en: 'Demos & experiments', ja: 'デモと実験', ko: '데모 및 실험', de: 'Demos & Experimente', fr: 'Démos & expériences', es: 'Demos y experimentos', pt: 'Demos e experimentos' },
     match: /\b(built|demo|fight|game|shooter|bot|playground|made)\b/i,
   },
   {
     key: 'integrations',
-    title: { zh: '集成与工具', en: 'Integrations & tooling' },
+    title: { zh: '集成与工具', en: 'Integrations & tooling', ja: '統合とツール', ko: '통합 및 도구', de: 'Integrationen & Werkzeuge', fr: 'Intégrations & outils', es: 'Integraciones y herramientas', pt: 'Integrações e ferramentas' },
     match: /\b(browser use|api|sdk|plugin|mcp|agent|router|compaction|vs\b|pipeline)\b/i,
   },
   {
+    key: 'benchmarks',
+    title: { zh: '评测与对比', en: 'Benchmarks & comparisons', ja: 'ベンチマークと比較', ko: '벤치마크 및 비교', de: 'Benchmarks & Vergleiche', fr: 'Benchmarks & comparaisons', es: 'Benchmarks y comparaciones', pt: 'Benchmarks e comparações' },
+    match: /\b(benchmark|alternative|comparison|accuracy|speed|faster|eval|leaderboard|vs\b)\b/i,
+  },
+  {
     key: 'opinion',
-    title: { zh: '观点与讨论', en: 'Opinion & discussion' },
+    title: { zh: '观点与讨论', en: 'Opinion & discussion', ja: '意見と議論', ko: '의견 및 토론', de: 'Meinungen & Diskussion', fr: 'Opinions & discussions', es: 'Opiniones y debate', pt: 'Opiniões e debate' },
     match: /\b(why|thoughts|opinion|tldr|find|believe|trust|hot take|unpopular)\b/i,
   },
   {
     key: 'other',
-    title: { zh: '其他', en: 'Other' },
+    title: { zh: '其他', en: 'Other', ja: 'その他', ko: '기타', de: 'Sonstiges', fr: 'Autres', es: 'Otros', pt: 'Outros' },
     match: /.*/,
   },
 ] as const;
@@ -57,6 +62,18 @@ export function categorize(text: string): string {
   return 'other';
 }
 export const pulseEntries: PulseEntry[] = [
+  {
+    id: "2101491913866055821",
+    author: "Cuth",
+    screenName: "ItsCuthulhu",
+    url: "https://x.com/ItsCuthulhu/status/2101491913866055821",
+    date: "2026-09-20T02:01:30.000Z",
+    text: "Top 5 Jev Alternatives — I have been running a benchmark since this morning on every Jev alternative against Jev. So far, none have beaten it on accuracy but some have slightly less accuracy with better speed. 1. djev — slightly lower accuracy, slightly faster, worthy tradeoff. 2. Simplejev-qwen38-27b — best open source replacement today, but needs a 27B rig (DGX Spark or similar). 3. Reflex-4b — 2-3x faster, ~5% less accurate, Apache 2.0. 4. Decider-2b — ~10x faster, fully local, ~5% less accurate. 5. Laya — 62.5% accuracy, not worth it. Jev is the frontier of this paradigm, but it is losing ground quickly. Benchmark auto-updates at bench.jakecuth.com",
+    views: 43127,
+    likes: 109,
+    projectUrl: "http://bench.jakecuth.com",
+  },
+
   {
     id: "2101028527978020920",
     author: "Neel Patel",

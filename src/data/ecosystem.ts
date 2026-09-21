@@ -2055,6 +2055,60 @@ export const projects: Project[] = [
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
   },
+  {
+    repo: "djev.dev",
+    url: "https://djev.dev/",
+    desc: {
+      zh: "面向文本与图像的判定服务，提供 Playground 与 API，是 Jev 的直接替代方案之一。", en: "A judgment service for text and images with a playground and API — one of the direct Jev alternatives.", ja: "テキストと画像向けの判定サービス。Playground と API を備えた Jev の直接的な代替候補。", ko: "텍스트와 이미지를 위한 판정 서비스. Playground와 API를 갖춘 Jev의 직접적인 대안.",
+      de: "Ein Urteilsdienst für Text und Bilder mit Playground und API — eine direkte Jev-Alternative.", fr: "Un service de jugement pour le texte et les images avec playground et API — une alternative directe à Jev.", es: "Un servicio de juicio para texto e imágenes con playground y API — una alternativa directa a Jev.", pt: "Um serviço de juízo para texto e imagens com playground e API — uma alternativa direta ao Jev.",
+    },
+    decisionPoint: {
+      zh: "把文本或图像状态与类型化问题发给判定端点，返回带概率的类型化答案。", en: "Sends text or image state plus typed questions to a judgment endpoint and returns typed answers with probabilities.", ja: "テキストまたは画像の状態と型付き質問を判定エンドポイントに送り、確率付きの型付き回答を返す。", ko: "텍스트 또는 이미지 상태와 타입 질문을 판정 엔드포인트로 보내 확률이 포함된 타입 답을 받는다.",
+      de: "Sendet Text- oder Bild-Zustand plus typisierte Fragen an einen Urteils-Endpunkt und gibt typisierte Antworten mit Wahrscheinlichkeiten zurück.", fr: "Envoie l'état texte ou image plus des questions typées à un endpoint de jugement et renvoie des réponses typées avec probabilités.", es: "Envía el estado de texto o imagen más preguntas tipadas a un endpoint de juicio y devuelve respuestas tipadas con probabilidades.", pt: "Envia o estado de texto ou imagem mais perguntas tipadas a um endpoint de juízo e devolve respostas tipadas com probabilidades.",
+    },
+    stars: 0,
+    forks: 0,
+    language: null,
+    license: null,
+    topics: ['judgment-api', 'multimodal'],
+    category: "integration",
+  },
+  {
+    repo: "YannQi/R-4B",
+    url: "https://huggingface.co/YannQi/R-4B",
+    desc: {
+      zh: "4B 开源判定模型（Reflex-4b），实测比 Jev 快 2-3 倍、精度约低 5%，Apache 2.0 许可。", en: "A 4B open decision model (Reflex-4b): benchmarked at 2-3x faster than Jev with roughly 5% lower accuracy, Apache 2.0.", ja: "4B のオープン判定モデル（Reflex-4b）。Jev より 2〜3 倍高速で精度は約 5% 低い（Apache 2.0）。", ko: "4B 오픈 판정 모델(Reflex-4b). Jev보다 2~3배 빠르고 정확도는 약 5% 낮음(Apache 2.0).",
+      de: "Ein offenes 4B-Entscheidungsmodell (Reflex-4b): 2-3x schneller als Jev bei etwa 5% geringerer Genauigkeit, Apache 2.0.", fr: "Un modèle de décision ouvert 4B (Reflex-4b) : 2-3x plus rapide que Jev avec environ 5% de précision en moins, Apache 2.0.", es: "Un modelo de decisión abierto de 4B (Reflex-4b): 2-3x más rápido que Jev con ~5% menos precisión, Apache 2.0.", pt: "Um modelo de decisão aberto de 4B (Reflex-4b): 2-3x mais rápido que o Jev com ~5% menos precisão, Apache 2.0.",
+    },
+    decisionPoint: {
+      zh: "在本地加载 4B 权重，接收状态与类型化问题，单次前向输出校准概率。", en: "Loads 4B weights locally, takes state plus typed questions, and returns calibrated probabilities in one forward pass.", ja: "4B の重みをローカルで読み込み、状態と型付き質問を受け取り、1 回の推論で校正済み確率を返す。", ko: "4B 가중치를 로컬에서 로드하고 상태와 타입 질문을 받아 한 번의 전방 계산으로 보정된 확률을 반환한다.",
+      de: "Lädt 4B-Gewichte lokal, nimmt Zustand plus typisierte Fragen und gibt kalibrierte Wahrscheinlichkeiten in einem Durchlauf zurück.", fr: "Charge les poids 4B localement, prend l'état plus des questions typées et renvoie des probabilités calibrées en une passe.", es: "Carga pesos 4B localmente, toma estado más preguntas tipadas y devuelve probabilidades calibradas en una pasada.", pt: "Carrega pesos 4B localmente, recebe estado mais perguntas tipadas e devolve probabilidades calibradas numa passagem.",
+    },
+    stars: 185,
+    forks: 0,
+    language: null,
+    license: "apache-2.0",
+    topics: ['decision-model', 'reflex'],
+    category: "research",
+  },
+  {
+    repo: "Mapika/decider-2b",
+    url: "https://huggingface.co/Mapika/decider-2b",
+    desc: {
+      zh: "2B 开源判定模型（Decider-2b），实测比 Jev 快约 10 倍、完全本地运行、精度约低 5%。", en: "A 2B open decision model (Decider-2b): benchmarked at ~10x faster than Jev, fully local, roughly 5% lower accuracy.", ja: "2B のオープン判定モデル（Decider-2b）。Jev の約 10 倍高速で完全ローカル、精度は約 5% 低い。", ko: "2B 오픈 판정 모델(Decider-2b). Jev보다 약 10배 빠르고 완전 로컬, 정확도는 약 5% 낮음.",
+      de: "Ein offenes 2B-Entscheidungsmodell (Decider-2b): ~10x schneller als Jev, vollständig lokal, etwa 5% geringere Genauigkeit.", fr: "Un modèle de décision ouvert 2B (Decider-2b) : ~10x plus rapide que Jev, entièrement local, ~5% de précision en moins.", es: "Un modelo de decisión abierto de 2B (Decider-2b): ~10x más rápido que Jev, totalmente local, ~5% menos precisión.", pt: "Um modelo de decisão aberto de 2B (Decider-2b): ~10x mais rápido que o Jev, totalmente local, ~5% menos precisão.",
+    },
+    decisionPoint: {
+      zh: "2B 权重本地推理，状态 + 类型化问题 → 校准概率，适合完全离线的判定场景。", en: "Runs 2B weights locally: state plus typed questions to calibrated probabilities, suited to fully offline judging.", ja: "2B の重みをローカルで推論し、状態と型付き質問から校正済み確率を返す。完全オフラインの判定に適する。", ko: "2B 가중치를 로컬에서 실행해 상태와 타입 질문을 보정된 확률로 변환한다. 완전 오프라인 판정에 적합.",
+      de: "Führt 2B-Gewichte lokal aus: Zustand plus typisierte Fragen zu kalibrierten Wahrscheinlichkeiten, geeignet für vollständig Offline-Urteile.", fr: "Exécute les poids 2B localement : état plus questions typées vers probabilités calibrées, adapté au jugement hors ligne.", es: "Ejecuta pesos 2B localmente: estado más preguntas tipadas a probabilidades calibradas, ideal para juicio totalmente offline.", pt: "Executa pesos 2B localmente: estado mais perguntas tipadas em probabilidades calibradas, ideal para juízo totalmente offline.",
+    },
+    stars: 57,
+    forks: 0,
+    language: null,
+    license: "apache-2.0",
+    topics: ['decision-model', 'decider'],
+    category: "research",
+  },
 ];
 
 /** 按分类分组，组内按 stars 降序 */
