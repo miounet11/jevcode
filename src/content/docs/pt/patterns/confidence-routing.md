@@ -1,6 +1,6 @@
 ---
 title: "Roteamento por confiança"
-description: "Trate a confiança como um segundo eixo de decisão. A resposta indica \"o que é\", enquanto a confiança informa \"se deve executar\"."
+description: 'Trate a confiança como um segundo eixo de decisão. A resposta indica \"o que é\", enquanto a confiança informa \"se deve executar\".'
 section: patterns
 order: 30
 tags: ['confidence', 'routing', 'safety']

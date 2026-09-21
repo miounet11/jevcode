@@ -1,6 +1,6 @@
 ---
 title: "Modèle d'architecture"
-description: "Architectural patterns for building systems with TypeSafe. Learning to think in terms of \"discrete atomic decisions\" is key to unlocking its full potential."
+description: 'Architectural patterns for building systems with TypeSafe. Learning to think in terms of \"discrete atomic decisions\" is key to unlocking its full potential.'
 section: patterns
 order: 10
 tags: ['patterns', 'architecture']
