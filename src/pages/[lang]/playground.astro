@@ -313,7 +313,8 @@ const ui = {
     border: 1px solid var(--border-strong);
     border-radius: 999px;
     padding: 2px 10px;
-    white-space: nowrap;
+    /* 不锁 nowrap：fr/de/es 文案在窄屏会超出容器，允许收缩换行以免撑破卡片 */
+    min-width: 0;
   }
   .pg__answer {
     font-family: var(--font-mono);

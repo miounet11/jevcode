@@ -55,7 +55,7 @@ const dateShort = (iso: string) => iso.slice(0, 10);
       <h1 class="doc__title">{copy.title}</h1>
       <p class="doc__desc">{copy.lead}</p>
 
-      <div class="stats__grid">
+      <div class="stats__grid stats__grid--single">
         <div class="stat">
           <div class="stat__num">{pulseEntries.length}</div>
           <div class="stat__label">{copy.stats}</div>
@@ -95,6 +95,11 @@ const dateShort = (iso: string) => iso.slice(0, 10);
 </BaseLayout>
 
 <style>
+  /* 本页 stats 只有 1 个瓦片，全局 .stats__grid 的 repeat(4,1fr) 会让其余 3 列只露出 --border 底色。
+     用页面级类收成单列 + 宽度贴合内容，避免影响首页(4 瓦片)/生态页(3 瓦片)。 */
+  .stats__grid--single {
+    grid-template-columns: minmax(0, max-content);
+  }
   .pulse__note {
     color: var(--fg-dim);
     font-size: 12.5px;
