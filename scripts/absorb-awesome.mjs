@@ -4,19 +4,21 @@
  *
  * 数据源：.research/awesome-jev-projects/projects.json（MIT，已附 ATTRIBUTION）
  * 映射规则：
- *   - 只收 star >= MIN_STARS 且本站尚未收录的项目
+ *   - 只收 star >= MIN_STARS、本站尚未收录，且 verificationStatus 为
+ *     source-verified / source-reviewed、summarySource 为 human-reviewed / curated 的项目
  *   - 参考站 4 语言（zh/en/ja/ko）summary → 本站 desc；de/fr/es/pt 用 en 兜底
  *   - jevDecisionPoint（"Jev 在这里做什么"）→ decisionPoint，同样 4+4 兜底
  *   - category 英文 → 本站 category key（手动映射表）
  *   - 保留 stars/forks/language/license/url
  *
- * 用法：node scripts/absorb-awesome.mjs [--min-stars N] [--dry]
+ * 用法：node scripts/absorb-awesome.mjs [--min-stars=N] [--dry]
  *  --dry  只打印将写入的条目数与清单，不写 ecosystem.ts
+ *  默认 --min-stars=10。不收 compatibility-verified / integration-detected。
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const MIN_STARS = Number((process.argv.find((a) => a.startsWith('--min-stars=')) ?? '--min-stars=100').split('=')[1]);
+const MIN_STARS = Number((process.argv.find((a) => a.startsWith('--min-stars=')) ?? '--min-stars=10').split('=')[1]);
 const DRY = process.argv.includes('--dry');
 
 const ECO = 'src/data/ecosystem.ts';
@@ -74,6 +76,10 @@ for (const x of ref) {
   if (!repo) continue;
   if (known.has(repo.toLowerCase())) continue;
   if ((x.stars ?? 0) < MIN_STARS) continue;
+  // 只收源码已核验、摘要人工撰写的条目。兼容实现和仅检测到集成的项目不写成「用 Jev 做的」。
+  const verified = x.verificationStatus === 'source-verified' || x.verificationStatus === 'source-reviewed';
+  const reviewed = x.summarySource === 'human-reviewed' || x.summarySource === 'curated';
+  if (!verified || !reviewed) continue;
   const category = CATEGORY_MAP[x.category] ?? 'tooling';
   const desc = pick4('plainSummary', x);
   const decisionPoint = pick4('jevDecisionPoint', x);
