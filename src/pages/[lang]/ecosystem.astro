@@ -56,6 +56,8 @@ const copy =
         filterTopic: '主题',
         searchPlaceholder: '搜索项目名、描述…',
         noResult: '没有匹配的项目。',
+        // 客户端筛选后替换 {n}，故同时提供模板
+        shownTpl: '显示 {n} 个项目',
         shown: (n: number) => `显示 ${n} 个项目`,
         decision: 'Jev 在这里做什么',
       }
@@ -72,6 +74,7 @@ const copy =
         filterTopic: 'Topic',
         searchPlaceholder: 'Search name or description…',
         noResult: 'No matching projects.',
+        shownTpl: '{n} projects shown',
         shown: (n: number) => `${n} projects shown`,
         decision: 'What Jev does here',
       };
@@ -129,7 +132,7 @@ const copy =
             ))}
           </select>
           <input class="eco-search" type="search" data-search placeholder={copy.searchPlaceholder} />
-          <span class="eco-count" data-count data-tpl={copy.shown('{n}')}>
+          <span class="eco-count" data-count data-tpl={copy.shownTpl}>
             {copy.shown(projects.length)}
           </span>
         </div>
