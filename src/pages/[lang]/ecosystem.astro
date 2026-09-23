@@ -30,6 +30,17 @@ const topLanguages = [...langCounts.entries()]
   .sort((a, b) => b[1] - a[1])
   .map(([name, n]) => ({ name, n }));
 
+// 主题筛选：复用仓库自带的 topics，只保留 >=4 个项目的，避免长尾噪声。
+// 这是「二级分类」，不改动 category —— 173 条数据不重归类，零破坏。
+const topicCounts = new Map<string, number>();
+for (const p of projects) {
+  for (const t of p.topics ?? []) topicCounts.set(t, (topicCounts.get(t) ?? 0) + 1);
+}
+const topTopics = [...topicCounts.entries()]
+  .filter(([, n]) => n >= 4)
+  .sort((a, b) => b[1] - a[1])
+  .map(([name, n]) => ({ name, n }));
+
 const copy =
   lang === 'zh'
     ? {
@@ -42,6 +53,7 @@ const copy =
         forks: 'forks',
         filterAll: '全部',
         filterLanguage: '语言',
+        filterTopic: '主题',
         searchPlaceholder: '搜索项目名、描述…',
         noResult: '没有匹配的项目。',
         shown: (n: number) => `显示 ${n} 个项目`,
@@ -57,6 +69,7 @@ const copy =
         forks: 'forks',
         filterAll: 'All',
         filterLanguage: 'Language',
+        filterTopic: 'Topic',
         searchPlaceholder: 'Search name or description…',
         noResult: 'No matching projects.',
         shown: (n: number) => `${n} projects shown`,
@@ -108,6 +121,13 @@ const copy =
               <option value={name}>{name} ({n})</option>
             ))}
           </select>
+          <label class="eco-filter__label" for="eco-topic">{copy.filterTopic}</label>
+          <select class="eco-select" id="eco-topic" data-topic-filter>
+            <option value="all">{copy.filterAll}</option>
+            {topTopics.map(({ name, n }) => (
+              <option value={name}>{name} ({n})</option>
+            ))}
+          </select>
           <input class="eco-search" type="search" data-search placeholder={copy.searchPlaceholder} />
           <span class="eco-count" data-count data-tpl={copy.shown('{n}')}>
             {copy.shown(projects.length)}
@@ -124,6 +144,7 @@ const copy =
                 data-cat={category.key}
                 data-stars={p.stars}
                 data-language={p.language ?? ''}
+                data-topics={(p.topics ?? []).join(' ')}
                 data-search={`${p.repo} ${p.desc[lang] ?? p.desc.en} ${(p.topics ?? []).join(' ')}`.toLowerCase()}
               >
                 <a class="project-name" href={p.url} target="_blank" rel="noopener noreferrer">
@@ -156,12 +177,14 @@ const copy =
   const rows = list ? [...list.querySelectorAll<HTMLElement>('[data-project]')] : [];
   const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-cat]')];
   const langSel = document.querySelector<HTMLSelectElement>('[data-lang-filter]');
+  const topicSel = document.querySelector<HTMLSelectElement>('[data-topic-filter]');
   const searchEl = document.querySelector<HTMLInputElement>('[data-search]');
   const countEl = document.querySelector<HTMLElement>('[data-count]');
   const emptyEl = document.querySelector<HTMLElement>('[data-empty]');
 
   let cat = 'all';
   let language = 'all';
+  let topic = 'all';
   let q = '';
 
   function apply() {
@@ -169,8 +192,11 @@ const copy =
     for (const row of rows) {
       const okCat = cat === 'all' || row.dataset.cat === cat;
       const okLang = language === 'all' || row.dataset.language === language;
+      // topics 以空格分隔，需按词匹配，避免 'agent' 命中 'ai-agents'
+      const okTopic =
+        topic === 'all' || (row.dataset.topics ?? '').split(' ').includes(topic);
       const okQ = !q || (row.dataset.search ?? '').includes(q);
-      const on = okCat && okLang && okQ;
+      const on = okCat && okLang && okTopic && okQ;
       row.hidden = !on;
       if (on) shown++;
     }
@@ -186,6 +212,7 @@ const copy =
     });
   }
   langSel?.addEventListener('change', () => { language = langSel.value; apply(); });
+  topicSel?.addEventListener('change', () => { topic = topicSel.value; apply(); });
   searchEl?.addEventListener('input', () => { q = searchEl.value.trim().toLowerCase(); apply(); });
 </script>
 
