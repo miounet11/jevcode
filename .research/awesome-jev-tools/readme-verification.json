@@ -1,0 +1,3121 @@
+[
+ {
+  "repo": "alterhq/typesafe-sdk-swift",
+  "stars": 4,
+  "lang": "Swift",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Unofficial Swift library for the TypeSafe API",
+  "archived": false,
+  "readme_len": 9921,
+  "score": 52,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "@typesafe-ai/sdk",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Swift ecosystem: dependency-free Swift 6 client for Jev Choice, Score, and Noul questions with strict concurrency, configurable authentication and retries, and offline transport tests.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-curate",
+  "stars": 8,
+  "lang": "Rust",
+  "license": "MIT",
+  "topics": [
+   "arrow",
+   "cli",
+   "data-cleaning",
+   "data-engineering",
+   "dataset-curation",
+   "eval-harness",
+   "fine-tuning",
+   "jev",
+   "jsonl",
+   "llm",
+   "parquet",
+   "polars",
+   "pretraining",
+   "pyo3",
+   "reasoning-models",
+   "rust",
+   "synthetic-data",
+   "system-one",
+   "type-safe-ai",
+   "typesafe-ai"
+  ],
+  "gh_desc": "High-throughput synthetic & pretraining dataset sifter powered by TypeSafe AI Jev (api.typesafe.ai). Stream, filter, and score Parquet & JSONL datasets at 1,500+ rows/sec using System One typed decisions (Choice, Score, Noul).",
+  "archived": false,
+  "readme_len": 7350,
+  "score": 48,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Dataset engineering: sifts synthetic JSONL and Parquet rows using Jev Noul checks and calibrated confidence scores, streaming passed records and rejections straight to disk.",
+  "cat": "Data Labeling & Curation"
+ },
+ {
+  "repo": "Butochnikov/laravel-typesafe-jev",
+  "stars": 2,
+  "lang": "PHP",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Unofficial Laravel integration for TypeSafe Jev AI with typed responses, async requests, scoped dependency injection, and testing fakes.",
+  "archived": false,
+  "readme_len": 7525,
+  "score": 47,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "@typesafe-ai/sdk",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "PHP ecosystem: unofficial Laravel integration for Jev with typed responses, async requests, scoped dependency injection, and testing fakes.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "FFatTiger/new-api-plugin-typesafe",
+  "stars": 3,
+  "lang": "JavaScript",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": "TypeSafe AI System One (Jev) task plugin for QuantumNous/new-api — native /v1/systemone, synchronous evaluation, token billing",
+  "archived": false,
+  "readme_len": 4825,
+  "score": 43,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "LLM gateway: adds a native `/v1/systemone` endpoint to new-api so typed decisions sit behind the same gateway as chat models.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "rajivkuriakose/typesafe-jev-examples",
+  "stars": 1,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Worked examples for TypeSafe's Jev System One decision model, runnable today through OpenRouter",
+  "archived": false,
+  "readme_len": 12513,
+  "score": 43,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "@typesafe-ai/sdk",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Starter examples: worked ticket-triage and reranking examples runnable through OpenRouter without an early-access key, shipped with their own sample data and Makefile.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "bitnovus/jev-spam-eval",
+  "stars": 0,
+  "lang": "Jupyter Notebook",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Zero-shot spam filtering with TypeSafe Jev Noul questions, compared with TF-IDF baselines",
+  "archived": false,
+  "readme_len": 18540,
+  "score": 43,
+  "hits": [
+   "@typesafe-ai/sdk",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Spam filtering: zero-shot spam classification with Jev `Boolean` questions, benchmarked against TF-IDF baselines.",
+  "cat": "Content Moderation"
+ },
+ {
+  "repo": "24601/Augustus",
+  "stars": 6,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "agent-skills",
+   "agent-workflows",
+   "agentic-ai",
+   "ai-agents",
+   "calibrated-confidence",
+   "claude-code",
+   "claude-code-skills",
+   "codex-skills",
+   "cursor-skills",
+   "decision-systems",
+   "decision-theory",
+   "formal-methods",
+   "jev",
+   "reranking",
+   "structured-output",
+   "system-one",
+   "system-one-models",
+   "typesafe",
+   "typesafe-ai",
+   "zero-shot-classification"
+  ],
+  "gh_desc": "Agent skill: design judgment-assisted systems with TypeSafe Jev (System One). Maps Choice/Score/Noul onto decision theory, reranking, and routing. Composition algebra, question design, validation gates. MIT.",
+  "archived": false,
+  "readme_len": 81767,
+  "score": 39,
+  "hits": [
+   "systemone",
+   "@typesafe-ai/sdk",
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: agent skill that maps Choice, Score, and Noul onto classical methods so an agent can place typed judgment in software, with a composition algebra, question-design diagnosis, and a validation gate that requires a falsifying experiment.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "obie/ruby_decision_model",
+  "stars": 48,
+  "lang": "Ruby",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Ruby client for decision models such as Typesafe Jev",
+  "archived": false,
+  "readme_len": 7965,
+  "score": 36,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Ruby ecosystem: client for decision models such as Jev, so Ruby applications can put typed questions directly to the model.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "legacybridge-tech/pi-typesafe-jev",
+  "stars": 2,
+  "lang": "TypeScript",
+  "license": "NOASSERTION",
+  "topics": [],
+  "gh_desc": "A pi extension that exposes TypeSafe (Jev, System One) judgments as five pi tools, so a model can make narrow semantic judgments while your code and your users keep control of thresholds, weights, and actions.",
+  "archived": false,
+  "readme_len": 14263,
+  "score": 36,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: exposes System One judgments as five Pi tools so a model makes narrow semantic judgments while code and users keep control of thresholds, weights, and actions.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "zhengxuyu/litjev",
+  "stars": 35,
+  "lang": "Python",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": "Turn any off-the-shelf LLM into a Jev -like decision layer",
+  "archived": false,
+  "readme_len": 6372,
+  "score": 34,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Local reproduction: a reproduction of Jev that turns any Qwen model into a fast decision model, serving the same `/v1/systemone` schema (Choice, Score, Noul) with no training and no generated answer text.",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "raihankhan-rk/diffjury",
+  "stars": 4,
+  "lang": "TypeScript",
+  "license": null,
+  "topics": [],
+  "gh_desc": "DiffJury — TypeSafe Jev PR risk router + code review coach",
+  "archived": false,
+  "readme_len": 3567,
+  "score": 34,
+  "hits": [
+   "systemone",
+   "@typesafe-ai/sdk",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Code review: routes each pull request by risk with Jev before a human reviewer is assigned, doubling as a review coach.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "innocentdiaz/s1_ruby",
+  "stars": 2,
+  "lang": "Ruby",
+  "license": "MIT",
+  "topics": [
+   "ai",
+   "jev",
+   "rails",
+   "rails8",
+   "ruby",
+   "ruby-app",
+   "ruby-gem",
+   "ruby-on-rails",
+   "rubygems",
+   "rubylang",
+   "rubyonrails",
+   "s1-models"
+  ],
+  "gh_desc": "Makes S1-model 'measurement' (and the collapse that follows it) a Ruby primitive.",
+  "archived": false,
+  "readme_len": 52026,
+  "score": 34,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Ruby ecosystem: makes System One measurement, and the collapse that follows it, a Ruby primitive, with a TypeSafe provider behind its own spec suite.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "jkudish/jev-mcp",
+  "stars": 201,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Fast, cheap, typed judgments from TypeSafe's Jev model, as MCP tools.",
+  "archived": false,
+  "readme_len": 37194,
+  "score": 33,
+  "hits": [
+   "systemone",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "MCP ecosystem: proof-of-concept MCP server that puts Jev claim verification, content screening, and candidate ranking behind standard MCP tools.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "anpicasso/hermes-jev-approvals",
+  "stars": 11,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "TypeSafe Jev as the reviewer for Hermes Agent smart command approvals. 8.7x faster, 4.4x fewer prompts, measured on 153 real commands. Approvals only.",
+  "archived": false,
+  "readme_len": 7574,
+  "score": 33,
+  "hits": [
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Agent approvals: proof of concept that puts Jev in front of Hermes Agent's command approvals, reporting 8.7x faster decisions and 4.4x fewer prompts to the user.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "tumf/jev-cli",
+  "stars": 9,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "ai",
+   "cli",
+   "jev",
+   "python",
+   "typesafe"
+  ],
+  "gh_desc": "Small dependency-free CLI for TypeSafe Jev",
+  "archived": false,
+  "readme_len": 12592,
+  "score": 33,
+  "hits": [
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Developer tooling: small dependency-free CLI for Jev.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "us/jev-local",
+  "stars": 3,
+  "lang": "Python",
+  "license": null,
+  "topics": [],
+  "gh_desc": "Local Jev-compatible evaluation server: POST /v1/systemone with typed noul/choice/score, open weights, no waitlist",
+  "archived": false,
+  "readme_len": 10074,
+  "score": 32,
+  "hits": [
+   "systemone",
+   "@typesafe-ai/sdk",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Local reproduction: Jev-compatible `POST /v1/systemone` server answering typed `Choice`/`Score`/`Noul` questions with confidence from open weights, verified as an official-SDK drop-in with temperature-fit calibration (set3 n=1316, 0.83 overall).",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "mgaitan/sqlite-jev",
+  "stars": 2,
+  "lang": "C",
+  "license": null,
+  "topics": [],
+  "gh_desc": "Batched natural-language judgments for SQLite, powered by TypeSafe Jev",
+  "archived": false,
+  "readme_len": 11654,
+  "score": 32,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "SQLite ecosystem: loadable C extension and Python package that expose Jev Noul, Choice, and Score judgments as SQL functions and batched virtual-table queries with confidence results.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "WiktorB2004/llama-index-jev",
+  "stars": 3,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "jev",
+   "llamaindex",
+   "postprocessor",
+   "python",
+   "rag",
+   "reranker",
+   "selector",
+   "typesafe"
+  ],
+  "gh_desc": "LlamaIndex reranker + router powered by TypeSafe Jev — typed scores/choices, cheaper than LLM-as-judge.",
+  "archived": false,
+  "readme_len": 6722,
+  "score": 31,
+  "hits": [
+   "systemone",
+   "@typesafe-ai/sdk",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Retrieval / RAG: unofficial LlamaIndex adapter where Jev `Score`s each retrieved passage and `Choice`/`Noul` selects the query engine, with nfcorpus nDCG@5 0.340→0.396 at about $0.0003/query.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "Mapika/decider",
+  "stars": 257,
+  "lang": "Python",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": "A family of System One-style models fine-tuned from Qwen3.5, designed for one-pass typed decisions with calibrated probabilities.",
+  "archived": false,
+  "readme_len": 31538,
+  "score": 30,
+  "hits": [
+   "systemone",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Open models: reproduces the System One shape with a Qwen3.5-2B fine-tune that emits typed decisions with calibrated probabilities in one pass.",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "realZachi/typesafe-adblock",
+  "stars": 64,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "🧹 Fun project: a Chrome extension that asks a tiny AI decision model (TypeSafe Jev) \"is this DOM element an ad?\" and pops it off the page. BYOK, no backend, not a real ad blocker.",
+  "archived": false,
+  "readme_len": 5498,
+  "score": 30,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Browser tooling: Chrome extension that asks Jev whether each DOM element is an ad, turning ad blocking into a stream of per-element typed questions.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "nexibeo/jev-cookbook",
+  "stars": 11,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "browser-automation",
+   "browser-use",
+   "cookbook",
+   "data-labeling",
+   "jev",
+   "jev-ai",
+   "llm",
+   "open-router",
+   "openrouter",
+   "pii-detection",
+   "sql",
+   "typesafe"
+  ],
+  "gh_desc": "Practical, tested recipes for TypeSafe's Jev decision model on OpenRouter: support triage, database indexing, file organizing, tagging, taxonomies, dedupe, PII detection, extraction, search re-ranking and a browser agent.",
+  "archived": false,
+  "readme_len": 13500,
+  "score": 30,
+  "hits": [
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Developer education: 15 runnable Node recipes that route support tickets, file documents, categorize bank transactions and label Gmail with Jev `Choice` and `Noul` questions, sending low-confidence answers to human review.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "joelhooks/pi-fast-jev-compaction",
+  "stars": 7,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Pi extension: verbatim context compaction with TypeSafe Jev decisions",
+  "archived": false,
+  "readme_len": 5979,
+  "score": 30,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Context management: Pi extension that keeps conversation text verbatim while pruning stale tool history with Jev, falling back to Pi's own summarization only when pruning cannot free enough room.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-scout",
+  "stars": 2,
+  "lang": "Rust",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "claude-code",
+   "cli",
+   "code-search",
+   "coding-agents",
+   "crates-io",
+   "developer-tools",
+   "github-search",
+   "jev",
+   "mcp-server",
+   "package-manager",
+   "repository-search",
+   "rust",
+   "system-one",
+   "typesafe-ai",
+   "ureq",
+   "zero-hallucination"
+  ],
+  "gh_desc": "Zero-hallucination open-source repo and crate scout powered by TypeSafe AI Jev System One scoring",
+  "archived": false,
+  "readme_len": 7739,
+  "score": 30,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Developer tooling: sub-second zero-hallucination open-source repo and crate scout using TypeSafe Jev speculative fan-out scoring.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "tacticocc/Jevbridge",
+  "stars": 35,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "acp",
+   "agent",
+   "claude",
+   "computer-use",
+   "grok",
+   "jev",
+   "llm",
+   "opencode",
+   "typesafe"
+  ],
+  "gh_desc": "ACP and MCP adapter that bridges TypeSafe Jev with any LLM — computer use and typed decisions alongside Codex, Claude, Grok, and OpenCode.",
+  "archived": false,
+  "readme_len": 17763,
+  "score": 29,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Agent bridges: ACP and MCP adapter that exposes Jev typed decisions to Codex, Claude, Grok, and other LLMs.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "AboveColin/HA-Jev",
+  "stars": 40,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "ai",
+   "assist",
+   "conversation",
+   "custom-components",
+   "decision-model",
+   "hacs",
+   "home-assistant",
+   "home-automation",
+   "homeassistant",
+   "jev",
+   "llm",
+   "python",
+   "smart-home",
+   "typesafe",
+   "voice-assistant",
+   "voice-control"
+  ],
+  "gh_desc": "Ask your house a question, get a number back. Home Assistant integration for TypeSafe Jev: typed answers as sensors, four actions for automations, and a conversation agent for Assist.",
+  "archived": false,
+  "readme_len": 17613,
+  "score": 28,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Smart home: Home Assistant integration that answers questions about the house as a probability, a choice, or a score.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "leepokai/jev-guard",
+  "stars": 18,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "claude-code",
+   "codex",
+   "cursor",
+   "gemini-cli",
+   "hooks",
+   "jev",
+   "opencode",
+   "prompt-injection",
+   "security"
+  ],
+  "gh_desc": "Auto mode for every coding agent, built on Jev: risk-scores every tool call with session context (deny / ask / allow), flags prompt injection in results, checks skills and plugins. Claude Code, Codex, Copilot, Gemini, Cursor, pi, OpenCode, ACP.",
+  "archived": false,
+  "readme_len": 16586,
+  "score": 28,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Agent security: prompt-injection and dangerous-action guard for Claude Code, Codex, Pi, and ACP agents, with Jev deciding what to block.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "chy4pro/jev-for-chrome",
+  "stars": 14,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agent",
+   "browser-agent",
+   "browser-automation",
+   "browser-use",
+   "chrome-extension",
+   "jev",
+   "manifest-v3",
+   "openrouter",
+   "typesafe",
+   "web-agent"
+  ],
+  "gh_desc": "Jev for Chrome: drives the tab you are looking at with TypeSafe Jev, a sub-second decision model. Community port of browser-use/jev-ultrafast, not affiliated with TypeSafe.",
+  "archived": false,
+  "readme_len": 17171,
+  "score": 28,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Browser automation: unofficial Chrome extension port of Jev Ultrafast where a Jev `Choice` picks the operation and DOM element each step and two `Noul` checks (goal reached, stuck) veto a premature DONE or BLOCKED, with a small text model used only when text must be typed.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "wfzyx/von",
+  "stars": 310,
+  "lang": "Python",
+  "license": "Apache-2.0",
+  "topics": [
+   "decision-model",
+   "jev",
+   "machine-learning",
+   "python",
+   "rlcd",
+   "system-one",
+   "typesafe"
+  ],
+  "gh_desc": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
+  "archived": false,
+  "readme_len": 19576,
+  "score": 27,
+  "hits": [
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Open alternative: a 395M non-autoregressive System One model that answers typed questions with calibrated probabilities in under 15 ms, positioned as a local drop-in replacement for Jev.",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "Stumble/jev-go",
+  "stars": 3,
+  "lang": "Go",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Community Go SDK for TypeSafe AI Jev / System One",
+  "archived": false,
+  "readme_len": 11302,
+  "score": 27,
+  "hits": [
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Go ecosystem: community Go SDK for Jev.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "jamesward/zio-typesafe-ai",
+  "stars": 3,
+  "lang": "Scala",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": null,
+  "archived": false,
+  "readme_len": 10272,
+  "score": 27,
+  "hits": [
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Scala ecosystem: ZIO client for TypeSafe AI with a typed DSL over Jev decisions.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "valentynkit/jev-skip",
+  "stars": 3,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "YouTube sponsor skipper that reads the captions and decides at watch time: a probability heatmap on the seek bar, no crowd database",
+  "archived": false,
+  "readme_len": 7144,
+  "score": 27,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Media: browser extension that reads the YouTube caption track and scores each segment's sponsor probability on the seek bar before the intro ends, reporting 77% of SponsorBlock's sponsor seconds caught over 23 videos at $0.0008 a video.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "dannote/jev",
+  "stars": 23,
+  "lang": "Elixir",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "TypeSafe Jev for OTP: reply to Jev from a GenServer and pattern match on its answer",
+  "archived": false,
+  "readme_len": 7838,
+  "score": 26,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Elixir ecosystem: GenServer client that replies with Jev's answer so callers can pattern match on it directly.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "HyunjunJeon/pi-quiet-ask",
+  "stars": 10,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "TypeSafe Jev as the pi coding agent's quiet decision layer",
+  "archived": false,
+  "readme_len": 23702,
+  "score": 26,
+  "hits": [
+   "systemone",
+   "@typesafe-ai/sdk",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: gives the Pi agent a quiet Jev decision layer for judgments it would otherwise hand to a chat model.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "CodeAlive-AI/mastra-jev-moderation",
+  "stars": 3,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Input moderation for Mastra agents on TypeSafe Jev — one file",
+  "archived": false,
+  "readme_len": 5173,
+  "score": 26,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "AI assistants: Mastra input processor that asks Jev a `Boolean` \"must this message be blocked?\" plus a category `Choice` in one request, aborting the turn at 0.7 and failing open behind a deadline and circuit breaker; in production it blocked 9/9 hostile and 0/49 real messages at ~0.4 s median, about 4× cheaper than an LLM moderator.",
+  "cat": "Content Moderation"
+ },
+ {
+  "repo": "kxzk/typesafe-jev-drone-demo",
+  "stars": 0,
+  "lang": "Python",
+  "license": null,
+  "topics": [],
+  "gh_desc": "Three.js drone simulator with a Python backend and live TypeSafe Jev navigation",
+  "archived": false,
+  "readme_len": 6236,
+  "score": 26,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Simulation: Three.js drone simulator with a Python backend where Jev drives the navigation decisions.",
+  "cat": "Game & Simulation"
+ },
+ {
+  "repo": "yodablocks/jev-orderby-bench",
+  "stars": 0,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "benchmark",
+   "calibration",
+   "duckdb",
+   "information-retrieval",
+   "jev",
+   "llm-evaluation",
+   "python",
+   "ranking",
+   "reproducible-research",
+   "typesafe"
+  ],
+  "gh_desc": "Does ORDER BY over a Jev probability put rows in a defensible order? Independent ranking, calibration and invariant measurements of TypeSafe AI's Jev: passes six pre-registered gates on 360 labeled rows, fails four of six on graded product relevance.",
+  "archived": false,
+  "readme_len": 37016,
+  "score": 26,
+  "hits": [
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Model evaluation: measures whether a SQL ORDER BY over a Jev probability is defensible (pairwise inversion, Score ordinality against a human grade, calibration, wording invariants, sort-key ties) under a pre-registered gate that jev-1.13.0 passes on 20 Newsgroups topics and fails four of six conditions on Amazon ESCI product relevance, and shows a DuckDB extension's default 40-row batching fails the ranking gate that one row per request passes.",
+  "cat": "Evaluation & Benchmarking"
+ },
+ {
+  "repo": "y0usaf/pi-jev",
+  "stars": 131,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "guardrails",
+   "jev",
+   "pi-extension",
+   "pi-package",
+   "typesafe"
+  ],
+  "gh_desc": "TypeSafe Jev as a decision layer for the Pi coding agent: a measured tool-call gate plus jev_ask for typed, calibrated answers",
+  "archived": false,
+  "readme_len": 10761,
+  "score": 25,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Agent safety: adds a measured tool-call gate to the Pi coding agent so risky calls are checked by Jev before execution.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "kylemclaren/jevql",
+  "stars": 11,
+  "lang": "Go",
+  "license": "MIT",
+  "topics": [
+   "jev",
+   "postgres"
+  ],
+  "gh_desc": "Semantic SQL for Postgres, powered by Jev",
+  "archived": false,
+  "readme_len": 15229,
+  "score": 25,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Data tooling: psql-shaped CLI and Go/TypeScript/Python SDKs that run plain SQL on a vanilla Postgres (no extension) and then ask Jev Noul, Choice, or Score questions about each surviving row so the client can apply `jev()` filters, `jev_prob` sorts, and `jev_choice` groups.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "leonaaardob/fast-dev-compaction",
+  "stars": 3,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "codex",
+   "codex-plugin",
+   "compaction",
+   "jev",
+   "typesafe"
+  ],
+  "gh_desc": "Codex plugin: verbatim Jev-guided context restoration around session compaction. Port of tamaratran/fast-jev-compaction to Codex lifecycle hooks.",
+  "archived": false,
+  "readme_len": 8526,
+  "score": 25,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Context management: Codex port of the Jev-guided compaction idea, restoring context verbatim around a session compaction rather than summarizing it.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "tamaratran/jev-pruner",
+  "stars": 131,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Claude Code plugin: trim long Bash output with TypeSafe Jev before the model sees it",
+  "archived": false,
+  "readme_len": 34601,
+  "score": 24,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Context management: Claude Code plugin that trims long Bash output with Jev before the model ever sees it, keeping terminal noise out of the window.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "TheoOliveira/pi-jev",
+  "stars": 29,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "jev",
+   "pi-coding-agent",
+   "pi-extension",
+   "pi-package",
+   "system-one",
+   "tool-routing",
+   "typesafe"
+  ],
+  "gh_desc": "Semantic tool routing and typed System One decisions for the Pi coding agent using TypeSafe Jev",
+  "archived": false,
+  "readme_len": 9482,
+  "score": 24,
+  "hits": [
+   "systemone",
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: semantic tool routing and typed System One decisions for the Pi coding agent.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "phyous/tsai-sc",
+  "stars": 19,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "TypeSafe Jev controls original StarCraft shareware through keyboard and mouse with recorded action probabilities.",
+  "archived": false,
+  "readme_len": 18477,
+  "score": 24,
+  "hits": [
+   "systemone",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Gaming: drives original StarCraft shareware through keyboard and mouse with Jev action probabilities recorded per decision.",
+  "cat": "Game & Simulation"
+ },
+ {
+  "repo": "GodsBoy/jev-agent-skill-router",
+  "stars": 12,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "agentic-ai",
+   "ai-agents",
+   "hermes-agent",
+   "jev",
+   "python",
+   "skill-routing",
+   "typesafe"
+  ],
+  "gh_desc": "Typed, confidence-aware agent skill routing with TypeSafe Jev.",
+  "archived": false,
+  "readme_len": 13447,
+  "score": 24,
+  "hits": [
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Agent infrastructure: routes agent skill selection through typed, confidence-aware Jev decisions so weak matches are declined instead of guessed.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "abhixhek/jevcal",
+  "stars": 10,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "calibration",
+   "confidence-thresholds",
+   "jev",
+   "llm-evals",
+   "system-one",
+   "typesafe"
+  ],
+  "gh_desc": "Stop guessing confidence thresholds: calibrate, threshold, and drift-check typed decision models (TypeSafe Jev) against an LLM teacher.",
+  "archived": false,
+  "readme_len": 8780,
+  "score": 23,
+  "hits": [
+   "systemone",
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Model evaluation: fits a per-question confidence threshold to a target accuracy on your own labeled data, verifies it on a held-out split, reports how much traffic still has to escalate to an LLM, and fails CI when a model update breaks the locked thresholds.",
+  "cat": "Evaluation & Benchmarking"
+ },
+ {
+  "repo": "Nyarlathoteppppp/pi-heed",
+  "stars": 6,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "coding-agent",
+   "guardrails",
+   "jev",
+   "pi-coding-agent",
+   "pi-package",
+   "typesafe"
+  ],
+  "gh_desc": "Runtime constraints for the pi coding agent: checks every side-effecting tool call against what you said, before it runs. Powered by TypeSafe Jev.",
+  "archived": false,
+  "readme_len": 20827,
+  "score": 23,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Runtime constraints: checks every side-effecting tool call from the Pi agent against what the user actually asked for.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "hotchpotch/jev-reranker",
+  "stars": 6,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Jev-powered relevance filtering and reranking for RAG in Python.",
+  "archived": false,
+  "readme_len": 29090,
+  "score": 23,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Retrieval and RAG: uses Jev Noul judgments to assess retrieved documents for relevance and usefulness as answer evidence, then sorts results and optionally filters them using a configurable threshold.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "HyunjunJeon/jev-judgment",
+  "stars": 3,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Agent Skill: send closed coding-agent judgments to TypeSafe Jev",
+  "archived": false,
+  "readme_len": 2290,
+  "score": 22,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: agent skill that sends closed coding-agent judgments to Jev so verdicts stay typed, cheap, and comparable across runs.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "milanboers/jev-plays-pokemon",
+  "stars": 3,
+  "lang": "Python",
+  "license": "NOASSERTION",
+  "topics": [
+   "agent",
+   "ai-agent",
+   "emulation",
+   "game-boy",
+   "jev",
+   "llm",
+   "pokemon-red",
+   "pyboy",
+   "typesafe",
+   "typesafe-jev"
+  ],
+  "gh_desc": "Playing Pokemon Red using TypeSafe Jev",
+  "archived": false,
+  "readme_len": 16192,
+  "score": 22,
+  "hits": [
+   "systemone",
+   "@typesafe-ai/sdk",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Gaming: reads Pokémon Red game state as text, answers typed questions each turn, and lets deterministic code turn the answers into moves.",
+  "cat": "Game & Simulation"
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-git",
+  "stars": 2,
+  "lang": "Rust",
+  "license": "MIT",
+  "topics": [
+   "ai-safety",
+   "cli",
+   "developer-tools",
+   "git",
+   "git-hook",
+   "jev",
+   "pre-commit",
+   "rust",
+   "security",
+   "typesafe-ai"
+  ],
+  "gh_desc": "Sub-second Git pre-commit & pre-push semantic reflex gate powered by TypeSafe AI Jev",
+  "archived": false,
+  "readme_len": 2937,
+  "score": 22,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Developer tooling: sub-second Git pre-commit & pre-push reflex gate that screens staged diffs for secrets and destructive commands using Jev.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "NandhaKishorM/laya",
+  "stars": 7408,
+  "lang": "Python",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": null,
+  "archived": false,
+  "readme_len": 20060,
+  "score": 21,
+  "hits": [
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Open alternative: non-autoregressive decision model that answers `choice`, `score`, and `noul` questions with RLCD-trained calibrated probabilities in a single ~35 ms forward pass, published on PyPI and Hugging Face.",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "blakestone-x/jev-mcp",
+  "stars": 16,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "MCP server for TypeSafe Jev: typed classify, score, check, match and screen for any agent, with confidence on every answer",
+  "archived": false,
+  "readme_len": 7931,
+  "score": 21,
+  "hits": [
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "MCP ecosystem: MCP server exposing Jev classify, score, check, match, and screen as tools for any agent, with confidence on every answer.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-superpowers",
+  "stars": 12,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "agentic-skills",
+   "ai-agents",
+   "antigravity",
+   "claude-code",
+   "codex",
+   "coding-agents",
+   "cursor",
+   "developer-tools",
+   "gemini-cli",
+   "git-jev",
+   "jev",
+   "jev-scout",
+   "software-engineering",
+   "superpowers",
+   "system-one",
+   "tdd",
+   "typesafe-ai",
+   "zero-hallucination"
+  ],
+  "gh_desc": "Systematic software development framework for AI coding agents upgraded with TypeSafe Jev System One typed decisions",
+  "archived": false,
+  "readme_len": 10353,
+  "score": 21,
+  "hits": [
+   "systemone",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Systematic software development framework for AI coding agents upgraded with TypeSafe Jev System One typed decisions, zero-hallucination package vetting, and completion gates.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "dakdevs/decide-mcp",
+  "stars": 0,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Configurable decision MCP server with AI SDK, Jev, percentage scores, and bias profile routing",
+  "archived": false,
+  "readme_len": 13342,
+  "score": 21,
+  "hits": [
+   "@typesafe-ai/sdk",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "MCP ecosystem: configurable decision server with percentage scores and bias-profile routing on top of Jev.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "ikermoel/open-alternative-jev",
+  "stars": 43,
+  "lang": "Python",
+  "license": "Apache-2.0",
+  "topics": [
+   "calibration",
+   "classification",
+   "jev",
+   "jev-alternative",
+   "llm",
+   "logprobs",
+   "open-jev",
+   "open-source-jev",
+   "open-weights",
+   "qwen",
+   "structured-decisions",
+   "structured-output",
+   "system-one",
+   "system-one-model",
+   "transformers",
+   "typed-decisions",
+   "typesafe",
+   "typesafe-jev",
+   "vllm"
+  ],
+  "gh_desc": "Open-source alternative to TypeSafe's Jev: a System One style model layer that gives typed, calibrated decisions from any open-weights LLM in one forward pass (HF + vLLM), with honest benchmarks",
+  "archived": false,
+  "readme_len": 14644,
+  "score": 20,
+  "hits": [
+   "systemone",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Open alternative: runs a Jev-shaped decision model locally on your own GPU.",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-seo",
+  "stars": 25,
+  "lang": "Rust",
+  "license": "MIT",
+  "topics": [
+   "ahrefs-alternative",
+   "claude-code",
+   "cli",
+   "decision-oracle",
+   "duckduckgo",
+   "generative-engine-optimization",
+   "geo",
+   "jev",
+   "mcp",
+   "mcp-server",
+   "rank-tracker",
+   "rust",
+   "search-engine-optimization",
+   "semrush-alternative",
+   "seo",
+   "seo-audit",
+   "seo-tools",
+   "serp",
+   "typesafe",
+   "typesafe-ai"
+  ],
+  "gh_desc": "100% free ₹0 agent-first SEO & GEO CLI suite and MCP server in Rust replacing Semrush and OpenSEO via DuckDuckGo and TypeSafe Jev System One",
+  "archived": false,
+  "readme_len": 13000,
+  "score": 20,
+  "hits": [
+   "systemone",
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Zero-cost, agent-first SEO & Generative Engine Optimization (GEO) search radar CLI suite and MCP server powered by DuckDuckGo and TypeSafe Jev System One.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "shiftynick/jev-axi",
+  "stars": 17,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "agent-safety",
+   "ai-agents",
+   "axi",
+   "claude-code",
+   "claude-code-hooks",
+   "cli",
+   "codex",
+   "developer-tools",
+   "jev",
+   "llm-guardrails",
+   "prompt-injection",
+   "typesafe"
+  ],
+  "gh_desc": "Agent-ergonomic CLI for TypeSafe's Jev: fast calibrated judgments (pick, rate, check, rank, triage, guard) from the shell",
+  "archived": false,
+  "readme_len": 24625,
+  "score": 20,
+  "hits": [
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Agent safety: PreToolUse gate for Claude Code and Codex that has Jev score each shell command for destructiveness, exfiltration, remote code execution, and security weakening, deciding routine commands locally so nothing is sent for them, and scoring 44/44 on the 44 labeled tool calls in its repository.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "Kevthetech143/super-jev",
+  "stars": 8,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "A small, extensible decision-to-action harness for TypeSafe Jev",
+  "archived": false,
+  "readme_len": 31346,
+  "score": 20,
+  "hits": [
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Decision harness: turns a Jev answer into a bounded action instead of leaving the caller to interpret it.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "valentynkit/jev-commit",
+  "stars": 8,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "pre-commit hook: one Jev call judges whether your commit message matches the diff, plus debug leftovers, scope creep, and a secret belt",
+  "archived": false,
+  "readme_len": 8166,
+  "score": 20,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Developer tooling: pre-commit hook where one Jev call judges whether the commit message matches the staged diff, flags debug leftovers and unmentioned work, and blocks only on a detected credential.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "forvela/jev-agent-browser",
+  "stars": 6,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Fast, bounded browser agents powered by Jev and agent-browser — typed actions, research, classification, and safe orchestration.",
+  "archived": false,
+  "readme_len": 7444,
+  "score": 20,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Browser agents: a parent agent delegates bounded tasks to a Jev loop that selects typed browser actions, validates them through agent-browser, and escalates ambiguity or stuck states back to the parent.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "ariel-frischer/jevkit",
+  "stars": 2,
+  "lang": "Rust",
+  "license": "MIT",
+  "topics": [
+   "ai",
+   "api",
+   "classification",
+   "cli",
+   "developer-tools",
+   "jev",
+   "jevkit",
+   "json",
+   "linter",
+   "linting",
+   "llm",
+   "llm-tools",
+   "rust",
+   "token-optimization",
+   "typed-decisions",
+   "typesafe",
+   "typesafe-jev",
+   "yaml"
+  ],
+  "gh_desc": "Fast Rust CLI for TypeSafe Jev: typed decisions, offline linting before you pay",
+  "archived": false,
+  "readme_len": 13597,
+  "score": 20,
+  "hits": [
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Developer tooling: Rust CLI that validates `Choice`/`Score`/`Noul` question sets with 13 offline lint rules before any Jev call, then sends the canonical wire payload and prints parsed, confidence-bearing JSON answers to stdout using exit code 2 to reject a billed-but-useless request.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "zhihz/openjev",
+  "stars": 26,
+  "lang": "Python",
+  "license": "NOASSERTION",
+  "topics": [],
+  "gh_desc": "Local bilingual probability decisions from context, questions, and candidate answers. Independent research preview inspired by TypeSafe Jev.",
+  "archived": false,
+  "readme_len": 17590,
+  "score": 19,
+  "hits": [
+   "systemone",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Open research: independent local preview that answers bilingual probability questions from context, questions, and candidate answers, inspired by TypeSafe Jev.",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "adarshmishra07/jcm-router",
+  "stars": 3,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Local proxy that picks the Claude model and effort per message using TypeSafe Jev. Routes subagents, leaves your cached main chat alone.",
+  "archived": false,
+  "readme_len": 19415,
+  "score": 19,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: local proxy that picks the Claude model and reasoning effort per message with a Jev decision while leaving the cached main chat untouched.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "yusukebe/hono-jev-router",
+  "stars": 45,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Route HTTP requests by meaning. A semantic router for Hono powered by Jev.",
+  "archived": false,
+  "readme_len": 5630,
+  "score": 18,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Web frameworks: Hono middleware that routes HTTP requests by meaning rather than by method and path, deciding with Jev.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "luantak/is-malicious",
+  "stars": 18,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "jev",
+   "security-scanner",
+   "typesafe-ai"
+  ],
+  "gh_desc": "A codebase scanner that helps you not run malicous code",
+  "archived": false,
+  "readme_len": 7702,
+  "score": 18,
+  "hits": [
+   "\\bNoul\\b",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Software supply-chain security: asks Jev `Noul` checks about source and build files, escalates suspicious chunks for a second pass, and returns implicated files and lines before execution.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "valentynkit/jev-belay",
+  "stars": 17,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Claude Code Stop hook that blocks an unverified done: reads the transcript for evidence, asks Jev once, fails open on everything else",
+  "archived": false,
+  "readme_len": 16024,
+  "score": 18,
+  "hits": [
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: Claude Code Stop hook that reads the transcript for evidence and spends one four-question Jev call only when files changed with no passing check since, failing open on any error.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "unicodeveloper/jevocks",
+  "stars": 14,
+  "lang": "TypeScript",
+  "license": null,
+  "topics": [
+   "jev",
+   "stocks",
+   "valyu"
+  ],
+  "gh_desc": "Everyday Stocks Status with Jev",
+  "archived": false,
+  "readme_len": 8258,
+  "score": 18,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Stock decisions: terminal that gathers live market evidence through Valyu and asks Jev whether a stock is likely to trade higher over the next 30 days.",
+  "cat": "Finance & Trading"
+ },
+ {
+  "repo": "jesset/pi-verdict",
+  "stars": 4,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "auto-mode",
+   "claude-code",
+   "guardrails",
+   "permissions",
+   "pi",
+   "pi-extension"
+  ],
+  "gh_desc": "A minimal  permission gate for Pi in the style of Claude Code's auto mode",
+  "archived": false,
+  "readme_len": 19423,
+  "score": 18,
+  "hits": [
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Agent safety: Pi permission gate where Jev answers one Choice (allow/ask/deny) per gray-zone tool call — deterministic rules settle clear cases first, deny blocks, ask escalates to a human confirm, and errors or timeouts deny; Jev is an optional backend, OpenRouter-only and experimental.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "DanRWilloughby/snifftest",
+  "stars": 26,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "ai-writing",
+   "claude-code",
+   "claude-code-plugin",
+   "claude-skills",
+   "github-action",
+   "jev",
+   "linter",
+   "markdown",
+   "pre-commit",
+   "prose",
+   "typesafe",
+   "writing"
+  ],
+  "gh_desc": "A prose linter that sniffs out AI writing tells. Zero dependencies, countable rules plus one judgment model.",
+  "archived": false,
+  "readme_len": 18099,
+  "score": 17,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Writing: prose linter that asks Jev ten `Boolean` questions per paragraph (stacked hedges, restating closers, not-X-but-Y turns, naked cost figures) at a 0.7 threshold; CLI, pre-commit hook, GitHub Action and Claude Code skill; measured 182 ms median and 1 of 54 clean paragraphs flagged against 37 for Haiku 4.5.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "sosopop/jev_stock",
+  "stars": 11,
+  "lang": "Python",
+  "license": null,
+  "topics": [
+   "financial-data",
+   "financial-machine-learning",
+   "jev",
+   "llm",
+   "machine-learning",
+   "market-analysis",
+   "quantitative-finance",
+   "reasoning-models",
+   "stock-prediction",
+   "time-series-forecasting"
+  ],
+  "gh_desc": "An experimental JEV-powered framework for forecasting short-term stock price direction from structured market data.",
+  "archived": false,
+  "readme_len": 13721,
+  "score": 17,
+  "hits": [
+   "systemone",
+   "\\bChoice\\b.*\\b(confidence",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Short-term forecasting: experimental Hong Kong stock framework that turns structured market state into a Jev decision on price direction, with a backtest script for the first trading day.",
+  "cat": "Finance & Trading"
+ },
+ {
+  "repo": "Silbercue/public-browser",
+  "stars": 10,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "agentic-ai",
+   "ai-agent",
+   "browser-automation",
+   "cdp",
+   "chrome",
+   "chrome-devtools-protocol",
+   "claude-code",
+   "cursor",
+   "llm-tools",
+   "mcp",
+   "mcp-server",
+   "model-context-protocol",
+   "playwright-alternative",
+   "typescript",
+   "web-automation"
+  ],
+  "gh_desc": "Lets Claude Code and Cursor drive Chrome. Browse your real profile: -30% tokens, -25% cost, -41% tool calls, -34% tool defs, +40% faster. Direct CDP, a11y-tree refs, server-side plan executor. MIT, no paid tier.",
+  "archived": false,
+  "readme_len": 61067,
+  "score": 17,
+  "hits": [
+   "systemone",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Browser control: lets Claude Code and Cursor drive a real Chrome profile, with a Jev loop deciding the actions, reporting roughly 30% fewer tokens and 25% lower cost.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "noplan-inc/limpet",
+  "stars": 1,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "claude-code",
+   "codex",
+   "hooks",
+   "jev"
+  ],
+  "gh_desc": "A Stop hook that stops your coding agent from stopping too early. Plain-language rules, judged by jev.",
+  "archived": false,
+  "readme_len": 13107,
+  "score": 17,
+  "hits": [
+   "api\\.typesafe\\.ai",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: Stop hook that keeps an agent from finishing too early by judging plain-language completion rules with Jev.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "valentynkit/jev.nvim",
+  "stars": 3,
+  "lang": "Lua",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Neovim: ask the buffer a question, get a quickfix list. Treesitter splits functions, Jev scores each one, probabilities land as virtual text",
+  "archived": false,
+  "readme_len": 9130,
+  "score": 16,
+  "hits": [
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Developer tooling: Neovim plugin that splits the buffer into functions with Treesitter, scores each against a plain-language question with Jev, and ranks answers by probability in quickfix.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "shitianfang/jev-use",
+  "stars": 11,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "agent",
+   "agent-skills",
+   "ai-agents",
+   "claude-code",
+   "claude-code-hooks",
+   "claude-code-plugin",
+   "claude-skills",
+   "codex",
+   "jev",
+   "llm",
+   "mcp",
+   "mcp-server",
+   "mcp-tools",
+   "model-context-protocol",
+   "typesafe-ai"
+  ],
+  "gh_desc": "Claude Code / Codex / pi plugin that hands agent steps needing no text output to Jev (TypeSafe's judgment model) — measured p50 ~230 ms and ~$0.02 per 1,000 judgments, with typed escalation back to the LLM",
+  "archived": false,
+  "readme_len": 4793,
+  "score": 15,
+  "hits": [
+   "systemone",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "MCP ecosystem: Claude Code / Codex / pi plugin (MCP server + library, native pi extension) that hands agent steps needing no text output to Jev as typed judgments — untypeable and generation-needing questions are rejected before the call, low-confidence answers come back flagged as priors, and a fail-open PreToolUse gate can only deny or ask.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "GoldenLoaf24h/browserclaw",
+  "stars": 4,
+  "lang": "TypeScript",
+  "license": "NOASSERTION",
+  "topics": [
+   "ai-agent",
+   "browser-automation",
+   "chrome-extension",
+   "crawler",
+   "mcp",
+   "model-context-protocol"
+  ],
+  "gh_desc": "BrowserClaw - High-efficiency Chrome browser automation MCP server ",
+  "archived": false,
+  "readme_len": 12060,
+  "score": 15,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Browser automation: Zero-lock, session-preserving Chrome MCP server that couples a local Jev System One semantic micro-loop (`chrome_act_toward_goal`) with an 85%+ pruned DOM tree (Shadow DOM & iframe pierced), dispatching native CDP events (`isTrusted: true`) on active logged-in sessions without focus theft.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "islee23520/omo-jevlike-router",
+  "stars": 2,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Jev-style one-pass skill router for OmO: shrink the skill catalog in your system prompt with one forward pass (frozen Qwen2.5-0.5B + jevlike head, fail-open extension)",
+  "archived": true,
+  "readme_len": 6714,
+  "score": 15,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Skill routing: shrinks the skill catalog in a system prompt with one forward pass over a frozen Qwen, routing each request Jev-style.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "jekozyra/pi-typesafe-router",
+  "stars": 0,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": null,
+  "archived": false,
+  "readme_len": 3352,
+  "score": 15,
+  "hits": [
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: routes Pi's work through typed Jev decisions.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "hegargarcia/jev-playground",
+  "stars": 0,
+  "lang": "TypeScript",
+  "license": null,
+  "topics": [],
+  "gh_desc": null,
+  "archived": false,
+  "readme_len": 6492,
+  "score": 15,
+  "hits": [
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Model evaluation: benchmarks Jev against Luna, Haiku, and Gemini at choosing validated legal moves in explicit-state games, scoring decision quality and consistency across a sequence of moves.",
+  "cat": "Evaluation & Benchmarking"
+ },
+ {
+  "repo": "OmniJev/PlayJev",
+  "stars": 15,
+  "lang": "JavaScript",
+  "license": "Apache-2.0",
+  "topics": [
+   "browser-games",
+   "game-ai",
+   "game-playing-agent",
+   "html5-games",
+   "imitation-learning",
+   "jev",
+   "jev-game",
+   "multimodal",
+   "openjev",
+   "playjev",
+   "qwen",
+   "real-time",
+   "small-models",
+   "system-one",
+   "vision-language-model"
+  ],
+  "gh_desc": "🚀🚀 A 0.8B JEV-like multimodal model playing GUI games directly from raw pixels.",
+  "archived": false,
+  "readme_len": 17962,
+  "score": 14,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Gaming: open 0.8B vision-language model that reads one 448 px game frame, returns a probability over the moves the game lists in a single forward pass with no generated text, and hands its low-confidence steps to a search program, across ten browser games.",
+  "cat": "Game & Simulation"
+ },
+ {
+  "repo": "scienthoon/jev-ood-calibration",
+  "stars": 3,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Independent calibration test of TypeSafe's Jev on a task it cannot have seen: 900 rule-generated support tickets (choice / score / boolean) plus 3 public benchmarks via Vercel AI Gateway. Raw responses, ECE with noise floor, temperature refit, per-type sign of miscalibration. Reproducible for ~$0.06.",
+  "archived": false,
+  "readme_len": 10469,
+  "score": 14,
+  "hits": [
+   "\\bNoul\\b",
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Model evaluation: independent calibration test of Jev on 900 rule-generated support tickets it cannot have seen plus three public benchmarks, publishing every raw response, ECE against a simulated noise floor, temperature refit, and the per-type sign of miscalibration (Choice and Score overconfident, Boolean underconfident).",
+  "cat": "Evaluation & Benchmarking"
+ },
+ {
+  "repo": "TKY-27/JevSlop",
+  "stars": 2,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "ai-slop",
+   "jev"
+  ],
+  "gh_desc": "Jevによるnote記事のAI Slop判定サイト",
+  "archived": false,
+  "readme_len": 4604,
+  "score": 14,
+  "hits": [
+   "systemone",
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Writing quality: scores public note.com articles on eight Jev `Score` axes inside a single `systemOne` request and turns them into a 0-100 Slop Score in ordinary TypeScript.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "RomanSlack/jev-drone",
+  "stars": 100,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "autonomous-agents",
+   "drone",
+   "mujoco",
+   "robotics",
+   "typesafe"
+  ],
+  "gh_desc": "Camera-only autonomous drone in MuJoCo with a small judgment model (TypeSafe Jev) in the loop at 2.5Hz",
+  "archived": false,
+  "readme_len": 14107,
+  "score": 13,
+  "hits": [
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Robotics simulation: camera-only autonomous drone in MuJoCo that puts a Jev judgment model in the control loop at 2.5 Hz.",
+  "cat": "Game & Simulation"
+ },
+ {
+  "repo": "gaborishka/jev-canvas",
+  "stars": 2,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "hand-tracking",
+   "jev",
+   "mediapipe",
+   "openrouter",
+   "tldraw",
+   "typesafe",
+   "voice-control",
+   "web-speech-api"
+  ],
+  "gh_desc": "Draw on a tldraw canvas with your voice and a pointing finger. Jev (TypeSafe System One) decides action, target and place in ~350 ms per spoken word.",
+  "archived": false,
+  "readme_len": 12493,
+  "score": 13,
+  "hits": [
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Multimodal UI: draw on a tldraw canvas by voice while pointing a webcam-tracked finger; on every partial transcript Jev answers eight typed questions (is it a command, is the sentence complete, action, shape, colour, target, place, size) and plain code gates them with thresholds, in English and Ukrainian, 300–550 ms per decision.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "edgardcham/huncho",
+  "stars": 1,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Decisions as code on System One models: typed questions, thresholds with hysteresis, nested decisions, journal, calibration",
+  "archived": false,
+  "readme_len": 4449,
+  "score": 13,
+  "hits": [
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "TypeScript ecosystem: dependency-free SDK that turns Jev `Noul`, `Choice` and `Score` answers into named decisions with `enter`/`exit` thresholds (hysteresis), nested decision trees settled in one call, a JSONL journal, replay of a threshold change over recorded answers with no inference, and Brier/reliability calibration, over TypeSafe direct, OpenRouter or Vercel AI Gateway.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "vinnylarouge/jevlike",
+  "stars": 1143,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": null,
+  "archived": false,
+  "readme_len": 7706,
+  "score": 12,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Training library: build a small model that chooses among a changing list of text options and returns one probability per option in a single pass - the base CUA-S1-FORMS was built on.",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "vercel-labs/ai-cli",
+  "stars": 808,
+  "lang": "TypeScript",
+  "license": null,
+  "topics": [],
+  "gh_desc": "Generate anything from your terminal",
+  "archived": false,
+  "readme_len": 17544,
+  "score": 12,
+  "hits": [
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Developer tooling: Vercel Labs CLI that can run Jev as the evaluation model for its `evaluate` command.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "aowang-ai/jev-trade",
+  "stars": 74,
+  "lang": "TypeScript",
+  "license": "NOASSERTION",
+  "topics": [
+   "hyperliquid",
+   "jev",
+   "quantitative-finance",
+   "typesafe"
+  ],
+  "gh_desc": "Live Jev trader on Hyperliquid",
+  "archived": false,
+  "readme_len": 4604,
+  "score": 12,
+  "hits": [
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Crypto trading: asks Jev for a Choice of long or short on a Hyperliquid market each round, places that order, and runs the same loop across many assets.",
+  "cat": "Finance & Trading"
+ },
+ {
+  "repo": "yikangy873-gif/jev-desktop",
+  "stars": 51,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "codex",
+   "computer-use",
+   "desktop-automation",
+   "jev",
+   "macos"
+  ],
+  "gh_desc": "TypeSafe Jev action selection inside Codex Computer Use",
+  "archived": false,
+  "readme_len": 8471,
+  "score": 12,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Computer use: supplies Jev action selection inside Codex Computer Use, choosing among desktop actions rather than asking a language model at every step.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "brainstormity/Jev-Moderation-Bot",
+  "stars": 42,
+  "lang": "Python",
+  "license": null,
+  "topics": [],
+  "gh_desc": null,
+  "archived": false,
+  "readme_len": 6930,
+  "score": 12,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Community moderation: Discord bot that scores incoming messages for phishing, spam, and social engineering with Jev and drives a four-stage escalation ladder, injecting pardoned messages back into context as verified-safe precedent.",
+  "cat": "Content Moderation"
+ },
+ {
+  "repo": "kavehmz/typesafe-playground",
+  "stars": 11,
+  "lang": "JavaScript",
+  "license": null,
+  "topics": [],
+  "gh_desc": "Interactive experiments with TypeSafe Jev, from support routing to 3D driving simulations with real AI decisions and visible sensor inputs.",
+  "archived": false,
+  "readme_len": 5357,
+  "score": 12,
+  "hits": [
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Interactive playground: small Jev experiments that put the decision on screen, from routing a support message to steering a car in a 3D world.",
+  "cat": "Game & Simulation"
+ },
+ {
+  "repo": "GiesN/typesafe-jev-workflow",
+  "stars": 6,
+  "lang": "Python",
+  "license": null,
+  "topics": [],
+  "gh_desc": null,
+  "archived": false,
+  "readme_len": 2417,
+  "score": 12,
+  "hits": [
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Back-office automation: async LangGraph workflow gets a typed Jev `Choice` (`invoice` or `general`) and routes each inbound email to the matching handler.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "prismhq/jev-router",
+  "stars": 5,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Open-source LLM router that uses TypeSafe's Jev to pick a model, on top of LiteLLM",
+  "archived": false,
+  "readme_len": 2538,
+  "score": 12,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "LLM infrastructure: open-source LiteLLM-based router where a Jev decision picks which model serves each request.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "MarissaFamularo/citation-verifier",
+  "stars": 3,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "citation-verification",
+   "claude",
+   "peer-review",
+   "typesafe"
+  ],
+  "gh_desc": "Check whether each cited paper supports the sentence citing it. Claude proves the quote, TypeSafe's Jev scores it, a human decides.",
+  "archived": false,
+  "readme_len": 4308,
+  "score": 12,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Academic publishing: checks whether each cited paper actually supports the sentence citing it, with Claude locating the quote, Jev scoring the support, and a human making the final call.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "cephalization/jev-triage",
+  "stars": 1,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Uses typeful jev, zero sync to pull and sync large repositories for issue triage",
+  "archived": false,
+  "readme_len": 9378,
+  "score": 12,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Open-source maintenance: multiplayer triage dashboard where Jev answers a fixed set of typed questions per issue — kind, severity, urgency, duplicate, and next step — and every human correction is kept and shown back to the model on later runs.",
+  "cat": "Data Labeling & Curation"
+ },
+ {
+  "repo": "ably-labs/jev-pong",
+  "stars": 0,
+  "lang": "TypeScript",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": "Pong where the ball moves one step per model decision. Jev vs LLMs via Vercel AI Gateway, every player and agent on an Ably channel.",
+  "archived": false,
+  "readme_len": 13008,
+  "score": 12,
+  "hits": [
+   "systemone",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Model comparison: Pong where the ball advances one step per model decision, putting Jev head-to-head with LLMs through Vercel AI Gateway.",
+  "cat": "Evaluation & Benchmarking"
+ },
+ {
+  "repo": "komikat/jev-bfs",
+  "stars": 0,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Wikipedia link races with direct Jev ranking and a live terminal display.",
+  "archived": false,
+  "readme_len": 3788,
+  "score": 12,
+  "hits": [
+   "jev-1\\.\\d",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Search tooling: finds link paths between English Wikipedia articles by having Jev rank each page's outgoing links while Python controls the search.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "devagrawal09/stanley-code",
+  "stars": 108,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Bounded TypeSafe Jev workflows for coding agents.",
+  "archived": false,
+  "readme_len": 26872,
+  "score": 11,
+  "hits": [
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: bounded Jev workflows that keep agent judgments typed instead of free-form.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "r-ms/mini-jev",
+  "stars": 39,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "mini-Jev: what a Jev-style typed-decision interface looks like on a frozen Qwen3-4B — read the option letter's logits instead of generating JSON. Preregistered experiment, results, teaching bench.",
+  "archived": false,
+  "readme_len": 11174,
+  "score": 11,
+  "hits": [
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Local reproduction: implements Jev's typed-decision interface on top of a local LLM.",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "matthewp/flue-jev-demo",
+  "stars": 9,
+  "lang": "TypeScript",
+  "license": null,
+  "topics": [],
+  "gh_desc": "Flue agent routing with TypeSafe Jev through Cloudflare AI Gateway",
+  "archived": false,
+  "readme_len": 5216,
+  "score": 11,
+  "hits": [
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Agent routing: routes a Flue agent's work with Jev through Cloudflare AI Gateway.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "typesafe-ai/skills",
+  "stars": 1429,
+  "lang": null,
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Agent skills for building with TypeSafe's System One API",
+  "archived": false,
+  "readme_len": 1336,
+  "score": 9,
+  "hits": [
+   "systemone",
+   "typesafe"
+  ],
+  "prose": "Official tooling: installable agent skills package (`npx skills add typesafe-ai/skills`) that teaches agents the Jev workflow.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "coldteadotai/abide",
+  "stars": 200,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "claude-code",
+   "claude-code-hooks",
+   "claude-code-plugin",
+   "claude-code-plugins",
+   "claude-code-skill",
+   "claude-code-skills",
+   "codex-plugin",
+   "codex-skill",
+   "opencode",
+   "opencode-plugin",
+   "opencode-skills"
+  ],
+  "gh_desc": "Make your coding agent abide by all your project rules ",
+  "archived": false,
+  "readme_len": 10350,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Agent supervision: reads every edit a coding agent makes and has Jev flag rule violations, with the project reporting that an independent reviewer confirmed 10 of the 39 flagged edits and 11 of the 15 flagged turns.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "supercorp-ai/supercov",
+  "stars": 86,
+  "lang": "Rust",
+  "license": "MIT",
+  "topics": [
+   "ai",
+   "coverage",
+   "jev",
+   "qa",
+   "quality-assurance",
+   "typesafe"
+  ],
+  "gh_desc": "Code quality and coverage for coding agents",
+  "archived": false,
+  "readme_len": 16869,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Code quality for coding agents: Jev answers twelve `Noul` properties per source file so the agent knows what to fix first.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "agent-labs-dev/fastbrowse",
+  "stars": 72,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [
+   "agents",
+   "browser-agent",
+   "llm",
+   "python",
+   "web-automation"
+  ],
+  "gh_desc": "A fast browser agent: Jev picks each action from what is on the page, an LLM reads and plans, and every claim in an answer cites a quote from the page.",
+  "archived": false,
+  "readme_len": 17696,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Browser agents: Jev picks each action from what is on the page while an LLM reads and plans.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "compozy/yoshi",
+  "stars": 21,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "bun",
+   "claude-code",
+   "codex",
+   "context-window",
+   "jev",
+   "llm-proxy",
+   "typesafe"
+  ],
+  "gh_desc": "Context-pruning proxy for Claude Code and Codex: Jev judges which history is still needed, measured not claimed. POC here now, heading soon into https://github.com/compozy/compozy",
+  "archived": false,
+  "readme_len": 16749,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Context management: proxy for Claude Code and Codex where Jev judges which conversation history is still needed before pruning.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "mejiasd3v/pi-jev-router",
+  "stars": 10,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Automatic model routing for Pi using TypeSafe's Jev through Vercel AI Gateway",
+  "archived": false,
+  "readme_len": 14981,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: adds automatic per-request model routing to the Pi coding agent through Jev decisions on Vercel AI Gateway.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "RyanKung/rotom",
+  "stars": 5,
+  "lang": "Rust",
+  "license": "LGPL-3.0",
+  "topics": [
+   "anthropic",
+   "api",
+   "claude-code",
+   "codex",
+   "grok",
+   "openai",
+   "rust"
+  ],
+  "gh_desc": "Local OpenAI- and Anthropic-compatible API gateway backed by Codex OAuth.",
+  "archived": false,
+  "readme_len": 10546,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Local gateways: OpenAI- and Anthropic-compatible API gateway that carries Jev through its model catalog and evaluation path.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "andrelandgraf/safer-with-jev",
+  "stars": 4,
+  "lang": "TypeScript",
+  "license": null,
+  "topics": [],
+  "gh_desc": "Neon Function proxy for the Neon AI Gateway with TypeSafe Jev routing.",
+  "archived": false,
+  "readme_len": 2928,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Cloud infrastructure: Neon Function proxy for the Neon AI Gateway that routes decisions with Jev.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "doeixd/jev-pref",
+  "stars": 4,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "agent-skills",
+   "claude-code",
+   "code-review",
+   "jev",
+   "skills-sh",
+   "typesafe"
+  ],
+  "gh_desc": "Turn your AGENTS.md preferences into a fast, Jev-powered AI linter.",
+  "archived": false,
+  "readme_len": 16476,
+  "score": 9,
+  "hits": [
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Code review: turns the preferences in a project's AGENTS.md into `jev-pref.json` rules that Jev checks against each diff hunk, staged file set, or pull request, returning `fix_now` or advisory findings to the coding agent and a nonzero exit code on blocking ones.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "jgridifier/jev-research-eval",
+  "stars": 2,
+  "lang": "HTML",
+  "license": "NOASSERTION",
+  "topics": [],
+  "gh_desc": "Reproducible Jev Ultrafast research-browser eval harness + field note (QC’d cases, suite runner, report generator). Not investment advice.",
+  "archived": false,
+  "readme_len": 6359,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Research automation: reproducible eval harness plus field note for Jev Ultrafast research-browser tasks, with QC'd cases, a suite runner, and a report generator.",
+  "cat": "Evaluation & Benchmarking"
+ },
+ {
+  "repo": "kitze/pagegrade",
+  "stars": 2,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Grade page sections for clarity, writing and on-page SEO. WXT + TypeSafe AI Jev.",
+  "archived": false,
+  "readme_len": 17440,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Content quality: grades page sections for clarity, writing, and on-page SEO with Jev and returns per-section scores.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "shitianfang/wakegate",
+  "stars": 0,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "ai-sdk",
+   "cloudflare-durable-objects",
+   "cloudflare-workers",
+   "jev",
+   "long-running-agents",
+   "typesafe",
+   "typesafe-ai"
+  ],
+  "gh_desc": "Ask Jev whether a sleeping agent's wakeup is worth a full LLM turn before you resume it. A fail-open wake gate for long-running agents on Workers, Durable Objects and Node.",
+  "archived": false,
+  "readme_len": 7941,
+  "score": 9,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Long-running agents: before a sleeping agent's LLM is resumed on a timer or incoming event, Jev answers a `Choice` (wake, not yet, unrelated) against the agent's own sleep note, and code skips the wakeup only when wake is below 0.2 while always waking on user messages, bare timers, a skip limit, errors, and timeouts; one run passed 21 of 21 hand-written scenarios, which the README calls a smoke test rather than a benchmark.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "socai-io/jev-social",
+  "stars": 37,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "agent-skills",
+   "ai-agents",
+   "browser-agent",
+   "browser-automation",
+   "computer-use",
+   "decision-model",
+   "instagram",
+   "jev",
+   "linkedin",
+   "local-first",
+   "openrouter",
+   "osint",
+   "research-agent",
+   "socai",
+   "social-media",
+   "social-media-research",
+   "socmint",
+   "system-one",
+   "tiktok",
+   "typesafe-ai"
+  ],
+  "gh_desc": "Jev-powered Instagram, TikTok, and LinkedIn research: typed routing, real browser evidence, streamed post cards, video capture, and cited socai reports.",
+  "archived": false,
+  "readme_len": 7784,
+  "score": 7,
+  "hits": [
+   "\\bChoice\\b.*\\b(confidence",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Social media research: uses a Jev `Choice` at each step to select a concrete socai CLI operation and observed post or profile target on Instagram, TikTok, or LinkedIn, rejecting malformed or low-confidence decisions before execution.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "olanotolu/jevbetter",
+  "stars": 14,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "A stronger one-pass scorer over a variable list of text options. Hashed n-gram encoder, rival-aware attention, gated head, temperature scaling — with a head-to-head benchmark vs the jevlike starter design.",
+  "archived": false,
+  "readme_len": 5569,
+  "score": 7,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Improved scorer: a stronger one-pass scorer over a variable list of text options, using a hashed n-gram encoder, rival-aware attention, and gated heads.",
+  "cat": "Calibration & Research"
+ },
+ {
+  "repo": "bohutang/sift",
+  "stars": 9,
+  "lang": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "ai-detection",
+   "chrome-extension",
+   "content-filter",
+   "jev",
+   "twitter",
+   "typesafe",
+   "x"
+  ],
+  "gh_desc": "Chrome extension that labels every post on X (Substance · Humor · Chit-chat · Promo · Junk · AI-written) with TypeSafe Jev, and hides the ones you don't want.",
+  "archived": false,
+  "readme_len": 1991,
+  "score": 7,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Content labelling: Chrome extension that labels every post in an X timeline - substance, humour, chit-chat, promo, junk, or AI-written - with Jev decisions.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "frostney/clean-code-review",
+  "stars": 7,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "agents",
+   "ai",
+   "ai-gateway",
+   "ai-sdk",
+   "clean-code",
+   "code-quality",
+   "code-review",
+   "developer-tools",
+   "eve",
+   "jev",
+   "llm",
+   "nextjs",
+   "pull-request",
+   "static-analysis",
+   "typescript",
+   "vercel"
+  ],
+  "gh_desc": "Every code file in a pull request, judged against Uncle Bob's Clean Code by TypeSafe's Jev, then reviewed by Luna. Built on eve and Next.js.",
+  "archived": false,
+  "readme_len": 6848,
+  "score": 7,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Code quality: scores every file of a pull request on 31 boolean Clean Code smells plus function size and nesting, then hands the verdicts to a writing model for the review prose.",
+  "cat": "Scoring & Ranking"
+ },
+ {
+  "repo": "valentynkit/jev-plays-pokemon-red",
+  "stars": 4,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Pokemon Red on PyBoy: code owns the route and the arithmetic, Jev picks at branches in about 100 ms, calibration measured instead of assumed",
+  "archived": false,
+  "readme_len": 8793,
+  "score": 7,
+  "hits": [
+   "\\bNoul\\b",
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Gaming: Pokemon Red on PyBoy where deterministic code owns the route and arithmetic, Jev picks only at branches, and every battle turn's faint prediction is scored by Brier against RAM state.",
+  "cat": "Game & Simulation"
+ },
+ {
+  "repo": "gtaras7/typesafe-jev",
+  "stars": 3,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Screen a folder of CVs with the TypeSafe Jev decision model: typed judgments, an editable policy, free re-scoring.",
+  "archived": false,
+  "readme_len": 1008,
+  "score": 7,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Recruiting: screens a folder of CVs with Jev typed judgments against an editable policy, re-scoring candidates for free when the policy changes.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "grmkris/robo-harness",
+  "stars": 1,
+  "lang": "TypeScript",
+  "license": null,
+  "topics": [],
+  "gh_desc": "SO-101 robot-arm agent workbench: Bun/Effect coordinator, React workbench, Python LeRobot motor owner",
+  "archived": false,
+  "readme_len": 12189,
+  "score": 7,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Robotics: SO-101 arm workbench where a Jev decision runner picks bounded joint steps from typed candidate actions under a spend budget.",
+  "cat": "Agent Decisions"
+ },
+ {
+  "repo": "Shogo-nfrealmusic/jev-eval",
+  "stars": 0,
+  "lang": "TypeScript",
+  "license": null,
+  "topics": [],
+  "gh_desc": null,
+  "archived": false,
+  "readme_len": 4538,
+  "score": 7,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Third-party check: compares Jev against GPT-4o-mini and Claude Sonnet 4.5 under identical conditions on the same judgment task.",
+  "cat": "Evaluation & Benchmarking"
+ },
+ {
+  "repo": "nekuda-ai/WindTunnel",
+  "stars": 75,
+  "lang": "HTML",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": "A WebMCP benchmark, measures WebMCP against other browser-agent interfaces.",
+  "archived": false,
+  "readme_len": 20674,
+  "score": 3,
+  "hits": [
+   "\\bjev\\b"
+  ],
+  "prose": "Browser-agent benchmark: measures WebMCP against other browser-agent interfaces, with Jev appearing as one of the compared configurations.",
+  "cat": "Evaluation & Benchmarking"
+ },
+ {
+  "repo": "Kelbie/hunch",
+  "stars": 1,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Semantic code review with Jev, plain-English rules and Agent Skills.",
+  "archived": false,
+  "readme_len": 3070,
+  "score": 3,
+  "hits": [
+   "typesafe",
+   "\\bjev\\b"
+  ],
+  "prose": "Code review: plain-English rules that Jev checks code against, locally or on every pull request, with Jev picking one label per finding.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "kuhung/understanding-jev",
+  "stars": 1,
+  "lang": "HTML",
+  "license": null,
+  "topics": [],
+  "gh_desc": "深入解读 Jev 模型：毫秒级判定与工程边界",
+  "archived": false,
+  "readme_len": 1026,
+  "score": 3,
+  "hits": [
+   "\\bjev\\b"
+  ],
+  "prose": "Chinese deep-dive: examines Jev's millisecond judgments and, more usefully, where its engineering boundaries lie.",
+  "cat": "Related Practices / Discussions"
+ },
+ {
+  "repo": "cline/plugins",
+  "stars": 31,
+  "lang": "TypeScript",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": "Official curated plugins for Cline CLI and extensions",
+  "archived": false,
+  "readme_len": 2571,
+  "score": 2,
+  "hits": [
+   "\\bjev\\b"
+  ],
+  "prose": "Coding agents: Cline's official plugin collection includes a Jev-driven browser plugin (`jev-browser`), so Jev arrives as a first-class Cline capability.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "different-ai/openwork",
+  "stars": 23683,
+  "lang": "TypeScript",
+  "license": "NOASSERTION",
+  "topics": [],
+  "gh_desc": "The open-source alternative to Claude Cowork (powered by opencode)",
+  "archived": false,
+  "readme_len": 10755,
+  "score": 0,
+  "hits": [],
+  "prose": "Engineering workflow: wires Jev into its eval testkit as a verification judge so agent-produced work is gated by typed verdicts rather than a text model.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "vercel/eve",
+  "stars": 5290,
+  "lang": "TypeScript",
+  "license": "Apache-2.0",
+  "topics": [
+   "agent",
+   "framework",
+   "harness",
+   "javascript",
+   "markdown",
+   "sandbox",
+   "typescript",
+   "vercel",
+   "workflows"
+  ],
+  "gh_desc": "The Open Framework for Building Agents",
+  "archived": false,
+  "readme_len": 4420,
+  "score": 0,
+  "hits": [],
+  "prose": "Agent frameworks: Vercel's eve engine ships Jev as the default evaluation model (`typesafe-ai/jev`) in its experimental evaluate path.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "vercel-labs/fx",
+  "stars": 3092,
+  "lang": "Zig",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": "Unix like coding agent",
+  "archived": false,
+  "readme_len": 5961,
+  "score": 0,
+  "hits": [],
+  "prose": "Coding agent: ships a `typesafe_permission_reviewer` builtin so the agent's permission decisions run through Jev rather than an LLM call.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "silverstein/minutes",
+  "stars": 1492,
+  "lang": "Rust",
+  "license": "MIT",
+  "topics": [
+   "agent-skills",
+   "ai",
+   "claude",
+   "mcp",
+   "meeting-notes",
+   "meetings",
+   "parakeet",
+   "privacy",
+   "rust",
+   "speech-to-text",
+   "transcription",
+   "voice-memo",
+   "whisper"
+  ],
+  "gh_desc": "Open-source, local-first Granola/Otter alternative that Claude Code, Codex, Cursor, and any MCP client can query. Meetings, calls, and voice memos transcribed on-device into markdown you own.",
+  "archived": false,
+  "readme_len": 7541,
+  "score": 0,
+  "hits": [],
+  "prose": "Meeting notes: local-first transcription app whose live voice path runs its evaluations through Jev.",
+  "cat": "Evaluation & Benchmarking"
+ },
+ {
+  "repo": "smithersai/smithers",
+  "stars": 418,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "agent-orchestration",
+   "ai-agents",
+   "background-agents",
+   "claude-code",
+   "codex",
+   "developer-tools",
+   "durable-execution",
+   "human-in-the-loop",
+   "llm",
+   "multi-agent",
+   "react",
+   "typescript",
+   "workflow-engine"
+  ],
+  "gh_desc": "Smithers is an agentic workflow framework for defining workflows in simple TypeScript configuration files and executing them quickly, durably, and reliably",
+  "archived": false,
+  "readme_len": 3011,
+  "score": 0,
+  "hits": [],
+  "prose": "Agent frameworks: TypeScript workflow framework with a Jev session checker wired into its workflows.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "usenotra/notra",
+  "stars": 202,
+  "lang": "TypeScript",
+  "license": "AGPL-3.0",
+  "topics": [],
+  "gh_desc": "Turn Your Work Into Content",
+  "archived": false,
+  "readme_len": 5338,
+  "score": 0,
+  "hits": [],
+  "prose": "Marketing analytics: production GEO platform whose `NOTRA_JEV_CLASSIFIERS` flag routes brand-visibility classifiers off an LLM and onto Jev `Boolean` decisions at a 0.5 threshold, targeting 300 ms p50.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "vercel-labs/ai-python",
+  "stars": 184,
+  "lang": "Python",
+  "license": "NOASSERTION",
+  "topics": [],
+  "gh_desc": "AI SDK for Python",
+  "archived": false,
+  "readme_len": 4947,
+  "score": 0,
+  "hits": [],
+  "prose": "Python ecosystem: the official Vercel AI SDK for Python carries Jev through its evaluation operation and Gateway examples.",
+  "cat": "Infra / SDKs / Integrations"
+ },
+ {
+  "repo": "dzhng/duet-agent",
+  "stars": 44,
+  "lang": "TypeScript",
+  "license": "Apache-2.0",
+  "topics": [
+   "agent",
+   "claude-code",
+   "codex",
+   "harness",
+   "harness-engineering",
+   "hermes",
+   "openclaw"
+  ],
+  "gh_desc": "An opinionated full-stack agent harness with native memories, long running tasks, and multi-agent relay",
+  "archived": false,
+  "readme_len": 45527,
+  "score": 0,
+  "hits": [],
+  "prose": "Agent harness: keeps a Jev-backed routing table for deciding which model should serve a request.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "ryanwaits/secondlayer",
+  "stars": 6,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "blockchain",
+   "clarity",
+   "open-source",
+   "react",
+   "self-hosted",
+   "stacks",
+   "typescript"
+  ],
+  "gh_desc": "Decoded Stacks data in your own database. Self-hosted.",
+  "archived": false,
+  "readme_len": 3685,
+  "score": 0,
+  "hits": [],
+  "prose": "Fault triage: self-hosted Stacks data service whose Slack gate and fault-triage paths both run on Jev decisions.",
+  "cat": "Classification & Routing"
+ },
+ {
+  "repo": "useopencompany/opencompany",
+  "stars": 6,
+  "lang": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "AI workspace with chat, durable tasks and workflows, connected integrations, Brain knowledge, and cloud coding sessions.",
+  "archived": false,
+  "readme_len": 3697,
+  "score": 0,
+  "hits": [],
+  "prose": "Agent workspace: runs its approval review through Jev so workspace actions are gated by a typed decision.",
+  "cat": "Verification & Guardrails"
+ },
+ {
+  "repo": "johnhughes3/LegalForecastBench",
+  "stars": 5,
+  "lang": "Python",
+  "license": "Apache-2.0",
+  "topics": [],
+  "gh_desc": "LegalForecast-MTD benchmark alpha and official evaluation workflows",
+  "archived": false,
+  "readme_len": 15008,
+  "score": 0,
+  "hits": [],
+  "prose": "Legal forecasting: benchmark that asks Jev to predict federal motion-to-dismiss rulings from the judge's written record and scores the calibrated probabilities with claim-defendant micro-Brier metrics.",
+  "cat": "Compliance & Legal"
+ },
+ {
+  "repo": "david-cermak/jevlike-esp32",
+  "stars": 1,
+  "lang": "Python",
+  "license": "MIT",
+  "topics": [],
+  "gh_desc": "Jevlike edge router on ESP32",
+  "archived": false,
+  "readme_len": 358,
+  "score": 0,
+  "hits": [],
+  "prose": "Edge deployment: exports a jevlike scorer as ESP32 firmware with a C scorer and a host-side check, putting one-pass decisions on a microcontroller.",
+  "cat": "Calibration & Research"
+ }
+]

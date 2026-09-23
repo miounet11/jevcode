@@ -1,0 +1,2340 @@
+[
+ {
+  "repo": "typesafe-ai/skills",
+  "url": "https://github.com/typesafe-ai/skills",
+  "stars": 1429,
+  "forks": 64,
+  "language": null,
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "Agent skills for building with TypeSafe's System One API"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "wfzyx/von",
+  "url": "https://github.com/wfzyx/von",
+  "stars": 310,
+  "forks": 22,
+  "language": "Python",
+  "license": "Apache-2.0",
+  "topics": [
+   "decision-model",
+   "jev",
+   "machine-learning",
+   "python",
+   "rlcd",
+   "system-one",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Calibration & Research",
+  "desc": {
+   "en": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "Mapika/decider",
+  "url": "https://github.com/Mapika/decider",
+  "stars": 257,
+  "forks": 6,
+  "language": "Python",
+  "license": "Apache-2.0",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Calibration & Research",
+  "desc": {
+   "en": "A family of System One-style models fine-tuned from Qwen3.5, designed for one-pass typed decisions with calibrated probabilities."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "jkudish/jev-mcp",
+  "url": "https://github.com/jkudish/jev-mcp",
+  "stars": 201,
+  "forks": 23,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "MCP & Integrations",
+  "desc": {
+   "zh": "给 Agent 提供核对引用、筛查内容、查找、重排、分类、比较和提取等八个 MCP 判断工具。",
+   "en": "Eight MCP tools for evidence checks, content screening, search, reranking, classification, comparison and extraction.",
+   "ja": "引用確認、内容検査、検索、並べ替え、分類、比較、抽出など、8つの MCP 判断ツールを提供する。",
+   "ko": "근거 확인, 콘텐츠 검사, 검색, 재정렬, 분류, 비교, 추출 등 8개 MCP 판단 도구를 제공한다."
+  },
+  "dp": {
+   "zh": "用 Choice、Noul 等问题评估证据支持、内容风险和候选相关性。",
+   "en": "Uses typed questions to assess evidence support, content risk and candidate relevance.",
+   "ja": "型付きの質問で、根拠の支持度、内容のリスク、候補の関連度を評価する。",
+   "ko": "구조화된 질문으로 근거의 뒷받침, 콘텐츠 위험, 후보 관련성을 평가한다."
+  }
+ },
+ {
+  "repo": "tamaratran/jev-pruner",
+  "url": "https://github.com/tamaratran/jev-pruner",
+  "stars": 131,
+  "forks": 8,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Context GC & Filter",
+  "desc": {
+   "zh": "Claude Code 输出修剪插件，在 Bash 执行后、结果进入主模型前筛掉部分冗余文本。",
+   "en": "A Claude Code output-pruning plugin filtering selected Bash output before it reaches the main model.",
+   "ja": "Bash 実行後、主モデルへ渡す前に一部の出力を絞る Claude Code プラグイン。",
+   "ko": "Bash 실행 후 주 모델에 전달하기 전 일부 출력을 줄이는 Claude Code 플러그인."
+  },
+  "dp": {
+   "zh": "满足长度与内容条件后，Jev 按块判断哪些输出应保留，原始内容另行归档。",
+   "en": "After length and content checks, Jev judges which chunks to retain while original output is archived.",
+   "ja": "長さと内容を確認してから Jev が保持する塊を選び、原文は別途保存する。",
+   "ko": "길이·내용 조건 확인 후 Jev가 유지할 청크를 선택하고 원본은 별도 보관한다."
+  }
+ },
+ {
+  "repo": "y0usaf/pi-jev",
+  "url": "https://github.com/y0usaf/pi-jev",
+  "stars": 131,
+  "forks": 8,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "guardrails",
+   "jev",
+   "pi-extension",
+   "pi-package",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Security & Guardrails",
+  "desc": {
+   "zh": "Pi 编码 Agent 扩展：执行前提示工具风险，执行后检查秘密泄露与失败类型。",
+   "en": "A Pi extension that flags tool risks before execution and checks output for secrets and failure types.",
+   "ja": "Pi のツール実行前にリスクを通知し、実行後に秘密情報や失敗の種類を点検する拡張。",
+   "ko": "Pi 도구 실행 전 위험을 알리고 실행 후 비밀 정보와 오류 유형을 확인하는 확장."
+  },
+  "dp": {
+   "zh": "Jev 给破坏性、越权和输出风险打分，配置决定提示还是请求确认。",
+   "en": "Jev scores destructive actions, scope and output risks; configuration chooses warnings or confirmation.",
+   "ja": "Jev のリスク評価を設定に従って警告や確認要求に使う。",
+   "ko": "Jev 위험 점수를 설정에 따라 경고나 확인 요청에 사용한다."
+  }
+ },
+ {
+  "repo": "devagrawal09/stanley-code",
+  "url": "https://github.com/devagrawal09/stanley-code",
+  "stars": 108,
+  "forks": 6,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Verification & Guardrails",
+  "desc": {
+   "en": "Bounded TypeSafe Jev workflows for coding agents."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "RomanSlack/jev-drone",
+  "url": "https://github.com/RomanSlack/jev-drone",
+  "stars": 100,
+  "forks": 7,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "autonomous-agents",
+   "drone",
+   "mujoco",
+   "robotics",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "High-Frequency & Simulation",
+  "desc": {
+   "zh": "MuJoCo 无人机仿真实验：从相机缓冲区提取场景，Jev 提供战术动作建议。",
+   "en": "A MuJoCo drone experiment deriving scene features from camera buffers for Jev tactical advice.",
+   "ja": "カメラのバッファから場面を抽出し、Jev が戦術を助言する MuJoCo ドローン実験。",
+   "ko": "카메라 버퍼에서 장면을 추출하고 Jev가 전술을 조언하는 MuJoCo 드론 실험이다."
+  },
+  "dp": {
+   "zh": "根据距离扇区、障碍高度与目标状态选择机动、评估风险和目标丢失状态。",
+   "en": "Uses range sectors, obstacle heights and target state to choose maneuvers and assess risk or target loss.",
+   "ja": "距離区分、障害物の高さ、目標状態から機動、リスク、目標喪失を判断する。",
+   "ko": "거리 구간, 장애물 높이와 목표 상태로 기동, 위험 및 목표 상실을 판단한다."
+  }
+ },
+ {
+  "repo": "aowang-ai/jev-trade",
+  "url": "https://github.com/aowang-ai/jev-trade",
+  "stars": 74,
+  "forks": 16,
+  "language": "TypeScript",
+  "license": "NOASSERTION",
+  "topics": [
+   "hyperliquid",
+   "jev",
+   "quantitative-finance",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Domain & Vertical Tools",
+  "desc": {
+   "zh": "一个 Hyperliquid 交易机器人实验，用 Jev 判断做多、做空，以及开仓、平仓或等待。",
+   "en": "An experimental Hyperliquid trading bot using Jev to choose long or short and whether to open, close, or hold.",
+   "ja": "Jev が売買方向と開始、決済、待機を選ぶ Hyperliquid 取引ボットの実験。",
+   "ko": "Jev가 매매 방향과 진입, 청산, 대기를 선택하는 Hyperliquid 거래 봇 실험."
+  },
+  "dp": {
+   "zh": "每个资产账户读取行情后单独调用 Jev，执行器按选择提交或撤销订单。",
+   "en": "Each asset account sends market state to Jev; execution code places or cancels orders based on the decisions.",
+   "ja": "各資産の口座が相場を Jev に送り、実行コードが注文や取り消しを行う。",
+   "ko": "각 자산 계정이 시장 상태를 Jev에 보내고 실행 코드가 주문하거나 취소한다."
+  }
+ },
+ {
+  "repo": "agent-labs-dev/fastbrowse",
+  "url": "https://github.com/agent-labs-dev/fastbrowse",
+  "stars": 72,
+  "forks": 8,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "agents",
+   "browser-agent",
+   "llm",
+   "python",
+   "web-automation"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "A fast browser agent: Jev picks each action from what is on the page, an LLM reads and plans, and every claim in an answer cites a quote from the page."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "realZachi/typesafe-adblock",
+  "url": "https://github.com/realZachi/typesafe-adblock",
+  "stars": 64,
+  "forks": 4,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Browser & OS Action",
+  "desc": {
+   "zh": "一个实验性 Chrome 扩展，让 Jev 判断候选 DOM 元素是否是广告，再高亮或移除。",
+   "en": "An experimental Chrome extension that asks Jev whether candidate DOM elements are ads, then highlights or removes them.",
+   "ja": "候補 DOM が広告かを Jev に尋ね、強調表示や削除を行う実験的 Chrome 拡張。",
+   "ko": "후보 DOM의 광고 여부를 Jev에 물어 강조하거나 제거하는 실험적 Chrome 확장."
+  },
+  "dp": {
+   "zh": "对元素文本、标签和链接等信息批量询问 Noul，按阈值应用页面操作。",
+   "en": "Batches element text, labels, and link information into Noul questions and applies a threshold.",
+   "ja": "要素の文字、ラベル、リンク情報を Noul で評価し、閾値を適用する。",
+   "ko": "요소 텍스트, 라벨, 링크 정보를 Noul로 평가하고 임계값을 적용한다."
+  }
+ },
+ {
+  "repo": "yikangy873-gif/jev-desktop",
+  "url": "https://github.com/yikangy873-gif/jev-desktop",
+  "stars": 51,
+  "forks": 0,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "codex",
+   "computer-use",
+   "desktop-automation",
+   "jev",
+   "macos"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "TypeSafe Jev action selection inside Codex Computer Use"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "obie/ruby_decision_model",
+  "url": "https://github.com/obie/ruby_decision_model",
+  "stars": 48,
+  "forks": 2,
+  "language": "Ruby",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "SDK & Decision Frameworks",
+  "desc": {
+   "zh": "Ruby 决策模型客户端，可通过 TypeSafe 原生接口或 OpenRouter 调用 Jev。",
+   "en": "A Ruby decision-model client for Jev through TypeSafe’s native API or OpenRouter.",
+   "ja": "TypeSafe のネイティブ API または OpenRouter 経由で Jev を呼ぶ Ruby クライアント。",
+   "ko": "TypeSafe 기본 API 또는 OpenRouter로 Jev를 호출하는 Ruby 클라이언트."
+  },
+  "dp": {
+   "zh": "用统一 Client 提交状态与类型化问题，解析选择、概率、评分及用量。",
+   "en": "A shared Client sends state and typed questions and parses choices, probabilities, scores and usage.",
+   "ja": "共通 Client から状態と質問を送り、選択・確率・スコア・使用量を解析する。",
+   "ko": "공통 Client가 상태와 질문을 보내 선택지·확률·점수·사용량을 파싱한다."
+  }
+ },
+ {
+  "repo": "yusukebe/hono-jev-router",
+  "url": "https://github.com/yusukebe/hono-jev-router",
+  "stars": 45,
+  "forks": 2,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Routing & Cost Optimization",
+  "desc": {
+   "zh": "Hono 的实验性 HTTP 语义路由器，让请求描述决定走哪个处理函数。",
+   "en": "An experimental semantic HTTP router for Hono using natural-language route descriptions.",
+   "ja": "自然言語のルート説明を使う Hono の実験的 HTTP セマンティックルーター。",
+   "ko": "자연어 경로 설명을 사용하는 Hono의 실험적 HTTP 의미 기반 라우터."
+  },
+  "dp": {
+   "zh": "Jev 判断请求与各路由描述的匹配概率，程序选择首个达到阈值的路由。",
+   "en": "Jev scores request-to-description matches; code selects the first route above its threshold.",
+   "ja": "Jev の一致確率から、閾値を超えた最初のルートをコードが選ぶ。",
+   "ko": "Jev의 일치 확률을 이용해 임곗값을 넘는 첫 경로를 코드가 선택한다."
+  }
+ },
+ {
+  "repo": "ikermoel/open-alternative-jev",
+  "url": "https://github.com/ikermoel/open-alternative-jev",
+  "stars": 43,
+  "forks": 10,
+  "language": "Python",
+  "license": "Apache-2.0",
+  "topics": [
+   "calibration",
+   "classification",
+   "jev",
+   "jev-alternative",
+   "llm",
+   "logprobs",
+   "open-jev",
+   "open-source-jev",
+   "open-weights",
+   "qwen",
+   "structured-decisions",
+   "structured-output",
+   "system-one",
+   "system-one-model",
+   "transformers",
+   "typed-decisions",
+   "typesafe",
+   "typesafe-jev",
+   "vllm"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Calibration & Research",
+  "desc": {
+   "en": "Open-source alternative to TypeSafe's Jev: a System One style model layer that gives typed, calibrated decisions from any open-weights LLM in one forward pass (HF + vLLM), with honest benchmarks"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "brainstormity/Jev-Moderation-Bot",
+  "url": "https://github.com/brainstormity/Jev-Moderation-Bot",
+  "stars": 42,
+  "forks": 3,
+  "language": "Python",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Security & Guardrails",
+  "desc": {
+   "zh": "一个 Discord 审核机器人，让 Jev 检查垃圾消息和诈骗链接，并按本地规则逐级警告或禁言。",
+   "en": "A Discord moderation bot using Jev to check spam and scam links, with local warning and timeout rules.",
+   "ja": "Jev でスパムや詐欺リンクを確認し、ローカル規則で警告・タイムアウトする Discord Bot。",
+   "ko": "Jev로 스팸·사기 링크를 확인하고 로컬 규칙으로 경고·타임아웃을 적용하는 Discord Bot."
+  },
+  "dp": {
+   "zh": "评估单条消息或成员近期消息的风险，由 Bot 执行删除、提醒及超时处理。",
+   "en": "Assesses messages or recent member history; the bot applies deletion, warnings or timeouts.",
+   "ja": "メッセージや直近履歴のリスクを評価し、Bot が削除・警告などを行う。",
+   "ko": "메시지나 최근 기록의 위험을 평가하고 Bot이 삭제·경고 등을 처리한다."
+  }
+ },
+ {
+  "repo": "AboveColin/HA-Jev",
+  "url": "https://github.com/AboveColin/HA-Jev",
+  "stars": 40,
+  "forks": 2,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "ai",
+   "assist",
+   "conversation",
+   "custom-components",
+   "decision-model",
+   "hacs",
+   "home-assistant",
+   "home-automation",
+   "homeassistant",
+   "jev",
+   "llm",
+   "python",
+   "smart-home",
+   "typesafe",
+   "voice-assistant",
+   "voice-control"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Domain & Vertical Tools",
+  "desc": {
+   "zh": "把 Jev 的判断变成 Home Assistant 传感器，例如检查衣服是否洗完后一直没取。",
+   "en": "Turns Jev judgments into Home Assistant sensors, such as checking whether finished laundry has been left unattended.",
+   "ja": "洗濯物の取り忘れなどを Jev が判断し、Home Assistant のセンサーとして扱う。",
+   "ko": "세탁물 방치 여부 같은 Jev 판단을 Home Assistant 센서로 제공한다."
+  },
+  "dp": {
+   "zh": "读取选定设备与实体状态，返回概率、选项或分数，再由配置阈值触发自动化。",
+   "en": "Reads selected entity states and returns probabilities, choices, or scores that configured thresholds can use in automations.",
+   "ja": "選択したエンティティの状態から確率、選択肢、スコアを返し、設定した閾値で自動化につなぐ。",
+   "ko": "선택한 엔티티 상태에서 확률, 선택지, 점수를 반환하고 설정한 임계값으로 자동화에 연결한다."
+  }
+ },
+ {
+  "repo": "r-ms/mini-jev",
+  "url": "https://github.com/r-ms/mini-jev",
+  "stars": 39,
+  "forks": 3,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Calibration & Research",
+  "desc": {
+   "en": "mini-Jev: what a Jev-style typed-decision interface looks like on a frozen Qwen3-4B — read the option letter's logits instead of generating JSON. Preregistered experiment, results, teaching bench."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "socai-io/jev-social",
+  "url": "https://github.com/socai-io/jev-social",
+  "stars": 37,
+  "forks": 5,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "agent-skills",
+   "ai-agents",
+   "browser-agent",
+   "browser-automation",
+   "computer-use",
+   "decision-model",
+   "instagram",
+   "jev",
+   "linkedin",
+   "local-first",
+   "openrouter",
+   "osint",
+   "research-agent",
+   "socai",
+   "social-media",
+   "social-media-research",
+   "socmint",
+   "system-one",
+   "tiktok",
+   "typesafe-ai"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Jev-powered Instagram, TikTok, and LinkedIn research: typed routing, real browser evidence, streamed post cards, video capture, and cited socai reports."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "tacticocc/Jevbridge",
+  "url": "https://github.com/tacticocc/Jevbridge",
+  "stars": 35,
+  "forks": 3,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "acp",
+   "agent",
+   "claude",
+   "computer-use",
+   "grok",
+   "jev",
+   "llm",
+   "opencode",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "ACP and MCP adapter that bridges TypeSafe Jev with any LLM — computer use and typed decisions alongside Codex, Claude, Grok, and OpenCode."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "zhengxuyu/litjev",
+  "url": "https://github.com/zhengxuyu/litjev",
+  "stars": 35,
+  "forks": 5,
+  "language": "Python",
+  "license": "Apache-2.0",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Calibration & Research",
+  "desc": {
+   "en": "Turn any off-the-shelf LLM into a Jev -like decision layer"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "TheoOliveira/pi-jev",
+  "url": "https://github.com/TheoOliveira/pi-jev",
+  "stars": 29,
+  "forks": 2,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "jev",
+   "pi-coding-agent",
+   "pi-extension",
+   "pi-package",
+   "system-one",
+   "tool-routing",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "MCP & Integrations",
+  "desc": {
+   "zh": "为 Pi Agent 按任务寻找工具与技能，并提供结构化判断和可选的历史筛选。",
+   "en": "Helps Pi Agents find tools and skills for a task, with structured evaluation and optional history filtering.",
+   "ja": "Pi Agent に必要なツールとスキルを探し、構造化評価や任意の履歴フィルターを提供する。",
+   "ko": "Pi Agent에 필요한 도구와 스킬을 찾고 구조화된 평가와 선택적 기록 필터링을 제공한다."
+  },
+  "dp": {
+   "zh": "判断候选工具、技能和历史记录与当前任务的相关性，供本地规则决定加载或保留。",
+   "en": "Judges how candidate tools, skills, and history relate to the task so local rules can load or retain them.",
+   "ja": "候補ツール、スキル、履歴とタスクの関連性を判定し、読み込みや保持に使う。",
+   "ko": "후보 도구, 스킬, 기록의 작업 관련성을 판단해 로딩과 보존에 활용한다."
+  }
+ },
+ {
+  "repo": "DanRWilloughby/snifftest",
+  "url": "https://github.com/DanRWilloughby/snifftest",
+  "stars": 26,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "ai-writing",
+   "claude-code",
+   "claude-code-plugin",
+   "claude-skills",
+   "github-action",
+   "jev",
+   "linter",
+   "markdown",
+   "pre-commit",
+   "prose",
+   "typesafe",
+   "writing"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Creative Tools",
+  "desc": {
+   "zh": "Markdown 与纯文本写作检查器，用本地规则和可选 Jev 判断标记文风问题。",
+   "en": "A Markdown and plain-text prose linter using local rules and optional Jev judgments.",
+   "ja": "ローカル規則と任意の Jev 判断で文章を点検する Markdown・テキスト用 linter。",
+   "ko": "로컬 규칙과 선택형 Jev 판단으로 문장을 검사하는 Markdown·텍스트 linter다."
+  },
+  "dp": {
+   "zh": "逐段判断重复结尾、套话、过度保留等语义规则，返回每条规则的概率。",
+   "en": "Assesses paragraphs against style rules such as redundant closings, clichés and excessive hedging.",
+   "ja": "冗長な結び、常套句、過度な留保などの文体規則を段落ごとに評価する。",
+   "ko": "중복 결말, 상투어와 과도한 유보 같은 문체 규칙을 문단별로 평가한다."
+  }
+ },
+ {
+  "repo": "zhihz/openjev",
+  "url": "https://github.com/zhihz/openjev",
+  "stars": 26,
+  "forks": 3,
+  "language": "Python",
+  "license": "NOASSERTION",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Calibration & Research",
+  "desc": {
+   "en": "Local bilingual probability decisions from context, questions, and candidate answers. Independent research preview inspired by TypeSafe Jev."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-seo",
+  "url": "https://github.com/AkashPriyadarshii/jev-seo",
+  "stars": 25,
+  "forks": 2,
+  "language": "Rust",
+  "license": "MIT",
+  "topics": [
+   "ahrefs-alternative",
+   "claude-code",
+   "cli",
+   "decision-oracle",
+   "duckduckgo",
+   "generative-engine-optimization",
+   "geo",
+   "jev",
+   "mcp",
+   "mcp-server",
+   "rank-tracker",
+   "rust",
+   "search-engine-optimization",
+   "semrush-alternative",
+   "seo",
+   "seo-audit",
+   "seo-tools",
+   "serp",
+   "typesafe",
+   "typesafe-ai"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Domain & Vertical Tools",
+  "desc": {
+   "zh": "Rust SEO/GEO 命令行与 MCP 实验工具，结合网页检查、DuckDuckGo 查询和可选 Jev 评分。",
+   "en": "An experimental Rust SEO/GEO CLI and MCP tool combining page checks, DuckDuckGo queries and optional Jev scoring.",
+   "ja": "ページ検査、DuckDuckGo 検索、任意の Jev 評価を組み合わせる実験的な Rust SEO/GEO CLI と MCP。",
+   "ko": "페이지 검사, DuckDuckGo 검색과 선택형 Jev 평가를 결합한 실험적 Rust SEO/GEO CLI 및 MCP다."
+  },
+  "dp": {
+   "zh": "给搜索意图、内容直接性和内容缺口分类，并按自定义 rubric 估计可引用性。",
+   "en": "Classifies search intent, direct answers and content gaps, with a custom citation-likelihood rubric.",
+   "ja": "検索意図、直接的回答、内容不足を分類し、独自尺度で引用されやすさを推定する。",
+   "ko": "검색 의도, 직접 답변과 내용 부족을 분류하고 자체 기준으로 인용 가능성을 추정한다."
+  }
+ },
+ {
+  "repo": "dannote/jev",
+  "url": "https://github.com/dannote/jev",
+  "stars": 23,
+  "forks": 1,
+  "language": "Elixir",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "TypeSafe Jev for OTP: reply to Jev from a GenServer and pattern match on its answer"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "compozy/yoshi",
+  "url": "https://github.com/compozy/yoshi",
+  "stars": 21,
+  "forks": 1,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "bun",
+   "claude-code",
+   "codex",
+   "context-window",
+   "jev",
+   "llm-proxy",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Context-pruning proxy for Claude Code and Codex: Jev judges which history is still needed, measured not claimed. POC here now, heading soon into https://github.com/compozy/compozy"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "phyous/tsai-sc",
+  "url": "https://github.com/phyous/tsai-sc",
+  "stars": 19,
+  "forks": 1,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "High-Frequency & Simulation",
+  "desc": {
+   "zh": "让 Jev 操作原版 StarCraft shareware 的 Strongarm 关卡，读取状态与推理时暂停游戏。",
+   "en": "A Jev harness for StarCraft shareware’s Strongarm mission, pausing the game during state reads and inference.",
+   "ja": "状態取得と推論中にゲームを停止し、StarCraft shareware の Strongarm を Jev で操作する。",
+   "ko": "상태 읽기와 추론 중 게임을 일시 정지하며 Jev로 StarCraft shareware의 Strongarm을 조작한다."
+  },
+  "dp": {
+   "zh": "从结构化游戏状态中选择命令，再通过鼠标和键盘输入执行。",
+   "en": "Selects commands from structured game state and executes them with mouse and keyboard input.",
+   "ja": "構造化されたゲーム状態からコマンドを選び、マウスとキーボードで実行する。",
+   "ko": "구조화된 게임 상태에서 명령을 골라 마우스·키보드 입력으로 실행한다."
+  }
+ },
+ {
+  "repo": "leepokai/jev-guard",
+  "url": "https://github.com/leepokai/jev-guard",
+  "stars": 18,
+  "forks": 2,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "claude-code",
+   "codex",
+   "cursor",
+   "gemini-cli",
+   "hooks",
+   "jev",
+   "opencode",
+   "prompt-injection",
+   "security"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Security & Guardrails",
+  "desc": {
+   "zh": "在编程 Agent 调工具前后加一道检查：操作是否危险、是不是用户要求的、返回内容里有没有诱导 Agent 越界的指令。",
+   "en": "Tool-call checks for coding Agents that assess operation risk, user intent and prompt-injection signals.",
+   "ja": "コーディング Agent のツール呼び出しで、操作リスク・意図・指示注入の兆候を確認する。",
+   "ko": "코딩 Agent의 도구 호출에서 동작 위험·사용자 의도·프롬프트 주입 징후를 검사한다."
+  },
+  "dp": {
+   "zh": "结合会话对工具风险、用户意图与提示注入迹象做判断，由本地规则决定放行、提醒或拦截。",
+   "en": "Jev evaluates tool inputs or outputs in session context; local rules allow, warn or block.",
+   "ja": "Jev が会話文脈で入出力を評価し、ローカル規則が許可・警告・遮断する。",
+   "ko": "Jev가 대화 맥락에서 입출력을 평가하고 로컬 규칙이 허용·경고·차단한다."
+  }
+ },
+ {
+  "repo": "shiftynick/jev-axi",
+  "url": "https://github.com/shiftynick/jev-axi",
+  "stars": 17,
+  "forks": 1,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "agent-safety",
+   "ai-agents",
+   "axi",
+   "claude-code",
+   "claude-code-hooks",
+   "cli",
+   "codex",
+   "developer-tools",
+   "jev",
+   "llm-guardrails",
+   "prompt-injection",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "CLI & Pipelines",
+  "desc": {
+   "zh": "在命令行调用 Jev 做 pick、rate、check、rank、triage、guard，并可接到 Agent 工具调用前的 hook。",
+   "en": "A CLI for Jev pick, rate, check, rank, triage, and guard tasks, with optional hooks before Agent tool calls.",
+   "ja": "Jev の pick、rate、check、rank、triage、guard を使う CLI。Agent のツール実行前 hook にも対応する。",
+   "ko": "Jev의 pick, rate, check, rank, triage, guard를 사용하는 CLI로 Agent 도구 실행 전 hook도 제공한다."
+  },
+  "dp": {
+   "zh": "把输入状态和选项转为结构化问题，返回结果或供本地安全策略使用的风险分数。",
+   "en": "Converts input state and options into structured questions, returning results or risk scores for local policy.",
+   "ja": "状態と選択肢を質問に変換し、結果やローカルポリシー用のリスクスコアを返す。",
+   "ko": "상태와 선택지를 질문으로 바꾸고 결과나 로컬 정책용 위험 점수를 반환한다."
+  }
+ },
+ {
+  "repo": "valentynkit/jev-belay",
+  "url": "https://github.com/valentynkit/jev-belay",
+  "stars": 17,
+  "forks": 1,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Claude Code Stop hook that blocks an unverified done: reads the transcript for evidence, asks Jev once, fails open on everything else"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "blakestone-x/jev-mcp",
+  "url": "https://github.com/blakestone-x/jev-mcp",
+  "stars": 16,
+  "forks": 3,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "MCP & Integrations",
+  "desc": {
+   "zh": "把 Jev 的分类、打分、是非判断和候选匹配封装为 MCP 工具。",
+   "en": "Wraps Jev classification, scoring, yes/no judgments and candidate matching as MCP tools.",
+   "ja": "Jev の分類・採点・二択判断・候補照合を MCP ツールとして公開する。",
+   "ko": "Jev 분류·채점·예/아니요 판단·후보 매칭을 MCP 도구로 제공한다."
+  },
+  "dp": {
+   "zh": "MCP 服务器调用 TypeSafe SDK，返回选项、概率与结构化评分。",
+   "en": "The MCP server calls the TypeSafe SDK and returns choices, probabilities and scores.",
+   "ja": "MCP サーバーが TypeSafe SDK を呼び、選択肢・確率・スコアを返す。",
+   "ko": "MCP 서버가 TypeSafe SDK를 호출해 선택지·확률·점수를 반환한다."
+  }
+ },
+ {
+  "repo": "OmniJev/PlayJev",
+  "url": "https://github.com/OmniJev/PlayJev",
+  "stars": 15,
+  "forks": 0,
+  "language": "JavaScript",
+  "license": "Apache-2.0",
+  "topics": [
+   "browser-games",
+   "game-ai",
+   "game-playing-agent",
+   "html5-games",
+   "imitation-learning",
+   "jev",
+   "jev-game",
+   "multimodal",
+   "openjev",
+   "playjev",
+   "qwen",
+   "real-time",
+   "small-models",
+   "system-one",
+   "vision-language-model"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Game & Simulation",
+  "desc": {
+   "en": "🚀🚀 A 0.8B JEV-like multimodal model playing GUI games directly from raw pixels."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "chy4pro/jev-for-chrome",
+  "url": "https://github.com/chy4pro/jev-for-chrome",
+  "stars": 14,
+  "forks": 1,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agent",
+   "browser-agent",
+   "browser-automation",
+   "browser-use",
+   "chrome-extension",
+   "jev",
+   "manifest-v3",
+   "openrouter",
+   "typesafe",
+   "web-agent"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Jev for Chrome: drives the tab you are looking at with TypeSafe Jev, a sub-second decision model. Community port of browser-use/jev-ultrafast, not affiliated with TypeSafe."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "unicodeveloper/jevocks",
+  "url": "https://github.com/unicodeveloper/jevocks",
+  "stars": 14,
+  "forks": 3,
+  "language": "TypeScript",
+  "license": null,
+  "topics": [
+   "jev",
+   "stocks",
+   "valyu"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Finance & Trading",
+  "desc": {
+   "en": "Everyday Stocks Status with Jev"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-superpowers",
+  "url": "https://github.com/AkashPriyadarshii/jev-superpowers",
+  "stars": 12,
+  "forks": 1,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "agentic-skills",
+   "ai-agents",
+   "antigravity",
+   "claude-code",
+   "codex",
+   "coding-agents",
+   "cursor",
+   "developer-tools",
+   "gemini-cli",
+   "git-jev",
+   "jev",
+   "jev-scout",
+   "software-engineering",
+   "superpowers",
+   "system-one",
+   "tdd",
+   "typesafe-ai",
+   "zero-hallucination"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Systematic software development framework for AI coding agents upgraded with TypeSafe Jev System One typed decisions"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "GodsBoy/jev-agent-skill-router",
+  "url": "https://github.com/GodsBoy/jev-agent-skill-router",
+  "stars": 12,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "agentic-ai",
+   "ai-agents",
+   "hermes-agent",
+   "jev",
+   "python",
+   "skill-routing",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "Typed, confidence-aware agent skill routing with TypeSafe Jev."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "anpicasso/hermes-jev-approvals",
+  "url": "https://github.com/anpicasso/hermes-jev-approvals",
+  "stars": 11,
+  "forks": 2,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Security & Guardrails",
+  "desc": {
+   "zh": "Hermes 的实验性命令审批插件，只替换 auxiliary.approval 判断任务。",
+   "en": "An experimental Hermes command-approval provider for the auxiliary.approval task only.",
+   "ja": "Hermes の auxiliary.approval だけを置き換える実験的なコマンド承認プラグイン。",
+   "ko": "Hermes의 auxiliary.approval만 대체하는 실험적 명령 승인 플러그인."
+  },
+  "dp": {
+   "zh": "Jev 返回 APPROVE、DENY 或 ESCALATE，由本地阈值和策略决定最终处理。",
+   "en": "Jev returns APPROVE, DENY or ESCALATE, with local thresholds and policy determining handling.",
+   "ja": "Jev の APPROVE・DENY・ESCALATE をローカル閾値と方針で処理する。",
+   "ko": "Jev의 APPROVE·DENY·ESCALATE를 로컬 임곗값과 정책으로 처리한다."
+  }
+ },
+ {
+  "repo": "kavehmz/typesafe-playground",
+  "url": "https://github.com/kavehmz/typesafe-playground",
+  "stars": 11,
+  "forks": 3,
+  "language": "JavaScript",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Evaluation & Observability",
+  "desc": {
+   "zh": "可交互的 Jev 实验集，展示客服工单分流预览和三维驾驶仿真。",
+   "en": "Interactive Jev experiments for support-routing previews and 3D driving simulations.",
+   "ja": "問い合わせ振り分けのプレビューと3D運転シミュレーションを行う Jev 実験集。",
+   "ko": "지원 요청 라우팅 미리보기와 3D 주행 시뮬레이션을 제공하는 Jev 실험이다."
+  },
+  "dp": {
+   "zh": "给客服消息做多项判断，或根据结构化模拟传感器选择车道与目标速度。",
+   "en": "Judges support messages or chooses lanes and target speed from structured simulated sensors.",
+   "ja": "問い合わせを評価するか、構造化された模擬センサーから車線と速度を選ぶ。",
+   "ko": "지원 메시지를 평가하거나 구조화된 모의 센서로 차선과 목표 속도를 고른다."
+  }
+ },
+ {
+  "repo": "kylemclaren/jevql",
+  "url": "https://github.com/kylemclaren/jevql",
+  "stars": 11,
+  "forks": 0,
+  "language": "Go",
+  "license": "MIT",
+  "topics": [
+   "jev",
+   "postgres"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Data & Search",
+  "desc": {
+   "zh": "在普通 PostgreSQL 查询外加一层语义处理，用 Jev 筛选、分组和排序，无需安装数据库扩展。",
+   "en": "Adds Jev semantic filtering, grouping, and ranking around ordinary PostgreSQL without installing a database extension.",
+   "ja": "データベース拡張を入れずに、通常の PostgreSQL へ Jev による絞り込み、分類、順位付けを加える。",
+   "ko": "데이터베이스 확장 설치 없이 일반 PostgreSQL에 Jev 기반 필터링, 분류, 순위를 추가한다."
+  },
+  "dp": {
+   "zh": "CLI 或服务层解析 jev_* 调用，把行文本发给 Jev，再用结果完成查询。",
+   "en": "The CLI or service layer evaluates jev_* calls over row text before completing the query.",
+   "ja": "CLI やサービス層が jev_* 呼び出しを解析し、行テキストの判断結果で問い合わせを処理する。",
+   "ko": "CLI나 서비스 계층이 jev_* 호출을 해석하고 행 텍스트 판단 결과로 쿼리를 처리한다."
+  }
+ },
+ {
+  "repo": "nexibeo/jev-cookbook",
+  "url": "https://github.com/nexibeo/jev-cookbook",
+  "stars": 11,
+  "forks": 0,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "browser-automation",
+   "browser-use",
+   "cookbook",
+   "data-labeling",
+   "jev",
+   "jev-ai",
+   "llm",
+   "open-router",
+   "openrouter",
+   "pii-detection",
+   "sql",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "Practical, tested recipes for TypeSafe's Jev decision model on OpenRouter: support triage, database indexing, file organizing, tagging, taxonomies, dedupe, PII detection, extraction, search re-ranking and a browser agent."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "shitianfang/jev-use",
+  "url": "https://github.com/shitianfang/jev-use",
+  "stars": 11,
+  "forks": 1,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "agent",
+   "agent-skills",
+   "ai-agents",
+   "claude-code",
+   "claude-code-hooks",
+   "claude-code-plugin",
+   "claude-skills",
+   "codex",
+   "jev",
+   "llm",
+   "mcp",
+   "mcp-server",
+   "mcp-tools",
+   "model-context-protocol",
+   "typesafe-ai"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "Claude Code / Codex / pi plugin that hands agent steps needing no text output to Jev (TypeSafe's judgment model) — measured p50 ~230 ms and ~$0.02 per 1,000 judgments, with typed escalation back to the LLM"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "sosopop/jev_stock",
+  "url": "https://github.com/sosopop/jev_stock",
+  "stars": 11,
+  "forks": 2,
+  "language": "Python",
+  "license": null,
+  "topics": [
+   "financial-data",
+   "financial-machine-learning",
+   "jev",
+   "llm",
+   "machine-learning",
+   "market-analysis",
+   "quantitative-finance",
+   "reasoning-models",
+   "stock-prediction",
+   "time-series-forecasting"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Finance & Trading",
+  "desc": {
+   "en": "An experimental JEV-powered framework for forecasting short-term stock price direction from structured market data."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "HyunjunJeon/pi-quiet-ask",
+  "url": "https://github.com/HyunjunJeon/pi-quiet-ask",
+  "stars": 10,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "TypeSafe Jev as the pi coding agent's quiet decision layer"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "abhixhek/jevcal",
+  "url": "https://github.com/abhixhek/jevcal",
+  "stars": 10,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "calibration",
+   "confidence-thresholds",
+   "jev",
+   "llm-evals",
+   "system-one",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Evaluation & Observability",
+  "desc": {
+   "zh": "用自己的标注数据评估 Jev 概率、选择置信度阈值，并检查模型更新后的变化。",
+   "en": "A toolkit for evaluating Jev probabilities on labeled data, selecting confidence thresholds and checking model drift.",
+   "ja": "ラベル付きデータで Jev の確率・閾値・モデル更新の影響を調べるツール。",
+   "ko": "라벨 데이터로 Jev의 확률·임계값·모델 업데이트 영향을 점검하는 도구."
+  },
+  "dp": {
+   "zh": "调用决策模型处理固定问题，计算准确率、校准、覆盖率和需要升级处理的比例。",
+   "en": "Runs fixed questions and measures accuracy, calibration, coverage and escalation rates.",
+   "ja": "固定質問で精度・校正・処理範囲・追加処理率を測定する。",
+   "ko": "고정 질문으로 정확도·보정·처리 범위·상위 처리 비율을 측정한다."
+  }
+ },
+ {
+  "repo": "mejiasd3v/pi-jev-router",
+  "url": "https://github.com/mejiasd3v/pi-jev-router",
+  "stars": 10,
+  "forks": 0,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "Automatic model routing for Pi using TypeSafe's Jev through Vercel AI Gateway"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "bohutang/sift",
+  "url": "https://github.com/bohutang/sift",
+  "stars": 9,
+  "forks": 4,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "ai-detection",
+   "chrome-extension",
+   "content-filter",
+   "jev",
+   "twitter",
+   "typesafe",
+   "x"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "Chrome extension that labels every post on X (Substance · Humor · Chit-chat · Promo · Junk · AI-written) with TypeSafe Jev, and hides the ones you don't want."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "matthewp/flue-jev-demo",
+  "url": "https://github.com/matthewp/flue-jev-demo",
+  "stars": 9,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "Flue agent routing with TypeSafe Jev through Cloudflare AI Gateway"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "tumf/jev-cli",
+  "url": "https://github.com/tumf/jev-cli",
+  "stars": 9,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "ai",
+   "cli",
+   "jev",
+   "python",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "CLI & Pipelines",
+  "desc": {
+   "zh": "为 Jev 提供 CLI 和 stdio MCP 入口，输入文本或 JSON，输出结构化判断。",
+   "en": "A CLI and stdio MCP server for typed Jev judgments over text or JSON.",
+   "ja": "テキストや JSON を Jev で判断する CLI と stdio MCP サーバー。",
+   "ko": "텍스트나 JSON을 Jev로 판단하는 CLI 및 stdio MCP 서버."
+  },
+  "dp": {
+   "zh": "向 Jev 提交 noul、choice、score 问题，将结果输出为 JSON 或单个值。",
+   "en": "Submits noul, choice and score questions and emits JSON or a primary value.",
+   "ja": "noul・choice・score を問い、JSON または主値を出力する。",
+   "ko": "noul·choice·score 질문을 보내 JSON이나 주요 값을 출력한다."
+  }
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-curate",
+  "url": "https://github.com/AkashPriyadarshii/jev-curate",
+  "stars": 8,
+  "forks": 1,
+  "language": "Rust",
+  "license": "MIT",
+  "topics": [
+   "arrow",
+   "cli",
+   "data-cleaning",
+   "data-engineering",
+   "dataset-curation",
+   "eval-harness",
+   "fine-tuning",
+   "jev",
+   "jsonl",
+   "llm",
+   "parquet",
+   "polars",
+   "pretraining",
+   "pyo3",
+   "reasoning-models",
+   "rust",
+   "synthetic-data",
+   "system-one",
+   "type-safe-ai",
+   "typesafe-ai"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Data & Search",
+  "desc": {
+   "zh": "Rust 数据集筛选实验，用 Jev 给文本记录评分并分流到保留或拒绝结果。",
+   "en": "A Rust dataset-filtering experiment using Jev scores to keep or reject text records.",
+   "ja": "Jev の採点でテキストレコードを採用・除外する Rust のデータセット選別実験。",
+   "ko": "Jev 점수로 텍스트 레코드를 유지·제외하는 Rust 데이터셋 필터링 실험."
+  },
+  "dp": {
+   "zh": "本地预过滤后调用 TypeSafe，按各项概率和评分阈值决定是否保留记录。",
+   "en": "Runs local prefilters, calls TypeSafe and applies probability and score thresholds to each record.",
+   "ja": "ローカル前処理後に TypeSafe を呼び、確率とスコアの閾値を適用する。",
+   "ko": "로컬 사전 필터 후 TypeSafe를 호출하고 확률·점수 임곗값을 적용한다."
+  }
+ },
+ {
+  "repo": "Kevthetech143/super-jev",
+  "url": "https://github.com/Kevthetech143/super-jev",
+  "stars": 8,
+  "forks": 1,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "SDK & Decision Frameworks",
+  "desc": {
+   "zh": "一个 TypeScript 决策执行框架，把证据、Jev 判断、允许的动作和结果记录串起来。",
+   "en": "A TypeScript decision-to-action harness connecting evidence, Jev judgments, permitted actions, and outcome records.",
+   "ja": "証拠、Jev の判断、許可された操作、結果の記録をつなぐ TypeScript の実行フレームワーク。",
+   "ko": "근거, Jev 판단, 허용된 동작, 결과 기록을 연결하는 TypeScript 실행 프레임워크."
+  },
+  "dp": {
+   "zh": "提交类型化问题，校验答案后由领域规则选择注册工具，并检查权限与参数。",
+   "en": "Submits typed questions, validates answers, and lets domain rules choose registered tools with permission and argument checks.",
+   "ja": "型付き質問と回答を検証し、領域ルールが権限や引数を確認して登録ツールを選ぶ。",
+   "ko": "타입 질문과 답을 검증하고 도메인 규칙이 권한과 인자를 확인해 등록 도구를 선택한다."
+  }
+ },
+ {
+  "repo": "valentynkit/jev-commit",
+  "url": "https://github.com/valentynkit/jev-commit",
+  "stars": 8,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Verification & Guardrails",
+  "desc": {
+   "en": "pre-commit hook: one Jev call judges whether your commit message matches the diff, plus debug leftovers, scope creep, and a secret belt"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "frostney/clean-code-review",
+  "url": "https://github.com/frostney/clean-code-review",
+  "stars": 7,
+  "forks": 1,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "agents",
+   "ai",
+   "ai-gateway",
+   "ai-sdk",
+   "clean-code",
+   "code-quality",
+   "code-review",
+   "developer-tools",
+   "eve",
+   "jev",
+   "llm",
+   "nextjs",
+   "pull-request",
+   "static-analysis",
+   "typescript",
+   "vercel"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Scoring & Ranking",
+  "desc": {
+   "en": "Every code file in a pull request, judged against Uncle Bob's Clean Code by TypeSafe's Jev, then reviewed by Luna. Built on eve and Next.js."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "joelhooks/pi-fast-jev-compaction",
+  "url": "https://github.com/joelhooks/pi-fast-jev-compaction",
+  "stars": 7,
+  "forks": 1,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Pi extension: verbatim context compaction with TypeSafe Jev decisions"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "24601/Augustus",
+  "url": "https://github.com/24601/Augustus",
+  "stars": 6,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "agent-skills",
+   "agent-workflows",
+   "agentic-ai",
+   "ai-agents",
+   "calibrated-confidence",
+   "claude-code",
+   "claude-code-skills",
+   "codex-skills",
+   "cursor-skills",
+   "decision-systems",
+   "decision-theory",
+   "formal-methods",
+   "jev",
+   "reranking",
+   "structured-output",
+   "system-one",
+   "system-one-models",
+   "typesafe",
+   "typesafe-ai",
+   "zero-shot-classification"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Agent skill: design judgment-assisted systems with TypeSafe Jev (System One). Maps Choice/Score/Noul onto decision theory, reranking, and routing. Composition algebra, question design, validation gates. MIT."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "GiesN/typesafe-jev-workflow",
+  "url": "https://github.com/GiesN/typesafe-jev-workflow",
+  "stars": 6,
+  "forks": 1,
+  "language": "Python",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Classification & Taxonomy",
+  "desc": {
+   "zh": "一个异步 LangGraph 示例：让 Jev 把模拟邮件分成发票事务和普通邮件。",
+   "en": "An async LangGraph example that classifies mocked emails as invoice-related or general.",
+   "ja": "模擬メールを請求書関連と一般に分類する、非同期 LangGraph の例。",
+   "ko": "모의 이메일을 청구서 관련과 일반으로 분류하는 비동기 LangGraph 예제."
+  },
+  "dp": {
+   "zh": "Jev 返回 invoice 或 general，图节点据此选择示例处理分支。",
+   "en": "Jev returns invoice or general; graph nodes choose the corresponding demo handler.",
+   "ja": "Jev が invoice または general を返し、graph が処理分岐を選ぶ。",
+   "ko": "Jev가 invoice 또는 general을 반환하고 graph가 처리 분기를 고른다."
+  }
+ },
+ {
+  "repo": "Nyarlathoteppppp/pi-heed",
+  "url": "https://github.com/Nyarlathoteppppp/pi-heed",
+  "stars": 6,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "coding-agent",
+   "guardrails",
+   "jev",
+   "pi-coding-agent",
+   "pi-package",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Verification & Guardrails",
+  "desc": {
+   "en": "Runtime constraints for the pi coding agent: checks every side-effecting tool call against what you said, before it runs. Powered by TypeSafe Jev."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "forvela/jev-agent-browser",
+  "url": "https://github.com/forvela/jev-agent-browser",
+  "stars": 6,
+  "forks": 0,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Fast, bounded browser agents powered by Jev and agent-browser — typed actions, research, classification, and safe orchestration."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "hotchpotch/jev-reranker",
+  "url": "https://github.com/hotchpotch/jev-reranker",
+  "stars": 6,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Scoring & Ranking",
+  "desc": {
+   "en": "Jev-powered relevance filtering and reranking for RAG in Python."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "prismhq/jev-router",
+  "url": "https://github.com/prismhq/jev-router",
+  "stars": 5,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "Open-source LLM router that uses TypeSafe's Jev to pick a model, on top of LiteLLM"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "alterhq/typesafe-sdk-swift",
+  "url": "https://github.com/alterhq/typesafe-sdk-swift",
+  "stars": 4,
+  "forks": 0,
+  "language": "Swift",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "Unofficial Swift library for the TypeSafe API"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "andrelandgraf/safer-with-jev",
+  "url": "https://github.com/andrelandgraf/safer-with-jev",
+  "stars": 4,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Security & Guardrails",
+  "desc": {
+   "zh": "给 HTTP 请求装一道内容门禁。Jev 先检查注入指令或不安全内容，通过了再转发到指定地址。",
+   "en": "An HTTP inspection gateway that checks request content with Jev before optionally forwarding it to an HTTPS destination.",
+   "ja": "Jev で本文を検査し、条件を満たせば HTTPS 宛先に転送するゲートウェイ。",
+   "ko": "Jev로 본문을 검사하고 조건을 충족하면 HTTPS 대상에 전달하는 게이트웨이."
+  },
+  "dp": {
+   "zh": "检查请求内容是否允许通过；本地代码在 pass 时转发，review 或 block 时拦住。",
+   "en": "Jev judges prompt injection or unsafe content; local rules forward, flag or block the request.",
+   "ja": "Jev が指示注入や不適切な内容を判定し、ローカル規則が転送・確認・遮断を決める。",
+   "ko": "Jev가 프롬프트 주입이나 유해 내용을 판단하고 로컬 규칙이 전달·검토·차단을 결정한다."
+  }
+ },
+ {
+  "repo": "doeixd/jev-pref",
+  "url": "https://github.com/doeixd/jev-pref",
+  "stars": 4,
+  "forks": 0,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "agent-skills",
+   "claude-code",
+   "code-review",
+   "jev",
+   "skills-sh",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Evaluation & Observability",
+  "desc": {
+   "zh": "把 AGENTS.md 中的项目偏好整理为规则，再用 Jev 检查 hunk、暂存文件或 PR。",
+   "en": "Turns AGENTS.md preferences into rules checked by Jev against hunks, staged files or PRs.",
+   "ja": "AGENTS.md のプロジェクト方針をルールに整理し、hunk・ステージ済みファイル・PR を Jev で点検する。",
+   "ko": "AGENTS.md의 프로젝트 선호를 규칙으로 정리해 hunk·스테이징 파일·PR을 Jev로 검사한다."
+  },
+  "dp": {
+   "zh": "Jev 判断代码变更是否触及配置规则，程序将答案映射为检查结果。",
+   "en": "Jev classifies change evidence against configured rules; code maps answers to review outcomes.",
+   "ja": "変更証拠を設定ルールに照らして分類し、コードが結果へ変換する。",
+   "ko": "변경 증거를 설정 규칙에 따라 분류하면 코드가 검토 결과로 변환한다."
+  }
+ },
+ {
+  "repo": "raihankhan-rk/diffjury",
+  "url": "https://github.com/raihankhan-rk/diffjury",
+  "stars": 4,
+  "forks": 1,
+  "language": "TypeScript",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "DiffJury — TypeSafe Jev PR risk router + code review coach"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "valentynkit/jev-plays-pokemon-red",
+  "url": "https://github.com/valentynkit/jev-plays-pokemon-red",
+  "stars": 4,
+  "forks": 1,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Game & Simulation",
+  "desc": {
+   "en": "Pokemon Red on PyBoy: code owns the route and the arithmetic, Jev picks at branches in about 100 ms, calibration measured instead of assumed"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "CodeAlive-AI/mastra-jev-moderation",
+  "url": "https://github.com/CodeAlive-AI/mastra-jev-moderation",
+  "stars": 3,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Content Moderation",
+  "desc": {
+   "en": "Input moderation for Mastra agents on TypeSafe Jev — one file"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "FFatTiger/new-api-plugin-typesafe",
+  "url": "https://github.com/FFatTiger/new-api-plugin-typesafe",
+  "stars": 3,
+  "forks": 0,
+  "language": "JavaScript",
+  "license": "Apache-2.0",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "TypeSafe AI System One (Jev) task plugin for QuantumNous/new-api — native /v1/systemone, synchronous evaluation, token billing"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "HyunjunJeon/jev-judgment",
+  "url": "https://github.com/HyunjunJeon/jev-judgment",
+  "stars": 3,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Security & Guardrails",
+  "desc": {
+   "zh": "给编程 Agent 增加授权、操作风险和失败原因的判断检查。",
+   "en": "Adds judgment checks for authorization, operation risk, and failure causes to coding Agents.",
+   "ja": "コーディング Agent に権限、操作リスク、失敗原因の判断を追加する。",
+   "ko": "코딩 Agent에 권한, 작업 위험, 실패 원인 판단을 추가한다."
+  },
+  "dp": {
+   "zh": "依据对话与命令结果，判断是否需要询问用户、操作是否越界、失败能否重试。",
+   "en": "Uses conversation and command results to assess whether to ask the user, whether an action exceeds scope, and whether to retry.",
+   "ja": "会話と実行結果から、ユーザー確認の必要性、権限範囲、再試行の可否を評価する。",
+   "ko": "대화와 실행 결과로 사용자 확인 필요성, 권한 범위, 재시도 여부를 평가한다."
+  }
+ },
+ {
+  "repo": "MarissaFamularo/citation-verifier",
+  "url": "https://github.com/MarissaFamularo/citation-verifier",
+  "stars": 3,
+  "forks": 0,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "citation-verification",
+   "claude",
+   "peer-review",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Scoring & Ranking",
+  "desc": {
+   "en": "Check whether each cited paper supports the sentence citing it. Claude proves the quote, TypeSafe's Jev scores it, a human decides."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "Stumble/jev-go",
+  "url": "https://github.com/Stumble/jev-go",
+  "stars": 3,
+  "forks": 0,
+  "language": "Go",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "Community Go SDK for TypeSafe AI Jev / System One"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "WiktorB2004/llama-index-jev",
+  "url": "https://github.com/WiktorB2004/llama-index-jev",
+  "stars": 3,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "jev",
+   "llamaindex",
+   "postprocessor",
+   "python",
+   "rag",
+   "reranker",
+   "selector",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Data & Search",
+  "desc": {
+   "zh": "为 LlamaIndex 提供 Jev 重排序器和路由器，给检索片段评分或选择查询工具。",
+   "en": "Provides Jev rerankers and routers for LlamaIndex to score retrieved passages or select query tools.",
+   "ja": "LlamaIndex 向けに、検索文章の採点と問い合わせ先の選択を行う Jev 部品を提供する。",
+   "ko": "LlamaIndex에서 검색 문단을 평가하고 쿼리 도구를 선택하는 Jev 구성 요소를 제공한다."
+  },
+  "dp": {
+   "zh": "用 Score 给候选片段评相关性，用 Choice 选择查询引擎或工具。",
+   "en": "Uses Score for passage relevance and Choice for selecting query engines or tools.",
+   "ja": "Score で文章の関連性を評価し、Choice で検索エンジンやツールを選ぶ。",
+   "ko": "Score로 문단 관련성을 평가하고 Choice로 쿼리 엔진이나 도구를 선택한다."
+  }
+ },
+ {
+  "repo": "adarshmishra07/jcm-router",
+  "url": "https://github.com/adarshmishra07/jcm-router",
+  "stars": 3,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "Local proxy that picks the Claude model and effort per message using TypeSafe Jev. Routes subagents, leaves your cached main chat alone."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "gtaras7/typesafe-jev",
+  "url": "https://github.com/gtaras7/typesafe-jev",
+  "stars": 3,
+  "forks": 1,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Classification & Routing",
+  "desc": {
+   "en": "Screen a folder of CVs with the TypeSafe Jev decision model: typed judgments, an editable policy, free re-scoring."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "leonaaardob/fast-dev-compaction",
+  "url": "https://github.com/leonaaardob/fast-dev-compaction",
+  "stars": 3,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "codex",
+   "codex-plugin",
+   "compaction",
+   "jev",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Codex plugin: verbatim Jev-guided context restoration around session compaction. Port of tamaratran/fast-jev-compaction to Codex lifecycle hooks."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "milanboers/jev-plays-pokemon",
+  "url": "https://github.com/milanboers/jev-plays-pokemon",
+  "stars": 3,
+  "forks": 0,
+  "language": "Python",
+  "license": "NOASSERTION",
+  "topics": [
+   "agent",
+   "ai-agent",
+   "emulation",
+   "game-boy",
+   "jev",
+   "llm",
+   "pokemon-red",
+   "pyboy",
+   "typesafe",
+   "typesafe-jev"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Game & Simulation",
+  "desc": {
+   "en": "Playing Pokemon Red using TypeSafe Jev"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "scienthoon/jev-ood-calibration",
+  "url": "https://github.com/scienthoon/jev-ood-calibration",
+  "stars": 3,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Evaluation & Benchmarking",
+  "desc": {
+   "en": "Independent calibration test of TypeSafe's Jev on a task it cannot have seen: 900 rule-generated support tickets (choice / score / boolean) plus 3 public benchmarks via Vercel AI Gateway. Raw responses, ECE with noise floor, temperature refit, per-type sign of miscalibration. Reproducible for ~$0.06."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "us/jev-local",
+  "url": "https://github.com/us/jev-local",
+  "stars": 3,
+  "forks": 0,
+  "language": "Python",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Calibration & Research",
+  "desc": {
+   "en": "Local Jev-compatible evaluation server: POST /v1/systemone with typed noul/choice/score, open weights, no waitlist"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "valentynkit/jev.nvim",
+  "url": "https://github.com/valentynkit/jev.nvim",
+  "stars": 3,
+  "forks": 0,
+  "language": "Lua",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Scoring & Ranking",
+  "desc": {
+   "en": "Neovim: ask the buffer a question, get a quickfix list. Treesitter splits functions, Jev scores each one, probabilities land as virtual text"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-git",
+  "url": "https://github.com/AkashPriyadarshii/jev-git",
+  "stars": 2,
+  "forks": 0,
+  "language": "Rust",
+  "license": "MIT",
+  "topics": [
+   "ai-safety",
+   "cli",
+   "developer-tools",
+   "git",
+   "git-hook",
+   "jev",
+   "pre-commit",
+   "rust",
+   "security",
+   "typesafe-ai"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Verification & Guardrails",
+  "desc": {
+   "en": "Sub-second Git pre-commit & pre-push semantic reflex gate powered by TypeSafe AI Jev"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "AkashPriyadarshii/jev-scout",
+  "url": "https://github.com/AkashPriyadarshii/jev-scout",
+  "stars": 2,
+  "forks": 0,
+  "language": "Rust",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "claude-code",
+   "cli",
+   "code-search",
+   "coding-agents",
+   "crates-io",
+   "developer-tools",
+   "github-search",
+   "jev",
+   "mcp-server",
+   "package-manager",
+   "repository-search",
+   "rust",
+   "system-one",
+   "typesafe-ai",
+   "ureq",
+   "zero-hallucination"
+  ],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "Data & Search",
+  "desc": {
+   "zh": "用搜索结果建立真实仓库与 Rust crate 候选，再让 Jev 按需求相关性进行评分和选择。",
+   "en": "A repository and Rust crate search tool that asks Jev to score and select retrieved candidates for a request.",
+   "ja": "検索で得たリポジトリーと Rust crate の候補を、Jev が依頼に合わせて評価・選択する。",
+   "ko": "검색한 저장소와 Rust crate 후보를 Jev가 요청에 맞춰 평가·선택한다."
+  },
+  "dp": {
+   "zh": "比较候选信息与用户需求，对适配度和维护迹象打分，并选择候选。",
+   "en": "Compares candidate information with the request, scores fit and maintenance signals, and chooses a candidate.",
+   "ja": "候補情報と依頼を比べ、適合度や保守の兆候を評価する。",
+   "ko": "후보 정보와 요청을 비교해 적합성과 유지보수 신호를 평가한다."
+  }
+ },
+ {
+  "repo": "Butochnikov/laravel-typesafe-jev",
+  "url": "https://github.com/Butochnikov/laravel-typesafe-jev",
+  "stars": 2,
+  "forks": 0,
+  "language": "PHP",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "A",
+  "srcCat": "SDK & Integrations",
+  "desc": {
+   "zh": "把 Jev 接入 Laravel，提供配置、依赖注入、Facade 和可记录请求的测试替身。",
+   "en": "A Laravel adapter for Jev with configuration, dependency injection, a Facade and a request-recording test fake.",
+   "ja": "設定・依存性注入・Facade・リクエスト記録用 fake を備えた Laravel 向け Jev アダプター。",
+   "ko": "설정·의존성 주입·Facade·요청 기록용 fake를 갖춘 Laravel용 Jev 어댑터."
+  },
+  "dp": {
+   "zh": "复用社区 PHP SDK 发出三类判断请求，保留类型、异步 Promise 和异常。",
+   "en": "Wraps a community PHP SDK for typed judgments and preserves promises and exceptions.",
+   "ja": "コミュニティ製 PHP SDK を包み、型付き判断・Promise・例外を扱う。",
+   "ko": "커뮤니티 PHP SDK를 감싸 타입이 있는 판단·Promise·예외를 처리한다."
+  }
+ },
+ {
+  "repo": "ariel-frischer/jevkit",
+  "url": "https://github.com/ariel-frischer/jevkit",
+  "stars": 2,
+  "forks": 0,
+  "language": "Rust",
+  "license": "MIT",
+  "topics": [
+   "ai",
+   "api",
+   "classification",
+   "cli",
+   "developer-tools",
+   "jev",
+   "jevkit",
+   "json",
+   "linter",
+   "linting",
+   "llm",
+   "llm-tools",
+   "rust",
+   "token-optimization",
+   "typed-decisions",
+   "typesafe",
+   "typesafe-jev",
+   "yaml"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "Fast Rust CLI for TypeSafe Jev: typed decisions, offline linting before you pay"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "gaborishka/jev-canvas",
+  "url": "https://github.com/gaborishka/jev-canvas",
+  "stars": 2,
+  "forks": 0,
+  "language": "JavaScript",
+  "license": "MIT",
+  "topics": [
+   "hand-tracking",
+   "jev",
+   "mediapipe",
+   "openrouter",
+   "tldraw",
+   "typesafe",
+   "voice-control",
+   "web-speech-api"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Draw on a tldraw canvas with your voice and a pointing finger. Jev (TypeSafe System One) decides action, target and place in ~350 ms per spoken word."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "jgridifier/jev-research-eval",
+  "url": "https://github.com/jgridifier/jev-research-eval",
+  "stars": 2,
+  "forks": 0,
+  "language": "HTML",
+  "license": "NOASSERTION",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Evaluation & Benchmarking",
+  "desc": {
+   "en": "Reproducible Jev Ultrafast research-browser eval harness + field note (QC’d cases, suite runner, report generator). Not investment advice."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "kitze/pagegrade",
+  "url": "https://github.com/kitze/pagegrade",
+  "stars": 2,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Scoring & Ranking",
+  "desc": {
+   "en": "Grade page sections for clarity, writing and on-page SEO. WXT + TypeSafe AI Jev."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "legacybridge-tech/pi-typesafe-jev",
+  "url": "https://github.com/legacybridge-tech/pi-typesafe-jev",
+  "stars": 2,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "NOASSERTION",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "A pi extension that exposes TypeSafe (Jev, System One) judgments as five pi tools, so a model can make narrow semantic judgments while your code and your users keep control of thresholds, weights, and actions."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "mgaitan/sqlite-jev",
+  "url": "https://github.com/mgaitan/sqlite-jev",
+  "stars": 2,
+  "forks": 0,
+  "language": "C",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "Batched natural-language judgments for SQLite, powered by TypeSafe Jev"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "Kelbie/hunch",
+  "url": "https://github.com/Kelbie/hunch",
+  "stars": 1,
+  "forks": 1,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Verification & Guardrails",
+  "desc": {
+   "en": "Semantic code review with Jev, plain-English rules and Agent Skills."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "cephalization/jev-triage",
+  "url": "https://github.com/cephalization/jev-triage",
+  "stars": 1,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Data Labeling & Curation",
+  "desc": {
+   "en": "Uses typeful jev, zero sync to pull and sync large repositories for issue triage"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "edgardcham/huncho",
+  "url": "https://github.com/edgardcham/huncho",
+  "stars": 1,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "Decisions as code on System One models: typed questions, thresholds with hysteresis, nested decisions, journal, calibration"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "kuhung/understanding-jev",
+  "url": "https://github.com/kuhung/understanding-jev",
+  "stars": 1,
+  "forks": 0,
+  "language": "HTML",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Related Practices / Discussions",
+  "desc": {
+   "en": "深入解读 Jev 模型：毫秒级判定与工程边界"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "noplan-inc/limpet",
+  "url": "https://github.com/noplan-inc/limpet",
+  "stars": 1,
+  "forks": 1,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "claude-code",
+   "codex",
+   "hooks",
+   "jev"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "A Stop hook that stops your coding agent from stopping too early. Plain-language rules, judged by jev."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "rajivkuriakose/typesafe-jev-examples",
+  "url": "https://github.com/rajivkuriakose/typesafe-jev-examples",
+  "stars": 1,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "Worked examples for TypeSafe's Jev System One decision model, runnable today through OpenRouter"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "ably-labs/jev-pong",
+  "url": "https://github.com/ably-labs/jev-pong",
+  "stars": 0,
+  "forks": 2,
+  "language": "TypeScript",
+  "license": "Apache-2.0",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Evaluation & Benchmarking",
+  "desc": {
+   "en": "Pong where the ball moves one step per model decision. Jev vs LLMs via Vercel AI Gateway, every player and agent on an Ably channel."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "bitnovus/jev-spam-eval",
+  "url": "https://github.com/bitnovus/jev-spam-eval",
+  "stars": 0,
+  "forks": 0,
+  "language": "Jupyter Notebook",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Content Moderation",
+  "desc": {
+   "en": "Zero-shot spam filtering with TypeSafe Jev Noul questions, compared with TF-IDF baselines"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "dakdevs/decide-mcp",
+  "url": "https://github.com/dakdevs/decide-mcp",
+  "stars": 0,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Infra / SDKs / Integrations",
+  "desc": {
+   "en": "Configurable decision MCP server with AI SDK, Jev, percentage scores, and bias profile routing"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "komikat/jev-bfs",
+  "url": "https://github.com/komikat/jev-bfs",
+  "stars": 0,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Scoring & Ranking",
+  "desc": {
+   "en": "Wikipedia link races with direct Jev ranking and a live terminal display."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "kxzk/typesafe-jev-drone-demo",
+  "url": "https://github.com/kxzk/typesafe-jev-drone-demo",
+  "stars": 0,
+  "forks": 0,
+  "language": "Python",
+  "license": null,
+  "topics": [],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Game & Simulation",
+  "desc": {
+   "en": "Three.js drone simulator with a Python backend and live TypeSafe Jev navigation"
+  },
+  "dp": {}
+ },
+ {
+  "repo": "shitianfang/wakegate",
+  "url": "https://github.com/shitianfang/wakegate",
+  "stars": 0,
+  "forks": 0,
+  "language": "TypeScript",
+  "license": "MIT",
+  "topics": [
+   "ai-agents",
+   "ai-sdk",
+   "cloudflare-durable-objects",
+   "cloudflare-workers",
+   "jev",
+   "long-running-agents",
+   "typesafe",
+   "typesafe-ai"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Agent Decisions",
+  "desc": {
+   "en": "Ask Jev whether a sleeping agent's wakeup is worth a full LLM turn before you resume it. A fail-open wake gate for long-running agents on Workers, Durable Objects and Node."
+  },
+  "dp": {}
+ },
+ {
+  "repo": "yodablocks/jev-orderby-bench",
+  "url": "https://github.com/yodablocks/jev-orderby-bench",
+  "stars": 0,
+  "forks": 0,
+  "language": "Python",
+  "license": "MIT",
+  "topics": [
+   "benchmark",
+   "calibration",
+   "duckdb",
+   "information-retrieval",
+   "jev",
+   "llm-evaluation",
+   "python",
+   "ranking",
+   "reproducible-research",
+   "typesafe"
+  ],
+  "archived": false,
+  "tier": "B",
+  "srcCat": "Evaluation & Benchmarking",
+  "desc": {
+   "en": "Does ORDER BY over a Jev probability put rows in a defensible order? Independent ranking, calibration and invariant measurements of TypeSafe AI's Jev: passes six pre-registered gates on 360 labeled rows, fails four of six on graded product relevance."
+  },
+  "dp": {}
+ }
+]

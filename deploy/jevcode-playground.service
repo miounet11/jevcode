@@ -1,0 +1,15 @@
+[Unit]
+Description=JevCode guest judgment playground
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/jevcode-playground
+EnvironmentFile=/etc/jevcode/playground.env
+ExecStart=/usr/bin/node /opt/jevcode-playground/playground.mjs
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

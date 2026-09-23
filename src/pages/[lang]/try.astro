@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, type Lang } from '../../i18n/ui';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const path = `/${lang}/try/`;
+const copy = lang === 'zh'
+  ? {
+      title: '试一次判定',
+      lead: '不用注册。写下一段状态，Jev 返回的是带概率的判定，不是一段生成文本。结果会得到一个可以转发的链接。',
+      state: '状态',
+      run: '运行判定',
+      running: '判定中…',
+      share: '分享这次结果',
+      copied: '链接已复制',
+    }
+  : {
+      title: 'Try a judgment',
+      lead: 'No account. Write a state and Jev returns a probability, not generated prose. The result gets a link you can forward.',
+      state: 'State',
+      run: 'Run judgment',
+      running: 'Judging…',
+      share: 'Share this result',
+      copied: 'Link copied',
+    };
+
+const preset = {
+  state: 'Help. My payouts have been failing for 3 days and I need this resolved today.',
+  questions: {
+    is_urgent: { type: 'noul', instructions: 'Does this convey urgency?' },
+    intent: {
+      type: 'choice',
+      instructions: 'What does the sender want?',
+      options: ['refund', 'status update', 'complaint', 'other'],
+    },
+  },
+};
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+  <section class="section">
+    <div class="wrap try">
+      <p class="eyebrow"><span class="eyebrow__dot"></span>Playground</p>
+      <h1>{copy.title}</h1>
+      <p class="try__lead">{copy.lead}</p>
+
+      <label class="try__label" for="state">{copy.state}</label>
+      <textarea id="state" rows="5">{preset.state}</textarea>
+
+      <button class="btn btn--primary" id="run" type="button">{copy.run}</button>
+      <p class="try__error" id="error" hidden></p>
+
+      <div class="try__result" id="result" hidden>
+        <div id="bars"></div>
+        <a class="btn btn--ghost" id="share" href="#"></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ preset, copy, lang }}>
+  const stateEl = document.getElementById('state');
+  const runEl = document.getElementById('run');
+  const errorEl = document.getElementById('error');
+  const resultEl = document.getElementById('result');
+  const barsEl = document.getElementById('bars');
+  const shareEl = document.getElementById('share');
+
+  function bar(label, value) {
+    const pct = Math.round(Number(value) * 100);
+    return `<div class="try__bar"><div class="try__bar-label"><span>${label}</span><b>${pct}%</b></div><div class="try__track"><span style="width:${pct}%"></span></div></div>`;
+  }
+
+  function render(record) {
+    const html = [];
+    for (const [name, answer] of Object.entries(record.answers || {})) {
+      if (typeof answer.noul === 'number') html.push(bar(name, answer.noul));
+      else if (answer.choice && answer.confidence) {
+        html.push(`<p class="try__choice"><b>${name}</b> → ${answer.choice}</p>`);
+        for (const [option, p] of Object.entries(answer.confidence)) html.push(bar(option, p));
+      }
+    }
+    barsEl.innerHTML = html.join('');
+    shareEl.href = `/${lang}/r/${record.id}/`;
+    shareEl.textContent = copy.share;
+    resultEl.hidden = false;
+  }
+
+  runEl.addEventListener('click', async () => {
+    errorEl.hidden = true;
+    runEl.disabled = true;
+    runEl.textContent = copy.running;
+    try {
+      const res = await fetch('/api/try', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ state: stateEl.value, questions: preset.questions }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'request failed');
+      render(data);
+      history.replaceState({}, '', `/${lang}/r/${data.id}/`);
+    } catch (err) {
+      errorEl.hidden = false;
+      errorEl.textContent = err.message;
+    } finally {
+      runEl.disabled = false;
+      runEl.textContent = copy.run;
+    }
+  });
+</script>
+
+<style>
+  .try { max-width: 760px; }
+  .try h1 { font-size: clamp(36px, 5vw, 56px); letter-spacing: -0.04em; margin: 12px 0; }
+  .try__lead { color: var(--fg-muted); max-width: 62ch; }
+  .try__label { display: block; margin: 22px 0 8px; font-size: 13px; color: var(--fg-dim); }
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    background: var(--bg-elev);
+    color: var(--fg);
+    padding: 14px;
+    font: inherit;
+    resize: vertical;
+  }
+  #run { margin-top: 16px; }
+  .try__error { color: #f0a8a8; }
+  .try__result { margin-top: 28px; display: grid; gap: 14px; }
+  .try__bar-label, .try__choice { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
+  .try__track { height: 8px; border-radius: 99px; background: var(--bg-code); overflow: hidden; margin: 6px 0 12px; }
+  .try__track span { display: block; height: 100%; background: var(--accent); }
+</style>
