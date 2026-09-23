@@ -15,8 +15,19 @@ const CHECK = process.argv.includes('--check');
 const TOKEN = process.env.GITHUB_TOKEN;
 
 const src = readFileSync('src/data/ecosystem.ts', 'utf8');
-const repos = [...src.matchAll(/repo: '([^']+)'/g)].map((m) => m[1]);
-console.error(`发现 ${repos.length} 个仓库`);
+// 吸收条目用双引号、原始条目用单引号，两种都要认，否则漏刷大部分仓库
+// 同时按 url 排掉非 GitHub 条目：生态页也收录 HuggingFace 模型与站点，
+// 其 repo 字段存的是 HF id 或域名。对这些发 GitHub API 会 404（被误报 gone），
+// 更糟的是同名 GitHub 仓库存在时会静默把别人的 stars 写进来——实测 YannQi/R-4B
+// 撞上了论文仓库 yannqi/R-4B（MLLM，与 Jev 判定无关），stars 被写成 141。
+const all = [...src.matchAll(/repo: ['"]([^'"]+)['"],\s*\n\s*url: ['"]([^'"]+)['"]/g)];
+const repos = all.filter(([, , url]) => url.startsWith('https://github.com/')).map(([, repo]) => repo);
+const nonGh = all.filter(([, , url]) => !url.startsWith('https://github.com/')).map(([, repo]) => repo);
+console.error(`发现 ${repos.length} 个 GitHub 仓库`);
+if (nonGh.length) {
+  // 这些条目的 stars 是快照值，本脚本不刷新——改由人工在收录时更新
+  console.error(`跳过 ${nonGh.length} 个非 GitHub 条目（stars 为手动快照）：${nonGh.join(', ')}`);
+}
 
 async function fetchOne(repo, attempt = 1) {
   const res = await fetch(`https://api.github.com/repos/${repo}`, {
@@ -42,6 +53,9 @@ async function fetchOne(repo, attempt = 1) {
   return res.json();
 }
 
+// repo 名可含正则元字符（omg.dev、jev.nvim 的点号），不转义会错配到别的条目
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
+
 const changes = [];
 const results = [];
 for (const repo of repos) {
@@ -55,12 +69,10 @@ for (const repo of repos) {
   if (j.archived) changes.push({ repo, kind: 'archived' });
 }
 
-// 与现有值 diff（stars/forks）
-const oldStars = [...src.matchAll(/repo: '([^']+)',[\s\S]*?stars: (\d+)/g)];
-// 上面贪婪问题，改为逐 repo 查找
+// 与现有值 diff（stars/forks），逐 repo 查找（贪婪一次性匹配会错位）
 const oldMap = {};
 for (const repo of repos) {
-  const m = src.match(new RegExp(`repo: '${repo}',[\\s\\S]*?\\n    stars: (\\d+),\\s*\\n    forks: (\\d+)`));
+  const m = src.match(new RegExp(`repo: ['"]${esc(repo)}['"],[\\s\\S]*?\\n    stars: (\\d+),\\s*\\n    forks: (\\d+)`));
   if (m) oldMap[repo] = { stars: Number(m[1]), forks: Number(m[2]) };
 }
 
@@ -94,7 +106,7 @@ if (dateRe.test(out)) {
 }
 for (const d of data) {
   if (!d.fresh || d.gone) continue;
-  const re = new RegExp(`(repo: '${d.repo.replace(/\//g, '\\/')}',[\\s\\S]*?\\n    stars: )\\d+(,\\s*\\n    forks: )\\d+(,)`);
+  const re = new RegExp(`(repo: ['"]${esc(d.repo)}['"],[\\s\\S]*?\\n    stars: )\\d+(,\\s*\\n    forks: )\\d+(,)`);
   const next = out.replace(re, `$1${d.fresh.stargazers_count}$2${d.fresh.forks_count}$3`);
   if (next !== out) updated++;
   out = next;

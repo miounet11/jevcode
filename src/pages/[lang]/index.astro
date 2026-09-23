@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { languages, useTranslations, type Lang } from '../../i18n/ui';
 import { primitiveCards, patternCards } from '../../data/site';
+import { projects } from '../../data/ecosystem';
+import { pulseEntries } from '../../data/community';
 import Figure from '../../components/Figure.astro';
 import { heroFigure } from '../../data/images';
 
@@ -23,12 +25,21 @@ const stats = [
   { num: '20+', label: t('home.stats.cases') },
 ];
 
-const quickLinks = [
-  { href: `/${lang}/introduction/`, label: t('home.link.whatIs') },
-  { href: `/${lang}/quickstart/`, label: t('home.link.quickstart') },
-  { href: `/${lang}/primitives/`, label: t('home.link.primitives') },
-  { href: `/${lang}/patterns/`, label: t('home.link.patterns') },
+const destinations = [
+  { href: `/${lang}/introduction/`, title: t('home.dest.docs'), desc: t('home.dest.docs.desc') },
+  { href: `/${lang}/quickstart/`, title: t('home.dest.start'), desc: t('home.dest.start.desc') },
+  { href: `/${lang}/ecosystem/`, title: t('home.dest.eco'), desc: t('home.dest.eco.desc') },
+  { href: `/${lang}/community/`, title: t('home.dest.pulse'), desc: t('home.dest.pulse.desc') },
 ];
+
+const freshDocs = all
+  .filter((e) => e.id.startsWith(`${lang}/`))
+  .sort((a, b) => b.data.order - a.data.order)
+  .slice(0, 4);
+
+const featuredProjects = [...projects].sort((a, b) => b.stars - a.stars).slice(0, 4);
+const featuredPulse = [...pulseEntries].sort((a, b) => b.likes - a.likes).slice(0, 3);
+const fmtStars = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
 
 const path = `/${lang}/`;
 ---
@@ -43,8 +54,8 @@ const path = `/${lang}/`;
       <h1>{t('home.hero.title')}</h1>
       <p class="hero__lead">{t('home.hero.lead')}</p>
       <div class="cta-row">
-        <a class="btn btn--primary" href={`/${lang}/introduction/`}>{t('home.hero.cta')} →</a>
-        <a class="btn btn--ghost" href={`/${lang}/patterns/`}>{t('home.hero.cta2')}</a>
+        <a class="btn btn--primary" href={`/${lang}/try/`}>{lang === 'zh' ? '试一次判定' : 'Try a judgment'} →</a>
+        <a class="btn btn--ghost" href={`/${lang}/introduction/`}>{t('home.hero.cta')}</a>
       </div>
       <Figure fig={heroFigure} lang={lang} priority class="figure--hero" />
     </div>
@@ -59,6 +70,58 @@ const path = `/${lang}/`;
             <div class="stat__label">{s.label}</div>
           </div>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--fresh">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 class="section__title">{t('home.whatsNew')}</h2>
+        <p class="section__lead">{t('home.whatsNew.lead')}</p>
+      </div>
+      <div class="grid grid--3">
+        <div class="fresh">
+          <div class="fresh__head">
+            <h3>{t('home.fresh.docs')}</h3>
+            <a href={`/${lang}/introduction/`}>{t('home.viewAll')}</a>
+          </div>
+          <ul>
+            {freshDocs.map((doc) => (
+              <li>
+                <a href={`/${lang}/${doc.id.replace(new RegExp(`^${lang}/`), '').replace(/\.md$/, '')}/`}>{doc.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="fresh">
+          <div class="fresh__head">
+            <h3>{t('home.fresh.community')}</h3>
+            <a href={`/${lang}/community/`}>{t('home.viewAll')}</a>
+          </div>
+          <ul>
+            {featuredPulse.map((entry) => (
+              <li>
+                <a href={`/${lang}/community/`}>{entry.author}: {entry.text.slice(0, 88)}…</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="fresh">
+          <div class="fresh__head">
+            <h3>{t('home.fresh.projects')}</h3>
+            <a href={`/${lang}/ecosystem/`}>{t('home.viewAll')}</a>
+          </div>
+          <ul>
+            {featuredProjects.map((project) => (
+              <li>
+                <a href={project.url} target="_blank" rel="noopener noreferrer">
+                  {project.repo} <span>★ {fmtStars(project.stars)}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -105,9 +168,10 @@ const path = `/${lang}/`;
         <p class="section__lead">{t('home.section.ecosystem.lead')}</p>
       </div>
       <div class="grid grid--4">
-        {quickLinks.map((q) => (
+        {destinations.map((q) => (
           <a class="card" href={q.href}>
-            <h3 class="card__title" style="margin:0">{q.label}</h3>
+            <h3 class="card__title">{q.title}</h3>
+            <p class="card__desc">{q.desc}</p>
           </a>
         ))}
       </div>

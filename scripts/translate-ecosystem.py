@@ -38,19 +38,66 @@ for a in sys.argv[1:]:
         CONCURRENCY = int(a.split("=", 1)[1])
 
 
+PROMPT = (
+    "Translate the following one-sentence project description into {lang}. "
+    "Keep these product names verbatim in Latin script, never transliterate them: "
+    "Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python. "
+    "Output only the translation, no preamble, no quotes.\n\n"
+    'Text: "{text}"'
+)
+
+
+def clean(text):
+    """去掉模型偶尔加的引号与空白，并拒收跑题输出。
+
+    实测两类坏输出：
+      - 夹带解释性前言（"The translation into Chinese ... is:"），写回后会破坏 TS 字符串；
+      - 把 Jev 音译成 杰夫 / ジェブ / 제브，品牌名不该被转写。
+    返回 None 表示弃用该结果（调用方保留英文兜底）。
+    """
+    out = text.strip().strip('"').strip()
+    if not out:
+        return None
+    # 换行会截断 TS 字符串字面量
+    if "\n" in out or "\r" in out:
+        out = " ".join(out.split())
+    # 前言/解释痕迹
+    if re.search(r"(?i)^(the translation|translated|here is|sure,|translation:)", out):
+        return None
+    if re.search(r"(?i)\bis:\s*$", out):
+        return None
+    # 品牌名被音译
+    if re.search(r"杰夫|ジェブ|제브|タイプセー|ノウル|Neulernen|Sistema Uno|Système Un", out):
+        return None
+    # 品牌名被拼错（实测出现过 Jov）
+    if re.search(r"\bJov\b", out):
+        return None
+    # 未闭合引号
+    if out.count('"') % 2 == 1:
+        return None
+    return out
+
+
 def translate(text, lang):
+    # max_tokens 必须随原文长度伸缩：固定 80 会把长简介拦腰截断
+    # （如 von 的德语被截成 "Das Open-Source-System-Entscheidungsmodell eins."）。
+    # 各语言 token/字符比不同（CJK 更省），按字符数估上界并留足余量。
+    budget = max(120, int(len(text) * 2.2))
     payload = json.dumps({
         "model": GEN_MODEL,
-        "messages": [{"role": "user", "content": f'Translate to {lang} (one short sentence, no preamble, no quotes): "{text}"'}],
-        "max_tokens": 80,
+        "messages": [{"role": "user", "content": PROMPT.format(lang=lang, text=text)}],
+        "max_tokens": min(budget, 1200),
     }).encode("utf-8")
     req = urllib.request.Request(GEN_URL, data=payload, headers={"Content-Type": "application/json"})
     for attempt in range(3):
         try:
             with urllib.request.urlopen(req, timeout=30) as r:
                 d = json.loads(r.read().decode("utf-8"))
-            out = d.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
-            return out.strip('"')
+            raw = d.get("choices", [{}])[0].get("message", {}).get("content", "")
+            out = clean(raw)
+            if out is None:
+                raise ValueError(f"bad translation output: {raw[:80]!r}")
+            return out
         except Exception as e:
             if attempt == 2:
                 raise
@@ -69,6 +116,9 @@ lines = src.split("\n")
 # 行级扫描：跟踪当前处于 desc 块还是 decisionPoint 块，记录块内各语言值。
 # 只处理双引号值（吸收条目），单引号（原始 12 条）跳过。
 FIELD_RE = re.compile(r'^\s*([a-z]{2}):\s*"(.*)",\s*$')
+# 少数条目把 4 种语言压在同一行（如 zh/en/ja/ko 一行、de/fr/es/pt 一行）。
+# 这些行语言已齐全，无需翻译，但 FIELD_RE 会把整行当成一个值导致 JSON 解析失败，故先识别并跳过。
+MULTI_LANG_RE = re.compile(r'^\s*[a-z]{2}:\s*".*",\s*[a-z]{2}:\s*"')
 
 jobs = []  # (line_index, lang, en_value)
 kind = None
@@ -94,6 +144,8 @@ for idx, line in enumerate(lines):
         block = {}
         continue
     if kind in ("desc", "decisionPoint"):
+        if MULTI_LANG_RE.match(line):
+            continue  # 4 语言同行，已齐全
         m = FIELD_RE.match(line)
         if m:
             block[m.group(1)] = parse_value(m.group(2))
@@ -119,6 +171,8 @@ for idx, line in enumerate(lines):
                     pass
         kind = None; block = {}; continue
     if kind in ("desc", "decisionPoint"):
+        if MULTI_LANG_RE.match(line):
+            continue
         m = FIELD_RE.match(line)
         if m:
             block[m.group(1)] = parse_value(m.group(2))
@@ -143,6 +197,8 @@ for idx, line in enumerate(lines):
                     pending.append((block_line_map[l], l, block["en"]))
         kind = None; block = {}; block_line_map = {}; continue
     if kind in ("desc", "decisionPoint"):
+        if MULTI_LANG_RE.match(line):
+            continue
         m = FIELD_RE.match(line)
         if m:
             block[m.group(1)] = parse_value(m.group(2))

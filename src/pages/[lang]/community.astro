@@ -46,52 +46,54 @@ const dateShort = (iso: string) => iso.slice(0, 10);
 ---
 
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
-  <div class="wrap docs-shell">
-    <main class="doc">
-      <p class="doc__breadcrumb">
-        <a href={`/${lang}/`}>{t('site.name')}</a> / {copy.title}
-      </p>
+  <section class="section">
+    <div class="wrap">
+      <main class="doc">
+        <p class="doc__breadcrumb">
+          <a href={`/${lang}/`}>{t('site.name')}</a> / {copy.title}
+        </p>
 
-      <h1 class="doc__title">{copy.title}</h1>
-      <p class="doc__desc">{copy.lead}</p>
+        <h1 class="doc__title">{copy.title}</h1>
+        <p class="doc__desc">{copy.lead}</p>
 
-      <div class="stats__grid stats__grid--single">
-        <div class="stat">
-          <div class="stat__num">{pulseEntries.length}</div>
-          <div class="stat__label">{copy.stats}</div>
+        <div class="stats__grid stats__grid--single">
+          <div class="stat">
+            <div class="stat__num">{pulseEntries.length}</div>
+            <div class="stat__label">{copy.stats}</div>
+          </div>
         </div>
-      </div>
 
-      <p class="pulse__note">{copy.note}</p>
+        <p class="pulse__note">{copy.note}</p>
 
-      {groups.map((g) => g.items.length > 0 && (
-        <section class="pulse">
-          <div class="section__head">
-            <h2 class="section__title">{g.title}</h2>
-          </div>
-          <div class="pulse__list">
-            {g.items.map((e) => (
-              <article class="pulse__card">
-                <div class="pulse__head">
-                  <span class="pulse__author">{e.author}</span>
-                  <span class="pulse__handle">@{e.screenName}</span>
-                  <span class="pulse__date">{dateShort(e.date)}</span>
-                  <span class="pulse__views" title="views">▲ {fmt(e.views)}</span>
-                </div>
-                <p class="pulse__text" lang="en">{e.text}</p>
-                <div class="pulse__actions">
-                  <a class="pulse__link" href={e.url} target="_blank" rel="noopener noreferrer">{copy.viewOriginal} ↗</a>
-                  {e.projectUrl && (
-                    <a class="pulse__link pulse__link--proj" href={e.projectUrl} target="_blank" rel="noopener noreferrer">{copy.project} ↗</a>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      ))}
-    </main>
-  </div>
+        {groups.map((g) => g.items.length > 0 && (
+          <section class="pulse">
+            <div class="section__head">
+              <h2 class="section__title">{g.title}</h2>
+            </div>
+            <div class="pulse__list">
+              {g.items.map((e) => (
+                <article class="pulse__card">
+                  <div class="pulse__head">
+                    <span class="pulse__author">{e.author}</span>
+                    <span class="pulse__handle">@{e.screenName}</span>
+                    <span class="pulse__date">{dateShort(e.date)}</span>
+                    <span class="pulse__views" title="views">▲ {fmt(e.views)}</span>
+                  </div>
+                  <p class="pulse__text" lang="en">{e.text}</p>
+                  <div class="pulse__actions">
+                    <a class="pulse__link" href={e.url} target="_blank" rel="noopener noreferrer">{copy.viewOriginal} ↗</a>
+                    {e.projectUrl && (
+                      <a class="pulse__link pulse__link--proj" href={e.projectUrl} target="_blank" rel="noopener noreferrer">{copy.project} ↗</a>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+      </main>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
@@ -112,7 +114,7 @@ const dateShort = (iso: string) => iso.slice(0, 10);
   }
   .pulse__list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
     gap: 14px;
   }
   .pulse__card {
