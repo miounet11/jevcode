@@ -1,6 +1,6 @@
 ---
 title: "HTTP-API-Referenz"
-description: "Rufen Sie den TypeSafe-Auswertungsendpunkt direkt auf – Anforderungsstruktur, die Fragearten noul / choice / score, Antwortstrukturen und Fehlerbehandlung."
+description: "Rufen Sie den TypeSafe-Evaluierungsendpunkt direkt auf — Anfrageformat, die noul-/choice-/score-Fragetypen, Antwortformate und Fehlerbehandlung."
 section: sdk
 order: 50
 tags: ['api', 'http', 'reference']
@@ -15,9 +15,9 @@ Authorization: Bearer <API_KEY>
 Content-Type: application/json
 ```
 
-Sende eine `state` mit einer Karte von getippten `questions` und erhalte pro Frage eine `answer` zurück.
+Sende eine `state` mit einer Karte von typisierten `questions` und erhalte pro Frage eine `answer` zurück.
 
-## Anfragetext
+Anfragekörper
 
 ```json
 {
@@ -34,11 +34,11 @@ Sende eine `state` mit einer Karte von getippten `questions` und erhalte pro Fra
 
 | Feld | Typ | Erforderlich | Beschreibung |
 | :--- | :--- | :--- | :--- |
-| `state` | string \| object \| array | Ja | Der zu bewertende Inhalt. Ein einfacher String für Text oder strukturierte Daten für Chat-Protokolle, Datensätze oder den aktuellen Zustand Ihrer Anwendung |
+| `state` | string \| object \| array | Ja | Der zu bewertende Inhalt. Ein einfacher String für Text oder strukturierte Daten für Chat-Verläufe, Datensätze oder den aktuellen Zustand Ihrer Anwendung |
 | `model` | string | Ja | Das Modell, das die Anfrage verarbeitet. Verwenden Sie `jev-latest`, TypeSafes Flaggschiff-Modell; weitere Modelle und Aliase finden Sie auf der offiziellen Models-Seite |
 | `questions` | map&lt;string, Question&gt; | Ja | Eine Map von typisierten Fragen |
 
-Sie wählen die Schlüssel in `questions`, und jede Antwort wird unter dem **gleichen Schlüssel** zurückgegeben. Dieser Schlüssel wird nicht an das zugrunde liegende Modell gesendet und nicht bei der Inferenz verwendet, sodass Sie ihn nach Ihrer Geschäftsdomäne benennen können (`department`, `is_urgent`).
+Sie wählen die Schlüssel in `questions`, und jede Antwort wird unter dem **gleichen Schlüssel** zurückgegeben. Dieser Schlüssel wird nicht an das zugrunde liegende Modell gesendet und wird nicht bei der Inferenz verwendet, sodass Sie ihn nach Ihrer Geschäftsdomäne benennen können (`department`, `is_urgent`).
 
 ## Die drei Fragetypen
 
@@ -72,7 +72,7 @@ Eine Ja/Nein-Frage. **Gibt die Wahrscheinlichkeit zurück, dass die Antwort Ja i
 
 ### choice — aus Optionen wählen
 
-Wähle eine Option aus einer von dir definierten Menge und gib die gewählte Option **sowie die vollständige Wahrscheinlichkeitsverteilung** zurück.
+Wähle eine Option aus einer von dir definierten Menge und gib die gewählte Option **sowie die vollständige Wahrscheinlichungsverteilung** zurück.
 
 ```json
 {
@@ -88,11 +88,11 @@ Wähle eine Option aus einer von dir definierten Menge und gib die gewählte Opt
 }
 ```
 
-`criteria` ist erforderlich, vom Typ `map⦇0⦈`: Optionenamen, die einer Rubrikbeschreibung zugeordnet sind. Verwenden Sie `null` als Wert, wenn eine Option keine weitere Erklärung benötigt.
+`criteria` ist erforderlich, vom Typ `map<string, string | null>`: Optionenamen, die einer Rubrikbeschreibung zugeordnet sind. Verwenden Sie `null` als Wert, wenn eine Option keine weitere Erklärung benötigt.
 
 ### score — entlang einer Skala bewerten
 
-Bewerte `state` anhand eines von dir definierten Kriterienkatalogs und gib einen **wahrscheinlichkeitsgewichteten Wert über deine Stufen** zurück.
+Bewerte `state` anhand einer von dir definierten Rubrik und gib einen **wahrscheinlichkeitsgewichteten Wert über deine Stufen** zurück.
 
 ```json
 {
@@ -104,11 +104,11 @@ Bewerte `state` anhand eines von dir definierten Kriterienkatalogs und gib einen
 }
 ```
 
-`criteria` ist erforderlich und ein **geordnetes Array** von Level-Beschreibungen. Du musst mindestens zwei Level angeben.
+`criteria` ist erforderlich und ein **geordnetes Array** von Level-Beschreibungen. Du musst mindestens zwei Levels angeben.
 
 ## Antwortkörper
 
-Jede Frage erzeugt eine Antwort, verknüpft mit der von Ihnen angegebenen ID.
+Jede Frage erzeugt eine Antwort, verknüpft mit der id, die Sie angegeben haben.
 
 ```json
 {
@@ -131,13 +131,13 @@ Jede Frage erzeugt eine Antwort, verknüpft mit der von Ihnen angegebenen ID.
 
 ### Antwortformen nach Typ
 
-Jede Antwort trägt eine `type`, die ihrer Frage entspricht. `choice` und `score` Antworten tragen zudem `confidence` (zwischen 0 und 1), das aus der Wahrscheinlichkeitsverteilung dieser Antwort abgeleitet wird (siehe die offizielle Confidence-Seite).
+Jede Antwort trägt eine `type`, die ihrer Frage entspricht. `choice` und `score` Antworten tragen ebenfalls `confidence` (zwischen 0 und 1), abgeleitet aus der Wahrscheinlichkeitsverteilung dieser Antwort (siehe die offizielle Confidence-Seite).
 
 **noul Antwort**
 
 | Feld | Typ | Beschreibung |
 | :--- | :--- | :--- |
-| `noul` | Zahl | Die Ja/Nein-Antwort, von 0 (Nein) bis 1 (Ja) |
+| `noul` | number | Die Ja/Nein-Antwort, von 0 (nein) bis 1 (ja) |
 
 ```json
 { "type": "noul", "noul": 0.92 }
@@ -160,12 +160,12 @@ Jede Antwort trägt eine `type`, die ihrer Frage entspricht. `choice` und `score
 }
 ```
 
-**Antwort bewerten**
+**Antwort für Score**
 
 | Feld | Typ | Beschreibung |
 | :--- | :--- | :--- |
 | `score` | number | Der wahrscheinlichkeitsgewichtete Wert, der **zwischen den Stufen liegen kann** |
-| `legend` | map&lt;string, string&gt; | Ordnet jeden Stufenindex seiner Beschreibung zu |
+| `legend` | map&lt;string, string&gt; | Ordnet jedem Stufenindex seine Beschreibung zu |
 | `probabilities` | map&lt;string, number&gt; | Wahrscheinlichkeit pro Stufe (String-Schlüssel); summiert sich zu 1 |
 | `confidence` | number | Wie sicher das Modell ist, abgeleitet aus den Wahrscheinlichkeiten |
 
@@ -179,7 +179,7 @@ Jede Antwort trägt eine `type`, die ihrer Frage entspricht. `choice` und `score
 }
 ```
 
-Beachte, wie `score` mit `probabilities` zusammenhängt: Die drei Ebenen-Wahrscheinlichkeiten betragen 0,05 / 0,3 / 0,65, gewichtet zu einem `score` von 1,6. `score` muss also keine ganze Zahl sein – was genau den Unterschied zu `choice` ausmacht: `choice` bietet dir eine diskrete Option, während `score` „etwas zwischen zwei Ebenen“ ausdrücken kann.
+Beachten Sie, wie `score` mit `probabilities` zusammenhängt: Die drei Wahrscheinlichkeiten auf Ebene sind 0,05 / 0,3 / 0,65, gewichtet zu einem `score` von 1,6. Daher muss `score` keine ganze Zahl sein – was genau der Punkt ist, der es von `choice` unterscheidet: `choice` bietet Ihnen eine diskrete Option, während `score` „irgendwo zwischen zwei Ebenen“ ausdrücken kann.
 
 ## Fehler
 
@@ -194,4 +194,4 @@ Fehler verwenden standardmäßige HTTP-Statuscodes, mit einem JSON-Body, der bes
 
 ### Umgang mit Ratenbegrenzungen
 
-Bei `429` oder `529` **mit exponentieller Backoff wiederholen**, anstatt sofort erneut zu versuchen. Wenn Sie ein offizielles SDK verwenden, übernimmt dessen Standard-Wiederholungsrichtlinie dies automatisch, sodass kein zusätzlicher Code erforderlich ist.
+Bei `429` oder `529` **mit exponentieller Backoff-Wiederholung** versuchen, anstatt sofort erneut zu versuchen. Wenn Sie ein offizielles SDK verwenden, behandelt dessen Standard-Wiederholungsrichtlinie dies automatisch, sodass kein zusätzlicher Code erforderlich ist.

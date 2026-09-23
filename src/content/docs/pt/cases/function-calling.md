@@ -7,7 +7,7 @@ tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/function_calling"
 translatedFrom: en
 ---
-Quando você pede um "latte gelado grande com aveia, sem adoçante", o barista não anota sua frase. Ele marca quatro opções em um copo. Este livro de receitas faz o mesmo para uma API de negociação: uma frase entra, e sai um nome de função e seus argumentos como enums avaliados, cada um com uma confiança.
+Quando você pede um "latte gelado de aveia grande, sem adoçante", o barista não anota sua frase. Ele marca quatro opções em um copo. Este livro de receitas faz o mesmo para uma API de negociação: uma frase entra, e sai um nome de função e seus argumentos como enums avaliados, cada um com uma confiança.
 
 ```text
 "plot rolling correlation between nvda and spy for the past month"
@@ -23,7 +23,7 @@ Quando você pede um "latte gelado grande com aveia, sem adoçante", o barista n
     list_symbols()                                                     confidence 1.00
 ```
 
-Essas chamadas vão para dez funções comuns em um assistente de negociação. Seus argumentos recebem valores de listas fixas, portanto, são ⦇0⦇s já:
+Essas chamadas vão para dez funções comuns em um assistente de negociação. Seus argumentos recebem valores de listas fixas, então eles são `Literal`s já:
 
 ```python
 def plot_price(
@@ -38,10 +38,10 @@ def plot_price(
 ```
 
 Um argumento cujos valores provêm de uma lista fixa é um conjunto fechado. Quando ele assume um valor
-desssa lista, recebe uma pergunta `Choice` sobre exatamente esses valores, de modo que o que
+desssa lista, ele recebe uma pergunta `Choice` sobre exatamente esses valores, então o que
 chega à função é um valor que a função aceita. Você deixa as funções de lado. O que
 você adiciona é uma especificação que diz em palavras simples o que cada argumento significa. No final, você tem um
-`Dispatcher` que pode apontar para suas próprias funções.
+`Dispatcher` que você pode apontar para suas próprias funções.
 
 ## Configuração
 
@@ -50,8 +50,8 @@ pip install ipython polars matplotlib numpy "typesafe-sdk>=0.5.7" cooksafe --ext
 ```
 
 Defina `TYPESAFE_API_KEY`. Dois módulos ficam ao lado deste arquivo. `trader.py` contém as dez
-funções, além de um cliente TypeSafe que lê respostas de um cache, de modo que o novo
-renderização reproduz os números abaixo sem chamar a API. `dispatch.py` contém o código que lê uma
+funções, além de um cliente TypeSafe que lê respostas de um cache, então o re-renderização reproduz
+os números abaixo sem chamar a API. `dispatch.py` contém o código que lê uma
 assinatura e uma especificação e faz a chamada.
 
 ```python
@@ -76,7 +76,7 @@ print(f"{len(TOOLS)} functions over {load().height:,} one-minute bars")
 As dicas de tipo já indicam quais argumentos vêm de uma lista fixa e o que há em cada
 lista. `closed_sets` lê uma assinatura e organiza esses argumentos em três formas: uma
 **escolha** (um `Literal`, ou seja, um valor da lista), um **conjunto** (um `list[Literal[...]]`,
-ou seja, qualquer número deles) ou um **sinalizador** (um `bool`, ou seja, ligado ou desligado). Todas as dez funções são
+ou seja, qualquer número deles) ou um **flag** (um `bool`, ou seja, ligado ou desligado). Todas as dez funções são
 definidas em `trader.py`.
 
 ```python
@@ -112,10 +112,7 @@ livre, números e datas funcionam da mesma forma: sem pergunta, e o padrão da f
 
 ## Escreva a especificação
 
-O `Literal` fornece as strings `"1mo"` e `"3mo"`. Ele não afirma que um usuário digitando
-"este trimestre" se refere ao segundo. É a especificação que diz isso. Ela contém uma pergunta por argumento,
-uma linha por opção, uma descrição por função e mais uma pergunta que escolhe entre as
-funções. Ela reside em `spec.json`, e um LLM pode escrevê-la para você a partir das assinaturas.
+O `Literal` fornece as strings `"1mo"` e `"3mo"`. Ele não diz que um usuário digitando "este trimestre" significa o segundo. A especificação diz isso. Ela mantém uma pergunta por argumento, uma linha por opção, uma descrição por função e mais uma pergunta que escolhe entre as funções. Ela reside em `spec.json`, e um LLM pode escrevê-la para você a partir das assinaturas.
 
 ```python
 SPEC = json.loads(Path("spec.json").read_text())
@@ -151,18 +148,15 @@ for argument in ("style", "moving_average"):
 }
 ```
 
-As chaves de opção são as strings que a função recebe, portanto nada precisa mapear um rótulo de volta para um argumento depois. `stated` torna um argumento opcional. É uma segunda pergunta sim/não perguntando se o comando diz algo sobre esse argumento em absoluto. Quando a resposta é não, a chamada omite esse argumento e o padrão próprio da função se aplica.
+As chaves de opção são as strings que a função recebe, portanto nada precisa mapear um rótulo de volta para um argumento depois. `stated` torna um argumento opcional. É uma segunda pergunta sim/não perguntando se o comando diz algo sobre esse argumento em tudo. Quando a resposta é não, a chamada omite esse argumento e o padrão próprio da função se aplica.
 
 Um argumento de conjunto recebe sua pergunta uma vez por membro, com `{}` substituindo o nome do membro. `"Does the user want {} in the comparison?"` torna-se uma pergunta por ticker.
 
-Escreva cada pergunta sobre a ideia em vez das palavras que um usuário pode escolher, porque a correspondência é baseada no significado: "amd está acompanhando a nvidia ultimamente" atinge `rolling_correlation` mesmo
-que nem *acompanhando* nem *ultimamente* apareçam em `spec.json`. Evite nomear uma
-pergunta com base em seu parâmetro - `"Which resolution?"` não fornece ao comando nada para
-corresponder.
+Escreva cada pergunta sobre a ideia em vez das palavras que um usuário pode escolher, porque a correspondência é baseada no significado: "is amd tracking nvidia lately" atinge `rolling_correlation` mesmo que nem *tracking* nem *lately* apareçam em `spec.json`. Evite nomear uma pergunta com base em seu parâmetro - `"Which resolution?"` não fornece ao comando nada contra o qual fazer a correspondência.
 
 ## Transforme a especificação em perguntas
 
-`Dispatcher` constrói as perguntas a partir da especificação uma vez. Cada comando é então uma única solicitação
+`Dispatcher` compila as perguntas a partir da especificação uma vez. Cada comando é então uma solicitação
 carregando a escolha da função e os argumentos de todas as funções, e o despachante lê
 apenas as respostas da função escolhida.
 
@@ -189,7 +183,7 @@ for qid in (
 
 ## Execute catorze comandos
 
-Uma requisição ocupa uma linha, e seu `confidence` é o julgamento menos certo por trás
+Um pedido ocupa uma linha, e seu `confidence` é o julgamento menos certo por trás
 daquela chamada.
 
 ```python
@@ -303,10 +297,10 @@ top 3 losers over 1d
 
 ## Leia a confiança
 
-`confidence` relata o julgamento menos certo na chamada, em vez do produto
-de todos eles, já que um único argumento errado é suficiente para estragar o resultado. Um produto responde a uma
+`confidence` relata a avaliação menos certa na chamada, em vez do produto
+de todas elas, já que um único argumento errado é suficiente para estragar o resultado. Um produto responde a uma
 pergunta diferente ("está tudo certo em cada parte"), e ele diminui à medida que a função recebe mais
-argumentos, independentemente de algum julgamento específico ser instável.
+argumentos, independentemente de uma única avaliação ser instável.
 
 De onde veio esse número, argumento por argumento:
 
@@ -332,12 +326,12 @@ print(f"  weakest argument: {call.weakest().name}")
   weakest argument: benchmark
 ```
 
-`window` e `resolution` estão ambos omitidos aqui, porque "ultimamente" não especifica o quanto para trás
+`window` e `resolution` estão ambos omitidos aqui, porque "recentemente" não especifica há quanto tempo
 ou em quais barras, então `rolling_correlation` segue seus padrões próprios de um mês e barras
-horárias. É para isso que serve a pergunta `stated`. Sem ela, a escolha teria que nomear
+horárias. É para isso que serve a pergunta `stated`. Sem ela, a escolha teria de nomear
 alguma janela, e teria nomeado uma com confiança.
 
-## Abra no playground
+## Abra-o no playground
 
 O link abaixo contém um comando e as perguntas para a função que ele escolheu: a escolha
 entre as dez descrições de função, e os quatro argumentos de `rolling_correlation`. Edite o
@@ -359,4 +353,4 @@ display(
 )
 ```
 
-[Abra o comando e suas perguntas no playground do TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIADgDYQr4BOEJJAlkgOb5QSWUIkCGKdES+AEYIUAdwTJ8SAG5gu+LkjD4AzkQCe+AGZt8KABYJ8RLiopx+BkABpCRanCIoVGbHkLAAOiAD6PlBA0ft4EXiAo6kQIIfjeUPoQdFDRNrEgDGaUMFC8-Cox3gDq+jz4dCp6hvgwKgiUCioA1gzMBkYolFxgLQ0q5SiKFAH4kAD83rZxlHQodXRcMWH0Zj4q6nCCNPnu3mhVNXX4ooMVw41IEKJH+kn6quubJBW6CVdw2Xc3Zmya5fhkXQQYFsFyGEFUEgUSE0JkovFg3Hq8S4cPwuiQ8GElAmaTgKMaIlW8DxlHUBRAeyMB3qx1QzyQRnoDOMhzWGxoqlePVelSMogSJCMmxRygs0iBtlEMzuF1ULUF93ZJDlTEFyggMBQOO8pHIPnsSRSBF2+1qNJOenBZAgjQUFH4RjZjwA5BUDck0eL6rxEA0FCwSnDtelUJ05Op9TxZpQkOTKdUzQ1GhUefIIkQklxlR0uj1w-hGBAEBUdPUHYrHvgALTXUolIhRJAVUptNGN2ylOB0MDh2wMYatqBkWrB1iOFEIHwcFAwGPbY0U02HWnOPSicG6CwcCtbNECVsqLi+5Go4a1Pk3eIjbtCETR4PUWgtHysdicHh8WM7RdUxMr07gue+A8kOEC1CQmhiIBDy7iU4q3pIYo9AEjAiIYlAdkowGXJUdamAGiioWAwYqMSKIRmYPDzmk8bUkcFpplwggKhAWhSJidQlro5ZOhyNY3Iw+gqLYZCiMJChelwqH4GKCC2AEAzKtOs5fpMIDSDQH70BEcZLvUpjJthVwadwvCCrY8QQA26i2Lo0xNJoPEwcqJQVMIyDBgERA+LJlDUSav7LgxVCKASyjLPabH8rcO5PFQYFGLoWicNmVQWGYwZgJ0oiQKIX4LrRiYGSmOFaCie6Os52gpdoDj+lEXCNH2q7rn5FBgAgQ4MCkAC+PVqY+TKMC+bAcKZn4AHS8SQizeOmRppJZhrBhkHTZLkTbksUMXfFAtp-K2dEGT0TEahQNatuWwg9IgpizhKUhHkC2h0G14ypFMMxzAs7hhAAygACgAmuSgNA-JVR-QAZAD+AAKwAAwI2UShYPgACiaAAGIQ0YJIEhQ+HyPyNApGpAByABqAAiACC5Lk9I3bzLZWizAIojTCg7P4FTdPBrTACy1PkkL1O2LTYDSIoyTKILSTUPg1MIEzyTbGptO0wDAAyosNuZaJs5InMzDzms68Ggt-VjaDkvLUDUCorEoKzPMm9zkhWzbwZoH92v09+GAqNwrvG1zPO+-73h9QNNBDSNb7jfwE3CEg8T47N4SRAtcQJMtH0hpk62fv5IDbVeu37RUMy3j0Y6ws9UlcKt1a8hCrBYeWSBPcCbfqCKZhJI071qQ7X3TD9oTeGDoPA7j+DQ7DiPIwwHWYBj2Pz-jIh+sTApk2kfMBwujPM1wocc+HkhHwLwui8LEtSzLz324ryuq8WAta7r360-rcmGzdlfAQ5sf5qS9rbb8r8wLOwvkcYB+AIE+z9sfGixYQ6ALDqbSQkcA4xzSINZ8r4xofmTqndO+J3pTyzlEckFwYAzQLqtLIOQS7kmpkWU4elHq+nkLUDuyhpqWhYBAcc24m6rXev1AhcciGjXfBtCaUolCXEzvNckS1kgrSbGtVheRyQAAlSrlUEFwPaZQuGBX0k0E6mxNStwCL2NuJgzBHAkE1ZxphzCWH0LZb0VQXFDH0BwPGPiVAj0Wlzb6mcACMxFvyOK4DZNuplixDDDD0WoKg+j8D3BBYMMTRDklbIEtxCBGgFIsMUgJXiZI+ODAAZiqQkmpriDAhLqagISHZ8AAEcYAonvCAfB3hCFMATiQxRyjcpUPwGEdR356GMLUsw4u+jvwcOLG3Oih5NA8jKvUUx5jhjWg8aRK8+FEnJIMH8cQ5SIZ-AsF0vxlQ-j9MGXUKRscnzjOIQoyaHAnYkE1J+NR2cNF5y0UwnRLCNql2KKUUx9Q+gAC9HQJAYcoVsyk5y3hkggO6HB1QCBrOWLsGJZi2C0HQeC5LNTFipXQI2iEGD0vEuWDFGE0RlmZOGCJn1ozzFiXAckDoqx0tmFQEQKl1ZpDhiK781LxTitZZKnFm0C4xPleSalzKkAqopUYdVsrvAxP0OSTlEEpUzjnAU+JC45B0Ctca6O0jRmyN+fIpOSAJqApoCC-gsz5ngsWRqZZaRVl6I1QuTZliEysiSbWCgSK5Rou5SjaM0tszgluqRbcxq9xSJ6qkEAXAMyU04p+dw6kYklvAp1WYYBBYQA6k8dwABtEAAArFWVYYkTRiQAJhAAAXR6kAA)
+[Abra o comando e suas perguntas no playground TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIADgDYQr4BOEJJAlkgOb5QSWUIkCGKdES+AEYIUAdwTJ8SAG5gu+LkjD4AzkQCe+AGZt8KABYJ8RLiopx+BkABpCRanCIoVGbHkLAAOiAD6PlBA0ft4EXiAo6kQIIfjeUPoQdFDRNrEgDGaUMFC8-Cox3gDq+jz4dCp6hvgwKgiUCioA1gzMBkYolFxgLQ0q5SiKFAH4kAD83rZxlHQodXRcMWH0Zj4q6nCCNPnu3mhVNXX4ooMVw41IEKJH+kn6quubJBW6CVdw2Xc3Zmya5fhkXQQYFsFyGEFUEgUSE0JkovFg3Hq8S4cPwuiQ8GElAmaTgKMaIlW8DxlHUBRAeyMB3qx1QzyQRnoDOMhzWGxoqlePVelSMogSJCMmxRygs0iBtlEMzuF1ULUF93ZJDlTEFyggMBQOO8pHIPnsSRSBF2+1qNJOenBZAgjQUFH4RjZjwA5BUDck0eL6rxEA0FCwSnDtelUJ05Op9TxZpQkOTKdUzQ1GhUefIIkQklxlR0uj1w-hGBAEBUdPUHYrHvgALTXUolIhRJAVUptNGN2ylOB0MDh2wMYatqBkWrB1iOFEIHwcFAwGPbY0U02HWnOPSicG6CwcCtbNECVsqLi+5Go4a1Pk3eIjbtCETR4PUWgtHysdicHh8WM7RdUxMr07gue+A8kOEC1CQmhiIBDy7iU4q3pIYo9AEjAiIYlAdkowGXJUdamAGiioWAwYqMSKIRmYPDzmk8bUkcFpplwggKhAWhSJidQlro5ZOhyNY3Iw+gqLYZCiMJChelwqH4GKCC2AEAzKtOs5fpMIDSDQH70BEcZLvUpjJthVwadwvCCrY8QQA26i2Lo0xNJoPEwcqJQVMIyDBgERA+LJlDUSav7LgxVCKASyjLPabH8rcO5PFQYFGLoWicNmVQWGYwZgJ0oiQKIX4LrRiYGSmOFaCie6Os52gpdoDj+lEXCNH2q7rn5FBgAgQ4MCkAC+PVqY+TKMC+bAcKZn4AHS8SQizeOmRppJZhrBhkHTZLkTbksUMXfFAtp-K2dEGT0TEahQNatuWwg9IgpizhKUhHkC2h0G14ypFMMxzAs7hhAAygACgAmuSgNA-JVR-QAZAD+AAKwAAwI2UShYPgACiaAAGIQ0YJIEhQ+HyPyNApGpAByABqAAiACC5Lk9I3bzLZWizAIojTCg7P4FTdPBrTACy1PkkL1O2LTYDSIoyTKILSTUPg1MIEzyTbGptO0wDAAyosNuZaJs5InMzDzms68Ggt-VjaDkvLUDUCorEoKzPMm9zkhWzbwZoH92v09+GAqNwrvG1zPO+-73h9QNNBDSNb7jfwE3CEg8T47N4SRAtcQJMtH0hpk62fv5IDbVeu37RUMy3j0Y6ws9UlcKt1a8hCrBYeWSBPcCbfqCKZhJI071qQ7X3TD9oTeGDoPA7j+DQ7DiPIwwHWYBj2Pz-jIh+sTApk2kfMBwujPM1wocc+HkhHwLwui8LEtSzLz324ryuq8WAta7r360-rcmGzdlfAQ5sf5qS9rbb8r8wLOwvkcYB+AIE+z9sfGixYQ6ALDqbSQkcA4xzSINZ8r4xofmTqndO+J3pTyzlEckFwYAzQLqtLIOQS7kmpkWU4elHq+nkLUDuyhpqWhYBAcc24m6rXev1AhcciGjXfBtCaUolCXEzvNckS1kgrSbGtVheRyQAAlSrlUEFwPaZQuGBX0k0E6mxNStwCL2NuJgzBHAkE1ZxphzCWH0LZb0VQXFDH0BwPGPiVAj0Wlzb6mcACMxFvyOK4DZNuplixDDDD0WoKg+j8D3BBYMMTRDklbIEtxCBGgFIsMUgJXiZI+ODAAZiqQkmpriDAhLqagISHZ8AAEcYAonvCAfB3hCFMATiQxRyjcpUPwGEdR356GMLUsw4u+jvwcOLG3Oih5NA8jKvUUx5jhjWg8aRK8+FEnJIMH8cQ5SIZ-AsF0vxlQ-j9MGXUKRscnzjOIQoyaHAnYkE1J+NR2cNF5y0UwnRLCNql2KKUUx9Q+gAC9HQJAYcoVsyk5y3hkggO6HB1QCBrOWLsGJZi2C0HQeC5LNTFipXQI2iEGD0vEuWDFGE0RlmZOGCJn1ozzFiXAckDoqx0tmFQEQKl1ZpDhiK781LxTitZZKnFm0C4xPleSalzKkAqopUYdVsrvAxP0OSTlEEpUzjnAU+JC45B0Ctca6O0jRmyN+fIpOSAJqApoCC-gsz5ngsWRqZZaRVl6I1QuTZliEysiSbWCgSK5Rou5SjaM0tszgluqRbcxq9xSJ6qkEAXAMyU04p+dw6kYklvAp1WYYBBYQA6k8dwABtEAAArFWVYYkTRiQAJhAAAXR6kAA)

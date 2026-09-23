@@ -7,14 +7,14 @@ tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/consistency_choice_cookbook"
 translatedFrom: en
 ---
-Este libro de recetas toma una publicación de usuario límite, aplica un rúbrica de moderación sobre ella 15 veces,
+Este libro de recetas toma una publicación de usuario en el límite, aplica un rúbrica de moderación sobre ella 15 veces,
 y verifica si cada respuesta se mantiene estable a través de las repeticiones. Cada verificación es un
 `Choice`, por lo que cada respuesta es una etiqueta de un conjunto fijo. En una tubería de moderación
 esa etiqueta es la decisión de enrutamiento: eliminar o dejar visible, escalar o resolver automáticamente, enviar a la
-amenaza, spam o cola general. Cuando la etiqueta tambalea de una ejecución a la siguiente,
+cola de amenazas, spam o general. Cuando la etiqueta oscila de una ejecución a la siguiente,
 la misma publicación se enruta a diferentes lugares sin una buena razón.
 
-El rúbrica consta de 8 `Choice` preguntas, y cada ejecución es una única llamada que responde las 8. Realizamos
+La rúbrica es de 8 `Choice` preguntas, y cada ejecución es una única llamada que responde a las 8. Realizamos
 15
 repeticiones por condición, donde una condición es un modelo más una configuración, y graficamos cada
 etiqueta que se devolvió.
@@ -22,15 +22,15 @@ etiqueta que se devolvió.
 Las condiciones:
 
 * Modelos de lenguaje grandes (LLM) no razonadores `claude-haiku-4-5` y `gpt-5.4-mini`, a una temperatura `0` y la configuración predeterminada de la API.
-* Modelos de lenguaje grandes (LLM) razonadores `gpt-5.5` y `claude-opus-4-8`, que no cuentan con un control de temperatura.
-* TypeSafe: una única llamada `system_one` a través de las 8 preguntas `Choice`, con un campo `uid` nuevo (un valor único desechable) en cada llamada, que coincide con la configuración del cookbook de noul.
+* Modelos de lenguaje grandes (LLM) de razonamiento `gpt-5.5` y `claude-opus-4-8`, que no tienen un dial de temperatura.
+* TypeSafe: una sola llamada `system_one` a través de las 8 preguntas `Choice`, con un campo `uid` nuevo (un valor único desechable) en cada llamada, que coincide con la configuración del cookbook de noul.
 
-Lo que hay que buscar: las etiquetas seleccionadas pueden invertirse dentro de una única condición, incluido TypeSafe,
+Qué buscar: las etiquetas seleccionadas pueden cambiar dentro de una única condición, incluyendo TypeSafe,
 y las condiciones discrepan entre sí.
 
-En esta ejecución, las configuraciones de distribución del LLM repiten sus etiquetas de pluralidad entre el 87,5 % y el 100 % de las veces, en comparación con el 90,8 % de TypeSafe. TypeSafe presenta una variación media de probabilidad menor que cinco de las seis condiciones de distribución del LLM; Haiku a temperatura 0 varía menos. Las probabilidades cercanas aún permiten cambios de enrutamiento: TypeSafe cambia en 2 de las 8 preguntas.
+En esta ejecución, los ajustes de distribución del LLM repiten sus etiquetas de pluralidad entre el 87,5 % y el 100 % de las veces, en comparación con el 90,8 % de TypeSafe. TypeSafe tiene una variación media de probabilidad menor que cinco de las seis condiciones de distribución del LLM; Haiku a temperatura 0 varía menos. Las probabilidades cercanas aún permiten cambios de enrutamiento: TypeSafe cambia en 2 de las 8 preguntas.
 
-Para las decisiones de la aplicación, también requerimos una probabilidad superior de al menos `0.60`; de lo contrario, el resultado es `uncertain` y pasa a revisión humana. El acuerdo de TypeSafe luego asciende al 99.2%, con etiquetas automáticas en el 74.2% de las respuestas. Mostramos las salidas crudas y aplicamos el mismo umbral a las condiciones de probabilidad de LLM, manteniendo las abstenciones y los cambios visibles.
+Para las decisiones de la aplicación, también requerimos una probabilidad superior de al menos `0.60`; de lo contrario, el resultado es `uncertain` y pasa a revisión humana. El acuerdo de TypeSafe luego asciende al 99.2%, con etiquetas automáticas en el 74.2% de las respuestas. Mostramos las salidas en bruto y aplicamos el mismo umbral a las condiciones de probabilidad de LLM, manteniendo las abstenciones y los cambios visibles.
 
 ## Configuración
 
@@ -38,7 +38,7 @@ Para las decisiones de la aplicación, también requerimos una probabilidad supe
 pip install anthropic openai matplotlib ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-entonces establece `TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY` y `OPENAI_API_KEY`.
+luego establece `TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY` y `OPENAI_API_KEY`.
 Esta ejecución utiliza `jev-latest` en la API de producción, muestreada el 2026-09-11.
 
 ```python
@@ -95,14 +95,15 @@ typesafe_client = TypeSafeClient(
 )
 ```
 
-## El estado: una publicación de usuario en la frontera, como JSON
+## El estado: una publicación de usuario límite, en JSON
 
-La publicación de abajo está construida para mantenerse en la valla. El lenguaje es acalorado e insultante, dirigido
+El siguiente post está construido para mantenerse en la valla. El lenguaje es acalorado e insultante, dirigido
 en parte a una persona y en parte al argumento y a la comunidad. Contiene
-una invitación fuera de la plataforma (un enlace que atrae a personas a otro sitio), una infracción previa en la
-cuenta y cuatro reportes de usuarios, y el lenguaje con amenaza nunca está formulado de manera limpia.
+una invitación fuera de la plataforma (un enlace que lleva a los usuarios a otro sitio), una infracción previa en la
+cuenta y cuatro informes de usuarios, y el lenguaje con amenaza nunca está formulado de manera clara.
 
-No hay una única respuesta obvia aquí, y ese es el punto: las pequeñas diferencias de redacción no deben mover aleatoriamente la misma publicación entre las rutas de aplicación.
+No hay una única respuesta obvia aquí, y ese es el punto: las pequeñas diferencias de redacción
+no deben mover aleatoriamente la misma publicación entre las rutas de aplicación.
 
 Los LLMs reciben `json.dumps(POST)` en el prompt. TypeSafe recibe el diccionario de Python directamente.
 
@@ -137,7 +138,7 @@ POST = {
 
 ## La rúbrica: 8 `Choice` preguntas
 
-Cada pregunta tiene un `key`, una línea de instrucciones y un conjunto de etiquetas fijo. Las etiquetas dentro de una pregunta son mutuamente excluyentes (exactamente una aplica), y cada una lleva una descripción corta. TypeSafe devuelve una `choice` elegida más una distribución `probabilities` sobre las etiquetas. Se pide a los LLM que usen los mismos conjuntos de etiquetas, lo que mantiene comparable cada fila.
+Cada pregunta tiene un `key`, una línea de instrucciones y un conjunto de etiquetas fijo. Las etiquetas dentro de una pregunta son mutuamente excluyentes (exactamente una aplica), y cada una lleva una descripción corta. TypeSafe devuelve un `choice` seleccionado más una distribución `probabilities` sobre las etiquetas. Se pide a los LLMs que utilicen los mismos conjuntos de etiquetas, lo que mantiene comparable cada fila.
 
 ```python
 QUESTIONS = {
@@ -223,13 +224,13 @@ QUESTIONS = {
 
 ## Cómo lo pedimos
 
-Cada llamada a LLM es un prompt que contiene `json.dumps(POST)`, las 8 preguntas y todas las etiquetas permitidas. Hay dos formatos de respuesta. En modo de distribución, el modelo devuelve un objeto JSON por pregunta con una probabilidad para cada etiqueta. En modo de selección única, devuelve una etiqueta cruda por pregunta, y nuestro análisis asigna toda la masa de probabilidad a esa etiqueta.
+Cada llamada al LLM es un prompt que contiene `json.dumps(POST)`, las 8 preguntas y todas las etiquetas permitidas. Hay dos formatos de respuesta. En el modo de distribución, el modelo devuelve un objeto JSON por pregunta con una probabilidad para cada etiqueta. En el modo de selección única, devuelve una etiqueta cruda por pregunta, y nuestro análisis concentra toda la masa de probabilidad en esa etiqueta.
 
 La llamada TypeSafe es una `system_one` solicitud sobre la misma publicación y las mismas 8
 `Choice` preguntas, devolviendo una distribución por pregunta.
 
-Cada consulta también recibe un `uid` nuevo, un valor único desechable que cambia en cada ejecución mientras
-se mantiene la publicación y la rúbrica sin cambios. Aparece en el prompt del LLM y como un campo adicional
+Cada consulta también recibe un `uid` fresco, un valor único desechable que cambia en cada ejecución mientras
+se mantienen sin cambios la publicación y la rúbrica. Aparece en el prompt del LLM y como un campo adicional
 en el estado de TypeSafe. Esta configuración no puede separar la sensibilidad al campo irrelevante
 de la variación que ocurriría en solicitudes idénticas.
 
@@ -460,25 +461,22 @@ def ask_llm_rubric(
 ### Cuadrícula de experimentos
 
 | Grupo de modelos | Modelo | Distribución (t=0) | Distribución (predeterminada) | Elección única (t=0) |
-| ---------------------- | -------------------------------- | :----------------: | :---------------------------: | :------------------: |
+| -------------------- | -------------------------------- | :----------------: | :--------------------: | :---------------: |
 | Modelos sin razonamiento | `claude-haiku-4-5` | ✓ | ✓ | ✓ |
 | Modelos sin razonamiento | `gpt-5.4-mini` | ✓ | ✓ | ✓ |
 | Modelos con razonamiento | `gpt-5.5` | — | ✓ | — |
 | Modelos con razonamiento | `claude-opus-4-8` | — | ✓ | — |
 | TypeSafe | `jev-latest` (`typesafe_choice`) | — | ✓ | — |
 
-* Un `✓` marca una condición probada con 15 repeticiones; un `—` marca una combinación que no está
+* Un `✓` indica una condición probada con 15 repeticiones; un `—` indica una combinación que no está
  probada.
-* La columna predeterminada no envía argumento de temperatura: los modelos no razonadores usan el
- valor predeterminado de la API, y los modelos razonadores y TypeSafe se ejecutan sin configuración
- de temperatura.
+* La columna predeterminada no envía el argumento de temperatura: los modelos no razonadores usan el
+ valor predeterminado de la API, y los modelos razonadores y TypeSafe se ejecutan sin configuración de temperatura.
 * Las condiciones de selección única devuelven una etiqueta por pregunta.
-* La temperatura `0` se sugiere comúnmente para la repetibilidad, por lo que se compara con el
- valor predeterminado de la API.
+* La temperatura `0` se sugiere comúnmente para la repetibilidad, por lo que se compara con el valor
+ predeterminado de la API.
 
-Dibujamos `NUM_SAMPLES` = 15 repeticiones por condición. Cada repetición tiene su propia clave de caché y
-cuenta como un dibujo distinto, y la caché (`json_cache.json`) se incluye con el libro de recetas, por lo que
-el re-renderizado la reutiliza y no realiza llamadas a la API. Elimina la caché para volver a muestrear en vivo.
+Dibujamos `NUM_SAMPLES` = 15 repeticiones por condición. Cada repetición tiene su propia clave de caché y cuenta como un dibujo distinto, y la caché (`json_cache.json`) se incluye con el libro de recetas, por lo que el re-renderizado la reutiliza y no realiza llamadas a API. Elimina la caché para volver a muestrear en vivo.
 
 ```python
 CONDITIONS = []
@@ -566,9 +564,9 @@ TypeSafe requested model: jev-latest
 TypeSafe returned models (calls): {'jev-1.13.0': 15}
 ```
 
-### Cost + velocidad (por consulta de rúbrica)
+### Coste + velocidad (por consulta de rúbrica)
 
-Los costos siguientes utilizan las suposiciones de precio históricas en la Configuración, incluida la tasa `speed_latest` para TypeSafe. No son precios `jev-latest` verificados ni montos de facturación actuales.
+Los costos a continuación utilizan las suposiciones de precio históricas en Setup, incluyendo la tasa `speed_latest` para TypeSafe. No son precios `jev-latest` verificados ni montos de facturación actuales.
 
 Una fila es una llamada completa de rúbrica de 8 preguntas. `time/call` y `cost/call` promedian las 15 llamadas, y las columnas `vs ts_choice` dividen por las cifras de TypeSafe. Los LLMs se ejecutan en un pool de 16 vías.
 
@@ -608,23 +606,22 @@ claude-opus-4-8-reasoning              15    10376ms    $0.028375      90.9x    
 typesafe_choice                        15      114ms    $0.000046       1.0x       1.0x
 ```
 
-En esta ejecución `typesafe_choice` tiene una latencia de ida y vuelta media de 114ms. Las condiciones del LLM oscilan entre 826ms y 13,0 segundos por llamada bajo los ajustes de concurrencia anteriores.
+En esta ejecución `typesafe_choice` tiene una latencia de ida y vuelta media de 114ms. Las condiciones de LLM oscilan entre 826ms y 13,0 segundos por llamada bajo los ajustes de concurrencia anteriores.
 
-## Trama: la decisión de cada muestra como un mapa de calor
+## Trama: la decisión de cada muestra como mapa de calor
 
 Cómo leerlo:
 
 * Grupo de filas exterior: la pregunta.
 * Fila interior: la condición.
-* Columna: una llamada completa a la rúbrica.
-* Texto de la celda: la decisión de la aplicación más la probabilidad en la etiqueta superior.
-* Color de la celda: la posición de la etiqueta dentro de esa pregunta, por lo que el mismo color a lo largo
- de una fila significa la misma decisión cada vez.
-* Gris ⦇0⦇: la probabilidad superior está por debajo de ⦇1⦇, por lo que el caso pasa a revisión humana.
-* Rayado ⦇2⦇: la respuesta no se analizó en etiquetas utilizables (un error de análisis).
+* Columna: una llamada completa de rúbrica.
+* Texto de celda: la decisión de la aplicación más la probabilidad en la etiqueta superior.
+* Color de celda: la posición de la etiqueta dentro de esa pregunta, por lo que el mismo color a lo largo de una fila significa la misma decisión cada vez.
+* Gris `uncertain`: la probabilidad superior está por debajo de `0.60`, por lo que el caso pasa a revisión humana.
+* Rayado `n/a`: la respuesta no se analizó en etiquetas utilizables (un error de análisis).
 * Las filas en blanco son solo separadores.
 
-Las condiciones de selección única conservan sus etiquetas devueltas: no proporcionan ninguna estimación de incertidumbre.
+Las condiciones de selección única mantienen sus etiquetas devueltas: no proporcionan ninguna estimación de incertidumbre.
 
 ```python
 GAP = 1  # blank spacer row(s) between question blocks
@@ -759,17 +756,16 @@ display(fig)
 
 <img src="/img/cases/consistency-choice-cookbook-consistency_choice_cookbook.executed.1.png" alt="output" width="2230" height="4044" data-path="cookbooks/consistency_choice_cookbook/consistency_choice_cookbook.executed.1.png" />
 
-Las preguntas más claras se mantienen estables: `target` lee Persona y `severity` lee Alto en todos los aspectos. Los casos límite se dividen entre las condiciones: `category`, `primary_risk`,
-`action`, `review_path`,
-y `link_handling`. Algunas condiciones también cambian dentro de sus
+Las preguntas más claras se mantienen estables: `target` lee Persona y `severity` lee Alta en todas partes. Las limítrofes se dividen entre las condiciones: `category`, `primary_risk`,
+`action`, `review_path`, y `link_handling`. Algunas condiciones también cambian dentro de sus
 15 repeticiones propias. Antes de la abstención, TypeSafe cambia su etiqueta principal en `primary_risk`
-(Acoso 11 veces, Violencia 4 veces) y `link_handling` (RmLink 8 veces, Brigada 7
+(Acoso 11 veces, Violencia 4 veces) y `link_handling` (RmLink 8 veces, Brigade 7
 veces). Ambas filas ahora muestran `uncertain` en todo momento porque sus probabilidades principales son
 inferiores a `0.60`.
 
 ## Desviación estándar de probabilidad
 
-Esto examina los vectores de probabilidad completos, no solo la etiqueta seleccionada. Para cada condición, recopilamos las 15 distribuciones para cada pregunta, calculamos la desviación estándar de la probabilidad de cada etiqueta a través de las repeticiones (cuánto se mueve de una ejecución a otra), y luego promediamos esas desviaciones estándar sobre todas las etiquetas y preguntas. También informamos la mayor desviación estándar de una sola etiqueta, y contamos los fallos de análisis por separado.
+Esto analiza los vectores de probabilidad completos, no solo la etiqueta seleccionada. Para cada condición, recopilamos las 15 distribuciones para cada pregunta, calculamos la desviación estándar de la probabilidad de cada etiqueta a través de las repeticiones (cuánto cambia de una ejecución a otra), y luego promediamos esas desviaciones estándar sobre todas las etiquetas y preguntas. También informamos la desviación estándar más grande de una sola etiqueta, y contamos los fallos de análisis por separado.
 
 La tabla compara cada condición de LLM de salida de probabilidades frente a TypeSafe. Las filas de selección única se omiten, ya que emiten etiquetas definitivas en lugar de distribuciones de probabilidad.
 
@@ -825,11 +821,11 @@ claude-opus-4-8-reasoning                  0.0245        0.0693         0%      
 typesafe_choice                            0.0098        0.0515         0%        1.00x
 ```
 
-En esta ejecución, TypeSafe tiene una desviación estándar media de probabilidad de `0.0098` y una desviación estándar máxima de etiqueta única de `0.0515`. Haiku a temperatura 0 tiene una desviación estándar media más baja de `0.0012`. Las otras cinco condiciones de probabilidad de LLM oscilan entre `0.0245` y `0.0543`, aproximadamente `2.5x` a `5.6x` la media de TypeSafe. Los pequeños cambios aún pueden cambiar la etiqueta principal cuando dos etiquetas están cercanas.
+En esta ejecución, TypeSafe tiene una desviación estándar media de probabilidad de `0.0098` y una desviación estándar máxima de etiqueta única de `0.0515`. Haiku a temperatura 0 tiene una desviación estándar media más baja de `0.0012`. Las otras cinco condiciones de probabilidad de LLM oscilan entre `0.0245` y `0.0543`, aproximadamente `2.5x` a `5.6x` la media de TypeSafe. Los pequeños cambios aún pueden cambiar la etiqueta principal cuando dos etiquetas están cerca.
 
 ## Trama: acuerdo de decisión con un resultado incierto
 
-Devuelve `uncertain` cuando la probabilidad más alta esté por debajo de `0.60`. Para cada condición de salida de probabilidad y pregunta, cuenta la decisión de aplicación más común, incluyendo `uncertain`, y divídela por las 15 extracciones. Los fallos de análisis se cuentan contra el acuerdo. Cada barra promedia la puntuación en las 8 preguntas, con el acuerdo más alto primero.
+Devuelve `uncertain` cuando la probabilidad más alta esté por debajo de `0.60`. Para cada condición de salida de probabilidad y pregunta, cuenta la decisión de aplicación más común, incluyendo `uncertain`, y divídela por los 15 sorteos. Los fallos de análisis se cuentan como desacuerdo. Cada barra promedia la puntuación en las 8 preguntas, con el acuerdo más alto primero.
 
 Las condiciones de LLM de selección única están excluidas porque no proporcionan ninguna estimación de incertidumbre.
 
@@ -896,18 +892,18 @@ display(fig_bar)
 
 <img src="/img/cases/consistency-choice-cookbook-consistency_choice_cookbook.executed.2.png" alt="output" width="1052" height="651" data-path="cookbooks/consistency_choice_cookbook/consistency_choice_cookbook.executed.2.png" />
 
-Bajo la misma regla `0.60`, Haiku a temperatura 0 obtuvo un 100%. TypeSafe obtuvo un 99,2%, y las otras condiciones de LLM se situaron entre el 84,2% y el 94,2%. TypeSafe devolvió `uncertain` en el 25,8% de las respuestas y actuó automáticamente en el otro 74,2%; Haiku a temperatura 0 nunca se abstuvo. Estos porcentajes miden únicamente la repetibilidad. La tabla a continuación establece las tasas de acuerdo crudo y abstención junto con el acuerdo de política en este gráfico.
+Bajo la misma regla `0.60`, Haiku a temperatura 0 obtuvo un 100%. TypeSafe obtuvo un 99,2%, y las otras condiciones de LLM se situaron entre el 84,2% y el 94,2%. TypeSafe devolvió `uncertain` en el 25,8% de las respuestas y actuó automáticamente en el otro 74,2%; Haiku a temperatura 0 nunca se abstuvo. Estos porcentajes miden únicamente la repetibilidad. La siguiente tabla establece las tasas de acuerdo crudo y abstención junto con el acuerdo de políticas en este gráfico.
 
 ## Que las probabilidades inciertas produzcan una decisión incierta
 
-Un pequeño cambio en la probabilidad puede intercambiar dos etiquetas cercanas. La aplicación no tiene que actuar sobre la ganadora: devolver `uncertain` cuando la probabilidad principal esté por debajo de `0.60`, y enviar ese caso a un humano. En exactamente `0.60`, seleccionar la etiqueta principal. Esto utiliza las probabilidades devueltas, no el campo separado `confidence` de la API, y no añade llamadas al modelo.
+Un pequeño cambio de probabilidad puede intercambiar dos etiquetas cercanas. La aplicación no tiene que actuar sobre la ganadora: devolver `uncertain` cuando la probabilidad superior esté por debajo de `0.60`, y enviar ese caso a un humano. En exactamente `0.60`, seleccionar la etiqueta superior. Esto utiliza las probabilidades devueltas, no el campo `confidence` separado de API, y no añade llamadas al modelo.
 
 El umbral es una política de aplicación ilustrativa, no una garantía calibrada ni un
-umbral elegido para maximizar el acuerdo de esta ejecución. Elige umbrales de producción utilizando
+umbral elegido para maximizar el acuerdo de esta ejecución. Elige umbrales de producción usando
 ejemplos etiquetados y el costo de las acciones incorrectas y la revisión humana.
 
 Aplicamos la misma regla a cada condición de salida de probabilidad. Las respuestas de LLM de selección única
-no tienen estimación de probabilidad; sus vectores sintéticos one-hot no pueden medir la incertidumbre,
+no tienen estimación de probabilidad; sus vectores one-hot sintéticos no pueden medir la incertidumbre,
 por lo que se excluyen del gráfico y la tabla de acuerdo.
 
 ```python
@@ -966,11 +962,16 @@ typesafe_choice                         90.8%        99.2%      25.8%      74.2%
 
 `policy agree` cuenta `uncertain` como una decisión; los fallos de análisis cuentan contra el acuerdo.
 `automatic` es la proporción de todas las respuestas que seleccionan una etiqueta. `conflicts` cuenta las preguntas
-con más de una etiqueta concreta entre las repeticiones, ignorando las abstenciones. Estas medidas
-describen la repetibilidad y con qué frecuencia actúa la aplicación, no si sus acciones son
+con más de una etiqueta concreta a través de las repeticiones, ignorando las abstenciones. Estas medidas
+describen la repetibilidad y con qué frecuencia la aplicación actúa, no si sus acciones son
 correctas.
 
-El acuerdo de TypeSafe aumentó del 90,8 % al 99,2 %. De las respuestas, el 25,8 % fueron inciertas y el 74,2 % automáticas. `primary_risk` y `link_handling` volvieron a ser inciertos en cada repetición; `category` alternó entre Violence y `uncertain`, cruzando el umbral de acción en algunas repeticiones y no en otras. Ninguna pregunta produjo dos etiquetas TypeSafe concretas diferentes. Nada de esto muestra precisión o superioridad: Haiku a temperatura 0 tuvo un 100 % de acuerdo aquí, sin abstenciones.
+El acuerdo de TypeSafe aumentó del 90,8 % al 99,2 %. De las respuestas, el 25,8 % fueron inciertas y
+el 74,2 % automáticas. `primary_risk` y `link_handling` volvieron a ser inciertos en cada repetición;
+`category` alternó entre Violence y `uncertain`, cruzando el umbral de acción en
+algunas repeticiones y no en otras. Ninguna pregunta produjo dos etiquetas TypeSafe concretas diferentes.
+Nada de esto muestra precisión o superioridad: Haiku a temperatura 0 tuvo un 100 % de acuerdo
+aquí, sin abstenciones.
 
 ```python
 # Show every TypeSafe decision while retaining the top probability behind it.
@@ -1028,4 +1029,4 @@ display(
 )
 ```
 
-[Abre esta publicación + rúbrica en el playground de TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAA4QDOKpBJ5VKA+gJZi36kAKAtABx8ATAEYAzKQA0nEAEMYKABYQATh3oxKCZa3Z5pMAPQAWIwHZhk6TKhQIMVExkBzBEzAyAnpQ6i+U0mTKLCpM1EEA1gjeesL+IABmEAA2SRAA7lrRBCIADAC+cbaoWDR69JQwyvHWCBwBMABGSSxQ+MoIZEkelqQsSEztnR5MKBB1skgQilr4GjNgCPHIYH1O+DL4TjKI+GQyKFAKPSC2cHD2LCjdeqTKBluICw37UaQF0kUoyKV0pF-Y4wAgu18B47PhNEE7JQuvhFCxKPgFkhNAB+fCApBgpAIfBpJRIxbLRGKfa7faHfAI9b4U6dBBfWmpNJIdZIMAQpQwJIchq4hBwZ7KZQySiaDmjfAIABuyF2jHwCi0CAAdPguAgIPT8M1IqDwTIQfj9gByRHKGB9VZwhTU07nJCXDxsjlKHHUWFgmD4HEICUQfB8wkyJIoPGXBRqgDCEB2lE8VLDkrgzuqUAQUj60suCDNbRYTgUYaV7TVAGkEB1E7MyC78ABJE0pKXs-WVPFKJK4w4yJA4pIq44KUVMZpIcIcFAWjPSMfhNyxmR9cYrSi2ZRgFVOJzHJK9pwwZy1G4gZBvOKDFQoLL4dSQgYdK83owXx-KZjtUUQFEcADapGHEUxUQVBjkoPY4GORRP1KABdPIEJAKRyGUWMyGvDBsD0IhSCgF4nBUa5fhAK4yGPAhcKUFpj0KIIviCGQ1FIAA5b9yOkVj5WaKBnWzZJ9mCVkIHiNlnXCPpN2OAAJQ1RRvUh6xRblr3wFRCUQXtEQ2MjlEob8pDSCMfQDaCEDJYTFUNOA60mXZUK+KAvjAHgoD3MV1hQFBrHCQckOkGSviBTzvK03ZMm-VTlE2VCYFrCBZSi7T7IQRy-VpQDrHohEUBafAAAoRXTKR2maJxBKkFx2S0KQVVqgBKXy4gANWCLskHTcYAFkZEiUKoHaFYmlxUzzJEwDrLUvooBzRE+La9N1i2PpqAhWNNRxRrpAAZQg8YAFUUWSFocw5QJYymQTIp1PpwghCCDKM2ydL0pAQw8ryoB844tqwQ8knGH7MD+q6ZDAZTaW-L5UF895ehRKcYEcwT5JAAB1Ycw2paYIVWLt8DgBUZDIToWhkIaIeKVAeAobjnTwr4COUVM1PhREKGoVFz2kQIWDgQ1hiCSgJzKP4PDI8ZDggajjn6nMGKYkAZKAygQJ+aQNV0783v2D7bpZw0XCc9YGjmKkSSVfGl1ZQWvr80gWuSZAOpPQEbRg1Sxqsq6+hyuA2AEiKsYtvm+nzIXNtIAAZG7ARNzRxgAUWwLRXqSHg5yu4T4mpvcUESZRrNsFQVlenKIpts2bVxEPrYRW24kBGw7FQKTssI8YuChRKm-sYs26Zq7BjMsM+WHPioqD6urbD+vpEj9IACU6-GTiNMdJAnHibl8YgBYRTL2uhcrwIom+GG4mWhGke-FH0bJSe7N5-md73gPD9u0kw0oLkeSRIJZThAxFw+B842mpOzFAnMQCwxIgbBkCtSLsUolLZ2tE5YsEYiLEArEcQrymEiFg7RUocjJL2bEuJQ57HfC0bkhoI4gA1i9cYAARQhKUjbmRxHdFKLB4i5QkiwbMYMQz0IAOIxTICwthxCPI0jOg5I2TgJFXVcnJehXBc750gieVhRCOFJgtvaC4VwrqdH2FoxMmgkjxCkJMMM2lwpIHPtIS+Fpr4-hPOjAMaljSY3Nt2SG3xH58yCLCFYei0r7CgTAzKgkEFiyQScKiqCPh0S0BghWgIUjpHGJHMyADsYQJrOGRQxl1juPoajQ0SBcn5OGhbIpsVAzyHetYBQNI0jVOtHuPkA5jgLwFPFRJAyCYFIaYwKQJswyQGMmGMiqcWAAC96m4msLYXu9CtpThYJEcYIyhlV3lCtXsJCwAkIhNsvUkpsZrObigehCc1whheOMNAPVcS2TkKMPmHD3EAG5FTJA5KAjYCh4C9kJNNSgglnFwzCIjA+t8MYtnzumVW5SD6cjsL-IMXlIhCVZKzI5kCuakAAI4wAQJS+J4sTyS2lnbE4aT5ZYMBPIMYLt2U8HaHpJIsoAW2TBXzVkFKqUfMrAsSSjLRHIC0CGcYMqcQiiSC-OVmLRWUvoWgBQMFXk6uHvgAw+A5pO1xDyigKJcQatVN9XaJ4drbDrGYvOKg4A8DJqba1Wqtp5NBq8i01B3Xsh4PGJYJiuyg0NRCZAwQopetJSAVxCLkbjHRi0dp0KN54wJq-dVlLKVYu5BydIhLbRs0YNEuIc4mDDnZGOHcWDEES2STRVJ6DMHESycyWpMgxm4gzpQvc6Z6ELzgNHccANtlxSiquMmeNsYZymfgSIVZCmMHoQAISCFsBY-qDULpuusRERcNx9BeLybdoNrQnIxZdS4R7jZzAeU83OiSfqtgPeOOEAYNjgR4SGbK36j2aHcnyfOqykYb1hYm+GbjEXjCkukQtv8yFSmTsoVO10v1qSzjncxrqqRIGzIyUOa6VpBlrWALsYBK3SHaNmBAaQmB7EUDSxJ9KUm4WZRk1l7KgTsp+ZE-5ZShUQvoywRj9CpLgpqS7EBqFUBjlxKJ1kOa1VqT5r1Q5eEUibJjSoIE0bHQ4ain+6aAGVricYzMak7QKVsKlXEPJWx-ongXnYRkkouwuaunuNIPBkCooFEEqIOm37QaTe4pFAZv7Yo5JplZICz0qp0yqiKRKIG0dIJoBKTo2PNpQa2rj7aFY4MSZxOa4XjjzzSHsmACwrqrj9mKQRM4l1RE0KgDBKRnTjS7GKehnU-QsHgB3Rxb0MrASCYZUptlXJmWULCfqw3yYjXudJAsRwTxKzkui0YhsSwlPaRsNbNoyTrJxWasyJDj0DRYENCLsHk031Tcih+QzlUqpy+kkxFkMsVreHkPysgyAsCapkQS2FpTCGB1Y9hfpOq7wQEkSgehfwgAAFYynTi8agIB4JAA)
+[Abrir esta publicación + rúbrica en el entorno de TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAA4QDOKpBJ5VKA+gJZi36kAKAtABx8ATAEYAzKQA0nEAEMYKABYQATh3oxKCZa3Z5pMAPQAWIwHZhk6TKhQIMVExkBzBEzAyAnpQ6i+U0mTKLCpM1EEA1gjeesL+IABmEAA2SRAA7lrRBCIADAC+cbaoWDR69JQwyvHWCBwBMABGSSxQ+MoIZEkelqQsSEztnR5MKBB1skgQilr4GjNgCPHIYH1O+DL4TjKI+GQyKFAKPSC2cHD2LCjdeqTKBluICw37UaQF0kUoyKV0pF-Y4wAgu18B47PhNEE7JQuvhFCxKPgFkhNAB+fCApBgpAIfBpJRIxbLRGKfa7faHfAI9b4U6dBBfWmpNJIdZIMAQpQwJIchq4hBwZ7KZQySiaDmjfAIABuyF2jHwCi0CAAdPguAgIPT8M1IqDwTIQfj9gByRHKGB9VZwhTU07nJCXDxsjlKHHUWFgmD4HEICUQfB8wkyJIoPGXBRqgDCEB2lE8VLDkrgzuqUAQUj60suCDNbRYTgUYaV7TVAGkEB1E7MyC78ABJE0pKXs-WVPFKJK4w4yJA4pIq44KUVMZpIcIcFAWjPSMfhNyxmR9cYrSi2ZRgFVOJzHJK9pwwZy1G4gZBvOKDFQoLL4dSQgYdK83owXx-KZjtUUQFEcADapGHEUxUQVBjkoPY4GORRP1KABdPIEJAKRyGUWMyGvDBsD0IhSCgF4nBUa5fhAK4yGPAhcKUFpj0KIIviCGQ1FIAA5b9yOkVj5WaKBnWzZJ9mCVkIHiNlnXCPpN2OAAJQ1RRvUh6xRblr3wFRCUQXtEQ2MjlEob8pDSCMfQDaCEDJYTFUNOA60mXZUK+KAvjAHgoD3MV1hQFBrHCQckOkGSviBTzvK03ZMm-VTlE2VCYFrCBZSi7T7IQRy-VpQDrHohEUBafAAAoRXTKR2maJxBKkFx2S0KQVVqgBKXy4gANWCLskHTcYAFkZEiUKoHaFYmlxUzzJEwDrLUvooBzRE+La9N1i2PpqAhWNNRxRrpAAZQg8YAFUUWSFocw5QJYymQTIp1PpwghCCDKM2ydL0pAQw8ryoB844tqwQ8knGH7MD+q6ZDAZTaW-L5UF895ehRKcYEcwT5JAAB1Ycw2paYIVWLt8DgBUZDIToWhkIaIeKVAeAobjnTwr4COUVM1PhREKGoVFz2kQIWDgQ1hiCSgJzKP4PDI8ZDggajjn6nMGKYkAZKAygQJ+aQNV0783v2D7bpZw0XCc9YGjmKkSSVfGl1ZQWvr80gWuSZAOpPQEbRg1Sxqsq6+hyuA2AEiKsYtvm+nzIXNtIAAZG7ARNzRxgAUWwLRXqSHg5yu4T4mpvcUESZRrNsFQVlenKIpts2bVxEPrYRW24kBGw7FQKTssI8YuChRKm-sYs26Zq7BjMsM+WHPioqD6urbD+vpEj9IACU6-GTiNMdJAnHibl8YgBYRTL2uhcrwIom+GG4mWhGke-FH0bJSe7N5-md73gPD9u0kw0oLkeSRIJZThAxFw+B842mpOzFAnMQCwxIgbBkCtSLsUolLZ2tE5YsEYiLEArEcQrymEiFg7RUocjJL2bEuJQ57HfC0bkhoI4gA1i9cYAARQhKUjbmRxHdFKLB4i5QkiwbMYMQz0IAOIxTICwthxCPI0jOg5I2TgJFXVcnJehXBc750gieVhRCOFJgtvaC4VwrqdH2FoxMmgkjxCkJMMM2lwpIHPtIS+Fpr4-hPOjAMaljSY3Nt2SG3xH58yCLCFYei0r7CgTAzKgkEFiyQScKiqCPh0S0BghWgIUjpHGJHMyADsYQJrOGRQxl1juPoajQ0SBcn5OGhbIpsVAzyHetYBQNI0jVOtHuPkA5jgLwFPFRJAyCYFIaYwKQJswyQGMmGMiqcWAAC96m4msLYXu9CtpThYJEcYIyhlV3lCtXsJCwAkIhNsvUkpsZrObigehCc1whheOMNAPVcS2TkKMPmHD3EAG5FTJA5KAjYCh4C9kJNNSgglnFwzCIjA+t8MYtnzumVW5SD6cjsL-IMXlIhCVZKzI5kCuakAAI4wAQJS+J4sTyS2lnbE4aT5ZYMBPIMYLt2U8HaHpJIsoAW2TBXzVkFKqUfMrAsSSjLRHIC0CGcYMqcQiiSC-OVmLRWUvoWgBQMFXk6uHvgAw+A5pO1xDyigKJcQatVN9XaJ4drbDrGYvOKg4A8DJqba1Wqtp5NBq8i01B3Xsh4PGJYJiuyg0NRCZAwQopetJSAVxCLkbjHRi0dp0KN54wJq-dVlLKVYu5BydIhLbRs0YNEuIc4mDDnZGOHcWDEES2STRVJ6DMHESycyWpMgxm4gzpQvc6Z6ELzgNHccANtlxSiquMmeNsYZymfgSIVZCmMHoQAISCFsBY-qDULpuusRERcNx9BeLybdoNrQnIxZdS4R7jZzAeU83OiSfqtgPeOOEAYNjgR4SGbK36j2aHcnyfOqykYb1hYm+GbjEXjCkukQtv8yFSmTsoVO10v1qSzjncxrqqRIGzIyUOa6VpBlrWALsYBK3SHaNmBAaQmB7EUDSxJ9KUm4WZRk1l7KgTsp+ZE-5ZShUQvoywRj9CpLgpqS7EBqFUBjlxKJ1kOa1VqT5r1Q5eEUibJjSoIE0bHQ4ain+6aAGVricYzMak7QKVsKlXEPJWx-ongXnYRkkouwuaunuNIPBkCooFEEqIOm37QaTe4pFAZv7Yo5JplZICz0qp0yqiKRKIG0dIJoBKTo2PNpQa2rj7aFY4MSZxOa4XjjzzSHsmACwrqrj9mKQRM4l1RE0KgDBKRnTjS7GKehnU-QsHgB3Rxb0MrASCYZUptlXJmWULCfqw3yYjXudJAsRwTxKzkui0YhsSwlPaRsNbNoyTrJxWasyJDj0DRYENCLsHk031Tcih+QzlUqpy+kkxFkMsVreHkPysgyAsCapkQS2FpTCGB1Y9hfpOq7wQEkSgehfwgAAFYynTi8agIB4JAA)

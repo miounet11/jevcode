@@ -4,8 +4,8 @@ description: "社区实测中的5款Jev替代品：精度、速度与算力的�
 section: cases
 order: 15
 tags: ['comparison', 'alternatives', 'benchmark']
-translatedFrom: en
 ---
+
 ## 本文内容
 
 这种判定模型范式并非 Jev 独有。社区中已涌现出一批开源复刻版与替代品，它们运行在更小、更快的模型之上。

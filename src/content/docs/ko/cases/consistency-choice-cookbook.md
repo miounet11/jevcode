@@ -1,27 +1,28 @@
 ---
 title: "자기 일관성: 선택"
-description: "검토 결정에 불확실한 결과를 추가하고, 라벨 간 일치도와 자동 조치 비율을 비교한다."
+description: "검토 결정에 불확실한 결과를 추가하고, 라벨 간 일치율을 자동 조치 비율과 비교한다."
 section: cases
 order: 150
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/consistency_choice_cookbook"
 translatedFrom: en
 ---
-이 쿡북은 경계선상의 사용자 게시글 하나를 가져와서 15회에 걸쳐 모더레이션 기준을 적용하고, 각 답변이 반복 실행 동안 일관되게 유지되는지 확인합니다. 각 검사는 `Choice`이므로, 각 답변은 고정된 세트 중 하나의 레이블을 가집니다. 모더레이션 파이프라인에서 이 레이블은 라우팅 결정입니다: 삭제하거나 게시 유지, 에스컬레이션하거나 자동 해결, 위협, 스팸 또는 일반 큐로 전송. 레이블이 한 실행에서 다음 실행으로 흔들리면, 동일한 게시글이 별다른 이유 없이 다른 위치로 라우팅됩니다.
+이 쿡북은 경계선상의 사용자 게시글 하나를 가져와서 15회에 걸쳐 모더레이션 기준을 적용하고, 각 답변이 반복 동안 일관되게 유지되는지 확인합니다. 각 검사는 `Choice`이므로, 각 답변은 고정된 세트에서 하나의 라벨을 가집니다. 모더레이션 파이프라인에서 이 라벨은 라우팅 결정입니다: 삭제하거나 게시 유지, 에스컬레이션하거나 자동 해결, 위협, 스팸 또는 일반 큐로 전송. 라벨이 한 실행에서 다음 실행으로 흔들리면, 동일한 게시글이 별다른 이유 없이 서로 다른 위치로 라우팅됩니다.
 
-루브릭은 8 `Choice`개의 질문으로 구성되며, 각 실행은 8개 모두에 답변하는 하나의 호출입니다. 우리는 조건당 15번 반복합니다. 여기서 조건은 하나의 모델과 하나의 설정의 조합이며, 반환된 모든 레이블을 플롯합니다.
+루브릭은 8 `Choice`개의 질문으로 구성되며, 각 실행은 8개 모두에 답변하는 단일 호출입니다. 우리는 조건당 15번 반복하며, 여기서 조건은 하나의 모델과 하나의 설정을 의미하고, 반환된 모든 라벨을 플롯합니다.
 
 조건:
 
 * 비추론형 LLM `claude-haiku-4-5` 및 `gpt-5.4-mini`, 온도 `0` 및 API 기본값 사용.
 * 추론형 LLM `gpt-5.5` 및 `claude-opus-4-8`, 온도 조절 기능이 없음.
-* TypeSafe: 8개의 `Choice` 질문 중 한 번의 `system_one` 호출, 각 호출마다 새로운 `uid` 필드(일회용 고유 값) 포함, noul 쿡북 설정과 일치.
+* TypeSafe: 8개의 `Choice` 질문 중 한 번의 `system_one` 호출, 각 호출마다 noul 쿡북 설정과 일치하는 새로운 `uid` 필드(일회용 고유 값) 사용.
 
-무엇을 살펴봐야 할지: 선택된 레이블은 TypeSafe를 포함한 단일 조건 내에서 뒤집힐 수 있으며, 조건들끼리 서로 모순될 수 있습니다.
+무엇을 살펴봐야 할지: 선택된 레이블은 TypeSafe를 포함한 단일 조건 내에서 뒤집힐 수 있으며,
+조건들끼리 서로 모순될 수 있습니다.
 
-이번 실행에서 LLM 분포 설정은 TypeSafe의 90.8%와 비교하여 87.5%에서 100%의 확률로 다수 라벨을 반복합니다. TypeSafe는 여섯 가지 LLM 분포 조건 중 다섯 가지보다 평균 확률 변동이 낮습니다. Haiku는 온도 0에서 더 적은 변동을 보입니다. 확률이 근접해도 라우팅 변경은 가능합니다: TypeSafe는 8개 질문 중 2개에서 전환됩니다.
+이번 실행에서 LLM 분포 설정은 TypeSafe의 90.8%와 비교하여 87.5%에서 100%의 확률로 다수 라벨을 반복합니다. TypeSafe는 여섯 가지 LLM 분포 조건 중 다섯 가지보다 평균 확률 변동이 낮습니다. Haiku는 온도 0에서 변동이 더 적습니다. 확률이 근접해도 라우팅 변경은 가능합니다: TypeSafe는 8개 질문 중 2개에서 전환됩니다.
 
-애플리케이션 결정에는 최소 `0.60`의 상위 확률이 필요하며, 그렇지 않은 경우 결과는 `uncertain`로 처리되어 인간 검토로 넘어갑니다. TypeSafe의 동의율은 99.2%까지 상승하며, 답변의 74.2%에 자동 라벨이 적용됩니다. 우리는 원본 출력을 표시하고 LLM 확률 조건에도 동일한 임계값을 적용하여, 보류 및 변경 사항을 가시적으로 유지합니다.
+애플리케이션 결정에는 최소 `0.60`의 상위 확률이 필요하며, 그렇지 않으면 결과는 `uncertain`로 처리되어 인간 검토로 넘어갑니다. TypeSafe의 동의율은 99.2%까지 상승하며, 답변의 74.2%에 대해 자동 라벨이 적용됩니다. 우리는 원본 출력을 표시하고 LLM 확률 조건에도 동일한 임계값을 적용하여, 보류 및 변경 사항을 가시적으로 유지합니다.
 
 ## 설정
 
@@ -88,11 +89,11 @@ typesafe_client = TypeSafeClient(
 
 ## 상태: 경계선 사용자 게시글, JSON 형식
 
-아래 게시물은 중립을 유지하도록 구성되어 있습니다. 언어는 격앙되고 모욕적이며, 특정 개인과 논쟁, 그리고 커뮤니티 모두를 겨냥하고 있습니다. 이 게시물은 플랫폼 외부로의 초대(다른 사이트로 사용자를 유도하는 링크)를 포함하고 있으며, 해당 계정에는 과거 한 번의 경고 이력이 있고, 네 건의 사용자 신고가 접수되었으며, 위협적으로 읽힐 수 있는 표현이 명확하게 정리되지 않았습니다.
+아래 게시물은 중립을 지키도록 구성되어 있다. 언어는 격앙되고 모욕적이며, 한 사람을 겨냥한 부분과 논쟁 및 커뮤니티를 겨냥한 부분이 혼재되어 있다. 이 게시물은 플랫폼 외부로의 초대(다른 사이트로 유입시키는 링크)를 포함하고 있으며, 해당 계정에는 과거 한 번의 경고 이력이 있고, 네 건의 사용자 신고가 접수되었으며, 위협적으로 읽힐 수 있는 표현이 명확하게 정리되지 않았다.
 
-여기에는 명확한 단일 정답이 없으며, 그것이 핵심입니다: 작은 어휘 차이는 동일한 게시물이 강제 처리 경로 사이를 무작위로 이동하게 해서는 안 됩니다.
+여기에는 명확한 정답이 하나 있는 것은 아니며, 그것이 핵심입니다: 작은 어휘 차이는 동일한 게시물을 강제 처리 경로 간에 무작위로 이동시켜서는 안 됩니다.
 
-LLM에는 `json.dumps(POST)`가 프롬프트로 전달됩니다. TypeSafe에는 Python 사전이 직접 전달됩니다.
+LLM에는 `json.dumps(POST)`가 프롬프트로 전달됩니다. TypeSafe에는 Python 딕셔너리가 직접 전달됩니다.
 
 ```python
 POST = {
@@ -125,7 +126,7 @@ POST = {
 
 ## 평가 기준: 8 `Choice` 질문
 
-각 질문에는 `key`, 지침 한 줄, 그리고 고정된 레이블 세트가 있습니다. 질문 내 레이블들은 상호 배타적(정확히 하나만 적용)이며, 각각 짧은 설명을 포함합니다. TypeSafe는 선택된 `choice`과 레이블들에 대한 `probabilities` 분포를 반환합니다. LLM들은 동일한 레이블 세트를 사용하도록 요청되며, 이는 모든 행을 비교 가능하게 유지합니다.
+각 질문에는 `key`, 지침 문장, 그리고 고정된 라벨 세트가 포함됩니다. 질문 내 라벨들은 상호 배타적(정확히 하나만 적용)이며, 각각 짧은 설명을 갖습니다. TypeSafe는 선택된 `choice`과 라벨들에 대한 `probabilities` 분포를 반환합니다. LLM들은 동일한 라벨 세트를 사용하도록 요청받으며, 이는 모든 행을 비교 가능하게 유지합니다.
 
 ```python
 QUESTIONS = {
@@ -211,11 +212,11 @@ QUESTIONS = {
 
 ## 우리가 어떻게 묻는가
 
-각 LLM 호출은 `json.dumps(POST)`, 8개 질문 전체, 그리고 허용된 모든 라벨을 포함하는 하나의 프롬프트입니다. 두 가지 답변 형식이 있습니다. 분산 모드에서는 모델이 각 질문마다 각 라벨에 대한 확률을 포함한 하나의 JSON 객체를 반환합니다. 단일 선택 모드에서는 각 질문마다 하나의 원시 라벨을 반환하며, 우리의 분석은 해당 라벨에 모든 확률 질량을 할당합니다.
+각 LLM 호출은 `json.dumps(POST)`, 8개의 모든 질문, 그리고 허용된 모든 라벨을 포함하는 하나의 프롬프트입니다. 답변 형식은 두 가지가 있습니다. 분산 모드에서는 모델이 각 질문마다 각 라벨에 대한 확률을 포함한 하나의 JSON 객체를 반환합니다. 단일 선택 모드에서는 각 질문마다 하나의 원시 라벨을 반환하며, 우리의 분석은 해당 라벨에 모든 확률 질량을 할당합니다.
 
-TypeSafe 호출은 동일한 게시글과 동일한 8개의 ⦇0⦇ 질문 `Choice`에 대한 하나의 요청이며, 질문마다 하나의 분포를 반환합니다.
+TypeSafe 호출은 동일한 게시글과 동일한 8개의 `Choice` 질문을 대상으로 한 `system_one` 요청이며, 질문마다 하나의 분포를 반환합니다.
 
-모든 쿼리에는 매번 새로운 `uid`가 할당되며, 이는 각 실행마다 변경되는 일회용 고유 값으로, 게시글과 평가 기준은 그대로 유지됩니다. 이는 LLM 프롬프트와 TypeSafe 상태의 추가 필드에 나타납니다. 이 구조는 무관한 필드에 대한 민감도와 동일한 요청에서 발생할 수 있는 변동성을 분리할 수 없습니다.
+모든 쿼리에는 매번 새로 생성되는 `uid`가 할당되며, 이는 각 실행마다 변경되는 일회용 고유 값으로, 게시글과 평가 기준은 그대로 유지됩니다. 이는 LLM 프롬프트와 TypeSafe 상태의 추가 필드에 나타납니다. 이 구조는 무관한 필드에 대한 민감도와 동일한 요청에서 발생할 수 있는 변동을 분리할 수 없습니다.
 
 각 도우미는 답변, 예상 비용, 왕복 지연 시간을 반환합니다。
 
@@ -451,12 +452,12 @@ def ask_llm_rubric(
 | 추론 모델 | `claude-opus-4-8` | — | ✓ | — |
 | TypeSafe | `jev-latest` (`typesafe_choice`) | — | ✓ | — |
 
-* `✓`는 15회 반복으로 테스트된 조건을 나타내며, `—`는 테스트되지 않은 조합을 나타냅니다.
-* 기본 열은 온도 인수를 전송하지 않습니다: 추론 모델이 아닌 모델은 API 기본값을 사용하며, 추론 모델과 TypeSafe는 온도 설정 없이 실행됩니다.
+* `✓`는 15회 반복으로 테스트된 조건을, `—`는 테스트되지 않은 조합을 나타냅니다.
+* 기본 열은 온도 인수를 전송하지 않습니다: 비추론 모델은 API 기본값을 사용하며, 추론 모델과 TypeSafe는 온도 설정 없이 실행됩니다.
 * 단일 선택 조건은 질문당 하나의 레이블을 반환합니다.
-* 온도 `0`는 일반적으로 재현성을 위해 권장되므로 API 기본값과 비교됩니다.
+* 재현성을 위해 온도 `0`가 일반적으로 권장되므로, API 기본값과 비교됩니다.
 
-우리는 `NUM_SAMPLES` = 조건당 15회 반복으로 샘플링합니다. 각 반복은 고유한 캐시 키를 가지며 별도의 샘플링으로 간주되고, 캐시(`json_cache.json`)는 쿡북과 함께 제공되므로 다시 렌더링 시 이를 재사용하여 API 호출을 수행하지 않습니다. 캐시를 삭제하면 다시 실시간 샘플링을 수행할 수 있습니다.
+우리는 `NUM_SAMPLES` = 조건당 15회 반복을 사용합니다. 각 반복은 고유한 캐시 키를 가지며 별도의 샘플링으로 간주되고, 캐시(`json_cache.json`)는 쿡북과 함께 제공되므로 다시 렌더링 시 이를 재사용하여 API 호출을 전혀 사용하지 않습니다. 캐시를 삭제하면 다시 실시간 샘플링을 수행할 수 있습니다.
 
 ```python
 CONDITIONS = []
@@ -546,9 +547,9 @@ TypeSafe returned models (calls): {'jev-1.13.0': 15}
 
 ### 비용 + 속도 (규칙별 쿼리 기준)
 
-다음 비용은 Setup의 과거 가격 가정, TypeSafe에 대한 `speed_latest` 비율을 포함하여 산출되었습니다. 이는 검증된 `jev-latest` 가격이나 현재 청구 금액이 아닙니다.
+아래 비용은 Setup의 과거 가격 가정, TypeSafe의 `speed_latest` 비율을 포함하여 산정되었습니다. 이는 검증되지 않은 `jev-latest` 가격 또는 현재 청구 금액이 아닙니다.
 
-한 행은 8문항 평가 기준 호출 한 건을 의미합니다. `time/call`와 `cost/call`는 15회 호출의 평균을 내고, `vs ts_choice` 열은 TypeSafe 수치를 나눕니다. LLM은 16개 풀에서 실행됩니다.
+한 행은 8문항 평가 기준 호출 하나를 의미합니다. `time/call`와 `cost/call`는 15회 호출의 평균을 내고, `vs ts_choice` 열은 TypeSafe 수치를 나눕니다. LLM은 16개 풀에서 실행됩니다.
 
 ```python
 typesafe_cost = mean([cost for cost, _latency in stats["typesafe_choice"]])
@@ -592,16 +593,16 @@ typesafe_choice                        15      114ms    $0.000046       1.0x    
 
 읽는 방법:
 
-* 외부 행 그룹: 질문.
-* 내부 행: 조건.
-* 열: 하나의 전체 루브릭 호출.
+* 바깥쪽 행 그룹: 질문.
+* 안쪽 행: 조건.
+* 열: 하나의 전체 루빅 호출.
 * 셀 텍스트: 애플리케이션 결정과 상위 레이블의 확률.
-* 셀 색상: 해당 질문 내에서의 레이블 위치, 따라서 행 전체에 걸쳐 같은 색상은 항상 같은 결정을 의미.
-* 회색 `uncertain`: 최상위 확률이 `0.60` 미만인 경우, 해당 사례는 인간 검토로 넘어감.
-* 해치 `n/a`: 응답이 사용 가능한 레이블로 파싱되지 않음(파싱 실패).
+* 셀 색상: 해당 질문 내 레이블의 위치, 따라서 행 전체에 걸쳐 같은 색상은 항상 동일한 결정을 의미.
+* 회색 `uncertain`: 상위 확률이 `0.60` 미만인 경우, 해당 사례는 인간 검토로 넘어감.
+* 대각선 줄무늬 `n/a`: 응답이 사용 가능한 레이블로 파싱되지 않음(파싱 실패).
 * 빈 행은 단순한 간격 역할.
 
-단일 선택 조건은 반환된 라벨을 유지합니다: 불확실성 추정치를 제공하지 않습니다.
+단일 선택 조건은 반환된 라벨을 유지합니다. 불확실성 추정치를 제공하지 않습니다。
 
 ```python
 GAP = 1  # blank spacer row(s) between question blocks
@@ -736,11 +737,11 @@ display(fig)
 
 <img src="/img/cases/consistency-choice-cookbook-consistency_choice_cookbook.executed.1.png" alt="output" width="2230" height="4044" data-path="cookbooks/consistency_choice_cookbook/consistency_choice_cookbook.executed.1.png" />
 
-더 명확한 질문들은 일관성을 유지한다: `target`는 Person으로, `severity`는 전반적으로 High로 판독된다. 경계선에 있는 것들은 조건 간에 분할된다: `category`, `primary_risk`, `action`, `review_path`, 그리고 `link_handling`. 일부 조건은 자체 15회 반복 내에서 반전되기도 한다. 기권 이전, TypeSafe는 `primary_risk`(Harassment 11회, Violence 4회)과 `link_handling`(RmLink 8회, Brigade 7회)에서 최상위 레이블을 변경한다. 두 행은 이제 최상위 확률이 `0.60` 미만이기 때문에 `uncertain`를 전반적으로 보여준다.
+더 명확한 질문들은 일관성을 유지한다: `target`은 Person을, `severity`은 High를 전반적으로 나타낸다. 경계선상의 것들은 조건 간에 분포된다: `category`, `primary_risk`, `action`, `review_path`, 그리고 `link_handling`. 일부 조건은 자체 15회 반복 내에서 반전되기도 한다. 기권 이전, TypeSafe는 `primary_risk`(Harassment 11회, Violence 4회)과 `link_handling`(RmLink 8회, Brigade 7회)에서 최상위 레이블을 변경한다. 두 행은 이제 최상위 확률이 `0.60` 미만이기 때문에 `uncertain`를 전반적으로 보여준다.
 
 ## 확률 표준편차
 
-이는 선택된 레이블뿐만 아니라 전체 확률 벡터를 검토합니다. 각 조건에 대해 모든 질문마다 15개 분포를 수집하고, 반복 실행 간 각 레이블 확률의 표준편차(실행 간 변동 폭)를 계산한 후, 모든 레이블과 질문에서 해당 표준편차를 평균냅니다. 또한 단일 최대 레이블 표준편차를 보고하고, 구문 분석 실패는 별도로 카운트합니다.
+이는 선택된 레이블뿐만 아니라 전체 확률 벡터를 검토합니다. 각 조건에 대해 모든 질문마다 15개 분포를 수집하고, 반복 실행 간 각 레이블 확률의 표준 편차(실행 간 변동 폭)를 계산한 후, 모든 레이블과 질문에서 해당 표준 편차를 평균냅니다. 또한 단일 최대 레이블 표준 편차를 보고하고, 구문 분석 실패는 별도로 집계합니다.
 
 표는 확률 출력 LLM의 각 조건을 TypeSafe와 비교합니다. 단일 선택 행은 확률 분포가 아닌 하드 라벨을 출력하므로 제외됩니다.
 
@@ -796,11 +797,11 @@ claude-opus-4-8-reasoning                  0.0245        0.0693         0%      
 typesafe_choice                            0.0098        0.0515         0%        1.00x
 ```
 
-이번 실행에서 TypeSafe는 `0.0098`의 평균 확률 표준편차와 `0.0515`의 최대 단일 라벨 표준편차를 가집니다. 온도 0에서 Haiku는 `0.0012`의 더 낮은 평균 표준편차를 보입니다. 나머지 다섯 LLM 확률 조건은 `0.0245`에서 `0.0543`까지이며, TypeSafe 평균의 약 `2.5x`에서 `5.6x` 사이입니다. 두 라벨이 근접할 때 작은 변화라도 상위 라벨을 바꿀 수 있습니다.
+이번 실행에서 TypeSafe는 `0.0098`의 평균 확률 표준편차와 `0.0515`의 최대 단일 레이블 표준편차를 가집니다. 온도 0에서의 Haiku는 `0.0012`의 더 낮은 평균 표준편차를 가집니다. 다른 다섯 LLM 확률 조건은 `0.0245`에서 `0.0543` 사이이며, TypeSafe 평균의 약 `2.5x`에서 `5.6x`입니다. 두 레이블이 근접할 때 작은 변화라도 상위 레이블을 변경할 수 있습니다.
 
-## 플롯: 불확실한 결과를 가진 의사 결정 합의
+## 플롯: 불확실한 결과를 가진 결정 합의
 
-최고 확률이 `0.60` 미만일 경우 `uncertain`를 반환한다. 각 확률 출력 조건과 질문마다 가장 빈번한 애플리케이션 결정을 `uncertain` 포함하여 세고, 이를 전체 15회 추첨으로 나눈다. 파싱 실패는 일치도 계산에 반영된다. 각 막대는 모든 8개 질문에 대한 점수의 평균을 나타내며, 일치도가 높은 순으로 정렬된다.
+최상위 확률이 `0.60` 미만일 경우 `uncertain`를 반환한다. 각 확률 출력 조건과 질문마다 `uncertain`를 포함한 가장 일반적인 애플리케이션 결정을 세고, 이를 15번의 추출 전체로 나눈다. 구문 분석 실패는 일치도 계산에 반영된다. 각 막대는 8개 질문 전체에 대한 점수의 평균을 나타내며, 일치도가 가장 높은 순으로 정렬된다.
 
 불확실성 추정치를 제공하지 않기 때문에 단일 선택 LLM 조건은 제외됩니다.
 
@@ -867,15 +868,15 @@ display(fig_bar)
 
 <img src="/img/cases/consistency-choice-cookbook-consistency_choice_cookbook.executed.2.png" alt="output" width="1052" height="651" data-path="cookbooks/consistency_choice_cookbook/consistency_choice_cookbook.executed.2.png" />
 
-`0.60` 규칙 하에서, Haiku는 온도 0에서 100%의 점수를 기록했습니다. TypeSafe는 99.2%를 기록했으며, 다른 LLM 조건들은 84.2%에서 94.2% 사이에 위치했습니다. TypeSafe는 답변의 25.8%에서 `uncertain`을 반환했고 나머지 74.2%에서는 자동으로 조치를 취했습니다. 온도 0의 Haiku는 절대 거부하지 않았습니다. 이 비율들은 반복성만을 측정합니다. 아래 표는 이 차트의 정책 일치율과 함께 원시 일치율 및 거부율을 나란히 보여줍니다.
+`0.60` 규칙 하에서, Haiku는 온도 0에서 100%의 점수를 기록했습니다. TypeSafe는 99.2%를 기록했으며, 다른 LLM 조건들은 84.2%에서 94.2% 사이에 위치했습니다. TypeSafe는 답변의 25.8%에서 `uncertain`을 반환했고 나머지 74.2%에서는 자동으로 조치를 취했습니다. 온도 0의 Haiku는 결코 거부하지 않았습니다. 이 비율들은 반복성만을 측정합니다. 아래 표는 이 차트의 정책 동의율과 함께 원시 동의율과 거부율을 나란히 제시합니다.
 
 ## 불확실한 확률이 불확실한 결정을 낳게 한다
 
-작은 확률 변화로 두 개의 근접한 라벨이 바뀔 수 있습니다. 애플리케이션은 최우선 순위의 라벨에 반드시 따라야 하는 것은 아닙니다: 상위 확률이 `uncertain` 미만일 경우 `uncertain`를 반환하고, 해당 케이스는 사람에게 전달합니다. 정확히 `0.60`일 때 최우선 순위 라벨을 선택합니다. 이는 API의 별도 `confidence` 필드가 아닌 반환된 확률을 사용하며, 모델 호출을 추가하지 않습니다.
+작은 확률 변화가 두 개의 근접한 레이블을 바꿀 수 있습니다. 애플리케이션은 최상위 레이블에 반드시 반응해야 하는 것은 아닙니다: 상위 확률이 `uncertain` 미만일 경우 `0.60`를 반환하고, 해당 케이스를 사람에게 전달합니다. 정확히 `0.60`에서 최상위 레이블을 선택합니다. 이는 API의 별도 `confidence` 필드가 아닌 반환된 확률을 사용하며, 모델 호출을 추가하지 않습니다.
 
-임계값은 예시용 애플리케이션 정책이며, 교정된 보증이나 이번 실행의 합의를 최대화하도록 선택된 임계값이 아닙니다. 라벨이 붙은 예시와 잘못된 조치의 비용, 그리고 사람의 검토를 사용하여 생산 환경의 임계값을 선택하세요.
+임계값은 예시용 애플리케이션 정책이며, 교정된 보증이나 이번 실행의 일치율을 최대화하도록 선택된 임계값이 아닙니다. 라벨이 붙은 예시와 잘못된 조치의 비용, 그리고 인간 검토를 사용하여 생산 환경의 임계값을 선택하세요.
 
-우리는 동일한 규칙을 모든 확률 출력 조건에 적용합니다. 단일 선택 LLM 응답에는 확률 추정이 없으며, 그 합성 원-핫 벡터는 불확실성을 측정할 수 없으므로 동의 차트와 표에서 제외됩니다.
+우리는 모든 확률 출력 조건에 동일한 규칙을 적용합니다. 단일 선택 LLM 응답에는 확률 추정치가 없으며, 이들의 합성 원-핫 벡터는 불확실성을 측정할 수 없으므로 일치도 차트와 표에서 제외됩니다.
 
 ```python
 def agreement_rate(samples: list) -> float:
@@ -931,10 +932,10 @@ claude-opus-4-8-reasoning               92.5%        94.2%      33.3%      66.7%
 typesafe_choice                         90.8%        99.2%      25.8%      74.2%          0
 ```
 
-`policy agree`는 `uncertain`를 의사결정으로 간주하며, 구문 분석 실패는 합의에 대해 카운트됩니다.
-`automatic`는 라벨을 선택하는 모든 답변의 비율입니다. `conflicts`는 기권은 무시하고 반복 동안 여러 개의 구체적인 라벨이 있는 질문의 수를 세며, 이는 재현성과 애플리케이션이 행동을 취하는 빈도를 설명하지만, 그 행동이 올바른지 여부는 설명하지 않습니다.
+`policy agree`는 결정을 `uncertain`로 간주하며, 구문 분석 실패는 합의에 대해 카운트됩니다.
+`automatic`는 레이블을 선택하는 모든 답변의 비율입니다. `conflicts`는 기권을 무시하고 반복 동안 여러 개의 구체적인 레이블이 있는 질문의 수를 카운트합니다. 이러한 지표는 행동이 올바른지 여부가 아니라, 반복성과 애플리케이션이 행동하는 빈도를 설명합니다.
 
-TypeSafe의 동의율은 90.8%에서 99.2%로 상승했다. 답변 중 25.8%는 불확실했고, 74.2%는 자동이었다. `primary_risk`과 `link_handling`은 모든 반복에서 불확실한 것으로 돌아왔으며, `category`은 Violence와 `uncertain` 사이를 오가며 일부 반복에서는 행동 임계값을 넘었고 다른 반복에서는 넘지 않았다. 어떤 질문도 두 가지 다른 구체적인 TypeSafe 라벨을 생성하지 않았다. 이 중 어느 것도 정확성이나 우월성을 보여주지 않는다: Haiku는 온도 0에서 100%의 동의율을 보였으며, 거부 답변은 없었다.
+TypeSafe의 합의율은 90.8%에서 99.2%로 상승했다. 답변 중 25.8%는 불확실했고 74.2%는 자동이었다. `primary_risk`과 `link_handling`은 모든 반복에서 불확실하게 돌아왔으며, `category`은 폭력과 `uncertain` 사이를 오가며 일부 반복에서는 행동 임계값을 넘었고 다른 반복에서는 넘지 않았다. 어떤 질문도 두 가지 다른 구체적인 TypeSafe 라벨을 생성하지 않았다. 이 결과는 정확성이나 우월성을 보여주지 않는다: Haiku는 온도 0에서 100%의 합의율을 보였으며, 거부 답변은 없었다.
 
 ```python
 # Show every TypeSafe decision while retaining the top probability behind it.
@@ -969,11 +970,11 @@ display(fig_policy)
 
 <img src="/img/cases/consistency-choice-cookbook-consistency_choice_cookbook.executed.3.png" alt="output" width="1932" height="584" data-path="cookbooks/consistency_choice_cookbook/consistency_choice_cookbook.executed.3.png" />
 
-이 정책은 모델을 결정론적으로 만들지 않습니다. 거부하는 것은 동일한 인간 검토 결과를 가진 경쟁 레이블을 대체할 수 있지만, `0.60` 근처의 확률은 여전히 구체적인 레이블과 `uncertain` 사이에서 이동할 수 있습니다. 확률 통계와 표의 `raw agree` 열은 여전히 원래 모델 출력을 보고합니다.
+이 정책은 모델을 결정론적으로 만들지 않습니다. 거부하는 것은 동일한 인간 검토 결과를 가진 경쟁 레이블을 대체할 수 있지만, `0.60` 근처의 확률은 여전히 구체적인 레이블과 `uncertain` 사이에서 이동할 수 있습니다. 확률 통계와 테이블의 `raw agree` 열은 여전히 원래 모델 출력을 보고합니다.
 
 ## TypeSafe 플레이그라운드에서 열기
 
-아래 링크는 플레이그라운드에서 동일한 게시글과 기준을 엽니다: 하나의 게시글, 동일한 8
+아래 링크는 플레이그라운드에서 동일한 게시글과 평가 기준을 엽니다: 하나의 게시글, 동일한 8
 `Choice`s, 그리고 TypeSafe `jev-latest`.
 
 ```python
@@ -992,4 +993,4 @@ display(
 )
 ```
 
-[TypeSafe 플레이그라운드에서 이 게시글 + 기준 열기 →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAA4QDOKpBJ5VKA+gJZi36kAKAtABx8ATAEYAzKQA0nEAEMYKABYQATh3oxKCZa3Z5pMAPQAWIwHZhk6TKhQIMVExkBzBEzAyAnpQ6i+U0mTKLCpM1EEA1gjeesL+IABmEAA2SRAA7lrRBCIADAC+cbaoWDR69JQwyvHWCBwBMABGSSxQ+MoIZEkelqQsSEztnR5MKBB1skgQilr4GjNgCPHIYH1O+DL4TjKI+GQyKFAKPSC2cHD2LCjdeqTKBluICw37UaQF0kUoyKV0pF-Y4wAgu18B47PhNEE7JQuvhFCxKPgFkhNAB+fCApBgpAIfBpJRIxbLRGKfa7faHfAI9b4U6dBBfWmpNJIdZIMAQpQwJIchq4hBwZ7KZQySiaDmjfAIABuyF2jHwCi0CAAdPguAgIPT8M1IqDwTIQfj9gByRHKGB9VZwhTU07nJCXDxsjlKHHUWFgmD4HEICUQfB8wkyJIoPGXBRqgDCEB2lE8VLDkrgzuqUAQUj60suCDNbRYTgUYaV7TVAGkEB1E7MyC78ABJE0pKXs-WVPFKJK4w4yJA4pIq44KUVMZpIcIcFAWjPSMfhNyxmR9cYrSi2ZRgFVOJzHJK9pwwZy1G4gZBvOKDFQoLL4dSQgYdK83owXx-KZjtUUQFEcADapGHEUxUQVBjkoPY4GORRP1KABdPIEJAKRyGUWMyGvDBsD0IhSCgF4nBUa5fhAK4yGPAhcKUFpj0KIIviCGQ1FIAA5b9yOkVj5WaKBnWzZJ9mCVkIHiNlnXCPpN2OAAJQ1RRvUh6xRblr3wFRCUQXtEQ2MjlEob8pDSCMfQDaCEDJYTFUNOA60mXZUK+KAvjAHgoD3MV1hQFBrHCQckOkGSviBTzvK03ZMm-VTlE2VCYFrCBZSi7T7IQRy-VpQDrHohEUBafAAAoRXTKR2maJxBKkFx2S0KQVVqgBKXy4gANWCLskHTcYAFkZEiUKoHaFYmlxUzzJEwDrLUvooBzRE+La9N1i2PpqAhWNNRxRrpAAZQg8YAFUUWSFocw5QJYymQTIp1PpwghCCDKM2ydL0pAQw8ryoB844tqwQ8knGH7MD+q6ZDAZTaW-L5UF895ehRKcYEcwT5JAAB1Ycw2paYIVWLt8DgBUZDIToWhkIaIeKVAeAobjnTwr4COUVM1PhREKGoVFz2kQIWDgQ1hiCSgJzKP4PDI8ZDggajjn6nMGKYkAZKAygQJ+aQNV0783v2D7bpZw0XCc9YGjmKkSSVfGl1ZQWvr80gWuSZAOpPQEbRg1Sxqsq6+hyuA2AEiKsYtvm+nzIXNtIAAZG7ARNzRxgAUWwLRXqSHg5yu4T4mpvcUESZRrNsFQVlenKIpts2bVxEPrYRW24kBGw7FQKTssI8YuChRKm-sYs26Zq7BjMsM+WHPioqD6urbD+vpEj9IACU6-GTiNMdJAnHibl8YgBYRTL2uhcrwIom+GG4mWhGke-FH0bJSe7N5-md73gPD9u0kw0oLkeSRIJZThAxFw+B842mpOzFAnMQCwxIgbBkCtSLsUolLZ2tE5YsEYiLEArEcQrymEiFg7RUocjJL2bEuJQ57HfC0bkhoI4gA1i9cYAARQhKUjbmRxHdFKLB4i5QkiwbMYMQz0IAOIxTICwthxCPI0jOg5I2TgJFXVcnJehXBc750gieVhRCOFJgtvaC4VwrqdH2FoxMmgkjxCkJMMM2lwpIHPtIS+Fpr4-hPOjAMaljSY3Nt2SG3xH58yCLCFYei0r7CgTAzKgkEFiyQScKiqCPh0S0BghWgIUjpHGJHMyADsYQJrOGRQxl1juPoajQ0SBcn5OGhbIpsVAzyHetYBQNI0jVOtHuPkA5jgLwFPFRJAyCYFIaYwKQJswyQGMmGMiqcWAAC96m4msLYXu9CtpThYJEcYIyhlV3lCtXsJCwAkIhNsvUkpsZrObigehCc1whheOMNAPVcS2TkKMPmHD3EAG5FTJA5KAjYCh4C9kJNNSgglnFwzCIjA+t8MYtnzumVW5SD6cjsL-IMXlIhCVZKzI5kCuakAAI4wAQJS+J4sTyS2lnbE4aT5ZYMBPIMYLt2U8HaHpJIsoAW2TBXzVkFKqUfMrAsSSjLRHIC0CGcYMqcQiiSC-OVmLRWUvoWgBQMFXk6uHvgAw+A5pO1xDyigKJcQatVN9XaJ4drbDrGYvOKg4A8DJqba1Wqtp5NBq8i01B3Xsh4PGJYJiuyg0NRCZAwQopetJSAVxCLkbjHRi0dp0KN54wJq-dVlLKVYu5BydIhLbRs0YNEuIc4mDDnZGOHcWDEES2STRVJ6DMHESycyWpMgxm4gzpQvc6Z6ELzgNHccANtlxSiquMmeNsYZymfgSIVZCmMHoQAISCFsBY-qDULpuusRERcNx9BeLybdoNrQnIxZdS4R7jZzAeU83OiSfqtgPeOOEAYNjgR4SGbK36j2aHcnyfOqykYb1hYm+GbjEXjCkukQtv8yFSmTsoVO10v1qSzjncxrqqRIGzIyUOa6VpBlrWALsYBK3SHaNmBAaQmB7EUDSxJ9KUm4WZRk1l7KgTsp+ZE-5ZShUQvoywRj9CpLgpqS7EBqFUBjlxKJ1kOa1VqT5r1Q5eEUibJjSoIE0bHQ4ain+6aAGVricYzMak7QKVsKlXEPJWx-ongXnYRkkouwuaunuNIPBkCooFEEqIOm37QaTe4pFAZv7Yo5JplZICz0qp0yqiKRKIG0dIJoBKTo2PNpQa2rj7aFY4MSZxOa4XjjzzSHsmACwrqrj9mKQRM4l1RE0KgDBKRnTjS7GKehnU-QsHgB3Rxb0MrASCYZUptlXJmWULCfqw3yYjXudJAsRwTxKzkui0YhsSwlPaRsNbNoyTrJxWasyJDj0DRYENCLsHk031Tcih+QzlUqpy+kkxFkMsVreHkPysgyAsCapkQS2FpTCGB1Y9hfpOq7wQEkSgehfwgAAFYynTi8agIB4JAA)
+[TypeSafe 플레이그라운드에서 이 게시글 + 기준을 열기 →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAA4QDOKpBJ5VKA+gJZi36kAKAtABx8ATAEYAzKQA0nEAEMYKABYQATh3oxKCZa3Z5pMAPQAWIwHZhk6TKhQIMVExkBzBEzAyAnpQ6i+U0mTKLCpM1EEA1gjeesL+IABmEAA2SRAA7lrRBCIADAC+cbaoWDR69JQwyvHWCBwBMABGSSxQ+MoIZEkelqQsSEztnR5MKBB1skgQilr4GjNgCPHIYH1O+DL4TjKI+GQyKFAKPSC2cHD2LCjdeqTKBluICw37UaQF0kUoyKV0pF-Y4wAgu18B47PhNEE7JQuvhFCxKPgFkhNAB+fCApBgpAIfBpJRIxbLRGKfa7faHfAI9b4U6dBBfWmpNJIdZIMAQpQwJIchq4hBwZ7KZQySiaDmjfAIABuyF2jHwCi0CAAdPguAgIPT8M1IqDwTIQfj9gByRHKGB9VZwhTU07nJCXDxsjlKHHUWFgmD4HEICUQfB8wkyJIoPGXBRqgDCEB2lE8VLDkrgzuqUAQUj60suCDNbRYTgUYaV7TVAGkEB1E7MyC78ABJE0pKXs-WVPFKJK4w4yJA4pIq44KUVMZpIcIcFAWjPSMfhNyxmR9cYrSi2ZRgFVOJzHJK9pwwZy1G4gZBvOKDFQoLL4dSQgYdK83owXx-KZjtUUQFEcADapGHEUxUQVBjkoPY4GORRP1KABdPIEJAKRyGUWMyGvDBsD0IhSCgF4nBUa5fhAK4yGPAhcKUFpj0KIIviCGQ1FIAA5b9yOkVj5WaKBnWzZJ9mCVkIHiNlnXCPpN2OAAJQ1RRvUh6xRblr3wFRCUQXtEQ2MjlEob8pDSCMfQDaCEDJYTFUNOA60mXZUK+KAvjAHgoD3MV1hQFBrHCQckOkGSviBTzvK03ZMm-VTlE2VCYFrCBZSi7T7IQRy-VpQDrHohEUBafAAAoRXTKR2maJxBKkFx2S0KQVVqgBKXy4gANWCLskHTcYAFkZEiUKoHaFYmlxUzzJEwDrLUvooBzRE+La9N1i2PpqAhWNNRxRrpAAZQg8YAFUUWSFocw5QJYymQTIp1PpwghCCDKM2ydL0pAQw8ryoB844tqwQ8knGH7MD+q6ZDAZTaW-L5UF895ehRKcYEcwT5JAAB1Ycw2paYIVWLt8DgBUZDIToWhkIaIeKVAeAobjnTwr4COUVM1PhREKGoVFz2kQIWDgQ1hiCSgJzKP4PDI8ZDggajjn6nMGKYkAZKAygQJ+aQNV0783v2D7bpZw0XCc9YGjmKkSSVfGl1ZQWvr80gWuSZAOpPQEbRg1Sxqsq6+hyuA2AEiKsYtvm+nzIXNtIAAZG7ARNzRxgAUWwLRXqSHg5yu4T4mpvcUESZRrNsFQVlenKIpts2bVxEPrYRW24kBGw7FQKTssI8YuChRKm-sYs26Zq7BjMsM+WHPioqD6urbD+vpEj9IACU6-GTiNMdJAnHibl8YgBYRTL2uhcrwIom+GG4mWhGke-FH0bJSe7N5-md73gPD9u0kw0oLkeSRIJZThAxFw+B842mpOzFAnMQCwxIgbBkCtSLsUolLZ2tE5YsEYiLEArEcQrymEiFg7RUocjJL2bEuJQ57HfC0bkhoI4gA1i9cYAARQhKUjbmRxHdFKLB4i5QkiwbMYMQz0IAOIxTICwthxCPI0jOg5I2TgJFXVcnJehXBc750gieVhRCOFJgtvaC4VwrqdH2FoxMmgkjxCkJMMM2lwpIHPtIS+Fpr4-hPOjAMaljSY3Nt2SG3xH58yCLCFYei0r7CgTAzKgkEFiyQScKiqCPh0S0BghWgIUjpHGJHMyADsYQJrOGRQxl1juPoajQ0SBcn5OGhbIpsVAzyHetYBQNI0jVOtHuPkA5jgLwFPFRJAyCYFIaYwKQJswyQGMmGMiqcWAAC96m4msLYXu9CtpThYJEcYIyhlV3lCtXsJCwAkIhNsvUkpsZrObigehCc1whheOMNAPVcS2TkKMPmHD3EAG5FTJA5KAjYCh4C9kJNNSgglnFwzCIjA+t8MYtnzumVW5SD6cjsL-IMXlIhCVZKzI5kCuakAAI4wAQJS+J4sTyS2lnbE4aT5ZYMBPIMYLt2U8HaHpJIsoAW2TBXzVkFKqUfMrAsSSjLRHIC0CGcYMqcQiiSC-OVmLRWUvoWgBQMFXk6uHvgAw+A5pO1xDyigKJcQatVN9XaJ4drbDrGYvOKg4A8DJqba1Wqtp5NBq8i01B3Xsh4PGJYJiuyg0NRCZAwQopetJSAVxCLkbjHRi0dp0KN54wJq-dVlLKVYu5BydIhLbRs0YNEuIc4mDDnZGOHcWDEES2STRVJ6DMHESycyWpMgxm4gzpQvc6Z6ELzgNHccANtlxSiquMmeNsYZymfgSIVZCmMHoQAISCFsBY-qDULpuusRERcNx9BeLybdoNrQnIxZdS4R7jZzAeU83OiSfqtgPeOOEAYNjgR4SGbK36j2aHcnyfOqykYb1hYm+GbjEXjCkukQtv8yFSmTsoVO10v1qSzjncxrqqRIGzIyUOa6VpBlrWALsYBK3SHaNmBAaQmB7EUDSxJ9KUm4WZRk1l7KgTsp+ZE-5ZShUQvoywRj9CpLgpqS7EBqFUBjlxKJ1kOa1VqT5r1Q5eEUibJjSoIE0bHQ4ain+6aAGVricYzMak7QKVsKlXEPJWx-ongXnYRkkouwuaunuNIPBkCooFEEqIOm37QaTe4pFAZv7Yo5JplZICz0qp0yqiKRKIG0dIJoBKTo2PNpQa2rj7aFY4MSZxOa4XjjzzSHsmACwrqrj9mKQRM4l1RE0KgDBKRnTjS7GKehnU-QsHgB3Rxb0MrASCYZUptlXJmWULCfqw3yYjXudJAsRwTxKzkui0YhsSwlPaRsNbNoyTrJxWasyJDj0DRYENCLsHk031Tcih+QzlUqpy+kkxFkMsVreHkPysgyAsCapkQS2FpTCGB1Y9hfpOq7wQEkSgehfwgAAFYynTi8agIB4JAA)

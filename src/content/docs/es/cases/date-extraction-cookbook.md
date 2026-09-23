@@ -1,6 +1,6 @@
 ---
 title: "Extracción de fechas"
-description: "Extrae fechas absolutas y relativas preguntando a TypeSafe por las partes nombradas en un documento, para luego resolverlas y validarlas en el código mediante una revisión basada en la confianza."
+description: "Extrae fechas absolutas y relativas preguntando a TypeSafe por las partes nombradas en un documento, luego las resuelve y valida en código con revisión basada en confianza."
 section: cases
 order: 170
 tags: ['cookbook', 'recipe']
@@ -9,14 +9,19 @@ translatedFrom: en
 ---
 *Lee las partes de una fecha del texto con TypeSafe, luego resuélvelas a un `date` en código.*
 
-La función que construyes aquí, `extract_date(document, role)`, recibe un documento y una frase que nombra la fecha que deseas, como "el plazo para devolver el formulario", y devuelve un `date` con una confianza. Señala una lectura de baja confianza, y otra cuyas partes no suman una fecha en absoluto, incluyendo una fecha que el documento nunca indica. La fecha puede estar escrita por extenso ("14 de agosto de 2027") o escrita en relación con hoy ("mañana", "el próximo jueves").
+La función que construyes aquí, `extract_date(document, role)`, toma un documento y una
+frase que nombra la fecha que deseas, como "el plazo para devolver el formulario", y devuelve
+un `date` con una confianza. Marca una lectura de baja confianza, y otra cuyas partes no
+suman una fecha en absoluto, incluyendo una fecha que el documento nunca indica. La fecha puede
+estar escrita por extenso ("14 de agosto de 2027") o escrita en relación con hoy ("mañana", "jueves
+que viene").
 
 TypeSafe responde `Choice` preguntas sobre la fecha en una sola llamada: qué tipo de fecha es,
 y
 qué mes, día, año o día de la semana nombra el texto. El código convierte esas respuestas en un `date`.
-El modelo lee lo que dice el texto y nunca realiza los cálculos del calendario.
+El modelo lee lo que dice el texto y nunca realiza cálculos calendáricos.
 
-Las celdas siguientes ejecutan esa función sobre cuatro documentos breves, imprimen cada fecha con su
+Las celdas de abajo ejecutan esa función sobre cuatro documentos breves, imprimen cada fecha con su
 confianza, y dividen los resultados en los que el código acepta y los que una persona debería
 examinar.
 
@@ -32,7 +37,7 @@ o lo envía a revisión.*
 pip install ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-luego establece ⦇0⦇.
+entonces establece `TYPESAFE_API_KEY`.
 
 ```python
 import os
@@ -99,9 +104,9 @@ Siete `Choice` preguntas se envían en una sola llamada. `mode` indica cómo se 
 para una fecha que nombra un mes, `relative` para una escrita en relación con hoy, y `none`
 cuando el documento no indica la fecha en absoluto.
 
-Los otros seis leen las piezas. Una fecha absoluta necesita `month`, `day` y `year`. Una relativa necesita `day_anchor`: hoy, mañana, pasado mañana o un día de la semana con nombre. Cuando nombra un día de la semana, `weekday` y `week_offset` indican cuál es y en qué semana. El código lee solo las piezas que `mode` solicita.
+Los otros seis leen las piezas. Una fecha absoluta necesita `month`, `day` y `year`. Una relativa necesita `day_anchor`: hoy, mañana, pasado mañana o un día de la semana con nombre. Cuando nombra un día de la semana, `weekday` y `week_offset` indican cuál es y en qué semana. El código lee únicamente las piezas que `mode` solicita.
 
-`year` enumera una opción por año desde 1900 hasta 2050, más dos escapes. `none` significa que el texto no indica ningún año y el código lo rellena. `out_of_range` significa que el texto indica un año fuera de la lista, y el código lo marca en lugar de adivinar. Si una lista tan larga te molesta, extrae primero los números parecidos a años del texto y ofrece al modelo solo esos.
+`year` enumera una opción por año desde 1900 hasta 2050, más dos escapes. `none` significa que el texto no indica año y el código rellena uno. `out_of_range` significa que el texto indica un año fuera de la lista, y el código lo marca en lugar de adivinar. Si una lista tan larga te molesta, extrae primero los números parecidos a años del texto y ofrece al modelo solo esos.
 
 ```python
 def date_questions(role: str) -> dict[str, Choice]:
@@ -165,11 +170,11 @@ def date_questions(role: str) -> dict[str, Choice]:
     }
 ```
 
-## Resuélvelo en el código
+## Resuélvelo en código
 
-`read_parts` realiza la llamada. `assemble` convierte las respuestas en un `date`: completa el año cuando el texto no lo indica y determina a qué día corresponde un día de la semana nombrado. Ambos cuentan desde `TODAY`, que está fijado para que las fechas relativas sean iguales en cada ejecución. `assemble` también informa de la confianza más baja entre las partes utilizadas, por lo que una respuesta débil en cualquier parte puede enviar toda la fecha a revisión.
+`read_parts` realiza la llamada. `assemble` convierte las respuestas en un `date`: completa el año cuando el texto no lo indica, y determina a qué día corresponde un día de la semana nombrado. Ambos cuentan desde `TODAY`, que está fijado para que las fechas relativas sean iguales en cada ejecución. `assemble` también informa de la confianza más baja entre las partes utilizadas, por lo que una respuesta débil en cualquier parte puede enviar toda la fecha a revisión.
 
-«el próximo jueves» puede referirse a dos días distintos, por lo que el código decide cuál. Un día de la semana sin calificativo significa el siguiente que cae hoy o después de hoy. `next` significa la semana calendario siguiente, y `current` significa esta semana.
+«el próximo jueves» puede referirse a dos días distintos, por lo que el código decide cuál. Un día de la semana sin calificativo significa el siguiente que cae hoy o después. `next` significa la semana calendario siguiente, y `current` significa esta semana.
 
 ```python
 @json_cache
@@ -282,8 +287,8 @@ def extract_date(document: str, role: str) -> dict:
 ## Ejecútalo
 
 Seis preguntas en cuatro documentos breves: dos fechas de un contrato que indica sus años,
-una fecha límite de formulario escrita sin año, una encuesta que cierra "hoy", una reseña programada para
-"el próximo jueves" y una fecha que el formulario nunca menciona. Todas se resuelven contra `TODAY` =
+una fecha límite de un formulario escrita sin año, una encuesta que cierra "hoy", una reseña programada para
+"el próximo jueves", y una fecha que el formulario nunca menciona. Todas se resuelven contra `TODAY` =
 2026-07-30, un jueves.
 
 ```python
@@ -328,19 +333,19 @@ OK the date the survey closes            2026-07-30  2026-07-30    0.94
 OK the date of the design review         2026-08-06  2026-08-06    0.92
 ```
 
-El contrato indica ambos años, por lo que se extrajeron del texto. El formulario no indica ningún año,
+El contrato indica ambos años, por lo que se extrajeron del texto. El formulario no indica año,
 por lo que el código completó 2026: toma el año actual y pasa al siguiente solo cuando la
 fecha ya tiene más de un mes de antigüedad. "hoy" y "el próximo jueves" pasaron por la misma
 función que las fechas escritas con letras.
 
-La llamada de arranque es la que el formulario nunca menciona. Hay una fecha en ese formulario, solo que no
+La llamada de inicio es la que el formulario nunca menciona. Hay una fecha en ese formulario, solo que no
 en este, y la nota `absolute date incomplete` significa que `mode` volvió `absolute` sin
-mes que la acompañe. La fecha volvió vacía, la confianza lee 0.46, y la fila está
+mes que la acompañe. La fecha volvió vacía, la confianza es de 0.46, y la fila está
 marcada para una persona.
 
 ## Confianza para enrutar
 
-Cada respuesta vuelve con una confianza calibrada, y la confianza de una fecha es la más baja entre las partes que la componen. Una fecha bajo `REVIEW_BELOW` = 0.60 se envía a una persona, y lo mismo ocurre con una fecha que el código no pudo ensamblar en absoluto. El resto pasa directamente.
+Cada respuesta vuelve con una confianza calibrada, y la confianza de una fecha es la más baja entre las partes que la componen. Una fecha bajo `REVIEW_BELOW` = 0.60 se asigna a una persona, y lo mismo ocurre con una fecha que el código no pudo ensamblar en absoluto. El resto pasa directamente.
 
 ```python
 if __name__ == "__cookbook__":
@@ -379,8 +384,8 @@ send to review (1):
 
 ## Ábrelo en el playground de TypeSafe
 
-El siguiente enlace contiene el mensaje del "próximo jueves" y las mismas preguntas que envía el código.
-Ábrelo para ver las respuestas y sus niveles de confianza, y para modificar el texto sin escribir
+El enlace siguiente contiene el mensaje del "próximo jueves" y las mismas preguntas que envía el código.
+Ábrelo para ver las respuestas y sus niveles de confianza, y para cambiar la redacción sin escribir
 ningún código.
 
 ```python
@@ -395,4 +400,4 @@ if __name__ == "__cookbook__":
     )
 ```
 
-[Abrir este documento + preguntas en el playground de TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIAMgigOQDO+FUAFgmDADYL4r35gIUCWA5knwAnBADceCAO74AZhCH4kWFPjS0YQimACGATwB0IADSEADkIhxTKChmx5CwADog4ELi4LOQKXaYSe+C50EDxQAcZBIFBCPCgIsdqB3toARhQQTDDxgUjMTCYuIkzaKDyiEQR5TAVRSBBKufkAvoUgPEgUKEIwUGUNFIEuABIQ0jxU7Kw68fgQMmwcXLwCwmIS0pKxKPFIAPz4ZGkZWfFk+AC8+Nr4UNosSDoKM6xI2nAdfNf4bqi0+AAKBD6Pj6Q4AQRgfBgXXwAEYACxkExkKb4ADMQjAcwWAFltEI6GQAJQAbkOxVK5QQ5yufGpgkpZQqbAgrJ0ukBKHcehM3LcQgskj5Sz01xk8QU-PkQpM8m+b0Q2MkCAQAGsOdRev9tFQyEpsKp1JoOSTyfqGjTLotptB4MgVJBuIoICouqVWOwJpwPfoXK0or92MkXL5-ENorRQuEXG0YnEEjwkg5vAApbR5Am6Jo1NoAMQQqR6WZztRc+MJtFLbXB5h4TGrUXx2Yc1TLIFTMEarfybU7TBbVV7UUh0K6jZcAGUENYEHBUgkJyAAPJ9CALoRLgByEAq88XPdzUQAIghwvvN4f2-VuwQXGpbbBEKhOBBnfU3SgPYsJnKFHF8G9D8fyoNUOmxeYfXiP0QADFwOi6Ho+h4AYIwASQWNEXhxG1OG4fhGXWKRAKoDNrnSTJslYO4HieKCEBMSRaDCf4g3+b0AI6PZ-TaDkQx8PxKiiEIwgiONtkTZMvBcOElwAJiXdElwRJcAFYlwANiXAB2JcAA4lwATiXOEAAYTNkq82jhBSrKiOElLsmSVKckA4XU1y4S0zzdM8gzPOM1y5PMoLLKHI8XDk2zwvbOTHJito5JchKojkjyUsi7yMpAOTfOyuT-PywLsvREKSrCxRhxcG8hPvJY7WfR03yoYD3VmL0KD-QCVCA10QPwMDHhwl4YLg9pOm6Xp+k6dDMNFWZIKw-DVhEcRiO9Mjjko2YaOQOiXkY5i6B9TlFo4NjAThABadE4WJbjYLaXQEAJfiw1qyNozE4SJMSfi4UM0yysqiK3MBiq22swHopB9sAdM+LYah0zkqR+zAfStGZMBrKsbB0y8rx+HCqJwHitJsyTMMuEIaqsGbKphzGdRyH0fcxncdZ7G4UJrn6ZJvmAYBqngpF2nQYBqKRcRwXDKSkXMdluTObpyXedVuWBY1uTydl0qqdug2Yb1mWNfRFmzcVs2VYlwz0XV230S1x3dY1hFgdlhFxbhwyEWNt3TdthELaDq2g5tn2EQdyPncj13bdUj2NdU72odU-2E8Dn3VJD7Ow+ziO0+jtPY7T+OfY0pPbY01P0Y0jOK6zqGNNz5v8+bwu6+LuvS7r8uoe0qufe02vse0huB6b9HtNb6f2+nzux+7sfe7H-v0b0oeob00ewb0ieN6n7G9Nn4-5+Pxe9+XvfV739fscBqnqafg+H6PsHfaf8+P8vgHDOvv+t8-73xykDLeqUga72CqZV+oCEbySBqfOB39oGX2gdfaBt9oEgOCpTIKpkaYIIZvgpmJCkG4JQQQtBBCMEEKwQQnBMDwGRRgVAmBsDgpxQQfLfBaVuHUNytw+hOsEH63wYbcRHCEbv2CubURlD0TUPtqI+h6JGHuwQV7TRUiEQyJRuQlGlCETUKjpo+hCJGGJyXBAbIAB9eYtihAZj4B9cE+BnoEhItQL88RsRyClMxKg2FUjZC8TYmwPAuC4SYBMXxwhnHAljHUS0EYdzuJev+KgbUGCyHlB1eio02gIUmshVCDgXAYVwthM60xlqETWuMUiggtqnGovcPaniDr4CYixdJBIDgAAUwhqkODVc4PA5qPntC+bJLU2QeIUACKA7hWAdBkAkKgcRiRdTIOE+xMhHEJPGQsG4CyvHZOxCElQwEOjRNiYUqIHJbEZhCJeaSAlwzlM+qJJJwRfpJjejyQceNpSCjGEuJ52gJQHmyiqdUfFXI1QjA+V8T4HSvnfH1bJIEuqcTmSofJg0IILBGjxKIxSkLTUGF8ypWFvw1LwisepGwvFMmpKydkvJulHX+JqDiKADioiBciQ4oKhQirIJC6FQhzgAjpZyKFkpWQCiFNsuYCgyBwo1HoWVNxFQ5M1AyrVxIHkuC1Qi9570IwiRjJEP5CY-opnLA0C1eM0AwG4K6vmAB1BgSgtB6CXGoDQAbgV8zzLEL1dNJylA0FG0Gk4uzxuvCkr5KLIBopfE6fF3jvwdVxT1HNhLwLDV9GS+CE1KUoRmjSyZ9EcJLSZWsBpih3jOhuIautWrDq9MtA9MaWr9kyAoKQN6glrVRh+Xa6I-ypL4G8LAQUDolwGhQCu1Nd4QDpoaui7NLpPx5sCQWrxwFi1DUgqSx65LK1TWrdSzdtL5qsAZcsAizaWX6tIt01U2rdA9uOlqrxnF9ijOUOcfxoHDTBpNDq9VhxoOhsUMob96oyDmkXSIVA4H5SokCUaENppzRjNyQoG4qQCSsHNWKSQcR-j1HwAARxgPcCZEhFkACsYQqDIAh00+AAD0hwGj4Zg7oEko1miRBANoUwPAABqGzq0OBAKIOEUmR0sD6AwXEKymAUAcAAbRAOxsQV04T6BsiAAAus0IAA)
+[Abre este documento + preguntas en el playground de TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIAMgigOQDO+FUAFgmDADYL4r35gIUCWA5knwAnBADceCAO74AZhCH4kWFPjS0YQimACGATwB0IADSEADkIhxTKChmx5CwADog4ELi4LOQKXaYSe+C50EDxQAcZBIFBCPCgIsdqB3toARhQQTDDxgUjMTCYuIkzaKDyiEQR5TAVRSBBKufkAvoUgPEgUKEIwUGUNFIEuABIQ0jxU7Kw68fgQMmwcXLwCwmIS0pKxKPFIAPz4ZGkZWfFk+AC8+Nr4UNosSDoKM6xI2nAdfNf4bqi0+AAKBD6Pj6Q4AQRgfBgXXwAEYACxkExkKb4ADMQjAcwWAFltEI6GQAJQAbkOxVK5QQ5yufGpgkpZQqbAgrJ0ukBKHcehM3LcQgskj5Sz01xk8QU-PkQpM8m+b0Q2MkCAQAGsOdRev9tFQyEpsKp1JoOSTyfqGjTLotptB4MgVJBuIoICouqVWOwJpwPfoXK0or92MkXL5-ENorRQuEXG0YnEEjwkg5vAApbR5Am6Jo1NoAMQQqR6WZztRc+MJtFLbXB5h4TGrUXx2Yc1TLIFTMEarfybU7TBbVV7UUh0K6jZcAGUENYEHBUgkJyAAPJ9CALoRLgByEAq88XPdzUQAIghwvvN4f2-VuwQXGpbbBEKhOBBnfU3SgPYsJnKFHF8G9D8fyoNUOmxeYfXiP0QADFwOi6Ho+h4AYIwASQWNEXhxG1OG4fhGXWKRAKoDNrnSTJslYO4HieKCEBMSRaDCf4g3+b0AI6PZ-TaDkQx8PxKiiEIwgiONtkTZMvBcOElwAJiXdElwRJcAFYlwANiXAB2JcAA4lwATiXOEAAYTNkq82jhBSrKiOElLsmSVKckA4XU1y4S0zzdM8gzPOM1y5PMoLLKHI8XDk2zwvbOTHJito5JchKojkjyUsi7yMpAOTfOyuT-PywLsvREKSrCxRhxcG8hPvJY7WfR03yoYD3VmL0KD-QCVCA10QPwMDHhwl4YLg9pOm6Xp+k6dDMNFWZIKw-DVhEcRiO9Mjjko2YaOQOiXkY5i6B9TlFo4NjAThABadE4WJbjYLaXQEAJfiw1qyNozE4SJMSfi4UM0yysqiK3MBiq22swHopB9sAdM+LYah0zkqR+zAfStGZMBrKsbB0y8rx+HCqJwHitJsyTMMuEIaqsGbKphzGdRyH0fcxncdZ7G4UJrn6ZJvmAYBqngpF2nQYBqKRcRwXDKSkXMdluTObpyXedVuWBY1uTydl0qqdug2Yb1mWNfRFmzcVs2VYlwz0XV230S1x3dY1hFgdlhFxbhwyEWNt3TdthELaDq2g5tn2EQdyPncj13bdUj2NdU72odU-2E8Dn3VJD7Ow+ziO0+jtPY7T+OfY0pPbY01P0Y0jOK6zqGNNz5v8+bwu6+LuvS7r8uoe0qufe02vse0huB6b9HtNb6f2+nzux+7sfe7H-v0b0oeob00ewb0ieN6n7G9Nn4-5+Pxe9+XvfV739fscBqnqafg+H6PsHfaf8+P8vgHDOvv+t8-73xykDLeqUga72CqZV+oCEbySBqfOB39oGX2gdfaBt9oEgOCpTIKpkaYIIZvgpmJCkG4JQQQtBBCMEEKwQQnBMDwGRRgVAmBsDgpxQQfLfBaVuHUNytw+hOsEH63wYbcRHCEbv2CubURlD0TUPtqI+h6JGHuwQV7TRUiEQyJRuQlGlCETUKjpo+hCJGGJyXBAbIAB9eYtihAZj4B9cE+BnoEhItQL88RsRyClMxKg2FUjZC8TYmwPAuC4SYBMXxwhnHAljHUS0EYdzuJev+KgbUGCyHlB1eio02gIUmshVCDgXAYVwthM60xlqETWuMUiggtqnGovcPaniDr4CYixdJBIDgAAUwhqkODVc4PA5qPntC+bJLU2QeIUACKA7hWAdBkAkKgcRiRdTIOE+xMhHEJPGQsG4CyvHZOxCElQwEOjRNiYUqIHJbEZhCJeaSAlwzlM+qJJJwRfpJjejyQceNpSCjGEuJ52gJQHmyiqdUfFXI1QjA+V8T4HSvnfH1bJIEuqcTmSofJg0IILBGjxKIxSkLTUGF8ypWFvw1LwisepGwvFMmpKydkvJulHX+JqDiKADioiBciQ4oKhQirIJC6FQhzgAjpZyKFkpWQCiFNsuYCgyBwo1HoWVNxFQ5M1AyrVxIHkuC1Qi9570IwiRjJEP5CY-opnLA0C1eM0AwG4K6vmAB1BgSgtB6CXGoDQAbgV8zzLEL1dNJylA0FG0Gk4uzxuvCkr5KLIBopfE6fF3jvwdVxT1HNhLwLDV9GS+CE1KUoRmjSyZ9EcJLSZWsBpih3jOhuIautWrDq9MtA9MaWr9kyAoKQN6glrVRh+Xa6I-ypL4G8LAQUDolwGhQCu1Nd4QDpoaui7NLpPx5sCQWrxwFi1DUgqSx65LK1TWrdSzdtL5qsAZcsAizaWX6tIt01U2rdA9uOlqrxnF9ijOUOcfxoHDTBpNDq9VhxoOhsUMob96oyDmkXSIVA4H5SokCUaENppzRjNyQoG4qQCSsHNWKSQcR-j1HwAARxgPcCZEhFkACsYQqDIAh00+AAD0hwGj4Zg7oEko1miRBANoUwPAABqGzq0OBAKIOEUmR0sD6AwXEKymAUAcAAbRAOxsQV04T6BsiAAAus0IAA)

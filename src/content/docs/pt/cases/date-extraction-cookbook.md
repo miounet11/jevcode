@@ -1,34 +1,34 @@
 ---
 title: "Extração de datas"
-description: "Extrai datas absolutas e relativas perguntando ao TypeSafe pelas partes nomeadas em um documento, e então as resolve e valida no código com revisão baseada em confiança."
+description: "Extrai datas absolutas e relativas perguntando ao TypeSafe pelas partes nomeadas em um documento, depois resolvendo e validando-as no código com revisão baseada em confiança."
 section: cases
 order: 170
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/date_extraction_cookbook"
 translatedFrom: en
 ---
-*Leia as partes de uma data a partir do texto com TypeSafe, depois resolva-as para um ⦇0⦇ no código.*
+*Leia as partes de uma data no texto com TypeSafe, depois resolva-as para um `date` no código.*
 
 A função que você constrói aqui, `extract_date(document, role)`, recebe um documento e uma
 frase que nomeia a data que você deseja, como "o prazo para devolver o formulário", e retorna
 um `date` com uma confiança. Ela sinaliza uma leitura de baixa confiança, e uma cujas partes não
-somam uma data de todo, incluindo uma data que o documento nunca afirma. A data pode ser
+se somam a uma data de todo, incluindo uma data que o documento nunca afirma. A data pode ser
 escrita por extenso ("14 de agosto de 2027") ou escrita em relação a hoje ("amanhã", "próxima
 quinta-feira").
 
-TypeSafe responde `Choice` perguntas sobre a data em uma única chamada: que tipo de data é,
+Respostas TypeSafe `Choice` perguntas sobre a data em uma única chamada: que tipo de data é,
 e
-em que mês, dia, ano ou dia da semana o texto se refere. O código converte essas respostas em um `date`.
-O modelo lê o que o texto diz e nunca realiza cálculos de calendário.
+qual mês, dia, ano ou dia da semana o texto nomeia. O código transforma essas respostas em um `date`.
+O modelo lê o que o texto diz e nunca faz a matemática do calendário.
 
 As células abaixo executam essa função sobre quatro documentos curtos, imprimem cada data com sua
-confiança e dividem os resultados naqueles que o código aceita e naqueles que uma pessoa deve
-analisar.
+confiança, e dividem os resultados naqueles que o código aceita e naqueles que uma pessoa deve
+examinar.
 
 <img src="/img/cases/date-extraction-cookbook-overview.png" alt="Overview diagram" width="1351" height="348" data-path="cookbooks/date_extraction_cookbook/overview.png" />
 
 *TypeSafe lê como a data é escrita e quais partes o texto nomeia. O código transforma essas
-respostas em um ⦇0⦇, contando a partir de hoje quando a data é relativa, e ou aceita
+respostas em um `date`, contando a partir de hoje quando a data é relativa, e ou aceita
 ou envia para revisão.*
 
 ## Configuração
@@ -37,7 +37,7 @@ ou envia para revisão.*
 pip install ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-então defina ⦇0⦇.
+então defina `TYPESAFE_API_KEY`.
 
 ```python
 import os
@@ -99,14 +99,14 @@ if __name__ == "__cookbook__":
 
 ## As perguntas
 
-Sete `Choice` perguntas são feitas em uma única chamada. `mode` indica como a data é escrita:
+Sete `Choice` perguntas são enviadas em uma única chamada. `mode` indica como a data é escrita:
 `absolute`
 para uma data que nomeia um mês, `relative` para uma escrita em relação a hoje, e `none`
-quando o documento não indica a data de forma alguma.
+quando o documento não menciona a data em absoluto.
 
-Os outros seis leem os trechos. Uma data absoluta precisa de `month`, `day` e `year`. Uma relativa precisa de `day_anchor`: hoje, amanhã, depois de amanhã ou um dia da semana com nome. Quando nomeia um dia da semana, `weekday` e `week_offset` indicam qual é e em qual semana. O código lê apenas os trechos que `mode` solicita.
+Os outros seis leem as partes. Uma data absoluta precisa de `month`, `day` e `year`. Uma relativa precisa de `day_anchor`: hoje, amanhã, depois de amanhã ou um dia da semana com nome. Quando nomeia um dia da semana, `weekday` e `week_offset` indicam qual é e em qual semana. O código lê apenas as partes que `mode` solicita.
 
-`year` lista uma opção por ano de 1900 a 2050, mais duas opções de escape. `none` indica que o texto não menciona ano e o código preenche um. `out_of_range` indica que o texto menciona um ano fora da lista, e o código sinaliza isso em vez de adivinhar. Se uma lista tão longa te incomodar, extraia primeiro os números semelhantes a ano do texto e ofereça ao modelo apenas esses.
+`year` lista uma opção por ano de 1900 a 2050, mais duas saídas. `none` significa que o texto não indica ano e o código preenche um. `out_of_range` significa que o texto indica um ano fora da lista, e o código sinaliza isso em vez de adivinhar. Se uma lista tão longa te incomoda, extraia primeiro os números semelhantes a ano do texto e ofereça ao modelo apenas esses.
 
 ```python
 def date_questions(role: str) -> dict[str, Choice]:
@@ -172,7 +172,7 @@ def date_questions(role: str) -> dict[str, Choice]:
 
 ## Resolva isso no código
 
-`read_parts` faz a chamada. `assemble` converte as respostas em um `date`: preenche o ano quando o texto não o indica e determina o dia correspondente a um dia da semana nomeado. Ambos contam a partir de `TODAY`, que é fixo, garantindo que datas relativas sejam consistentes em todas as execuções. `assemble` também relata a menor confiança entre as partes utilizadas, de modo que uma resposta fraca em qualquer uma delas pode enviar a data inteira para revisão.
+`read_parts` faz a chamada. `assemble` transforma as respostas em um `date`: preenche o ano quando o texto não o indica e determina a data exata correspondente a um dia da semana nomeado. Ambos contam a partir de `TODAY`, que é fixo, garantindo que datas relativas sejam consistentes em todas as execuções. `assemble` também relata a menor confiança entre as partes utilizadas, de modo que uma resposta fraca em qualquer uma delas pode enviar a data inteira para revisão.
 
 "next Thursday" pode significar dois dias diferentes, então o código decide qual. Um dia da semana sem qualificador significa o próximo a partir de hoje. `next` significa a próxima semana civil, e `current` significa esta semana.
 
@@ -333,21 +333,19 @@ OK the date the survey closes            2026-07-30  2026-07-30    0.94
 OK the date of the design review         2026-08-06  2026-08-06    0.92
 ```
 
-O contrato indica ambos os seus anos, por isso foram retirados do texto. O formulário não indica ano,
-por isso o código preencheu 2026: ele pega o ano atual e avança para o próximo apenas quando a
+O contrato indica ambos os seus anos, por isso esses foram retirados do texto. O formulário não indica ano,
+por isso o código preencheu 2026: ele usa o ano atual e avança para o próximo apenas quando a
 data já está há mais de um mês. "hoje" e "próxima quinta-feira" passaram pela mesma
 função que as datas por extenso.
 
-A reunião de kickoff é aquela que o formulário nunca menciona. Há uma data nesse formulário, apenas não
-esta, e a nota `absolute date incomplete` significa que `mode` retornou `absolute` sem
-mês para acompanhá-la. A data retornou vazia, a confiança é 0,46 e a linha é
+A reunião inicial é aquela que o formulário nunca menciona. Há uma data nesse formulário, apenas não
+esta, e a nota `absolute date incomplete` significa que `mode` voltou `absolute` sem
+mês para acompanhá-la. A data voltou vazia, a confiança lê 0.46, e a linha é
 sinalizada para uma pessoa.
 
-## Confiança para rotear com base
+## Confiança para rotear em
 
-Cada resposta retorna com uma confiança calibrada, e a confiança de uma data é a mais baixa
-entre as partes que a compõem. Uma data sob `REVIEW_BELOW` = 0.60 vai para uma pessoa,
-e o mesmo ocorre com uma data que o código não conseguiu montar. O resto segue direto.
+Cada resposta retorna com uma confiança calibrada, e a confiança de uma data é a mais baixa entre as partes que a compõem. Uma data sob `REVIEW_BELOW` = 0.60 é encaminhada a uma pessoa, e o mesmo ocorre com uma data que o código não conseguiu montar. O restante segue diretamente.
 
 ```python
 if __name__ == "__cookbook__":
@@ -384,7 +382,7 @@ send to review (1):
   - the date of the kickoff call  (conf 0.46 / absolute date incomplete)
 ```
 
-## Abra-o no playground do TypeSafe
+## Abra no playground TypeSafe
 
 O link abaixo carrega a mensagem de "próxima quinta-feira" e as mesmas perguntas que o código envia.
 Abra-o para ver as respostas e suas confianças, e para alterar a redação sem escrever
@@ -402,4 +400,4 @@ if __name__ == "__cookbook__":
     )
 ```
 
-[Abra este documento + perguntas no playground do TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIAMgigOQDO+FUAFgmDADYL4r35gIUCWA5knwAnBADceCAO74AZhCH4kWFPjS0YQimACGATwB0IADSEADkIhxTKChmx5CwADog4ELi4LOQKXaYSe+C50EDxQAcZBIFBCPCgIsdqB3toARhQQTDDxgUjMTCYuIkzaKDyiEQR5TAVRSBBKufkAvoUgPEgUKEIwUGUNFIEuABIQ0jxU7Kw68fgQMmwcXLwCwmIS0pKxKPFIAPz4ZGkZWfFk+AC8+Nr4UNosSDoKM6xI2nAdfNf4bqi0+AAKBD6Pj6Q4AQRgfBgXXwAEYACxkExkKb4ADMQjAcwWAFltEI6GQAJQAbkOxVK5QQ5yufGpgkpZQqbAgrJ0ukBKHcehM3LcQgskj5Sz01xk8QU-PkQpM8m+b0Q2MkCAQAGsOdRev9tFQyEpsKp1JoOSTyfqGjTLotptB4MgVJBuIoICouqVWOwJpwPfoXK0or92MkXL5-ENorRQuEXG0YnEEjwkg5vAApbR5Am6Jo1NoAMQQqR6WZztRc+MJtFLbXB5h4TGrUXx2Yc1TLIFTMEarfybU7TBbVV7UUh0K6jZcAGUENYEHBUgkJyAAPJ9CALoRLgByEAq88XPdzUQAIghwvvN4f2-VuwQXGpbbBEKhOBBnfU3SgPYsJnKFHF8G9D8fyoNUOmxeYfXiP0QADFwOi6Ho+h4AYIwASQWNEXhxG1OG4fhGXWKRAKoDNrnSTJslYO4HieKCEBMSRaDCf4g3+b0AI6PZ-TaDkQx8PxKiiEIwgiONtkTZMvBcOElwAJiXdElwRJcAFYlwANiXAB2JcAA4lwATiXOEAAYTNkq82jhBSrKiOElLsmSVKckA4XU1y4S0zzdM8gzPOM1y5PMoLLKHI8XDk2zwvbOTHJito5JchKojkjyUsi7yMpAOTfOyuT-PywLsvREKSrCxRhxcG8hPvJY7WfR03yoYD3VmL0KD-QCVCA10QPwMDHhwl4YLg9pOm6Xp+k6dDMNFWZIKw-DVhEcRiO9Mjjko2YaOQOiXkY5i6B9TlFo4NjAThABadE4WJbjYLaXQEAJfiw1qyNozE4SJMSfi4UM0yysqiK3MBiq22swHopB9sAdM+LYah0zkqR+zAfStGZMBrKsbB0y8rx+HCqJwHitJsyTMMuEIaqsGbKphzGdRyH0fcxncdZ7G4UJrn6ZJvmAYBqngpF2nQYBqKRcRwXDKSkXMdluTObpyXedVuWBY1uTydl0qqdug2Yb1mWNfRFmzcVs2VYlwz0XV230S1x3dY1hFgdlhFxbhwyEWNt3TdthELaDq2g5tn2EQdyPncj13bdUj2NdU72odU-2E8Dn3VJD7Ow+ziO0+jtPY7T+OfY0pPbY01P0Y0jOK6zqGNNz5v8+bwu6+LuvS7r8uoe0qufe02vse0huB6b9HtNb6f2+nzux+7sfe7H-v0b0oeob00ewb0ieN6n7G9Nn4-5+Pxe9+XvfV739fscBqnqafg+H6PsHfaf8+P8vgHDOvv+t8-73xykDLeqUga72CqZV+oCEbySBqfOB39oGX2gdfaBt9oEgOCpTIKpkaYIIZvgpmJCkG4JQQQtBBCMEEKwQQnBMDwGRRgVAmBsDgpxQQfLfBaVuHUNytw+hOsEH63wYbcRHCEbv2CubURlD0TUPtqI+h6JGHuwQV7TRUiEQyJRuQlGlCETUKjpo+hCJGGJyXBAbIAB9eYtihAZj4B9cE+BnoEhItQL88RsRyClMxKg2FUjZC8TYmwPAuC4SYBMXxwhnHAljHUS0EYdzuJev+KgbUGCyHlB1eio02gIUmshVCDgXAYVwthM60xlqETWuMUiggtqnGovcPaniDr4CYixdJBIDgAAUwhqkODVc4PA5qPntC+bJLU2QeIUACKA7hWAdBkAkKgcRiRdTIOE+xMhHEJPGQsG4CyvHZOxCElQwEOjRNiYUqIHJbEZhCJeaSAlwzlM+qJJJwRfpJjejyQceNpSCjGEuJ52gJQHmyiqdUfFXI1QjA+V8T4HSvnfH1bJIEuqcTmSofJg0IILBGjxKIxSkLTUGF8ypWFvw1LwisepGwvFMmpKydkvJulHX+JqDiKADioiBciQ4oKhQirIJC6FQhzgAjpZyKFkpWQCiFNsuYCgyBwo1HoWVNxFQ5M1AyrVxIHkuC1Qi9570IwiRjJEP5CY-opnLA0C1eM0AwG4K6vmAB1BgSgtB6CXGoDQAbgV8zzLEL1dNJylA0FG0Gk4uzxuvCkr5KLIBopfE6fF3jvwdVxT1HNhLwLDV9GS+CE1KUoRmjSyZ9EcJLSZWsBpih3jOhuIautWrDq9MtA9MaWr9kyAoKQN6glrVRh+Xa6I-ypL4G8LAQUDolwGhQCu1Nd4QDpoaui7NLpPx5sCQWrxwFi1DUgqSx65LK1TWrdSzdtL5qsAZcsAizaWX6tIt01U2rdA9uOlqrxnF9ijOUOcfxoHDTBpNDq9VhxoOhsUMob96oyDmkXSIVA4H5SokCUaENppzRjNyQoG4qQCSsHNWKSQcR-j1HwAARxgPcCZEhFkACsYQqDIAh00+AAD0hwGj4Zg7oEko1miRBANoUwPAABqGzq0OBAKIOEUmR0sD6AwXEKymAUAcAAbRAOxsQV04T6BsiAAAus0IAA)
+[Abra este documento + perguntas no playground TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIAMgigOQDO+FUAFgmDADYL4r35gIUCWA5knwAnBADceCAO74AZhCH4kWFPjS0YQimACGATwB0IADSEADkIhxTKChmx5CwADog4ELi4LOQKXaYSe+C50EDxQAcZBIFBCPCgIsdqB3toARhQQTDDxgUjMTCYuIkzaKDyiEQR5TAVRSBBKufkAvoUgPEgUKEIwUGUNFIEuABIQ0jxU7Kw68fgQMmwcXLwCwmIS0pKxKPFIAPz4ZGkZWfFk+AC8+Nr4UNosSDoKM6xI2nAdfNf4bqi0+AAKBD6Pj6Q4AQRgfBgXXwAEYACxkExkKb4ADMQjAcwWAFltEI6GQAJQAbkOxVK5QQ5yufGpgkpZQqbAgrJ0ukBKHcehM3LcQgskj5Sz01xk8QU-PkQpM8m+b0Q2MkCAQAGsOdRev9tFQyEpsKp1JoOSTyfqGjTLotptB4MgVJBuIoICouqVWOwJpwPfoXK0or92MkXL5-ENorRQuEXG0YnEEjwkg5vAApbR5Am6Jo1NoAMQQqR6WZztRc+MJtFLbXB5h4TGrUXx2Yc1TLIFTMEarfybU7TBbVV7UUh0K6jZcAGUENYEHBUgkJyAAPJ9CALoRLgByEAq88XPdzUQAIghwvvN4f2-VuwQXGpbbBEKhOBBnfU3SgPYsJnKFHF8G9D8fyoNUOmxeYfXiP0QADFwOi6Ho+h4AYIwASQWNEXhxG1OG4fhGXWKRAKoDNrnSTJslYO4HieKCEBMSRaDCf4g3+b0AI6PZ-TaDkQx8PxKiiEIwgiONtkTZMvBcOElwAJiXdElwRJcAFYlwANiXAB2JcAA4lwATiXOEAAYTNkq82jhBSrKiOElLsmSVKckA4XU1y4S0zzdM8gzPOM1y5PMoLLKHI8XDk2zwvbOTHJito5JchKojkjyUsi7yMpAOTfOyuT-PywLsvREKSrCxRhxcG8hPvJY7WfR03yoYD3VmL0KD-QCVCA10QPwMDHhwl4YLg9pOm6Xp+k6dDMNFWZIKw-DVhEcRiO9Mjjko2YaOQOiXkY5i6B9TlFo4NjAThABadE4WJbjYLaXQEAJfiw1qyNozE4SJMSfi4UM0yysqiK3MBiq22swHopB9sAdM+LYah0zkqR+zAfStGZMBrKsbB0y8rx+HCqJwHitJsyTMMuEIaqsGbKphzGdRyH0fcxncdZ7G4UJrn6ZJvmAYBqngpF2nQYBqKRcRwXDKSkXMdluTObpyXedVuWBY1uTydl0qqdug2Yb1mWNfRFmzcVs2VYlwz0XV230S1x3dY1hFgdlhFxbhwyEWNt3TdthELaDq2g5tn2EQdyPncj13bdUj2NdU72odU-2E8Dn3VJD7Ow+ziO0+jtPY7T+OfY0pPbY01P0Y0jOK6zqGNNz5v8+bwu6+LuvS7r8uoe0qufe02vse0huB6b9HtNb6f2+nzux+7sfe7H-v0b0oeob00ewb0ieN6n7G9Nn4-5+Pxe9+XvfV739fscBqnqafg+H6PsHfaf8+P8vgHDOvv+t8-73xykDLeqUga72CqZV+oCEbySBqfOB39oGX2gdfaBt9oEgOCpTIKpkaYIIZvgpmJCkG4JQQQtBBCMEEKwQQnBMDwGRRgVAmBsDgpxQQfLfBaVuHUNytw+hOsEH63wYbcRHCEbv2CubURlD0TUPtqI+h6JGHuwQV7TRUiEQyJRuQlGlCETUKjpo+hCJGGJyXBAbIAB9eYtihAZj4B9cE+BnoEhItQL88RsRyClMxKg2FUjZC8TYmwPAuC4SYBMXxwhnHAljHUS0EYdzuJev+KgbUGCyHlB1eio02gIUmshVCDgXAYVwthM60xlqETWuMUiggtqnGovcPaniDr4CYixdJBIDgAAUwhqkODVc4PA5qPntC+bJLU2QeIUACKA7hWAdBkAkKgcRiRdTIOE+xMhHEJPGQsG4CyvHZOxCElQwEOjRNiYUqIHJbEZhCJeaSAlwzlM+qJJJwRfpJjejyQceNpSCjGEuJ52gJQHmyiqdUfFXI1QjA+V8T4HSvnfH1bJIEuqcTmSofJg0IILBGjxKIxSkLTUGF8ypWFvw1LwisepGwvFMmpKydkvJulHX+JqDiKADioiBciQ4oKhQirIJC6FQhzgAjpZyKFkpWQCiFNsuYCgyBwo1HoWVNxFQ5M1AyrVxIHkuC1Qi9570IwiRjJEP5CY-opnLA0C1eM0AwG4K6vmAB1BgSgtB6CXGoDQAbgV8zzLEL1dNJylA0FG0Gk4uzxuvCkr5KLIBopfE6fF3jvwdVxT1HNhLwLDV9GS+CE1KUoRmjSyZ9EcJLSZWsBpih3jOhuIautWrDq9MtA9MaWr9kyAoKQN6glrVRh+Xa6I-ypL4G8LAQUDolwGhQCu1Nd4QDpoaui7NLpPx5sCQWrxwFi1DUgqSx65LK1TWrdSzdtL5qsAZcsAizaWX6tIt01U2rdA9uOlqrxnF9ijOUOcfxoHDTBpNDq9VhxoOhsUMob96oyDmkXSIVA4H5SokCUaENppzRjNyQoG4qQCSsHNWKSQcR-j1HwAARxgPcCZEhFkACsYQqDIAh00+AAD0hwGj4Zg7oEko1miRBANoUwPAABqGzq0OBAKIOEUmR0sD6AwXEKymAUAcAAbRAOxsQV04T6BsiAAAus0IAA)

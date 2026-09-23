@@ -1,6 +1,6 @@
 ---
 title: "Referencia de la API HTTP"
-description: "Llamar directamente al endpoint de evaluación de TypeSafe: forma de la solicitud, los tipos de pregunta noul / choice / score, formas de respuesta y manejo de errores."
+description: "Llama directamente al endpoint de evaluación de TypeSafe: forma de la solicitud, los tipos de pregunta noul / choice / score, formas de respuesta y manejo de errores."
 section: sdk
 order: 50
 tags: ['api', 'http', 'reference']
@@ -15,7 +15,7 @@ Authorization: Bearer <API_KEY>
 Content-Type: application/json
 ```
 
-Envía un `state` con un mapa de `questions` tipados y recibe un `answer` por pregunta.
+Envía un `state` con un mapa de `questions` escritos y recibe un `answer` por pregunta.
 
 ## Cuerpo de la solicitud
 
@@ -35,14 +35,14 @@ Envía un `state` con un mapa de `questions` tipados y recibe un `answer` por pr
 | Campo | Tipo | Obligatorio | Descripción |
 | :--- | :--- | :--- | :--- |
 | `state` | string \| object \| array | Sí | El contenido a evaluar. Una cadena de texto simple para texto, o datos estructurados para registros de chat, registros o el estado actual de tu aplicación |
-| `model` | string | Sí | El modelo que maneja la solicitud. Usa `jev-latest`, el modelo insignia de TypeSafe; consulta la página oficial de Modelos para otros modelos y alias |
+| `model` | string | Sí | El modelo que maneja la solicitud. Usa `jev-latest`, el modelo insignia de TypeSafe; consulta la página oficial de Models para otros modelos y alias |
 | `questions` | map&lt;string, Question&gt; | Sí | Un mapa de preguntas tipadas |
 
-Tú eliges las claves en `questions`, y cada respuesta vuelve bajo la **misma clave**. Esa clave no se envía al modelo subyacente ni se usa en la inferencia, por lo que puedes nombrarla según tu dominio de negocio (`department`, `is_urgent`).
+Tú eliges las claves en `questions`, y cada respuesta vuelve bajo la **misma clave**. Esa clave no se envía al modelo subyacente ni se usa en la inferencia, así que puedes nombrarla según tu dominio de negocio (`department`, `is_urgent`).
 
 ## Los tres tipos de preguntas
 
-Un `Question` se discrimina por su campo `type`; hay tres. Los tres comparten `type` y `instructions`, y cada uno añade su propio `criteria`.
+A `Question` se discrimina por su campo `type`; hay tres. Los tres comparten `type` y `instructions`, y cada uno añade su propio `criteria`.
 
 `instructions` tiene el tipo `string | object | array`.
 
@@ -88,11 +88,11 @@ Elige una opción de un conjunto que definas, devolviendo la opción elegida **m
 }
 ```
 
-`criteria` es obligatorio, de tipo `map⦇0⦈`: nombres de opciones mapeados a una descripción de rúbrica. Utiliza `null` como valor cuando una opción no necesita explicación adicional.
+`criteria` es obligatorio, de tipo `map<string, string | null>`: nombres de opciones mapeados a una descripción de rúbrica. Utiliza `null` como valor cuando una opción no requiere explicación adicional.
 
 ### score — califica a lo largo de una escala
 
-Evalúa `state` según una rúbrica que definas, devolviendo un **valor ponderado por probabilidad a través de tus niveles**.
+Evalúa el `state` según una rúbrica que definas, devolviendo un **valor ponderado por probabilidad a través de tus niveles**.
 
 ```json
 {
@@ -104,7 +104,7 @@ Evalúa `state` según una rúbrica que definas, devolviendo un **valor ponderad
 }
 ```
 
-`criteria` es obligatorio y es una **matriz ordenada** de descripciones de nivel. Debes incluir al menos dos niveles.
+`criteria` es obligatorio y es un **array ordenado** de descripciones de nivel. Debes incluir al menos dos niveles.
 
 ## Cuerpo de la respuesta
 
@@ -126,18 +126,18 @@ Cada pregunta produce una respuesta, identificada por el id que proporcionaste.
 | Campo | Tipo | Descripción |
 | :--- | :--- | :--- |
 | `model` | string | El modelo que realizó la evaluación |
-| `answers` | map&lt;string, Answer&gt; | Una respuesta por pregunta, con la misma clave que `questions` |
+| `answers` | map&lt;string, Answer&gt; | Una respuesta por pregunta, con claves idénticas a `questions` |
 | `usage` | object | Uso de tokens para la solicitud: `input_tokens`, `output_tokens` |
 
 ### Formas de respuesta por tipo
 
-Cada respuesta lleva un `type` que coincide con su pregunta. Las respuestas `choice` y `score` también llevan `confidence` (entre 0 y 1), derivadas de la distribución de probabilidad de esa respuesta (consulta la página oficial de Confianza).
+Cada respuesta lleva un `type` que coincide con su pregunta. Las respuestas `choice` y `score` también llevan `confidence` (entre 0 y 1), derivadas de la distribución de probabilidad de esa respuesta (consulta la página oficial de Confidence).
 
-**respuesta de Noul**
+**noul answer**
 
 | Campo | Tipo | Descripción |
 | :--- | :--- | :--- |
-| `noul` | number | La respuesta sí/no, desde 0 (no) hasta 1 (sí) |
+| `noul` | number | La respuesta sí/no, de 0 (no) a 1 (sí) |
 
 ```json
 { "type": "noul", "noul": 0.92 }
@@ -160,14 +160,14 @@ Cada respuesta lleva un `type` que coincide con su pregunta. Las respuestas `cho
 }
 ```
 
-**respuesta de puntuación**
+**responder puntuación**
 
 | Campo | Tipo | Descripción |
 | :--- | :--- | :--- |
-| `score` | number | El valor ponderado por probabilidad, que **puede caer entre niveles** |
-| `legend` | map&lt;string, string&gt; | Mapea cada índice de nivel de vuelta a su descripción |
-| `probabilities` | map&lt;string, number&gt; | Probabilidad por nivel (claves como cadena); suma 1 |
-| `confidence` | number | Qué tan seguro está el modelo, derivado de las probabilidades |
+| `score` | number | El valor ponderado por probabilidad, que **puede situarse entre niveles** |
+| `legend` | map&lt;string, string&gt; | Asocia cada índice de nivel con su descripción |
+| `probabilities` | map&lt;string, number&gt; | Probabilidad por nivel (claves de tipo string); suma 1 |
+| `confidence` | number | El grado de certeza del modelo, derivado de las probabilidades |
 
 ```json
 {
@@ -179,19 +179,19 @@ Cada respuesta lleva un `type` que coincide con su pregunta. Las respuestas `cho
 }
 ```
 
-Observa cómo `score` se relaciona con `probabilities`: las probabilidades de tres niveles son 0.05 / 0.3 / 0.65, ponderando hacia un `score` de 1.6. Por lo tanto, `score` no tiene por qué ser un número entero, lo cual es precisamente lo que lo separa de `choice`: `choice` te ofrece una opción discreta, mientras que `score` puede expresar «alguien entre dos niveles».
+Observa cómo `score` se relaciona con `probabilities`: las tres probabilidades de nivel son 0.05 / 0.3 / 0.65, ponderando hacia un `score` de 1.6. Por lo tanto, `score` no tiene por qué ser un número entero, lo cual es precisamente lo que lo distingue de `choice`: `choice` te ofrece una opción discreta, mientras que `score` puede expresar «en algún lugar entre dos niveles».
 
 ## Errores
 
-Los errores utilizan códigos de estado HTTP estándar, con un cuerpo JSON que describe qué salió mal.
+Los errores utilizan códigos de estado HTTP estándar, con un cuerpo JSON que describe lo que salió mal.
 
 | Estado | Significado |
 | :--- | :--- |
-| `401 Unauthorized` | La clave API falta o no es válida. Comprueba el encabezado `Authorization` |
-| `422 Unprocessable Entity` | El cuerpo de la solicitud no superó la validación, por ejemplo, un campo obligatorio faltante o una pregunta con formato incorrecto. El cuerpo señala el campo problemático |
-| `429 Too Many Requests` | Has excedido tu límite de velocidad. Reintenta tras una breve pausa |
-| `529 Overloaded` | TypeSafe está temporalmente sobrecargado. Reintenta tras una breve pausa |
+| `401 Unauthorized` | La clave API está ausente o es inválida. Comprueba el encabezado `Authorization` |
+| `422 Unprocessable Entity` | El cuerpo de la solicitud no superó la validación, por ejemplo, un campo obligatorio faltante o una pregunta con formato incorrecto. El cuerpo señala el campo infractor |
+| `429 Too Many Requests` | Has excedido tu límite de velocidad. Reintenta después de un breve retraso |
+| `529 Overloaded` | TypeSafe está temporalmente sobrecargado. Reintenta después de un breve retraso |
 
 ### Manejo de límites de velocidad
 
-En `429` o `529`, **reintentar con retroceso exponencial** en lugar de reintentar inmediatamente. Si usas un SDK oficial, su política de reintento predeterminada gestiona esto automáticamente, por lo que no se necesita código adicional.
+En `429` o `529`, **reintenta con retroceso exponencial** en lugar de reintentar inmediatamente. Si usas un SDK oficial, su política de reintento predeterminada maneja esto automáticamente, por lo que no se necesita código adicional.

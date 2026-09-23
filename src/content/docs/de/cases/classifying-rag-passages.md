@@ -1,31 +1,31 @@
 ---
-title: "Klassifizierung von RAG-Abschnitten"
-description: "Bewerten Sie jeden abgerufenen Textabschnitt mit einer einzigen TypeSafe-Anfrage und entscheiden Sie dann im Code, welche Abschnitte das Antwortmodell erreichen. Behalten Sie beispielsweise diejenigen bei, die der Frage widersprechen, und kennzeichnen Sie diese; entfernen Sie solche, die eine versteckte Anweisung oder Prompt-Injection enthalten."
+title: "Klassifizierung von RAG-Passagen"
+description: "Bewerten Sie jeden abgerufenen Abschnitt mit einer einzigen TypeSafe-Anfrage, und entscheiden Sie dann im Code, welche davon das answering model erreichen. Behalten und markieren Sie beispielsweise solche, die der Frage widersprechen, und verwerfen Sie solche, die eine versteckte Anweisung oder Prompt-Injection enthalten."
 section: cases
 order: 140
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/classifying_rag_passages"
 translatedFrom: en
 ---
-Der Retrieval-Schritt einer RAG-Pipeline bewertet Passagen danach, wie sehr ihre Wortwahl der Abfrage ähnelt, und übergibt die besten wenigen an ein Sprachmodell. Diese können verrauschte oder irrelevante Passagen enthalten oder, was noch schlimmer ist, widersprüchliche Fakten, Prompt-Injektionen oder Modellanweisungen zusammen mit dem nominell als Beleg dienenden Inhalt bündeln, um die Generierung einer Antwort zu unterstützen.
+Der Retrieval-Schritt einer RAG-Pipeline sortiert Passagen nach der Ähnlichkeit ihrer Formulierung zur Anfrage und übergibt die besten wenigen an ein language model. Diese können verrauschte oder irrelevante Passagen enthalten oder, schlimmer noch, widersprüchliche Fakten, Prompt-Injektionen oder model instructions zusammen mit dem nominell als Evidenz dienenden Inhalt zur Unterstützung der Antwortgenerierung vermischen.
 
-Zwischen Retrieving und Generierung eine zweite Stufe einfügen, die jeden abgerufenen Textabschnitt klassifiziert. Sende für jeden Abschnitt eine Anfrage an TypeSafe, die mehrere Fragen zum Query-Abschnitt-Paar enthält: Ist er relevant, enthält er etwas Verwertbares für eine Antwort, widerspricht er etwas, von dem der Query ausgeht, und versucht er, das Modell anzuleiten? Die Antworten auf diese Fragen entscheiden darüber, was mit jedem Abschnitt geschieht, mittels einfacher Verzweigungslogik: Füge ihn als Beleg zum Prompt hinzu, füge ihn als widersprüchliche Information zum Prompt hinzu oder streiche ihn. Belege und Widersprüche kommen in separaten Blöcken an, sodass der Generator angemessen reagieren kann.
+Zwischen Retrieving und Generierung eine zweite Stufe einfügen, die jeden abgerufenen Textabschnitt klassifiziert. Sende für jeden Abschnitt eine Anfrage an TypeSafe, die mehrere Fragen zum Query-Abschnitt-Paar enthält: Ist er relevant, enthält er etwas, das in einer Antwort verwendbar ist, widerspricht er etwas, von dem der Query ausgeht, und versucht er, das Modell anzuweisen. Die Antworten auf diese Fragen entscheiden darüber, was mit jedem Abschnitt geschieht, mittels einfacher Verzweigungslogik: Füge ihn als Evidenz in den Prompt ein, füge ihn als widersprüchliche Information in den Prompt ein oder streiche ihn. Evidenz und Widersprüche kommen in separaten Blöcken an, sodass der Generator angemessen reagieren kann.
 
 Um die Pipeline zu testen, führen wir sie über einige knifflige Fragen gegen echte
 Authentifizierungsdokumentation, die voller Seiten besteht, die sich ähnlich lesen, und einen
 eingepflanzten Abschnitt, der eine Prompt-Injektion enthält. Zwei Fragen enthalten falsche
 Annahmen, die markiert werden, bevor sie an das Modell zur Beantwortung übergeben werden.
 
-Die Pipeline, in der Reihenfolge, in der die Abschnitte sie aufbauen: das Korpus mit 81 Passagen, eine Kosinus-Ähnlichkeitssuche, die die Top-12-Passagen pro Abfrage behält, die vier `Noul` Fragen, die für jede dieser Passagen an TypeSafe gesendet werden, die Schwellenwerte in `route()`, die jede einzelne kennzeichnen, die aus separaten Evidenz- und Konfliktblöcken zusammengesetzte Eingabeaufforderung und die Antworten, die `claude-sonnet-5` daraus generiert.
+Die Pipeline, in der Reihenfolge, in der die Abschnitte sie aufbauen: das Korpus mit 81 Passagen, eine Cosine-Ähnlichkeitssuche, die die Top-12-Passagen pro Abfrage behält, die vier `Noul` Fragen, die für jede dieser Passagen an TypeSafe gesendet werden, die Schwellenwerte in `route()`, die jede davon kennzeichnen, die aus separaten Evidenz- und Konfliktblöcken zusammengesetzte Eingabeaufforderung und die Antworten, die `claude-sonnet-5` daraus generiert.
 
 <!-- mermaid flowchart converted to equivalent tables (this site loads no chart library) -->
 
-*Richtung des Flusses: LR*
+*Flussrichtung: LR*
 
-| Knoten | Beschreibung | Gruppe |
+| Node | Beschreibung | Gruppe |
 | :--- | :--- | :--- |
-| `CALL` | eine Anfrage pro abgerufenem Textabschnitt | eine Anfrage pro abgerufenem Textabschnitt |
-| `N` | Nouls: / · relevant? / · verwertbare Beweise vorhanden? / · widerspricht dies der Prämisse der Anfrage? / · weist das Modell an? | eine Anfrage pro abgerufenem Textabschnitt |
+| `CALL` | eine Anfrage pro abgerufenem Abschnitt | eine Anfrage pro abgerufenem Abschnitt |
+| `N` | Nouls: / · relevant? / · verwendbare Beweise? / · widerspricht es der Prämisse der Anfrage? / · weist das Modell an? | eine Anfrage pro abgerufenem Abschnitt |
 | `GEN` | ein LLM-Aufruf | ein LLM-Aufruf |
 | `INC` | akzeptierte Beweise | ein LLM-Aufruf |
 | `CON` | widersprüchliche Beweise | ein LLM-Aufruf |
@@ -35,19 +35,20 @@ Die Pipeline, in der Reihenfolge, in der die Abschnitte sie aufbauen: das Korpus
 | `CALL` | — | `R` |
 | `R` | verwertbare Evidenz | `INC` |
 | `R` | bestreitet die Prämisse | `CON` |
-| `R` | Injektion, off-topic, / oder nichts Verwertbares | `DROP` |
+| `R` | Injektion, Off-Topic, / oder nichts Verwertbares | `DROP` |
 | `GEN` | — | `ANS` |
 
 
-## Einrichtung
+
+## Setup
 
 ```bash
 pip install anthropic openai matplotlib ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-Setze `TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY` und `OPENAI_API_KEY`. Wir verwenden TypeSafe, um jeden abgerufenen Abschnitt zu bewerten, OpenAI, um das Korpus für den Suchschritt einzubetten, und Claude, um die endgültige Antwort aus dem zu verfassen, was die Bewertung überstanden hat.
+Setze `TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY` und `OPENAI_API_KEY`. Wir verwenden TypeSafe, um jeden abgerufenen Abschnitt zu bewerten, OpenAI, um das Korpus für den Suchschritt zu embedden, und Claude, um die endgültige Antwort aus dem zu schreiben, was die Bewertung überstanden hat.
 
-Keine der drei Komponenten benötigt einen Schlüssel, um diese Seite zu reproduzieren. `json_cache.json` wird mit dem Kochbuch ausgeliefert und wiederholt jeden aufgezeichneten Aufruf, sodass ein erneutes Rendern keine Kosten verursacht. Löschen Sie die Datei, um die Pipeline stattdessen live auszuführen. Die hier gezeigten Zahlen stammen vom 27.08.2026 aus `jev-1.12` und `claude-sonnet-5`.
+Keine der drei benötigt einen Schlüssel, um diese Seite zu reproduzieren. `json_cache.json` wird mit dem Cookbook ausgeliefert und wiederholt jeden aufgezeichneten Aufruf, sodass ein erneutes Rendern nichts kostet. Löschen Sie die Datei, um die Pipeline stattdessen live auszuführen. Die Zahlen hier stammen von `jev-1.12` und `claude-sonnet-5` am 2026-08-27.
 
 ```python
 import json
@@ -96,14 +97,14 @@ json_cache = JsonCache(Path("json_cache.json"))
 
 ## Laden Sie das Dokumentenkorpus
 
-Die Korpusdatei `corpus.json` enthält 81 Passagen. Wir haben 80 davon direkt aus den Supabase-Authentifizierungsdocs im Commit `2440b06` kopiert, eine Passage pro Überschrift, wörtlich und verwendet unter Apache 2.0:
+Die Korpusdatei `corpus.json` enthält 81 Abschnitte. Wir haben 80 davon direkt aus den Supabase-Authentifizierungsdokumentationen im Commit `2440b06` übernommen, einen Abschnitt pro Überschrift, wörtlich und verwendet unter Apache 2.0:
 [https://github.com/supabase/supabase/tree/2440b06/apps/docs/content/guides/auth](https://github.com/supabase/supabase/tree/2440b06/apps/docs/content/guides/auth)
 
 Jeder Abschnitt trägt `id`, `title`, `text` und `source_type`, und jede Anfrage sendet alle vier. Knapp verfehlte Treffer füllen die Menge. Rotation, Ablauf, Sitzungen und Signierschlüssel erhalten jeweils ihre eigene Seite, und diese Seiten lesen sich ähnlich. Refresh-Token-Rotation und JWT-Signierschlüssel-Rotation sind unterschiedliche Dinge, die in fast denselben Worten beschrieben werden.
 
-Wir haben die letzte selbst geschrieben, `forum-injection`, markiert `community_forum`: Sie liest sich wie eine gewöhnliche Forenantwort, bis zum letzten Absatz, der eine Anweisung an das Modell darstellt.
+Wir haben den letzten selbst geschrieben, `forum-injection`, markiert `community_forum`: Er liest sich wie eine gewöhnliche Foren-Antwort, bis zu seinem letzten Absatz, der eine Anweisung an das Modell darstellt.
 
-Wir haben auch zwei der sechs Abfragen so formuliert, dass sie eine Prämisse aufstellen, der die Dokumentation widerspricht, sodass sowohl die Injektions- als auch die Konflikt-Routen etwas abfangen können.
+Wir haben auch zwei der sechs Abfragen so formuliert, dass sie eine Prämisse aufstellen, der die Docs widersprechen, sodass sowohl die Injection- als auch die Conflict-Routes etwas zum Abfangen haben.
 
 ```python
 PASSAGES = json.loads(Path("corpus.json").read_text(encoding="utf-8"))
@@ -136,12 +137,12 @@ One passage, as the model will see it (sessions-01):
 A session is represented by the Supabase Auth access token in t...
 ```
 
-## Abrufen der Top-Passagen
+## Top-Passagen abrufen
 
-Ordnen Sie die Passagen nach Kosinusähnlichkeit über Einbettungen, unter Verwendung von `text-embedding-3-small` bei
-256 Dimensionen, und behalten Sie die besten `TOP_K = 12` für jede Abfrage. Kurze Vektoren halten den
+Ordne die Passagen nach Kosinusähnlichkeit über Einbettungen, unter Verwendung von `text-embedding-3-small` bei
+256 Dimensionen, und behalte die besten `TOP_K = 12` für jede Anfrage. Kurze Vektoren halten den
 mitgelieferten Cache klein, und die Einbettungsaufrufe werden zusammen mit allem anderen zwischengespeichert, sodass die
-Vektoren innerhalb von `json_cache.json` übertragen werden.
+Vektoren innerhalb von `json_cache.json` transportiert werden.
 
 ```python
 @json_cache
@@ -213,14 +214,14 @@ for passage in retrieve(HEADLINE_QUERY, TOP_K):
 ```
 
 Der Forenbeitrag mit der injizierten Anweisung, `forum-injection`, belegt Platz 1 mit 0,584.
-Der Absatz, der die Prämisse widerlegt, `sessions-01`, belegt Platz 7 mit 0,509. Alle 12 Werte
-liegen zwischen 0,584 und 0,455, eine Spanne, die zu eng ist, um den Absatz, der die
+Der Abschnitt, der die Prämisse widerlegt, `sessions-01`, belegt Platz 7 mit 0,509. Alle 12 Scores
+liegen zwischen 0,584 und 0,455, eine Spanne, die zu eng ist, um den Abschnitt, der die
 Abfrage korrigiert, von dem zu trennen, der versucht, die Antwort zu übernehmen.
 
 ## Stelle zu jedem Abschnitt vier Fragen
 
 Setzen Sie die Abfrage und einen Textabschnitt zusammen in den Zustand, sodass jede Frage das Paar betrifft
-und nicht nur den Textabschnitt. Form:
+und nicht allein den Textabschnitt. Form:
 
 ```json
 {
@@ -234,16 +235,17 @@ und nicht nur den Textabschnitt. Form:
 }
 ```
 
-Verwende für jede Anfrage dieselben vier Fragen. Nur der Zustand ändert sich zwischen den Aufrufen.
+Verwende dieselben vier Fragen für jede Anfrage. Nur der Zustand ändert sich zwischen den Aufrufen.
 
 Vier `Noul` Fragen, und was jede Antwort vorantreibt:
 
-* `is_relevant`: die Relevanzgrenze.
+* `is_relevant`: die Relevanzschwelle.
 * `contains_answer_evidence`: einschließen oder ausschließen.
 * `contradicts_query_premise`: befördert in den Konfliktblock.
 * `contains_prompt_injection`: schließt vollständig aus.
 
-Keine der vier Fragen prüft, ob der Abschnitt eingebunden werden soll. Diese Entscheidung liegt im nachfolgenden Code, wo ihre Änderung das Bearbeiten einer Zahl bedeutet, anstatt eine Frage umzuformulieren.
+Keiner der vier Punkte hinterfragt, ob der Abschnitt aufgenommen werden soll. Diese Entscheidung liegt im untenstehenden Code,
+wo eine Änderung das Bearbeiten einer Zahl bedeutet, anstatt eine Frage umzuformulieren.
 
 ```python
 PASSAGE_QUESTIONS = {
@@ -306,10 +308,10 @@ Die Tests, in der Reihenfolge:
 4. `contains_answer_evidence > 0.55` -> einschließen
 5. sonst ausschließen
 
-Injection kommt zuerst, weil es eine Sicherheitsentscheidung und keine Evidenzentscheidung ist. Der Widerspruchstest kommt vor dem Evidenztest, weil ein Abschnitt, der die Prämisse der Anfrage leugnet, normalerweise auch etwas Verwendbares aussagt; wurde er in umgekehrter Reihenfolge getestet, würde er in den akzeptierten Block anstelle des Konfliktsblocks fallen.
+Injection kommt zuerst, weil es eine Sicherheitsentscheidung ist, keine Evidenz-Entscheidung. Der Widerspruchstest kommt vor dem Evidenztest, weil ein Abschnitt, der die Prämisse der Anfrage verneint, normalerweise auch etwas Verwertbares aussagt; würde man es andersherum testen, würde es in den akzeptierten Block statt in den Konflikt-Block landen.
 
 
-> **Hinweis** — Wir haben diese vier Zahlen für dieses Korpus ausgewählt. Betrachte sie als Ausgangspunkt, nicht als Standardwerte. Das Verschieben eines ist kostengünstig: ⦇0⦇ hält alle vier und ⦇1⦇ liest nur die gespeicherten Antworten, daher verursacht das Umleiten jedes Abschnitts keine API-Aufrufe.
+> **Hinweis** — Wir haben diese vier Zahlen für dieses Korpus ausgewählt. Betrachte sie als Ausgangspunkt, nicht als Standardwerte. Das Verschieben eines ist kostengünstig: `THRESHOLDS` hält alle vier und `route()` liest nur die gespeicherten Antworten, sodass das Umleiten jedes Abschnitts keine API-Aufrufe kostet.
 
 
 ```python
@@ -373,12 +375,14 @@ exclude                0.04  0.05   0.10  0.16  signing-keys-55-b
 exclude                0.04  0.05   0.10  0.13  signing-keys-54-a
 ```
 
-Die Prämissen-Widerspruchs-Frage erzielt `sessions-01` bei 0,92 und wird an den Konfliktblock gesendet. Relevanz liest 0,49 und Antwortbelege 0,51, sodass diese beiden allein sie bereits abgewertet hätten.
+Die Prämissen-Widerspruchs-Frage erzielt `sessions-01` bei 0.92 und wird an den
+Konfliktblock gesendet. Relevanz liest 0.49 und Antwortbeweis 0.51, sodass diese beiden allein
+sie bereits abgewertet hätten.
 
-Die Ähnlichkeit rangiert `forum-injection` an erster Stelle, und ihre Relevanz liegt deutlich über 0,71. Der Injektionsscore von 0,99 ist es, der sie nach unten zieht.
+Die Ähnlichkeit rangiert `forum-injection` an erster Stelle, und ihre Relevanz liegt deutlich über der Schwelle von 0,71. Der Injektionswert von 0,99 ist es, der sie zurückhält.
 
 Nichts erreicht den Prompt als Beweis, was für eine Frage, die auf einer falschen
-Prämisse basiert, richtig ist. Unten, dieselbe Tabelle für eine Abfrage, die die Docs beantworten.
+Prämisse aufbaut, richtig ist. Unten, dieselbe Tabelle für eine Abfrage, die die Docs beantworten.
 
 ```python
 print(f'"{QUERIES[5]}"\n')
@@ -403,18 +407,21 @@ include                0.79  0.57   0.06  0.31  sessions-09
 exclude                0.12  0.11   0.07  0.20  sessions-07-b
 ```
 
-Vier Passagen erreichen den Evidenzblock hier, und die unten stehende Antwort zitiert alle vier. Die Zeilen werden in der Abrufreihenfolge ausgegeben, was die Umstellung zeigt: die Ränge 2, 3 und 4 lesen sich alle als *Lifetime of a signing key*, die falsche Art von Lebensdauer, fast in den eigenen Worten der Abfrage, und alle drei erreichen einen Wert von 0,08 oder weniger in Bezug auf die Relevanz. Drei der vier, die es geschafft haben, lagen auf Platz 8, 9 und 11. `forum-injection` wird erneut bei 0,99 ausgeschlossen.
+Vier Passagen erreichen den Evidenzblock hier, und die untenstehende Antwort zitiert alle vier. Die Zeilen werden in der Abrufreihenfolge ausgegeben, was die Umgruppierung zeigt: die Ränge 2, 3 und 4 lesen sich alle als *Lifetime of a signing key*, die falsche Art von Lifetime in fast den eigenen Worten der Abfrage, und alle drei haben eine Relevanz von 0,08 oder weniger. Drei der vier, die es geschafft haben, lagen auf Platz 8, 9 und 11. `forum-injection` wird erneut bei 0,99 ausgeschlossen.
 
-Die Injection-Frage ist ein Filter, und zwar der einzige. Ein Textabschnitt, der unter der Schwelle bleibt, erreicht dennoch das Prompt, sodass das Generator-Prompt jeden Abschnitt unabhängig von seiner Punktzahl als nicht vertrauenswürdigen Text behandeln muss. Hier gibt es keine Sicherheitsgrenze.
+Die Injection-Frage ist ein Filter, und nur einer. Ein Passage, die unter der
+Schwelle bewertet wird, erreicht dennoch das Prompt, sodass das Generator-Prompt jeden Passage als
+nicht vertrauenswürdigen Text behandeln muss, unabhängig von seiner Bewertung. Hier ist nichts eine
+Sicherheitsgrenze.
 
-Eine Anfrage pro Abschnitt, sodass die Kosten mit `k` skalieren. Es werden keine Abschnitte zu einer einzigen Anfrage gebündelt, da jede Frage ein einzelnes Paar betrifft.
+Eine Anfrage pro Abschnitt, daher skalieren die Kosten mit `k`. Es werden keine Abschnitte zu einer einzigen Anfrage gebündelt, da jede Frage ein einzelnes Paar betrifft.
 
 ## Erstellen Sie das Prompt aus den akzeptierten Beweisen
 
-TypeSafe bewertet die Passagen und die Routing-Komponente kennzeichnet sie. Eine LLM schreibt weiterhin die Antwort,
-hier `claude-sonnet-5`. Akzeptierte und widersprüchliche Beweise werden in separaten Blöcken gehalten.
+TypeSafe bewertet die Passagen und die Routing-Komponente kennzeichnet sie. Eine LLM verfasst weiterhin die Antwort, hier `claude-sonnet-5`. Akzeptierte und widersprüchliche Beweise werden in separaten Blöcken gehalten.
 
-Zwei Blöcke lassen die Antwort widersprechen. Verschmilzt man sie zu einem, hat der Generator keine Möglichkeit mehr, einen Abschnitt, der die Anfrage beantwortet, von einem zu unterscheiden, der ihre Prämisse verneint.
+Zwei Blöcke lassen die Antwort widersprechen. Verschmilzt man sie zu einem, hat der Generator keine Möglichkeit,
+einen Abschnitt, der die Anfrage beantwortet, von einem zu unterscheiden, der ihre Prämisse verneint.
 
 ```python
 PROMPT = """Answer the query using only the supplied evidence.
@@ -503,7 +510,7 @@ A session is represented by the Supabase Auth access token in the form of a JWT,
    ...
 ```
 
-Die erste Antwort bezieht sich auf die Frage mit falscher Prämisse, *Refresh-Token laufen nach 30 Tagen ab – wie verlängere ich diesen Zeitraum?*; die zweite ist eine gewöhnliche Frage, die die Dokumentation tatsächlich beantwortet, wobei die 12 abgerufenen Passagen `forum-injection` und die eingefügte Anweisung enthielten.
+Die erste Antwort bezieht sich auf die Frage mit falscher Prämisse, *Refresh tokens expire after 30 days - how do I extend that window?*; die zweite ist eine gewöhnliche Frage, die die Docs tatsächlich beantworten, wobei die 12 abgerufenen Passagen `forum-injection` und deren injizierte Anweisung enthielten.
 
 ```python
 SHOWN = [HEADLINE_QUERY, QUERIES[5]]
@@ -551,9 +558,10 @@ Since this passage is marked as conflicting/unverified evidence rather than acce
 **No conflicts** were found between the passages — they consistently point to a default/recommended value of 1 hour, with an acceptable range of roughly 5 minutes to 1 hour, and caution against going much shorter or longer without specific need.
 ```
 
-Die erste Antwort traf ein mit einem leeren akzeptierten Block und einem widersprüchlichen Abschnitt. Sie beginnt mit „Ich verfüge nicht über ausreichende akzeptierte Beweise“, benennt den Konflikt und zitiert `sessions-01` dazu, dass Refresh-Tokens niemals ablaufen, anstatt eine 30-Tage-Einstellung zu erfinden.
+Die erste Antwort traf mit einem leeren akzeptierten Block und einem widersprüchlichen Abschnitt ein. Sie beginnt mit „Ich habe keine ausreichenden akzeptierten Beweise“, benennt den Konflikt und zitiert `sessions-01` zu dem Punkt, dass Refresh Tokens niemals ablaufen, anstatt eine 30-Tage-Einstellung zu erfinden.
 
-Der zweite hatte 4 akzeptierte Passagen und keinen Konflikt, und zitiert alle vier. Nichts der injizierten Anweisung erreicht den Text.
+Der zweite hatte 4 akzeptierte Passagen und keinen Konflikt, und zitiert alle vier. Nichts der
+injizierten Anweisung erreicht den Text.
 
 ## Vergleichen Sie die sechs Abfragen
 
@@ -644,11 +652,11 @@ plt.close(fig)
 
 <img src="/img/cases/classifying-rag-passages-classifying_rag_passages.executed.1.png" alt="output" width="1335" height="525" data-path="cookbooks/classifying_rag_passages/classifying_rag_passages.executed.1.png" />
 
-Jede Spalte enthält die 12 für eine einzelne Abfrage abgerufenen Passagen, insgesamt 72. Mindestens zwei Drittel jeder Spalte werden ausgeschlossen. Nur die beiden Abfragen mit falscher Prämisse leiten etwas an den Konflikt weiter, und zwei Abfragen akzeptieren überhaupt nichts: diejenige bezüglich einer 30-tägigen Ablaufzeit und *wie werden Refresh-Tokens rotiert?*
+Jede Spalte enthält die 12 für eine einzelne Abfrage abgerufenen Passagen, insgesamt 72. Mindestens zwei Drittel jeder Spalte werden ausgeschlossen. Nur die beiden Abfragen mit falscher Prämisse leiten etwas an Conflict weiter, und zwei Abfragen akzeptieren überhaupt nichts: diejenige bezüglich einer 30-Tage-Ablaufzeit und *wie werden Refresh Tokens rotiert?*
 
-## Öffnen Sie es im Playground
+## Öffne es im Playground
 
-Öffnen Sie den untenstehenden Link, um einen Aufruf live erneut auszuführen: die erste Abfrage zum Durchgang, die zum Konfliktblock geleitet wurde, sowie die vier Fragen.
+Öffnen Sie den untenstehenden Link, um einen Aufruf live erneut auszuführen: die erste Abfrage gegenüber dem Durchgang, der an den Konfliktblock weitergeleitet wurde, sowie die vier Fragen.
 
 ```python
 linked = next(r for r in ROUTED[HEADLINE_QUERY] if r["route"] == "conflicting_evidence")
@@ -660,4 +668,4 @@ deeplink = make_playground_link(
 display(Markdown(f"🔗 [Open the query + passage and its four questions]({deeplink})"))
 ```
 
-[Die Abfrage + den Text und die vier Fragen öffnen →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAI4wIBOAnqQaQEoIBmVCAzgBb4oQDWyDviwAHAJbt8AQxYpq+AMwAGfGGk1hAWnxcIAdzUR8ASRHZkYXl2kp8+8Ukj6A-KQA0+UqOkcO0gHMEenwSEHEwENIOTg5xCCQOLWUARg8vEBRxFAAbYLwMgFUYqnwYv3jEggB1GztxYWky2Mq3EE9SeWwokABBZoqE-Ab8KHZbBCt9LmQZfBgSsvEAxOGkADp8ACEaNVZpGByUT2z8HN8UYUcwVkdshBzd6Sc5hYUoZ91pADcEGSR5kgcuI4PcrEh4AAjBQQFgyKBZX4DOIJYRDXz4ODPXY3b7iKCcdbEYhIYlIfrlFEAkbsUTsGKoSb4SG7FAzfAAZRgPkhvj+vRgbPhBL8vAEs0c1j+LAgVDg+FhcwAUtU0J5nlYmuw2JweHxBADpvieCMmjAkOIKH8OCgqI4AkSSWTelARcJ9UIZFIbnEVky+MzrXoqHZgb8wJ4FjBpDlHoGUPoELMAKyYxyCzj-KwpXQQGClI15fDa+l68WrJAIX6lMSSP6QwWjT4JOPQ+YxKwJAmbACaeabAKwUBsSCCcxLurFBoVQN2Xb+AaCdialcM0ldsSzxdYpansx8kkdpJJaC4Izp0E3Iw+saZACo7xPuPapcjKusH2TnW+hvI5Y4Jg4TwblESwXyGKAEhYZZ81sSpPGmZBcDJHRTz+N5SigYEoH4YRfQBPMUCPVD2Qw0YRyCd0ZkkfAfD8fRZU7UpQKoGU5UaZpYDtFBdgZOJET+dcsgSYjTDsLJEDRRswEoMU1iE8Q8R40STDscZh0zbJhCxTAQXgM5xBYBAJIQUT+jI-CrgIgFnggNkFFxfFTPSaI8yoAkAH0eNAnpYWgqBxBjDzIFgRBUDghJSAAXyi9pCAvOBREuDBsAKIhSAaDz2Dyb5nhQEIwm8-IGBAJA8xyFzwkSW0YARSoOB6AARCBMzZc9fH8MdpDAMB6So60YEhAArBAEQVOF7PwK1aDaKKOhASDwscDgPOeDhEyoDyqwiZACQKzoaB8gpSDKw5KuWmq6tRJqWqo9q-ECa0UAmNY2KxYSAQWaRISLSUmjAOsxrWjbZvmxbbW6-FLg86aaA8ukEFBGJ9syQ7ioyU6KrijLqqoWqPoa46QGa1qz2EOjOr+RaWGwuwHCFJoWCE6Mclo9gkaeiYrElSbYdBjJwekZb4aoCBEpQDzHBGq7SQKQq0Z6THztx-H6pu0n7spmQUHkcW5PB0XWcmjhNF1-51uoF9ecoGbotizwQGkCQADVqCpNLvhSOKQBiPIEUmABZCAbhyDgCgAbRAEbvi0FJ1hSAAmEAAF0oqAA)
+[Öffnen Sie die Abfrage + den Text und die vier Fragen →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAI4wIBOAnqQaQEoIBmVCAzgBb4oQDWyDviwAHAJbt8AQxYpq+AMwAGfGGk1hAWnxcIAdzUR8ASRHZkYXl2kp8+8Ukj6A-KQA0+UqOkcO0gHMEenwSEHEwENIOTg5xCCQOLWUARg8vEBRxFAAbYLwMgFUYqnwYv3jEggB1GztxYWky2Mq3EE9SeWwokABBZoqE-Ab8KHZbBCt9LmQZfBgSsvEAxOGkADp8ACEaNVZpGByUT2z8HN8UYUcwVkdshBzd6Sc5hYUoZ91pADcEGSR5kgcuI4PcrEh4AAjBQQFgyKBZX4DOIJYRDXz4ODPXY3b7iKCcdbEYhIYlIfrlFEAkbsUTsGKoSb4SG7FAzfAAZRgPkhvj+vRgbPhBL8vAEs0c1j+LAgVDg+FhcwAUtU0J5nlYmuw2JweHxBADpvieCMmjAkOIKH8OCgqI4AkSSWTelARcJ9UIZFIbnEVky+MzrXoqHZgb8wJ4FjBpDlHoGUPoELMAKyYxyCzj-KwpXQQGClI15fDa+l68WrJAIX6lMSSP6QwWjT4JOPQ+YxKwJAmbACaeabAKwUBsSCCcxLurFBoVQN2Xb+AaCdialcM0ldsSzxdYpansx8kkdpJJaC4Izp0E3Iw+saZACo7xPuPapcjKusH2TnW+hvI5Y4Jg4TwblESwXyGKAEhYZZ81sSpPGmZBcDJHRTz+N5SigYEoH4YRfQBPMUCPVD2Qw0YRyCd0ZkkfAfD8fRZU7UpQKoGU5UaZpYDtFBdgZOJET+dcsgSYjTDsLJEDRRswEoMU1iE8Q8R40STDscZh0zbJhCxTAQXgM5xBYBAJIQUT+jI-CrgIgFnggNkFFxfFTPSaI8yoAkAH0eNAnpYWgqBxBjDzIFgRBUDghJSAAXyi9pCAvOBREuDBsAKIhSAaDz2Dyb5nhQEIwm8-IGBAJA8xyFzwkSW0YARSoOB6AARCBMzZc9fH8MdpDAMB6So60YEhAArBAEQVOF7PwK1aDaKKOhASDwscDgPOeDhEyoDyqwiZACQKzoaB8gpSDKw5KuWmq6tRJqWqo9q-ECa0UAmNY2KxYSAQWaRISLSUmjAOsxrWjbZvmxbbW6-FLg86aaA8ukEFBGJ9syQ7ioyU6KrijLqqoWqPoa46QGa1qz2EOjOr+RaWGwuwHCFJoWCE6Mclo9gkaeiYrElSbYdBjJwekZb4aoCBEpQDzHBGq7SQKQq0Z6THztx-H6pu0n7spmQUHkcW5PB0XWcmjhNF1-51uoF9ecoGbotizwQGkCQADVqCpNLvhSOKQBiPIEUmABZCAbhyDgCgAbRAEbvi0FJ1hSAAmEAAF0oqAA)

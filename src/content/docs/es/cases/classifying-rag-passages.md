@@ -1,19 +1,19 @@
 ---
 title: "Clasificación de fragmentos RAG"
-description: "Evalúa cada fragmento recuperado con una única solicitud TypeSafe y luego decide en el código cuáles llegan al modelo de respuesta. Por ejemplo, conserva y marca aquellos que contradicen la pregunta, y descarta los que contienen una instrucción oculta o una inyección de prompt."
+description: "Puntúa cada fragmento recuperado con una única solicitud TypeSafe, y luego decide en el código cuáles llegan al modelo de respuesta. Por ejemplo, conserva y marca aquellos que contradicen la pregunta, y desecha los que contienen una instrucción oculta o inyección de prompt."
 section: cases
 order: 140
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/classifying_rag_passages"
 translatedFrom: en
 ---
-La etapa de recuperación de un pipeline RAG clasifica los pasajes según el grado de similitud de su redacción con la consulta, y entrega los mejores a un modelo de lenguaje. Estos pueden incluir pasajes ruidosos o irrelevantes, o, peor aún, pueden agrupar hechos contradictorios, inyecciones de prompt o instrucciones del modelo junto con lo que nominalmente es evidencia para ayudar a generar una respuesta.
+El paso de recuperación de una tubería RAG clasifica los pasajes según cuánto se asemeja su redacción a la consulta, y entrega los mejores a un modelo de lenguaje. Estos pueden incluir pasajes ruidosos o irrelevantes, o peor aún, pueden agrupar hechos contradictorios, inyecciones de prompt o instrucciones del modelo junto con lo que nominalmente es evidencia para ayudar a generar una respuesta.
 
-Entre la recuperación y la generación, añade una segunda etapa que clasifique cada pasaje recuperado. Para cada uno, envía a TypeSafe una única solicitud que contenga múltiples preguntas sobre el par consulta-pasaje: ¿es relevante, ¿contiene algo utilizable para una respuesta, ¿contradice algo que la consulta da por sentado, y ¿está intentando instruir al modelo? Las respuestas a esas preguntas determinan qué ocurre con cada pasaje, mediante una lógica de ramificación simple: añadirlo al prompt como evidencia, añadirlo al prompt como información conflictiva, o descartarlo. La evidencia y los conflictos llegan en bloques separados, para que el generador pueda reaccionar de manera apropiada.
+Entre la recuperación y la generación, añade una segunda etapa que clasifique cada pasaje recuperado. Para cada uno, envía a TypeSafe una solicitud que contenga múltiples preguntas sobre el par consulta-pasaje: ¿es relevante, ¿afirma algo utilizable en una respuesta, ¿contradice algo que la consulta da por sentado, y ¿está intentando instruir al modelo? Las respuestas a esas preguntas determinan qué sucede con cada pasaje, mediante una lógica de ramificación simple: añadirlo al prompt como evidencia, añadirlo al prompt como información contradictoria, o descartarlo. La evidencia y las contradicciones llegan en bloques separados, para que el generador pueda reaccionar de manera apropiada.
 
-Para ejecutar la canalización, la sometemos a algunas preguntas difíciles contra documentación real de autenticación llena de páginas que se leen igual, y un pasaje plantado que lleva una inyección de prompt. Dos preguntas contienen suposiciones falsas, las cuales se marcan antes de ser entregadas al modelo que genera respuestas.
+Para ejecutar la canalización, la ejecutamos sobre algunas preguntas complicadas contra documentación real de autenticación llena de páginas que se leen igual, y un pasaje plantado que lleva una inyección de prompt. Dos preguntas contienen suposiciones falsas, las cuales se señalan antes de ser entregadas al modelo que genera respuestas.
 
-El pipeline, en el orden en que las secciones lo construyen: el corpus de 81 pasajes, una búsqueda de similitud coseno que conserva los 12 pasajes principales por consulta, las cuatro preguntas `Noul` enviadas a TypeSafe para cada uno de esos pasajes, los umbrales en `route()` que etiquetan cada uno, la instrucción ensamblada a partir de bloques separados de evidencia y conflicto, y las respuestas `claude-sonnet-5` que escribe a partir de ella.
+El pipeline, en el orden en que las secciones lo construyen: el corpus de 81 pasajes, una búsqueda de similitud coseno que conserva los 12 mejores pasajes por consulta, las cuatro preguntas `Noul` enviadas a TypeSafe para cada uno de esos pasajes, los umbrales en `route()` que etiquetan cada uno, la instrucción ensamblada a partir de bloques de evidencia y conflicto separados, y las respuestas `claude-sonnet-5` que escribe a partir de ella.
 
 <!-- mermaid flowchart converted to equivalent tables (this site loads no chart library) -->
 
@@ -42,13 +42,11 @@ El pipeline, en el orden en que las secciones lo construyen: el corpus de 81 pas
 pip install anthropic openai matplotlib ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-Establecer `TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY` y `OPENAI_API_KEY`. Utilizamos TypeSafe para puntuar
-cada pasaje recuperado, OpenAI para incrustar el corpus para el paso de búsqueda, y Claude para escribir
-la respuesta final a partir de lo que sobrevive a la puntuación.
+Configurar `TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY` y `OPENAI_API_KEY`. Utilizamos TypeSafe para puntuar cada pasaje recuperado, OpenAI para incrustar el corpus en la etapa de búsqueda, y Claude para redactar la respuesta final a partir de lo que sobreviva a la puntuación.
 
-Ninguno de los tres necesita una clave para reproducir esta página. `json_cache.json` se entrega con el
-libro de recetas y reproduce cada llamada registrada, por lo que un nuevo renderizado no cuesta nada. Elimina el archivo para
-ejecutar la canalización en vivo en su lugar. Los números aquí provienen de `jev-1.12` y
+Ninguno de los tres necesita una clave para reproducir esta página. `json_cache.json` viene con el
+cookbook y reproduce cada llamada grabada, por lo que un nuevo renderizado no cuesta nada. Elimina el archivo para
+ejecutar la pipeline en vivo en su lugar. Los números aquí provienen de `jev-1.12` y
 `claude-sonnet-5` el 2026-08-27.
 
 ```python
@@ -101,10 +99,13 @@ json_cache = JsonCache(Path("json_cache.json"))
 El archivo de corpus `corpus.json` contiene 81 pasajes. Copiamos 80 de ellos directamente de la documentación de autenticación de Supabase en el commit `2440b06`, un pasaje por encabezado, textual y utilizado bajo la licencia Apache 2.0:
 [https://github.com/supabase/supabase/tree/2440b06/apps/docs/content/guides/auth](https://github.com/supabase/supabase/tree/2440b06/apps/docs/content/guides/auth)
 
-Cada pasaje lleva `id`, `title`, `text` y `source_type`, y cada solicitud envía los cuatro. Los casos casi fallidos llenan el conjunto. Rotación, expiración, sesiones y claves de firma tienen cada uno su propia página, y esas páginas se leen de forma similar. La rotación de tokens de actualización y la rotación de claves de firma JWT son cosas distintas descritas con palabras casi idénticas.
+Cada pasaje lleva `id`, `title`, `text` y `source_type`, y cada solicitud envía los
+cuatro. Los casos límite llenan el conjunto. Rotación, expiración, sesiones y claves de firma tienen cada una
+su propia página, y esas páginas se leen igual. La rotación de tokens de actualización y la rotación de claves de firma JWT
+son cosas diferentes descritas con palabras casi idénticas.
 
-Lo escribimos nosotros mismos, `forum-injection`, marcando `community_forum`: parece
-una respuesta de foro normal hasta su último párrafo, que es una instrucción dirigida al
+Lo escribimos nosotros mismos, `forum-injection`, marcado `community_forum`: se lee como
+una respuesta de foro ordinaria hasta su último párrafo, que es una instrucción dirigida al
 modelo.
 
 También escribimos dos de las seis consultas para establecer una premisa que contradice la documentación, por lo que las rutas de inyección y conflicto tienen algo que capturar.
@@ -140,11 +141,11 @@ One passage, as the model will see it (sessions-01):
 A session is represented by the Supabase Auth access token in t...
 ```
 
-## Recuperar los mejores fragmentos
+## Recuperar los pasajes principales
 
-Clasifica los pasajes por similitud coseno sobre embeddings, usando `text-embedding-3-small` a
-256 dimensiones, y conserva los mejores `TOP_K = 12` para cada consulta. Los vectores cortos mantienen
-la caché enviada pequeña, y las llamadas de embedding se almacenan en caché con todo lo demás, por lo que los
+Clasifica los pasajes por similitud del coseno sobre embeddings, usando `text-embedding-3-small` en
+256 dimensiones, y mantén los mejores `TOP_K = 12` para cada consulta. Los vectores cortos mantienen la
+caché enviada pequeña, y las llamadas de embedding se almacenan en caché con todo lo demás, por lo que los
 vectores viajan dentro de `json_cache.json`.
 
 ```python
@@ -216,14 +217,14 @@ for passage in retrieve(HEADLINE_QUERY, TOP_K):
   0.455  signing-keys-54-a     official_docu  JWT Signing Keys: Lifetime of a signing key
 ```
 
-La publicación del foro que contiene la instrucción inyectada, `forum-injection`, ocupa el 1.º lugar con 0.584.
+La publicación del foro que lleva la instrucción inyectada, `forum-injection`, ocupa el 1.º lugar con 0.584.
 El pasaje que refuta la premisa, `sessions-01`, ocupa el 7.º lugar con 0.509. Las 12 puntuaciones
 oscilan entre 0.584 y 0.455, una diferencia demasiado estrecha para separar el pasaje que corrige
 la consulta del que intenta secuestrar la respuesta.
 
 ## Haz cuatro preguntas sobre cada pasaje
 
-Coloca la consulta y un pasaje juntos en el estado, de manera que cada pregunta se refiera al par
+Coloca la consulta y un pasaje en el estado juntos, de modo que cada pregunta se refiera al par
 en lugar de solo al pasaje. Forma:
 
 ```json
@@ -238,7 +239,7 @@ en lugar de solo al pasaje. Forma:
 }
 ```
 
-Utiliza las mismas cuatro preguntas para cada consulta. Solo cambia el estado entre las llamadas.
+Usa las mismas cuatro preguntas para cada consulta. Solo cambia el estado entre las llamadas.
 
 Cuatro `Noul` preguntas, y lo que impulsa cada respuesta:
 
@@ -247,8 +248,8 @@ Cuatro `Noul` preguntas, y lo que impulsa cada respuesta:
 * `contradicts_query_premise`: promueve al bloque de conflicto.
 * `contains_prompt_injection`: excluye por completo.
 
-Ninguna de las cuatro preguntas si incluir el pasaje. Esa llamada se encuentra en el código a continuación,
-donde cambiarlo significa editar un número en lugar de reformular una pregunta.
+Ninguno de los cuatro asks si incluir el passage. Esa call sits en el code abajo,
+donde cambiarlo significa editar un number en lugar de rewording una question.
 
 ```python
 PASSAGE_QUESTIONS = {
@@ -299,22 +300,29 @@ def gate_all(query: str, passages: list[dict]) -> list[dict]:
         return list(pool.map(lambda passage: gate(query, passage["id"]), passages))
 ```
 
-## Enruta cada pasaje en el código
+## Enruta cada pasaje en código
 
-Cada respuesta regresa como una probabilidad, y hay muchas formas de convertir cuatro de ellas en una decisión. Una serie simple de comparaciones funcionó aquí. Prueba las cuatro probabilidades contra sus umbrales en un orden fijo y detente en la primera coincidencia. Esa coincidencia etiqueta el fragmento, y la etiqueta decide qué sucede con él: evidencia en el prompt, un conflicto en el prompt, o descartado.
+Cada respuesta se devuelve como una probabilidad, y hay muchas formas de convertir cuatro de
+ellas en una decisión. Una serie simple de comparaciones funcionó aquí. Prueba las cuatro
+probabilidades contra sus umbrales en un orden fijo y detente en la primera coincidencia. Esa
+coincidencia etiqueta el pasaje, y la etiqueta decide qué sucede con él: evidencia en el
+prompt, un conflicto en el prompt, o descartado.
 
 Las pruebas, en orden:
 
 1. `contains_prompt_injection > 0.70` -> excluir
 2. `contradicts_query_premise > 0.70` -> evidencia\_conflictiva
-3. `es_relevante < 0.45` -> excluir
+3. `is_relevant < 0.45` -> excluir
 4. `contains_answer_evidence > 0.55` -> incluir
 5. de lo contrario excluir
 
-La inyección se realiza primero porque es una decisión de seguridad, no una de evidencia. La prueba de contradicción se aplica antes que la prueba de evidencia porque un pasaje que niega la premisa de la consulta suele contener también información utilizable; si se aplicara al revés, terminaría en el bloque aceptado en lugar del de conflicto.
+La inyección se realiza primero porque es una decisión de seguridad, no una de evidencia. La
+prueba de contradicción se realiza antes que la prueba de evidencia porque un pasaje que niega la
+premisa de la consulta suele expresar algo utilizable también; probado al revés, caería
+en el bloque aceptado en lugar del de conflicto.
 
 
-> **Nota** — Elegimos estos cuatro números para este corpus. Trátalos como un punto de partida, no como valores predeterminados. Mover uno es económico: ⦇0⦇ contiene los cuatro y ⦇1⦇ lee solo las respuestas almacenadas, por lo que reencaminar cada pasaje no cuesta llamadas a la API.
+> **Nota** — Elegimos estos cuatro números para este corpus. Trátalos como un punto de partida, no como valores predeterminados. Mover uno es barato: `THRESHOLDS` contiene los cuatro y `route()` lee solo las respuestas almacenadas, por lo que reencaminar cada pasaje no cuesta llamadas a la API.
 
 
 ```python
@@ -380,9 +388,9 @@ exclude                0.04  0.05   0.10  0.13  signing-keys-54-a
 
 La pregunta de contradicción de premisas obtiene `sessions-01` a 0.92 y la envía al bloque de conflicto. La relevancia lee 0.49 y la evidencia de respuesta 0.51, por lo que solo esos dos habrían descartado la pregunta.
 
-La similitud clasificada `forum-injection` en primer lugar y su relevancia supera el umbral de 0.71. La puntuación de inyección de 0.99 es lo que la descarta.
+La similitud clasificada `forum-injection` primero y su relevancia supera el umbral de 0.71. La puntuación de inyección de 0.99 es lo que la hace caer.
 
-Nada llega al prompt como evidencia, lo cual es correcto para una pregunta basada en una premisa falsa. A continuación, la misma tabla para una consulta que la documentación sí responde.
+Nada llega al prompt como evidencia, lo cual es correcto para una pregunta basada en una premisa falsa. A continuación, la misma tabla para una consulta que la documentación responde.
 
 ```python
 print(f'"{QUERIES[5]}"\n')
@@ -407,22 +415,18 @@ include                0.79  0.57   0.06  0.31  sessions-09
 exclude                0.12  0.11   0.07  0.20  sessions-07-b
 ```
 
-Cuatro pasajes llegan al bloque de evidencia aquí, y la respuesta a continuación cita los cuatro.
-Las filas se imprimen en orden de recuperación, lo que muestra el reordenamiento: los puestos 2, 3 y 4 leen
-*Lifetime of a signing key*, el tipo de vida incorrecto en casi las mismas palabras de la consulta,
-y los tres obtienen una puntuación de 0.08 o menos en relevancia. Tres de los cuatro que lograron entrar ocuparon los puestos
-8, 9 y 11. `forum-injection` se excluye nuevamente en 0.99.
+Cuatro pasajes llegan al bloque de evidencia aquí, y la respuesta a continuación cita los cuatro. Las filas se imprimen en orden de recuperación, lo que muestra el reordenamiento: los puestos 2, 3 y 4 leen *Lifetime of a signing key*, el tipo de vida incorrecto en casi las mismas palabras de la consulta, y los tres obtienen una puntuación de 0.08 o menos en relevancia. Tres de los cuatro que lograron entrar ocuparon los puestos 8, 9 y 11. `forum-injection` se excluye nuevamente en 0.99.
 
-La pregunta de inyección es un filtro, y solo uno. Un fragmento que obtiene una puntuación por debajo del umbral aún llega al prompt, por lo que el prompt del generador debe tratar cada fragmento como texto no confiable, independientemente de su puntuación. Nada aquí constituye un límite de seguridad.
+La pregunta de inyección es un filtro, y solo uno. Un pasaje que obtiene una puntuación por debajo del umbral aún llega al prompt, por lo que el prompt del generador debe tratar cada pasaje como texto no confiable independientemente de su puntuación. Nada aquí es un límite de seguridad.
 
 Una solicitud por pasaje, por lo que el costo escala con `k`. Nada agrupa pasajes en una única solicitud, porque cada pregunta se refiere a un solo par.
 
-## Construye el prompt a partir de la evidencia aceptada
+## Construye la indicación a partir de la evidencia aceptada
 
-TypeSafe puntúa los pasajes y las etiquetas de enrutamiento los clasifican. Una LLM sigue escribiendo la respuesta,
+TypeSafe evalúa los pasajes y las etiquetas de enrutamiento los clasifican. Una LLM sigue escribiendo la respuesta,
 aquí `claude-sonnet-5`. Mantén la evidencia aceptada y la contradictoria en bloques separados.
 
-Dos bloques permiten que la respuesta se resista. Fusionarlos en uno solo deja al generador sin forma de distinguir un pasaje que responde a la consulta de uno que niega su premisa.
+Dos bloques permiten que la respuesta se resista. Fusionarlos en uno hace que el generador no tenga forma de distinguir un pasaje que responde a la consulta de uno que niega su premisa.
 
 ```python
 PROMPT = """Answer the query using only the supplied evidence.
@@ -511,7 +515,7 @@ A session is represented by the Supabase Auth access token in the form of a JWT,
    ...
 ```
 
-La primera respuesta es a la consulta de premisa falsa, *Los tokens de actualización expiran después de 30 días: ¿cómo extiendo esa ventana?*; la segunda es a una pregunta ordinaria que la documentación sí responde, cuyos 12 fragmentos recuperados incluían `forum-injection` y su instrucción inyectada.
+La primera respuesta es a la consulta de premisa falsa, *Los tokens de actualización expiran después de 30 días - ¿cómo extiendo esa ventana?*; la segunda es a una pregunta ordinaria que la documentación sí responde, cuyos 12 pasajes recuperados incluyeron `forum-injection` y su instrucción inyectada.
 
 ```python
 SHOWN = [HEADLINE_QUERY, QUERIES[5]]
@@ -559,11 +563,11 @@ Since this passage is marked as conflicting/unverified evidence rather than acce
 **No conflicts** were found between the passages — they consistently point to a default/recommended value of 1 hour, with an acceptable range of roughly 5 minutes to 1 hour, and caution against going much shorter or longer without specific need.
 ```
 
-La primera respuesta llegó con un bloque aceptado vacío y un pasaje contradictorio.
-Comienza con "No tengo evidencia aceptada suficiente", nombra el conflicto y cita
-`sessions-01` sobre los tokens de actualización que nunca expiran en lugar de inventar una configuración de 30 días.
+La primera respuesta llegó con un bloque aceptado vacío y un pasaje conflictivo.
+Se abre con "No tengo evidencia aceptada suficiente", nombra el conflicto y cita
+`sessions-01` sobre los tokens de refresco que nunca expiran en lugar de inventar una configuración de 30 días.
 
-El segundo tenía 4 pasajes aceptados y sin conflicto, y cita los cuatro. Nada de la instrucción inyectada llega al texto.
+El segundo tenía 4 pasajes aceptados y sin conflicto, y cita a los cuatro. Nada de la instrucción inyectada llega al texto.
 
 ## Compara las seis consultas
 
@@ -654,12 +658,12 @@ plt.close(fig)
 
 <img src="/img/cases/classifying-rag-passages-classifying_rag_passages.executed.1.png" alt="output" width="1335" height="525" data-path="cookbooks/classifying_rag_passages/classifying_rag_passages.executed.1.png" />
 
-Cada barra contiene los 12 pasajes recuperados para una consulta, 72 en total. Al menos dos tercios de cada barra se excluyen. Solo las dos consultas con premisas falsas enrutan algo al conflicto, y dos consultas no aceptan nada en absoluto: la que trata sobre una caducidad de 30 días, y *cómo se rotan los tokens de actualización?*
+Cada barra contiene los 12 pasajes recuperados para una consulta, 72 en total. Al menos dos tercios de cada barra se excluyen. Solo las dos consultas con premisa falsa enrutan algo hacia conflict, y dos consultas no aceptan nada en absoluto: la que trata sobre una caducidad de 30 días, y *cómo se rotan los tokens de actualización?*
 
 ## Ábrelo en el playground
 
 Abre el siguiente enlace para volver a ejecutar una llamada en vivo: la primera consulta contra el pasaje que
-enrutó al bloque de conflicto, más las cuatro preguntas.
+se dirigió al bloque de conflicto, más las cuatro preguntas.
 
 ```python
 linked = next(r for r in ROUTED[HEADLINE_QUERY] if r["route"] == "conflicting_evidence")
@@ -671,4 +675,4 @@ deeplink = make_playground_link(
 display(Markdown(f"🔗 [Open the query + passage and its four questions]({deeplink})"))
 ```
 
-[Abre la consulta + el pasaje y sus cuatro preguntas →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAI4wIBOAnqQaQEoIBmVCAzgBb4oQDWyDviwAHAJbt8AQxYpq+AMwAGfGGk1hAWnxcIAdzUR8ASRHZkYXl2kp8+8Ukj6A-KQA0+UqOkcO0gHMEenwSEHEwENIOTg5xCCQOLWUARg8vEBRxFAAbYLwMgFUYqnwYv3jEggB1GztxYWky2Mq3EE9SeWwokABBZoqE-Ab8KHZbBCt9LmQZfBgSsvEAxOGkADp8ACEaNVZpGByUT2z8HN8UYUcwVkdshBzd6Sc5hYUoZ91pADcEGSR5kgcuI4PcrEh4AAjBQQFgyKBZX4DOIJYRDXz4ODPXY3b7iKCcdbEYhIYlIfrlFEAkbsUTsGKoSb4SG7FAzfAAZRgPkhvj+vRgbPhBL8vAEs0c1j+LAgVDg+FhcwAUtU0J5nlYmuw2JweHxBADpvieCMmjAkOIKH8OCgqI4AkSSWTelARcJ9UIZFIbnEVky+MzrXoqHZgb8wJ4FjBpDlHoGUPoELMAKyYxyCzj-KwpXQQGClI15fDa+l68WrJAIX6lMSSP6QwWjT4JOPQ+YxKwJAmbACaeabAKwUBsSCCcxLurFBoVQN2Xb+AaCdialcM0ldsSzxdYpansx8kkdpJJaC4Izp0E3Iw+saZACo7xPuPapcjKusH2TnW+hvI5Y4Jg4TwblESwXyGKAEhYZZ81sSpPGmZBcDJHRTz+N5SigYEoH4YRfQBPMUCPVD2Qw0YRyCd0ZkkfAfD8fRZU7UpQKoGU5UaZpYDtFBdgZOJET+dcsgSYjTDsLJEDRRswEoMU1iE8Q8R40STDscZh0zbJhCxTAQXgM5xBYBAJIQUT+jI-CrgIgFnggNkFFxfFTPSaI8yoAkAH0eNAnpYWgqBxBjDzIFgRBUDghJSAAXyi9pCAvOBREuDBsAKIhSAaDz2Dyb5nhQEIwm8-IGBAJA8xyFzwkSW0YARSoOB6AARCBMzZc9fH8MdpDAMB6So60YEhAArBAEQVOF7PwK1aDaKKOhASDwscDgPOeDhEyoDyqwiZACQKzoaB8gpSDKw5KuWmq6tRJqWqo9q-ECa0UAmNY2KxYSAQWaRISLSUmjAOsxrWjbZvmxbbW6-FLg86aaA8ukEFBGJ9syQ7ioyU6KrijLqqoWqPoa46QGa1qz2EOjOr+RaWGwuwHCFJoWCE6Mclo9gkaeiYrElSbYdBjJwekZb4aoCBEpQDzHBGq7SQKQq0Z6THztx-H6pu0n7spmQUHkcW5PB0XWcmjhNF1-51uoF9ecoGbotizwQGkCQADVqCpNLvhSOKQBiPIEUmABZCAbhyDgCgAbRAEbvi0FJ1hSAAmEAAF0oqAA)
+[Abrir la consulta + el pasaje y sus cuatro preguntas →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAI4wIBOAnqQaQEoIBmVCAzgBb4oQDWyDviwAHAJbt8AQxYpq+AMwAGfGGk1hAWnxcIAdzUR8ASRHZkYXl2kp8+8Ukj6A-KQA0+UqOkcO0gHMEenwSEHEwENIOTg5xCCQOLWUARg8vEBRxFAAbYLwMgFUYqnwYv3jEggB1GztxYWky2Mq3EE9SeWwokABBZoqE-Ab8KHZbBCt9LmQZfBgSsvEAxOGkADp8ACEaNVZpGByUT2z8HN8UYUcwVkdshBzd6Sc5hYUoZ91pADcEGSR5kgcuI4PcrEh4AAjBQQFgyKBZX4DOIJYRDXz4ODPXY3b7iKCcdbEYhIYlIfrlFEAkbsUTsGKoSb4SG7FAzfAAZRgPkhvj+vRgbPhBL8vAEs0c1j+LAgVDg+FhcwAUtU0J5nlYmuw2JweHxBADpvieCMmjAkOIKH8OCgqI4AkSSWTelARcJ9UIZFIbnEVky+MzrXoqHZgb8wJ4FjBpDlHoGUPoELMAKyYxyCzj-KwpXQQGClI15fDa+l68WrJAIX6lMSSP6QwWjT4JOPQ+YxKwJAmbACaeabAKwUBsSCCcxLurFBoVQN2Xb+AaCdialcM0ldsSzxdYpansx8kkdpJJaC4Izp0E3Iw+saZACo7xPuPapcjKusH2TnW+hvI5Y4Jg4TwblESwXyGKAEhYZZ81sSpPGmZBcDJHRTz+N5SigYEoH4YRfQBPMUCPVD2Qw0YRyCd0ZkkfAfD8fRZU7UpQKoGU5UaZpYDtFBdgZOJET+dcsgSYjTDsLJEDRRswEoMU1iE8Q8R40STDscZh0zbJhCxTAQXgM5xBYBAJIQUT+jI-CrgIgFnggNkFFxfFTPSaI8yoAkAH0eNAnpYWgqBxBjDzIFgRBUDghJSAAXyi9pCAvOBREuDBsAKIhSAaDz2Dyb5nhQEIwm8-IGBAJA8xyFzwkSW0YARSoOB6AARCBMzZc9fH8MdpDAMB6So60YEhAArBAEQVOF7PwK1aDaKKOhASDwscDgPOeDhEyoDyqwiZACQKzoaB8gpSDKw5KuWmq6tRJqWqo9q-ECa0UAmNY2KxYSAQWaRISLSUmjAOsxrWjbZvmxbbW6-FLg86aaA8ukEFBGJ9syQ7ioyU6KrijLqqoWqPoa46QGa1qz2EOjOr+RaWGwuwHCFJoWCE6Mclo9gkaeiYrElSbYdBjJwekZb4aoCBEpQDzHBGq7SQKQq0Z6THztx-H6pu0n7spmQUHkcW5PB0XWcmjhNF1-51uoF9ecoGbotizwQGkCQADVqCpNLvhSOKQBiPIEUmABZCAbhyDgCgAbRAEbvi0FJ1hSAAmEAAF0oqAA)

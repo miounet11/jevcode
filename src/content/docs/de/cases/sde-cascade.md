@@ -1,51 +1,51 @@
 ---
 title: "SDE-Kaskade"
-description: "Verwendet eine zweistufige Kaskade zur Extraktion strukturierter Daten (Mini → Verifizierung → Reasoning), um einen Großteil der Qualität eines großen Reasoning-Modells zu einem Bruchteil der Kosten zu erzielen."
+description: "Verwendet eine zweistufige Cascade zur Extraktion strukturierter Daten (mini → verify → reasoning), um den Großteil der Qualität eines großen reasoning-Modells zu einem Bruchteil der Kosten zu erhalten."
 section: cases
 order: 250
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/sde_cascade"
 translatedFrom: en
 ---
-* Überblick
+* Übersicht
  * Große Reasoning-Modelle extrahieren strukturierte Daten gut, sind aber langsam und teuer
  * Kleine Modelle sind günstig, machen aber Fehler
  * Eine *Kaskade* erzielt den Großteil der Qualität zu einem Bruchteil der Kosten
- * Die von uns verwendeten Modelle und ihre Preise (\$ pro 1M Tokens, Eingabe / Ausgabe; Standardtarife
+ * Die von uns verwendeten Modelle und ihre Preise (\$ pro 1M Tokens, Input / Output; Standardtarife
  geprüft am 15. September 2026):
  * Stufe 0 (Mini): [`gpt-5.4-mini`](https://developers.openai.com/api/docs/models/gpt-5.4-mini)
  zu \$0,75 / \$4,50
  * Stufe 1 (Reasoning): [`gpt-5.5`](https://developers.openai.com/api/docs/models/gpt-5.5)
- zu \$5,00 / \$30,00 (ca. das 7-fache des Mini)
- * Verifier: TypeSafe `jev-1.12` zu \$0,042 / \$0,00 (Ausgabe-Tokens sind kostenlos;
+ zu \$5,00 / \$30,00 (ca. 7x das Mini)
+ * Verifier: TypeSafe `jev-1.12` zu \$0,042 / \$0,00 (Output-Tokens sind kostenlos;
  [veröffentlichte Jev-Preise](https://typesafe.ai/blog/introducing-system-one-models-and-jev))
 * Algorithmus
  1. **Extrahieren** mit einem günstigen/kleinen Modell.
  2. **Verifizieren** mit **TypeSafe**-Primitiven: eine Ja/Nein-Frage pro Feld („Noul-Frage“)
- * (z. B. „fehlt dieser Wert in der Quelle?“, „wurde er aus einem
- unzusammenhängenden Text übernommen?“), wobei jede Frage P(etwas ist falsch) zurückgibt.
+ * (z. B. „fehlt dieser Wert in der Quelle?“, „wurde er aus einem unrelateden
+ Text übernommen?“), wobei jede Frage P(etwas ist falsch) zurückgibt.
  3. **Eskalieren** zu einem teuren Reasoning-Modell, wenn ein Verifier-Signal auslöst; andernfalls
  die günstige Antwort beibehalten.
-* Dieses Kochbuch
- * geht ein reales Beispiel von Anfang bis Ende durch und zeigt dann den Tradeoff über 100 Prompts hinweg
- * Hinweis: Die beiden Extraktionsstufen verwenden den Text-Modus von OpenAI
- * Wir verwenden *keine* strukturierten Ausgaben, Tool-Aufrufe oder den JSON-Modus, weil:
- * Ein Fehler beim *Schema-Following* nicht der Fehler ist, den wir von einem LLM erwarten (es ist
+* Dieses Cookbook
+ * geht ein reales Beispiel von Anfang bis Ende durch und zeigt dann den Tradeoff über 100 Prompts
+ * Hinweis: Die beiden Extraktionsstufen verwenden den Textmodus von OpenAI
+ * Wir verwenden *keine* strukturierten Outputs, Tool-Aufrufe oder den JSON-Modus, weil:
+ * Ein Fehler beim *Schema-Following* ist nicht der Fehler, den wir von einem LLM erwarten (es ist
  einfach,
  synthetische Daten dafür zu erstellen)
- * Wenn ein LLM das Schema nicht befolgt, ist es fast immer stark verwirrt, sodass
- constrained decoding das zugrunde liegende Problem nicht behebt
+ * Wenn ein LLM das Schema nicht befolgt, ist es fast immer sehr verwirrt, daher
+ löst constrained decoding das zugrunde liegende Problem nicht
  * Wir ermutigen Sie jedoch, es trotzdem auszuprobieren!
 
-## Einrichtung
+## Setup
 
-* Installieren Sie die Abhängigkeiten (der TypeSafe-Verifier-Client wird vom TypeSafe-Paketindex bereitgestellt):
+* Installieren Sie die Abhängigkeiten (der TypeSafe-Verifizierer-Client wird vom TypeSafe-Paketindex bereitgestellt):
 
 ```bash
 pip install openai datasets jsonschema ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-* dann legen Sie ⦇0⦇ und ⦇1⦇ in Ihrer Umgebung fest
+* legen Sie dann `OPENAI_API_KEY` und `TYPESAFE_API_KEY` in Ihrer Umgebung fest
 
 ```python
 import json
@@ -71,7 +71,7 @@ ts = TypeSafeClient(api_key=os.environ["TYPESAFE_API_KEY"], timeout=30.0)
 
 ## Schritt 1: die Daten
 
-Wir wählen ein Huggingface-Dataset namens scrapegraphai
+Wir wählen ein huggingface-Dataset namens scrapegraphai
 
 ```python
 SCRAPEGRAPHAI_REVISION = "4bb9fba1dff9181c5acdb60a5a26fea62fa54fe9"
@@ -232,22 +232,23 @@ Unless otherwise noted, all content copyright New York University. All rights re
   * [![](https://events.nyu.edu/live/resource/image/_i/themes/global/images/icons/youtube.rev.1773448758.svg)](https://youtube.com/)
 ```
 
-* Diese Zeile ist eine **NYU-Veranstaltungskalenderseite** („Census-Datum Herbst 2024“):
+* Diese Zeile ist eine **NYU events-calendar page** ("Fall 2024 Census Date"):
  * das Schema verlangt nur zwei Felder: `registration_open_date` und `description`
- * der Prompt-Scraping hat nur die Kalender-Navigation und Standardtext erfasst: **es gibt kein
- Anmelde- oder Beschreibungsdatum**
- * beachten Sie, dass das `description`-Feld des Schemas sogar einen *Beispiel*-Wert („Die Anmeldung für das Herbstsemester öffnet“) in seiner eigenen Feldbeschreibung enthält
-* daher sollte ein wohlwollender Extraktor *ablehnen*, Felder zu erfinden, die die Seite nicht
+ * der Prompt scrape hat nur calendar nav und boilerplate erfasst: **there is no
+ registration date, or description**
+ * beachte, dass das `description` Feld des Schemas sogar einen *example* Wert ("Registration
+ opens for the fall semester") in seiner eigenen Feldbeschreibung liefert
+* also sollte ein gutartiger Extractor *decline* die Felder zu erfinden, die die Seite nicht
  enthält
-* mal sehen, ob das kleine Modell das Richtige tut!
+* mal sehen, ob das small model das Richtige tut!
 
-## Schritt 2: Extraktion mit dem Mini-Modell (Textmodus)
+## Schritt 2: Extrahieren mit dem Mini-Modell (Textmodus)
 
-* Hinweis: `gpt-5.4-mini` ist bei dieser Eingabe sehr stochastisch – selbst bei `temperature=0`
- erfindet es bei nahezu jedem Durchlauf einen anderen `description`. Für einen reproduzierbaren
- **hard-coden** wir die eine kanonische Fiktion, die der Rest dieses Notebooks erklärt (und die
- der Verifier bei P(falsch) > 0.8 markiert. Eine echte Pipeline würde einfach `extract(MINI,
- prompt, schema, content, temperature=0)` direkt verwenden.
+* Hinweis: `gpt-5.4-mini` ist bei dieser Eingabe sehr stochastisch -- selbst bei `temperature=0`
+ erfindet es auf fast jedem Durchlauf einen anderen `description`. Für einen reproduzierbaren
+ Ablauf **hard-coden** wir die eine kanonische Fiktion, die der Rest dieses Notebooks
+ erklärt (und die der Verifier bei P(wrong) > 0.8 markiert). Eine echte Pipeline würde
+ einfach `extract(MINI, prompt, schema, content, temperature=0)` direkt verwenden.
 
 ```python
 EXTRACT_SYSTEM = (
@@ -319,34 +320,34 @@ mini extraction:
 schema-valid: True
 ```
 
-* Der Datensatz ist **schema-gültig** (die obige Zeile gibt `True` aus), ist aber falsch:
- * `registration_open_date` bleibt leer, was mit der Seite übereinstimmt: dort steht kein Datum
+* Der Datensatz ist **schema-valid** (die obige Zeile gibt `True` aus), ist aber falsch:
+ * `registration_open_date` bleibt leer, was mit der Seite übereinstimmt: sie besagt, dass kein Datum angegeben ist
  * aber `description` ist erfunden: die Seite beschreibt niemals ein Registrierungsdatum, daher
- erfindet mini ein plausibles. Es kann das eigene Beispiel des Schemas, „Die Registrierung
- öffnet für das Herbstsemester“, nachplappern oder „...wurde im Dokument nicht gefunden“
+ erfindet mini ein plausibles. Es kann das eigene Beispiel des Schemas, „Registration
+ opens for the fall semester“, nachplappern oder „...was not found in the document“
  narrativ einbetten
  * eine JSON-Schema-Prüfung kann dies nicht erkennen. Ein günstiges Modell produziert
- derartige, schema-konforme Erfindungen mit hoher Zuversicht, und das Aufspüren obliegt
- einem semantischen Verifier
+ derartige, das Schema erfüllende, aber semantisch falsche Erfindungen mit großer
+ Überzeugung; das Aufdecken solcher Fälle ist die Aufgabe eines semantischen Verifiers
 
-## Schritt 3: Verifizierung mit TypeSafe
+## Schritt 3: mit TypeSafe überprüfen
 
-* der Verifier ist **TypeSafe**; für jedes Feld erstellen wir eine `Noul` Frage:
+* der Verifizierer ist **TypeSafe**; für jedes Feld erstellen wir eine `Noul` Frage:
  * eine enge Ja/Nein-Frage, so formuliert, dass `true` = etwas ist falsch ( eskalieren)
 * TypeSafe gibt ein kalibriertes `noul` = `P(true)` pro Frage zurück, in einem system\_one Aufruf
 * die Fragesammlung:
  * ein ganzheitlicher **`__overall__::judge`** Kopf („sollte dieser Datensatz eskaliert werden?"). Wir
- berechnen und zeigen ihn an, um ein Gesamturteil über den Datensatz mit den Kopfnoten pro Feld zu kontrastieren,
- aber das Gate in Schritt 4 verwendet ihn **nicht** – die Eskalation wird durch die
- Batterie pro Feld gesteuert.
- * eine Batterie pro Feld
- * nicht-leere Felder erhalten die volle Menge an Kopfnoten
- * leere Felder (null / "" / \[]) erhalten nur die `absence_wrong` Kopfnote
- * (die vollständige Pipeline hat auch eine `spurious` Kopfnote für ganze Container und eine gesamte
- `difficulty` Punktzahl; hier nicht gezeigt, um diesen Durchlauf auf die zwei Gating-Kopfnoten zu beschränken)
-* **Der TypeSafe Weg: Dekomposition**
- * Beachten Sie, wie alles *programatisch dekomponiert* wird, das ist der TypeSafe Weg.
- * Dekomposition maximiert die Intelligenz jedes Prompts und macht den Algorithmus
+ berechnen und zeigen ihn an, um ein Urteil über den gesamten Datensatz mit den
+ einzelnen Kopfnoten zu kontrastieren, aber das Tor in Schritt 4 verwendet ihn **nicht** -- die Eskalation wird durch die
+ Feld-Batterie gesteuert.
+ * eine batterie pro Feld
+ * nicht-leere Felder erhalten die volle Menge an Köpfen
+ * leere Felder (null / "" / \[]) erhalten nur den `absence_wrong` Kopf
+ * (die vollständige Pipeline hat auch einen `spurious` Kopf für ganze Container und eine gesamte
+ `difficulty` Punktzahl; hier nicht gezeigt, um diesen Durchlauf auf die zwei Tor-Köpfe zu beschränken)
+* **Der TypeSafe Weg: Zerlegung**
+ * Beachten Sie, wie alles *programmatical zerlegt wird*, das ist der TypeSafe Weg.
+ * Zerlegung maximiert die Intelligenz jedes Prompts und macht den Algorithmus
  abstimmbar und interpretierbar.
  * <img src="/img/cases/sde-cascade-this_is_the_way.jpg" alt="this is the way" width="100" height="56" data-path="cookbooks/sde_cascade/this_is_the_way.jpg" />
 
@@ -500,7 +501,7 @@ def verify(record: dict) -> dict[str, float | str]:
     }
 ```
 
-### Führe den gesamten Batteriesatz über die Mini-Extraktion
+### Führen Sie den gesamten Batteriesatz über die Mini-Extraktion
 
 ```python
 checks = verify(mini_record)
@@ -532,16 +533,16 @@ description::name_desc_mismatch              0.08
 description::type_mismatch                   0.02
 ```
 
-[Öffne diese Verifikation im TypeSafe Playground →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAM4CeZKCcA+omWQIYDmCpBpAmhDPlhQAnZlBT5qQmGJhCEYfGGYpm+AGZCIcRdHjIUZAHT4ASghSyk+CEgA2FfADdmtmAjISYABy8QhNBQAjBxQACwR8GmxjADEIW1sIAHd8ZiQHZ1cItT84ZQkvBCgASzVi+XxgyPCJKHC86yF8YoN1ctsFMHcoIWKvFGKbI1IAGnxSYqRJaQGbTnGQAFFsETFqiOmZOQU5KD8FDS1q4o9IWERUUYWyPiEoBDoolHnSAGUAaz7IiHw91H18B8vigfrAhHJUPgvGwIkhmI5iqxlIMkMRiKj0QBtfAAXQAFKEUCgvGRcAB6MlJKmGdIwQzyGBkgCUaIxSFeCGYd1CgJaHHRrOx+MJxNJFKpSRpFDpDOZrNZ+HwACp8NiAIJQZhdODFKBkYVEknkynU2n0sCM0Ra2i6oyEuC2FnoxUq9VgHVMFH6gmGsUmyVm2Vaj1kL2Ge2OhXK1Wmdyc7kG0XGiVSmUWslyMjxurhlAOp1WaPYgCqSGKjgQQlDKAcABlSghE0bxabpebGbYG7n81HXfg1YE+Cgm36U4H08xBzAUN3IwL52y1Ql8AA5bjF+XogDEioAshBAsVbBEV-DEcibOMF0KfUmWwG27KC6yOVy6ryaJvC66NdadXqR2TVs00tTVtVtWcCxdVU1XdE5QyGQD71TdsyWDeCwwjKCizMLM31CJD-RQ2VM2zUJIN7VVS3LStqzrBtCLHR9007NQEAo50iwHIdGOA1DJyHDi2S-JdbFXdcvwASSQHJ1D8L9oIAIVEd5vnwPJJnU5AYEo6TZJyJoFMVItXgsLpUG9EVmyI8dGWoGBzIMITjKLGJRBgWwa14h8QLJNR3M8ihnOMn9XDgMtvOIicwrLYLoMxRY4C8RIKAQdxItsslaGSiBUvcOKiwAYS0OAYDLLzb2spjfL2OBSvKoKsK-L9MVrCBWHwaSm2NUItHYzLn3RPSfgMozXVMhz9Es30gJ81D7Mcu08znb9VTc2BAoy5jGX8jaa2C0L4AiyrRz4oMYuKA7VUSnK8umu8bO2rKkpStKlp7TjXWKuqypaCgtpqkrfv2pqFxatqOq6k6er6qLGUG9kyI-CJX25L8d3wRYKws-BCpcZAlEMhdUffLGpqvRcfHsWMs2eBd4u46d1kx7HWjx48kEJ3FoeQzLste9wM3cW57jIABaNIwDFrMhARUWyUQMBimYCXObF2r6t1C8pjJJXWBaFx1aBstNVmHXforKs-rFhBWfFzUOcJq6Ert3H8c5rl8DQac-GVsSAdQ-ncreoWblkUXValmW5cFxXlcjo2fpN7WyF1xEDdsRPNdNr0yQt2jrdtqb1fdwmyQsEFehcd6VvisxfH8ZomDcRooU0BEunUNKwECFTuasv0zWj3UEDFpBkkMWqyTILwAH5ijAABeMgoDoU26D5OAADJKDIDel4AdgANgATgADjAMAACZmHPwIoDUAAWAAGZ-H6gM+oGfgBmZ+j+-sAZ9H4ICvgfR+CMvwkx5DEI8NAqxu0dlyL8K4EApF4EIVS1FLZ0QpqyRYABHGALh8AAHkfB+AsA1VInNVw2DFgAEROD0YoOo4Rm1SOINcxZ8Bi1XKg-A6DMFlmwX9JuvwSotACGpDSqBmCTEmB1NIAgkAIk0EgC44gwj5GQHsWQMIPCSzktQWi+BMyFDWAZZonNywLyIWJTIbgDE0OYD4TQXgq40HEZzGYqQ4A2EUcuQoVYhjGGkqkZcWCC41gKKIdwYsxZeFCFQLWYlDF6wzvE9x7URB1QUWMUQAwEQDHcPkmhRccZcgiJqcE5QFBDisakKAewhBKCQPcfASQWg8hcclLWgRjz4FsMwFIzAPBJAQMuUZ+BIlW2ib4TsUAKBjCSKEXUPJJhQFcF0DwgQmYnHwOPcQnYdRSJBM0VoK46GMJXr0Vh2tqEKDVKgYoYsAASXJRlkA0fgAACvEXUQVcHolLMeJg1gwiVk6VmA5EAAj5OXH8GgkI9heAoL0VghI+FoL8EImiszAWiVMYiQkHhSKy3kMYMaqooGETwtyOGcpPqqjxklGAHhdwuIDrKPIXhnZkwsoRcpTkBqUUxMVWRaxiz3SqmddMiKClizZc7AA4jRLlE4pwoDJPrBESBWDO2Kqi9FmKt74DcsUJoUrGw80eoDI1xKUAJ38haxVWZnY-N6M4RZ6rGTuPLKIRqy1sI-iae4UMh5OwVQHrNBlohRbhqPH9Z2MRu69ygO8H1ZItxsXkGm94QlmpMsxCg7FGC3asuladOaT5RUDn4PQ0Ik5ijlq8GywitItQMuDdSxterG3NpZa2ytxoyC9oxXIrtha2TxQAISYkFXbBlnYKyhxFggMkLCYRkg3uXeogtWCJF7rYDdeR2Cp11EMPysTBwQHzXIRwhgACMB8D7f0fo-M+B8ACsB9DBkEcKwJkhFdoIBvfmqe3bMRzoXVNJdNFV3h3XZu9g27ii7toPuw9LgT36I3X8VOnYkDvHkJMQw96n0vrfR+79Z8-0AaAzawjxGlZIEnloRlq0oPzptUKowmVl3rszGunDKGd0QsYNqrDx7kOCwvTrTAZHbYUdfe+z9P66OAcIgpiDoroM8cXfx+DQnEMifXWJvdqcD0HmwzJ89+GN1TBUKwHJimH3PpU9R9T-7NM2smNQNgLmdNFr09GikvG4MruM3cJDp6zNofE5h6z0nYt2cvRQIcMBAjsXI+5qjanaPeYY6Fsk6XpyZfYkF4SAoQBjFICveozB5gkBAFkoJxSyBNdIHIfWkhtZ0AgIUJAdAlCfjwPgZr2zmH9BRC8EAaAagjYiFo8Q3WTjCHuQN5AHhLEQvUC4MSWZGBwOMLuYsrw0CVAiJpXbBk8jiDqrrMAJWKAvdiH4AQmBmAvQQGMSxqg9gJAQOwBpu2r7Pyvo-MWYOr5ftqL1eI+BUpcjGC0dSDrLsSD6mEBRgzijEfwM-E+ZJn5frJNDx+xgzAWCEFYVQ-S0iqUkDj0oiO+CpDkPgMqZBZDsSuKQAYKBjyzbMD19b7CyHIHwPQ5QHAasLBrIUWbTO9WkAAL61fAN0Xo025hjYm1rvoZtZtqkqL0BAahFAG511YCAFvdurd6+wzbVhFtvaaFgL7yUfv4AAOQi7WyIJ3g3tvvZu-tiQGHjFCB94YPnIABdC7G6QehVujdy-5xQRXSfyDCAUWr9XCw5CEItfIeYmIutA4D3153w2Zdx8m9rtPOINcJ9l1wEA-vHcogl6idP8fM9t4WAeAAVkUZ4IAC+kEEKsNPBBmsO7Fyifrg3a+jfb-X1PM3s+d8X5eZ3Iemhh+XId9wcD89y5a5oJKBgMDYDG0QUgdB+uW320-3AuBh8OXYJ1-vWf2-jw8jjz82EBmC9Fm0kg8Gxw8GnwKQqF2H2GoSsWaV2HEBgLEBRB4V4RuEQCcBcBbi528AbikSqF2zDmi1bkOS8VuxxzOVILqFoGYDGCLxgBLwUEmFu3uRDBx3eySDUVYDGHe2wOyHaAUEbQSGkEmBlwUHiUx3OQkF6g8iCAiG6BcCkLUlUC+S5DgXUggC6FsFnjj2YTgWVh-xAMH35xqHgJaTESUQ2T8BQI+3W3QN1w138lsCzFm3tyKAQP2X+3sLH0cJny31V0nxAAX0DyXxr0W3f0nCzDaQeF4P8VMIH1mwANsCAMcykGcKmB-zKAmTADoBniKB-2hDCFm3COrxX0WzjwV3MJz16BVz7wb0Ny33b3mwiEW2qHyAqKDy2zkkPxqDcIO0j2O3wFO3Owx2u0GNyHyAe0vme1ezNXew92+1+3ez8MB2BymIiHJyh3B1h3qwgARyRyEBR3u3Ryy0x0QGxz1Vx3x0J2J1J3J0p3MEsFSEqCGSIwkFz1uJZ1K3ZwiAILkFjz72YNYPmDMNCLQICDoDyI6FmzjxkToEIVP1aIWHaPwAAANoT5BYSRDMSxFsoawxgkAPJbABCmglEiSHAAdjxsjjB6EIB3BmYyD2kngvEVBtirEOD2FdtMS4SCiiioACTmissyAxg8hPhbjdtqTTF3APJxBEi9UDCJ8NcjDKwTC9d+cpA6jVAHEIgkgpklSD0HAtBJFS8+83CPDs85BqcyxbjDlVlfiPBkCx988Ndmjrd384REBhtugGATg7s6hki-8Fg0iMjNgzYOstSQABTCjzESjlBQhZtPS08W8Ujs9ldWAN8bkWjdd28TdAgzcLdUyMDbdmYeiyzBtFAZc3cPtPdjwxg-dK8u899g9+jmYhiI8jtKwY848wTtgISdSoSVhYCCiBThcWzd8bd2ydtBjw8T8o9ES5EhsUTqA0Tk8mTICahsTRyxBcSBSCTnUxIzkgyeQbsRCOEsTSjQgCTQ8dzSybACSuT+SRD4yihMTZ5Oo7cHzN8nzCTr8ll8BP8wBgc2AVzqBmZMSbyCSXAbBedVSFh1Sq5TCdTPCdycTxz8SdBmTKCzzOzLyfSIh3sWgPBMTHykBMS48rS6i+TMK8T8iCSzzmSLz8iDkvsIhDFyK-zKL3SFgKL39aiAzNCUBgyYzajUi+B0i+9gCsiozci3yhTEyyjs8KKaiMz28sycyptZ8FhCzizLdczrdrAfyIhKy2zJdXclj3dPtVjfcd8IiLKpgOyj9hiezo8QSNcByLSCBISNd6KJzt8pzHKZy+i5zsgFyRjKxlzJhkTHFdLNyWKMK9yYTDynBBghlPE+TaiRSighltgQcdy4yhTPy1c1TehjDGtxK0Ls86KUqDzsKER4gZdtyOi8rKkFBMScrqLq5aLkqnDUrsK-hbtICfhdsuhNkOqsTuqJ9QiBLcAyo5BRkbBJxE858M9QzSBwyZLMjQChgFL8j3yoBlLkzVKeL1LNr6i88mjzrs99LygSyeKTKKzgqNtqyrK4gbKGzvdmzRcQrrBZz7yIrj8oqPL+yEBi9Byxs-KFgAqRDJy-q3qwqga9sQb3KYrVz4qNyQAICoK4bGLrAkAltG1xBVAlqbg4R+kIggkKaOkpKFBKDG0KxAixyXLVkyLirzFSrELSBkLNT1r48ar28ybOQKbVrqbaJLwkh6aYVxAmblD6qFAoDcCsger3C+qFaBqMD9lyaVqqa+LSB5qxDXASg2EfLxsNq6jtqNdZK9qciYzObiiYybyUzbr0zLqtKbqjKEqQB7rzdDKdKyzTK5TEbeiXdazrL6y7Lfqq8w6D9OzIr3K+zQSIaWCobfLhz-LFaGL4SgrQ6qzkaBjga3LT9oq+8kS1yfbca6qBqGqCaCDyF-AKhggKTUhAg4jxBDg4AxhSC11IhBAVTQi+aqqBazD0KIhdza6sKCbfD8BjaJC2EMCZDKDudG7iCgL1j26AQu6e6ahWSltBA1brT28a6Z866OhnyPBV6iDm6Qg96+6ngDbNdvaUR39bc1BHguR2Bx9R6NKwypKIyQDsjoyBbHbjrnakzXaX6XD5c-66sfjsyvbA78y9LTcHqA7G8g6Xr86nKayaA6yVivcmyHKkbnLwrUaS6o9k6vLU7wTobM7Ybs7Ar28SG462bi7uzS6hAMa4rUSUHErWrMdEN+7sA9sjw1J2BSTJgJkHA5AiDmYbiOo+SwHcrcyxSxgbhmZ9SOkplW1AcDgr8kCF59BiEnhB7yq+QULqq3Bx6hHyDIBcLYV8BJGWCibqYskO5ib9kBTMCtG8CDTdGySKgu6jHHJTHD7LTerbH97nHtJpHqY5GKFtzvH4bZqPSeL387Dvs18Lbf8raAGdrIywCHbFKEyIGVL281K+8JLMyEHtLMH+Hfa0H-aKLnqvCcHQrw78HI7CHGz7LXq2HyGuzFy4FqHC9aH07IgGGp8mHUmWGBmC6yGUbhnQaeHK7sbGSkqJ78aL6xGTzQQXFqdOKVaW5e7hHr6kn8A8RDkDTwgIUi6sSVGxFMTvKwBMSmRzGkKKqNSR7cmx7arBjLz9ljTqZqSSSyTW6uDbi9T-GWS+6Ln-BozXComAXhC2LNR+gedBHtGznyCEWDAn75qeS6AmrMq0Tmsan-8CmbbdrgGDqOgjqTqoHkHe93a6jPb0noHe8CzmnHquW2nLCFncGPrljbKiH+mOmAbC6E60auGxmK9IbzaYaZmp6c6wAEbY7Fn47XLOGlzy6VzeH1zGnNnBHJ6z7p7dnSWZdOyZjxB3t8N1tJhWgWFelb6oKKLMTd6Nh6CGguqB9PWHlmZoTtbaWoyrn2J9U8HshbWxhgZxTlF4AtI4AssqxVkvAPmyqvnLH+a-mhb5d+rzW1WCSrWaBBGXXOxgnbXW4HWRAnWkWFgaLbGzWxyi2JBkQyA8jBGeTA2a2VyCXZrVcL8XFigAA1AuGwe-RwR9CfIAA)
+[Öffnen Sie diese Überprüfung im TypeSafe-Playground →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAM4CeZKCcA+omWQIYDmCpBpAmhDPlhQAnZlBT5qQmGJhCEYfGGYpm+AGZCIcRdHjIUZAHT4ASghSyk+CEgA2FfADdmtmAjISYABy8QhNBQAjBxQACwR8GmxjADEIW1sIAHd8ZiQHZ1cItT84ZQkvBCgASzVi+XxgyPCJKHC86yF8YoN1ctsFMHcoIWKvFGKbI1IAGnxSYqRJaQGbTnGQAFFsETFqiOmZOQU5KD8FDS1q4o9IWERUUYWyPiEoBDoolHnSAGUAaz7IiHw91H18B8vigfrAhHJUPgvGwIkhmI5iqxlIMkMRiKj0QBtfAAXQAFKEUCgvGRcAB6MlJKmGdIwQzyGBkgCUaIxSFeCGYd1CgJaHHRrOx+MJxNJFKpSRpFDpDOZrNZ+HwACp8NiAIJQZhdODFKBkYVEknkynU2n0sCM0Ra2i6oyEuC2FnoxUq9VgHVMFH6gmGsUmyVm2Vaj1kL2Ge2OhXK1Wmdyc7kG0XGiVSmUWslyMjxurhlAOp1WaPYgCqSGKjgQQlDKAcABlSghE0bxabpebGbYG7n81HXfg1YE+Cgm36U4H08xBzAUN3IwL52y1Ql8AA5bjF+XogDEioAshBAsVbBEV-DEcibOMF0KfUmWwG27KC6yOVy6ryaJvC66NdadXqR2TVs00tTVtVtWcCxdVU1XdE5QyGQD71TdsyWDeCwwjKCizMLM31CJD-RQ2VM2zUJIN7VVS3LStqzrBtCLHR9007NQEAo50iwHIdGOA1DJyHDi2S-JdbFXdcvwASSQHJ1D8L9oIAIVEd5vnwPJJnU5AYEo6TZJyJoFMVItXgsLpUG9EVmyI8dGWoGBzIMITjKLGJRBgWwa14h8QLJNR3M8ihnOMn9XDgMtvOIicwrLYLoMxRY4C8RIKAQdxItsslaGSiBUvcOKiwAYS0OAYDLLzb2spjfL2OBSvKoKsK-L9MVrCBWHwaSm2NUItHYzLn3RPSfgMozXVMhz9Es30gJ81D7Mcu08znb9VTc2BAoy5jGX8jaa2C0L4AiyrRz4oMYuKA7VUSnK8umu8bO2rKkpStKlp7TjXWKuqypaCgtpqkrfv2pqFxatqOq6k6er6qLGUG9kyI-CJX25L8d3wRYKws-BCpcZAlEMhdUffLGpqvRcfHsWMs2eBd4u46d1kx7HWjx48kEJ3FoeQzLste9wM3cW57jIABaNIwDFrMhARUWyUQMBimYCXObF2r6t1C8pjJJXWBaFx1aBstNVmHXforKs-rFhBWfFzUOcJq6Ert3H8c5rl8DQac-GVsSAdQ-ncreoWblkUXValmW5cFxXlcjo2fpN7WyF1xEDdsRPNdNr0yQt2jrdtqb1fdwmyQsEFehcd6VvisxfH8ZomDcRooU0BEunUNKwECFTuasv0zWj3UEDFpBkkMWqyTILwAH5ijAABeMgoDoU26D5OAADJKDIDel4AdgANgATgADjAMAACZmHPwIoDUAAWAAGZ-H6gM+oGfgBmZ+j+-sAZ9H4ICvgfR+CMvwkx5DEI8NAqxu0dlyL8K4EApF4EIVS1FLZ0QpqyRYABHGALh8AAHkfB+AsA1VInNVw2DFgAEROD0YoOo4Rm1SOINcxZ8Bi1XKg-A6DMFlmwX9JuvwSotACGpDSqBmCTEmB1NIAgkAIk0EgC44gwj5GQHsWQMIPCSzktQWi+BMyFDWAZZonNywLyIWJTIbgDE0OYD4TQXgq40HEZzGYqQ4A2EUcuQoVYhjGGkqkZcWCC41gKKIdwYsxZeFCFQLWYlDF6wzvE9x7URB1QUWMUQAwEQDHcPkmhRccZcgiJqcE5QFBDisakKAewhBKCQPcfASQWg8hcclLWgRjz4FsMwFIzAPBJAQMuUZ+BIlW2ib4TsUAKBjCSKEXUPJJhQFcF0DwgQmYnHwOPcQnYdRSJBM0VoK46GMJXr0Vh2tqEKDVKgYoYsAASXJRlkA0fgAACvEXUQVcHolLMeJg1gwiVk6VmA5EAAj5OXH8GgkI9heAoL0VghI+FoL8EImiszAWiVMYiQkHhSKy3kMYMaqooGETwtyOGcpPqqjxklGAHhdwuIDrKPIXhnZkwsoRcpTkBqUUxMVWRaxiz3SqmddMiKClizZc7AA4jRLlE4pwoDJPrBESBWDO2Kqi9FmKt74DcsUJoUrGw80eoDI1xKUAJ38haxVWZnY-N6M4RZ6rGTuPLKIRqy1sI-iae4UMh5OwVQHrNBlohRbhqPH9Z2MRu69ygO8H1ZItxsXkGm94QlmpMsxCg7FGC3asuladOaT5RUDn4PQ0Ik5ijlq8GywitItQMuDdSxterG3NpZa2ytxoyC9oxXIrtha2TxQAISYkFXbBlnYKyhxFggMkLCYRkg3uXeogtWCJF7rYDdeR2Cp11EMPysTBwQHzXIRwhgACMB8D7f0fo-M+B8ACsB9DBkEcKwJkhFdoIBvfmqe3bMRzoXVNJdNFV3h3XZu9g27ii7toPuw9LgT36I3X8VOnYkDvHkJMQw96n0vrfR+79Z8-0AaAzawjxGlZIEnloRlq0oPzptUKowmVl3rszGunDKGd0QsYNqrDx7kOCwvTrTAZHbYUdfe+z9P66OAcIgpiDoroM8cXfx+DQnEMifXWJvdqcD0HmwzJ89+GN1TBUKwHJimH3PpU9R9T-7NM2smNQNgLmdNFr09GikvG4MruM3cJDp6zNofE5h6z0nYt2cvRQIcMBAjsXI+5qjanaPeYY6Fsk6XpyZfYkF4SAoQBjFICveozB5gkBAFkoJxSyBNdIHIfWkhtZ0AgIUJAdAlCfjwPgZr2zmH9BRC8EAaAagjYiFo8Q3WTjCHuQN5AHhLEQvUC4MSWZGBwOMLuYsrw0CVAiJpXbBk8jiDqrrMAJWKAvdiH4AQmBmAvQQGMSxqg9gJAQOwBpu2r7Pyvo-MWYOr5ftqL1eI+BUpcjGC0dSDrLsSD6mEBRgzijEfwM-E+ZJn5frJNDx+xgzAWCEFYVQ-S0iqUkDj0oiO+CpDkPgMqZBZDsSuKQAYKBjyzbMD19b7CyHIHwPQ5QHAasLBrIUWbTO9WkAAL61fAN0Xo025hjYm1rvoZtZtqkqL0BAahFAG511YCAFvdurd6+wzbVhFtvaaFgL7yUfv4AAOQi7WyIJ3g3tvvZu-tiQGHjFCB94YPnIABdC7G6QehVujdy-5xQRXSfyDCAUWr9XCw5CEItfIeYmIutA4D3153w2Zdx8m9rtPOINcJ9l1wEA-vHcogl6idP8fM9t4WAeAAVkUZ4IAC+kEEKsNPBBmsO7Fyifrg3a+jfb-X1PM3s+d8X5eZ3Iemhh+XId9wcD89y5a5oJKBgMDYDG0QUgdB+uW320-3AuBh8OXYJ1-vWf2-jw8jjz82EBmC9Fm0kg8Gxw8GnwKQqF2H2GoSsWaV2HEBgLEBRB4V4RuEQCcBcBbi528AbikSqF2zDmi1bkOS8VuxxzOVILqFoGYDGCLxgBLwUEmFu3uRDBx3eySDUVYDGHe2wOyHaAUEbQSGkEmBlwUHiUx3OQkF6g8iCAiG6BcCkLUlUC+S5DgXUggC6FsFnjj2YTgWVh-xAMH35xqHgJaTESUQ2T8BQI+3W3QN1w138lsCzFm3tyKAQP2X+3sLH0cJny31V0nxAAX0DyXxr0W3f0nCzDaQeF4P8VMIH1mwANsCAMcykGcKmB-zKAmTADoBniKB-2hDCFm3COrxX0WzjwV3MJz16BVz7wb0Ny33b3mwiEW2qHyAqKDy2zkkPxqDcIO0j2O3wFO3Owx2u0GNyHyAe0vme1ezNXew92+1+3ez8MB2BymIiHJyh3B1h3qwgARyRyEBR3u3Ryy0x0QGxz1Vx3x0J2J1J3J0p3MEsFSEqCGSIwkFz1uJZ1K3ZwiAILkFjz72YNYPmDMNCLQICDoDyI6FmzjxkToEIVP1aIWHaPwAAANoT5BYSRDMSxFsoawxgkAPJbABCmglEiSHAAdjxsjjB6EIB3BmYyD2kngvEVBtirEOD2FdtMS4SCiiioACTmissyAxg8hPhbjdtqTTF3APJxBEi9UDCJ8NcjDKwTC9d+cpA6jVAHEIgkgpklSD0HAtBJFS8+83CPDs85BqcyxbjDlVlfiPBkCx988Ndmjrd384REBhtugGATg7s6hki-8Fg0iMjNgzYOstSQABTCjzESjlBQhZtPS08W8Ujs9ldWAN8bkWjdd28TdAgzcLdUyMDbdmYeiyzBtFAZc3cPtPdjwxg-dK8u899g9+jmYhiI8jtKwY848wTtgISdSoSVhYCCiBThcWzd8bd2ydtBjw8T8o9ES5EhsUTqA0Tk8mTICahsTRyxBcSBSCTnUxIzkgyeQbsRCOEsTSjQgCTQ8dzSybACSuT+SRD4yihMTZ5Oo7cHzN8nzCTr8ll8BP8wBgc2AVzqBmZMSbyCSXAbBedVSFh1Sq5TCdTPCdycTxz8SdBmTKCzzOzLyfSIh3sWgPBMTHykBMS48rS6i+TMK8T8iCSzzmSLz8iDkvsIhDFyK-zKL3SFgKL39aiAzNCUBgyYzajUi+B0i+9gCsiozci3yhTEyyjs8KKaiMz28sycyptZ8FhCzizLdczrdrAfyIhKy2zJdXclj3dPtVjfcd8IiLKpgOyj9hiezo8QSNcByLSCBISNd6KJzt8pzHKZy+i5zsgFyRjKxlzJhkTHFdLNyWKMK9yYTDynBBghlPE+TaiRSighltgQcdy4yhTPy1c1TehjDGtxK0Ls86KUqDzsKER4gZdtyOi8rKkFBMScrqLq5aLkqnDUrsK-hbtICfhdsuhNkOqsTuqJ9QiBLcAyo5BRkbBJxE858M9QzSBwyZLMjQChgFL8j3yoBlLkzVKeL1LNr6i88mjzrs99LygSyeKTKKzgqNtqyrK4gbKGzvdmzRcQrrBZz7yIrj8oqPL+yEBi9Byxs-KFgAqRDJy-q3qwqga9sQb3KYrVz4qNyQAICoK4bGLrAkAltG1xBVAlqbg4R+kIggkKaOkpKFBKDG0KxAixyXLVkyLirzFSrELSBkLNT1r48ar28ybOQKbVrqbaJLwkh6aYVxAmblD6qFAoDcCsger3C+qFaBqMD9lyaVqqa+LSB5qxDXASg2EfLxsNq6jtqNdZK9qciYzObiiYybyUzbr0zLqtKbqjKEqQB7rzdDKdKyzTK5TEbeiXdazrL6y7Lfqq8w6D9OzIr3K+zQSIaWCobfLhz-LFaGL4SgrQ6qzkaBjga3LT9oq+8kS1yfbca6qBqGqCaCDyF-AKhggKTUhAg4jxBDg4AxhSC11IhBAVTQi+aqqBazD0KIhdza6sKCbfD8BjaJC2EMCZDKDudG7iCgL1j26AQu6e6ahWSltBA1brT28a6Z866OhnyPBV6iDm6Qg96+6ngDbNdvaUR39bc1BHguR2Bx9R6NKwypKIyQDsjoyBbHbjrnakzXaX6XD5c-66sfjsyvbA78y9LTcHqA7G8g6Xr86nKayaA6yVivcmyHKkbnLwrUaS6o9k6vLU7wTobM7Ybs7Ar28SG462bi7uzS6hAMa4rUSUHErWrMdEN+7sA9sjw1J2BSTJgJkHA5AiDmYbiOo+SwHcrcyxSxgbhmZ9SOkplW1AcDgr8kCF59BiEnhB7yq+QULqq3Bx6hHyDIBcLYV8BJGWCibqYskO5ib9kBTMCtG8CDTdGySKgu6jHHJTHD7LTerbH97nHtJpHqY5GKFtzvH4bZqPSeL387Dvs18Lbf8raAGdrIywCHbFKEyIGVL281K+8JLMyEHtLMH+Hfa0H-aKLnqvCcHQrw78HI7CHGz7LXq2HyGuzFy4FqHC9aH07IgGGp8mHUmWGBmC6yGUbhnQaeHK7sbGSkqJ78aL6xGTzQQXFqdOKVaW5e7hHr6kn8A8RDkDTwgIUi6sSVGxFMTvKwBMSmRzGkKKqNSR7cmx7arBjLz9ljTqZqSSSyTW6uDbi9T-GWS+6Ln-BozXComAXhC2LNR+gedBHtGznyCEWDAn75qeS6AmrMq0Tmsan-8CmbbdrgGDqOgjqTqoHkHe93a6jPb0noHe8CzmnHquW2nLCFncGPrljbKiH+mOmAbC6E60auGxmK9IbzaYaZmp6c6wAEbY7Fn47XLOGlzy6VzeH1zGnNnBHJ6z7p7dnSWZdOyZjxB3t8N1tJhWgWFelb6oKKLMTd6Nh6CGguqB9PWHlmZoTtbaWoyrn2J9U8HshbWxhgZxTlF4AtI4AssqxVkvAPmyqvnLH+a-mhb5d+rzW1WCSrWaBBGXXOxgnbXW4HWRAnWkWFgaLbGzWxyi2JBkQyA8jBGeTA2a2VyCXZrVcL8XFigAA1AuGwe-RwR9CfIAA)
 
 * TypeSafe konzentriert das Signal auf die Felder, die tatsächlich falsch sind.
 * Unsere Ergebnisse sind kalibriert: hoch bei dem Feld, das falsch ist, niedrig bei dem Feld, das korrekt ist, mittel bei einem Feld, das seltsam aussieht, ohne eindeutig falsch zu sein
-* Das ist es, was dir ein typesafe-Verifier im Vergleich zu einem stumpfen „Ist das Ganze gut?“-Richter bringt
+* Dies ist das, was ein typesafe verifier im Vergleich zu einem stumpfen „Ist das Ganze insgesamt gut?“-Richter bietet
 
-## Schritt 4: die Eskalations-Schleuse
+## Schritt 4: die Eskalations-Schwelle
 
 * Jetzt wird auf **`any_flag`** geprüft: Eskalation, wenn *irgendein* Feld-Flag `FIRE_T` überschreitet (0,7, oben festgelegt und mit dem `<== FIRES`-Marker in Schritt 3 geteilt)
-* Dies ist ein `max`-artiger Gate (Eskalation, wenn *irgendein* Feld auslöst), kein Mittelwert, sodass ein einzelnes sicheres rotes Flag ausreicht, anstatt in der Durchschnittsbildung unterzugehen
+* Dies ist ein `max`-Stil-Gate (Eskalation, wenn *irgendein* Feld auslöst), kein Mittelwert, sodass ein einzelnes sicheres rotes Flaggen-Signal ausreicht, anstatt in der Stille zu verpuffen
 
 ```python
 # any_flag is a per-field gate: the holistic __overall__ head is shown above but not part of it
@@ -565,7 +566,7 @@ any_flag gate (threshold 0.7): ESCALATE
   fired: description::off_target  (P=0.85)
 ```
 
-## Schritt 5: Eskalation an das Reasoning-Modell
+## Schritt 5: an das Reasoning-Modell eskalieren
 
 Da ein Signal ausgelöst wurde, zahlen wir für das starke Modell (`gpt-5.5`, `reasoning_effort="high"`)
 
@@ -593,51 +594,53 @@ field-level diff (mini -> final):
 ```
 
 * **Die Verbesserung**
- * Das Reasoning-Modell lässt die erfundene `description` weg und gibt stattdessen `""` zurück
- * Es erkannte, dass die Seite niemals ein Registrierungsdatum beschreibt, und lehnte es ab, eines zu erfinden
- * Die Kaskade verwandelte eine selbstbewusste, schema-gültige Fälschung in ein ehrliches leeres Feld
- * Und sie verwendete nur Reasoning-Modell-Dollars für diesen einen Punkt, *weil der Verifier es anwies*
+ * Das Reasoning-Modell lässt die erfundene `description` weg und gibt `""` zurück
+ * Es erkannte, dass die Seite niemals ein Registrierungsdatum beschreibt, und verweigerte die Erfindung eines solchen
+ * Die Kette verwandelte eine selbstbewusste, schema-gültige Fiktion in ein ehrliches leeres Feld
+ * Und es gab nur Reasoning-Modell-Dollar für diesen einen Punkt aus *weil der Verifier es dazu aufforderte*
 
 ## Schritt 6: So sieht das bei 100 Prompts aus
 
-* **Dies sind interne TypeSafe-Ergebnisse**, die mit der oben genannten allgemeinen Methode erzeugt wurden:
- * dieselbe `extract → verify → escalate`-Schleife, `gpt-5.4-mini → gpt-5.5-reasoning`,
- `any_flag`-Tore über den pro-Feld-Köpfen, ausgeführt an 100 scrapegraphai-Prompts
- * die kostengünstige Extraktion jedes Elements wird von TypeSafe bewertet; der Schwellenwert des Tores („Cut“) wird von 0→1 durchgelaufen, und jede daraus resultierende Konfiguration wird im (Kosten, Qualität)-Raum dargestellt
- * das Diagramm ist eine historische Momentaufnahme; seine Kosten wurden nicht zum oben angegebenen aktuellen Jev-Satz neu berechnet
+* **Dies sind interne TypeSafe-Ergebnisse**, erzeugt mit der allgemeinen Methode oben:
+ * die gleiche `extract → verify → escalate`-Schleife, `gpt-5.4-mini → gpt-5.5-reasoning`,
+ `any_flag`-Tore über den pro-Feld-Köpfen, ausgeführt über 100 scrapegraphai-Prompts
+ * die kostengünstige Extraktion jedes Elements wird von TypeSafe bewertet; der Tor-Schwellenwert („cut“) wird
+ von 0→1 durchgescannt, und jede daraus resultierende Konfiguration wird im (Kosten, Qualität)-Raum geplottet
+ * das Diagramm ist ein historischer Schnappschuss; seine Kosten wurden nicht zum
+ oben angegebenen aktuellen Jev-Satz neu berechnet
 
 <img src="/img/cases/sde-cascade-pareto_100prompts.png" alt="internal results: cost/quality frontier over 100 prompts" width="1299" height="655" data-path="cookbooks/sde_cascade/pareto_100prompts.png" />
 
 * so liest du es:
  * **schwarze Diamanten** = die vier Modelle laufen eigenständig (die Kosten steigen mit der Fähigkeit; das
- stärkste, `gpt-5.5-reasoning`, befindet sich oben rechts bei ≈0,81 Qualität für ≈\$0,10/Extraktion)
- * **blaue Punkte** = die Kaskade an vielen Schwellenwerten; die gestrichelte Linie ist die **pareto-
- frontiere**
- * die Kaskadenfront liegt **oben und links von jedem einzelnen Modell**: das Durchlaufen des Tors bringt
+ stärkste, `gpt-5.5-reasoning`, sitzt oben rechts bei ≈0.81 Qualität für ≈\$0,10/Extraktion)
+ * **blaue Punkte** = die Kaskade bei vielen Schwellenwerten; die gestrichelte Linie ist die **pareto
+ effiziente Grenze**
+ * die Kaskaden-Grenze liegt **oben links von jedem einzelnen Modell**: das Durchlaufen des Tors bringt
  dir die meiste Qualität des Top-Modells zu einem Bruchteil seiner Kosten
  * die günstige Stufe erledigt die einfachen Items für fast nichts, und nur die markierten Items zahlen für
  das Reasoning-Modell
 
-## Anhang A: Was ein guter Verifizierungssignal ausmacht
+## Anhang A: Was ein guter Verifier-Signal ausmacht
 
 * die Kaskade ist nur so gut wie ihr Verifizierer; was ein nützliches Signal von einem
  nutzlosen unterscheidet:
  * **Eng und fundiert.**
- * eine überprüfbare Ja/Nein-Prüfung zu einem einzelnen Feld im Vergleich zur Quelle
- (z. B. „Fehlt dieser Wert in der Quelle?“), nicht eine vage „Ist diese Extraktion gut?“
- * vage Fragen führen zu schwammigen, nicht kalibrierten Werten
+ * eine überprüfbare Ja/Nein-Prüfung zu einem Feld im Vergleich zur Quelle (z. B. „ist dieser Wert in
+ der Quelle nicht vorhanden?“), nicht eine vage „ist diese Extraktion gut?“
+ * vage Fragen ergeben schwammige, nicht kalibrierte Scores
  * **Schlecht = TRUE, mit expliziten Kriterien.**
- * formuliere jede Frage so, dass der Fall der *Eskalation* der `true`-Fall ist, und lege fest,
- was `true`/`false` bedeuten
+ * formuliere jede Frage so, dass der *escalate*-Fall der `true`-Fall ist, und gib an, was
+ `true`/`false` bedeuten
  * **Pro-Feld, dann aggregiere mit `max`.**
  * ein pro-Feld-Flag lokalisiert den Fehler und bleibt sparsam und stark
- * `max` („irgend ein Flag löst aus“) stellt sicher, dass ein einzelnes sicheres Rot-Flag eskaliert, anstatt
+ * `max` („any flag fires“) stellt sicher, dass ein einzelnes sicheres rotes Flag eskaliert, anstatt
  in Stille zu verblassen
  * **Unabhängig und kostengünstig.**
  * ein dedizierter Verifizierer (hier, TypeSafe), der die Ausgabe beurteilt, fängt die eigenen
  blind spots des Extraktors ab
- * er muss kostengünstig sein, sonst bleiben keine Einsparungen übrig, die man einfangen könnte
- * **Trennscharf / kalibriert.**
+ * er muss kostengünstig sein, sonst bleiben keine Einsparungen zu erfassen
+ * **Trennend / kalibriert.**
  * ein gutes Signal hat hohe Werte bei echten Fehlern und niedrige bei korrekten, sodass eine einzelne Schwelle
  akzeptieren vs. eskalieren sauber trennt
- * diese Trennschärfe ist es, was die Pareto-Kurve nach oben-links schiebt
+ * diese Trennung ist es, was die Pareto-Kurve nach oben-links schiebt

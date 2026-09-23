@@ -1,28 +1,32 @@
 ---
-title: "Classificando trechos de RAG"
-description: "Avalie cada trecho recuperado com uma única solicitação TypeSafe e, em seguida, decida no código quais deles são encaminhados ao modelo de resposta. Por exemplo, mantenha e sinalize aqueles que contradizem a pergunta, e descarte aqueles que contêm instruções ocultas ou tentativas de injeção de prompt."
+title: "Classificando passagens de RAG"
+description: "Avalie cada trecho recuperado com uma única solicitação TypeSafe, e depois decida no código quais deles chegam ao modelo de resposta. Por exemplo, mantenha e sinalize aqueles que contradizem a pergunta, e descarte aqueles que carregam uma instrução oculta ou injeção de prompt."
 section: cases
 order: 140
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/classifying_rag_passages"
 translatedFrom: en
 ---
-A etapa de recuperação de um pipeline RAG classifica os trechos com base no quanto seu texto se assemelha à consulta e envia os principais para um modelo de linguagens. Esses trechos podem incluir dados ruidosos ou irrelevantes ou, pior ainda, agrupar fatos contraditórios, injeções de prompt ou instruções do modelo junto com o que é nominalmente evidência para auxiliar na geração de uma resposta.
+A etapa de recuperação de um pipeline RAG classifica os trechos com base em quão semelhante é a sua redação
+à consulta, e entrega os poucos primeiros a um modelo de linguagem. Esses podem incluir trechos ruidosos ou
+irrelevantes, ou, pior ainda, podem agrupar fatos contraditórios,
+injeções de prompt, ou instruções do modelo junto com o que é nominalmente evidência para auxiliar na
+geração de uma resposta.
 
-Entre a recuperação e a geração, adicione uma segunda etapa que classifique cada trecho recuperado. Para cada um, envie ao TypeSafe uma solicitação contendo várias perguntas sobre o par consulta–trecho: ele é relevante, afirma algo utilizável em uma resposta, contradiz algo que a consulta dá como certo e está tentando instruir o modelo. As respostas a essas perguntas decidem o que acontece com cada trecho, com lógica de ramificação simples: adicioná-lo ao prompt como evidência, adicioná-lo ao prompt como informação conflitante ou descartá-lo. Evidências e conflitos chegam em blocos separados, para que o gerador possa reagir de forma apropriada.
+Entre a recuperação e a geração, adicione uma segunda etapa que classifique cada trecho recuperado. Para cada um, envie ao TypeSafe uma solicitação contendo várias perguntas sobre o par consulta–trecho: ele é relevante, afirma algo utilizável em uma resposta, contradiz algo que a consulta dá como certo e está tentando instruir o modelo. As respostas a essas perguntas decidem o que acontece com cada trecho, com lógica de ramificação simples: adicione-o ao prompt como evidência, adicione-o ao prompt como informação conflitante ou descarte-o. Evidências e conflitos chegam em blocos separados, para que o gerador possa reagir de forma apropriada.
 
-Para exercitar o pipeline, executamos-no sobre algumas perguntas complicadas contra documentação real de autenticação cheia de páginas que se parecem, e um trecho plantado carregando uma injeção de prompt. Duas perguntas contêm suposições falsas, que são sinalizadas antes de serem entregues ao modelo que gera respostas.
+Para exercitar o pipeline, executamo-lo sobre algumas perguntas complicadas contra a documentação real de autenticação, repleta de páginas que se parecem, e um trecho inserido contendo uma injeção de prompt. Duas perguntas contêm suposições falsas, que são sinalizadas antes de serem entregues ao modelo que gera respostas.
 
-O pipeline, na ordem em que as seções o constroem: o corpus de 81 passagens, uma busca por similaridade cosseno que mantém as 12 melhores passagens por consulta, as quatro perguntas `Noul` enviadas ao TypeSafe para cada uma dessas passagens, os limiares em `route()` que rotulam cada uma, o prompt montado a partir de blocos separados de evidência e conflito, e as respostas que `claude-sonnet-5` escreve a partir dele.
+O pipeline, na ordem em que as seções o constroem: o corpus de 81 passagens, uma busca por similaridade cosseno que mantém as 12 melhores passagens por consulta, as quatro perguntas `Noul` enviadas ao TypeSafe para cada uma dessas passagens, os limiares em `route()` que classificam cada uma, o prompt montado a partir de blocos separados de evidência e conflito, e as respostas `claude-sonnet-5` que ele escreve a partir dele.
 
 <!-- mermaid flowchart converted to equivalent tables (this site loads no chart library) -->
 
-*Direção do fluxo: ES-D*
+*Direção do fluxo: LR*
 
 | Nó | Descrição | Grupo |
 | :--- | :--- | :--- |
-| `CALL` | uma solicitação por trecho recuperado | uma solicitação por trecho recuperado |
-| `N` | Noul: / · relevante? / · estados usam evidências utilizáveis? / · contradiz a premissa da consulta? / · instrui o modelo? | uma solicitação por trecho recuperado |
+| `CALL` | um pedido por trecho recuperado | um pedido por trecho recuperado |
+| `N` | Nouls: / · relevante? / · usa evidências utilizáveis? / · contradiz a premissa da consulta? / · instrui o modelo? | um pedido por trecho recuperado |
 | `GEN` | uma chamada LLM | uma chamada LLM |
 | `INC` | evidência aceita | uma chamada LLM |
 | `CON` | evidência conflitante | uma chamada LLM |
@@ -30,7 +34,7 @@ O pipeline, na ordem em que as seções o constroem: o corpus de 81 passagens, u
 | De | Condição | Para |
 | :--- | :--- | :--- |
 | `CALL` | — | `R` |
-| `R` | evidências utilizáveis | `INC` |
+| `R` | evidência utilizável | `INC` |
 | `R` | nega a premissa | `CON` |
 | `R` | injeção, fora do tópico, / ou nada utilizável | `DROP` |
 | `GEN` | — | `ANS` |
@@ -42,13 +46,11 @@ O pipeline, na ordem em que as seções o constroem: o corpus de 81 passagens, u
 pip install anthropic openai matplotlib ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-Defina `TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY` e `OPENAI_API_KEY`. Usamos TypeSafe para pontuar
-cada trecho recuperado, OpenAI para incorporar o corpus para a etapa de busca, e Claude para escrever
-a resposta final a partir do que sobrevive à pontuação.
+Defina `TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY` e `OPENAI_API_KEY`. Usamos TypeSafe para pontuar cada trecho recuperado, OpenAI para incorporar o corpus para a etapa de busca, e Claude para escrever a resposta final a partir do que sobreviver à pontuação.
 
 Nenhum dos três precisa de uma chave para reproduzir esta página. `json_cache.json` vem com o
-cookbook e reproduz todas as chamadas gravadas, portanto, uma nova renderização não custa nada. Exclua o arquivo para
-executar o pipeline ao vivo. Os números aqui vieram do `jev-1.12` e
+cookbook e reproduz todas as chamadas gravadas, então um novo render não custa nada. Apague o arquivo para
+executar o pipeline ao vivo. Os números aqui vieram de `jev-1.12` e
 `claude-sonnet-5` em 2026-08-27.
 
 ```python
@@ -96,21 +98,21 @@ embedder = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "cache-only"))
 json_cache = JsonCache(Path("json_cache.json"))
 ```
 
-## Carregar o corpus de documentação
+## Carregar o corpus de documentos
 
 O arquivo do corpus `corpus.json` contém 81 passagens. Copiamos 80 delas diretamente da documentação de autenticação do Supabase no commit `2440b06`, uma passagem por título, na íntegra e utilizadas sob a licença Apache 2.0:
 [https://github.com/supabase/supabase/tree/2440b06/apps/docs/content/guides/auth](https://github.com/supabase/supabase/tree/2440b06/apps/docs/content/guides/auth)
 
-Cada passagem carrega `id`, `title`, `text` e `source_type`, e cada solicitação envia todas
-as quatro. Quase-acertos preenchem o conjunto. Rotação, expiração, sessões e chaves de assinatura têm cada um
-sua própria página, e essas páginas se parecem. Rotação de token de atualização e rotação de chave de assinatura JWT
+Cada trecho carrega `id`, `title`, `text` e `source_type`, e cada solicitação envia os
+quatro. Quase-acertos preenchem o conjunto. Rotação, expiração, sessões e chaves de assinatura têm cada um sua
+própria página, e essas páginas se leem de forma semelhante. Rotação de refresh-token e rotação de chave de assinatura JWT
 são coisas diferentes descritas em palavras quase idênticas.
 
-Nós mesmos escrevemos o último, `forum-injection`, marcado `community_forum`: ele parece
-uma resposta comum de fórum até o seu último parágrafo, que é uma instrução direcionada ao
+Nós mesmos escrevemos o último, `forum-injection`, marcado `community_forum`: ele se parece com
+uma resposta comum de fórum até o seu parágrafo final, que é uma instrução dirigida ao
 modelo.
 
-Também escrevemos duas das seis consultas para afirmar uma premissão que os documentos contradizem, de modo que as rotas de injeção e conflito tenham ambas algo para capturar.
+Também escrevemos duas das seis consultas para afirmar uma premissa que os documentos contradizem, de modo que as rotas de injeção e conflito tenham algo para capturar.
 
 ```python
 PASSAGES = json.loads(Path("corpus.json").read_text(encoding="utf-8"))
@@ -146,7 +148,7 @@ A session is represented by the Supabase Auth access token in t...
 ## Recuperar os principais trechos
 
 Classifique as passagens por similaridade cosseno sobre embeddings, usando `text-embedding-3-small` em
-256 dimensões, e mantenha os melhores `TOP_K = 12` para cada consulta. Vetores curtos mantêm o
+256 dimensões, e mantenha o melhor `TOP_K = 12` para cada consulta. Vetores curtos mantêm o
 cache enviado pequeno, e as chamadas de embedding são armazenadas em cache com tudo o mais, então os
 vetores viajam dentro de `json_cache.json`.
 
@@ -194,7 +196,7 @@ QUERIES = [
 ]
 ```
 
-Os 12 trechos recuperados para a primeira consulta:
+As 12 passagens recuperadas para a primeira consulta:
 
 ```python
 for passage in retrieve(HEADLINE_QUERY, TOP_K):
@@ -221,10 +223,10 @@ for passage in retrieve(HEADLINE_QUERY, TOP_K):
 
 A publicação do fórum que carrega a instrução injetada, `forum-injection`, ocupa o 1º lugar com 0,584.
 O trecho que refuta a premissa, `sessions-01`, ocupa o 7º lugar com 0,509. Todas as 12 pontuações
-ficam entre 0,584 e 0,455, uma margem muito estreita para separar o trecho que corrige
+ficam entre 0,584 e 0,455, uma variação muito estreita para separar o trecho que corrige
 a consulta daquele que tenta sequestrar a resposta.
 
-## Faça quatro perguntas sobre cada trecho
+## Faça quatro perguntas sobre cada passagem
 
 Coloque a consulta e um trecho no estado juntos, para que cada pergunta seja sobre o par
 em vez de apenas o trecho. Formato:
@@ -243,12 +245,12 @@ em vez de apenas o trecho. Formato:
 
 Use as mesmas quatro perguntas para cada consulta. Apenas o estado muda entre as chamadas.
 
-Quatro `Noul` perguntas, e o que cada resposta direciona:
+Quatro `Noul` perguntas, e o que cada resposta impulsiona:
 
-* `is_relevant`: o piso de relevância.
+* `is_relevant`: o limite de relevância.
 * `contains_answer_evidence`: incluir ou descartar.
 * `contradicts_query_premise`: promove para o bloco de conflito.
-* `contains_prompt_injection`: exclui completamente.
+* `contains_prompt_injection`: exclui categoricamente.
 
 Nenhum dos quatro questiona se deve incluir a passagem. Essa decisão está no código abaixo,
 onde alterá-la significa editar um número em vez de reformular uma pergunta.
@@ -302,14 +304,14 @@ def gate_all(query: str, passages: list[dict]) -> list[dict]:
         return list(pool.map(lambda passage: gate(query, passage["id"]), passages))
 ```
 
-## Encaminhe cada trecho no código
+## Roteie cada passagem no código
 
 Cada resposta retorna como uma probabilidade, e há muitas maneiras de transformar quatro delas em uma única decisão. Uma sequência simples de comparações funcionou aqui. Teste as quatro probabilidades contra seus limites em uma ordem fixa e pare na primeira correspondência. Essa correspondência rotula a passagem, e o rótulo decide o que acontece com ela: evidência no prompt, um conflito no prompt, ou descartada.
 
 Os testes, em ordem:
 
 1. `contains_prompt_injection > 0.70` -> excluir
-2. `contradicts_query_premise > 0.70` -> evidência conflitante
+2. `contradicts_query_premise > 0.70` -> evidência\_conflitante
 3. `is_relevant < 0.45` -> excluir
 4. `contains_answer_evidence > 0.55` -> incluir
 5. caso contrário, excluir
@@ -317,7 +319,7 @@ Os testes, em ordem:
 A injeção vem primeiro porque é uma decisão de segurança, não uma de evidência. O teste de contradição vem antes do teste de evidência porque um trecho que nega a premissa da consulta geralmente afirma algo utilizável também; testado ao contrário, ele cairia no bloco aceito em vez do de conflito.
 
 
-> **Nota** — Escolhemos estes quatro números para este corpus. Tratá-los como um ponto de partida, não como padrões. Alterar um é barato: ⦇0⦇ mantém os quatro e ⦇1⦇ lê apenas as respostas armazenadas, portanto, reencaminhar cada passagem não custa chamadas de API.
+> **Nota** — Escolhemos estes quatro números para este corpus. Tratá-los como um ponto de partida, não como padrões. Mover um é barato: `THRESHOLDS` contém todos os quatro e `route()` lê apenas as respostas armazenadas, portanto, reencaminhar cada passagem não custa chamadas de API.
 
 
 ```python
@@ -381,9 +383,9 @@ exclude                0.04  0.05   0.10  0.16  signing-keys-55-b
 exclude                0.04  0.05   0.10  0.13  signing-keys-54-a
 ```
 
-A questão de contradição de premissa pontua `sessions-01` em 0,92 e a envia para o bloco de conflito. Relevância lê 0,49 e evidência da resposta 0,51, então esses dois sozinhos teriam rebaixado.
+A questão de contradição de premissa pontua `sessions-01` em 0,92 e a envia para o bloco de conflito. Relevância lê 0,49 e evidência da resposta 0,51, então esses dois sozinhos teriam rejeitado.
 
-A similaridade classificada `forum-injection` em primeiro lugar e sua relevância ultrapassa o limite de 0,71. A pontuação de injeção de 0,99 é o que a rebaixa.
+Similarity ranked `forum-injection` first and its relevance clears the floor at 0.71. The injection score of 0.99 is what drops it.
 
 Nada chega ao prompt como evidência, o que é adequado para uma pergunta construída sobre uma premissa falsa. Abaixo, a mesma tabela para uma consulta que a documentação responde.
 
@@ -410,21 +412,22 @@ include                0.79  0.57   0.06  0.31  sessions-09
 exclude                0.12  0.11   0.07  0.20  sessions-07-b
 ```
 
-Quatro passagens alcançam o bloco de evidências aqui, e a resposta abaixo cita todas as quatro. As linhas são impressas na ordem de recuperação, o que mostra a reorganização: as posições 2, 3 e 4 leem todas *Lifetime of a signing key*, o tipo errado de lifetime nas quase mesmas palavras da própria consulta, e todas as três têm pontuação de 0,08 ou menos em relevância. Três das quatro que foram incluídas estavam nas posições 8ª, 9ª e 11ª. `forum-injection` é excluído novamente em 0,99.
+Quatro passagens chegam ao bloco de evidências aqui, e a resposta abaixo cita todas as quatro. As linhas são impressas em ordem de recuperação, o que mostra a reorganização: as posições 2, 3 e 4 leem todas *Lifetime of a signing key*, o tipo errado de lifetime em quase as mesmas palavras da própria consulta, e todas as três pontuam 0,08 ou menos em relevância. Três dos quatro que entraram estavam nas posições 8ª, 9ª e 11ª. `forum-injection` é excluído novamente em 0,99.
 
 A pergunta de injeção é um filtro, e apenas um. Um trecho que pontua abaixo do
-limiar ainda chega ao prompt, então o prompt do gerador precisa tratar cada trecho como
+limite ainda chega ao prompt, então o prompt do gerador precisa tratar cada trecho como
 texto não confiável, independentemente de sua pontuação. Nada aqui é uma fronteira de segurança.
 
-Uma solicitação por trecho, então o custo escala com `k`. Nenhum trecho é agrupado em uma única solicitação, porque cada pergunta trata de um único par.
+Uma solicitação por trecho, então o custo escala com `k`. Nenhum lote de trechos em uma única
+solicitação, porque cada pergunta é sobre um par.
 
 ## Construa o prompt a partir das evidências aceitas
 
-O TypeSafe pontua os trechos e os rótulos de roteamento os classificam. Um LLM ainda escreve a resposta,
+O TypeSafe pontua as passagens e o roteamento as rotula. Um LLM ainda escreve a resposta,
 aqui `claude-sonnet-5`. Mantenha as evidências aceitas e conflitantes em blocos separados.
 
 Dois blocos permitem que a resposta empurre para trás. Fundi-los em um só e o gerador não tem como
-distinguir uma passagem que responde à consulta de uma que nega sua premissa.
+distinguir um trecho que responde à consulta de um que nega sua premissa.
 
 ```python
 PROMPT = """Answer the query using only the supplied evidence.
@@ -565,10 +568,10 @@ Since this passage is marked as conflicting/unverified evidence rather than acce
 ```
 
 A primeira resposta chegou com um bloco aceito vazio e um trecho conflitante.
-Ela começa com "Não tenho evidências aceitas suficientes", nomeia o conflito e cita
-`sessions-01` sobre os tokens de atualização nunca expirarem, em vez de inventar uma configuração de 30 dias.
+Ela começa com "I don't have sufficient accepted evidence", nomeia o conflito e cita
+`sessions-01` sobre os refresh tokens nunca expirarem, em vez de inventar uma configuração de 30 dias.
 
-O segundo teve 4 passagens aceitas e sem conflito, e cita todas as quatro. Nada da instrução injetada chega ao texto.
+O segundo tinha 4 passagens aceitas e sem conflito, e cita todas as quatro. Nada da instrução injetada chega ao texto.
 
 ## Compare as seis consultas
 
@@ -659,12 +662,12 @@ plt.close(fig)
 
 <img src="/img/cases/classifying-rag-passages-classifying_rag_passages.executed.1.png" alt="output" width="1335" height="525" data-path="cookbooks/classifying_rag_passages/classifying_rag_passages.executed.1.png" />
 
-Cada barra contém as 12 passagens recuperadas para uma única consulta, totalizando 72. Pelo menos dois terços de cada barra são excluídos. Apenas as duas consultas com premissas falsas encaminham algo para conflito, e duas consultas não aceitam nada: a que trata de uma expiração de 30 dias e *como os tokens de atualização são rotacionados?*
+Cada barra contém as 12 passagens recuperadas para uma consulta, 72 no total. Pelo menos dois terços de cada barra são excluídos. Apenas as duas consultas com premissas falsas encaminham algo para conflito, e duas consultas não aceitam nada: a que trata de uma expiração de 30 dias e *como os refresh tokens são rotacionados?*
 
-## Abra no playground
+## Abra-o no playground
 
 Abra o link abaixo para reexecutar uma chamada ao vivo: a primeira consulta contra o trecho que
-encaminhou para o bloco de conflito, mais as quatro perguntas.
+roteou para o bloco de conflito, mais as quatro perguntas.
 
 ```python
 linked = next(r for r in ROUTED[HEADLINE_QUERY] if r["route"] == "conflicting_evidence")

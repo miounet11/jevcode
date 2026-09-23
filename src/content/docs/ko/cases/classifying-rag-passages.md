@@ -1,19 +1,19 @@
 ---
 title: "RAG 구문 분류"
-description: "각 검색된 구절을 하나의 TypeSafe 요청으로 점수 매긴 후, 코드에서 답변 모델에 전달할 구절을 결정합니다. 예를 들어, 질문과 모순되는 구절은 유지하고 플래그를 지정하며, 숨겨진 지시사항이나 프롬프트 인젝션을 포함하는 구절은 제외합니다."
+description: "TypeSafe 요청을 사용하여 각 검색된 구문을 점수 매긴 후, 코드에서 답변 모델에 전달할 구문을 결정합니다. 예를 들어, 질문과 모순되는 구문은 유지하고 플래그를 지정하며, 숨겨진 지시사항이나 프롬프트 인젝션을 포함하는 구문은 제외합니다."
 section: cases
 order: 140
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/classifying_rag_passages"
 translatedFrom: en
 ---
-RAG 파이프라인의 검색 단계는 질의와 어휘적 유사도에 따라 패시지를 순위 매기고, 상위 몇 개를 언어 모델에 전달합니다. 여기에는 노이즈가 많거나 관련 없는 패시지가 포함되거나, 더 나쁘게는 명목상 증거와 함께 모순되는 사실, 프롬프트 인젝션, 또는 모델 지침이 섞여 답변 생성을 돕는 경우가 있을 수 있습니다.
+RAG 파이프라인의 검색 단계는 질의와 어휘적 유사도에 따라 문서 조각을 순위 매기고, 상위 몇 개를 언어 모델에 전달합니다. 여기에는 노이즈가 많거나 관련 없는 문서가 포함되거나, 더 나쁘게는 모순되는 사실, 프롬프트 인젝션, 모델 지침이 답변 생성을 돕기 위해 명목상 증거와 함께 묶일 수 있습니다.
 
-검색과 생성 사이, 검색된 각 구절을 분류하는 두 번째 단계를 추가합니다. 각 구절에 대해 TypeSafe에 쿼리-구절 쌍에 대한 여러 질문을 담은 하나의 요청을 보냅니다: 관련성이 있는지, 답변에 사용할 수 있는 내용을 명시하는지, 쿼리가 전제로 삼는 것과 모순되는지, 그리고 모델을 지시하려는 것인지입니다. 이러한 질문에 대한 답변은 각 구절의 처리 방식을 결정하며, 간단한 분기 논리를 따릅니다: 증거로 프롬프트에 추가, 충돌 정보로 프롬프트에 추가, 또는 삭제합니다. 증거와 충돌 정보는 별도의 블록으로 전달되므로 생성기가 적절하게 대응할 수 있습니다.
+검색과 생성 사이에, 검색된 각 구절을 분류하는 두 번째 단계를 추가합니다. 각 구절에 대해 TypeSafe에 쿼리–구절 쌍에 대한 여러 질문을 담은 하나의 요청을 보냅니다: 관련성이 있는지, 답변에 사용할 수 있는 내용을 명시하는지, 쿼리가 전제로 삼는 것과 모순되는지, 그리고 모델을 지시하려는 것인지입니다. 이러한 질문들에 대한 답변은 각 구절의 처리 방식을 결정하며, 간단한 분기 논리를 따릅니다: 증거로 프롬프트에 추가하거나, 상충 정보로 프롬프트에 추가하거나, 또는 삭제합니다. 증거와 상충 정보는 별도의 블록으로 전달되므로, 생성기는 적절하게 대응할 수 있습니다.
 
-파이프라인을 검증하기 위해, 우리는 실제 인증 문서(페이지들이 유사하게 보이는 자료)와 프롬프트 인젝션이 심어진 식별된 구절을 대상으로 몇 가지 까다로운 질문들을 처리했습니다. 두 질문에는 거짓된 전제가 포함되어 있으며, 이는 답변을 생성하는 모델에 전달되기 전에 플래그가 지정되었습니다.
+파이프라인을 검증하기 위해, 우리는 유사한 페이지들로 가득한 실제 인증 문서와 프롬프트 인젝션이 심어진 식별된 구절에 대해 몇 가지 까다로운 질문을 적용해 실행합니다. 두 개의 질문에는 거짓된 전제가 포함되어 있으며, 이는 답변을 생성하는 모델에 전달되기 전에 플래그가 지정됩니다.
 
-파이프라인은 섹션들이 구축하는 순서대로 다음과 같습니다: 81개 문단 코퍼스, 쿼리당 상위 12개 문단을 유지하는 코사인 유사도 검색, 각 문단에 대해 TypeSafe로 전송되는 `Noul`개의 질문, 각각을 레이블링하는 `route()`의 임계값, 별도 증거 및 충돌 블록으로 구성된 프롬프트, 그리고 이를 바탕으로 `claude-sonnet-5`가 작성하는 답변들입니다.
+파이프라인은 섹션이 구축하는 순서대로 다음과 같습니다: 81개 문단 코퍼스, 쿼리당 상위 12개 문단을 유지하는 코사인 유사도 검색, 각 문단에 대해 TypeSafe로 전송되는 `Noul`개의 질문, 각각을 레이블링하는 `route()`의 임계값, 분리된 증거 및 충돌 블록으로 구성된 프롬프트, 그리고 이를 바탕으로 `claude-sonnet-5`가 작성하는 답변들.
 
 <!-- mermaid flowchart converted to equivalent tables (this site loads no chart library) -->
 
@@ -21,8 +21,8 @@ RAG 파이프라인의 검색 단계는 질의와 어휘적 유사도에 따라 
 
 | 노드 | 설명 | 그룹 |
 | :--- | :--- | :--- |
-| `CALL` | 검색된 구절당 하나의 요청 | 검색된 구절당 하나의 요청 |
-| `N` | Noul: / · 관련성? / · 사용 가능한 증거 상태? / · 쿼리의 전제를 모순하는가? / · 모델에게 지시하는가? | 검색된 구절당 하나의 요청 |
+| `CALL` | 검색된 각 구절당 하나의 요청 | 검색된 각 구절당 하나의 요청 |
+| `N` | Noul: / · 관련성? / · 사용 가능한 증거 상태? / · 쿼리의 전제를 모순하는가? / · 모델에 지시하는가? | 검색된 각 구절당 하나의 요청 |
 | `GEN` | 하나의 LLM 호출 | 하나의 LLM 호출 |
 | `INC` | 수용된 증거 | 하나의 LLM 호출 |
 | `CON` | 상충되는 증거 | 하나의 LLM 호출 |
@@ -42,9 +42,9 @@ RAG 파이프라인의 검색 단계는 질의와 어휘적 유사도에 따라 
 pip install anthropic openai matplotlib ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-`TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`를 설정합니다. 검색 단계에서 코퍼스를 임베딩하기 위해 OpenAI를 사용하고, 점수 매기기를 통과한 내용을 바탕으로 최종 답변을 작성하기 위해 Claude를 사용하며, 검색된 각 파사지를 점수 매기기 위해 TypeSafe를 사용합니다.
+`TYPESAFE_API_KEY`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`를 설정합니다. 검색 단계에서 코퍼스를 임베딩하기 위해 OpenAI를 사용하고, 점수 매김을 통과한 내용을 바탕으로 최종 답변을 작성하기 위해 Claude를 사용하며, 검색된 각 파assage를 점수 매기기 위해 TypeSafe를 사용합니다.
 
-세 가지 모두 이 페이지를 재생산하는 데 키가 필요하지 않습니다. `json_cache.json`은 쿡북과 함께 제공되며 기록된 모든 호출을 재생하므로 다시 렌더링하는 데 비용이 들지 않습니다. 대신 파이프라인을 실시간으로 실행하려면 파일을 삭제하십시오. 여기에 나온 숫자들은 2026-08-27 기준 `jev-1.12`과 `claude-sonnet-5`에서 나온 것입니다.
+세 가지 모두 이 페이지를 재생산하는 데 키가 필요하지 않습니다. `json_cache.json`은 쿡북과 함께 제공되며 기록된 모든 호출을 재생하므로 다시 렌더링하는 데 비용이 들지 않습니다. 파일을 삭제하면 대신 파이프라인을 실시간으로 실행할 수 있습니다. 여기에 나온 숫자들은 2026-08-27 기준 `jev-1.12`과 `claude-sonnet-5`에서 나온 것입니다.
 
 ```python
 import json
@@ -91,16 +91,16 @@ embedder = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "cache-only"))
 json_cache = JsonCache(Path("json_cache.json"))
 ```
 
-## 문서 코퍼스 로드
+## Load the docs corpus
 
-코퍼스 파일 `corpus.json`에는 81개의 구절이 포함되어 있습니다. 우리는 `2440b06` 커밋의 Supabase 인증 문서에서 80개를 그대로 복사했으며, 각 구절은 제목별로, 원문을 그대로 Apache 2.0 라이선스 하에 사용했습니다:
+코퍼스 파일 `corpus.json`에는 81개의 구절이 포함되어 있습니다. 우리는 `2440b06` 커밋의 Supabase 인증 문서에서 80개를 그대로 복사했으며, 각 구절은 제목별로, 원문을 그대로 유지한 채 Apache 2.0 라이선스 하에 사용되었습니다:
 [https://github.com/supabase/supabase/tree/2440b06/apps/docs/content/guides/auth](https://github.com/supabase/supabase/tree/2440b06/apps/docs/content/guides/auth)
 
-각 패시지는 ⦇0⦇, ⦇1⦇, ⦇2⦇ 및 ⦇3⦇을 포함하며, 모든 요청은 이 네 가지를 모두 전송합니다. 근접 실패는 전체 세트를 채웁니다. 회전, 만료, 세션 및 서명 키는 각각 고유한 페이지를 가지며, 해당 페이지들은 유사하게 읽힙니다. 리프레시 토큰 회전과 JWT 서명 키 회전은 거의 동일한 어구로 설명되는 서로 다른 개념입니다.
+각 패시지는 `id`, `title`, `text` 및 `source_type`를 포함하며, 모든 요청은 이 네 가지를 모두 전송합니다. 근접 실패 사례가 이 집합을 채웁니다. 회전, 만료, 세션 및 서명 키는 각각 전용 페이지를 가지며, 해당 페이지들은 유사하게 읽힙니다. Refresh-token 회전과 JWT 서명 키 회전은 거의 동일한 어구로 설명되는 서로 다른 것입니다.
 
 우리는 `forum-injection`를 직접 작성했으며, `community_forum`로 표시했습니다. 이는 마지막 단락이 모델 대상의 지시사항이기 전까지는 일반적인 포럼 답변으로 읽힙니다.
 
-우리는 또한 6개 쿼리 중 2개를 작성하여 문서가 모순되는 전제를 명시했으므로, 주입 및 충돌 경로 모두 이를 포착할 무언가를 가지고 있습니다.
+우리는 또한 6개 쿼리 중 두 개를 작성하여 문서가 모순하는 전제를 명시했으며, 따라서 주입 및 충돌 경로 모두 이를 포착할 무언가를 가지고 있습니다.
 
 ```python
 PASSAGES = json.loads(Path("corpus.json").read_text(encoding="utf-8"))
@@ -133,9 +133,9 @@ One passage, as the model will see it (sessions-01):
 A session is represented by the Supabase Auth access token in t...
 ```
 
-## 상위 구문 검색
+## 상위 구절들 검색
 
-`text-embedding-3-small`의 256차원 임베딩을 기반으로 코사인 유사도로 구문을 순위 매기고, 각 쿼리마다 최상의 `TOP_K = 12`를 유지하세요. 짧은 벡터는 shipped 캐시를 작게 유지하며, 임베딩 호출은 다른 모든 것과 함께 캐시 처리되므로 벡터는 `json_cache.json` 내부에서 이동합니다.
+`text-embedding-3-small`의 256차원 임베딩을 기반으로 코사인 유사도로 구문을 순위 매기고, 각 쿼리마다 상위 `TOP_K = 12`개를 유지합니다. 짧은 벡터는 shipped 캐시를 작게 유지하고, 임베딩 호출은 다른 모든 것과 함께 캐싱되므로 벡터는 `json_cache.json` 내부에서 이동합니다.
 
 ```python
 @json_cache
@@ -181,7 +181,7 @@ QUERIES = [
 ]
 ```
 
-첫 번째 쿼리에 대해 검색된 12개의 문단:
+첫 번째 쿼리에 대해 검색된 12개의 구절:
 
 ```python
 for passage in retrieve(HEADLINE_QUERY, TOP_K):
@@ -206,14 +206,12 @@ for passage in retrieve(HEADLINE_QUERY, TOP_K):
   0.455  signing-keys-54-a     official_docu  JWT Signing Keys: Lifetime of a signing key
 ```
 
-주입된 지시사항을 담은 포럼 게시글 `forum-injection`는 0.584의 점수로 1위를 기록합니다.
-전제를 반박하는 구절 `sessions-01`는 0.509의 점수로 7위를 기록합니다. 모든 12개 점수는
-0.584와 0.455 사이에 분포하며, 이 범위는 쿼리를 수정하는 구절과 답변을 탈취하려는
-구절을 구분하기에는 너무 좁습니다.
+주입된 지시문을 담은 포럼 게시글 `forum-injection`는 0.584의 점수로 1위를 기록합니다.
+전제를 반박하는 구절 `sessions-01`는 0.509의 점수로 7위를 기록합니다. 모든 12개 점수는 0.584에서 0.455 사이에 분포하며, 이 범위는 쿼리를 수정하는 구절과 답변을 하이재킹하려는 구절을 구분하기에 너무 좁습니다.
 
 ## 각 구절마다 네 가지 질문을 하세요
 
-쿼리와 하나의 패시지를 상태에 함께 배치하여, 모든 질문이 패시지 alone가 아닌 쌍에 관한 것이 되도록 합니다. 형태:
+쿼리와 하나의 패시지를 상태에 함께 배치하여, 모든 질문이 패시지 단독이 아닌 쌍에 관한 것이 되도록 하십시오. 형태:
 
 ```json
 {
@@ -231,12 +229,12 @@ for passage in retrieve(HEADLINE_QUERY, TOP_K):
 
 네 `Noul`개의 질문과, 각 답변이 주도하는 바:
 
-* `is_relevant`: 관련성 기준치.
-* `contains_answer_evidence`: 포함 또는 제외.
-* `contradicts_query_premise`: 충돌 블록으로 승격.
-* `contains_prompt_injection`: 전면 배제.
+* `is_relevant`: 관련성 하한선.
+* `contains_answer_evidence`: 포함하거나, 제외하거나.
+* `contradicts_query_premise`: 충돌 블록으로 승격됨.
+* `contains_prompt_injection`: 완전히 배제됨.
 
-네 가지 모두 해당 구문을 포함할지 여부를 묻지 않는다. 그 결정은 아래 코드에 위치하며, 이를 변경하는 것은 질문을 다시 작성하는 대신 숫자를 수정하는 것을 의미한다。
+네 가지 모두 해당 구문을 포함할지 여부를 묻지 않는다. 그 결정은 아래 코드에 있으며, 이를 변경하려면 질문을 다시 작성하는 대신 숫자를 수정해야 한다.
 
 ```python
 PASSAGE_QUESTIONS = {
@@ -287,9 +285,9 @@ def gate_all(query: str, passages: list[dict]) -> list[dict]:
         return list(pool.map(lambda passage: gate(query, passage["id"]), passages))
 ```
 
-## 코드에서 각 구문을 라우팅하기
+## 코드 내 각 구문을 라우팅하기
 
-모든 답변은 확률로 반환되며, 이 네 가지를 하나의 결정으로 변환하는 방법은 다양합니다. 여기서는 단순 비교 연산이 효과적이었습니다. 네 확률을 고정된 순서로 임계값과 대조하여 테스트하고, 첫 번째 매칭이 발견되면 즉시 중단합니다. 이 매칭이 해당 구절에 라벨을 부여하며, 그 라벨이 구절의 처리 방식을 결정합니다: 프롬프트 내 증거, 프롬프트 내 충돌, 또는 삭제.
+모든 답변은 확률로 반환되며, 이 네 가지를 하나의 결정으로 바꾸는 방법은 다양합니다. 여기서는 단순 비교 연쇄가 작동했습니다. 네 확률을 고정된 순서로 임계값과 대조해 테스트하고, 첫 번째 일치 지점에서 멈춥니다. 그 일치가 해당 구절을 레이블링하며, 그 레이블이 해당 구절의 처리 방식을 결정합니다: 프롬프트 내 증거, 프롬프트 내 충돌, 또는 삭제.
 
 테스트, 순서대로:
 
@@ -297,12 +295,12 @@ def gate_all(query: str, passages: list[dict]) -> list[dict]:
 2. `contradicts_query_premise > 0.70` -> 상충되는_증거
 3. `is_relevant < 0.45` -> 제외
 4. `contains_answer_evidence > 0.55` -> 포함
-5. 그 외의 경우 제외
+5. 그 외 제외
 
-주입이 먼저 오는 이유는 그것이 증거가 아닌 보안 결정이기 때문이다. 모순 테스트는 증거 테스트보다 먼저 수행되는데, 쿼리의 전제를 부정하는 구절은 보통 유용한 정보도 포함하기 때문이다. 반대로 테스트하면, 그 구절은 충돌 블록이 아닌 허용 블록으로 분류된다.
+주입은 증거가 아닌 보안 결정이기 때문에 먼저 처리됩니다. 모순 테스트는 증거 테스트보다 먼저 수행되는데, 쿼리의 전제를 부정하는 구절은 보통 유용한 정보도 포함하기 때문입니다. 반대로 테스트하면, 해당 구절은 충돌 블록이 아닌 허용 블록에 분류됩니다.
 
 
-> **참고** — 이 코퍼스에 대해 이 네 숫자를 선택했습니다. 이를 기본값이 아닌 시작점으로 간주하세요. 하나를 변경하는 것은 저렴합니다: `THRESHOLDS`는 네 가지를 모두 보유하며 `route()`는 저장된 답변만 읽으므로, 모든 구절을 다시 라우팅해도 API 호출이 발생하지 않습니다.
+> **참고** — 이 코퍼스를 위해 이 네 숫자를 선택했습니다. 이를 기본값이 아닌 시작점으로 간주하세요. 하나를 변경하는 것은 비용이 적게 듭니다: `THRESHOLDS`는 네 가지를 모두 보유하며 `route()`는 저장된 답변만 읽으므로, 모든 구문을 재라우팅해도 API 호출 비용이 발생하지 않습니다.
 
 
 ```python
@@ -366,11 +364,11 @@ exclude                0.04  0.05   0.10  0.16  signing-keys-55-b
 exclude                0.04  0.05   0.10  0.13  signing-keys-54-a
 ```
 
-전제-모순 질문은 `sessions-01`에서 0.92점을 받아 충돌 블록으로 전송됩니다. 관련성은 0.49, 답변 증거는 0.51이므로, 이 두 항목만으로도 점수가 하락했을 것입니다.
+전제-모순 질문은 `sessions-01`에서 0.92점을 받아 충돌 블록으로 전송된다. 관련성은 0.49, 답변 증거는 0.51이므로, 이 두 항목만으로도 점수가 하락했을 것이다.
 
-유사도 순위 `forum-injection`가 우선하며 관련성은 0.71의 기준선을 충족합니다. 이를 떨어뜨리는 것은 0.99의 주입 점수입니다.
+유사도 순위 `forum-injection`가 우선하며 관련성은 0.71의 기준선을 충족합니다. 0.99의 주입 점수가 이를 하향 조정합니다.
 
-프롬프트에는 증거가 전혀 도달하지 않으며, 이는 잘못된 전제에 기반한 질문에는 적절한 일입니다. 아래는 문서가 답변하는 쿼리에 대한 동일한 표입니다.
+프롬프트에는 증거가 전혀 도달하지 않으며, 이는 잘못된 전제를 기반으로 한 질문에는 적절한 처리입니다. 아래는 문서가 답변하는 쿼리에 대한 동일한 테이블입니다.
 
 ```python
 print(f'"{QUERIES[5]}"\n')
@@ -395,21 +393,21 @@ include                0.79  0.57   0.06  0.31  sessions-09
 exclude                0.12  0.11   0.07  0.20  sessions-07-b
 ```
 
-네 개의 구절이 여기의 증거 블록에 도달하며, 아래 답변은 이 네 개를 모두 인용합니다.
+여기 증거 블록으로 네 개의 구문이 도달하며, 아래 답변은 이 네 가지를 모두 인용합니다.
 행은 검색 순서대로 출력되며, 이는 재배열을 보여줍니다: 순위 2, 3, 4는 모두
-*Lifetime of a signing key*로, 쿼리 자신의 단어와 거의 동일한 부정확한 수명을 나타내며,
-관련성 점수가 모두 0.08 이하입니다. 유입된 네 개 중 세 개는 각각 8위, 9위, 11위에 있었습니다. `forum-injection`는 0.99로 다시 제외됩니다.
+*Lifetime of a signing key*로, 쿼리 자신의 단어와 거의 동일한 잘못된 수명을 나타내며,
+관련성 점수가 0.08 이하입니다. 통과한 네 개 중 세 개는 각각 8위, 9위, 11위에 있었습니다. `forum-injection`는 0.99로 다시 제외됩니다.
 
-주입 질문은 필터이며, 유일한 필터입니다. 임계점 아래로 점수가 매겨진 구절도 프롬프트에 도달하므로, 생성기 프롬프트는 점수와 무관하게 모든 구절을 신뢰할 수 없는 텍스트로 처리해야 합니다. 여기에는 보안 경계가 되는 것이 아무것도 없습니다.
+주입 질문은 필터이며, 유일한 필터입니다. 임계값 미만으로 점수가 매겨진 passagem도 프롬프트에 도달하므로, 생성기 프롬프트는 점수와 관계없이 모든 passagem을 신뢰할 수 없는 텍스트로 처리해야 합니다. 여기에 보안 경계는 존재하지 않습니다.
 
-구문당 한 번의 요청이므로 비용은 `k`에 비례합니다. 질문마다 한 쌍에 관한 것이므로, 구문들을 하나의 요청으로 일괄 처리하지 않습니다.
+구문당 요청 한 건이므로 비용은 `k`에 비례해 증가한다. 각 질문이 한 쌍에 관한 것이므로, 구문들을 하나의 요청으로 묶지 않는다.
 
 ## 수락된 증거로 프롬프트를 작성하세요
 
-TypeSafe는 구문을 점수 매기고 라우팅은 이를 라벨링합니다. LLM은 여전히 답을 작성하며,
-여기 `claude-sonnet-5`입니다. 수락된 증거와 충돌하는 증거는 별도의 블록으로 유지합니다.
+TypeSafe는 구절에 점수를 매기고 라우팅이 이를 레이블링합니다. LLM이 여전히 답변을 작성합니다,
+여기 `claude-sonnet-5`. 수락된 증거와 상충되는 증거는 별도의 블록으로 유지합니다.
 
-두 개의 블록은 답변이 반박할 수 있게 합니다. 이들을 하나로 병합하면 생성기는 쿼리에 답하는 구절과 전제를 부정하는 구절을 구분할 방법이 없습니다.
+두 개의 블록이 답변을 반박할 수 있게 합니다. 이들을 하나로 병합하면 생성기는 쿼리에 답하는 구절과 그 전제를 부정하는 구절을 구분할 방법이 없습니다.
 
 ```python
 PROMPT = """Answer the query using only the supplied evidence.
@@ -498,7 +496,9 @@ A session is represented by the Supabase Auth access token in the form of a JWT,
    ...
 ```
 
-첫 번째 답변은 거짓 전제 쿼리인 “Refresh tokens expire after 30 days - how do I extend that window?”에 대한 것이며, 두 번째 답변은 문서가 실제로 답변하는 일반적인 질문에 대한 것입니다. 이 질문에는 `forum-injection`와 그 주입된 지시사항이 포함된 12개의 검색된 패시지가 포함되었습니다.
+첫 번째 답변은 거짓 전제 쿼리인 “Refresh tokens expire after 30 days -
+how do I
+extend that window?”에 대한 것이며, 두 번째 답변은 문서가 실제로 답변하는 일반적인 질문에 대한 것입니다. 이 질문의 경우 12개의 검색된 패세지 중 `forum-injection`와 그 주입된 지시사항이 포함되었습니다.
 
 ```python
 SHOWN = [HEADLINE_QUERY, QUERIES[5]]
@@ -546,9 +546,9 @@ Since this passage is marked as conflicting/unverified evidence rather than acce
 **No conflicts** were found between the passages — they consistently point to a default/recommended value of 1 hour, with an acceptable range of roughly 5 minutes to 1 hour, and caution against going much shorter or longer without specific need.
 ```
 
-첫 번째 답변은 빈 수락 블록과 하나 상충되는 구절을 포함해 도착했다. 이 답변은 "수락된 증거가 충분하지 않다"로 시작해 충돌을 명시하고, 30일 설정을 임의로 만들어내는 대신 `sessions-01`의 리프레시 토큰은 만료되지 않는다는 인용문을 제시한다.
+첫 번째 답변은 빈 수락 블록과 하나 상충되는 구절과 함께 도착했다. 이 답변은 "적절한 수락된 증거가 없습니다"로 시작해 상충점을 지적하고, 30일 설정을 임의로 만들어내는 대신 `sessions-01`의 리프레시 토큰은 절대 만료되지 않는다는 인용구를 제시한다.
 
-두 번째는 4개의 수락된 구절이 있고 충돌이 없으며, 네 가지를 모두 인용합니다. 주입된 지시사항의 내용은 텍스트에 전혀 반영되지 않습니다.
+두 번째는 4개의 수락된 구절이 있고 충돌이 없으며, 네 가지 모두를 인용합니다. 주입된 지시는 텍스트의 어느 부분에도 도달하지 않습니다.
 
 ## 여섯 쿼리 비교
 
@@ -639,11 +639,11 @@ plt.close(fig)
 
 <img src="/img/cases/classifying-rag-passages-classifying_rag_passages.executed.1.png" alt="output" width="1335" height="525" data-path="cookbooks/classifying_rag_passages/classifying_rag_passages.executed.1.png" />
 
-각 바는 하나의 쿼리에 대해 검색된 12개 패시지를 담고 있으며, 총 72개입니다. 각 바의 최소 3분의 2는 제외됩니다. 두 개의 거짓 전제 쿼리만 충돌으로 무언가를 라우팅하며, 두 개의 쿼리는 전혀 받아들이지 않습니다: 30일 만료에 관한 것과 *리프레시 토큰은 어떻게 회전합니까?*
+각 바는 하나의 쿼리에 대해 검색된 12개 패시지를 담고 있으며, 총 72개입니다. 각 바의 최소 3분의 2는 제외됩니다. 오직 두 개의 거짓 전제 쿼리만 충돌으로 무언가를 라우팅하며, 두 개의 쿼리는 전혀 받아들이지 않습니다: 30일 만료에 관한 것과 *리프레시 토큰은 어떻게 회전합니까?*
 
 ## 플레이그라운드에서 열기
 
-아래 링크를 열어 한 번의 호출을 실시간으로 다시 실행하세요: 갈등 블록으로 라우팅된 Passage에 대한 첫 번째 쿼리와 네 가지 질문.
+아래 링크를 열어 한 번의 호출을 실시간으로 다시 실행하세요: 충돌 블록으로 라우팅된 여정에 대한 첫 번째 쿼리와 네 가지 질문.
 
 ```python
 linked = next(r for r in ROUTED[HEADLINE_QUERY] if r["route"] == "conflicting_evidence")
@@ -655,4 +655,4 @@ deeplink = make_playground_link(
 display(Markdown(f"🔗 [Open the query + passage and its four questions]({deeplink})"))
 ```
 
-[クエリとパス、および4つの質問を開く →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAI4wIBOAnqQaQEoIBmVCAzgBb4oQDWyDviwAHAJbt8AQxYpq+AMwAGfGGk1hAWnxcIAdzUR8ASRHZkYXl2kp8+8Ukj6A-KQA0+UqOkcO0gHMEenwSEHEwENIOTg5xCCQOLWUARg8vEBRxFAAbYLwMgFUYqnwYv3jEggB1GztxYWky2Mq3EE9SeWwokABBZoqE-Ab8KHZbBCt9LmQZfBgSsvEAxOGkADp8ACEaNVZpGByUT2z8HN8UYUcwVkdshBzd6Sc5hYUoZ91pADcEGSR5kgcuI4PcrEh4AAjBQQFgyKBZX4DOIJYRDXz4ODPXY3b7iKCcdbEYhIYlIfrlFEAkbsUTsGKoSb4SG7FAzfAAZRgPkhvj+vRgbPhBL8vAEs0c1j+LAgVDg+FhcwAUtU0J5nlYmuw2JweHxBADpvieCMmjAkOIKH8OCgqI4AkSSWTelARcJ9UIZFIbnEVky+MzrXoqHZgb8wJ4FjBpDlHoGUPoELMAKyYxyCzj-KwpXQQGClI15fDa+l68WrJAIX6lMSSP6QwWjT4JOPQ+YxKwJAmbACaeabAKwUBsSCCcxLurFBoVQN2Xb+AaCdialcM0ldsSzxdYpansx8kkdpJJaC4Izp0E3Iw+saZACo7xPuPapcjKusH2TnW+hvI5Y4Jg4TwblESwXyGKAEhYZZ81sSpPGmZBcDJHRTz+N5SigYEoH4YRfQBPMUCPVD2Qw0YRyCd0ZkkfAfD8fRZU7UpQKoGU5UaZpYDtFBdgZOJET+dcsgSYjTDsLJEDRRswEoMU1iE8Q8R40STDscZh0zbJhCxTAQXgM5xBYBAJIQUT+jI-CrgIgFnggNkFFxfFTPSaI8yoAkAH0eNAnpYWgqBxBjDzIFgRBUDghJSAAXyi9pCAvOBREuDBsAKIhSAaDz2Dyb5nhQEIwm8-IGBAJA8xyFzwkSW0YARSoOB6AARCBMzZc9fH8MdpDAMB6So60YEhAArBAEQVOF7PwK1aDaKKOhASDwscDgPOeDhEyoDyqwiZACQKzoaB8gpSDKw5KuWmq6tRJqWqo9q-ECa0UAmNY2KxYSAQWaRISLSUmjAOsxrWjbZvmxbbW6-FLg86aaA8ukEFBGJ9syQ7ioyU6KrijLqqoWqPoa46QGa1qz2EOjOr+RaWGwuwHCFJoWCE6Mclo9gkaeiYrElSbYdBjJwekZb4aoCBEpQDzHBGq7SQKQq0Z6THztx-H6pu0n7spmQUHkcW5PB0XWcmjhNF1-51uoF9ecoGbotizwQGkCQADVqCpNLvhSOKQBiPIEUmABZCAbhyDgCgAbRAEbvi0FJ1hSAAmEAAF0oqAA)
+[クエリとパッセージ、および4つの質問を開く →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAI4wIBOAnqQaQEoIBmVCAzgBb4oQDWyDviwAHAJbt8AQxYpq+AMwAGfGGk1hAWnxcIAdzUR8ASRHZkYXl2kp8+8Ukj6A-KQA0+UqOkcO0gHMEenwSEHEwENIOTg5xCCQOLWUARg8vEBRxFAAbYLwMgFUYqnwYv3jEggB1GztxYWky2Mq3EE9SeWwokABBZoqE-Ab8KHZbBCt9LmQZfBgSsvEAxOGkADp8ACEaNVZpGByUT2z8HN8UYUcwVkdshBzd6Sc5hYUoZ91pADcEGSR5kgcuI4PcrEh4AAjBQQFgyKBZX4DOIJYRDXz4ODPXY3b7iKCcdbEYhIYlIfrlFEAkbsUTsGKoSb4SG7FAzfAAZRgPkhvj+vRgbPhBL8vAEs0c1j+LAgVDg+FhcwAUtU0J5nlYmuw2JweHxBADpvieCMmjAkOIKH8OCgqI4AkSSWTelARcJ9UIZFIbnEVky+MzrXoqHZgb8wJ4FjBpDlHoGUPoELMAKyYxyCzj-KwpXQQGClI15fDa+l68WrJAIX6lMSSP6QwWjT4JOPQ+YxKwJAmbACaeabAKwUBsSCCcxLurFBoVQN2Xb+AaCdialcM0ldsSzxdYpansx8kkdpJJaC4Izp0E3Iw+saZACo7xPuPapcjKusH2TnW+hvI5Y4Jg4TwblESwXyGKAEhYZZ81sSpPGmZBcDJHRTz+N5SigYEoH4YRfQBPMUCPVD2Qw0YRyCd0ZkkfAfD8fRZU7UpQKoGU5UaZpYDtFBdgZOJET+dcsgSYjTDsLJEDRRswEoMU1iE8Q8R40STDscZh0zbJhCxTAQXgM5xBYBAJIQUT+jI-CrgIgFnggNkFFxfFTPSaI8yoAkAH0eNAnpYWgqBxBjDzIFgRBUDghJSAAXyi9pCAvOBREuDBsAKIhSAaDz2Dyb5nhQEIwm8-IGBAJA8xyFzwkSW0YARSoOB6AARCBMzZc9fH8MdpDAMB6So60YEhAArBAEQVOF7PwK1aDaKKOhASDwscDgPOeDhEyoDyqwiZACQKzoaB8gpSDKw5KuWmq6tRJqWqo9q-ECa0UAmNY2KxYSAQWaRISLSUmjAOsxrWjbZvmxbbW6-FLg86aaA8ukEFBGJ9syQ7ioyU6KrijLqqoWqPoa46QGa1qz2EOjOr+RaWGwuwHCFJoWCE6Mclo9gkaeiYrElSbYdBjJwekZb4aoCBEpQDzHBGq7SQKQq0Z6THztx-H6pu0n7spmQUHkcW5PB0XWcmjhNF1-51uoF9ecoGbotizwQGkCQADVqCpNLvhSOKQBiPIEUmABZCAbhyDgCgAbRAEbvi0FJ1hSAAmEAAF0oqAA)

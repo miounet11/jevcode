@@ -9,9 +9,17 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params as { lang: Lang };
-const path = '/ecosystem/';
+const path = `/${lang}/ecosystem/`;
 const t = useTranslations(lang);
-const groups = projectsByCategory();
+const groups = projectsByCategory().map(({ category, items }) => {
+  const ranked = [...items].sort((a, b) => b.stars - a.stars);
+  return {
+    category,
+    featured: ranked.slice(0, 6),
+    restItems: ranked.slice(6),
+    rest: Math.max(0, ranked.length - 6),
+  };
+});
 
 const totalStars = projects.reduce((sum, p) => sum + p.stars, 0);
 const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
@@ -66,14 +74,14 @@ const copy =
       </div>
 
       {
-        groups.map(({ category, items }) => (
+        groups.map(({ category, featured, restItems, rest }) => (
           <section class="eco">
             <div class="section__head">
               <h2 class="section__title">{category.title[lang]}</h2>
               <p class="section__lead">{category.lead[lang]}</p>
             </div>
             <div class="grid grid--2">
-              {items.map((p) => (
+              {featured.map((p) => (
                 <a class="card eco__card" href={p.url} target="_blank" rel="noopener noreferrer">
                   <div class="eco__head">
                     <span class="eco__repo">{p.repo}</span>
@@ -96,6 +104,24 @@ const copy =
                 </a>
               ))}
             </div>
+            {rest > 0 && (
+              <details class="eco__more">
+                <summary>
+                  {lang === 'zh' ? `还有 ${rest} 个项目` : `${rest} more`}
+                </summary>
+                <div class="grid grid--2">
+                  {restItems.map((p) => (
+                    <a class="card eco__card" href={p.url} target="_blank" rel="noopener noreferrer">
+                      <div class="eco__head">
+                        <span class="eco__repo">{p.repo}</span>
+                        <span class="eco__stars">★ {fmt(p.stars)}</span>
+                      </div>
+                      <p class="card__desc">{p.desc[lang]}</p>
+                    </a>
+                  ))}
+                </div>
+              </details>
+            )}
           </section>
         ))
       }

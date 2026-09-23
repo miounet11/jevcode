@@ -178,9 +178,9 @@ TypeSafe 호출은 동일한 주장과 동일한 14 `Noul` 질문에 대해 한 
 
 모든 쿼리에는 매번 새로운 `uid`가 할당되며, 이는 각 실행마다 변경되는 일회용 고유 값으로, 주장과 평가지표는 동일하게 유지됩니다. 이는 LLM 프롬프트와 TypeSafe 상태의 추가 필드에 나타납니다. 이 구조는 관련 없는 필드에 대한 민감도와 동일한 요청에서 발생할 수 있는 변동성을 분리할 수 없습니다.
 
-> **참고:** "오직 JSON 객체만"이라는 지시에도 불구하고, `claude-haiku-4-5`는 거의 모든 응답을 ````json ... ``` ` fence that strict `json.loads` rejects > (the
-> other models return bare JSON). The helper peels the fence; a reply that still fails > to
-> parse becomes a parse failure, counted but not scored.
+> **참고:** "오직 JSON 객체만"이라는 지시에도 불구하고, `claude-haiku-4-5`는 거의 모든 응답을 ` ```json ... ``` ` 울타리로 감싸는데, 엄격한 `json.loads`는 이를 거부합니다 > (다른
+> 모델들은 순수 JSON을 반환합니다). 헬퍼가 이 울타리를 벗겨냅니다; 그래도 파싱에 실패한 응답은 파싱 실패로 집계되지만
+> 점수에는 포함되지 않습니다.
 
 Each helper returns the answer, an estimated cost, and the round-trip latency.
 

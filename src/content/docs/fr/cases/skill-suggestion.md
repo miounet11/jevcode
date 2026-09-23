@@ -1,24 +1,23 @@
 ---
 title: "Suggestion de compétence"
-description: "Sélectionne au plus une compétence pour un tour d'agent parmi les 182 du catalogue Hermes de Nous Research : une première requête TypeSafe classe toutes les compétences et demande si le tour nécessite effectivement une compétence, une seconde lit correctement les trois premières et peut les rejeter toutes. Le nom du gagnant est inscrit sur une seule ligne du sy"
+description: "Sélectionne au plus une compétence pour un tour d'agent parmi les 182 du catalogue Hermes de Nous Research : une requête TypeSafe classe chaque compétence et demande si le tour en nécessite une, une seconde lit correctement les trois premières et peut rejeter toutes. Le nom du gagnant est inscrit sur une seule ligne de l'agent's sy"
 section: cases
 order: 270
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/skill_suggestion"
 translatedFrom: en
 ---
-*Les agents choisissent les compétences en les tronquant et en les chargeant toutes dans le message système, ce qui augmente les coûts, dégrade la performance de sélection des compétences et induit une dégradation du contexte pour le reste de la session. Nous résolvons ce problème en utilisant deux requêtes TypeSafe par tour, une pour classer les compétences et une autre pour vérifier le choix, et nous réduisons de plus de moitié les chargements incorrects de compétences.*
+*Les agents choisissent les compétences en les tronquant et en les chargeant toutes dans le message système, ce qui augmente les coûts, détériore la performance de sélection des compétences et induit une dégradation du contexte pour le reste de la session. Nous remédions à cela en utilisant deux requêtes TypeSafe par tour, une pour classer les compétences et une pour vérifier le choix, et réduisons les chargements incorrects de compétences de plus de moitié.*
 
-Un agent disposant d’une large liste de compétences fait son choix sur la base de très peu d’informations. Cette liste lui parvient sous forme d’index : une ligne par compétence, avec la description tronquée afin que le texte intégral n’envahisse pas la conversation. Hermes, le framework d’agents utilisé ici, la réduit à 60 caractères par défaut. Par exemple, à cette largeur, la compétence qui *modifie* `.pptx` fichiers se lit presque de la même manière que celle qui *rédige* ces fichiers. Si l’on demande un support de présentation, l’agent peut charger le mauvais. Lors d’un tour où aucune compétence ne correspond vraiment, il peut en charger une quand même, car une simple liste de noms invite à deviner.
+Un agent disposant d’une large gamme de compétences fait son choix sur presque aucune information. Cette liste lui parvient sous forme d’index : une ligne par compétence, avec la description tronquée afin que le texte complet n’envahisse pas la conversation. Hermes, le framework d’agent utilisé ici, la réduit à 60 caractères par défaut. Par exemple, à cette largeur, la compétence qui *modifie* `.pptx` fichiers se lit presque de la même manière que celle qui les *rédige*. Si l’on demande un dossier de présentation, l’agent peut charger le mauvais. Lors d’un tour où aucune compétence ne convient, il peut tout de même en charger une, car une liste de noms invite à deviner.
 
-Ce cookbook laisse les descriptions telles quelles et utilise une divulgation progressive,
-en lisant toutes les 182 compétences à moindre coût puis en lisant trois d'entre elles en détail. Deux requêtes TypeSafe
-sont placées avant la décision concernant la compétence à charger, le cas échéant. La première classe chaque
-compétence du roster par rapport au tour de l'utilisateur et répond à la question de savoir si le tour nécessite une compétence ou non.
-La seconde relit uniquement les trois premières, désormais avec la description complète de chaque compétence et le
-début de leurs instructions, et est libre de toutes les rejeter.
+Ce livre de recettes laisse les descriptions telles quelles et utilise une divulgation progressive,
+en lisant toutes les 182 compétences à moindre coût, puis en lisant trois d'entre elles en détail. Deux requêtes TypeSafe
+sont placées avant la décision de quelle compétence charger, le cas échéant. La première classe chaque
+compétence du roster par rapport au tour de l'utilisateur et répond à la question de savoir si le tour nécessite une compétence ou non. La seconde relit uniquement les trois premières, maintenant avec la description complète de chaque compétence et l'
+ouverture de ses instructions, et est libre de rejeter toutes.
 
-Le nom du gagnant est ajouté sur une ligne supplémentaire du prompt système de l'agent pour ce tour :
+Le nom du gagnant est inscrit dans une ligne supplémentaire du prompt système de l'agent pour ce tour :
 
 ```
 <skill_relevance>
@@ -27,17 +26,19 @@ actually asked for.
 </skill_relevance>
 ```
 
-L’agent conserve son index complet et son propre jugement, et cette unique ligne lui indique seulement quelle entrée examiner en premier. Le roster lui-même ne change jamais, de sorte que tout cache de préfixe sur celui-ci reste valide. Sur 488 requêtes contre ⦇0⦇, en utilisant les compétences du roster Hermes :
+L'agent conserve son index complet et son propre jugement, et cette seule ligne lui indique uniquement quelle entrée examiner en premier. La liste elle-même ne change jamais, de sorte que tout cache de préfixe sur celle-ci reste valide. Sur 488 requêtes contre `claude-haiku-4-5-20251001`, en utilisant les compétences du roster Hermes :
 
-| | charge la mauvaise compétence | charge une compétence quand aucune ne correspond |
-| ------------------------------------ | ----------------------------- | ------------------------------------------------ |
-| agent seul, avec juste son registre | 16,8 % | 9,8 % |
+| | charge une compétence erronée | charge une compétence alors qu’aucune ne correspond |
+| ------------------------------------ | ----------------------------- | --------------------------------------------------- |
+| agent seul, avec seulement son répertoire | 16,8 % | 9,8 % |
 | **agent avec une suggestion TypeSafe** | **7,3 %** | **4,0 %** |
 | agent auquel on donne la bonne réponse | 2,5 % | 1,2 % |
 
-La troisième ligne montre que le plancher pour commettre des erreurs n'est pas nul, car un agent doté de la bonne compétence ne la charge pas toujours, et aucune méthode de sélection, aussi bonne soit-elle, ne parvient à contourner cela.
+La troisième ligne indique que le plancher pour faire des erreurs n'est pas zéro, car un agent doté de la
+bonne compétence ne la charge pas toujours, et aucune méthode de sélection, aussi bonne soit-elle, ne parvient à
+franchir ce seuil.
 
-Vous obtenez une fonction `suggest()` qui retourne au plus un nom de compétence, une `suggestion_block()` qui l’emballe pour la invite système, et le harnais qui a produit le tableau ci-dessus, prêt à pointer vers votre propre liste.
+Vous obtenez une fonction `suggest()` qui retourne au plus un nom de compétence, un `suggestion_block()` qui l'entoure pour la invite système, et le harnais qui a produit le tableau ci-dessus, prêt à pointer vers votre propre liste.
 
 <!-- mermaid flowchart converted to equivalent tables (this site loads no chart library) -->
 
@@ -45,12 +46,12 @@ Vous obtenez une fonction `suggest()` qui retourne au plus un nom de compétence
 
 | Nœud | Description | Groupe |
 | :--- | :--- | :--- |
-| `C1` | Appel 1 - survoler les 182 compétences | Appel 1 - survoler les 182 compétences |
-| `Q1`| Choix : quelle compétence convient ? / les 182, une ligne chacune | Appel 1 - survoler les 182 compétences |
-| `N1` | Nouls : faut-il vraiment une compétence ? / · agir sur leurs éléments? / · suivre les étapes écrites ? / · ou simplement discuter ? | Appel 1 - survoler les 182 compétences |
+| `C1` | Appel 1 - parcourir les 182 compétences | Appel 1 - parcourir les 182 compétences |
+| `Q1` | Choice : quelle compétence convient ? / les 182, une ligne chacune | Appel 1 - parcourir les 182 compétences |
+| `N1` | Nouls : faut-il une compétence ? / · agir sur leurs éléments ? / · suivre les étapes écrites ? / · ou simplement discuter ? | Appel 1 - parcourir les 182 compétences |
 | `C2` | Appel 2 - lire correctement ces 3 | Appel 2 - lire correctement ces 3 |
-| `Q2` | Choix : lequel des 3 ? / avec des détails concrets maintenant | Appel 2 - lire correctement ces 3 |
-| `N2` | Nouls : chacun le fait-il vraiment ? | Appel 2 - lire correctement ces 3 |
+| `Q2` | Choice : laquelle des 3 ? / avec des détails concrets maintenant | Appel 2 - lire correctement ces 3 |
+| `N2` | Nouls : chacune le fait-elle / vraiment ? | Appel 2 - lire correctement ces 3 |
 
 | De | Condition | À |
 | :--- | :--- | :--- |
@@ -62,7 +63,7 @@ Vous obtenez une fonction `suggest()` qui retourne au plus un nom de compétence
 | `C2` | un gagnant | `OUT` |
 
 
-## Installation
+## Configuration
 
 * Installez le client TypeSafe, le client Anthropic et les utilitaires partagés du cookbook.
 * Définissez une [clé d'API TypeSafe](https://console.typesafe.ai/keys), ainsi qu'une clé Anthropic pour l'agent à évaluer.
@@ -73,14 +74,14 @@ export TYPESAFE_API_KEY=your-key-here
 export ANTHROPIC_API_KEY=your-key-here
 ```
 
-> **Remarque :** les blocs de code ci-dessous constituent un seul script, dans l’ordre. Pour suivre le tutoriel, placez-les dans un
-> fichier unique, dans l’ordre indiqué.
+> **Remarque :** les blocs de code ci-dessous constituent un seul script, dans l'ordre. Pour suivre le tutoriel, placez-les dans un
+> seul fichier dans l'ordre indiqué.
 
 ## Mise en cache des résultats
 
 `JsonCache` enregistre le résultat de chaque appel, indexé par ses entrées, de sorte que relancer rejoue les
-nombres ci-dessous au lieu d’appeler l’une ou l’autre API. Supprimez `json_cache.json` pour exécuter en direct. Le
-run publié a utilisé `jev-1.12` et `claude-haiku-4-5-20251001`, rendu le 2026-07-31.
+chiffres ci-dessous au lieu d’appeler l’une ou l’autre API. Supprimez `json_cache.json` pour exécuter en direct. La
+publication a utilisé `jev-1.12` et `claude-haiku-4-5-20251001`, rendus le 2026-07-31.
 
 ```python
 import json
@@ -138,7 +139,7 @@ json_cache = JsonCache(Path("json_cache.json"))
 [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) (MIT) à un
 commit épinglé. Chaque enregistrement contient le nom et la catégorie d'une compétence, la description telle qu'elle apparaît dans l'index, la description complète, et l'ouverture de son `SKILL.md`.
 
-L'index ci-dessous, ainsi que les instructions qui le précèdent dans la demande, sont copiés depuis Hermes.
+L’index ci-dessous, ainsi que les instructions qui le précèdent dans la demande, sont copiés depuis Hermes.
 
 ```python
 ROSTER = json.loads(Path("hermes_roster.json").read_text(encoding="utf-8"))
@@ -228,18 +229,19 @@ one category, as the agent reads it:
     - imessage: Send and receive iMessages/SMS via the imsg CLI on macOS.
 ```
 
-## Étape 2 : évaluer l’agent selon ses propres critères
+## Étape 2 : évaluer l'agent selon ses propres critères
 
-`requests.json` contient 488 requêtes en un seul tour, dont 315 sont couvertes par exactement une compétence et les 173 autres ne sont couvertes par aucune.
+`requests.json` contient 488 requêtes en un seul tour, dont 315 sont couvertes par exactement une compétence
+et les 173 autres ne sont couvertes par aucune.
 
 Les demandes couvertes ont été rédigées par Claude Sonnet 5 à partir de `SKILL.md` propre à chaque compétence, de sorte que les étiquettes sont fiables et que les demandes sont plus simples que celles envoyées par les utilisateurs.
 
-Les 173 cas restants ont tous été rédigés pour punir les réponses par hasard : 85 demandes quotidiennes, 42 questions techniques qu’aucune compétence ne couvre (*expliquer ce qu’est une monade*), et 46 qui demandent quelque chose de spécifique pour lequel la liste des compétences ne prévoit aucune capacité, comme *publier ceci sur Mastodon* sur une liste qui ne couvre que X et rien d’autre.
+Les 173 autres ont toutes été rédigées pour punir les suppositions : 85 demandes quotidiennes, 42 questions techniques qu'aucune compétence ne couvre (*expliquer ce qu'est une monade*), et 46 qui demandent quelque chose de spécifique pour lequel la liste de compétences n'a aucune capacité, comme *poster ceci sur Mastodon* sur une liste qui couvre X et rien d'autre.
 
 Le scoring ne lit que la première réponse de l'agent. Les deux chiffres sont des taux d'erreur, donc plus ils sont bas, mieux c'est :
 
-* **charge inutile** : parmi les requêtes couvertes, la part où le premier `skill_view` appel n’était pas la compétence couvrante. Un tour qui ne chargeait rien du tout compte comme un échec.
-* **charge nécessaire** : parmi les requêtes non couvertes, la part où l’agent a appelé `skill_view` au total.
+* **charge incorrecte** : parmi les requêtes couvertes, la part où le premier `skill_view` appel n’était pas la compétence couvrante. Un tour qui ne chargeait rien du tout compte comme un échec.
+* **charge inutile** : parmi les requêtes non couvertes, la part où l’agent a appelé `skill_view`.
 
 ```python
 REQUESTS = json.loads(Path("requests.json").read_text(encoding="utf-8"))
@@ -261,9 +263,10 @@ covered   [1password]  I've got a config.yaml with `{{ op://app-prod/db/password
 uncovered  Add these three cards to our Trello backlog.
 ```
 
-La suggestion se trouve dans son propre bloc du prompt système, après la liste des rôles plutôt qu’à l’intérieur, afin que le texte de la liste reste identique à chaque tour pour maintenir la mise en cache des préfixes.
+La suggestion se trouve dans son propre bloc du prompt système, après la liste plutôt que
+à l'intérieur, afin que le texte de la liste soit identique à chaque tour pour maintenir la mise en cache des préfixes.
 
-L’agent dispose d’un ensemble minimal d’outils, incluant `skill_view` pour charger une compétence à l’aide d’un nom en texte libre. Le nom doit correspondre exactement à la compétence pour un chargement correct.
+L'agent dispose d'un ensemble minimal d'outils, incluant `skill_view` pour charger une compétence en utilisant un nom en texte libre. Le nom doit correspondre exactement à la compétence pour un chargement correct.
 
 ```python
 # Verbatim from hermes-agent tools/skills_tool.py:SKILL_VIEW_SCHEMA.
@@ -364,7 +367,7 @@ def run_arm(arm: str, suggestions: dict[str, str]) -> dict[str, dict]:
         return dict(zip(texts, turns))
 ```
 
-L’agent s’exécute en premier, avec uniquement son effectif, tel qu’il fonctionne aujourd’hui. Ses deux taux d’erreur constituent la référence contre laquelle le reste du livre de recettes mesure.
+L’agent s’exécute en premier avec uniquement son effectif, tel qu’il fonctionne aujourd’hui. Ses deux taux d’erreur constituent la référence que le reste du livre de recettes mesure.
 
 ```python
 baseline = run_arm("baseline", {})
@@ -400,26 +403,25 @@ needless loads 9.8%   (173 uncovered requests)
 of 36 wrong first picks, 10 came from the right skill's own category
 ```
 
-Les chargements erronés atterrissent bien plus souvent que ce que le hasard ne le prévoirait dans la catégorie propre de la bonne compétence, de sorte que la partie difficile consiste à distinguer quelques ressemblants. L'agent regarde déjà à peu près au bon endroit.
+Les charges erronées atterrissent dans la catégorie propre de la bonne compétence bien plus souvent que le hasard ne le laisserait supposer, de sorte que la partie difficile consiste à distinguer quelques ressemblants. L'agent regarde déjà à peu près au bon endroit.
 
-## Étape 3 : classer l’ensemble de l’effectif
+## Étape 3 : classer l'ensemble de la liste
 
-Une seule requête porte deux types de questions :
+Une demande porte deux types de question :
 
-* **`which`** est une question de [`Choice`](/en/primitives/choice/)
+* **`which`** est une question [`Choice`](/en/primitives/choice/)
  portant sur les 182 noms de compétences, la description de l'index servant de critère pour chaque option (le même
- texte que celui reçu par l'agent). Ses probabilités constituent le classement.
+ texte que celui reçu par l'agent). Leurs probabilités constituent le classement.
 * **trois questions [`Noul`](/en/primitives/noul/) concernant la
- demande**, imprimées ci-dessous, chacune interrogeant d'une manière différente si elle souhaite qu'une action soit
- entreprise plutôt qu'une explication fournie. `prose_suffices`
- compte dans l'autre sens. Leur moyenne détermine s'il faut ou non faire une suggestion, et en dessous de 0,30 aucune
- suggestion n'est faite.
+ demande**, imprimées ci-dessous, chacune interrogeant différemment si elle souhaite qu'une action soit effectuée
+ plutôt qu'une explication fournie. `prose_suffices`
+ compte dans l'autre sens. Leur moyenne décide s'il faut ou non faire une suggestion, et en dessous de 0,30 aucune suggestion n'est faite.
 
-Les deux sont envoyés dans une seule requête, de sorte que le classement et la vérification coûtent un seul aller-retour.
+Les deux partent dans une seule requête, donc le classement et la vérification coûtent un aller-retour.
 
-Écrivez ces trois éléments pour demander si une action est souhaitée. Une question sur le fond ne séparera pas *expliquer ce qu'est une monade* d'une demande nécessitant une compétence, car les deux relèvent du logiciel.
+Rédigez ces trois éléments pour demander si une action est souhaitée. Une question sur le fond ne séparera pas *expliquer ce qu'est une monade* d'une demande nécessitant une compétence, puisque les deux relèvent du logiciel.
 
-Une `Choice` question gère confortablement une liste d’une telle taille. Si elle est quelques fois plus grande, vous la diviserez en chunks et vous classerez chacun d’eux, puis vous appliquerez cette même étape de shortlist aux vainqueurs.
+Une seule `Choice` question gère confortablement une liste de cette taille. Si elle était quelques fois plus grande, vous la diviserez en chunks et vous classerez chacun d’eux, puis vous appliquerez cette même étape de shortlist sur les vainqueurs.
 
 ```python
 CHOICE_INSTRUCTIONS = (
@@ -521,17 +523,17 @@ for request in DEMO:
     0.080  openhands                             Delegate coding to OpenHands CLI (model-agnostic, LiteLLM).
 ```
 
-La demande de Notes.app est sans ambiguïté, et son option principale est la bonne. Rien ne peut sauver celle de Mastodon : les trois questions indiquent qu'une compétence est requise, car publier sur un compte est une action, et avec une compétence pour publier sur X et aucune pour Mastodon, la compétence la plus proche l'emporte de toute façon.
+La demande de l'application Notes.app est sans équivoque, et son option principale est la bonne. Rien ce qu'un classement peut faire ne sauvera celle de Mastodon : les trois questions indiquent qu'une compétence est souhaitée, car publier sur un compte est une action, et avec une compétence pour publier sur X et rien pour Mastodon, la compétence la plus proche l'emporte de toute façon.
 
-Cela laisse le jeu. Les deux leaders ont des compétences `.pptx`, et sur 60 caractères, la question large Choice place la compétence d’édition devant celle d’écriture, pour une demande concernant la rédaction d’un jeu.
+Cela laisse le deck. Les deux leaders ont `.pptx` compétences, et sur 60 caractères, la question Choice large place la compétence d'édition devant celle d'écriture, pour une demande concernant l'écriture d'un deck.
 
-## Étape 4 : réordonner les trois premiers
+## Étape 4 : reranker les trois premiers
 
-Trois options laissent de la place pour la description complète ainsi que l’ouverture de chaque compétence
-`SKILL.md`, de sorte que la deuxième demande pose la même question à des preuves plus probantes :
+Trois options laissent de la place pour la description complète ainsi que l'ouverture de chaque compétence propre à
+`SKILL.md`, de sorte que la deuxième demande pose la même question à des preuves plus solides :
 
-* **`which`** est une question de `Choice` sur la liste restreinte, le texte plus long servant de critère pour chaque option.
-* **`fits::{name}`** est une question de `Noul` par candidat : cette compétence fait-elle la chose spécifique demandée ? Chaque question est répondue indépendamment, de sorte qu’elles puissent toutes obtenir un score bas, et une liste restreinte dont le score le plus élevé est inférieur à 0,30 est entièrement exclue.
+* **`which`** est une question de `Choice` sur la liste restreinte, le texte plus long servant de critères pour chaque option.
+* **`fits::{name}`** correspond à une question de `Noul` par candidat : cette compétence réalise-t-elle la tâche spécifique demandée ? Chaque réponse est donnée séparément, de sorte qu’elles puissent toutes obtenir un score faible, et une liste restreinte dont le score le plus élevé est inférieur à 0,30 est entièrement exclue.
 
 ```python
 RERANK_INSTRUCTIONS = (
@@ -621,16 +623,19 @@ for request in DEMO:
     fits 0.05  openhands
 ```
 
-Les deux `.pptx` compétences se séparent une fois que chacune apporte son propre texte : la demande de jeu bascule vers la compétence de rédaction.
+Les deux `.pptx` compétences se séparent une fois chacune apporte son propre texte : la demande de jeu bascule
+vers la compétence d'authoring.
 
-Les `fits` noul et le Choice ne sont pas d'accord là-dessus : les noul attribuent un score plus élevé à la compétence d'édition, tandis que le Choice privilégie celle de création. Ils évaluent des aspects différents. Le Choice détermine *quelle* compétence, et les noul décident *s'il faut* dire quoi que ce soit.
+Les `fits` nouls et le Choice sont en désaccord là-dessus : les nouls attribuent un score plus élevé à la compétence d'édition, tandis que le Choice privilégie celle de création. Ils tranchent des aspects différents. Le Choice établit *quelle* compétence, et les nouls décident *s'il faut* dire quoi que ce soit.
 
-La requête Mastodon survit aux deux vérifications : son meilleur ⦇0⦇ noul est supérieur à 0,30, donc la recette suggère la compétence X pour une requête concernant Mastodon. La plupart des requêtes similaires sont interceptées.
-Le deuxième passage ne peut rejeter que ce que le classement large lui fournit, et ici, il s’agissait de trois résultats quasi-concordants.
+La requête Mastodon survit aux deux vérifications : son meilleur `fits` noul est supérieur à 0,30, donc la recette suggère la compétence X pour une requête concernant Mastodon. La plupart des requêtes similaires sont interceptées.
+Le deuxième passage ne peut rejeter que ce que le classement large lui fournit, et dans ce cas, il s'agissait de trois cas limites.
 
-La fonction ci-dessous est la recette complète : deux requêtes et deux seuils, avec au maximum un nom de compétence retourné.
+La fonction ci-dessous est la recette complète : deux requêtes et deux seuils, avec au plus un nom de compétence en retour.
 
-Pour le pointer vers votre propre liste, remplacez `hermes_roster.json`. Chaque question ci-dessus lit `name`, `description`, `description_full` et `body` depuis ce fichier, et rien d'autre ne connaît Hermes.
+Pour le pointer vers votre propre liste, remplacez `hermes_roster.json`. Chaque question ci-dessus lit
+`name`, `description`, `description_full`, et `body` depuis ce fichier, et rien d'autre
+ne connaît Hermes.
 
 ```python
 def suggest(request: str) -> tuple[str, ...]:
@@ -680,21 +685,21 @@ Relevant to the current request: xurl. Ignore this if it does not fit what the u
 
 ## Étape 5 : mesurer la suggestion
 
-Chacune des 488 requêtes est adressée à l'agent trois fois, une mesure par tour. Les exécutions
-ne diffèrent que par ce qui est indiqué à l'agent :
+Chacune des 488 requêtes est adressée à l'agent trois fois, une tour mesurée à la fois. Les exécutions
+ne diffèrent que par ce qui est dit à l'agent :
 
 | | ce qui va dans le prompt système |
 | ----------------------- | ------------------------------------------------------------------ |
 | agent seul | rien |
 | agent avec une suggestion | ce que `suggest()` a retourné |
-| agent recevant la réponse | le nom de la compétence de couverture, ou "rien ne s'applique" s'il n'y en a pas |
+| agent recevant la réponse | le nom de la compétence de couverture, ou "rien ne s'applique" quand il n'y en a pas |
 
-Le troisième n'est pas réalisable ; il s'agit du plafond auquel les deux autres sont mesurés.
+Le troisième n’est pas réalisable ; il s’agit du plafond contre lequel les deux autres sont mesurés.
 
-La formulation de cette suggestion remplit deux fonctions. Elle indique que la suggestion peut être ignorée,
-car insister davantage permet d’obtenir la conformité même pour des suggestions erronées, et une suggestion fausse est
-pire qu’aucune suggestion. Et un tour sans aucune suggestion envoie toujours une phrase pour le signaler ; ne rien envoyer du tout
-laisserait sans opposition l’instruction propre au roster de « pencher vers le chargement ».
+La formulation de cette suggestion accomplit deux fonctions. Elle indique que la suggestion peut être ignorée,
+car insister davantage permet d’obtenir la conformité même sur des suggestions erronées, et une suggestion fausse est pire
+qu’aucune suggestion. Et un tour sans aucune suggestion envoie toujours une phrase l’indiquant ; ne rien envoyer
+laisserait sans opposition l’instruction propre au roster « pencher du côté du chargement ».
 
 ```python
 texts = [request["text"] for request in REQUESTS]
@@ -763,7 +768,7 @@ print(
 of 315 covered requests: 37 the suggestion fixed, 7 it broke
 ```
 
-La suggestion corrige beaucoup plus de requêtes qu’elle n’en casse, mais elle en casse certaines que l’agent avait déjà correctement traitées. Une suggestion fausse mais assurée est plus persuasive qu’aucune suggestion du tout, ce qui est le prix à payer pour la placer avant le tour.
+La suggestion corrige beaucoup plus de requêtes qu’elle n’en casse, mais elle en casse tout de même certaines que l’agent avait correctement traitées seul. Une suggestion fausse mais assurée est plus persuasive qu’aucune suggestion du tout, ce qui est le prix à payer pour la placer devant le tour.
 
 ```python
 SURFACE, INK, INK2, MUTED = "#fcfcfb", "#0b0b0b", "#52514e", "#898781"
@@ -831,13 +836,13 @@ plt.close(fig)
 ## Ce que montrent les résultats
 
 * Les chargements erronés sont passés de 16,8 % à 7,3 % et les chargements inutiles de 9,8 % à 4,0 %, ce qui explique la majeure partie de l’écart entre le fait de deviner à partir d’un index tronqué et celui de se voir fournir la réponse.
-* Certaines requêtes que l’agent traitait correctement par lui-même deviennent incorrectes dès qu’une suggestion est ajoutée. Les effectifs correspondants figurent ci-dessus.
+* Certaines requêtes que l’agent traitait correctement par lui-même deviennent incorrectes dès qu’une suggestion est ajoutée. Les effectifs sont indiqués ci-dessus.
 
-Copiez cette forme lorsqu’un de vos agents gère un large portefeuille : un classement rapide de tout, puis un examen approfondi de deux ou trois éléments. Chaque étape peut ne rien donner.
+Copiez cette forme lorsqu’un agent de votre côté gère un large effectif : un classement rapide de tout, puis un examen approfondi de deux ou trois éléments. Chaque étape peut revenir les mains vides.
 
-## Ouvrez-le dans le terrain de jeu
+## Ouvrez-le dans le playground
 
-Génère un lien de playground pour la demande de deck issue de l’étape 4, en utilisant la description complète et l’extrait du corps de chaque candidat comme critères.
+Générer un lien de terrain de jeu pour la demande de jeu de cartes issue de l'étape 4, en utilisant la description complète et l'extrait du corps de chaque candidat comme critères.
 
 ```python
 demo_shortlist = tuple(name for name, _ in rank_wide(DEMO[1])["ranked"][:SHORTLIST])
@@ -855,11 +860,11 @@ display(
 
 [Ouvrir la shortlist + les questions dans le playground TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAE4ICOMCAziqQaQMICGS+AnhDPgA4wU+FBADmCFAAsEZfK34BLFFEn4wCKAGt8tTQgA2EiBwAUUCADcZAGh1KYrFAuP5LMiwoQB3W+bh9aWz4KKAR1VGEydlpWKCdjQPwAEWYAMVsAGQAhAHkASjlaOXwAOj4+FExbGFoFJFFXGFkAMwUyOABaFAR-fUcEMorMfGaIWQAjKKQwOob2MBGICBQkZdn8BFjVC1Z9B3iOJHhxmXxx2O0RYWl8UP19fCVb1kQRsgg4R44pBHw4CHU+gA-KRbKQQsgUAB9cyoLAMPD4UikAC+IFsIGCHwqtAw2ERRFIXkkChUjHwJBAKE4fAQ5NIKggpLp6KRICgZCUMgUrHJlL4EC8MgFdQRTBAzAo-VsUrAtjCT0GlTUGk0iVo+gU6kSq26iW6vX6tBK+EAKAT4ADE+AACoLhUyIgBlTQKe74SWbboyzZyuTTDYzIS2oVkW2ilVaIrm5rvTq0DmOFT4cRIGSOZwcLxKVTlSopgBW+p6fD63Q651oYQDSnWHnkMxCQgAGgBZDJ-dgKASljO2Wi01h6WS6ui+SSsMgoRLzFW1UQcACKAEETUv8AADJWYdePIryABaAElrXIyCoFFZXM18K3261DMbLVaAOrSb4QfAAVUrX5-UgURS6K6DzsJwwgKK88hbq4shlMswz3r8AFfBYED6FYCx1H6YFeKwYHmqwRR1AIKC2DwKAkWREzLJIBAcp66walqvzqJGQRKEmrFqlR-AUJWqDpgkADc+CyusYwbNgURxOs3TYG8HzYaUuaYCJCpOPUkkARpDTBHQkKCUgtAiX44x1OJsj9pqKA6TomrqCMrp0CJXhjC6mlZlIwjFqWdD4CYcGVHkth9NwgjqgOQ74COiQSX4iCoI+aCcqI4iyMSyAIFYsg-PgNSnAlBxFMQJXgKq1glaQSKlUx2oVaV1WkHp-EoIZ9VVRJFDNDIyChHuylDAA9IFCFOUgLwDE+NoUBQ1AAVyoJsipHSsIIkhjPSIBZDAroLMGMhhhEXFFNIrBgA+RSeTmnBSMYHQqSa5pWstq23bI1rvGAMChMU0GIa4HAzLoeW1Jp658Dd61IPdQybr+vwZRwYXRQgVZXICF6nPWqqFMU-0Tk4zSxKR0XLGonKXvImqXvtoYOkIla0LUxirmArAVFWMaKUuqCSO8fCkgA5EU4NDCta1jDuM7gxxkgdFxO5AfcREcAA2uwUj86StCDa041IFAPL6B0lZkB4fUALomJINkBLgg2DaI2YwOMJR+INGt8xAAtQDrevsIbuwm+4zK0HkJpoDcLbMCeg34DkzStKEHQAFKOmcUwqH5EDXrlYwKE7436HuFDk97tILOa-57kz8B+ad510EU1qQyz+CpBJuWTBAZ02HI+iypwJskuUVa04dQivetnKaUrDwmLVo46JFpwxfKcAnGAiSIDMrDBToqPXL84w7foKAdFh4N2mQIqoIrLr3BHJKAQ-DzIVTBc2zIHRCp-Qh8I4boZBvgwFTAsUYsh-iAnLBcKsx1-IC2UKoY6thDzMD+D0CAiRNjANmEUGKBQMqlyyjIMCRwN4FRqEIFA0lfhXHkLQHgZ4EZuXGEsTQJoLRWhyIIPgi0GRezgLyREpAACiFCwAzE0mzVqFZfgQPwAAJSXAAcT9AsSsQjUCkgPhOFQj1LTukEfIDo8daTQ0dEwn64jN5SIaEkRwrA5H4Ejr8Jch4OjjScJeGRTjCLyIkifXa6wMgZBbHIcomooCGUutmDB-wyCcE4S+N8wgPz5SMbGeQAAqbJ35fjMGMfgRGuBcn4FMdtYJmllFqJMBQGhngdjG1WqIQqVYUxpgOAUdmJZSQxPKfgAAcqjBY+hoC7EGpWfQzQOjrXoFWKwcQJK+OcaY58GtXDmJNlY34jC9gHH8kuABWd8AACYSgAAYCimI+ssZYNJ1hYRHGwiAaoBmOh6BrHRlY9GqDcLISAsBCpFFMY6EQM8Gg9FsXg4pcTECtV8fgXJLYJCcl9rkggpjcmnIACzWAAMwXIuQAanwCopQAAJF2OhWpkFoGUrF2SACM1gACcRLSUQLVAypF2SLBMpKPiwVZSF6yMMLYIUCBND6DAhQQw-iw4DNyUcrYvxzkXPwFE5AlYym5Pyf3IBXjMYq3mWdDFSrsnWjqBoYwCBzUtnYKwcQCwoBjJgL6V6EATbRM1JpRlqR3GOkdOa60TRdkQVdBOJQYEflnkkLYVYGCEWOItc+TYdZughs+t9A5bZPHph8Y41ZvKFxgCmCgc1FLP5shRGCEAdR6BkBzRmWgm1RGYGJjKgGvwc5Hx-HPIiRRcopRtt2tJmqe7gM7jcfKZBhaaqNEIWaNB6AmlfKSP5qYgRKJ9MU8cQhNhJmJg4e4YFIBL11PgfMVDHhTmihNEoqI62tCnLgXAAoQy3zFBSUg1JaSbVWDAfQ-D61GRoc2hIm0kgQD8rlOe+BBYfvtKKQWagPxwdpIbJO1xZIztNvO5ddBJ66CKBA7dh4hDIW1ByBQm9CgEA9NKUSPp5SBgGsqFBdlmI6mWEvA0JYjSPpALWtkL7aBvpehLMgfJf00hZOKQDwHWSkAbeBmSkGREgGg7Bm48HENiynmMVDkAj7Lw0AobD-5NK5VnQRqgK7iNvLI-gCju5Zw0bo4RAglT9B7WvhPCMbyG4XVhV5CGt1oYPSfaJpQ4ncAqCyTJqkcmAM8CU3W1TTb1NGSgzBodunX4IYSx8Vgxn0O6cwxZnRVmGg2fw0UQj9BChObGORyjRRqOck8+J-ANiwh2LUEW-xixZA1PUQfLRTgoC6LjUJlEaIMTswUAANRkMzJABJ+WshAFMjQ3QwAtgBAYWgiJVYgHzFlDoAqmWnJABbFEQA)
 
-## La suite
+## Quoi de neuf
 
 La même forme apparaît ailleurs :
-[Intent Routing](/en/patterns/intent-routing/) pour l'acheminement vers un
-gestionnaire plutôt qu'une compétence, [Confidence](/en/concepts/confidence/) pour
-la sélection des deux seuils, et
-[Speculative Fan-Out](/en/patterns/fan-out/) pour placer chaque
+[Routage d'intention](/en/patterns/intent-routing/) pour acheminer vers un
+gestionnaire plutôt qu'une compétence, [Confiance](/en/concepts/confidence/) pour
+choisir les deux seuils, et
+[Diffusion spéculative](/en/patterns/fan-out/) pour placer chaque
 question dans une seule requête.

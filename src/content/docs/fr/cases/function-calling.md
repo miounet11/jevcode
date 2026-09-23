@@ -1,13 +1,13 @@
 ---
 title: "Appel de fonction"
-description: "Transforme les demandes de trading en langage naturel en appels de fonctions typées classiques en mappant les noms de fonctions et les arguments à ensemble fermé vers des questions TypeSafe conscientes de la confiance."
+description: "Transforme les demandes de trading en langage naturel en appels de fonctions typées ordinaires en mappant les noms de fonctions et les arguments à ensemble fermé en questions TypeSafe à conscience de confiance."
 section: cases
 order: 190
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/function_calling"
 translatedFrom: en
 ---
-Lorsque vous commandez un « grand latte glacé à l’avoine, sans sucre », le barista ne note pas votre phrase. Il coche quatre options sur un gobelet. Ce livre de recettes fait de même pour une API de trading : une phrase entre, et en ressort un nom de fonction ainsi que ses arguments, évalués sous forme d’énumérations, chacune accompagnée d’un niveau de confiance.
+Lorsque vous commandez un « grand latte glacé à l’avoine, sans édulcorant », le barista ne note pas votre phrase. Il coche quatre options sur un gobelet. Ce livre de recettes fait de même pour une API de trading : une phrase entre, et en ressort un nom de fonction ainsi que ses arguments évalués sous forme d’énumérations, chacun accompagné d’un niveau de confiance.
 
 ```text
 "plot rolling correlation between nvda and spy for the past month"
@@ -23,7 +23,7 @@ Lorsque vous commandez un « grand latte glacé à l’avoine, sans sucre », le
     list_symbols()                                                     confidence 1.00
 ```
 
-Ces appels vont vers dix fonctions ordinaires dans un assistant de trading. Leurs arguments prennent des valeurs dans des listes fixes, donc ils sont déjà ⦇0⦇s :
+Ces appels vont vers dix fonctions ordinaires dans un assistant de trading. Leurs arguments prennent des valeurs dans des listes fixes, donc ils sont déjà des `Literal`s :
 
 ```python
 def plot_price(
@@ -37,19 +37,19 @@ def plot_price(
 ): ...
 ```
 
-Un argument dont les valeurs proviennent d’une liste fixe constitue un ensemble fermé. Lorsqu’il prend une valeur
-parmi cette liste, il pose une question `Choice` portant exactement sur ces valeurs, de sorte que
-ce qui atteint la fonction est une valeur que la fonction accepte. Vous laissez les fonctions telles quelles. Ce
-que vous ajoutez, c’est une spécification qui explique en mots simples ce que signifie chaque argument. À la fin, vous disposez d’un
+Un argument dont les valeurs proviennent d’une liste fixe constitue un ensemble clos. Lorsqu’il prend une valeur
+sur cette liste, il pose une question `Choice` portant exactement sur ces valeurs, de sorte que
+tout ce qui atteint la fonction est une valeur que la fonction accepte. Vous laissez les fonctions tranquilles. Ce
+que vous ajoutez, c’est une spécification qui dit en mots simples ce que signifie chaque argument. À la fin, vous avez un
 `Dispatcher` que vous pouvez montrer à vos propres fonctions.
 
-## Installation
+## Configuration
 
 ```bash
 pip install ipython polars matplotlib numpy "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-Set `TYPESAFE_API_KEY`. Deux modules sont placés à côté de ce fichier. `trader.py` contient les dix
+Ensemble `TYPESAFE_API_KEY`. Deux modules sont placés à côté de ce fichier. `trader.py` contient les dix
 fonctions, ainsi qu'un client TypeSafe qui lit les réponses dans un cache, de sorte que le nouveau rendu rejoue
 les nombres ci-dessous sans appeler l'API. `dispatch.py` contient le code qui lit une
 signature et une spécification et effectue l'appel.
@@ -73,7 +73,11 @@ print(f"{len(TOOLS)} functions over {load().height:,} one-minute bars")
 
 ## Trouver les ensembles fermés dans les signatures
 
-Les indications de type précisent déjà quels arguments proviennent d’une liste fixe, et ce que contient chaque liste. `closed_sets` lit une signature et classe ces arguments selon trois formes : un **choix** (un `Literal`, donc une seule valeur parmi la liste), un **ensemble** (un `list[Literal[...]]`, donc n’importe quel nombre d’entre eux), ou un **drapeau** (un `bool`, donc activé ou désactivé). Les dix fonctions sont définies dans `trader.py`.
+Les indications de type disent déjà quels arguments proviennent d'une liste fixe, et ce qui se trouve dans chaque
+liste. `closed_sets` lit une signature et trie ces arguments selon trois formes : un
+**choice** (un `Literal`, donc une valeur sur la liste), un **set** (un `list[Literal[...]]`,
+donc n'importe quel nombre d'entre eux), ou un **flag** (un `bool`, donc activé ou désactivé). Les dix fonctions sont
+définies dans `trader.py`.
 
 ```python
 for name, fn in TOOLS.items():
@@ -102,14 +106,13 @@ print(
 28 fillable arguments in total
 ```
 
-`top_movers` montre ce qui est exclu. De ses trois arguments, deux sont des ensembles fermés. Le troisième, `limit`, est un `int`, donc il ne reçoit jamais de question et conserve sa valeur par défaut de 3. Le texte libre, les nombres et les dates fonctionnent de la même manière : pas de question, et la valeur par défaut de la fonction reste en vigueur.
+`top_movers` montre ce qui est omis. Parmi ses trois arguments, deux sont des ensembles fermés. Le
+troisième, `limit`, est un `int`, donc il ne reçoit jamais de question et conserve sa valeur par défaut de 3. Le
+texte libre, les nombres et les dates fonctionnent de la même manière : pas de question, et la valeur par défaut de la fonction reste en vigueur.
 
 ## Rédiger la spécification
 
-Le `Literal` vous fournit les chaînes `"1mo"` et `"3mo"`. Il ne précise pas qu'un utilisateur tapant
-« ce trimestre » fait référence au second. C'est la spécification qui le dit. Elle contient une question par argument,
-une ligne par option, une description par fonction, et une question supplémentaire qui permet de choisir entre les
-fonctions. Elle réside dans `spec.json`, et un LLM peut la rédiger pour vous à partir des signatures.
+Le `Literal` vous fournit les chaînes `"1mo"` et `"3mo"`. Il ne précise pas qu'un utilisateur tapant « ce trimestre » fait référence au second. C'est la spécification qui le dit. Elle contient une question par argument, une ligne par option, une description par fonction, et une question supplémentaire qui permet de choisir entre les fonctions. Elle réside dans `spec.json`, et un LLM peut la rédiger pour vous à partir des signatures.
 
 ```python
 SPEC = json.loads(Path("spec.json").read_text())
@@ -145,15 +148,17 @@ for argument in ("style", "moving_average"):
 }
 ```
 
-Les clés d’option sont les chaînes que la fonction prend, donc rien n’a besoin de mapper un libellé à un argument ensuite. `stated` rend un argument optionnel. C’est une seconde question oui/non demandant si la commande dit quoi que ce soit à propos de cet argument. Lorsque la réponse est non, l’appel omet cet argument et la valeur par défaut de la fonction s’applique.
+Les clés d’option sont les chaînes que la fonction prend, de sorte qu’il n’est pas nécessaire de mapper un libellé à un argument ensuite. `stated` rend un argument optionnel. Il s’agit d’une seconde question oui/non demandant si la commande dit quoi que ce soit à propos de cet argument. Lorsque la réponse est non, l’appel exclut cet argument et la valeur par défaut de la fonction s’applique.
 
-Un argument en ensemble pose sa question une fois par membre, ⦇0⦇ servant à représenter le nom du membre. ⦇1⦇ devient une question par ticker.
+Un argument en ensemble pose sa question une fois par membre, `{}` servant de nom de membre. `"Does the user want {} in the comparison?"` devient une question par ticker.
 
-Formulez chaque question en fonction de l’idée plutôt que des mots qu’un utilisateur pourrait choisir, car la correspondance porte sur le sens : « is amd tracking nvidia lately » atteint `rolling_correlation` même si ni *tracking* ni *lately* n’apparaissent nulle part dans `spec.json`. Évitez de nommer une question d’après son paramètre - `"Which resolution?"` ne donne à la commande aucun élément contre lequel effectuer une correspondance.
+Formulez chaque question sur l’idée plutôt que sur les mots qu’un utilisateur pourrait choisir, car la correspondance porte sur le sens : « is amd tracking nvidia lately » atteint `rolling_correlation` même si ni *tracking* ni *lately* n’apparaissent nulle part dans `spec.json`. Évitez de nommer une question d’après son paramètre - `"Which resolution?"` ne donne à la commande rien contre quoi faire la correspondance.
 
 ## Transformer la spécification en questions
 
-`Dispatcher` génère les questions à partir de la spécification une seule fois. Chaque commande est ensuite une requête unique qui porte le choix de la fonction ainsi que les arguments de toutes les fonctions, et le répartiteur ne lit que les réponses correspondant à la fonction choisie.
+`Dispatcher` construit les questions à partir de la spécification une seule fois. Chaque commande est ensuite une requête unique
+transportant le choix de la fonction et les arguments de chaque fonction, et le répartiteur lit
+uniquement les réponses de la fonction choisie.
 
 ```python
 assistant = Dispatcher(SPEC, TOOLS, client)
@@ -178,7 +183,7 @@ for qid in (
 
 ## Exécuter quatorze commandes
 
-Une requête tient sur une seule ligne, et son `confidence` est le jugement le moins certain derrière cet appel.
+Une requête occupe une seule ligne, et son `confidence` est le jugement le moins certain derrière cet appel.
 
 ```python
 COMMANDS = [
@@ -238,9 +243,9 @@ for command, call in CALLS.items():
       rolling_correlation(symbol='AMD', benchmark='NVDA')               confidence 0.82   tool 0.82
 ```
 
-Les deux commandes longues ont été générées comme demandé. « plot rolling correlation between nvda and spy for the past month » a rempli quatre arguments à partir d’une seule phrase. Deux d’entre eux, `symbol` et `benchmark`, sont tirés des mêmes six tickers, et chaque ticker a atterri dans le bon argument car les questions précisent les rôles : *celui qui est mesuré, nommé en premier* contre *le deuxième nommé, l’étalon*. « compare nvda amd and msft over the past three months » a placé trois tickers dans l’ensemble et a exclu les trois autres.
+Les deux commandes longues sont sorties comme demandé. « plot rolling correlation between nvda and spy for the past month » a rempli quatre arguments à partir d’une seule phrase. Deux d’entre eux, `symbol` et `benchmark`, sont tirés des mêmes six tickers, et chaque ticker a atterri dans le bon argument car les questions précisent les rôles : *celui qui est mesuré, nommé en premier* contre *le second nommé, l’étalon*. « compare nvda amd and msft over the past three months » a placé trois tickers dans l’ensemble et a laissé les trois autres de côté.
 
-En exécutant trois d’entre eux :
+En faire fonctionner trois :
 
 ```python
 for command in (
@@ -321,11 +326,11 @@ print(f"  weakest argument: {call.weakest().name}")
   weakest argument: benchmark
 ```
 
-`window` et `resolution` sont tous deux omis ici, car « récemment » ne précise pas la durée ni les barres concernées, de sorte que `rolling_correlation` s’exécute avec ses valeurs par défaut d’un mois et de barres horaires. C’est précisément à cela que sert la question `stated`. Sans elle, le choix aurait dû nommer une fenêtre précise, et il l’aurait fait avec assurance.
+`window` et `resolution` sont tous deux omis ici, car « lately » n’indique pas jusqu’à quelle date en arrière ni sur quelles barres, de sorte que `rolling_correlation` s’exécute avec ses valeurs par défaut d’un mois et de barres horaires. C’est précisément à cela que sert la question `stated`. Sans elle, le choix aurait dû nommer une fenêtre, et il l’aurait fait avec assurance.
 
-## Ouvrez-le dans le terrain de jeu
+## Ouvrez-le dans le playground
 
-Le lien ci-dessous contient une seule commande et les questions pour la fonction qu’elle a sélectionnée : le choix parmi les dix descriptions de fonctions, ainsi que les quatre arguments de `rolling_correlation`. Modifiez la commande à cet endroit et les arguments changeront en conséquence.
+Le lien ci-dessous contient une commande et les questions pour la fonction qu’elle a sélectionnée : le choix parmi les dix descriptions de fonctions, ainsi que les quatre arguments de `rolling_correlation`. Modifiez la commande à cet endroit et les arguments changeront en conséquence.
 
 ```python
 COMMAND = "plot rolling correlation between nvda and spy for the past month"
@@ -343,4 +348,4 @@ display(
 )
 ```
 
-[Ouvrir la commande et ses questions dans le playground TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIADgDYQr4BOEJJAlkgOb5QSWUIkCGKdES+AEYIUAdwTJ8SAG5gu+LkjD4AzkQCe+AGZt8KABYJ8RLiopx+BkABpCRanCIoVGbHkLAAOiAD6PlBA0ft4EXiAo6kQIIfjeUPoQdFDRNrEgDGaUMFC8-Cox3gDq+jz4dCp6hvgwKgiUCioA1gzMBkYolFxgLQ0q5SiKFAH4kAD83rZxlHQodXRcMWH0Zj4q6nCCNPnu3mhVNXX4ooMVw41IEKJH+kn6quubJBW6CVdw2Xc3Zmya5fhkXQQYFsFyGEFUEgUSE0JkovFg3Hq8S4cPwuiQ8GElAmaTgKMaIlW8DxlHUBRAeyMB3qx1QzyQRnoDOMhzWGxoqlePVelSMogSJCMmxRygs0iBtlEMzuF1ULUF93ZJDlTEFyggMBQOO8pHIPnsSRSBF2+1qNJOenBZAgjQUFH4RjZjwA5BUDck0eL6rxEA0FCwSnDtelUJ05Op9TxZpQkOTKdUzQ1GhUefIIkQklxlR0uj1w-hGBAEBUdPUHYrHvgALTXUolIhRJAVUptNGN2ylOB0MDh2wMYatqBkWrB1iOFEIHwcFAwGPbY0U02HWnOPSicG6CwcCtbNECVsqLi+5Go4a1Pk3eIjbtCETR4PUWgtHysdicHh8WM7RdUxMr07gue+A8kOEC1CQmhiIBDy7iU4q3pIYo9AEjAiIYlAdkowGXJUdamAGiioWAwYqMSKIRmYPDzmk8bUkcFpplwggKhAWhSJidQlro5ZOhyNY3Iw+gqLYZCiMJChelwqH4GKCC2AEAzKtOs5fpMIDSDQH70BEcZLvUpjJthVwadwvCCrY8QQA26i2Lo0xNJoPEwcqJQVMIyDBgERA+LJlDUSav7LgxVCKASyjLPabH8rcO5PFQYFGLoWicNmVQWGYwZgJ0oiQKIX4LrRiYGSmOFaCie6Os52gpdoDj+lEXCNH2q7rn5FBgAgQ4MCkAC+PVqY+TKMC+bAcKZn4AHS8SQizeOmRppJZhrBhkHTZLkTbksUMXfFAtp-K2dEGT0TEahQNatuWwg9IgpizhKUhHkC2h0G14ypFMMxzAs7hhAAygACgAmuSgNA-JVR-QAZAD+AAKwAAwI2UShYPgACiaAAGIQ0YJIEhQ+HyPyNApGpAByABqAAiACC5Lk9I3bzLZWizAIojTCg7P4FTdPBrTACy1PkkL1O2LTYDSIoyTKILSTUPg1MIEzyTbGptO0wDAAyosNuZaJs5InMzDzms68Ggt-VjaDkvLUDUCorEoKzPMm9zkhWzbwZoH92v09+GAqNwrvG1zPO+-73h9QNNBDSNb7jfwE3CEg8T47N4SRAtcQJMtH0hpk62fv5IDbVeu37RUMy3j0Y6ws9UlcKt1a8hCrBYeWSBPcCbfqCKZhJI071qQ7X3TD9oTeGDoPA7j+DQ7DiPIwwHWYBj2Pz-jIh+sTApk2kfMBwujPM1wocc+HkhHwLwui8LEtSzLz324ryuq8WAta7r360-rcmGzdlfAQ5sf5qS9rbb8r8wLOwvkcYB+AIE+z9sfGixYQ6ALDqbSQkcA4xzSINZ8r4xofmTqndO+J3pTyzlEckFwYAzQLqtLIOQS7kmpkWU4elHq+nkLUDuyhpqWhYBAcc24m6rXev1AhcciGjXfBtCaUolCXEzvNckS1kgrSbGtVheRyQAAlSrlUEFwPaZQuGBX0k0E6mxNStwCL2NuJgzBHAkE1ZxphzCWH0LZb0VQXFDH0BwPGPiVAj0Wlzb6mcACMxFvyOK4DZNuplixDDDD0WoKg+j8D3BBYMMTRDklbIEtxCBGgFIsMUgJXiZI+ODAAZiqQkmpriDAhLqagISHZ8AAEcYAonvCAfB3hCFMATiQxRyjcpUPwGEdR356GMLUsw4u+jvwcOLG3Oih5NA8jKvUUx5jhjWg8aRK8+FEnJIMH8cQ5SIZ-AsF0vxlQ-j9MGXUKRscnzjOIQoyaHAnYkE1J+NR2cNF5y0UwnRLCNql2KKUUx9Q+gAC9HQJAYcoVsyk5y3hkggO6HB1QCBrOWLsGJZi2C0HQeC5LNTFipXQI2iEGD0vEuWDFGE0RlmZOGCJn1ozzFiXAckDoqx0tmFQEQKl1ZpDhiK781LxTitZZKnFm0C4xPleSalzKkAqopUYdVsrvAxP0OSTlEEpUzjnAU+JC45B0Ctca6O0jRmyN+fIpOSAJqApoCC-gsz5ngsWRqZZaRVl6I1QuTZliEysiSbWCgSK5Rou5SjaM0tszgluqRbcxq9xSJ6qkEAXAMyU04p+dw6kYklvAp1WYYBBYQA6k8dwABtEAAArFWVYYkTRiQAJhAAAXR6kAA)
+[Ouvrez la commande et ses questions dans le playground TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIADgDYQr4BOEJJAlkgOb5QSWUIkCGKdES+AEYIUAdwTJ8SAG5gu+LkjD4AzkQCe+AGZt8KABYJ8RLiopx+BkABpCRanCIoVGbHkLAAOiAD6PlBA0ft4EXiAo6kQIIfjeUPoQdFDRNrEgDGaUMFC8-Cox3gDq+jz4dCp6hvgwKgiUCioA1gzMBkYolFxgLQ0q5SiKFAH4kAD83rZxlHQodXRcMWH0Zj4q6nCCNPnu3mhVNXX4ooMVw41IEKJH+kn6quubJBW6CVdw2Xc3Zmya5fhkXQQYFsFyGEFUEgUSE0JkovFg3Hq8S4cPwuiQ8GElAmaTgKMaIlW8DxlHUBRAeyMB3qx1QzyQRnoDOMhzWGxoqlePVelSMogSJCMmxRygs0iBtlEMzuF1ULUF93ZJDlTEFyggMBQOO8pHIPnsSRSBF2+1qNJOenBZAgjQUFH4RjZjwA5BUDck0eL6rxEA0FCwSnDtelUJ05Op9TxZpQkOTKdUzQ1GhUefIIkQklxlR0uj1w-hGBAEBUdPUHYrHvgALTXUolIhRJAVUptNGN2ylOB0MDh2wMYatqBkWrB1iOFEIHwcFAwGPbY0U02HWnOPSicG6CwcCtbNECVsqLi+5Go4a1Pk3eIjbtCETR4PUWgtHysdicHh8WM7RdUxMr07gue+A8kOEC1CQmhiIBDy7iU4q3pIYo9AEjAiIYlAdkowGXJUdamAGiioWAwYqMSKIRmYPDzmk8bUkcFpplwggKhAWhSJidQlro5ZOhyNY3Iw+gqLYZCiMJChelwqH4GKCC2AEAzKtOs5fpMIDSDQH70BEcZLvUpjJthVwadwvCCrY8QQA26i2Lo0xNJoPEwcqJQVMIyDBgERA+LJlDUSav7LgxVCKASyjLPabH8rcO5PFQYFGLoWicNmVQWGYwZgJ0oiQKIX4LrRiYGSmOFaCie6Os52gpdoDj+lEXCNH2q7rn5FBgAgQ4MCkAC+PVqY+TKMC+bAcKZn4AHS8SQizeOmRppJZhrBhkHTZLkTbksUMXfFAtp-K2dEGT0TEahQNatuWwg9IgpizhKUhHkC2h0G14ypFMMxzAs7hhAAygACgAmuSgNA-JVR-QAZAD+AAKwAAwI2UShYPgACiaAAGIQ0YJIEhQ+HyPyNApGpAByABqAAiACC5Lk9I3bzLZWizAIojTCg7P4FTdPBrTACy1PkkL1O2LTYDSIoyTKILSTUPg1MIEzyTbGptO0wDAAyosNuZaJs5InMzDzms68Ggt-VjaDkvLUDUCorEoKzPMm9zkhWzbwZoH92v09+GAqNwrvG1zPO+-73h9QNNBDSNb7jfwE3CEg8T47N4SRAtcQJMtH0hpk62fv5IDbVeu37RUMy3j0Y6ws9UlcKt1a8hCrBYeWSBPcCbfqCKZhJI071qQ7X3TD9oTeGDoPA7j+DQ7DiPIwwHWYBj2Pz-jIh+sTApk2kfMBwujPM1wocc+HkhHwLwui8LEtSzLz324ryuq8WAta7r360-rcmGzdlfAQ5sf5qS9rbb8r8wLOwvkcYB+AIE+z9sfGixYQ6ALDqbSQkcA4xzSINZ8r4xofmTqndO+J3pTyzlEckFwYAzQLqtLIOQS7kmpkWU4elHq+nkLUDuyhpqWhYBAcc24m6rXev1AhcciGjXfBtCaUolCXEzvNckS1kgrSbGtVheRyQAAlSrlUEFwPaZQuGBX0k0E6mxNStwCL2NuJgzBHAkE1ZxphzCWH0LZb0VQXFDH0BwPGPiVAj0Wlzb6mcACMxFvyOK4DZNuplixDDDD0WoKg+j8D3BBYMMTRDklbIEtxCBGgFIsMUgJXiZI+ODAAZiqQkmpriDAhLqagISHZ8AAEcYAonvCAfB3hCFMATiQxRyjcpUPwGEdR356GMLUsw4u+jvwcOLG3Oih5NA8jKvUUx5jhjWg8aRK8+FEnJIMH8cQ5SIZ-AsF0vxlQ-j9MGXUKRscnzjOIQoyaHAnYkE1J+NR2cNF5y0UwnRLCNql2KKUUx9Q+gAC9HQJAYcoVsyk5y3hkggO6HB1QCBrOWLsGJZi2C0HQeC5LNTFipXQI2iEGD0vEuWDFGE0RlmZOGCJn1ozzFiXAckDoqx0tmFQEQKl1ZpDhiK781LxTitZZKnFm0C4xPleSalzKkAqopUYdVsrvAxP0OSTlEEpUzjnAU+JC45B0Ctca6O0jRmyN+fIpOSAJqApoCC-gsz5ngsWRqZZaRVl6I1QuTZliEysiSbWCgSK5Rou5SjaM0tszgluqRbcxq9xSJ6qkEAXAMyU04p+dw6kYklvAp1WYYBBYQA6k8dwABtEAAArFWVYYkTRiQAJhAAAXR6kAA)

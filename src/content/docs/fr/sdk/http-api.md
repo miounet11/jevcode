@@ -1,6 +1,6 @@
 ---
 title: "Référence de l'API HTTP"
-description: "Appelez directement l’endpoint d’évaluation TypeSafe — forme de la requête, les nouveaux types de questions /choice/ et /score/, formes de la réponse, et gestion des erreurs."
+description: "Appelez directement l’endpoint d’évaluation TypeSafe — forme de la requête, les types de questions noul / choice / score, formes de réponse, et gestion des erreurs."
 section: sdk
 order: 50
 tags: ['api', 'http', 'reference']
@@ -15,9 +15,9 @@ Authorization: Bearer <API_KEY>
 Content-Type: application/json
 ```
 
-Envoyez un `state` avec une carte de `questions` typés, et recevez un `answer` par question.
+Envoyez un `state` avec une carte de `questions` tapés, et recevez un `answer` par question.
 
-## Corps de la requête
+Corps de la demande
 
 ```json
 {
@@ -72,7 +72,7 @@ Une question par oui ou par non. **Renvoie la probabilité que la réponse soit 
 
 ### choice — choisir parmi les options
 
-Choisissez une option dans un ensemble que vous définissez, en renvoyant l'option choisie **ainsi que la distribution de probabilité complète**.
+Choisissez une option parmi un ensemble que vous définissez, en renvoyant l'option choisie **ainsi que la distribution de probabilité complète**.
 
 ```json
 {
@@ -88,7 +88,7 @@ Choisissez une option dans un ensemble que vous définissez, en renvoyant l'opti
 }
 ```
 
-`criteria` est requis, de type `map⦇0⦈` : noms d'options mappés à une description de grille. Utilisez `null` comme valeur lorsqu'une option ne nécessite pas d'explication supplémentaire.
+`criteria` est requis, de type `map<string, string | null>` : noms d'options mappés à une description de grille. Utilisez `null` comme valeur lorsqu'une option ne nécessite pas d'explication supplémentaire.
 
 ### score — évaluer selon une échelle
 
@@ -108,7 +108,7 @@ Choisissez une option dans un ensemble que vous définissez, en renvoyant l'opti
 
 Corps de la réponse
 
-Chaque question produit une réponse, indexée par l’identifiant que vous avez fourni.
+Chaque question produit une réponse, indexée par l’id que vous avez fourni.
 
 ```json
 {
@@ -131,9 +131,9 @@ Chaque question produit une réponse, indexée par l’identifiant que vous avez
 
 ### Formes de réponse par type
 
-Chaque réponse porte un `type` correspondant à sa question. Les réponses `choice` et `score` portent également un `confidence` (compris entre 0 et 1), dérivé de la distribution de probabilité de cette réponse (voir la page officielle sur la Confiance).
+Chaque réponse porte un `type` correspondant à sa question. Les réponses `choice` et `score` portent également `confidence` (entre 0 et 1), dérivées de la distribution de probabilité de cette réponse (voir la page officielle Confidence).
 
-**réponse de Noul**
+**réponse noul**
 
 | Champ | Type | Description |
 | :--- | :--- | :--- |
@@ -143,13 +143,13 @@ Chaque réponse porte un `type` correspondant à sa question. Les réponses `cho
 { "type": "noul", "noul": 0.92 }
 ```
 
-**réponse du choix**
+**réponse de choix**
 
 | Champ | Type | Description |
 | :--- | :--- | :--- |
 | `choice` | string | L'option la plus probable |
 | `probabilities` | map&lt;string, number&gt; | Probabilité par option ; la somme est égale à 1 |
-| `confidence` | number | Niveau de certitude du modèle, dérivé des probabilités |
+| `confidence` | number | Degré de certitude du modèle, dérivé des probabilités |
 
 ```json
 {
@@ -165,8 +165,8 @@ Chaque réponse porte un `type` correspondant à sa question. Les réponses `cho
 | Champ | Type | Description |
 | :--- | :--- | :--- |
 | `score` | number | La valeur pondérée par la probabilité, qui **peut se situer entre les niveaux** |
-| `legend` | map&lt;string, string&gt; | Associe chaque indice de niveau à sa description |
-| `probabilities` | map&lt;string, number&gt; | Probabilité par niveau (clés en chaîne) ; la somme est égale à 1 |
+| `legend` | map&lt;string, string&gt; | Associe chaque index de niveau à sa description |
+| `probabilities` | map&lt;string, number&gt; | Probabilité par niveau (clés de type chaîne) ; la somme est égale à 1 |
 | `confidence` | number | Le degré de certitude du modèle, dérivé des probabilités |
 
 ```json
@@ -179,19 +179,19 @@ Chaque réponse porte un `type` correspondant à sa question. Les réponses `cho
 }
 ```
 
-Remarquez comment `score` se rapporte à `probabilities` : les trois probabilités de niveau sont 0,05 / 0,3 / 0,65, ce qui donne un `score` de 1,6. Ainsi, `score` n'a pas besoin d'être un nombre entier — ce qui est précisément ce qui le distingue de `choice` : `choice` vous offre une option discrète, tandis que `score` peut exprimer « quelque part entre deux niveaux. »
+Notez comment `score` se rapporte à `probabilities` : les probabilités à trois niveaux sont de 0,05 / 0,3 / 0,65, ce qui donne une pondération vers un `score` de 1,6. Ainsi, `score` n’a pas besoin d’être un nombre entier — ce qui est précisément ce qui le distingue de `choice` : `choice` vous propose une option discrète, tandis que `score` peut exprimer « quelque part entre deux niveaux. »
 
 ## Erreurs
 
-Les erreurs utilisent les codes de statut HTTP standard, avec un corps JSON décrivant ce qui a mal tourné.
+Les erreurs utilisent les codes de statut HTTP standard, avec un corps JSON décrivant ce qui s'est mal passé.
 
 | Statut | Signification |
 | :--- | :--- |
 | `401 Unauthorized` | La clé API est manquante ou invalide. Vérifiez l'en-tête `Authorization` |
-| `422 Unprocessable Entity` | Le corps de la requête a échoué à la validation, par exemple un champ obligatoire manquant ou une question mal formée. Le corps indique le champ fautif |
+| `422 Unprocessable Entity` | Le corps de la requête a échoué à la validation, par exemple un champ requis manquant ou une question mal formée. Le corps indique le champ fautif |
 | `429 Too Many Requests` | Vous avez dépassé votre limite de taux. Réessayez après un court délai |
 | `529 Overloaded` | TypeSafe est temporairement surchargé. Réessayez après un court délai |
 
-### Gestion des limites de débit
+### Gestion des limites de taux
 
-Sur `429` ou `529`, **réessayez avec une temporisation exponentielle** plutôt que de réessayer immédiatement. Si vous utilisez un SDK officiel, sa politique de réessai par défaut gère cela automatiquement, donc aucun code supplémentaire n'est nécessaire.
+Sur `429` ou `529`, **réessayer avec une backoff exponentielle** plutôt que de réessayer immédiatement. Si vous utilisez un SDK officiel, sa politique de retry par défaut gère cela automatiquement, donc aucun code supplémentaire n'est nécessaire.

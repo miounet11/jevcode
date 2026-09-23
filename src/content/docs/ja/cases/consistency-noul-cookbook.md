@@ -1,26 +1,31 @@
 ---
 title: "自己一貫性：nouls"
-description: "ルート不確実な確率を人間のレビューに振り分けつつ、基礎となるnoul値は可視化したままにする。"
+description: "ルート不確実な確率を人間のレビューに振り分けつつ、基となる数値を可視状態に保つ。"
 section: cases
 order: 160
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/consistency_noul_cookbook"
 translatedFrom: en
 ---
-このクックブックは1件の自動車保険請求を扱い、それに対して14項目のルーブリックを15回適用し、各回答が反復を通じて安定しているかどうかを確認します。すべてのチェックは`Noul`であり、各回答は1つの真偽問題に対するP(true)です。着信請求を「支払う」「却下」「人間担当者へ転送」に分類する請求トリアージパイプラインでは、確率が判断を導きます。閾値付近の小さな変化が、取られるべきアクションを変更する可能性があります。
+このクックブックは1件の自動車保険請求を扱い、それに対して14問のルーブリックを15回適用し、
+各回答が反復を通じて安定しているかどうかを確認します。すべてのチェックは
+`Noul`であり、したがって各回答は1つの真偽問題に対するP(true)です。着信する請求を
+支払い、拒否、または人間担当への送付に分類する請求トリアージ
+パイプラインでは、確率が判断を導きます。閾値付近の小さな変化が、
+実行されるアクションを変更する可能性があります。
 
-ルビは14 `Noul` 問で、各ランは全14問に答える1回の呼び出しです。私たちは`NUM_SAMPLES` = 15 回の反復を条件ごとに実行します。ここでいう条件とは、1つのモデルと1つの設定の組み合わせを指し、返ってきた確率をすべて示します。
+ルーブリックは14 `Noul`の質問からなり、各ランは14のすべてに回答する1回の呼び出しです。私たちは`NUM_SAMPLES` = 15回の反復を条件ごとに実行します。ここでいう条件とは、1つのモデルと1つの設定の組み合わせを指し、返ってきたすべての確率を示します。
 
 条件：
 
-* 非推論型LLM `claude-haiku-4-5`および `gpt-5.4-mini`は、温度 `0`およびAPIデフォルト設定で実行。
-* 同じ2つの非推論型モデルをTrue/Falseモードで実行：各質問に対して1.0および0.0にマッピングされた単一の「はい」または「いいえ」。
-* 推論型LLM `gpt-5.5`および `claude-opus-4-8`は、温度調整ダイヤルを持たない。
-* TypeSafe：14 `Noul`の質問に対して1回の `system_one`呼び出しを行い、各呼び出しごとに新しい `uid`フィールド（使い捨ての一意値）を設定。
+* 非推論型LLM `claude-haiku-4-5`および `gpt-5.4-mini`、温度 `0`およびAPIデフォルト設定。
+* 同じ2つの非推論型モデルをTrue/Falseモードで：各質問につき1つの簡潔なyesまたはno、1.0および0.0にマッピング。
+* 推論型LLM `gpt-5.5`および `claude-opus-4-8`、温度調整機能なし。
+* TypeSafe：14 `Noul`の質問に対して1回の `system_one`呼び出し、各呼び出しごとに新しい `uid`フィールド（使い捨ての一意値）を使用。
 
-注目すべき点：LLMの回答は実行ごとに異なり、温度 `0` でも同様であり、判断を要する場面ではモデルが *自分自身* と矛盾する。TypeSafeの質問ごとの平均確率の標準偏差は `0.0102` で、ここに示すすべてのLLM確率条件を下回る。その `covered` の回答は `0.43` から `0.53` にまたがり、`0.5` の判断閾値を横断している。
+注目すべき点：LLMの回答は実行ごとに異なり、温度 `0` でも同様であり、判断を要する場面ではモデルが *自分自身* と矛盾する。TypeSafeの質問ごとの平均確率の標準偏差は `0.0102` で、ここに示すすべてのLLM確率条件を下回っている。その `covered` の回答は `0.43` から `0.53` にまたがり、 `0.5` の判断閾値を横断している。
 
-`0.30`から`0.70`までの確率を、人間のレビュー用の明示的な`uncertain`結果に変換します。最後の図は、TypeSafeの確率をこれらのアクションにマッピングしつつ、基盤となる確率を可視化したものです。
+`0.30`から`0.70`までの確率を、人間のレビュー用の明示的な`uncertain`結果に変換します。最後の図は、基礎となる確率が可視化したまま、TypeSafeの確率をこれらのアクションにマッピングしています。
 
 ## セットアップ
 
@@ -29,7 +34,7 @@ pip install anthropic openai matplotlib ipython "typesafe-sdk>=0.5.7" cooksafe -
 ```
 
 その後、`TYPESAFE_API_KEY`、`ANTHROPIC_API_KEY`、および`OPENAI_API_KEY`を設定します。
-この実行では、2026-09-11にサンプリングされた本番環境のAPIで`jev-latest`を使用しています。
+この実行では、2026-09-11にサンプリングされた本番環境のAPIに対して`jev-latest`を使用しています。
 
 ```python
 import hashlib
@@ -87,16 +92,16 @@ typesafe_client = TypeSafeClient(
 
 ## 状態：JSON形式の自動車保険請求
 
-境界線付近の判断がいくつか組み込まれた1つの主張：
+境界的な判断がいくつか組み込まれた一つの主張：
 
-* 損失はトラックデイイベント中に発生した（ポリシーは「トラック/競技運転」を除外する）が、サーキット上ではなく、駐車場で車両が静止している際に起きた。
-* ポリシーにレンタカー補償が含まれていないにもかかわらず、レンタカーの明細が請求されている。
-* 衝突事故で2,000ドルを超える場合、警察報告書の提出がポリシーで義務付けられているが、警察報告書が添付されていない。
-* 自動トリアージのノートには、人間のレビューを経ず、免責金額を控除することなく、すでに「承認、全額支払う」とマークされている。
+* 事故はトラックデイイベント中に発生した（保険約款は「トラック/競技運転」を免責とする）が、サーキット上ではなく、駐車場で車両が静止している際のことだった。
+* 保険約款にレンタカー補償が含まれていないにもかかわらず、レンタカーの項目が請求されている。
+* 保険約款は2,000ドル以上の事故には警察届出を義務付けているが、警察届が添付されていない。
+* 人間のレビューや免責額の控除なしに、自動トリアージのノートですでに「承認、全額支払い」とマークされている。
 
-以下のルブリックの質問の中には、明確な答えがあるものもあれば、サンプリングされたLLMの回答がばらつき、モデル間で意見が分かれるような境界線上のものもいくつかあります。
+以下のルブリックの質問の中には、明確な答えがあるものもあれば、サンプリングされたLLMの回答が散漫になり、モデル間で意見が分かれるような境界線上のものもいくつかあります。
 
-主張はJSON構造体です。LLMはプロンプト内で⦇0⦇を受け取り、TypeSafeは構造体を状態として直接取り扱います。
+主張は JSON 構造体です。LLM はプロンプト内で `json.dumps(CLAIM)` を取得し、TypeSafe はその構造体を状態として直接受け取ります。
 
 ```python
 CLAIM = {
@@ -140,9 +145,9 @@ CLAIM = {
 }
 ```
 
-## ルーブリック：14 `Noul` 問
+## ルーブリック：14 `Noul` の質問
 
-1行に1つの`key -> question`エントリとし、確認対象の事象が真であることを「はい」で示せるように記述します。これにより各行の比較可能性が保たれます：各モデルの確率とTypeSafeの`noul`は、同じ事象を測定します。
+1行に1つの`key -> question`エントリとし、確認対象の事柄が真であることを「yes」が意味するように記述します。これにより各行の比較可能性が保たれます：各モデルの確率とTypeSafeの`noul`は、同じ事柄を測定します。
 
 ```python
 QUESTIONS = {
@@ -165,91 +170,94 @@ QUESTIONS = {
 
 ## 私たちがどのように問いかけるか
 
-各LLM呼び出しは、`json.dumps(CLAIM)`と14の質問すべてを含む1つのプロンプトです。モデルは、各質問のキーに確率をマッピングしたJSONオブジェクトを返します。呼び出しはモデル名に基づきAnthropicまたはOpenAIにルーティングされます：推論非対応モデルは`temperature`（`0`またはAPIのデフォルト）を使用し、推論対応モデルはまず思考し、温度係数は使用しません。
+各LLM呼び出しは、`json.dumps(CLAIM)`と14の質問すべてを含む1つのプロンプトです。モデルは、各質問のキーを確率にマッピングしたJSONオブジェクトを返します。呼び出しはモデル名に基づきAnthropicまたはOpenAIにルーティングされます：推論非対応モデルは`temperature`（`0`またはAPIデフォルト）を使用し、推論対応モデルはまず思考し、温度係数は使用しません。
 
-推論非搭載モデルもまた、True/False バリアントを実行する。各質問に対して、
-1.0 と 0.0 にマッピングされる、単なる yes または no で回答する。これは
-確実な判断を強制し、不確実な中間領域に何らかの重みを残すことができない場合、
-これらのモデルがどのように振る舞うかを示す。
+推論型以外のモデルも、True/False 版を実行する。各質問に
+裸の yes または no で回答し、それを 1.0 と 0.0 にマッピングする。これにより
+明確な判断を強制し、不確かな中間に何らかの重みを残せない場合、
+これらのモデルがどのような挙動を示すかを示す。
 
-TypeSafeの呼び出しは、同じ主張と14の`Noul`質問に対して1回の`system_one`リクエストです。各回答の`noul`はP(true)です。
+TypeSafeの呼び出しは、同じ主張と14の`Noul`質問に対して、1回の`system_one`リクエストです。各回答の`noul`はP(true)です。
 
-すべてのクエリには、毎回異なる一時的な一意値である`uid`が付随します。これは実行ごとに変化しますが、主張と評価基準は変更されません。これはLLMのプロンプトおよびTypeSafeの状態における追加フィールドに表示されます。この構成では、無関係なフィールドへの感応度と、同一の要求において発生するばらつきを分離することができません。
+すべてのクエリには、`uid`という使い捨ての一意な値が新たに付与されます。これは各実行ごとに変化しますが、主張と評価基準は変更されません。これはLLMのプロンプトおよびTypeSafeの状態における追加フィールドに表示されます。この構成では、無関係なフィールドへの感応度と、同一の要求において発生する可能性のあるばらつきを分離することができません。
 
-> **注意：** 「JSONオブジェクトのみ」という指示にもかかわらず、`claude-haiku-4-5`はほぼすべての返信を ````json ... ``` ` fence that strict `json.loads` rejects > (the
-> other models return bare JSON). The helper peels the fence; a reply that still fails > to
-> parse becomes a parse failure, counted but not scored.
+> **注:** 「JSONオブジェクトのみ」という指示にもかかわらず、`claude-haiku-4-5`はほぼすべての返信を` ```json ... ``` `で囲むフェンスで包んでおり、厳格な`json.loads`はこれを拒否します（他のモデルは生JSONを返します）。ヘルパーはフェンスを取り除きます；依然として解析に失敗した返信は解析失敗としてカウントされますが、スコアには含まれません。
 
-Each helper returns the answer, an estimated cost, and the round-trip latency.
+各ヘルパーは、回答、推定コスト、および往復レイテンシを返します。
 
 ````python
 def rubric_prompt(mode: str, sample_index: int) -> str:
- """1つのプロンプトに主張と全14の質問を含める；``mode``が回答形式を選択する。
+    """The claim + all 14 questions in one prompt; ``mode`` picks the answer format.
 
- ``mode="prob"`` asks for a probability per question, ``mode="yesno"`` は真偽のみを返す場合用です。
- ``sample_index`` は uid バスターを初期化し、各繰り返しで独立した別の抽選が行われるようにします。"""
- if mode == "yesno":
- answer_format = (
- "\n\n各質問にはいかいいえで答えてください。\n"
- "各質問のキーを「yes」または「no」にマッピングする JSON オブジェクトのみを返信してください。質問ごとに1つのエントリとします。"
- )
- else:
- answer_format = (
- "\n\n各質問について、答えが yes である確率を提示してください。\n"
- "各質問のキーを 0.00 から 1.00 の間の数値にマッピングする JSON オブジェクトのみを返信してください。質問ごとに1つのエントリとします。"
- )
- return (
- f"uid: {sample_index}:{token_hex(4)}\n\n"
- f"ドキュメント（自動車保険の請求）:\n{json.dumps(CLAIM, indent=2)}\n\n質問:\n"
- + "\n".join(f"- {key}: {question}" for key, question in QUESTIONS.items())
- + answer_format
- )
+    ``mode="prob"`` asks for a probability per question, ``mode="yesno"`` for a bare True/False.
+    ``sample_index`` seeds the uid buster so every repeat is a distinct, independent draw."""
+    if mode == "yesno":
+        answer_format = (
+            "\n\nAnswer each question yes or no.\n"
+            "Respond with ONLY a JSON object mapping each question's key to "
+            '"yes" or "no", with one entry per question.'
+        )
+    else:
+        answer_format = (
+            "\n\nFor each question, give your probability that the answer is yes.\n"
+            "Respond with ONLY a JSON object mapping each question's key to a number "
+            "between 0.00 and 1.00, with one entry per question."
+        )
+    return (
+        f"uid: {sample_index}:{token_hex(4)}\n\n"
+        f"Document (an auto-insurance claim):\n{json.dumps(CLAIM, indent=2)}\n\nQuestions:\n"
+        + "\n".join(f"- {key}: {question}" for key, question in QUESTIONS.items())
+        + answer_format
+    )
 
 
 def _cost(prices: tuple[float, float], input_tokens: int, output_tokens: int) -> float:
- return input_tokens / 1e6 * prices[0] + output_tokens / 1e6 * prices[1]
+    return input_tokens / 1e6 * prices[0] + output_tokens / 1e6 * prices[1]
 
 
 def _call_llm(model: str, prompt: str, temperature: float | None):
- """1回のLLM呼び出し -> (text, cost_usd, latency_s)、モデル名でルーティング。"""
- reasoning = model in REASONING_MODELS
- started = perf_counter()
- if model.startswith("claude"):
- kwargs = {
- "model": model,
- "max_tokens": 4096,
- "messages": [{"role": "user", "content": prompt}],
- }
- if reasoning:
- kwargs["thinking"] = {"type": "adaptive"}
- elif temperature is not None:
- kwargs["temperature"] = temperature
- response = anthropic_client.messages.create(**kwargs)
- text = next((b.text for b in response.content if b.type == "text"), "")
- usage = (response.usage.input_tokens, response.usage.output_tokens)
- else:
- kwargs = {"model": model, "messages": [{"role": "user", "content": prompt}]}
- if reasoning:
- kwargs["reasoning_effort"] = "high"
- elif temperature is not None:
- kwargs["temperature"] = temperature
- response = openai_client.chat.completions.create(**kwargs)
- text = response.choices[0].message.content
- usage = (response.usage.prompt_tokens, response.usage.completion_tokens)
- return text, _cost(LLM_PRICES[model], *usage), perf_counter() - started
+    """One LLM call -> (text, cost_usd, latency_s), routed by model name."""
+    reasoning = model in REASONING_MODELS
+    started = perf_counter()
+    if model.startswith("claude"):
+        kwargs = {
+            "model": model,
+            "max_tokens": 4096,
+            "messages": [{"role": "user", "content": prompt}],
+        }
+        if reasoning:
+            kwargs["thinking"] = {"type": "adaptive"}
+        elif temperature is not None:
+            kwargs["temperature"] = temperature
+        response = anthropic_client.messages.create(**kwargs)
+        text = next((b.text for b in response.content if b.type == "text"), "")
+        usage = (response.usage.input_tokens, response.usage.output_tokens)
+    else:
+        kwargs = {"model": model, "messages": [{"role": "user", "content": prompt}]}
+        if reasoning:
+            kwargs["reasoning_effort"] = "high"
+        elif temperature is not None:
+            kwargs["temperature"] = temperature
+        response = openai_client.chat.completions.create(**kwargs)
+        text = response.choices[0].message.content
+        usage = (response.usage.prompt_tokens, response.usage.completion_tokens)
+    return text, _cost(LLM_PRICES[model], *usage), perf_counter() - started
 
 
-# すべてのサンプル（LLM と TypeSafe）は ``json_cache.json`` にキャッシュされ、これはクックブックに同梱されているため、再レンダリングしても API 費用をかけずに公開済みの数値を再現できる。``sample_index`` はキャッシュキーの一部であるため、NUM_SAMPLES の各繰り返しはそれぞれ独立したサンプリングとなる。ファイルを削除すると、ライブサンプリングが再実行される。
+# All samples (LLM and TypeSafe) are cached to ``json_cache.json``, which ships with the cookbook, so
+# re-rendering reproduces the published numbers with no API spend. ``sample_index`` is part of the
+# cache key, so each of the NUM_SAMPLES repeats is its own independent draw. Delete the file to
+# re-sample live.
 json_cache = JsonCache(Path("json_cache.json"))
 
 
 def _rubric_fingerprint() -> str:
- """プロンプト/ルーブリックを形成するすべてのものの短いダイジェスト：状態と各質問の
- テキスト。以下に示すキャッシュされた呼び出しに渡されるため、クレームや質問のいずれかを編集すると
- キャッシュキーが変更され、古い文章のために生成された静かな stale な回答を
- 提供し続けるのではなく、新しいサンプルが強制されます。"""
- payload = json.dumps([CLAIM, QUESTIONS], sort_keys=True, default=str)
- return hashlib.sha256(payload.encode()).hexdigest()[:12]
+    """Short digest of everything that shapes the prompt/rubric: the state and every question's
+    text. Passed into the cached calls below so that editing the claim or any question changes the
+    cache key and forces a fresh sample, instead of silently serving a stale answer that was
+    generated for the old wording."""
+    payload = json.dumps([CLAIM, QUESTIONS], sort_keys=True, default=str)
+    return hashlib.sha256(payload.encode()).hexdigest()[:12]
 
 
 RUBRIC_HASH = _rubric_fingerprint()
@@ -257,67 +265,66 @@ RUBRIC_HASH = _rubric_fingerprint()
 
 @json_cache
 def _call_typesafe(sample_index: int, rubric_hash: str, model: str):
- """1回の呼び出しに対して、Noul、トークン使用量、レイテンシ、およびモデルのメタデータを返します。
+    """Return nouls, token usage, latency, and model metadata for one call.
 
-``rubric_hash`` and ``model`` ルールやモデルの変更間で再利用しないこと。
-エイリアスが将来異なるバージョンを解決する可能性があるため、返されたモデルを保持すること。
- """
- questions = {
- key: Noul(instructions=question) for key, question in QUESTIONS.items()
- }
- started = perf_counter()
- response = typesafe_client.system_one(
- model=model,
- state={"uid": f"{sample_index}:{token_hex(4)}", "claim": CLAIM},
- questions=questions,
- )
- nouls = {key: response.answers[key].noul for key in QUESTIONS}
- return (
- nouls,
- response.usage.input_tokens,
- response.usage.output_tokens,
- perf_counter() - started,
- {"requested_model": model, "response_model": response.model},
- )
+    ``rubric_hash`` and ``model`` prevent reuse across rubric or model changes.
+    Preserve the returned model because an alias can resolve to a different version later.
+    """
+    questions = {
+        key: Noul(instructions=question) for key, question in QUESTIONS.items()
+    }
+    started = perf_counter()
+    response = typesafe_client.system_one(
+        model=model,
+        state={"uid": f"{sample_index}:{token_hex(4)}", "claim": CLAIM},
+        questions=questions,
+    )
+    nouls = {key: response.answers[key].noul for key in QUESTIONS}
+    return (
+        nouls,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+        perf_counter() - started,
+        {"requested_model": model, "response_model": response.model},
+    )
 
 
-申し訳ありませんが、提供されたテキストはMarkdown形式ではなく、Pythonのコードブロックです。また、翻訳対象の日本語テキストが含まれていないため、ご要望の翻訳タスクを実行できません。
+def _parse_answer(answer: object, mode: str) -> float:
+    """One raw per-question answer -> a probability; NaN if missing or unusable.
 
-もし、このコードの日本語でのドキュメント文字列（docstring）の翻訳や、関連する技術文書の翻訳をご希望であれば、その旨をお知らせください。
-
-``mode="prob"`` reads the answer as a number; ``mode="yesno"`` は True/False を 1.0 / 0.0 にマッピングします。
-それ以外のケース（キーの欠落、数値以外の値、yes でも no でもない返信）はすべて NaN となり、
-正当に見える値にはなりません。"""
- if answer is None:
- return float("nan")
- if mode == "yesno":
- text = str(answer).strip().lower()
- if text == "yes":
- return 1.0
- if text == "no":
- return 0.0
- return float("nan")
- try:
- return float(answer)
- except (TypeError, ValueError):
- return float("nan")
+    ``mode="prob"`` reads the answer as a number; ``mode="yesno"`` maps True/False to 1.0 / 0.0.
+    Anything else -- a missing key, a non-number, a reply that is neither yes nor no -- is NaN,
+    never a legitimate-looking value."""
+    if answer is None:
+        return float("nan")
+    if mode == "yesno":
+        text = str(answer).strip().lower()
+        if text == "yes":
+            return 1.0
+        if text == "no":
+            return 0.0
+        return float("nan")
+    try:
+        return float(answer)
+    except (TypeError, ValueError):
+        return float("nan")
 
 
 @json_cache
 def ask_llm_rubric(
- model: str,
- mode: str,
- temperature: float | None,
- sample_index: int,
- rubric_hash: str,
+    model: str,
+    mode: str,
+    temperature: float | None,
+    sample_index: int,
+    rubric_hash: str,
 ):
- """1回のLLMルーブリッククエリ -> (質問キーでキー付けされた質問ごとの確率、cost_usd、
- latency_s); 応答が解析できない箇所はNaN。``rubric_hash``は本体では未使用 -- 呼び出し側は
- ``RUBRIC_HASH``を渡すため、編集された状態やルーブリックがキャッシュを無効化し、古い応答を
- 返すことを防ぎます。"""
- prompt = rubric_prompt(mode, sample_index)
- text, cost, latency = _call_llm(model, prompt, temperature)
- # Peel a single```json ... ``` fence (claude-haiku-4-5 adds one despite "ONLY a JSON object").
+    """One LLM rubric query -> (per-question probabilities keyed by question key, cost_usd,
+    latency_s); NaNs where the reply doesn't parse. ``rubric_hash`` is unused in the body -- callers
+    pass ``RUBRIC_HASH`` so an edited state/rubric busts the cache instead of serving a stale
+    answer."""
+    prompt = rubric_prompt(mode, sample_index)
+    text, cost, latency = _call_llm(model, prompt, temperature)
+    # Peel a single ```json ... ``` fence (claude-haiku-4-5 adds one despite "ONLY a JSON object").
     stripped = text.strip()
     if stripped.startswith("```"):
         stripped = stripped[stripped.find("\n") + 1 :] if "\n" in stripped else ""
@@ -344,12 +351,12 @@ def ask_llm_rubric(
 | 推論モデル | `claude-opus-4-8` | — | ✓ | — |
 | TypeSafe | `jev-latest` (`typesafe_noul`) | — | ✓ | — |
 
-* チェックマークは1つの条件で、15回実行。ダッシュは未テストの組み合わせ。
-* デフォルトの列は温度引数を一切送信しない：非推論モデルはAPIデフォルトを使用し、推論モデルとTypeSafeは温度設定なしで実行される。
-* Yes/Noの回答はそれぞれ `1.0` / `0.0` にマッピングされる。
-* 再現性に関する一般的なアドバイスは温度 `0` であり、そのためAPIデフォルトと比較する。
+* チェックマークは1つの条件を示し、15回実行される。ダッシュはテストされていない組み合わせを示す。
+* デフォルトの列は温度引数を送信しない：非推論モデルはAPIのデフォルトを使用し、推論モデルとTypeSafeは温度設定なしで実行される。
+* はい/いいえの回答はそれぞれ `1.0` / `0.0` に対応する。
+* 再現性に関する一般的なアドバイスは温度 `0` であり、そのためAPIのデフォルトと比較する。
 
-`NUM_SAMPLES` = 15 回ずつ各条件で描画します。各回には固有のキャッシュキーがあり、別々の描画としてカウントされます。キャッシュ（`json_cache.json`）は cookbook に同梱されているため、再描画時に再利用され、API コールは消費されません。キャッシュを削除すると、再びライブでサンプリングできます。
+各条件で`NUM_SAMPLES` = 15回の繰り返しを行います。各繰り返しには独自のキャッシュキーがあり、別個の描画としてカウントされます。キャッシュ（`json_cache.json`）はクックブックに同梱されているため、再レンダリング時に再利用され、API呼び出しは発生しません。キャッシュを削除すると、再びライブサンプリングが行われます。
 
 ```python
 CONDITIONS = []
@@ -435,9 +442,9 @@ TypeSafe returned models (calls): {'jev-1.13.0': 15}
 
 ### コスト＋速度（ルーブリッククエリごと）
 
-以下のコストは、セットアップの過去の価格仮定を使用しており、TypeSafe の `speed_latest` レートが含まれます。これらは検証された `jev-latest` 価格や現在の請求金額ではありません。
+以下のコストは、セットアップの過去の価格前提を使用しており、TypeSafe の `speed_latest` レートが含まれます。これらは検証された `jev-latest` 価格や現在の請求額ではありません。
 
-1行は14問のルーブリック評価1回分に相当します。`time/call`と`cost/call`は15回の評価の平均値であり、`vs ts_noul`列はTypeSafeの数値で除算します。
+1行は14問のルーブリック呼び出し1回分です。`time/call`と`cost/call`は15回の呼び出しの平均値を、`vs ts_noul`列はTypeSafeの数値で除算します。
 
 ```python
 typesafe_cost = mean([cost for cost, _latency in stats["typesafe_noul"]])
@@ -475,7 +482,7 @@ claude-opus-4-8-reasoning         15    13886ms    $0.034275     125.0x     805.
 typesafe_noul                     15      111ms    $0.000043       1.0x       1.0x
 ```
 
-このランにおいて、TypeSafeの平均往復レイテンシは111msです。上記の同時実行設定の下、LLMの条件化は呼び出しあたり1.1秒から13.9秒の範囲です。
+このランにおいて、TypeSafeの平均往復レイテンシは111msです。上記の同時実行設定の下、LLMの条件は呼び出しあたり1.1秒から13.9秒の範囲です。
 
 ## プロット：各サンプルをヒートマップとして
 
@@ -484,9 +491,9 @@ typesafe_noul                     15      111ms    $0.000043       1.0x       1.
 * 外側の行グループ：質問。
 * 内側の行：条件。
 * 列：1つの完全なルーブリック呼び出し。
-* セルの色：赤はP(yes)が高く、緑は低い。リスクに関する質問の場合、赤のセルはルーブリックによってフラグが立てられたもの。
+* セルの色：赤は P(yes) が高いことを示し、緑は低いことを示す。リスクに関する質問の場合、赤のセルはルーブリックによってフラグが立てられたものである。
 
-`typesafe_noul`は`covered`（`0.43`から`0.53`）と`exclusion`（`0.53`から`0.62`）で最も変動します。一部のLLM行は温度`0`でも変動します。条件は判断呼び出しについて意見が分かれます。
+`typesafe_noul`は`covered`（`0.43`から`0.53`）と`exclusion`（`0.53`から`0.62`）で最も変動します。一部のLLM行は温度`0`でも変動します。条件は判断において意見が分かれます。
 
 ```python
 rows_per_block = len(LABELS) + 1  # rows per question block
@@ -576,17 +583,17 @@ display(fig)
 
 <img src="/img/cases/consistency-noul-cookbook-consistency_noul_cookbook.executed.1.png" alt="output" width="1616" height="5555" data-path="cookbooks/consistency_noul_cookbook/consistency_noul_cookbook.executed.1.png" />
 
-事実確認はほとんどの条件で安定しています。判断が重くなる条件では、LLMの行が動きます：`exclusion`、`rental_eligible`、`fraud_flag`、`manual_review`はサンプル間で変動したり、モデル間で意見が分かれたりします。TypeSafeの`covered`行は`0.5`を横切ります。その他の13問は、この実行全体を通じてその閾値の片側に留まります。
+事実確認はほとんどの条件で安定している。判断が重く求められるケースでは、LLMの行が変動する：`exclusion`、`rental_eligible`、`fraud_flag`、`manual_review`はサンプル間で変動したり、モデル間で意見が分れたりする。TypeSafeの`covered`行は`0.5`をまたぐが、その他の13問はこのラン全体を通じてその閾値の片側に留まっている。
 
-## 強制されたイエスかノーではなく、不確実な判断を許可する
+## 強制されたイエスまたはノーの代わりに、不確実な判断を許可する
 
-閾値が`0.5`の場合、確率`0.49`と`0.51`は、どちらも大きな不確実性を示しているにもかかわらず、逆の行動を引き起こします。代わりに、アプリケーションは以下を返すことができます：
+閾値を`0.5`とした場合、確率`0.49`および`0.51`は、どちらも大きな不確実性を示しているにもかかわらず、相反するアクションを引き起こします。代わりに、アプリケーションは以下を返すことができます：
 
 * `no`は`0.30`より下；
 * `uncertain`は`0.30`から`0.70`まで（両端を含む）；
 * `yes`は`0.70`より上。
 
-不確実なケースは人間に委ねる。エスカレーションは、返された確率に基づくアプリケーションロジックによるもの：新しい質問は行わず、2回目のAPI呼び出しもしない。この範囲は例示であり、補正された保証でも最適化された閾値でもない。本番環境の境界は、ラベル付き例と、誤った判断およびレビューのコストから設定する。
+不確実なケースは人間に委ねる。エスカレーションは、返された確率に基づくアプリケーションロジックである：新しい質問は行わず、2回目のAPI呼び出しもしない。この範囲は例示であり、補正された保証でも最適化された閾値でもない。本番環境の境界は、ラベル付きの例と、誤った判断およびレビューのコストから設定する。
 
 以下の図は、このバンドを記録されたTypeSafeの確率に適用したものです。
 
@@ -631,11 +638,11 @@ display(fig_policy)
 
 <img src="/img/cases/consistency-noul-cookbook-consistency_noul_cookbook.executed.2.png" alt="output" width="1932" height="883" data-path="cookbooks/consistency_noul_cookbook/consistency_noul_cookbook.executed.2.png" />
 
-レビュー帯は`0.5`周辺の揺らぎを吸収し、反対方向の自動アクションを発行しない。ただし、帯自体にも端が存在する。どちらかの外側境界に近い値でも、`uncertain`とyesまたはnoの間を移動することが可能である。それについて、モデルはより決定論的になるわけではなく、帯をクリアする自動決定が正しいと示されるわけではない。
+レビュー帯は`0.5`周辺の揺らぎを吸収し、反対方向の自動アクションを発行しない。しかし、帯には独自の境界が存在する。どちらかの外側境界に近い値であっても、`uncertain`とyesまたはnoの間を移動し続けることができる。それについてモデルがより決定論的になるわけではなく、帯をクリアする自動決定が正しかったことが示されるわけではない。
 
 ## TypeSafe プレイグラウンドで開く
 
-以下のリンクは、プレイグラウンドで同じ主張と評価基準を開きます：1つの主張、同じ14の`Noul`質問、およびTypeSafe `jev-latest`。ここでは、上記で使われた変化する`uid`フィールドは省略されています。
+以下のリンクは、プレイグラウンドで同じ主張と評価基準を開きます：1つの主張、同じ14の`Noul`質問、およびTypeSafe `jev-latest`。ここでは、上記で使用された変更される`uid`フィールドは省略されています。
 
 ```python
 playground_link = make_playground_link(
@@ -650,4 +657,4 @@ display(
 )
 ```
 
-[この主張と評価基準を TypeSafe プレイグラウンドで開く →](https://console.typesafe.ai/playground#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-lTeK+k6y-RmhCs0sw3EbzkhAIoT8JY8AruShBfyqUAsMefSm85Z5rSrF4Doo94xSDGBNekECjC1iEljX29d+hYQqKCzk-QN4cnhRuGAEqpUKSYrzYwHBC5Qw0CAQ21AABq7xrzI28IoaGgxlieFmDYCAhhyApC+CAVKbYpBUFyjgCEEwgA)
+[TypeSafeプレイグラウンドでこの主張とルーブリックを開く →](https://console.typesafe.ai/playground#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-lTeK+k6y-RmhCs0sw3EbzkhAIoT8JY8AruShBfyqUAsMefSm85Z5rSrF4Doo94xSDGBNekECjC1iEljX29d+hYQqKCzk-QN4cnhRuGAEqpUKSYrzYwHBC5Qw0CAQ21AABq7xrzI28IoaGgxlieFmDYCAhhyApC+CAVKbYpBUFyjgCEEwgA)

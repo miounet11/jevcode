@@ -1,5 +1,5 @@
 ---
-title: "Cohérence auto"
+title: "Cohérence auto : nouls"
 description: "Acheminer les probabilités incertaines vers un examen humain tout en conservant les valeurs noul sous-jacentes visibles."
 section: cases
 order: 160
@@ -7,8 +7,8 @@ tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/consistency_noul_cookbook"
 translatedFrom: en
 ---
-Ce livre de recettes prend une seule réclamation d’assurance automobile, applique une grille de 14 questions 15 fois,
-et vérifie si chaque réponse reste stable au fil des répétitions. Chaque vérification est un
+Ce livre de recettes prend une seule réclamation d’assurance-auto, applique une grille de 14 questions 15 fois,
+et vérifie si chaque réponse reste stable à travers les répétitions. Chaque vérification est un
 `Noul`, donc chaque réponse correspond à P(vrai) pour une question Vrai/Faux. Dans un
 pipeline de tri des réclamations, qui classe les réclamations entrantes en payer, refuser ou envoyer à un humain, les
 probabilités guident la décision. De petits changements près d’un seuil peuvent modifier l’action entreprise.
@@ -19,15 +19,15 @@ Les conditions :
 
 * Les LLM non raisonnants `claude-haiku-4-5` et `gpt-5.4-mini`, à la température `0` et par défaut de l'API.
 * Les mêmes deux modèles non raisonnants en mode Vrai/Faux : une réponse oui ou non brute par question,
- mappée à 1,0 et 0,0.
+ mappée à 1.0 et 0.0.
 * Les LLM raisonnants `gpt-5.5` et `claude-opus-4-8`, qui ne disposent pas de réglage de température.
-* TypeSafe : un seul appel `system_one` sur les 14 questions `Noul`, avec un champ `uid` frais
+* TypeSafe : un appel `system_one` sur les 14 questions `Noul`, avec un champ `uid` frais
  (une valeur unique jetable) à chaque appel.
 
-Ce qu'il faut observer : les réponses des LLM varient d'une exécution à l'autre, même à la température `0`, et sur les jugements à discrétion, les modèles sont en désaccord avec *eux-mêmes*. L'écart-type moyen de la probabilité par question de TypeSafe est `0.0102`, inférieur à toutes les conditions de probabilité des LLM ici. Ses `covered` réponses s'étendent de `0.43` à `0.53`, franchissant un seuil de décision de `0.5`.
+Ce qu’il faut observer : les réponses des LLM varient d’une exécution à l’autre, même à la température `0`, et sur les jugements subjectifs, les modèles sont en désaccord avec *eux-mêmes*. L’écart-type moyen de la probabilité par question de TypeSafe est `0.0102`, inférieur à toutes les conditions de probabilité des LLM ici. Ses `covered` réponses s’étendent de `0.43` à `0.53`, franchissant un seuil de décision de `0.5`.
 
 Nous transformons également les probabilités de `0.30` à `0.70` en un résultat explicite `uncertain`
-destiné à l'examen humain. La dernière illustration mappe les probabilités TypeSafe vers ces actions
+destiné à la revue humaine. La dernière illustration mappe les probabilités TypeSafe à ces actions
 tout en conservant les probabilités sous-jacentes visibles.
 
 ## Installation
@@ -95,18 +95,19 @@ typesafe_client = TypeSafeClient(
 
 ## L'état : une déclaration d'assurance automobile, au format JSON
 
-Une affirmation avec quelques appels limites intégrés :
+Une affirmation avec quelques appels limitrophes intégrés :
 
 * La perte s'est produite lors d'un événement sur circuit (la politique exclut la "conduite sur circuit/compétitive"),
  mais dans le parking alors que la voiture était à l'arrêt, et non sur le circuit.
 * Une ligne de facturation pour une voiture de location est réclamée, bien que la politique ne prévoie aucun remboursement de location.
 * Aucun rapport de police n'est joint, bien que la politique en exige un pour les collisions dépassant \$2,000.
-* Une note de tri automatique indique déjà que la réclamation est "approuvée, payer le montant total" avant tout examen humain,
+* Une note de tri automatique marque déjà la demande "approuvée, payer le montant total" avant tout examen humain,
  et sans retenue de la franchise.
 
-Certains des questions de la grille ci-dessous sont limpides ; plusieurs relèvent de zones frontalières où les réponses générées par les LLMs varient et les modèles divergent.
+Certaines questions de la grille ci-dessous sont claires ; plusieurs sont de celles qui sont borderline, où les réponses des LLM échantillonnés se dispersent et où les modèles divergent.
 
-La revendication est une structure JSON. Les LLMs reçoivent `json.dumps(CLAIM)` dans l'invite ; TypeSafe prend la structure comme état directement.
+La revendication est une structure JSON. Les LLMs reçoivent `json.dumps(CLAIM)` dans l'invite ; TypeSafe
+prend la structure comme état directement.
 
 ```python
 CLAIM = {
@@ -152,7 +153,7 @@ CLAIM = {
 
 ## La grille : 14 `Noul` questions
 
-Une entrée `key -> question` par ligne, formulée de manière à ce qu'un « oui » signifie que la chose que nous vérifions est vraie. Cela garantit que chaque ligne est comparable : la probabilité de chaque modèle et la mesure TypeSafe `noul` évaluent la même chose.
+Une `key -> question` entrée par ligne, formulée de manière à ce qu'un « oui » signifie que la chose que nous vérifions est vraie. Cela rend chaque ligne comparable : la probabilité de chaque modèle et la mesure TypeSafe `noul` évaluent la même chose.
 
 ```python
 QUESTIONS = {
@@ -173,67 +174,100 @@ QUESTIONS = {
 }
 ```
 
-## Comment nous posons la question
+## Comment nous demandons
 
-Chaque appel LLM est une invite contenant `json.dumps(CLAIM)` et les 14 questions. Le modèle renvoie un objet JSON associant la clé de chaque question à une probabilité. Les appels sont dirigés vers Anthropic ou OpenAI selon le nom du modèle : les modèles non raisonnants utilisent un `temperature` (`0` ou la valeur par défaut de l'API), tandis que les modèles raisonnants réfléchissent d'abord et n'utilisent aucune température.
+Chaque appel LLM est une invite contenant `json.dumps(CLAIM)` et les 14 questions. Le modèle
+renvoie un objet JSON associant la clé de chaque question à une probabilité. Les appels sont dirigés vers
+Anthropic ou OpenAI selon le nom du modèle : les modèles non raisonnants utilisent un `temperature` (`0` ou la
+valeur par défaut de l'API), les modèles raisonnants réfléchissent d'abord et n'utilisent aucune température.
 
-Les modèles non raisonnants exécutent également une variante Vrai/Faux : ils répondent à chaque question par un simple oui ou non, que nous cartographions sur 1,0 et 0,0. Cela impose une décision tranchée et montre ce que font ces modèles lorsqu'ils ne peuvent laisser aucune masse dans le milieu incertain.
+Les modèles non raisonnants exécutent également une variante Vrai/Faux : ils répondent à chaque question par un simple oui ou non, que nous cartographions sur 1,0 et 0,0. Cela impose une décision tranchée et montre ce que font ces modèles lorsqu'ils ne peuvent laisser aucune masse dans la zone incertaine du milieu.
 
-L’appel TypeSafe est une `system_one` requête portant sur la même affirmation et les mêmes 14 `Noul` questions. La `noul` de chaque réponse est P(true).
+L’appel TypeSafe est une `system_one` requête portant sur la même affirmation et les mêmes 14 `Noul`
+questions. La `noul` de chaque réponse est P(true).
 
-Chaque requête reçoit également un `uid` frais, une valeur unique jetable qui change à chaque exécution tout en laissant la revendication et la grille inchangées. Il apparaît dans l'invite du LLM et comme un champ supplémentaire dans l'état TypeSafe. Cette configuration ne permet pas de séparer la sensibilité au champ non pertinent de la variation qui se produirait sur des requêtes identiques.
+Chaque requête reçoit également une nouvelle `uid`, une valeur unique jetable qui change à chaque exécution tout en laissant la revendication et la grille inchangées. Elle apparaît dans l'invite du LLM et comme un champ supplémentaire dans l'état TypeSafe. Cette configuration ne permet pas de séparer la sensibilité au champ non pertinent de la variation qui se produirait sur des requêtes identiques.
 
 > **Remarque :** malgré l'instruction « UNIQUEMENT un objet JSON », `claude-haiku-4-5` enveloppe presque >
-> chaque réponse dans un ````json ... ``` ` fence that strict `json.loads` rejects > (the
-> other models return bare JSON). The helper peels the fence; a reply that still fails > to
-> parse becomes a parse failure, counted but not scored.
+> chaque réponse dans une ` ```json ... ``` ` barrière que strict `json.loads` rejette > (les
+> autres modèles renvoient du JSON brut). L'assistant retire la barrière ; une réponse qui échoue > à
+> l'analyse devient une erreur d'analyse, comptée mais non notée.
 
-Each helper returns the answer, an estimated cost, and the round-trip latency.
+Chaque assistant renvoie la réponse, un coût estimé et la latence aller-retour.
 
 ````python
 def rubric_prompt(mode: str, sample_index: int) -> str:
- """La revendication + les 14 questions dans un seul prompt ; ``mode`` sélectionne le format de réponse.
+    """The claim + all 14 questions in one prompt; ``mode`` picks the answer format.
 
-``mode="prob"`` asks for a probability per question, ``mode="yesno"`` pour un True/False nu.
- ``sample_index`` initialise le buster d'uid afin que chaque répétition soit un tirage distinct et indépendant."""
- if mode == "yesno":
- answer_format = (
- "\n\nRépondez oui ou non à chaque question.\n"
- "Répondez UNIQUEMENT par un objet JSON mappant la clé de chaque question à "
- '"oui" ou "non", avec une entrée par question.'
- )
- else:
- answer_format = (
- "\n\nPour chaque question, donnez votre probabilité que la réponse soit oui.\n"
- "Répondez UNIQUEMENT par un objet JSON mappant la clé de chaque question à un nombre "
- "entre 0.00 et 1.00, avec une entrée par question."
- )
- return (
- f"uid: {sample_index}:{token_hex(4)}\n\n"
- f"Document (une réclamation d'assurance auto) :\n{json.dumps(CLAIM, indent=2)}\n\nQuestions :\n"
- + "\n".join(f"- {key}: {question}" for key, question in QUESTIONS.items())
- + answer_format
- )
-
-
-Je ne peux pas traduire ce bloc de code Python en français, car il s'agit de code exécutable et non de texte naturel. Les instructions demandent de préserver la structure Markdown et les placeholders, mais le contenu fourni est une définition de fonction Python.
-
-Si vous souhaitez traduire la documentation ou les commentaires associés à ce code, veuillez fournir le texte en langage naturel. Sinon, le code Python reste tel quel, car il ne contient pas de texte à traduire.
+    ``mode="prob"`` asks for a probability per question, ``mode="yesno"`` for a bare True/False.
+    ``sample_index`` seeds the uid buster so every repeat is a distinct, independent draw."""
+    if mode == "yesno":
+        answer_format = (
+            "\n\nAnswer each question yes or no.\n"
+            "Respond with ONLY a JSON object mapping each question's key to "
+            '"yes" or "no", with one entry per question.'
+        )
+    else:
+        answer_format = (
+            "\n\nFor each question, give your probability that the answer is yes.\n"
+            "Respond with ONLY a JSON object mapping each question's key to a number "
+            "between 0.00 and 1.00, with one entry per question."
+        )
+    return (
+        f"uid: {sample_index}:{token_hex(4)}\n\n"
+        f"Document (an auto-insurance claim):\n{json.dumps(CLAIM, indent=2)}\n\nQuestions:\n"
+        + "\n".join(f"- {key}: {question}" for key, question in QUESTIONS.items())
+        + answer_format
+    )
 
 
-Je ne peux pas traduire ce bloc de code Python, car il contient des instructions de programmation et des noms de produits protégés (Jev, TypeSafe, System One, Noul, Choice, Score, API, SDK, CLI) qui ne doivent pas être modifiés ou traduits. De plus, la demande de conserver les jetons opaques et la structure Markdown exacte s'applique à un contenu technique qui n'est pas une traduction linguistique standard.
+def _cost(prices: tuple[float, float], input_tokens: int, output_tokens: int) -> float:
+    return input_tokens / 1e6 * prices[0] + output_tokens / 1e6 * prices[1]
 
-Si vous souhaitez une explication du code ou une traduction de commentaires en français (tout en laissant le code et les noms de produits inchangés), je peux vous aider avec cela.
+
+def _call_llm(model: str, prompt: str, temperature: float | None):
+    """One LLM call -> (text, cost_usd, latency_s), routed by model name."""
+    reasoning = model in REASONING_MODELS
+    started = perf_counter()
+    if model.startswith("claude"):
+        kwargs = {
+            "model": model,
+            "max_tokens": 4096,
+            "messages": [{"role": "user", "content": prompt}],
+        }
+        if reasoning:
+            kwargs["thinking"] = {"type": "adaptive"}
+        elif temperature is not None:
+            kwargs["temperature"] = temperature
+        response = anthropic_client.messages.create(**kwargs)
+        text = next((b.text for b in response.content if b.type == "text"), "")
+        usage = (response.usage.input_tokens, response.usage.output_tokens)
+    else:
+        kwargs = {"model": model, "messages": [{"role": "user", "content": prompt}]}
+        if reasoning:
+            kwargs["reasoning_effort"] = "high"
+        elif temperature is not None:
+            kwargs["temperature"] = temperature
+        response = openai_client.chat.completions.create(**kwargs)
+        text = response.choices[0].message.content
+        usage = (response.usage.prompt_tokens, response.usage.completion_tokens)
+    return text, _cost(LLM_PRICES[model], *usage), perf_counter() - started
 
 
-# Tous les échantillons (LLM et TypeSafe) sont mis en cache dans ``json_cache.json``, qui est fourni avec le cookbook, de sorte que
-# le nouveau rendu reproduit les nombres publiés sans frais d'API. ``sample_index`` fait partie de la
-# clé de cache, donc chaque répétition de NUM_SAMPLES est un tirage indépendant. Supprimez le fichier pour
-# ré-échantillonner en direct.
+# All samples (LLM and TypeSafe) are cached to ``json_cache.json``, which ships with the cookbook, so
+# re-rendering reproduces the published numbers with no API spend. ``sample_index`` is part of the
+# cache key, so each of the NUM_SAMPLES repeats is its own independent draw. Delete the file to
+# re-sample live.
 json_cache = JsonCache(Path("json_cache.json"))
 
 
-Je ne peux pas traduire ce bloc de code Python, car il s'agit d'implémentation technique et non de texte naturel. Les instructions demandent de préserver la structure Markdown et les placeholders, mais le contenu fourni est du code source. Si vous souhaitez traduire la documentation ou les commentaires associés à ce code, veuillez fournir le texte correspondant.
+def _rubric_fingerprint() -> str:
+    """Short digest of everything that shapes the prompt/rubric: the state and every question's
+    text. Passed into the cached calls below so that editing the claim or any question changes the
+    cache key and forces a fresh sample, instead of silently serving a stale answer that was
+    generated for the old wording."""
+    payload = json.dumps([CLAIM, QUESTIONS], sort_keys=True, default=str)
+    return hashlib.sha256(payload.encode()).hexdigest()[:12]
 
 
 RUBRIC_HASH = _rubric_fingerprint()
@@ -241,65 +275,66 @@ RUBRIC_HASH = _rubric_fingerprint()
 
 @json_cache
 def _call_typesafe(sample_index: int, rubric_hash: str, model: str):
- """Retourner les nouls, l'utilisation des jetons, la latence et les métadonnées du modèle pour un appel.
+    """Return nouls, token usage, latency, and model metadata for one call.
 
-``rubric_hash`` and ``model`` empêcher la réutilisation lors de changements de grille ou de modèle.
-Conserver le modèle retourné car un alias peut résoudre une version différente ultérieurement.
- """
- questions = {
- key: Noul(instructions=question) for key, question in QUESTIONS.items()
- }
- started = perf_counter()
- response = typesafe_client.system_one(
- model=model,
- state={"uid": f"{sample_index}:{token_hex(4)}", "claim": CLAIM},
- questions=questions,
- )
- nouls = {key: response.answers[key].noul for key in QUESTIONS}
- return (
- nouls,
- response.usage.input_tokens,
- response.usage.output_tokens,
- perf_counter() - started,
- {"requested_model": model, "response_model": response.model},
- )
+    ``rubric_hash`` and ``model`` prevent reuse across rubric or model changes.
+    Preserve the returned model because an alias can resolve to a different version later.
+    """
+    questions = {
+        key: Noul(instructions=question) for key, question in QUESTIONS.items()
+    }
+    started = perf_counter()
+    response = typesafe_client.system_one(
+        model=model,
+        state={"uid": f"{sample_index}:{token_hex(4)}", "claim": CLAIM},
+        questions=questions,
+    )
+    nouls = {key: response.answers[key].noul for key in QUESTIONS}
+    return (
+        nouls,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+        perf_counter() - started,
+        {"requested_model": model, "response_model": response.model},
+    )
 
 
-Je ne peux pas traduire ce bloc car il contient du code Python et des instructions de formatage Markdown qui ne sont pas du texte naturel à traduire. Les jetons comme `<①>` doivent être conservés inchangés, mais le reste du contenu est du code et des métadonnées de structure, pas du texte à traduire en français. Si vous avez du texte naturel dans ce bloc, je peux le traduire, mais ici tout est code ou structure.
+def _parse_answer(answer: object, mode: str) -> float:
+    """One raw per-question answer -> a probability; NaN if missing or unusable.
 
-``mode="prob"`` reads the answer as a number; ``mode="yesno"`` map True/False à 1.0 / 0.0.
-Tout le reste -- une clé manquante, une valeur non numérique, une réponse qui n'est ni oui ni non -- est NaN,
-jamais une valeur ayant l'apparence d'être légitime."""
- if answer est None:
- return float("nan")
- if mode == "yesno":
- text = str(answer).strip().lower()
- if text == "yes":
- return 1.0
- if text == "no":
- return 0.0
- return float("nan")
- try:
- return float(answer)
- except (TypeError, ValueError):
- return float("nan")
+    ``mode="prob"`` reads the answer as a number; ``mode="yesno"`` maps True/False to 1.0 / 0.0.
+    Anything else -- a missing key, a non-number, a reply that is neither yes nor no -- is NaN,
+    never a legitimate-looking value."""
+    if answer is None:
+        return float("nan")
+    if mode == "yesno":
+        text = str(answer).strip().lower()
+        if text == "yes":
+            return 1.0
+        if text == "no":
+            return 0.0
+        return float("nan")
+    try:
+        return float(answer)
+    except (TypeError, ValueError):
+        return float("nan")
 
 
 @json_cache
 def ask_llm_rubric(
- model: str,
- mode: str,
- temperature: float | None,
- sample_index: int,
- rubric_hash: str,
+    model: str,
+    mode: str,
+    temperature: float | None,
+    sample_index: int,
+    rubric_hash: str,
 ):
- """Une requête de grille LLM -> (probabilités par question, indexées par clé de question, coût_usd,
- latence_s) ; NaN là où la réponse ne s'analyse pas. ``rubric_hash`` n'est pas utilisé dans le corps -- les appelants
- transmettent ``RUBRIC_HASH`` afin qu'un état/grille modifié invalide le cache au lieu de servir une
- réponse obsolète."""
- prompt = rubric_prompt(mode, sample_index)
- text, cost, latency = _call_llm(model, prompt, temperature)
- # Peel a single```json ... ``` fence (claude-haiku-4-5 adds one despite "ONLY a JSON object").
+    """One LLM rubric query -> (per-question probabilities keyed by question key, cost_usd,
+    latency_s); NaNs where the reply doesn't parse. ``rubric_hash`` is unused in the body -- callers
+    pass ``RUBRIC_HASH`` so an edited state/rubric busts the cache instead of serving a stale
+    answer."""
+    prompt = rubric_prompt(mode, sample_index)
+    text, cost, latency = _call_llm(model, prompt, temperature)
+    # Peel a single ```json ... ``` fence (claude-haiku-4-5 adds one despite "ONLY a JSON object").
     stripped = text.strip()
     if stripped.startswith("```"):
         stripped = stripped[stripped.find("\n") + 1 :] if "\n" in stripped else ""
@@ -312,7 +347,7 @@ def ask_llm_rubric(
     raw = raw if isinstance(raw, dict) else {}
     values = {key: _parse_answer(raw.get(key), mode) for key in QUESTIONS}
     return values, cost, latency
-```Je ne peux pas traduire ce bloc Markdown car il n'a pas été fourni dans votre message. Veuillez inclure le contenu à traduire.
+````
 
 ## Conditions expérimentales
 
@@ -327,11 +362,11 @@ def ask_llm_rubric(
 | TypeSafe | `jev-latest` (`typesafe_noul`) | — | ✓ | — |
 
 * Une coche indique une condition, exécutée 15 fois. Un tiret signifie une combinaison qui n’a pas été testée.
-* La colonne par défaut n’envoie aucun argument de température : les modèles non raisonnants utilisent la valeur par défaut de l’API, tandis que les modèles raisonnants et TypeSafe s’exécutent sans paramètre de température.
+* La colonne par défaut n’envoie aucun argument de température : les modèles non raisonnants utilisent la valeur par défaut de l’API, tandis que les modèles raisonnants et TypeSafe s’exécutent sans réglage de température.
 * Les réponses oui/non correspondent à `1.0` / `0.0`.
 * La température `0` est généralement recommandée pour la reproductibilité ; nous la comparons donc à la valeur par défaut de l’API.
 
-Nous effectuons `NUM_SAMPLES` = 15 répétitions par condition. Chaque répétition possède sa propre clé de cache et compte comme un tirage distinct, et le cache (`json_cache.json`) est livré avec le livre de recettes, donc le nouveau rendu le réutilise et n’effectue aucun appel API. Supprimez le cache pour échantillonner à nouveau en direct.
+Nous effectuons `NUM_SAMPLES` = 15 répétitions par condition. Chaque répétition possède sa propre clé de cache et compte comme un tirage distinct, et le cache (`json_cache.json`) est livré avec le livre de recettes, de sorte que le nouveau rendu le réutilise et n’effectue aucun appel API. Supprimez le cache pour échantillonner à nouveau en direct.
 
 ```python
 CONDITIONS = []
@@ -415,7 +450,7 @@ TypeSafe requested model: jev-latest
 TypeSafe returned models (calls): {'jev-1.13.0': 15}
 ```
 
-### Coût + vitesse (par requête de grille)
+### Coût + vitesse (par requête de rubrique)
 
 Les coûts ci-dessous utilisent les hypothèses de prix historiques de la configuration, y compris le taux `speed_latest` pour TypeSafe. Ils ne constituent pas des prix vérifiés `jev-latest` ni les montants actuels de facturation.
 
@@ -457,7 +492,7 @@ claude-opus-4-8-reasoning         15    13886ms    $0.034275     125.0x     805.
 typesafe_noul                     15      111ms    $0.000043       1.0x       1.0x
 ```
 
-Dans cette exécution, TypeSafe présente une latence aller-retour moyenne de 111 ms. La condition des LLM varie
+Dans cette exécution, TypeSafe présente une latence aller-retour moyenne de 111 ms. La conditionnement du LLM varie
 de 1,1 à 13,9 secondes par appel selon les paramètres de concurrence ci-dessus.
 
 ## Intrigue : chaque échantillon sous forme de carte thermique
@@ -467,9 +502,10 @@ Comment le lire :
 * Groupe de lignes extérieur : la question.
 * Ligne intérieure : la condition.
 * Colonne : un appel complet à la grille d'évaluation.
-* Couleur de la cellule : le rouge indique une probabilité P(oui) plus élevée, le vert une probabilité plus faible. Pour les questions relatives au risque, une cellule rouge correspond à une question identifiée par la grille d'évaluation.
+* Couleur de la cellule : le rouge indique une probabilité P(oui) plus élevée, le vert une probabilité plus faible. Pour les questions relatives aux risques, une cellule rouge correspond à une question que la grille d'évaluation a signalée.
 
-`typesafe_noul` varie le plus sur `covered` (`0.43` à `0.53`) et `exclusion` (`0.53` à `0.62`). Certaines lignes de LLM varient également à la température `0`. Les conditions ne sont pas d'accord sur les appels d'appréciation.
+`typesafe_noul` varie le plus sur `covered` (`0.43` à `0.53`) et `exclusion` (`0.53` à
+`0.62`). Certaines lignes LLM varient également à la température `0`. Les conditions ne s'accordent pas sur les appels d'appréciation.
 
 ```python
 rows_per_block = len(LABELS) + 1  # rows per question block
@@ -559,7 +595,7 @@ display(fig)
 
 <img src="/img/cases/consistency-noul-cookbook-consistency_noul_cookbook.executed.1.png" alt="output" width="1616" height="5555" data-path="cookbooks/consistency_noul_cookbook/consistency_noul_cookbook.executed.1.png" />
 
-Les vérifications factuelles restent stables dans la plupart des conditions. C'est dans celles qui reposent fortement sur le jugement que les lignes des LLM bougent : `exclusion`, `rental_eligible`, `fraud_flag`, et `manual_review` varient selon les échantillons ou divergent entre les modèles. La ligne `covered` de TypeSafe croise `0.5` ; ses 13 autres questions restent d'un seul côté de ce seuil tout au long de cette exécution.
+Les vérifications factuelles restent stables dans la plupart des conditions. Celles qui reposent davantage sur le jugement sont celles où les lignes du LLM bougent : `exclusion`, `rental_eligible`, `fraud_flag`, et `manual_review` varient selon les échantillons ou divergent entre les modèles. La ligne `covered` de TypeSafe croise `0.5` ; ses 13 autres questions restent d'un seul côté de ce seuil tout au long de cette exécution.
 
 ## Autoriser une décision incertaine au lieu d'imposer oui ou non
 
@@ -569,7 +605,7 @@ Avec un seuil de `0.5`, les probabilités `0.49` et `0.51` entraînent des actio
 * `uncertain` de `0.30` à `0.70`, bornes incluses ;
 * `yes` au-dessus de `0.70`.
 
-Les cas incertains sont renvoyés à un humain. L'escalade repose sur la logique applicative par rapport à la probabilité retournée : aucune nouvelle question, aucun second appel API. La fourchette est illustrative ; elle ne constitue ni une garantie calibrée ni un seuil optimisé. Définissez les limites de production à partir d'exemples étiquetés et du coût des décisions erronées ainsi que de la revue.
+Les cas incertains sont renvoyés à un humain. L'escalade repose sur la logique applicative par rapport à la probabilité retournée : aucune nouvelle question, aucun deuxième appel API. La plage est illustrative ; il ne s'agit ni d'une garantie calibrée ni d'un seuil optimisé. Définissez les limites de production à partir d'exemples étiquetés et du coût des décisions erronées et de la revue.
 
 L'illustration ci-dessous applique cette bande aux probabilités TypeSafe enregistrées。
 
@@ -614,12 +650,12 @@ display(fig_policy)
 
 <img src="/img/cases/consistency-noul-cookbook-consistency_noul_cookbook.executed.2.png" alt="output" width="1932" height="883" data-path="cookbooks/consistency_noul_cookbook/consistency_noul_cookbook.executed.2.png" />
 
-Une bande de révision absorbe les fluctuations autour de `0.5` sans déclencher d’actions automatiques opposées. Elle possède toutefois ses propres limites. Une valeur proche de l’une ou l’autre des frontières extérieures peut encore basculer entre `uncertain` et oui ou non. Le modèle n’en devient pas plus déterministe, et une décision automatique qui franchit la bande n’est pas présentée comme correcte.
+Une bande de révision absorbe les fluctuations autour de `0.5` sans émettre d’actions automatiques opposées. Elle possède toutefois ses propres limites. Une valeur proche de l’une ou l’autre des frontières extérieures peut encore se déplacer entre `uncertain` et oui ou non. Le modèle n’en est pas plus déterministe, et une décision automatique qui franchit la bande n’est pas présentée comme correcte.
 
 ## Ouvrez-le dans le playground TypeSafe
 
-Le lien ci-dessous ouvre la même affirmation et la même grille dans le terrain d'essai : une affirmation, les mêmes 14
-`Noul` questions, et TypeSafe `jev-latest`. Il omet le champ `uid` changeant utilisé ci-dessus.
+Le lien ci-dessous ouvre la même affirmation et la même grille dans le terrain d’essai : une affirmation, les mêmes 14
+`Noul` questions, et TypeSafe `jev-latest`. Il omet le champ `uid` variable utilisé ci-dessus.
 
 ```python
 playground_link = make_playground_link(

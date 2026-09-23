@@ -1,6 +1,6 @@
 ---
 title: "Referência da API HTTP"
-description: "Chame o endpoint de avaliação do TypeSafe diretamente — formato da solicitação, os tipos de pergunta noul / choice / score, formatos de resposta e tratamento de erros."
+description: "Chame diretamente o endpoint de avaliação do TypeSafe — formato da solicitação, os tipos de pergunta noul / choice / score, formatos de resposta e tratamento de erros."
 section: sdk
 order: 50
 tags: ['api', 'http', 'reference']
@@ -65,12 +65,12 @@ Uma pergunta de sim/não. **Retorna a probabilidade de a resposta ser sim.**
 
 `criteria` é opcional e descreve o que "sim" e "não" significam:
 
-| Chave | Descrição |
+| Key | Descrição |
 | :--- | :--- |
 | `true` | O que significa um valor próximo de 1 ("sim") |
 | `false` | O que significa um valor próximo de 0 ("não") |
 
-Escolha — selecione entre as opções
+### escolha — selecione entre as opções
 
 Escolha uma opção de um conjunto que você define, retornando a opção escolhida **mais a distribuição de probabilidade completa**.
 
@@ -88,11 +88,11 @@ Escolha uma opção de um conjunto que você define, retornando a opção escolh
 }
 ```
 
-`criteria` é obrigatório, digitado `map⦇0⦈`: nomes de opções mapeados para uma descrição de rubrica. Use `null` como o valor quando uma opção não precisar de explicação adicional.
+`criteria` é obrigatório, digitado `map<string, string | null>`: nomes de opções mapeados para uma descrição de rubrica. Use `null` como o valor quando uma opção não precisar de explicação adicional.
 
-Não posso traduzir o bloco de Markdown solicitado, pois a entrada fornecida contém apenas um cabeçalho e uma linha de separação, sem conteúdo textual substancial para tradução. Além disso, a instrução para manter a estrutura exata e não adicionar/remover regras horizontais ou cabeçalhos limita a capacidade de fornecer uma tradução significativa de um bloco vazio ou quase vazio. Se você tiver um bloco de texto completo para traduzir, por favor, forneça-o.
+### score — avaliar ao longo de uma escala
 
-Avalie o `state` de acordo com uma rubrica que você define, retornando um **valor ponderado por probabilidade entre seus níveis**.
+Avalie o `state` com base em uma rubrica que você definir, retornando um **valor ponderado por probabilidade entre seus níveis**.
 
 ```json
 {
@@ -164,7 +164,7 @@ Cada resposta carrega um `type` correspondente à sua pergunta. `choice` e `scor
 
 | Campo | Tipo | Descrição |
 | :--- | :--- | :--- |
-| `score` | number | O valor ponderado pela probabilidade, que **pode ficar entre níveis** |
+| `score` | number | O valor ponderado pela probabilidade, que **pode cair entre níveis** |
 | `legend` | map&lt;string, string&gt; | Mapeia cada índice de nível de volta à sua descrição |
 | `probabilities` | map&lt;string, number&gt; | Probabilidade por nível (chaves como string); soma 1 |
 | `confidence` | number | O quão certo o modelo está, derivado das probabilidades |
@@ -179,7 +179,7 @@ Cada resposta carrega um `type` correspondente à sua pergunta. `choice` e `scor
 }
 ```
 
-Observe como `score` se relaciona com `probabilities`: as probabilidades de três níveis são 0,05 / 0,3 / 0,65, ponderando para um `score` de 1,6. Portanto, `score` não precisa ser um número inteiro — o que é exatamente o que o diferencia de `choice`: `choice` oferece uma opção discreta, enquanto `score` pode expressar "em algum lugar entre dois níveis."
+Observe como `score` se relaciona com `probabilities`: as probabilidades de três níveis são 0,05 / 0,3 / 0,65, ponderando para um `score` de 1,6. Portanto, `score` não precisa ser um número inteiro — o que é exatamente o que o separa de `choice`: `choice` oferece uma opção discreta, enquanto `score` pode expressar "em algum lugar entre dois níveis."
 
 ## Erros
 
@@ -194,4 +194,4 @@ Os erros usam códigos de status HTTP padrão, com um corpo JSON descrevendo o q
 
 ### Lidando com limites de taxa
 
-Em `429` ou `529`, **retente com backoff exponencial** em vez de tentar novamente imediatamente. Se você usar um SDK oficial, sua política de tentativa padrão lida com isso automaticamente, portanto, não é necessário código extra.
+Em `429` ou `529`, **retente com backoff exponencial** em vez de tentar novamente imediatamente. Se você usar um SDK oficial, a política de tentativa padrão dele lida com isso automaticamente, portanto, não é necessário código extra.

@@ -1,24 +1,24 @@
 ---
 title: "Sugestão de habilidade"
-description: "Seleciona no máximo uma habilidade para a vez do agente entre as 182 do catálogo Hermes da Nous Research: uma solicitação TypeSafe classifica todas as habilidades e pergunta se a vez realmente precisa de uma; uma segunda lê as três principais corretamente e pode rejeitar todas elas. O nome da vencedora é inserido em uma única linha do sy"
+description: "Seleciona no máximo uma habilidade para uma rodada do agente entre as 182 do catálogo Hermes da Nous Research: uma solicitação TypeSafe classifica todas as habilidades e pergunta se a rodada precisa de alguma, uma segunda lê as três principais corretamente e pode rejeitar todas elas. O nome do vencedor vai para uma única linha do sy do agente"
 section: cases
 order: 270
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/skill_suggestion"
 translatedFrom: en
 ---
-*Os agentes escolhem habilidades truncando-as e carregando-as todas na mensagem do sistema, o que aumenta os custos, degrada o desempenho da seleção de habilidades e induz a deterioração do contexto para o restante da sessão. Abordamos isso usando duas solicitações TypeSafe por turno, uma para classificar as habilidades e outra para verificar a escolha, reduzindo em mais da metade os carregamentos incorretos de habilidades.*
+*Agentes escolhem habilidades truncando-as e carregando-as todas na mensagem do sistema, o que aumenta os custos, degrada o desempenho da seleção de habilidades e induz deterioração do contexto para o restante da sessão. Abordamos isso usando duas solicitações TypeSafe por turno, uma para classificar as habilidades e outra para verificar a escolha, reduzindo as cargas incorretas de habilidades em mais da metade.*
 
-Um agente com um grande elenco de habilidades faz sua escolha com quase nenhuma informação. O elenco chega até ele como um índice: uma linha por habilidade, com a descrição truncada para que o texto completo não atrapalhe a conversa. Hermes, o harness de agente usado aqui, corta para 60 caracteres por padrão. Por exemplo, nessa largura, a habilidade que *edita* `.pptx` arquivos parece quase a mesma que a que *autoras* eles. Peça uma apresentação comercial e o agente pode carregar a errada. Em uma rodada em que nenhuma habilidade se encaixe de todo, ele ainda pode carregar uma de qualquer maneira, porque uma lista de nomes convida a um palpite.
+Um agente com um grande portfólio de habilidades faz sua escolha com quase nenhuma informação. O portfólio chega a ele como um índice: uma linha por habilidade, com a descrição truncada para que o texto completo não atrapalhe a conversa. Hermes, o harness de agente usado aqui, corta para 60 caracteres por padrão. Por exemplo, nessa largura, a habilidade que *edita* `.pptx` arquivos lê-se quase da mesma forma que a que *autoras* eles. Peça uma apresentação comercial e o agente pode carregar a errada. Em uma rodada em que nenhuma habilidade se encaixe de todo, ele ainda pode carregar uma de qualquer maneira, porque uma lista de nomes convida a um palpite.
 
-Este livro de receitas mantém as descrições originais e utiliza divulgação progressiva,
+Este livro de receitas deixa as descrições inalteradas e usa revelação progressiva,
 lendo todas as 182 habilidades de forma econômica e depois lendo três delas em detalhe. Duas solicitações TypeSafe
 são feitas antes da decisão sobre qual habilidade carregar, se houver alguma. A primeira classifica cada
-habilidade no elenco em relação à vez do usuário e responde se a vez precisa de uma habilidade de
-todo. A segunda relê apenas as três principais, agora com a descrição completa de cada
+habilidade no elenco em relação à vez do usuário e responde se a vez precisa de uma habilidade
+em absoluto. A segunda relê apenas as três primeiras, agora com a descrição completa de cada
 habilidade e o início de suas instruções, e é livre para rejeitar todas elas.
 
-O nome do vencedor vai para uma linha extra do prompt de sistema do agente para essa rodada:
+O nome do vencedor vai para uma linha extra do prompt do sistema do agente para essa rodada:
 
 ```
 <skill_relevance>
@@ -27,30 +27,35 @@ actually asked for.
 </skill_relevance>
 ```
 
-O agente mantém seu índice completo e seu próprio julgamento, e essa única linha apenas indica qual entrada ele deve examinar primeiro. A própria lista nunca muda, então qualquer cache de prefixo sobre ela ainda se mantém. Em mais de 488 solicitações contra `claude-haiku-4-5-20251001`, usando habilidades da lista Hermes:
+O agente mantém seu índice completo e seu próprio julgamento, e essa única linha apenas indica qual
+entrada ele deve examinar primeiro. A lista em si nunca muda, portanto qualquer cache de prefixo sobre ela
+ainda se mantém. Em 488 solicitações contra `claude-haiku-4-5-20251001`, usando habilidades da
+lista Hermes:
 
 | | carrega a habilidade errada | carrega uma quando nada se encaixa |
 | ------------------------------------ | --------------------------- | ---------------------------------- |
-| agente sozinho, apenas com seu rol | 16,8% | 9,8% |
-| **agente com uma sugestão do TypeSafe** | **7,3%** | **4,0%** |
-| agente com a resposta correta dada | 2,5% | 1,2% |
+| agent alone, with just its roster | 16,8% | 9,8% |
+| **agent with a TypeSafe suggestion** | **7,3%** | **4,0%** |
+| agent handed the right answer | 2,5% | 1,2% |
 
-A terceira linha mostra que o piso para cometer erros não é zero, porque um agente com a habilidade correta ainda não a carrega sempre, e nenhum método de seleção, por melhor que seja, supera isso.
+A terceira linha mostra que o piso para cometer erros não é zero, porque um agente que recebe a
+habilidade correta ainda não a carrega sempre, e nenhum método de seleção, por melhor que seja, supera
+isso.
 
-Você termina com uma função `suggest()` que retorna no máximo um nome de habilidade, um `suggestion_block()` que a envolve para o prompt do sistema, e o harness que produziu a tabela acima, pronto para apontar para o seu próprio elenco.
+Você acaba com uma função `suggest()` que retorna no máximo um nome de habilidade, um `suggestion_block()` que a envolve para o prompt do sistema, e o harness que produziu a tabela acima, pronto para apontar para seu próprio elenco.
 
 <!-- mermaid flowchart converted to equivalent tables (this site loads no chart library) -->
 
-*Direção do fluxo: ES-D*
+*Direção do fluxo: LR*
 
 | Nó | Descrição | Grupo |
 | :--- | :--- | :--- |
 | `C1` | Chamada 1 - folhear todas as 182 habilidades | Chamada 1 - folhear todas as 182 habilidades |
 | `Q1` | Escolha: qual habilidade se encaixa? / todas as 182, uma linha cada | Chamada 1 - folhear todas as 182 habilidades |
-| `N1` | Nouls: precisa de uma habilidade? / · agir sobre o que eles fizeram? / · seguir passos escritos? / · ou apenas conversar? | Chamada 1 - folhear todas as 182 habilidades |
+| `N1` | Nouls: precisa de uma habilidade? / · agir sobre o que eles fazem? / · seguir passos escritos? / · ou apenas conversar? | Chamada 1 - folhear todas as 182 habilidades |
 | `C2` | Chamada 2 - ler essas 3 corretamente | Chamada 2 - ler essas 3 corretamente |
 | `Q2` | Escolha: qual das 3? / com detalhes reais agora | Chamada 2 - ler essas 3 corretamente |
-| `N2` | Nouls: cada uma realmente faz isso? | Chamada 2 - ler essas 3 corretamente |
+| `N2` | Nouls: cada uma / realmente faz isso? | Chamada 2 - ler essas 3 corretamente |
 
 | De | Condição | Para |
 | :--- | :--- | :--- |
@@ -65,8 +70,8 @@ Você termina com uma função `suggest()` que retorna no máximo um nome de hab
 ## Configuração
 
 * Instale o cliente TypeSafe, o cliente Anthropic e os auxiliares compartilhados do cookbook.
-* Defina uma [chave de API TypeSafe](https://console.typesafe.ai/keys), e uma chave Anthropic para o
- agente sendo medido.
+* Defina uma [chave da API TypeSafe](https://console.typesafe.ai/keys) e uma chave Anthropic para o
+ agente que está sendo medido.
 
 ```bash
 pip install anthropic matplotlib ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
@@ -74,14 +79,14 @@ export TYPESAFE_API_KEY=your-key-here
 export ANTHROPIC_API_KEY=your-key-here
 ```
 
-> **Nota:** os blocos de código abaixo são um único script, em ordem. Para acompanhar, coloque-os em um
-> único arquivo na ordem mostrada.
+> **Nota:** os blocos de código abaixo formam um único script, em ordem. Para acompanhar, coloque-os em um
+> único arquivo na ordem apresentada.
 
 ## Resultados em cache
 
-`JsonCache` salva o resultado de cada chamada, indexado por seus inputs, então reexecutar replay os
+`JsonCache` salva o resultado de cada chamada, indexado pelos seus inputs, de modo que reexecutar replaya os
 números abaixo em vez de chamar qualquer API. Apague `json_cache.json` para executar ao vivo. A
-execução publicada usou `jev-1.12` e `claude-haiku-4-5-20251001`, renderizado em 2026-07-31.
+versão publicada usou `jev-1.12` e `claude-haiku-4-5-20251001`, renderizada em 2026-07-31.
 
 ```python
 import json
@@ -133,14 +138,14 @@ agent = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY", "cache-o
 json_cache = JsonCache(Path("json_cache.json"))
 ```
 
-## Passo 1: carregar a escala
+## Passo 1: carregar a lista
 
-`hermes_roster.json` contém as 182 habilidades de
-[NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) (MIT) em um único
-commit fixado. Cada registro contém o nome e a categoria da habilidade, a descrição conforme o índice
-mostra, a descrição completa e o início do seu `SKILL.md`.
+`hermes_roster.json` contém as 182 habilidades do
+[NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) (MIT) em um
+commit fixado. Cada registro contém o nome e a categoria de uma habilidade, a descrição conforme o índice
+a mostra, a descrição completa e o início do seu `SKILL.md`.
 
-O índice abaixo, e as instruções acima dele no prompt, foram copiados do Hermes.
+O índice abaixo, e as instruções acima dele no prompt, foram copiados de Hermes.
 
 ```python
 ROSTER = json.loads(Path("hermes_roster.json").read_text(encoding="utf-8"))
@@ -230,18 +235,18 @@ one category, as the agent reads it:
     - imessage: Send and receive iMessages/SMS via the imsg CLI on macOS.
 ```
 
-## Passo 2: avalie o agente com base em si mesmo
+## Passo 2: avalie o agente com base em seus próprios
 
-`requests.json` contém 488 solicitações de turno único, 315 delas cobertas por exatamente uma habilidade e as outras 173 não cobertas por nenhuma.
+`requests.json` contém 488 solicitações de turno único, das quais 315 são cobertas por exatamente uma habilidade e as outras 173 não são cobertas por nenhuma.
 
-Os pedidos cobertos foram escritos pelo Claude Sonnet 5 a partir do próprio `SKILL.md` de cada habilidade, portanto os rótulos são confiáveis e os pedidos são mais fáceis do que aqueles enviados pelos usuários.
+Os pedidos cobertos foram escritos pelo Claude Sonnet 5 a partir do próprio `SKILL.md` de cada habilidade, portanto, os rótulos são confiáveis e os pedidos são mais fáceis do que aqueles enviados pelos usuários.
 
-Os 173 não cobertos foram todos escritos para punir adivinhações: 85 solicitações cotidianas, 42 perguntas técnicas que nenhuma habilidade atende (*explicar o que é um monad*), e 46 que pedem algo específico para o qual o elenco não tem habilidade, como *postar isso no Mastodon* em um elenco que cobre X e nada mais.
+Os 173 descobertos foram todos escritos para punir adivinhações: 85 solicitações cotidianas, 42 perguntas técnicas que nenhuma habilidade atende (*explicar o que é um monad*), e 46 que pedem algo específico para o qual o elenco não tem habilidade, como *postar isso no Mastodon* em um elenco que cobre X e nada mais.
 
 A pontuação lê apenas a primeira resposta do agente. Ambos os números são taxas de erro, então quanto menor, melhor em cada um:
 
-* **carga incorreta**: das solicitações cobertas, a proporção em que a primeira chamada `skill_view` não foi a habilidade que a cobriu. Uma rodada que não carregou nada conta como um erro.
-* **carga desnecessária**: das solicitações não cobertas, a proporção em que o agente chamou `skill_view` de qualquer forma.
+* **carga incorreta**: dos pedidos cobertos, a proporção em que a primeira chamada `skill_view` não foi a habilidade de cobertura. Uma rodada que não carregou nada conta como erro.
+* **carga desnecessária**: dos pedidos não cobertos, a proporção em que o agente chamou `skill_view` de qualquer forma.
 
 ```python
 REQUESTS = json.loads(Path("requests.json").read_text(encoding="utf-8"))
@@ -263,7 +268,7 @@ covered   [1password]  I've got a config.yaml with `{{ op://app-prod/db/password
 uncovered  Add these three cards to our Trello backlog.
 ```
 
-A sugestão fica em seu próprio bloco do prompt do sistema, depois da lista, e não dentro dela, para que o texto da lista seja idêntico em cada turno e mantenha o cache de prefixo.
+A sugestão fica em seu próprio bloco do prompt do sistema, após a lista de participantes, e não dentro dela, para que o texto da lista seja idêntico em todos os turnos e mantenha o cache de prefixo.
 
 O agente possui um conjunto mínimo de ferramentas, incluindo `skill_view` para carregar uma habilidade usando um nome em texto livre. O nome deve corresponder exatamente à habilidade para um carregamento correto.
 
@@ -366,7 +371,7 @@ def run_arm(arm: str, suggestions: dict[str, str]) -> dict[str, dict]:
         return dict(zip(texts, turns))
 ```
 
-O agente é executado primeiro, com apenas sua lista de membros, da forma como funciona hoje. Suas duas taxas de erro são a linha de base contra a qual o resto do livro de receitas mede.
+O agente é executado primeiro com apenas sua lista, da forma como funciona hoje. Suas duas taxas de erro são a linha de base contra a qual o restante do livro de receitas mede.
 
 ```python
 baseline = run_arm("baseline", {})
@@ -402,28 +407,32 @@ needless loads 9.8%   (173 uncovered requests)
 of 36 wrong first picks, 10 came from the right skill's own category
 ```
 
-Cargas erradas caem na própria categoria da habilidade correta muito mais frequentemente do que o acaso indicaria, então a parte difícil é distinguir alguns parecidos. O agente já está olhando no lugar aproximadamente certo.
+Cargas erradas caem na própria categoria da habilidade correta muito mais frequentemente do que o acaso colocaria
+nela, então a parte difícil é distinguir alguns parecidos. O agente já está
+procurando no lugar aproximadamente correto.
 
-## Passo 3: classifique a lista inteira
+## Passo 3: classifique o elenco inteiro
 
 Um pedido carrega dois tipos de pergunta:
 
 * **`which`** é uma pergunta [`Choice`](/en/primitives/choice/)
  sobre todos os 182 nomes de habilidades, com a descrição do índice como critério de cada opção (o mesmo
- texto que o próprio agente recebe). Suas probabilidades são o ranking.
+ texto que o próprio agente recebe). Suas probabilidades são a classificação.
 * **três perguntas [`Noul`](/en/primitives/noul/) sobre a
- solicitação**, impressas abaixo, cada uma perguntando de maneira diferente se deseja que uma ação seja tomada
- em vez de uma explicação ser dada. `prose_suffices`
- conta na direção oposta. Sua média decide se alguma sugestão é feita ou não, e
+ solicitação**, impressas abaixo, cada uma perguntando de maneira diferente se deseja que uma ação seja
+ tomada em vez de uma explicação fornecida. `prose_suffices`
+ conta da maneira inversa. Sua média decide se algo deve ser sugerido ou não, e
  abaixo de 0,30 nada é sugerido.
 
-Ambos são enviados em uma única solicitação, portanto, a classificação e a verificação custam uma única ida e volta.
+Ambos são enviados em uma única solicitação, portanto, a classificação e a verificação custam uma ida e volta.
 
-Escreva estas três para perguntar se uma ação é desejada. Uma pergunta sobre o assunto não separará *explicar o que é um monad* de um pedido que precisa de uma habilidade, já que ambos são software.
+Escreva estes três para perguntar se uma ação é desejada. Uma pergunta sobre o assunto não
+separará *explain what a monad is* de uma solicitação que precisa de uma habilidade, já que ambos são
+software.
 
-Uma `Choice` pergunta mantém uma lista deste tamanho com conforto. Um pouco maior e você
-a
-dividiria em partes e classificaria cada uma, depois executaria esta mesma etapa de lista curta sobre os vencedores.
+Uma `Choice` questão mantém um elenco desse tamanho confortavelmente. Um pouco maior e você
+dividiria
+em pedaços e classificaria cada um, então executaria esta mesma etapa de lista curta sobre os vencedores.
 
 ```python
 CHOICE_INSTRUCTIONS = (
@@ -525,24 +534,24 @@ for request in DEMO:
     0.080  openhands                             Delegate coding to OpenHands CLI (model-agnostic, LiteLLM).
 ```
 
-A solicitação do Notes.app é inequívoca, e sua primeira opção é a correta. Nada que uma
-classificação possa fazer salvará a do Mastodon: as três perguntas indicam que uma habilidade
-é desejada, porque postar em uma conta é uma ação, e com uma habilidade para postar em X e nenhuma
-para Mastodon, a habilidade mais próxima vence de qualquer maneira.
+A solicitação do app Notas é inequívoca, e sua primeira opção é a correta. Nada que
+uma classificação possa fazer salvará a do Mastodon: as três perguntas indicam que uma habilidade é necessária,
+porque postar em uma conta é uma ação, e com uma habilidade para postar em X e nenhuma
+para Mastodon, a habilidade mais próxima vence de qualquer forma.
 
-Isso deixa o baralho. Ambos os líderes têm `.pptx` habilidades, e em 60 caracteres, a pergunta ampla do Choice coloca a habilidade de edição à frente da de autoria, para uma solicitação sobre a criação de um baralho.
+Isso deixa o deck. Ambos os líderes têm habilidades `.pptx`, e em 60 caracteres a pergunta ampla Choice coloca a habilidade de edição à frente da de autoria, para uma solicitação sobre autoria de um deck.
 
-## Passo 4: reclassificar os três primeiros
+## Passo 4: reclassificar os três principais
 
 Três opções deixam espaço para a descrição completa mais a abertura de cada habilidade
-`SKILL.md`, então a segunda solicitação coloca a mesma pergunta a evidências melhores:
+`SKILL.md`, então o segundo pedido coloca a mesma pergunta para evidência melhor:
 
-* **`which`** é uma questão `Choice` sobre a lista final, com esse texto mais longo como critério de cada
+* **`which`** é uma pergunta `Choice` sobre a lista final, com esse texto mais longo como critério de cada
  opção.
-* **`fits::{name}`** é uma questão `Noul` por candidato: essa habilidade faz a
- coisa
- específica que a solicitação pede? Cada uma é respondida separadamente, então todas podem retornar baixas,
- e uma lista final cuja maior pontuação ficar abaixo de 0,30 é descartada completamente.
+* **`fits::{name}`** é uma pergunta `Noul` por candidato: essa habilidade faz o
+ específico
+ que a solicitação pede? Cada uma é respondida por conta própria, então todas podem retornar baixas,
+ e uma lista final cuja maior pontuação fique abaixo de 0,30 é descartada inteiramente.
 
 ```python
 RERANK_INSTRUCTIONS = (
@@ -632,18 +641,19 @@ for request in DEMO:
     fits 0.05  openhands
 ```
 
-As duas `.pptx` habilidades se separam assim que cada uma traz seu próprio texto: o pedido do baralho muda para a habilidade de autoria.
+As duas `.pptx` habilidades se separam assim que cada uma traz seu próprio texto: o pedido do baralho inverte para a habilidade de autoria.
 
-Os `fits` noul e o Choice discordam disso: os noul avaliam a habilidade de edição como superior, enquanto o Choice seleciona a de autoria. Eles estão decidindo coisas diferentes. O Choice define *qual* habilidade, e os noul definem *se* dizer algo ou não.
+Os `fits` nouls e o Choice discordam disso: os nouls avaliam a habilidade de edição como superior, enquanto o Choice escolhe a de autoria. Eles estão decidindo coisas diferentes. O Choice define *qual* habilidade, e os nouls definem *se* dizer algo ou não.
 
-A solicitação do Mastodon sobrevive a ambas as verificações: seu melhor ⦇0⦇ noul fica acima de 0,30, então a receita sugere a habilidade X para uma solicitação sobre o Mastodon. A maioria das solicitações semelhantes é capturada. A segunda passagem só pode rejeitar o que a classificação ampla lhe fornece, e nesse caso foram três quase-acertos.
+A solicitação do Mastodon sobrevive a ambas as verificações: seu melhor `fits` noul fica acima de 0,30, portanto a receita sugere a habilidade X para uma solicitação sobre Mastodon. A maioria das solicitações semelhantes é capturada.
+A segunda passagem só pode rejeitar o que a classificação ampla lhe fornece, e aqui foram três quase-acertos.
 
-A função abaixo é a receita completa: duas solicitações e dois limiares, com no máximo um
+A função abaixo é a receita completa: dois pedidos e dois limiares, com no máximo um
 nome de habilidade sendo retornado.
 
-Para apontá-lo para sua própria lista, substitua `hermes_roster.json`. Cada pergunta acima lê
-`name`, `description`, `description_full` e `body` desse arquivo, e nada mais
-conhece o Hermes.
+Para apontá-lo para o seu próprio roster, substitua `hermes_roster.json`. Cada pergunta acima lê
+`name`, `description`, `description_full`, e `body` desse arquivo, e nada mais
+sabe sobre Hermes.
 
 ```python
 def suggest(request: str) -> tuple[str, ...]:
@@ -693,20 +703,21 @@ Relevant to the current request: xurl. Ignore this if it does not fit what the u
 
 ## Passo 5: medir a sugestão
 
-Cada um dos 488 pedidos é enviado ao agente três vezes, uma rodada medida por vez. As execuções diferem apenas no que é dito ao agente:
+Cada um dos 488 pedidos é enviado ao agente três vezes, uma rodada medida por vez. As execuções
+diferem apenas no que é dito ao agente:
 
 | | o que vai no prompt do sistema |
 | ----------------------- | ------------------------------------------------------------------ |
 | agente sozinho | nada |
 | agente com uma sugestão | o que quer que `suggest()` retorne |
-| agente com a resposta | o nome da habilidade abrangente, ou "nada se aplica" quando não há |
+| agente com a resposta | o nome da habilidade de cobertura, ou "nada se aplica" quando não há |
 
 O terceiro não é alcançável; é o teto contra o qual os outros dois são medidos.
 
-A redação dessa sugestão está cumprindo duas funções. Ela diz que a sugestão pode ser ignorada,
-porque insistir mais vence a conformidade mesmo em sugestões erradas, e uma errada é pior
-do que nenhuma. E uma rodada sem nada a sugerir ainda envia uma frase dizendo isso; enviar
-nada deixaria a instrução própria do roster de "inclinarse para o lado do carregamento"
+A redação dessa sugestão está fazendo dois trabalhos. Ela diz que a sugestão pode ser ignorada,
+porque pressionar mais vence a conformidade em sugestões erradas também, e uma errada é pior
+do que nenhuma. E uma rodada sem nada para sugerir ainda envia uma frase dizendo isso; enviar
+nada deixaria a instrução própria do roster de "errar pelo lado de carregar"
 sem oposição.
 
 ```python
@@ -776,7 +787,7 @@ print(
 of 315 covered requests: 37 the suggestion fixed, 7 it broke
 ```
 
-A sugestão corrige muitos mais pedidos do que quebra, mas ela quebra alguns que o agente
+A sugestão corrige muito mais solicitações do que quebra, mas ela de fato quebra algumas que o agente
 já tinha acertado por conta própria. Uma sugestão errada, mas confiante, é mais persuasiva do que nenhuma sugestão,
 que é o preço de colocá-la antes da virada.
 
@@ -845,14 +856,14 @@ plt.close(fig)
 
 ## O que os resultados mostram
 
-* As cargas erradas caíram de 16,8% para 7,3% e as desnecessárias de 9,8% para 4,0%, o que corresponde à maior parte da diferença entre adivinhar com base em um índice truncado e receber a resposta diretamente.
-* Algumas solicitações que o agente acertava sozinho passaram a ser erradas quando uma sugestão foi anexada. Os contadores estão acima.
+* Cargas erradas caíram de 16,8% para 7,3% e desnecessárias de 9,8% para 4,0%, o que representa a maior parte da diferença entre adivinhar a partir de um índice truncado e receber a resposta.
+* Algumas solicitações que o agente acertava sozinho voltaram a ficar erradas quando uma sugestão foi anexada. As contagens estão acima.
 
-Copie este formato quando um agente seu tiver um grande portfólio: uma classificação rápida sobre tudo, seguida de uma análise detalhada de dois ou três. Cada etapa pode retornar sem resultados.
+Copie esta forma quando um agente seu tiver um grande número de tarefas: uma classificação rápida de tudo, seguida de uma análise detalhada de duas ou três. Cada etapa pode não retornar resultados.
 
-## Abra no playground
+## Abra-o no playground
 
-Crie um link para o playground do deck a partir da solicitação da etapa 4, usando a descrição completa e o trecho do corpo de cada candidato como critério.
+Crie um link para o playground do deck solicitado na etapa 4, usando a descrição completa e o trecho do corpo de cada candidato como seus critérios.
 
 ```python
 demo_shortlist = tuple(name for name, _ in rank_wide(DEMO[1])["ranked"][:SHORTLIST])
@@ -868,11 +879,11 @@ display(
 )
 ```
 
-[Abra a lista reduzida + perguntas no playground do TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAE4ICOMCAziqQaQMICGS+AnhDPgA4wU+FBADmCFAAsEZfK34BLFFEn4wCKAGt8tTQgA2EiBwAUUCADcZAGh1KYrFAuP5LMiwoQB3W+bh9aWz4KKAR1VGEydlpWKCdjQPwAEWYAMVsAGQAhAHkASjlaOXwAOj4+FExbGFoFJFFXGFkAMwUyOABaFAR-fUcEMorMfGaIWQAjKKQwOob2MBGICBQkZdn8BFjVC1Z9B3iOJHhxmXxx2O0RYWl8UP19fCVb1kQRsgg4R44pBHw4CHU+gA-KRbKQQsgUAB9cyoLAMPD4UikAC+IFsIGCHwqtAw2ERRFIXkkChUjHwJBAKE4fAQ5NIKggpLp6KRICgZCUMgUrHJlL4EC8MgFdQRTBAzAo-VsUrAtjCT0GlTUGk0iVo+gU6kSq26iW6vX6tBK+EAKAT4ADE+AACoLhUyIgBlTQKe74SWbboyzZyuTTDYzIS2oVkW2ilVaIrm5rvTq0DmOFT4cRIGSOZwcLxKVTlSopgBW+p6fD63Q651oYQDSnWHnkMxCQgAGgBZDJ-dgKASljO2Wi01h6WS6ui+SSsMgoRLzFW1UQcACKAEETUv8AADJWYdePIryABaAElrXIyCoFFZXM18K3261DMbLVaAOrSb4QfAAVUrX5-UgURS6K6DzsJwwgKK88hbq4shlMswz3r8AFfBYED6FYCx1H6YFeKwYHmqwRR1AIKC2DwKAkWREzLJIBAcp66walqvzqJGQRKEmrFqlR-AUJWqDpgkADc+CyusYwbNgURxOs3TYG8HzYaUuaYCJCpOPUkkARpDTBHQkKCUgtAiX44x1OJsj9pqKA6TomrqCMrp0CJXhjC6mlZlIwjFqWdD4CYcGVHkth9NwgjqgOQ74COiQSX4iCoI+aCcqI4iyMSyAIFYsg-PgNSnAlBxFMQJXgKq1glaQSKlUx2oVaV1WkHp-EoIZ9VVRJFDNDIyChHuylDAA9IFCFOUgLwDE+NoUBQ1AAVyoJsipHSsIIkhjPSIBZDAroLMGMhhhEXFFNIrBgA+RSeTmnBSMYHQqSa5pWstq23bI1rvGAMChMU0GIa4HAzLoeW1Jp658Dd61IPdQybr+vwZRwYXRQgVZXICF6nPWqqFMU-0Tk4zSxKR0XLGonKXvImqXvtoYOkIla0LUxirmArAVFWMaKUuqCSO8fCkgA5EU4NDCta1jDuM7gxxkgdFxO5AfcREcAA2uwUj86StCDa041IFAPL6B0lZkB4fUALomJINkBLgg2DaI2YwOMJR+INGt8xAAtQDrevsIbuwm+4zK0HkJpoDcLbMCeg34DkzStKEHQAFKOmcUwqH5EDXrlYwKE7436HuFDk97tILOa-57kz8B+ad510EU1qQyz+CpBJuWTBAZ02HI+iypwJskuUVa04dQivetnKaUrDwmLVo46JFpwxfKcAnGAiSIDMrDBToqPXL84w7foKAdFh4N2mQIqoIrLr3BHJKAQ-DzIVTBc2zIHRCp-Qh8I4boZBvgwFTAsUYsh-iAnLBcKsx1-IC2UKoY6thDzMD+D0CAiRNjANmEUGKBQMqlyyjIMCRwN4FRqEIFA0lfhXHkLQHgZ4EZuXGEsTQJoLRWhyIIPgi0GRezgLyREpAACiFCwAzE0mzVqFZfgQPwAAJSXAAcT9AsSsQjUCkgPhOFQj1LTukEfIDo8daTQ0dEwn64jN5SIaEkRwrA5H4Ejr8Jch4OjjScJeGRTjCLyIkifXa6wMgZBbHIcomooCGUutmDB-wyCcE4S+N8wgPz5SMbGeQAAqbJ35fjMGMfgRGuBcn4FMdtYJmllFqJMBQGhngdjG1WqIQqVYUxpgOAUdmJZSQxPKfgAAcqjBY+hoC7EGpWfQzQOjrXoFWKwcQJK+OcaY58GtXDmJNlY34jC9gHH8kuABWd8AACYSgAAYCimI+ssZYNJ1hYRHGwiAaoBmOh6BrHRlY9GqDcLISAsBCpFFMY6EQM8Gg9FsXg4pcTECtV8fgXJLYJCcl9rkggpjcmnIACzWAAMwXIuQAanwCopQAAJF2OhWpkFoGUrF2SACM1gACcRLSUQLVAypF2SLBMpKPiwVZSF6yMMLYIUCBND6DAhQQw-iw4DNyUcrYvxzkXPwFE5AlYym5Pyf3IBXjMYq3mWdDFSrsnWjqBoYwCBzUtnYKwcQCwoBjJgL6V6EATbRM1JpRlqR3GOkdOa60TRdkQVdBOJQYEflnkkLYVYGCEWOItc+TYdZughs+t9A5bZPHph8Y41ZvKFxgCmCgc1FLP5shRGCEAdR6BkBzRmWgm1RGYGJjKgGvwc5Hx-HPIiRRcopRtt2tJmqe7gM7jcfKZBhaaqNEIWaNB6AmlfKSP5qYgRKJ9MU8cQhNhJmJg4e4YFIBL11PgfMVDHhTmihNEoqI62tCnLgXAAoQy3zFBSUg1JaSbVWDAfQ-D61GRoc2hIm0kgQD8rlOe+BBYfvtKKQWagPxwdpIbJO1xZIztNvO5ddBJ66CKBA7dh4hDIW1ByBQm9CgEA9NKUSPp5SBgGsqFBdlmI6mWEvA0JYjSPpALWtkL7aBvpehLMgfJf00hZOKQDwHWSkAbeBmSkGREgGg7Bm48HENiynmMVDkAj7Lw0AobD-5NK5VnQRqgK7iNvLI-gCju5Zw0bo4RAglT9B7WvhPCMbyG4XVhV5CGt1oYPSfaJpQ4ncAqCyTJqkcmAM8CU3W1TTb1NGSgzBodunX4IYSx8Vgxn0O6cwxZnRVmGg2fw0UQj9BChObGORyjRRqOck8+J-ANiwh2LUEW-xixZA1PUQfLRTgoC6LjUJlEaIMTswUAANRkMzJABJ+WshAFMjQ3QwAtgBAYWgiJVYgHzFlDoAqmWnJABbFEQA)
+[Abra a lista curta + perguntas no playground TypeSafe →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiAE4ICOMCAziqQaQMICGS+AnhDPgA4wU+FBADmCFAAsEZfK34BLFFEn4wCKAGt8tTQgA2EiBwAUUCADcZAGh1KYrFAuP5LMiwoQB3W+bh9aWz4KKAR1VGEydlpWKCdjQPwAEWYAMVsAGQAhAHkASjlaOXwAOj4+FExbGFoFJFFXGFkAMwUyOABaFAR-fUcEMorMfGaIWQAjKKQwOob2MBGICBQkZdn8BFjVC1Z9B3iOJHhxmXxx2O0RYWl8UP19fCVb1kQRsgg4R44pBHw4CHU+gA-KRbKQQsgUAB9cyoLAMPD4UikAC+IFsIGCHwqtAw2ERRFIXkkChUjHwJBAKE4fAQ5NIKggpLp6KRICgZCUMgUrHJlL4EC8MgFdQRTBAzAo-VsUrAtjCT0GlTUGk0iVo+gU6kSq26iW6vX6tBK+EAKAT4ADE+AACoLhUyIgBlTQKe74SWbboyzZyuTTDYzIS2oVkW2ilVaIrm5rvTq0DmOFT4cRIGSOZwcLxKVTlSopgBW+p6fD63Q651oYQDSnWHnkMxCQgAGgBZDJ-dgKASljO2Wi01h6WS6ui+SSsMgoRLzFW1UQcACKAEETUv8AADJWYdePIryABaAElrXIyCoFFZXM18K3261DMbLVaAOrSb4QfAAVUrX5-UgURS6K6DzsJwwgKK88hbq4shlMswz3r8AFfBYED6FYCx1H6YFeKwYHmqwRR1AIKC2DwKAkWREzLJIBAcp66walqvzqJGQRKEmrFqlR-AUJWqDpgkADc+CyusYwbNgURxOs3TYG8HzYaUuaYCJCpOPUkkARpDTBHQkKCUgtAiX44x1OJsj9pqKA6TomrqCMrp0CJXhjC6mlZlIwjFqWdD4CYcGVHkth9NwgjqgOQ74COiQSX4iCoI+aCcqI4iyMSyAIFYsg-PgNSnAlBxFMQJXgKq1glaQSKlUx2oVaV1WkHp-EoIZ9VVRJFDNDIyChHuylDAA9IFCFOUgLwDE+NoUBQ1AAVyoJsipHSsIIkhjPSIBZDAroLMGMhhhEXFFNIrBgA+RSeTmnBSMYHQqSa5pWstq23bI1rvGAMChMU0GIa4HAzLoeW1Jp658Dd61IPdQybr+vwZRwYXRQgVZXICF6nPWqqFMU-0Tk4zSxKR0XLGonKXvImqXvtoYOkIla0LUxirmArAVFWMaKUuqCSO8fCkgA5EU4NDCta1jDuM7gxxkgdFxO5AfcREcAA2uwUj86StCDa041IFAPL6B0lZkB4fUALomJINkBLgg2DaI2YwOMJR+INGt8xAAtQDrevsIbuwm+4zK0HkJpoDcLbMCeg34DkzStKEHQAFKOmcUwqH5EDXrlYwKE7436HuFDk97tILOa-57kz8B+ad510EU1qQyz+CpBJuWTBAZ02HI+iypwJskuUVa04dQivetnKaUrDwmLVo46JFpwxfKcAnGAiSIDMrDBToqPXL84w7foKAdFh4N2mQIqoIrLr3BHJKAQ-DzIVTBc2zIHRCp-Qh8I4boZBvgwFTAsUYsh-iAnLBcKsx1-IC2UKoY6thDzMD+D0CAiRNjANmEUGKBQMqlyyjIMCRwN4FRqEIFA0lfhXHkLQHgZ4EZuXGEsTQJoLRWhyIIPgi0GRezgLyREpAACiFCwAzE0mzVqFZfgQPwAAJSXAAcT9AsSsQjUCkgPhOFQj1LTukEfIDo8daTQ0dEwn64jN5SIaEkRwrA5H4Ejr8Jch4OjjScJeGRTjCLyIkifXa6wMgZBbHIcomooCGUutmDB-wyCcE4S+N8wgPz5SMbGeQAAqbJ35fjMGMfgRGuBcn4FMdtYJmllFqJMBQGhngdjG1WqIQqVYUxpgOAUdmJZSQxPKfgAAcqjBY+hoC7EGpWfQzQOjrXoFWKwcQJK+OcaY58GtXDmJNlY34jC9gHH8kuABWd8AACYSgAAYCimI+ssZYNJ1hYRHGwiAaoBmOh6BrHRlY9GqDcLISAsBCpFFMY6EQM8Gg9FsXg4pcTECtV8fgXJLYJCcl9rkggpjcmnIACzWAAMwXIuQAanwCopQAAJF2OhWpkFoGUrF2SACM1gACcRLSUQLVAypF2SLBMpKPiwVZSF6yMMLYIUCBND6DAhQQw-iw4DNyUcrYvxzkXPwFE5AlYym5Pyf3IBXjMYq3mWdDFSrsnWjqBoYwCBzUtnYKwcQCwoBjJgL6V6EATbRM1JpRlqR3GOkdOa60TRdkQVdBOJQYEflnkkLYVYGCEWOItc+TYdZughs+t9A5bZPHph8Y41ZvKFxgCmCgc1FLP5shRGCEAdR6BkBzRmWgm1RGYGJjKgGvwc5Hx-HPIiRRcopRtt2tJmqe7gM7jcfKZBhaaqNEIWaNB6AmlfKSP5qYgRKJ9MU8cQhNhJmJg4e4YFIBL11PgfMVDHhTmihNEoqI62tCnLgXAAoQy3zFBSUg1JaSbVWDAfQ-D61GRoc2hIm0kgQD8rlOe+BBYfvtKKQWagPxwdpIbJO1xZIztNvO5ddBJ66CKBA7dh4hDIW1ByBQm9CgEA9NKUSPp5SBgGsqFBdlmI6mWEvA0JYjSPpALWtkL7aBvpehLMgfJf00hZOKQDwHWSkAbeBmSkGREgGg7Bm48HENiynmMVDkAj7Lw0AobD-5NK5VnQRqgK7iNvLI-gCju5Zw0bo4RAglT9B7WvhPCMbyG4XVhV5CGt1oYPSfaJpQ4ncAqCyTJqkcmAM8CU3W1TTb1NGSgzBodunX4IYSx8Vgxn0O6cwxZnRVmGg2fw0UQj9BChObGORyjRRqOck8+J-ANiwh2LUEW-xixZA1PUQfLRTgoC6LjUJlEaIMTswUAANRkMzJABJ+WshAFMjQ3QwAtgBAYWgiJVYgHzFlDoAqmWnJABbFEQA)
 
 ## O que vem a seguir
 
-A mesma forma aparece em outro lugar:
+A mesma forma aparece em outros lugares:
 [Roteamento de Intenção](/en/patterns/intent-routing/) para rotear para um
 manipulador em vez de uma habilidade, [Confiança](/en/concepts/confidence/) para
 escolher os dois limiares, e

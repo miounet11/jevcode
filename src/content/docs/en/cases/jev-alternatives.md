@@ -1,63 +1,78 @@
 ---
-title: "Jev 与开源替代品"
-description: "社区实测里的 5 个 Jev 替代品：精度、速度与算力的取舍，以及什么情况下值得换。"
+translatedFrom: zh
+title: "Jev vs. open-source alternatives"
+description: "Five Jev alternatives from one community benchmark: the accuracy, speed, and compute trade-offs, and when switching away is worth it."
 section: cases
 order: 15
 tags: ['comparison', 'alternatives', 'benchmark']
-translatedFrom: en
 ---
 
-## 这篇讲什么
+## What this page covers
 
-判定模型这一范式不只有 Jev。社区已经出现一批开源复刻与替代品，跑在更小、更快的模型上。
+The judgment-model paradigm is not unique to Jev. A set of open-source replicas and
+alternatives has already appeared, running on smaller, faster models.
 
-这篇汇总一个公开社区实测给出的横向对比，说明每个替代品在**精度、速度、算力门槛**上的取舍，以及什么场景下换掉 Jev 是合理的。
+This page summarizes the cross-comparison from one public community benchmark: the
+trade-off each alternative makes on **accuracy, speed, and compute floor**, and when
+replacing Jev is reasonable.
 
-> **来源与局限**：下表数据来自 [@ItsCuthulhu](https://x.com/ItsCuthulhu/status/2101491913866055821) 于 2026-09-20 发布的公开实测（109 赞），作者声明基准会自动更新。
-> 这是**单一来源、方法论未公开**的实测，不是本站的独立复现。数字会随时间变化，请以作者的最新基准与各自项目页面为准。
+> **Source and limits**: the table below comes from a public benchmark published by
+> [@ItsCuthulhu](https://x.com/ItsCuthulhu/status/2101491913866055821) on 2026-09-20
+> (109 likes); the author states the benchmark updates automatically.
+> It is a **single-source benchmark with no published methodology**, not an independent
+> reproduction by this site. The numbers drift over time — defer to the author's latest
+> benchmark and to each project's own page.
 
-## 横向对比
+## Head-to-head
 
-| 替代品 | 形态 | 精度 | 速度 | 许可 / 门槛 | 作者结论 |
+| Alternative | Form | Accuracy | Speed | License / floor | Author's verdict |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Jev**（基线） | 托管 API | 基线 | 基线 | 按 input token 计费 | — |
-| [djev](https://djev.dev/) | 托管服务 | 略低 | 略快 | 有 Playground 与 API | 值得换 |
-| [Simplejev-qwen38-27b](https://huggingface.co/Qwen/Qwen3.8-27B) | 开源权重 | 最接近 | — | 需 27B 算力（DGX Spark 级） | 今天最好的开源替代 |
-| [Reflex-4b](https://huggingface.co/YannQi/R-4B) | 开源权重 | 约 -5% | 2–3x | Apache 2.0 | 快且开放 |
-| [Decider-2b](https://huggingface.co/Mapika/decider-2b) | 开源权重 | 约 -5% | 约 10x | Apache 2.0，完全本地 | 本地首选 |
-| Laya | — | 62.5% | — | — | 作者判定不值 |
+| **Jev** (baseline) | Hosted API | Baseline | Baseline | Billed per input token | — |
+| [djev](https://djev.dev/) | Hosted service | Slightly lower | Slightly faster | Playground and API | Worth switching |
+| [Simplejev-qwen38-27b](https://huggingface.co/Qwen/Qwen3.8-27B) | Open weights | Closest | — | Needs 27B-class compute (DGX Spark tier) | Best open alternative today |
+| [Reflex-4b](https://huggingface.co/YannQi/R-4B) | Open weights | ~ -5% | 2–3x | Apache 2.0 | Fast and open |
+| [Decider-2b](https://huggingface.co/Mapika/decider-2b) | Open weights | ~ -5% | ~10x | Apache 2.0, fully local | Best local pick |
+| Laya | — | 62.5% | — | — | Author judged it not worth it |
 
-## 怎么读这张表
+## How to read the table
 
-**精度上没人超过 Jev。** 作者的结论很直接：跑了一整天，没有一个替代品在准确率上打赢 Jev。差距不大（多数在 5% 以内），但方向一致。
+**Nothing beats Jev on accuracy.** The author's conclusion is blunt: after a full day of
+testing, no alternative won on accuracy. The gaps are small (mostly within 5%), but they
+all point the same way.
 
-**速度上 Jev 已经被追上。** 4B 的 Reflex 快 2–3 倍，2B 的 Decider 快约 10 倍。对延迟敏感、且能接受 5% 精度损失的管线，本地小模型是合理选择。
+**Jev has been caught on speed.** Reflex (4B) is 2–3x faster, and Decider (2B) roughly
+10x. For a pipeline that is latency-sensitive and can absorb a 5% accuracy loss, a small
+local model is a reasonable choice.
 
-**算力门槛是真正的分界线。** 想贴近 Jev 的精度，得扛 27B 的推理成本；想便宜又快，就得接受精度下降。这张表本质上是在「精度 / 速度 / 成本」三角里选一个角。
+**The compute floor is the real dividing line.** To approach Jev's accuracy you have to
+carry 27B inference costs; to be cheap and fast you accept lower accuracy. The table is
+essentially about picking one corner of the accuracy / speed / cost triangle.
 
-## 什么时候换掉 Jev
+## When to replace Jev
 
-值得考虑替代品的场景：
+Cases where an alternative is worth considering:
 
-- **延迟敏感**：一次判定要在几十毫秒内返回，2B/4B 本地模型的优势明显
-- **完全离线或合规要求**：数据不能出内网，[Decider-2b](https://huggingface.co/Mapika/decider-2b) 这类可完全本地运行
-- **成本敏感且量大**：调用量大到 input token 成本成为主要支出
-- **需要可自托管**：想在自己的集群里跑同一范式（本站的 [Playground](/en/playground/) 用的就是自建判定服务）
+- **Latency-sensitive**: one judgment has to return in tens of milliseconds, where 2B/4B local models have a clear edge
+- **Fully offline or compliance-bound**: data cannot leave the internal network, and something like [Decider-2b](https://huggingface.co/Mapika/decider-2b) runs entirely locally
+- **Cost-sensitive at volume**: call volume high enough that input-token cost becomes the main line item
+- **Self-hosting required**: you want the same paradigm on your own cluster (this site's [Playground](/en/playground/) runs on a self-hosted judgment service)
 
-继续用 Jev 更合适的场景：
+Cases where staying on Jev fits better:
 
-- **精度优先**：分类、路由、判定的错误成本高于调用成本
-- **不想运维**：托管 API 免去权重管理、显存规划、扩缩容
-- **需要校准概率**：Jev 每个答案都带置信度，可直接做[置信度路由](/en/patterns/confidence-routing/)；小模型的校准质量需要自行验证
+- **Accuracy first**: in classification, routing, and judgment, a mistake costs more than the call
+- **No ops appetite**: a hosted API removes weight management, VRAM planning, and scaling
+- **Calibrated probabilities**: every Jev answer carries a confidence you can route on directly with [confidence-gated routing](/en/patterns/confidence-routing/); a small model's calibration needs verifying on your own data
 
-## 一句话结论
+## The short version
 
-Jev 仍是这一范式的前沿，但领先幅度在缩小。选型时不要问「谁最好」，要问「这个管线里，精度、延迟、成本哪个最贵」。
+Jev is still at the front of this paradigm, but the lead is narrowing. When choosing, do
+not ask "which is best" — ask "in this pipeline, which of accuracy, latency, or cost is
+most expensive".
 
-## 相关
+## Related
 
-- [能力地图与生态案例](/en/cases/use-case-map/) — 按场景看别人用了哪类原语
-- [置信度路由](/en/patterns/confidence-routing/) — 用置信度决定分流，是 Jev 的典型用法
-- [扇出并行](/en/patterns/fan-out/) — 一次调用问完所有判断，摊薄延迟
-- [社区脉搏](/en/community/) — 更多社区实测与讨论
-- [生态页](/en/ecosystem/) — 完整项目清单
+- [Use-case map & ecosystem](/en/cases/use-case-map/) — see which primitives others reach for, by scenario
+- [Confidence-gated routing](/en/patterns/confidence-routing/) — using confidence to decide the split, a canonical Jev pattern
+- [Speculative fan-out](/en/patterns/fan-out/) — ask every question in one call and amortize the latency
+- [Community pulse](/en/community/) — more community benchmarks and discussion
+- [Ecosystem](/en/ecosystem/) — the full project index

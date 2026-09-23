@@ -1,28 +1,28 @@
 ---
 title: "Klassifizierung mit Konfidenz"
-description: "Klassifizieren Sie die jährlichen SEC-Berichte in 75 Industriegruppen mit jeweils einer Auswahl, und lesen Sie dann das eigene Konfidenzniveau der Antwort, um zu entscheiden, ob diese Gruppe oder die darüberliegende breitere Abteilung gemeldet wird."
+description: "Klassifiziere SEC-Jahresberichte in 75 Industriegruppen mit jeweils einem Choice, und lies dann das eigene Konfidenzniveau der Antwort, um zu entscheiden, ob diese Gruppe oder die darüberliegende breitere Division gemeldet wird."
 section: cases
 order: 130
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/classification_using_confidence"
 translatedFrom: en
 ---
-Jede Gesellschaft, die einen Jahresbericht bei der SEC einreicht, beschreibt darin ihr eigenes Geschäft. Wir klassifizieren diese Beschreibungen nach der Standard-Industrieklassifikation: 75 Industrie gruppen, eine ⦇0⦇ Frage pro Dokument.
+Jede Firma, die einen Jahresbericht bei der SEC einreicht, beschreibt darin ihr eigenes Geschäft. Wir klassifizieren diese Beschreibungen unter der Standard Industrial Classification: 75 Industrie gruppen, eine `Choice` Frage pro Dokument.
 
 Die meisten Einreichungen sind einfach. Eine Regionalbank ist eine Regionalbank. Einige sind es nicht: ein Unternehmen, das gerade eines seiner beiden Segmente verkauft hat, oder ein Startup, das ein Geschäft beschreibt, das es betreten will, anstatt eines, das es betreibt. Das Modell muss unabhängig davon eine Gruppe auswählen, und die Antwort für einen schwierigen Fall sieht nicht anders aus als die Antwort für einen einfachen Fall. Die Unterscheidung zwischen schwierigen und einfachen Fällen ist normalerweise dort, wo die Kosten entstehen: ein zweites Modell, zusätzliche Aufrufe, menschliche Überprüfung.
 
-Eine Choice sagt es dir bereits. Neben der siegreichen Option gibt sie `confidence` zurück, hoch, wenn fast die gesamte Wahrscheinlichkeit auf eine Option entfällt, und niedrig, wenn sie sich auf mehrere verteilt hat. Diese eine Zahl trennt die Antworten, denen du vertrauen kannst, von denen, denen du es nicht kannst.
+Ein Choice sagt es dir bereits. Neben der siegreichen Option gibt er `confidence` zurück, hoch, wenn fast die gesamte Wahrscheinlichkeit auf einer Option liegt, und niedrig, wenn sie sich auf mehrere verteilt. Diese eine Zahl trennt die Antworten, denen du vertrauen kannst, von denen, denen du es nicht kannst.
 
 Was man mit einer nicht vertrauenswürdigen Antwort macht, hängt von Ihren Labels ab. SIC-Labels bilden eine Hierarchie:
-Industriegruppen werden größeren Abteilungen zugeordnet. Das macht eine Antwort nahezu kostenlos. Wenn
-das Modell sich bei der Gruppe unsicher ist, melden Sie die Abteilung, der sie angehört. Das breite Label
-ergibt sich aus dem engen, sodass kein zweiter Aufruf nötig ist.
+Industriegruppen werden zu weiteren Abteilungen zusammengefasst. Das macht eine Antwort nahezu kostenlos. Wenn
+das Modell sich der Gruppe nicht sicher ist, melden Sie die Abteilung, der es angehört. Das breite Label
+ergibt sich aus dem schmalen, also gibt es keinen zweiten Aufruf.
 
-Über 60 Einreichungen hinweg teilt ein Konfidenz-Schwellenwert von 0,9 sie in zwei Hälften. Die selbstsichere Hälfte liegt in 90 % der Fälle richtig; die andere Hälfte in 40 %. Auf einer Ebene höher gemeldet, werden diese 40 % zu 70 %. Wir enden mit einer `classify()`-Funktion, die ein Label sowie die Spezifität zurückgibt, bei einer Anfrage pro Dokument.
+Über 60 Einreichungen hinweg teilt ein Konfidenz-Schwellenwert von 0,9 sie in zwei Hälften. Die sichere Hälfte liegt zu 90 % richtig; die andere Hälfte zu 40 %. Auf einer Ebene höher berichtet, wird diese 40 % zu 70 %. Wir enden mit einer `classify()`-Funktion, die ein Label sowie die Spezifität zurückgibt, bei einer Anfrage pro Dokument.
 
 <!-- mermaid flowchart converted to equivalent tables (this site loads no chart library) -->
 
-*Richtung des Flusses: LR*
+*Flussrichtung: LR*
 
 | Knoten | Beschreibung | Gruppe |
 | :--- | :--- | :--- |
@@ -30,8 +30,8 @@ ergibt sich aus dem engen, sodass kein zweiter Aufruf nötig ist.
 | `request` | eine Anfrage | eine Anfrage |
 | `q` | Choice / 75 Industriegruppen | eine Anfrage |
 | `sure` | Vertrauen / ≥ 0,9? | — |
-| `grp` | die Industriegruppe melden / z. B. 28 | — |
-| `div` | ihre Abteilung melden / z. B. Fertigung | — |
+| `grp` | melden Sie die Industriegruppe / z.B. 28 | — |
+| `div` | melden Sie ihre Abteilung / z.B. Fertigung | — |
 
 | Von | Bedingung | Zu |
 | :--- | :--- | :--- |
@@ -40,15 +40,15 @@ ergibt sich aus dem engen, sodass kein zweiter Aufruf nötig ist.
 | `sure` | nein | `div` |
 
 
-## Einrichtung
+## Setup
 
 ```bash
 pip install ipython matplotlib "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-dann `TYPESAFE_API_KEY` setzen. Jeder API-Aufruf wird in `json_cache.json` zwischengespeichert, das mit dem Kochbuch ausgeliefert wird, sodass das erneute Rendern die veröffentlichten Zahlen ohne API-Aufruf wiedergibt. Löschen Sie diese Datei, um alles live erneut auszuführen.
+dann `TYPESAFE_API_KEY` festlegen. Jeder API-Aufruf wird in `json_cache.json` zwischengespeichert, das mit dem Kochbuch ausgeliefert wird, sodass das erneute Rendern die veröffentlichten Zahlen abspielt, ohne die API aufzurufen. Löschen Sie diese Datei, um alles live neu auszuführen.
 
-Die untenstehenden Zahlen stammen von `jev-1.12` vom 12.08.2026.
+Die untenstehenden Zahlen stammen von `jev-1.12` am 2026-08-12.
 
 ```python
 import json
@@ -78,11 +78,11 @@ client = TypeSafeClient(
 json_cache = JsonCache(Path("json_cache.json"))
 ```
 
-## Erstellen Sie die zwei Ebenen der Taxonomie
+## Erstellen Sie die beiden Ebenen der Taxonomie
 
-`sic_codes.tsv` ist die Branchenliste, die die SEC für Meldepflichtige veröffentlicht, aus der sie ihren eigenen Code auswählen können, abgerufen am 2026-08-10: 444 vierstellige Codes, jeweils mit einem Branchen-Titel. Die Ziffern bilden eine Hierarchie. Die ersten beiden sind die **Hauptgruppe** (75 davon hier, von `01` landwirtschaftliche Produktion bis `99` nicht klassifizierbar), und feste Bereiche von Hauptgruppen bilden die zehn **Abteilungen**, die breiteste Unterteilung des SIC.
+`sic_codes.tsv` ist die Branchenliste, die die SEC für Meldepflichtige veröffentlicht, aus der sie ihren eigenen Code auswählen können, abgerufen am 2026-08-10: 444 vierstellige Codes, jeweils mit einem Branchen-Titel. Die Ziffern bilden eine Hierarchie. Die ersten beiden stellen die **Hauptgruppe** dar (75 davon hier, von `01` landwirtschaftliche Produktion bis `99` nicht klassifizierbar), und feste Bereiche von Hauptgruppen bilden die zehn **Abteilungen**, die breiteste Unterteilung des SIC.
 
-Beide Ebenen stammen aus dieser einen Datei, ohne Beteiligung eines Modells: Gruppieren Sie die Codes nach ihren ersten beiden Ziffern und weisen Sie diese Ziffern einer Abteilung zu.
+Beide Ebenen stammen aus dieser einen Datei ohne Beteiligung eines Modells: Gruppieren Sie die Codes nach ihren ersten beiden Ziffern und weisen Sie diese Ziffern dann einer Division zu.
 
 ```python
 DIVISIONS = [
@@ -126,11 +126,11 @@ print(
   group 35 = manufacturing / engines & turbines, farm machinery & equipment, lawn & garden tractors & home lawn & gardens equip ...
 ```
 
-Eine Choice-Frage benötigt etwas, das jede Option beschreibt, und der Eigenname einer Gruppe ist nicht
+Eine Choice-Frage benötigt etwas, um jede Option zu beschreiben, und der Eigenname einer Gruppe ist nicht
 immer
-vorhanden: 42 der 75 tragen einen übergeordneten Titel in der Liste der SEC, und die übrigen tragen keinen. Daher
-wird jede Gruppe durch die Branchen innerhalb ihrer beschrieben, was jemand, der die
-Einreichung liest, ohnehin abgleichen würde.
+vorhanden: 42 der 75 tragen einen Oberbegriff in der Liste der SEC, und die anderen tragen keinen. Daher
+wird jede Gruppe durch die Branchen innerhalb dieser Gruppe beschrieben, was jemand, der die
+Einreichung liest, sowieso abgleichen würde.
 
 ```python
 MAX_NAMED = (
@@ -161,9 +161,13 @@ group 65: real estate — includes: real estate operators (no developers) & less
 
 ## Die Einreichungen
 
-`filings.jsonl` enthält 60 Jahresberichte (10-K), die jeweils auf den Abschnitt „Item 1: Geschäftstätigkeit“ gekürzt wurden, in dem ein Unternehmen beschreibt, was es tut; dies ist der einzige Teil, der für einen Branchencode relevant ist. Sie umfassen den Zeitraum 1993–2024 und reichen von 700 bis 2.200 Wörtern. Jeder enthält den vom Einreicher gewählten SIC-Code sowie die Zugangsnummer zur Suche in EDGAR.
+`filings.jsonl` enthält 60 Jahresberichte (10-K), die jeweils auf Abschnitt 1 „Business“ gekürzt wurden, den Abschnitt, in dem ein Unternehmen beschreibt, was es tut; dies ist der einzige Teil, der für einen Industriecode relevant ist. Sie umfassen den Zeitraum 1993–2024 und reichen von 700 bis 2.200 Wörtern. Jeder enthält den SIC-Code, den der Einreicher gewählt hat, sowie die Zugangsnummer zur Suche auf EDGAR.
 
-Woher diese Bezeichnung stammt, ist vor jeder Genauigkeitszahl von Bedeutung. Sie wird selbst angegeben: Wer den Antrag vorbereitet hat, hat ihn einmal ausgewählt, und sie veraltet, wenn ein Unternehmen das Geschäft mit den Codenamen verkauft und den Code behält. Diese 60 wurden auf Anträge reduziert, deren eigener Text den von ihnen getragenen Code unterstützt, sodass die Zahlen hier das Rezept und nicht den Zustand von EDGARS Metadaten messen.
+Woher dieses Label stammt, ist vor jeder Genauigkeitszahl entscheidend. Es wird selbst angegeben:
+Wer auch immer den Antrag vorbereitet hat, hat ihn einmal ausgewählt, und er veraltet, wenn ein Unternehmen das
+Geschäft verkauft, dessen Codenamen es trägt, und die Codenamen behält. Diese 60 wurden auf Anträge reduziert, deren
+eigener Text den von ihnen getragenen Code unterstützt, sodass die Zahlen hier das Rezept messen und nicht
+den Zustand von EDGARS Metadaten.
 
 ```python
 FILINGS = [json.loads(line) for line in Path("filings.jsonl").read_text().splitlines()]
@@ -186,13 +190,13 @@ print(f"  filer's code: {example['sic']} {INDUSTRIES[example['sic']]}")
 
 ## Stelle eine Choice-Frage und lies das Vertrauen ab
 
-Eine `Choice` Frage, deren Optionen die 75 Gruppen sind. Die gesamte Taxonomie passt in eine Anfrage: Ein Choice funktioniert zuverlässig bis zu etwa 240 Optionen, und 75 liegt deutlich innerhalb dieses Bereichs.
+Eine `Choice` Frage, deren Optionen die 75 Gruppen sind. Die gesamte Taxonomie passt in eine Anfrage: Ein Choice funktioniert zuverlässig bis zu etwa 240 Optionen, und 75 liegt weit innerhalb dieses Bereichs.
 
-Die Antwort kommt mit `choice`, der gewinnenden Gruppe; `probabilities`, dem Gewicht auf jedem
+Die Antwort kommt mit `choice`, die gewinnende Gruppe; `probabilities`, das Gewicht auf jedem
 der 75; und `confidence`, das angibt, wie konzentriert diese Verteilung war. Das Rezept liest
-`confidence` statt der eigenen Wahrscheinlichkeit des Gewinners. Ein Gewinner bei 0,45 mit einem
-Zweiten bei 0,44 und ein Gewinner bei 0,45 mit dem Rest des Gewichts, das dünn verstreut ist, sind unterschiedliche
-Situationen, und `confidence` ist es, das sie trennt.
+`confidence` statt der eigenen Wahrscheinlichkeit des Gewinners. Ein Gewinner bei 0.45 mit einem
+Zweiten bei 0.44 und ein Gewinner bei 0.45, wobei das restliche Gewicht dünn verteilt ist, sind unterschiedliche
+Situationen, und `confidence` ist das, was sie trennt.
 
 ```python
 QUESTION = (
@@ -227,7 +231,7 @@ def ask(filing_id: str, text: str) -> dict:
 
 Die vier Zeilen unten sind das gesamte Rezept. Bei einem Konfidenzwert von 0,9 oder höher wird die Antwort als Industriegruppe gemeldet; darunter wird dieselbe Antwort als die Abteilung gemeldet, in der diese Gruppe angesiedelt ist.
 
-Jede Einreichung kehrt mit einem verwertbaren Label zurück. Eine, die das Modell nicht sicher klassifizieren konnte, wird eine Ebene höher zurückgegeben, anstatt verworfen oder weitergeleitet zu werden. Wenn eine Abteilung für Ihre Anwendung zu grob ist, um darauf zu reagieren, ist dies der Zweig, an den Sie sie an eine Person übergeben.
+Jede Einreichung kommt mit einem verwertbaren Label zurück. Eine, die das Modell nicht sicher klassifizieren konnte, kommt eine Ebene höher zurück, anstatt verworfen oder weitergeleitet zu werden. Wenn eine Aufteilung für Ihre Anwendung zu grob ist, um darauf zu reagieren, ist dies der Zweig, an den Sie sie an eine Person übergeben.
 
 ```python
 def classify(filing: dict) -> dict:
@@ -270,9 +274,10 @@ three it was not:
      46653_1999  conf 0.29  -> division services       (group 87: services-engineering, accounting, research, ma)
 ```
 
-Die Konfidenzwerte stimmen damit überein, wie schwer jede Einreichung zu klassifizieren ist. Die drei mit 1.00 sind ein pharmazeutischer Hersteller, eine Lebensversicherer und ein Versorgungsunternehmen; alle drei sind auf dem Papier Holdinggesellschaften, aber jede hat ein dominantes Geschäftsgebiet, das die Einreichung ausdrücklich nennt. Die drei am unteren Ende sind aus Gründen schwieriger, die Sie im Text nachlesen können. Zwei sind Entwicklungsunternehmen, die ein Geschäft beschreiben, das sie zu starten beabsichtigen (Nevaeh „beabsichtigt, als Softwareentwickler zu tätig zu sein“), Barricode wurde „organisiert, um in die Computer-Sicherheitssoftware-Branche einzusteigen“, und das dritte hatte zwei Segmente und verkaufte eines davon Wochen vor der Einreichung. Diese drei kommen als Abteilung statt als Gruppe zurück.
+Die Konfidenzwerte stimmen damit überein, wie schwer jede Einreichung zu klassifizieren ist. Die drei mit 1.00 sind ein pharmazeutischer Hersteller, eine Lebensversicherung und ein Versorgungsunternehmen; alle drei sind auf dem Papier Holdinggesellschaften, aber jede hat ein dominantes Geschäftsgebiet, das die Einreichung offen benennt. Die drei am unteren Ende sind aus Gründen schwieriger, die Sie im Text nachlesen können. Zwei sind Entwicklungsunternehmen, die ein Geschäft beschreiben, das sie starten beabsichtigen (Nevaeh "beabsichtigt, als Softwareentwickler zu operieren"), Barricode wurde "organisiert, um in die Computer-Sicherheitssoftware-Branche einzutreten"), und das dritte hatte zwei Segmente und verkaufte eines davon Wochen vor der Einreichung. Diese drei kommen als Abteilung statt als Gruppe zurück.
 
-`classify()` ist das gesamte Rezept. Zeige mit `ask()` auf deine eigenen Dokumente und schreibe `describe()` für deine eigene Taxonomie um, der Rest wird übernommen.
+`classify()` ist das gesamte Rezept. Zeige `ask()` auf deine eigenen Dokumente und schreibe
+`describe()` für deine eigene Taxonomie um, und der Rest wird übernommen.
 
 ## Was die umfassendere Antwort bringt
 
@@ -315,9 +320,9 @@ forced to name a group every time      39/60 right
 letting it answer coarsely when unsure  48/60 useful answers
 ```
 
-Wo das Modell sicher war, ist die von ihm genannte Gruppe neun von zehn Mal richtig. Wo es nicht sicher war, war die Benennung einer Gruppe häufiger falsch als richtig, mit 40 %. Die Meldung derselben Antworten als Division bringt sie auf 70 %.
+Wo das Modell sicher war, ist die von ihm genannte Gruppe neun von zehn Mal richtig. Wo es nicht sicher war, war die Nennung einer Gruppe häufiger falsch als richtig, bei 40 %. Die Berichterstattung über dieselben Antworten als Division bringt sie auf 70 %.
 
-Das Diagramm stellt die beiden Richtlinien nebeneinander, aufgeteilt danach, ob das Modell sich sicher war.
+Die Grafik stellt die beiden Richtlinien nebeneinander aufgeteilt, je nachdem, ob das Modell sich sicher war.
 
 ```python
 labels = ["sure\n(group reported)", "unsure\n(division reported)"]

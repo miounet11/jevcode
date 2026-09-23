@@ -1,18 +1,18 @@
 ---
 title: "引用の再確認"
-description: "ソース文書と照合して、誤った引用や幻覚的な引用を検出します。1つのTypeSafe Choiceの質問により、引用の文脈が主張を支持しているかどうかを判断し、その信頼度によって引用を人間のレビュー対象としてフラグを設定できます。"
+description: "ソース文書と照合して、誤った引用や幻覚的な引用を検出します。1つのTypeSafe Choiceの質問により、引用の文脈が主張を支持しているかどうかを判断し、その信頼度が引用を人間のレビュー対象としてフラグを立てる役割を果たします。"
 section: cases
 order: 120
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/citation_check"
 translatedFrom: en
 ---
-LLMが質問に回答し、出典を付与する。各主張に対して、ソース文書の該当セクションと、その根拠となる引用文が示される。これらの出典の中には誤りや幻覚が含まれる場合がある。引用文が文書に全く存在しない場合や、文字通り文書に含まれているものの、その文脈が主張と正反対であることを示している場合などである。
+あるLLMが質問に答え、引用を添付する。各主張について、ソース文書のセクションと、その根拠となる引用が示される。これらの引用の中には誤っているものや幻覚に基づくものがある。引用が文書に全く存在しない場合や、文字通り文書に含まれているものの、その文脈が主張と正反対であることを示している場合がある。
 
-手で一つずつ確認するのは遅い：文書を見つけ、その中の引用を見つけ、主張を裏付けるかどうかを判断するのに十分な文脈を読む必要がある。
+手動で一つずつ確認するのは遅い：該当文書を探し、その中の引用箇所を見つけ、さらに主張を裏付けるかどうかを判断するために十分な文脈を読み込む必要がある。
 
-そのチェックを自動化するには、まず通常の文字列マッチで欠落した引用符を探し、
-次に⦇0⦇の質問を使って、各引用符の文脈を読み取り、その主張を支持しているかどうかを判断します。
+そのチェックを自動化するために、まず通常の文字列マッチで欠落した引用符を探し、
+次に `Choice` 質問を用いて、各残留する引用符の文脈を読み取り、それが主張を支持するかどうかを判断します。
 
 <!-- mermaid flowchart converted to equivalent tables (this site loads no chart library) -->
 
@@ -21,11 +21,11 @@ LLMが質問に回答し、出典を付与する。各主張に対して、ソ�
 | ノード | 説明 | グループ |
 | :--- | :--- | :--- |
 | `cite` | 出典文書＋引用 | — |
-| `match` | 引用か／出典内か？ | — |
-| `fab` | 捏造をマーク | — |
+| `match` | 引用か／出典内にあるか？ | — |
+| `fab` | 捏造としてマーク | — |
 | `request` | リクエスト | リクエスト |
-| `q` | Choice — / セクションは主張とどう関係するか？／支持→検証済みとマーク／矛盾→矛盾ありとマーク／無関係→根拠なしとマーク | リクエスト |
-| `gate` | 信頼度／≥ 0.8？ | — |
+| `q` | Choice — / セクションは主張とどう関係するか？ / 支持→検証済みとしてマーク / 矛盾→矛盾ありとしてマーク / 無関係→根拠なしとしてマーク | リクエスト |
+| `gate` | 信頼度／≥ 0.8か？ | — |
 | `stand` | 判定を維持 | — |
 | `review` | 人間が確認 | — |
 
@@ -40,7 +40,9 @@ LLMが質問に回答し、出典を付与する。各主張に対して、ソ�
 | `gate` | — | `review` |
 
 
-以下、RFC 7519（JSON Web Token）に関するLLMの回答から引用された8つの出典が検証される。正確な4つの出典は、すべて0.93以上の信頼度で`verified`として返された。仕掛けられた4つの失敗はすべて検出された：捏造された引用、矛盾する主張、そして人間に送られた2つの根拠のない出典。
+以下、RFC 7519（JSON Web Token）に関するLLMの回答から引用された8つの出典をチェックする。
+信頼度0.93以上で返ってきた4つの正確な出典は`verified`である。
+植え込まれた4つの失敗はすべて検出された：捏造された引用、矛盾する主張、そして人間に送られた2つの根拠のない出典。
 
 `check_citation()`、ここで構築する関数は、ソースドキュメントと1つの引用を受け取り、4つの判断のいずれかを返します：`verified`、`unsupported`、`contradicted`、または`fabricated`。また、人間が確認すべきものをフラグで示す信頼度も返します。
 
@@ -50,9 +52,9 @@ LLMが質問に回答し、出典を付与する。各主張に対して、ソ�
 pip install ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-その後、`TYPESAFE_API_KEY`を設定します。すべてのAPI呼び出しは`json_cache.json`にキャッシュされ、これはクックブックに同梱されているため、リプレイを実行するとAPIを呼び出すのではなく公開済みの数値が再実行されます。すべての処理をライブで実行するには、そのファイルを削除してください。
+その後、`TYPESAFE_API_KEY`を設定します。すべてのAPI呼び出しは`json_cache.json`にキャッシュされ、これはクックブックに同梱されているため、リプレイを実行するとAPIを呼び出すのではなく公開済みの数値が再生されます。すべての処理を実環境で実行するには、そのファイルを削除してください。
 
-以下の数字は`jev-1.12`より2026年8月16日付で取得したものです。
+以下の数値は2026年8月16日時点の`jev-1.12`に基づくものです。
 
 ```python
 import json
@@ -79,8 +81,8 @@ json_cache = JsonCache(Path("json_cache.json"))
 ## ソースと引用を読み込む
 
 ソースは [RFC 7519](https://www.rfc-editor.org/rfc/rfc7519.html)（JSON Web Token）で、
-rfc-editor.org から取得し、このクックブックの隣に `rfc7519.txt` としてコミットしました。以下のコードは
-ページヘッダーとフッターを削除し、その後テキストを番号付きセクションに分割します。
+rfc-editor.org から取得し、このクックブックの隣に `rfc7519.txt` としてコミットしました。以下のコード
+はページヘッダーとフッターを削除し、テキストを番号付きセクションに分割します。
 
 `citations.json`の8つの引用は、LLMがRFCに対して生成したものです。4つは正確であり、残りの4つはチェックに失敗するように編集しました。
 
@@ -141,12 +143,12 @@ A claim-only citation:
 }
 ```
 
-## ソース内の各引用を検出
+## ソース内の各引用を検出する
 
 ソースにない引用は捏造であり、それを見抜くのにモデルは必要ない。
-RFCの行折り返しをまたいでも引用が一致するよう、空白と曲がり括弧を正規化し、部分文字列として検索する。一致すれば、その引用がどのセクションから来たか、そしてそのセクションが次のステップでモデルが読むテキストであることを示す。
+空白類と曲がり括弧を正規化し、RFCの行折り返しをまたいでも引用が一致するようにした上で、部分文字列として検索する。一致すれば、その引用がどのセクションから来たかを示し、そのセクションが次のステップでモデルが読むテキストとなる。
 
-引用では、セクションを指定するだけで、そこから何も引用しないことがある。その場合は一致する対象がないため、引用が指定するセクションに直接移動し、モデルへ進む。
+引用では、セクションを指定するだけで、そこから何も引用しない場合もある。この場合、一致させる対象がないため、引用で指定されたセクションに直接進み、モデルに渡す。
 
 ```python
 def normalize(text: str) -> str:
@@ -193,15 +195,15 @@ duplicate_names   found         section of 918 chars
 
 ## ソースが主張をサポートしているか確認する
 
-この時点で引用が残っている場合、それは出典と一字一句一致していることを意味します。しかし、それだけでは不十分です。引用自体が正確でも、それに基づいた主張は間違っている可能性があります。それを判断するには、引用の文脈と、ステップ1で見つかったセクションが必要です。
+この時点で引用が残っている場合、それは原文と完全に一致していることを意味します。しかし、それだけでは不十分です：引用自体は正確でも、それに基づいた主張は間違っている可能性があります。それを判断するには、ステップ1で見つかった引用の文脈とセクションが必要です。
 
-生存している引用ごとに`Choice`問ずつ、節が主張と関連する3つの方法を問う。
-最も確率が高い選択肢が判定となり、`AUTO_ACCEPT`（上記コードでは0.8）がそれに対して何を行うかを決定する：
+生存している各引用ごとに`Choice`問ずつ、節が主張と関連する3つの方法を問う。
+最も確率が高い選択肢が判定となり、`AUTO_ACCEPT`（上記コードでは0.8）がそれに対して何が行われるかを決定する：
 
-* 0.8以上：判断は単独で成立します；
-* 0.8未満：判断に対して何らかのアクションを起こす前に、人間が確認します。
+* 信頼度が0.8以上の場合：判断はそれ自体で成立します；
+* 0.8未満の場合：何かが判断に基づいて行動する前に、人間が判断を確認します。
 
-まずは高めの設定から始め、自分のドキュメント上でモデルがどのように動作するかを見ながらしきい値を下げていく。
+まずは高く設定し、モデルがあなたのドキュメントでどのように動作するかを確認しながら閾値を下げていきます。
 
 ```python
 QUESTIONS = {
@@ -261,7 +263,7 @@ def check_citation(sections: dict[str, str], citation: dict) -> dict:
 
 ## 出典をすべて確認
 
-すべての8つの引用が同じチェックを通過しました：
+同じチェックを8つの出典すべてに通す：
 
 ```python
 print(f"{'citation':<18}{'quote':<14}{'relation':<14}{'conf':>6}  {'verdict':<13}{'action':>7}")
@@ -291,20 +293,20 @@ duplicate_names   found         supports        0.99  verified        auto
 
 4件の引用が返ってきました`verified`、1件`fabricated`、1件`contradicted`、そして2件`unsupported`。
 
-* `epoch_seconds`、`aud_reject`、`clock_skew`、`duplicate_names`が正確な4つです。
- すべてが`verified`として、0.93以上の信頼度で返ってきました。これは`AUTO_ACCEPT`を大きく上回ります。
-* `sig_reporting`はモデルに到達しませんでした。その引用はRFCに含まれていないため、文字列マッチのみで`fabricated`と判断されます。
-* `exp_required`は4.1.4節をそのまま引用しており、同節には「このクレームの使用はOPTIONAL（任意）です」とあるため、`contradicted`です（信頼度0.99）。
-* `pii_encryption`と`iat_future`はそれぞれ0.27と0.56で`unsupported`として返ってきました。どちらも閾値を下回ったため、両方とも人間による確認に回されました。`pii_encryption`は、文字列マッチだけでは不十分である理由を示しています：その引用はソースと完全に一致していますが、その出典となった節ではそのクレームについて何も言及していません。
+* `epoch_seconds`, `aud_reject`, `clock_skew`, そして `duplicate_names` が正確な4つです。
+ これらすべては `verified` として、0.93以上の信頼度で返ってきました。これは `AUTO_ACCEPT` を大幅に上回る数値です。
+* `sig_reporting` はモデルに到達しませんでした。その引用はRFCに含まれていないため、文字列マッチのみで `fabricated` と判断されます。
+* `exp_required` は4.1.4節を一字一句そのまま引用しており、同節には「このクレームの使用は任意（OPTIONAL）です」とあるため、 `contradicted` と判断されます（信頼度0.99）。
+* `pii_encryption` と `iat_future` はそれぞれ0.27および0.56の信頼度で `unsupported` として返ってきました。これらはしきい値を下回っているため、どちらも人間による確認に回されました。 `pii_encryption` は、文字列マッチだけでは不十分である理由を示しています：その引用はソース上で一字一句一致していますが、その出典となった節ではそのクレームについて何も言及していません。
 
 これを自分のデータに指すには、`rfc7519.txt`と`citations.json`を置き換えてください。
 `load_source()`と`split_sections()`はRFCのレイアウト用に書かれているため、別の形状のドキュメントには独自の解析が必要です。
 
-正規化後の文字列一致は完全一致です：切り捨てまたは軽く言い換えられた引用は `fabricated` として返されます。曖昧な引用を許容する本番システムでは、ファジーマッチングが必要です。
+正規化後の文字列一致は完全一致です：切り捨てまたは軽く書き換えられた引用は `fabricated` として返されます。曖昧な引用を許容する本番システムでは、ファジーマッチングが必要です。
 
 ## プレイグラウンドで開く
 
-リンクには、1つの引用の主張とセクション、および質問が含まれています。ブラウザで同じ呼び出しをライブ実行するには、リンクを開いてください。
+リンクには、1つの引用の主張とセクション、および質問が含まれています。ブラウザで同じ呼び出しをリアルタイムで実行するには、リンクを開いてください。
 
 ```python
 example = next(c for c in CITATIONS if c["id"] == "exp_required")
@@ -315,4 +317,4 @@ playground_link = make_playground_link(
 display(Markdown(f"🔗 [Open one citation's claim + section in the TypeSafe playground]({playground_link})"))
 ```
 
-[TypeSafe プレーグラウンドで1つの引用の主張とセクションを開く →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiFADYCGAlnKQaQKIBuCATgJ74BSA6mvjgwAzinzUkFGGAT5KSfFgAO1NpRTUICjYgDcc-CggBrZPgDu1FAAsIMMcUchlj0uOH4kEMc0rlqYAB0pAA0+KTCCFAaWvThIAAsgQCMgUn44U4uTvgAFIyYKmoxCmi0CACU+ADCVLSOSA0Z+GjWsq7OhR15yqrqmtrlVRQ0cOIyqNQAZtQIHjayvcUDhuX4scQKGRBsclMo7BbW1FDWhm08-PgAsgCqAMoCAHIA8gIARrKUUFAISgdgfBTHb4JRsaBzYQSADmgQyrQQTQyYIhwihSGh6ym53aWS6ORGtHwbAQAEcYKo5ud1Dj8LA2CTUPgwOoEAB6HSIzbNO6PfCffkIYEk2lLfpaZmsjlrfyiBCAiS0jrZNyEuDBTZI-AASTgSnICEQqHYHmuAEEAJqg8HMAKyYX4YQQRCOuB+cj4A0IcyUDhhEQwd1cLyCHayGzyLWUIHewQSexzMJGOQ-OxMh0UaDGR2mcxwnUoDy+cgwWS8j5fTzwT5sLVQLQoGhIGEGJ7wdgnAAirPwxdL+dukSx52oHjV7nwLwACmhtS8nmaADLBEAAXxAYRAKL1hYw2DwhBIIBJVBKcSPKA4SkRB9IpwgJxvYTvbCsHco54iMCUSh2hbipAIo6UQlI6jYHPMFzjiCYCUtE5BcLQ+qzJBNJWBOKBsKWoTxPWqBqLB0TCABIBAZE0QrKIrKQbIEA-hAUIHMOCx0nUYwgkh-hUuho5An4kQ4REvrCAA+l4NgwiRZEgSskBUuJchgGAJJokcNIseOlBouwhZhAgVhtLsPocKQq7PiAEiiFhFFaMRt4gAAEhA5jMhAVIseRoEnj2yYaWxAD8pnrpulAqAAaiaAwHiAzDJBuhCRAa0TytcEAyOQwgHgA2iAABWCDMAAtKkyQAEwgAAuquQA)
+[TypeSafe プレイグラウンドで1つの引用の主張とセクションを開く →](https://console.typesafe.ai/playground#share/N4IgJg9gxgrgtgUwHYBcAqCAeKQC4AEIwAOiFADYCGAlnKQaQKIBuCATgJ74BSA6mvjgwAzinzUkFGGAT5KSfFgAO1NpRTUICjYgDcc-CggBrZPgDu1FAAsIMMcUchlj0uOH4kEMc0rlqYAB0pAA0+KTCCFAaWvThIAAsgQCMgUn44U4uTvgAFIyYKmoxCmi0CACU+ADCVLSOSA0Z+GjWsq7OhR15yqrqmtrlVRQ0cOIyqNQAZtQIHjayvcUDhuX4scQKGRBsclMo7BbW1FDWhm08-PgAsgCqAMoCAHIA8gIARrKUUFAISgdgfBTHb4JRsaBzYQSADmgQyrQQTQyYIhwihSGh6ym53aWS6ORGtHwbAQAEcYKo5ud1Dj8LA2CTUPgwOoEAB6HSIzbNO6PfCffkIYEk2lLfpaZmsjlrfyiBCAiS0jrZNyEuDBTZI-AASTgSnICEQqHYHmuAEEAJqg8HMAKyYX4YQQRCOuB+cj4A0IcyUDhhEQwd1cLyCHayGzyLWUIHewQSexzMJGOQ-OxMh0UaDGR2mcxwnUoDy+cgwWS8j5fTzwT5sLVQLQoGhIGEGJ7wdgnAAirPwxdL+dukSx52oHjV7nwLwACmhtS8nmaADLBEAAXxAYRAKL1hYw2DwhBIIBJVBKcSPKA4SkRB9IpwgJxvYTvbCsHco54iMCUSh2hbipAIo6UQlI6jYHPMFzjiCYCUtE5BcLQ+qzJBNJWBOKBsKWoTxPWqBqLB0TCABIBAZE0QrKIrKQbIEA-hAUIHMOCx0nUYwgkh-hUuho5An4kQ4REvrCAA+l4NgwiRZEgSskBUuJchgGAJJokcNIseOlBouwhZhAgVhtLsPocKQq7PiAEiiFhFFaMRt4gAAEhA5jMhAVIseRoEnj2yYaWxAD8pnrpulAqAAaiaAwHiAzDJBuhCRAa0TytcEAyOQwgHgA2iAABWCDMAAtKkyQAEwgAAuquQA)

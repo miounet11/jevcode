@@ -1,22 +1,22 @@
 ---
 title: "Preguntas paralelas"
-description: "Ejecuta un breveing regulatorio de 13 preguntas sobre el artículo de Wikipedia sobre el GDPR, demostrando que agrupar todas las preguntas en una sola llamada TypeSafe es 12,2 veces más barato y 10,0 veces más rápido, sin cambios en las respuestas."
+description: "Ejecuta un briefing regulatorio de 13 preguntas sobre el artículo de Wikipedia de GDPR, demostrando que agrupar cada pregunta en una sola llamada TypeSafe es 12.2x más barato y 10.0x más rápido sin cambio en las respuestas."
 section: cases
 order: 220
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/parallel_questions"
 translatedFrom: en
 ---
-Tienes un documento y N preguntas sobre él. Puedes enviar una única solicitud con las N preguntas, o N solicitudes con una pregunta cada una. Con TypeSafe las respuestas son las mismas en ambos casos: cada pregunta se evalúa por separado contra el documento, por lo que su respuesta no depende de lo demás que haya en la solicitud.
+Tienes un documento y N preguntas sobre él. Puedes enviar una sola solicitud con las N preguntas, o N solicitudes con una pregunta cada una. Con TypeSafe las respuestas son iguales en ambos casos: cada pregunta se evalúa por separado contra el documento, por lo que su respuesta no depende de lo demás que haya en la solicitud.
 
-Para comprobarlo, el libro de recetas formula cada pregunta varias veces en ambos sentidos: todas las N en una sola solicitud, y una pregunta por solicitud, y compara la desviación estándar entre ejecuciones: cuánto se desplaza una respuesta de una repetición a la siguiente. Cualquier ruido que tenga una pregunta, lo tiene bajo ambas estrategias de agrupación. El agrupamiento no añade ruido. La mayoría de las respuestas volvieron idénticas en las 5 repeticiones, tanto en un caso como en el otro, con el mismo valor en cada llamada, y una desviación estándar exactamente de 0.0.
+Para comprobarlo, el libro de recetas formula cada pregunta varias veces en ambos sentidos: todas las N en una sola solicitud, y una pregunta por solicitud, y compara la desviación típica entre ejecuciones: cuánto se desplaza una respuesta de una repetición a la siguiente. Cualquier ruido que tenga una pregunta, lo tiene bajo ambas estrategias de agrupación. El agrupamiento no añade ruido. La mayoría de las respuestas volvieron idénticas en las 5 repeticiones, tanto en un caso como en el otro, con el mismo valor en cada llamada y una desviación típica exactamente de 0.0.
 
-El coste y la velocidad sí varían. El documento domina cada solicitud. Las llamadas individuales de N preguntas lo pagan N veces, en N idas y vueltas; la llamada por lotes lo paga una sola vez. Cuanto mayor es el documento, más se acerca ese ahorro a un factor Nx completo.
+El coste y la velocidad sí cambian. El documento domina cada solicitud. Las llamadas N individuales con una pregunta lo pagan N veces, en N idas y vueltas; la llamada por lotes lo paga una sola vez. Cuanto más grande es el documento, más se acerca ese ahorro a un Nx completo.
 
 El caso aquí es un informe regulatorio. El documento es el artículo de Wikipedia sobre el GDPR
-(\~54,000 caracteres, una carga de trabajo dominada por documentos donde el documento es la mayor parte de cada
+(~54.000 caracteres, una carga de trabajo dominada por documentos donde el documento es la mayor parte de cada
 solicitud), y un equipo de cumplimiento quiere que se verifiquen 13 cosas: 8 `Noul` preguntas, 2 `Choice`
-preguntas, y 3 `Score` preguntas.
+preguntas y 3 `Score` preguntas.
 
 ## Configuración
 
@@ -24,7 +24,7 @@ preguntas, y 3 `Score` preguntas.
 pip install ipython "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-luego establece ⦇0⦇.
+luego establece `TYPESAFE_API_KEY`.
 
 ```python
 import json
@@ -50,9 +50,9 @@ json_cache = JsonCache(Path("json_cache.json"))
 
 ## El documento: el artículo de Wikipedia sobre el RGPD
 
-Obtenido como texto plano desde una revisión fijada del artículo y almacenado en `json_cache.json`
-junto a las llamadas a la API, de modo que el documento y sus números permanezcan fijos
-incluso cuando el artículo en vivo se edite.
+Obtenido como texto sin formato desde una revisión fijada del artículo y almacenado en caché en `json_cache.json`
+junto a las llamadas a la API, de modo que el documento y sus números permanezcan fijos aunque el artículo
+en vivo se edite.
 
 ```python
 WIKIPEDIA_REVISION = 1363040264  # "General Data Protection Regulation", as of 2026-07
@@ -88,13 +88,13 @@ display(Markdown(f"📄 [Read the pinned Wikipedia revision]({DOCUMENT['source']
 
 ## Las preguntas: 8 nouls + 2 choices + 3 scores
 
-Un número rastreado por respuesta, por tipo:
+Un número registrado por respuesta, por tipo:
 
 * `Noul`: la probabilidad de "sí".
-* `Choice`: la probabilidad máxima, la probabilidad en la etiqueta seleccionada. `criteria` asigna a cada
+* `Choice`: la prob. máx, la probabilidad en la etiqueta seleccionada. `criteria` asigna a cada
  etiqueta su significado.
 * `Score`: la puntuación normalizada a 0-1, la puntuación dividida por el nivel superior.
- `criteria` enumera las descripciones de los niveles, desde el nivel 0 hacia arriba.
+ `criteria` enumera las descripciones de nivel, desde el nivel 0 hacia arriba.
 
 ```python
 QUESTIONS = {
@@ -177,11 +177,12 @@ METRIC = {  # question type -> the one number we track per answer
 
 ## Pregunta de dos formas, 5 veces cada una
 
-`ask()` envía cualquier subconjunto de las preguntas junto con el documento y reduce cada respuesta a su único número rastreado. El documento es byte-idéntico en cada llamada.
+`ask()` envía cualquier subconjunto de las preguntas junto con el documento y reduce cada respuesta a su
+único número rastreado. El documento es byte-identical en cada llamada.
 
-Ambas estrategias de agrupación se ejecutan `RUNS` = 5 veces, lo que proporciona 5 respuestas por pregunta por estrategia,
+Ambas estrategias de agrupación se ejecutan `RUNS` = 5 veces, lo que proporciona 5 respuestas por pregunta para cada estrategia,
 suficiente para comparar la media (¿coinciden ambas?) y la desviación estándar (¿añade la agrupación ruido?).
-Las llamadas se almacenan en caché en `json_cache.json`, que se incluye con el libro de recetas, por lo que volver a renderizar es
+Las llamadas se almacenan en `json_cache.json`, que se incluye con el libro de recetas, por lo que volver a renderizar es
 gratuito; elimínalo para volver a ejecutar en tiempo real.
 
 ```python
@@ -227,9 +228,9 @@ singles = [
 ]  # N x 1, x RUNS
 ```
 
-## El agrupamiento no cambia las respuestas
+## El batching no cambia las respuestas
 
-Por pregunta: la media y la desviación estándar de su número rastreado a lo largo de las 5 ejecuciones, bajo cada estrategia de agrupación. Si la agrupación cambiaba las respuestas, las columnas agrupadas diferirían de las columnas individuales. Una media desplazada es sesgo. Una desviación estándar mayor es ruido.
+Por pregunta: la media y la desviación estándar de su número rastreado a lo largo de las 5 ejecuciones, bajo cada estrategia de agrupación. Si el agrupamiento cambiaba las respuestas, las columnas agrupadas diferirían de las columnas individuales. Una media desplazada es sesgo. Una desviación estándar mayor es ruido.
 
 ```python
 print(
@@ -265,27 +266,27 @@ compliance_burden     normalized score          0.750       0.750       0.0000  
 Leyendo la tabla por tipo de pregunta:
 
 * Las elecciones, puntuaciones y seis de los ocho nouls vuelven idénticos en las 5 repeticiones:
- desviación estándar exactamente 0.0 bajo ambas estrategias de agrupación, cada llamada agrupada y única
- devolviendo el mismo número. Una llamada con N preguntas da las mismas respuestas que N llamadas
+ la desviación estándar exactamente 0.0 bajo ambas estrategias de agrupación, cada llamada agrupada y única
+ devuelve el mismo número. Una llamada con N preguntas da las mismas respuestas que N llamadas
  con una pregunta cada una.
-* `breach_72h` y `criminal_penalties` presentan un pequeño ruido de muestreo entre ejecuciones, y es
+* `breach_72h` y `criminal_penalties` presentan un pequeño ruido de muestreo de ejecución a ejecución, y es
  del mismo tamaño bajo ambas estrategias de agrupación, con las medias que coinciden dentro de ese
  ruido. El ruido es una propiedad de la pregunta, no de cómo se agrupa: agrupar ni
  desplaza la respuesta ni añade varianza.
 
-De todas formas, no hay efecto de agrupación: la respuesta de ninguna pregunta depende de las otras 12 preguntas que comparten su solicitud.
+De cualquier manera, no hay efecto de agrupación: la respuesta de ninguna pregunta depende de las otras 12 preguntas que comparten su solicitud.
 
-## La única diferencia: costo y velocidad
+## La única diferencia: coste y velocidad
 
-Mismas respuestas, distinta factura. El artículo de ~54.000 caracteres domina cada solicitud, así que:
+Mismas respuestas, distinta factura. El artículo de \~54.000 caracteres domina cada solicitud, así que:
 
 * Costo: las 13 llamadas de pregunta única reenvían el artículo 13 veces; la llamada en lote lo envía
  una
- vez. Este ahorro se mantiene sin importar cómo se ejecuten las llamadas.
+ vez. Este ahorro se mantiene independientemente de cómo se ejecuten las llamadas.
 * Velocidad: la cifra suma las latencias de las 13 llamadas individuales, por lo que asume que se ejecutan una tras
- otra. Ejecútalas en paralelo y la brecha se reduce, pero el costo de tokens 13x permanece.
+ otra. Ejecútalas en paralelo y la diferencia se reduce, pero el costo de tokens 13x permanece.
 
-Los conteos de tokens y las latencias se almacenan en caché junto con las respuestas; el costo se aplica después, y ambos se promedian sobre las 5 ejecuciones.
+Los recuentos de tokens y las latencias se almacenan en caché junto con las respuestas; el costo se aplica después, y ambos se promedian sobre las 5 ejecuciones.
 
 ```python
 batched_cost = mean(cost for _values, cost, _latency in batched)
@@ -318,7 +319,7 @@ batching: 12.2x cheaper, 10.0x faster
 
 ## Ábrelo en el playground de TypeSafe
 
-El mismo artículo y las mismas 13 preguntas, empaquetadas en un enlace para compartir. Ábrelo para volver a ejecutar la reunión informativa en vivo; los mismos números regresan.
+El mismo artículo y las mismas 13 preguntas, empaquetadas en un enlace para compartir. Ábrelo para volver a ejecutar la reunión informativa en vivo; vuelven a aparecer los mismos números.
 
 ```python
 playground_link = make_playground_link(

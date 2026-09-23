@@ -1,28 +1,25 @@
 ---
 title: "Extracción de valores preanalizados"
-description: "Utiliza expresiones regulares para encontrar candidatos de correos electrónicos, números de teléfono y cantidades, y luego permite que TypeSafe seleccione el segmento solicitado para que el código pueda normalizar un valor literal."
+description: "Utiliza expresiones regulares para encontrar candidatos de correos electrónicos, números de teléfono y cantidades, luego tiene TypeSafe seleccionar el intervalo solicitado para que el código pueda normalizar un valor literal."
 section: cases
 order: 230
 tags: ['cookbook', 'recipe']
 source: "docs.typesafe.ai/cookbooks/pre_parsed_value_extraction_cookbook"
 translatedFrom: en
 ---
-*Una expresión regular encuentra los valores candidatos, TypeSafe selecciona el que la pregunta solicita,
-y el código lo copia literalmente.*
+*Una expresión regular encuentra los valores candidatos, TypeSafe selecciona el que la pregunta solicita, y el código lo copia textualmente.*
 
-El par `find` y `pick` de aquí es uno que puedes señalar en tus propios documentos, y tres casos trabajados muestran su uso: la dirección a la que un remitente quiere que se envíe su recibo, un número de teléfono como `+14155550177`, y un total de factura como `1315.50 USD` marcado como un cargo.
+El par `find` y `pick` de aquí es uno que puedes señalar en tus propios documentos, y tres casos trabajados muestran su uso: la dirección que un remitente quiere que se le envíe el recibo, un número de teléfono como `+14155550177`, y el total de una factura como `1315.50 USD` marcado como un cargo.
 
 TypeSafe selecciona una de las opciones que le proporcionas, por lo que los candidatos deben encontrarse primero. Una expresión regular los encuentra, TypeSafe selecciona uno y el código copia la selección, en tres pasos:
 
-1. Una expresión regular encuentra los valores candidatos en el texto. Ajusta para que sobreencuentre.
-2. TypeSafe selecciona qué candidato es el que la pregunta solicita, y extrae cualquier
+1. Una expresión regular encuentra los valores candidatos en el texto. Ajústala para que sobreencuentre.
+2. TypeSafe selecciona qué candidato es el que pregunta la pregunta, y lee cualquier
  atributo que el código necesite más adelante (moneda, país, si un importe es un
  crédito o un cargo).
 3. El código copia el valor seleccionado y lo normaliza.
 
-Como TypeSafe solo elige entre los fragmentos que encontró la expresión regular, el valor que obtienes
-es uno de esos fragmentos, copiado sin cambios. No puede inventar un valor ni transponer un
-dígito.
+Dado que TypeSafe solo elige entre los fragmentos que encontró la expresión regular, el valor que obtienes es uno de esos fragmentos, copiado sin cambios. No puede inventar un valor ni transponer un dígito.
 
 <img src="/img/cases/pre-parsed-value-extraction-cookbook-overview.png" alt="Overview diagram" width="1351" height="348" data-path="cookbooks/pre_parsed_value_extraction_cookbook/overview.png" />
 
@@ -34,7 +31,7 @@ dígito.
 pip install ipython phonenumbers "typesafe-sdk>=0.5.7" cooksafe --extra-index-url https://pypi.typesafe.ai/
 ```
 
-luego establece ⦇0⦇.
+luego establece `TYPESAFE_API_KEY`.
 
 ```python
 import os
@@ -65,12 +62,12 @@ json_cache = JsonCache(Path("json_cache.json"))
 
 `find` ejecuta una expresión regular ajustada para sobre-encontrar y deduplica las coincidencias. `pick` es una
 `Choice` pregunta cuyas opciones son los fragmentos que `find` devuelve, por lo que su respuesta es uno de
-esos fragmentos copiados exactamente, o `none` cuando ningún candidato encaja. `classify` es una
+esos fragmentos copiado exactamente, o `none` cuando ningún candidato encaja. `classify` es una
 `Choice` pregunta sobre un conjunto fijo de etiquetas, utilizada aquí para la moneda y el
 país.
 `is_true` es un `Noul`, utilizado aquí para preguntar si un importe es un crédito.
 
-Cada llamada se almacena en caché en `json_cache.json`, por lo que el nuevo renderizado no realiza llamadas a la API.
+Cada llamada se almacena en `json_cache.json`, por lo que volver a renderizar no realiza llamadas a la API.
 
 ```python
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
@@ -134,7 +131,7 @@ def is_true(document: str, question: str) -> float:
     )
 ```
 
-## Email: elige la dirección correcta según el rol
+## Correo: elige la dirección correcta según el rol
 
 Cuatro direcciones en los encabezados. El cuerpo solicita que el recibo se envíe a una dirección personal en lugar del alias de facturación `To:`, por lo que la respuesta depende de leer el cuerpo.
 Dos preguntas aquí: qué dirección recibe el recibo y cuál envió el mensaje.
@@ -170,7 +167,7 @@ receipt -> : dana.personal@gmail.com      (conf 0.98)
 sender  -> : dana.whit@acme-corp.com      (conf 1.00)
 ```
 
-`receipt` es la dirección de Gmail personal en la línea `Reply-To:`, que es lo que pide el cuerpo; `sender` es la que está en la línea `From`. Ambas son copias de las coincidencias de regex, convertidas a minúsculas en el código.
+`receipt` es la dirección de Gmail personal en la línea `Reply-To:`, que es lo que pide el cuerpo; `sender` es la que está en la línea `From`. Ambas son copias de coincidencias de regex, convertidas a minúsculas en el código.
 
 ## Teléfono: selecciona el móvil, normaliza a E.164
 
@@ -205,7 +202,7 @@ country -> : US  (conf 0.90)
 E.164   -> : +14155550177
 ```
 
-Nada en los dígitos indica cuál es el número de móvil o en qué país se encuentra; lo hacen las palabras que los rodean. TypeSafe lee esas palabras, y `phonenumbers` formatea el número seleccionado como `+14155550177`.
+Nada en los dígitos indica cuál es el número de móvil ni en qué país se encuentra; lo hacen las palabras que los rodean. TypeSafe lee esas palabras y `phonenumbers` formatea el número seleccionado como `+14155550177`.
 
 ## Dinero: elige la cantidad, clasifica la moneda, indica si es crédito o cargo
 
@@ -256,16 +253,16 @@ candidates : ['$1,200.00', '$115.50', '$1,315.50', '$50.00']
 ```
 
 El total adeudado es \$1,315.50 y el crédito es \$50.00, ambos en USD. El crédito-o-cargo
-`Noul` responde 0.01 al total y 0.99 al crédito, por lo que el código conoce el
+`Noul` responde 0.01 sobre el total y 0.99 sobre el crédito, por lo que el código conoce el
 signo de cada `Decimal` que analiza.
 
-> `to_decimal` asume que la coma separa los miles y el punto es el separador decimal. Esto
-> se aplica a `$1,315.50`; en `€1.315,50` ocurre lo contrario. Haz una pregunta a `Noul`
-> sobre qué convención utiliza el documento y ramifica la lógica en el código.
+> `to_decimal` asume que la coma separa los miles y el punto es el separador decimal. Eso
+> vale para `$1,315.50`; en `€1.315,50` es al revés. Haz una pregunta `Noul`
+> sobre qué convención usa el documento, y ramifica el código en consecuencia.
 
 ## Ábrelo en el playground de TypeSafe
 
-Un enlace compartido que abre el hilo de correo en el navegador, con la pregunta de recibo en él
+Un enlace compartido que abre el hilo de correo electrónico en el navegador, con la pregunta de recibo en él
 y las cuatro direcciones que la expresión regular encontró entre sus opciones.
 
 ```python
@@ -293,9 +290,9 @@ display(
 
 ## Dos límites
 
-* Una pregunta `Choice` permite como máximo 255 opciones. Con más candidatos que eso, reduce
+* Una pregunta `Choice` permite como máximo 255 opciones. Con más candidatos que eso, estrecha
  en dos
- etapas: selecciona primero la sección, luego el fragmento dentro de ella.
+ etapas: selecciona la sección primero, luego el fragmento dentro de ella.
 * Encontrar los candidatos es la parte que requiere trabajo. Los correos electrónicos, los números de teléfono y las cantidades
  tienen expresiones regulares que los cubren; un nombre no, por lo que sus candidatos deben provenir de una
- lista que ya tengas, o de un reconocedor de entidades nombradas o un LLM que los proponga. TypeSafe luego selecciona el que la pregunta solicita.
+ lista que ya tengas, o de un reconocedor de entidades nombradas o de un LLM que los proponga. TypeSafe luego selecciona el que la pregunta solicita.
