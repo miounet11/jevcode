@@ -11,38 +11,56 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Lang };
 const path = `/${lang}/ecosystem/`;
 const t = useTranslations(lang);
-const groups = projectsByCategory().map(({ category, items }) => {
-  const ranked = [...items].sort((a, b) => b.stars - a.stars);
-  return {
-    category,
-    featured: ranked.slice(0, 6),
-    restItems: ranked.slice(6),
-    rest: Math.max(0, ranked.length - 6),
-  };
-});
+
+const groups = projectsByCategory().map(({ category, items }) => ({
+  category,
+  items: [...items].sort((a, b) => b.stars - a.stars),
+}));
 
 const totalStars = projects.reduce((sum, p) => sum + p.stars, 0);
 const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
+
+// 语言筛选选项：按出现次数降序，只保留 >=2 个项目的语言
+const langCounts = new Map<string, number>();
+for (const p of projects) {
+  if (p.language) langCounts.set(p.language, (langCounts.get(p.language) ?? 0) + 1);
+}
+const topLanguages = [...langCounts.entries()]
+  .filter(([, n]) => n >= 2)
+  .sort((a, b) => b[1] - a[1])
+  .map(([name, n]) => ({ name, n }));
 
 const copy =
   lang === 'zh'
     ? {
         title: '社区生态',
-        lead: '围绕 Jev 与 TypeSafe System One 模型构建的公开项目。按用途分类，数据采集自 GitHub 公开仓库。',
+        lead: '围绕 Jev 与 TypeSafe System One 模型构建的公开项目。可按分类与语言筛选。',
         statProjects: '收录项目',
         statStars: '合计 stars',
-        statCategories: '分类',
+        statLanguages: '编程语言',
         snapshot: `快照日期 ${dataAsOf}，stars 会随时间变化。`,
         forks: 'forks',
+        filterAll: '全部',
+        filterLanguage: '语言',
+        searchPlaceholder: '搜索项目名、描述…',
+        noResult: '没有匹配的项目。',
+        shown: (n: number) => `显示 ${n} 个项目`,
+        decision: 'Jev 在这里做什么',
       }
     : {
         title: 'Ecosystem',
-        lead: 'Public projects built around Jev and the TypeSafe System One model, grouped by what they do. Data collected from public GitHub repositories.',
+        lead: 'Public projects built around Jev and the TypeSafe System One model. Filter by category and language.',
         statProjects: 'Projects',
         statStars: 'Combined stars',
-        statCategories: 'Categories',
+        statLanguages: 'Languages',
         snapshot: `Snapshot taken ${dataAsOf}; star counts drift over time.`,
         forks: 'forks',
+        filterAll: 'All',
+        filterLanguage: 'Language',
+        searchPlaceholder: 'Search name or description…',
+        noResult: 'No matching projects.',
+        shown: (n: number) => `${n} projects shown`,
+        decision: 'What Jev does here',
       };
 ---
 
@@ -58,7 +76,7 @@ const copy =
       <h1 class="doc__title">{copy.title}</h1>
       <p class="doc__desc">{copy.lead}</p>
 
-      <div class="stats__grid">
+      <div class="stats__grid stats__grid--3">
         <div class="stat">
           <div class="stat__num">{projects.length}</div>
           <div class="stat__label">{copy.statProjects}</div>
@@ -68,65 +86,280 @@ const copy =
           <div class="stat__label">{copy.statStars}</div>
         </div>
         <div class="stat">
-          <div class="stat__num">{groups.length}</div>
-          <div class="stat__label">{copy.statCategories}</div>
+          <div class="stat__num">{topLanguages.length}</div>
+          <div class="stat__label">{copy.statLanguages}</div>
         </div>
       </div>
 
-      {
-        groups.map(({ category, featured, restItems, rest }) => (
-          <section class="eco">
-            <div class="section__head">
-              <h2 class="section__title">{category.title[lang]}</h2>
-              <p class="section__lead">{category.lead[lang]}</p>
-            </div>
-            <div class="grid grid--2">
-              {featured.map((p) => (
-                <a class="card eco__card" href={p.url} target="_blank" rel="noopener noreferrer">
-                  <div class="eco__head">
-                    <span class="eco__repo">{p.repo}</span>
-                    <span class="eco__stars">★ {fmt(p.stars)}</span>
-                  </div>
-                  <p class="card__desc">{p.desc[lang]}</p>
-                  {p.decisionPoint && (
-                    <p class="eco__decision">
-                      <span class="eco__decision-label">Jev 在这里做什么</span>
-                      {p.decisionPoint[lang] ?? p.decisionPoint.en}
-                    </p>
-                  )}
-                  <div class="eco__meta">
-                    {p.language && <span class="tag">{p.language}</span>}
-                    {p.license && <span class="tag">{p.license}</span>}
-                    <span class="tag">
-                      {copy.forks} {p.forks}
-                    </span>
-                  </div>
-                </a>
-              ))}
-            </div>
-            {rest > 0 && (
-              <details class="eco__more">
-                <summary>
-                  {lang === 'zh' ? `还有 ${rest} 个项目` : `${rest} more`}
-                </summary>
-                <div class="grid grid--2">
-                  {restItems.map((p) => (
-                    <a class="card eco__card" href={p.url} target="_blank" rel="noopener noreferrer">
-                      <div class="eco__head">
-                        <span class="eco__repo">{p.repo}</span>
-                        <span class="eco__stars">★ {fmt(p.stars)}</span>
-                      </div>
-                      <p class="card__desc">{p.desc[lang]}</p>
-                    </a>
-                  ))}
-                </div>
-              </details>
-            )}
-          </section>
-        ))
-      }
+      <div class="eco-filter">
+        <div class="eco-filter__row" role="group">
+          <button class="eco-chip eco-chip--on" type="button" data-cat="all">{copy.filterAll}</button>
+          {groups.map(({ category, items }) => (
+            <button class="eco-chip" type="button" data-cat={category.key}>
+              {category.title[lang]}<b>{items.length}</b>
+            </button>
+          ))}
+        </div>
+        <div class="eco-filter__row eco-filter__row--sub">
+          <label class="eco-filter__label" for="eco-lang">{copy.filterLanguage}</label>
+          <select class="eco-select" id="eco-lang" data-lang-filter>
+            <option value="all">{copy.filterAll}</option>
+            {topLanguages.map(({ name, n }) => (
+              <option value={name}>{name} ({n})</option>
+            ))}
+          </select>
+          <input class="eco-search" type="search" data-search placeholder={copy.searchPlaceholder} />
+          <span class="eco-count" data-count data-tpl={copy.shown('{n}')}>
+            {copy.shown(projects.length)}
+          </span>
+        </div>
+      </div>
 
+      <ul class="eco-list" data-eco-list>
+        {groups.map(({ category, items }) =>
+          items.map((p) => (
+              <li
+                class="project-row"
+                data-project
+                data-cat={category.key}
+                data-stars={p.stars}
+                data-language={p.language ?? ''}
+                data-search={`${p.repo} ${p.desc[lang] ?? p.desc.en} ${(p.topics ?? []).join(' ')}`.toLowerCase()}
+              >
+                <a class="project-name" href={p.url} target="_blank" rel="noopener noreferrer">
+                  <span class="project-repo">{p.repo}</span>
+                  <span class="project-cat">{category.title[lang]}</span>
+                </a>
+                <span class="project-stars">★ {fmt(p.stars)}</span>
+                <span class="project-language">{p.language ?? '—'}</span>
+                <span class="project-desc">
+                  {p.desc[lang] ?? p.desc.en}
+                  {p.decisionPoint && (
+                    <span class="project-decision">
+                      <b>{copy.decision}</b> {p.decisionPoint[lang] ?? p.decisionPoint.en}
+                    </span>
+                  )}
+                </span>
+              </li>
+          ))
+        )}
+      </ul>
+
+      <p class="eco__empty" data-empty hidden>{copy.noResult}</p>
       <p class="eco__snapshot">{copy.snapshot}</p>
     </main>
   </div>
 </BaseLayout>
+
+<script>
+  const list = document.querySelector<HTMLElement>('[data-eco-list]');
+  const rows = list ? [...list.querySelectorAll<HTMLElement>('[data-project]')] : [];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-cat]')];
+  const langSel = document.querySelector<HTMLSelectElement>('[data-lang-filter]');
+  const searchEl = document.querySelector<HTMLInputElement>('[data-search]');
+  const countEl = document.querySelector<HTMLElement>('[data-count]');
+  const emptyEl = document.querySelector<HTMLElement>('[data-empty]');
+
+  let cat = 'all';
+  let language = 'all';
+  let q = '';
+
+  function apply() {
+    let shown = 0;
+    for (const row of rows) {
+      const okCat = cat === 'all' || row.dataset.cat === cat;
+      const okLang = language === 'all' || row.dataset.language === language;
+      const okQ = !q || (row.dataset.search ?? '').includes(q);
+      const on = okCat && okLang && okQ;
+      row.hidden = !on;
+      if (on) shown++;
+    }
+    if (countEl) countEl.textContent = countEl.dataset.tpl?.replace('{n}', String(shown)) ?? String(shown);
+    if (emptyEl) emptyEl.hidden = shown !== 0;
+  }
+
+  for (const chip of chips) {
+    chip.addEventListener('click', () => {
+      cat = chip.dataset.cat ?? 'all';
+      for (const c of chips) c.classList.toggle('eco-chip--on', c === chip);
+      apply();
+    });
+  }
+  langSel?.addEventListener('change', () => { language = langSel.value; apply(); });
+  searchEl?.addEventListener('input', () => { q = searchEl.value.trim().toLowerCase(); apply(); });
+</script>
+
+<style>
+  .eco-filter {
+    margin: 20px 0 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    padding: 12px 14px;
+  }
+  .eco-filter__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .eco-filter__row--sub {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    gap: 10px;
+  }
+  .eco-filter__label {
+    font-size: 12px;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .eco-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 0 11px;
+    background: none;
+    border: 1px solid transparent;
+    border-bottom: 2px solid transparent;
+    border-radius: 6px;
+    color: var(--fg-muted);
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: color 0.16s ease, border-color 0.16s ease;
+  }
+  .eco-chip b {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--fg-dim);
+  }
+  .eco-chip:hover {
+    color: var(--fg);
+  }
+  .eco-chip--on {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .eco-chip--on b {
+    color: var(--accent-strong);
+  }
+  .eco-select,
+  .eco-search {
+    min-height: 32px;
+    padding: 0 10px;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    color: var(--fg);
+    font-size: 13px;
+  }
+  .eco-search {
+    flex: 1;
+    min-width: 160px;
+  }
+  .eco-count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--fg-dim);
+    white-space: nowrap;
+  }
+
+  .eco-list {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--border);
+  }
+  .project-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 0.9fr) 74px 108px minmax(0, 2fr);
+    gap: 14px;
+    align-items: baseline;
+    padding: 11px 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .project-row[hidden] {
+    display: none;
+  }
+  .project-name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .project-repo {
+    font-weight: 650;
+    font-size: 13.5px;
+    color: var(--fg);
+    overflow-wrap: anywhere;
+  }
+  .project-cat {
+    font-size: 11px;
+    color: var(--fg-dim);
+  }
+  .project-stars {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .project-language {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--fg-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .project-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--fg-muted);
+    min-width: 0;
+  }
+  .project-decision {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--fg-dim);
+  }
+  .project-decision b {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .eco__empty {
+    margin: 18px 0;
+    color: var(--fg-dim);
+    font-size: 13.5px;
+  }
+  .eco__snapshot {
+    margin-top: 22px;
+    font-size: 12.5px;
+    color: var(--fg-dim);
+  }
+
+  /* 四列固定宽度合计约 430px，加上文本列与间距在 960px 以下放不下，
+     会在窄桌面/平板上产生横向溢出 —— 提前切到两行布局。
+     （实测：920px 仍溢出 14px，960px 起为 0。） */
+  @media (max-width: 959px) {
+    .project-row {
+      grid-template-columns: minmax(0, 1fr) 68px;
+      grid-template-areas:
+        'name stars'
+        'lang lang'
+        'desc desc';
+      gap: 6px 12px;
+      padding: 13px 2px;
+    }
+    .project-name { grid-area: name; }
+    .project-stars { grid-area: stars; text-align: right; }
+    .project-language { grid-area: lang; }
+    .project-desc { grid-area: desc; }
+    .eco-count { margin-left: 0; }
+  }
+</style>
