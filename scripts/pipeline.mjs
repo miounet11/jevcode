@@ -48,19 +48,45 @@ function say(msg) {
   log.push(msg);
 }
 
-/** 抓取会写回这个【已跟踪】文件；非发布路径必须还原，否则脏工作区
- *  会让 cron 的脏区保护在下一轮永久跳过（自锁死循环，实测复现）。 */
-const FETCHED_FILE = 'src/data/ecosystem.ts';
+/** 抓取会写回这些【已跟踪】文件；非发布路径必须全部还原，否则脏工作区
+ *  会让 cron 的脏区保护在下一轮永久跳过（自锁死循环，实测复现）。
+ *  动态卡片的两个产物同样由抓取阶段写入，必须一起还原。 */
+const FETCHED_FILES = [
+  'src/data/ecosystem.ts',
+  'data/builds/cards.json',
+  'public/data/jev-cards.json',
+];
 function restoreFetched() {
   if (SKIP_FETCH) return;
-  try {
-    if (run(`git status --porcelain -- ${FETCHED_FILE}`).trim()) {
-      run(`git checkout -- ${FETCHED_FILE}`);
-      say(`restored ${FETCHED_FILE}（未发布路径，还原抓取写入）`);
+  for (const file of FETCHED_FILES) {
+    try {
+      if (run(`git status --porcelain -- ${file}`).trim()) {
+        run(`git checkout -- ${file}`);
+        say(`restored ${file}（未发布路径，还原抓取写入）`);
+      }
+    } catch (err) {
+      say(`WARN 还原 ${file} 失败: ${err.message}`);
     }
-  } catch (err) {
-    say(`WARN 还原 ${FETCHED_FILE} 失败: ${err.message}`);
   }
+}
+
+/** 刷新本站自有的动态卡片，返回新增条数。
+ *  卡片由 build-jev-cards.mjs 逐条判定（自有产物 + 确实用到 Jev + 标题必须是原文摘录），
+ *  这本身就是质量门，所以不再过门 1；失败只告警，不阻塞生态数据发布。 */
+function refreshBuilds() {
+  const file = 'data/builds/cards.json';
+  const countOf = () => (existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')).cards ?? []).length : 0);
+  const before = countOf();
+  try {
+    run('node scripts/fetch-jev-builds.mjs');
+    run(`node scripts/build-jev-cards.mjs --limit=${process.env.BUILDS_LIMIT ?? '200'}`);
+  } catch (err) {
+    say(`WARN 动态卡片刷新失败（不阻塞生态发布）: ${String(err.message).slice(0, 200)}`);
+    return 0;
+  }
+  const after = countOf();
+  say(`builds: +${after - before} cards (total ${after})`);
+  return after - before;
 }
 
 function run(cmd, opts = {}) {
@@ -215,45 +241,57 @@ say(`start dry=${DRY} skipFetch=${SKIP_FETCH}`);
 
 // 1. 抓取
 let fetchReport = { repo_count: 0, changes: [] };
+let buildsAdded = 0;
 if (!SKIP_FETCH) {
   const out = run('node scripts/fetch-ecosystem.mjs');
   fetchReport = JSON.parse(out.slice(out.indexOf('{')));
   say(`fetch: ${fetchReport.repo_count} repos, ${fetchReport.changes.length} changes`);
+  // 动态卡片独立于生态门控：每条都由 build-jev-cards.mjs 判定过（自有产物 +
+  // 确实用到 Jev + 标题必须是原文摘录），自身即质量门，不再过门 1。
+  buildsAdded = refreshBuilds();
 }
 
 // 2. 门 1（含批量累积）
-if (fetchReport.changes.length === 0 && !SKIP_FETCH) {
+// 生态数据没变化、但动态卡片有新增时，不该整轮跳过，否则 builds 长期不刷新。
+if (fetchReport.changes.length === 0 && !SKIP_FETCH && buildsAdded === 0) {
   say('gate1: no changes, nothing to do');
   restoreFetched();
   writeLog('skipped-no-changes');
   process.exit(0);
 }
-const pending = loadPending();
-const trigger = accumulate(fetchReport, pending);
-savePending(pending);
-say(`pending batch: ${Object.keys(pending.pending).length} repos, trigger=${trigger}`);
-if (!trigger) {
-  say('gate1: below magnitude threshold, accumulating');
-  restoreFetched();
-  writeLog('accumulating', { pending });
-  process.exit(0);
-}
-let g1;
-try {
-  g1 = await gate1(fetchReport, pending, trigger);
-} catch (err) {
-  say(`gate1 FAILED (${err.message}) — 还原抓取写入`);
-  restoreFetched();
-  process.exit(1);
-}
-const worth = g1.worth_publishing.noul >= 0.5;
-const placement = g1.placement.choice;
-say(`gate1: worth=${g1.worth_publishing.noul} placement=${placement}`);
-writeLog('gate1', { fetchReport, pending, trigger, gate1: g1 });
-if (!worth || placement === 'defer') {
-  say('gate1: HOLD — not publishing this cycle');
-  restoreFetched();
-  process.exit(0);
+// 生态数据没变化、只有 builds 新增时，门 1 无内容可判：直接进构建与门 2。
+// 不能落进下面的累积分支，否则 trigger 为假会 restoreFetched() 把刚判出的卡片还原掉。
+const skipGate1 = !SKIP_FETCH && fetchReport.changes.length === 0 && buildsAdded > 0;
+if (skipGate1) {
+  say(`gate1: skipped (only builds changed, +${buildsAdded} cards) — 直接构建`);
+} else {
+  const pending = loadPending();
+  const trigger = accumulate(fetchReport, pending);
+  savePending(pending);
+  say(`pending batch: ${Object.keys(pending.pending).length} repos, trigger=${trigger}`);
+  if (!trigger) {
+    say('gate1: below magnitude threshold, accumulating');
+    restoreFetched();
+    writeLog('accumulating', { pending });
+    process.exit(0);
+  }
+  let g1;
+  try {
+    g1 = await gate1(fetchReport, pending, trigger);
+  } catch (err) {
+    say(`gate1 FAILED (${err.message}) — 还原抓取写入`);
+    restoreFetched();
+    process.exit(1);
+  }
+  const worth = g1.worth_publishing.noul >= 0.5;
+  const placement = g1.placement.choice;
+  say(`gate1: worth=${g1.worth_publishing.noul} placement=${placement}`);
+  writeLog('gate1', { fetchReport, pending, trigger, gate1: g1 });
+  if (!worth || placement === 'defer') {
+    say('gate1: HOLD — not publishing this cycle');
+    restoreFetched();
+    process.exit(0);
+  }
 }
 
 // 3. 提交
