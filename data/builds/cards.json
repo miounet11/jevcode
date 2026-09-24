@@ -18667,6 +18667,45 @@
       "d": "2026-09-16",
       "url": "https://x.com/BuildWithKhalil/status/2100364868733812987",
       "source": "syndication+jev"
+    },
+    {
+      "id": "2100157777595314615",
+      "sn": "5am2x",
+      "name": "Samuel",
+      "t": "Spent a few hours trying Jev-style inference with LFM2.5-350M.",
+      "x": "Spent a few hours trying Jev-style inference with LFM2.5-350M. 63× faster on an L40S. 8x on MPS. No training (for now) just parallel decisions. Code + weights on HF. Link below 👇 h…",
+      "cat": "Research & data",
+      "u": "Other",
+      "lang": "en",
+      "d": "2026-09-16",
+      "url": "https://x.com/5am2x/status/2100157777595314615",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2100371900690039274",
+      "sn": "katr_ieme",
+      "name": "katrieme",
+      "t": "The script handles candidate filtering and all Wordle feedback",
+      "x": "The script handles candidate filtering and all Wordle feedback Model: jev-latest Rendered with PIL https://t.co/QYtOTIbD4W",
+      "cat": "Games & real time",
+      "u": "Game logic",
+      "lang": "en",
+      "d": "2026-09-16",
+      "url": "https://x.com/katr_ieme/status/2100371900690039274",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2100307307267527087",
+      "sn": "DanKillenberger",
+      "name": "Daniel Killenberger",
+      "t": "Made a generalized skill for this. Feed /jev-predict-skill any skill with a closed verdict set. Jev returns the probabilities.",
+      "x": "Made a generalized skill for this. Feed /jev-predict-skill any skill with a closed verdict set. Jev returns the probabilities. Might skip review when SHIP is that lopsided. https:/…",
+      "cat": "Tools & apps",
+      "u": "Moderation",
+      "lang": "en",
+      "d": "2026-09-16",
+      "url": "https://x.com/DanKillenberger/status/2100307307267527087",
+      "source": "syndication+jev"
     }
   ],
   "rejected": [
@@ -57069,8 +57108,288 @@
       "title": "none",
       "title_in_text": false,
       "date": "2026-09-16"
+    },
+    {
+      "id": "2100244126335737899",
+      "artifact": 0.8,
+      "uses_jev": 0.44,
+      "title": "Made Jev draw pixel art:",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100361842820284651",
+      "artifact": 0.26,
+      "uses_jev": 0.37,
+      "title": "BUT Jev definitely generalizes. I got it working on Kirby easily without the crutches provided by https://t.co/VpKKp2z9dP",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100162790061113634",
+      "artifact": 0.87,
+      "uses_jev": 0.37,
+      "title": "I gave 24 AI people a town. Then I flooded it.",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100355805379735615",
+      "artifact": 0.67,
+      "uses_jev": 0.87,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100257867647299917",
+      "artifact": 0.41,
+      "uses_jev": 0.74,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100360859704856890",
+      "artifact": 0.77,
+      "uses_jev": 0.71,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100111398277959715",
+      "artifact": 0.36,
+      "uses_jev": 0.92,
+      "title": "It doesn't generate text, it returns calibrated probabilities you threshold in code.",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100345616152903962",
+      "artifact": 0.71,
+      "uses_jev": 0.24,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100299457430438358",
+      "artifact": 0.43,
+      "uses_jev": 0.77,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100324308635591024",
+      "artifact": 0.64,
+      "uses_jev": 0.24,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100346239397102065",
+      "artifact": 0.71,
+      "uses_jev": 0.41,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100242058690568644",
+      "artifact": 0.96,
+      "uses_jev": 0.65,
+      "title": "Built a tiny crypto playground with Jev from @typesafeai.",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100340966490018105",
+      "artifact": 0.64,
+      "uses_jev": 0.88,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100345622561787926",
+      "artifact": 0.77,
+      "uses_jev": 0.42,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100346879917916342",
+      "artifact": 0.95,
+      "uses_jev": 0.92,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100314623744352506",
+      "artifact": 0.83,
+      "uses_jev": 0.67,
+      "title": "First try - a message classifier https://t.co/eyKypZadyD",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100055562138362028",
+      "artifact": 0.58,
+      "uses_jev": 0.85,
+      "title": "@notkevinzhang model/effort router via Jev for https://t.co/PnTFQBLzEQ",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100153674173718874",
+      "artifact": 0.97,
+      "uses_jev": 0.21,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100135954312786047",
+      "artifact": 0.91,
+      "uses_jev": 0.82,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100166309405413785",
+      "artifact": 0.96,
+      "uses_jev": 0.55,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100335103193022592",
+      "artifact": 0.89,
+      "uses_jev": 0.06,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100344635440906275",
+      "artifact": 0.39,
+      "uses_jev": 0.63,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100310676556464347",
+      "artifact": 0.53,
+      "uses_jev": 0.05,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100106949874335851",
+      "artifact": 0.78,
+      "uses_jev": 0.56,
+      "title": "Here's a simple MCP to get started https://t.co/rjHDBOMIZG",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100367653307039780",
+      "artifact": 0.94,
+      "uses_jev": 0.93,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100338254600163587",
+      "artifact": 0.62,
+      "uses_jev": 0.66,
+      "title": "auto tag @obsdmd plugin with jev",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100341324335464893",
+      "artifact": 0.96,
+      "uses_jev": 0.61,
+      "title": "I built this demo with Jev from @typesafeai @CompleteSkeptic",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100111408176546261",
+      "artifact": 0.58,
+      "uses_jev": 0.42,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100337992426500135",
+      "artifact": 0.94,
+      "uses_jev": 0.95,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100271950337597607",
+      "artifact": 0.58,
+      "uses_jev": 0.94,
+      "title": "Ranked 2,500 jobs against a resume in ~60 seconds using @typesafeai's new model Jev",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100330610854092891",
+      "artifact": 0.54,
+      "uses_jev": 0.76,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100207255727808760",
+      "artifact": 0.91,
+      "uses_jev": 0.04,
+      "title": "Built @typesafeai  Rust SDK",
+      "title_in_text": true,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100290673190502585",
+      "artifact": 0.76,
+      "uses_jev": 0.43,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100063385962623127",
+      "artifact": 0.2,
+      "uses_jev": 0.33,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-16"
+    },
+    {
+      "id": "2100089380501168139",
+      "artifact": 0.82,
+      "uses_jev": 0.25,
+      "title": "Jev is very efficient.  I've built a quick classifier for the research skill.",
+      "title_in_text": true,
+      "date": "2026-09-16"
     }
   ],
-  "updated": "2026-09-24T11:04:58.247Z",
-  "total": 1436
+  "updated": "2026-09-24T15:20:11.558Z",
+  "total": 1439
 }
