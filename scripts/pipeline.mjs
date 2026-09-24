@@ -360,6 +360,9 @@ if (!ready) {
 // 6. 部署
 if (DRY) {
   say('dry-run: would deploy now');
+  // 干跑是非发布路径，必须和 HOLD 路径一样还原抓取写入。
+  // 否则每次干跑都在工作区留下脏改动，把下一轮 cron 的脏区保护永久触发（自锁）。
+  restoreFetched();
   writeLog('dry-run-end');
   process.exit(0);
 }
