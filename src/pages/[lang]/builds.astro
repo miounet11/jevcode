@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import { languages, useTranslations, type Lang } from '../../i18n/ui';
+import ownCards from '../../../data/builds/cards.json';
+
+// 只展示本站用 Jev 判定出的卡片。没有卡片时照常渲染空页，
+// 不再退回竞品镜像——镜像只作候选 id 来源，不是本站产出。
+const cards = ownCards.cards ?? [];
+const snapshot = {
+  source: 'syndication + Jev judgment',
+  updated: ownCards.updated ?? '',
+  analysed: cards.length,
+  authors: new Set(cards.map((card) => card.sn)).size,
+  total: cards.length,
+  categories: Object.entries(cards.reduce<Record<string, number>>((acc, card) => {
+    acc[card.cat] = (acc[card.cat] ?? 0) + 1;
+    return acc;
+  }, {})).sort((a, b) => b[1] - a[1]),
+  usecases: Object.entries(cards.reduce<Record<string, number>>((acc, card) => {
+    acc[card.u] = (acc[card.u] ?? 0) + 1;
+    return acc;
+  }, {})).sort((a, b) => b[1] - a[1]),
+  cards,
+};
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const path = `/${lang}/builds/`;
+const t = useTranslations(lang);
+const fmt = (n: number) => new Intl.NumberFormat('en').format(n);
+
+const copy =
+  lang === 'zh'
+    ? {
+        title: 'Jev 动态',
+        lead: '公开帖子原文由本站用 Jev 判定。标题必须是原文里的连续摘录；判定不通过的帖子不会出现。这不是本站核实过的生产案例。',
+        collected: '索引条目',
+        analysed: '本站已判定',
+        authors: '作者',
+        updated: `本站判定更新于 ${snapshot.updated}。`,
+        source: '查看来源',
+        category: '分类',
+        usecase: '用途',
+        all: '全部',
+        search: '搜索标题或正文…',
+        shownTpl: '显示 {n} 条',
+        empty: '没有匹配的动态。',
+        post: '原帖',
+        link: '链接',
+      }
+    : {
+        title: 'Jev builds',
+        lead: 'Public posts judged here with Jev. A title is kept only when it is a contiguous excerpt of the post. Posts that fail the judgment are omitted. This is not a verified production-case list.',
+        collected: 'Indexed posts',
+        analysed: 'Judged here',
+        authors: 'Authors',
+        updated: `Judged here at ${snapshot.updated}.`,
+        source: 'View source',
+        category: 'Category',
+        usecase: 'Use',
+        all: 'All',
+        search: 'Search title or text…',
+        shownTpl: '{n} shown',
+        empty: 'No matching builds.',
+        post: 'Post',
+        link: 'Link',
+      };
+
+const categories = snapshot.categories.filter((entry) => entry[0]);
+const usecases = snapshot.usecases.filter((entry) => entry[0]);
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+  <div class="wrap docs-shell">
+    <Sidebar lang={lang} />
+    <main class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> / {t('nav.builds')}
+      </p>
+      <h1 class="doc__title">{copy.title}</h1>
+      <p class="doc__desc">{copy.lead}</p>
+
+      <div class="stats__grid stats__grid--3">
+        <div class="stat">
+          <div class="stat__num">{fmt(snapshot.total)}</div>
+          <div class="stat__label">{copy.collected}</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">{fmt(snapshot.analysed)}</div>
+          <div class="stat__label">{copy.analysed}</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">{fmt(snapshot.authors)}</div>
+          <div class="stat__label">{copy.authors}</div>
+        </div>
+      </div>
+
+      <div class="eco-filter">
+        <div class="eco-filter__row">
+          <label class="eco-filter__label" for="build-cat">{copy.category}</label>
+          <select id="build-cat" data-cat>
+            <option value="">{copy.all}</option>
+            {categories.map(([name, count]) => <option value={name}>{name} ({count})</option>)}
+          </select>
+          <label class="eco-filter__label" for="build-use">{copy.usecase}</label>
+          <select id="build-use" data-use>
+            <option value="">{copy.all}</option>
+            {usecases.map(([name, count]) => <option value={name}>{name} ({count})</option>)}
+          </select>
+          <input data-search type="search" placeholder={copy.search} />
+          <span data-count data-tpl={copy.shownTpl}></span>
+        </div>
+      </div>
+
+      <ul class="build-list" data-list></ul>
+      <p data-empty hidden>{copy.empty}</p>
+      <div class="build-pager" data-pager></div>
+      <p class="eco__snapshot">
+        {copy.updated}
+        <a href={snapshot.source}>{copy.source}</a>
+      </p>
+    </main>
+  </div>
+</BaseLayout>
+
+<script define:vars={{ labels: { post: copy.post, link: copy.link } }}>
+  const PAGE = 40;
+  const list = document.querySelector('[data-list]');
+  const pager = document.querySelector('[data-pager]');
+  const countEl = document.querySelector('[data-count]');
+  const emptyEl = document.querySelector('[data-empty]');
+  const catEl = document.querySelector('[data-cat]');
+  const useEl = document.querySelector('[data-use]');
+  const searchEl = document.querySelector('[data-search]');
+  let cards = [];
+  let page = 0;
+
+  function matched() {
+    const cat = catEl.value;
+    const use = useEl.value;
+    const q = searchEl.value.trim().toLowerCase();
+    return cards.filter((card) => {
+      if (cat && card.cat !== cat) return false;
+      if (use && card.u !== use) return false;
+      if (!q) return true;
+      return `${card.t} ${card.x} ${card.name} ${card.sn}`.toLowerCase().includes(q);
+    });
+  }
+
+  function render() {
+    const rows = matched();
+    const pages = Math.max(1, Math.ceil(rows.length / PAGE));
+    if (page >= pages) page = pages - 1;
+    const slice = rows.slice(page * PAGE, page * PAGE + PAGE);
+    list.replaceChildren();
+    for (const card of slice) {
+      const li = document.createElement('li');
+      li.className = 'build-card';
+      const title = document.createElement('a');
+      title.href = card.url;
+      title.textContent = card.t;
+      title.rel = 'noopener noreferrer';
+      title.target = '_blank';
+      const meta = document.createElement('p');
+      meta.className = 'build-card__meta';
+      meta.textContent = [card.d, card.cat, card.u, card.name ? `${card.name} (@${card.sn})` : `@${card.sn}`]
+        .filter(Boolean)
+        .join(' · ');
+      const excerpt = document.createElement('p');
+      excerpt.textContent = card.x;
+      li.append(title, meta, excerpt);
+      if (card.link) {
+        const extra = document.createElement('a');
+        extra.href = card.link;
+        extra.textContent = labels.link;
+        extra.rel = 'noopener noreferrer';
+        extra.target = '_blank';
+        li.append(extra);
+      }
+      list.append(li);
+    }
+    countEl.textContent = countEl.dataset.tpl.replace('{n}', String(rows.length));
+    emptyEl.hidden = rows.length !== 0;
+    pager.replaceChildren();
+    if (pages > 1) {
+      const prev = document.createElement('button');
+      prev.type = 'button';
+      prev.textContent = '←';
+      prev.disabled = page === 0;
+      prev.addEventListener('click', () => { page -= 1; render(); });
+      const label = document.createElement('span');
+      label.textContent = `${page + 1} / ${pages}`;
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.textContent = '→';
+      next.disabled = page + 1 >= pages;
+      next.addEventListener('click', () => { page += 1; render(); });
+      pager.append(prev, label, next);
+    }
+  }
+
+  const data = await fetch('/data/jev-cards.json');
+  cards = (await data.json()).cards ?? [];
+  for (const el of [catEl, useEl]) el.addEventListener('change', () => { page = 0; render(); });
+  searchEl.addEventListener('input', () => { page = 0; render(); });
+  render();
+</script>
+
+<style>
+  .build-list {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .build-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    padding: 12px 14px;
+  }
+  .build-card > a {
+    font-weight: 650;
+  }
+  .build-card__meta,
+  .build-card p {
+    margin: 6px 0 0;
+    color: var(--fg-muted);
+    font-size: 13px;
+  }
+  .build-pager {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+  }
+  .eco-filter select,
+  .eco-filter input {
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+    border-radius: 6px;
+    padding: 6px 8px;
+  }
+</style>

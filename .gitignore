@@ -13,6 +13,11 @@ build/
 # 抓取原文的原始 HTML 与批量 md（已整理为 .research/*.md 扁平版并入库，避免重复 1.4MB）
 .research/official/
 
+# 动态卡片：只入库本站判定后的成品 cards.json 与公开页数据。
+# 候选 id 清单是竞品镜像（3MB），raw/ 是第三方推文全文，都不进公开仓库。
+data/builds/candidates.json
+data/builds/raw/
+
 # ---------- 以下路径含内网地址或凭据，禁止入库 ----------
 #
 # 本仓库是 public。llm.py 含内网集群地址，img.py 含内网地址与明文口令，
