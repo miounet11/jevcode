@@ -83,12 +83,44 @@ function withDecodedText(tweet) {
   return { ...tweet, text: decodeEntities(tweet.text) };
 }
 
+/**
+ * 上游偶发 429 / 5xx（如 529 system_overloaded）不该打断整批：
+ * 几千条要跑很久，撞上一次限流就全停太脆。只对这些状态退避重试。
+ */
+async function fetchWithRetry(url, init, label) {
+  const attempts = 5;
+  for (let attempt = 1; ; attempt += 1) {
+    let response;
+    try {
+      response = await fetch(url, init);
+    } catch (error) {
+      if (attempt >= attempts) throw error;
+      const wait = Math.min(2 ** attempt * 500, 20000) + Math.random() * 500;
+      console.log(`retry ${label} network ${error.message} in ${Math.round(wait)}ms (${attempt}/${attempts})`);
+      await new Promise((resolve) => setTimeout(resolve, wait));
+      continue;
+    }
+    if (response.ok || (response.status !== 429 && response.status < 500) || attempt >= attempts) {
+      return response;
+    }
+    const retryAfter = Number(response.headers.get('retry-after'));
+    const wait = Number.isFinite(retryAfter) && retryAfter > 0
+      ? retryAfter * 1000
+      : Math.min(2 ** attempt * 500, 20000) + Math.random() * 500;
+    await response.text();
+    console.log(`retry ${label} HTTP ${response.status} in ${Math.round(wait)}ms (${attempt}/${attempts})`);
+    await new Promise((resolve) => setTimeout(resolve, wait));
+  }
+}
+
 async function fetchTweet(id) {
   const file = new URL(`${id}.json`, rawDir);
   if (existsSync(file)) return JSON.parse(readFileSync(file, 'utf8'));
-  const response = await fetch(`https://cdn.syndication.twimg.com/tweet-result?id=${id}&token=0`, {
-    headers: { 'user-agent': 'jevcode-source' },
-  });
+  const response = await fetchWithRetry(
+    `https://cdn.syndication.twimg.com/tweet-result?id=${id}&token=0`,
+    { headers: { 'user-agent': 'jevcode-source' } },
+    `tweet ${id}`,
+  );
   if (!response.ok) throw new Error(`tweet ${id} HTTP ${response.status}`);
   const tweet = withDecodedText(await response.json());
   writeFileSync(file, JSON.stringify(tweet));
@@ -99,7 +131,7 @@ async function judge(tweet) {
   const text = String(tweet.text ?? '').trim();
   // 帖子长度差异大；窗口太短会让长帖的标题行落在窗口之外，被判成 none。
   const state = text.slice(0, 1800);
-  const response = await fetch('https://api.typesafe.ai/v1/systemone', {
+  const response = await fetchWithRetry('https://api.typesafe.ai/v1/systemone', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${KEY}`,
@@ -204,7 +236,32 @@ const seen = new Set([
 ]);
 const ids = idsFromCandidates().filter((id) => !seen.has(id)).slice(0, limit);
 
-for (const id of ids) {
+const count = (key) => {
+  const totals = new Map();
+  for (const card of existing.cards) totals.set(card[key], (totals.get(card[key]) ?? 0) + 1);
+  return [...totals.entries()].sort((a, b) => b[1] - a[1]);
+};
+
+/**
+ * 每判若干条就落盘一次。长批次要跑几十分钟，中途被中断（网络抖动、Ctrl-C）
+ * 不该丢掉已经判完的结果。
+ */
+function save() {
+  existing.updated = new Date().toISOString();
+  existing.total = existing.cards.length;
+  writeFileSync(outFile, JSON.stringify(existing, null, 2));
+  writeFileSync(publicFile, JSON.stringify({
+    source: 'syndication + Jev judgment',
+    updated: existing.updated,
+    total: existing.total,
+    authors: new Set(existing.cards.map((card) => card.sn)).size,
+    categories: count('cat'),
+    usecases: count('u'),
+    cards: existing.cards,
+  }));
+}
+
+for (const [index, id] of ids.entries()) {
   let tweet;
   let judged;
   try {
@@ -212,6 +269,7 @@ for (const id of ids) {
     judged = await judge(tweet);
   } catch (error) {
     console.log(`error ${id} ${error.message}`);
+    save();
     process.exitCode = 1;
     break;
   }
@@ -234,40 +292,27 @@ for (const id of ids) {
       date: cardDate,
     });
     console.log(`skip ${id} artifact=${artifact.toFixed(3)} uses_jev=${usesJev.toFixed(3)} title_in_text=${titleInText} date=${cardDate || 'missing'}`);
-    continue;
+  } else {
+    existing.cards.push({
+      id,
+      sn: tweet.user?.screen_name ?? '',
+      name: tweet.user?.name ?? '',
+      t: title,
+      x: excerpt(text, title),
+      cat: answers.category?.choice ?? '',
+      u: answers.usecase?.choice ?? '',
+      lang: tweet.lang ?? '',
+      d: cardDate,
+      url: `https://x.com/${tweet.user?.screen_name ?? 'i'}/status/${id}`,
+      source: 'syndication+jev',
+    });
+    console.log(`keep ${id} ${title}`);
   }
-  existing.cards.push({
-    id,
-    sn: tweet.user?.screen_name ?? '',
-    name: tweet.user?.name ?? '',
-    t: title,
-    x: excerpt(text, title),
-    cat: answers.category?.choice ?? '',
-    u: answers.usecase?.choice ?? '',
-    lang: tweet.lang ?? '',
-    d: cardDate,
-    url: `https://x.com/${tweet.user?.screen_name ?? 'i'}/status/${id}`,
-    source: 'syndication+jev',
-  });
-  console.log(`keep ${id} ${title}`);
+  if ((index + 1) % 25 === 0) {
+    save();
+    console.log(`progress ${index + 1}/${ids.length} cards=${existing.cards.length} rejected=${existing.rejected.length}`);
+  }
 }
 
-existing.updated = new Date().toISOString();
-existing.total = existing.cards.length;
-writeFileSync(outFile, JSON.stringify(existing, null, 2));
-
-const count = (key) => {
-  const totals = new Map();
-  for (const card of existing.cards) totals.set(card[key], (totals.get(card[key]) ?? 0) + 1);
-  return [...totals.entries()].sort((a, b) => b[1] - a[1]);
-};
-writeFileSync(publicFile, JSON.stringify({
-  source: 'syndication + Jev judgment',
-  updated: existing.updated,
-  total: existing.total,
-  authors: new Set(existing.cards.map((card) => card.sn)).size,
-  categories: count('cat'),
-  usecases: count('u'),
-  cards: existing.cards,
-}));
-console.log(`cards ${existing.total}`);
+save();
+console.log(`cards ${existing.total} rejected ${existing.rejected.length}`);
