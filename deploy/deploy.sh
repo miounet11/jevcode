@@ -22,7 +22,9 @@ SSH_KEY="${JEVCODE_SSH_KEY:-$HOME/.ssh/id_ed25519}"
 REMOTE_ROOT="${JEVCODE_REMOTE_ROOT:-/var/www/jevcode}"
 KEEP_RELEASES=5
 
-SSH_OPTS=(-o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 -p "$SSH_PORT")
+# ServerAliveInterval：这条链路实测会静默断开连接，长传和大批次会莫名中断。
+SSH_OPTS=(-o StrictHostKeyChecking=accept-new -o ConnectTimeout=20
+          -o ServerAliveInterval=15 -o ServerAliveCountMax=6 -p "$SSH_PORT")
 if [ -f "$SSH_KEY" ]; then
   SSH_OPTS+=(-i "$SSH_KEY")
 fi
@@ -47,19 +49,66 @@ tar -czf "$TARBALL" -C dist .
 # ---------- 3. 上传 ----------
 log "上传到 ${SSH_HOST}:${REMOTE_ROOT}/releases/${RELEASE_ID}..."
 ssh "${SSH_OPTS[@]}" "$SSH_HOST" "mkdir -p ${REMOTE_ROOT}/releases/${RELEASE_ID} ${REMOTE_ROOT}/shared"
-scp -P "$SSH_PORT" -o StrictHostKeyChecking=accept-new ${SSH_KEY:+-i "$SSH_KEY"} \
-  "$TARBALL" "$SSH_HOST:/tmp/"
-# 同时上传 nginx 配置，供 bootstrap.sh 首次初始化使用
-scp -P "$SSH_PORT" -o StrictHostKeyChecking=accept-new ${SSH_KEY:+-i "$SSH_KEY"} \
-  "$LOCAL_DIR/deploy/nginx/jevcode.conf" "$SSH_HOST:/tmp/jevcode.conf"
+
+# 20MB 的包在这条链路上实测反复断传（留下半包占着远端 /tmp）。
+# 优先用可续传的 rsync；没有 rsync 才退回 scp 整包重传。
+# 两种情况都以“远端字节数 == 本地字节数”为准，不认工具退出码。
+REMOTE_TARBALL="/tmp/jevcode-${RELEASE_ID}.tar.gz"
+remote_size() {
+  ssh "${SSH_OPTS[@]}" "$SSH_HOST" "wc -c < $REMOTE_TARBALL 2>/dev/null || echo 0" | tr -d ' '
+}
+
+upload_tarball() {
+  if command -v rsync >/dev/null 2>&1; then
+    log "  rsync --partial（断点可续）"
+    # rsync 会在收尾阶段偶发断连并返回非零，但文件其实已完整送达。
+    # 不看退出码，改看远端实际大小；不全则再续传一次。
+    local attempt
+    for attempt in 1 2 3; do
+      rsync -e "ssh ${SSH_OPTS[*]}" --partial --inplace --timeout=180 \
+        "$TARBALL" "$SSH_HOST:$REMOTE_TARBALL" || true
+      [ "$(remote_size)" = "$(wc -c < "$TARBALL" | tr -d ' ')" ] && return 0
+      log "  第 ${attempt} 次未传完（远端 $(remote_size) 字节），续传..."
+      sleep 2
+    done
+    return 1
+  else
+    log "  scp（无 rsync，整包重传）"
+    local attempt
+    for attempt in 1 2 3; do
+      scp -P "$SSH_PORT" -o StrictHostKeyChecking=accept-new ${SSH_KEY:+-i "$SSH_KEY"} \
+        "$TARBALL" "$SSH_HOST:$REMOTE_TARBALL" && return 0
+      log "  scp 第 ${attempt} 次失败，重试..."
+      sleep 3
+    done
+    return 1
+  fi
+}
+upload_tarball || die "上传失败：${TARBALL}（远端 $(remote_size) 字节，期望 $(wc -c < "$TARBALL" | tr -d ' ')）"
+
+# 同时上传 nginx 配置，供 bootstrap.sh 首次初始化使用。
+# 小文件也重试：这条链路实测会在收尾阶段断开，一次失败不该中断整次发布。
+scp_small() {
+  local attempt
+  for attempt in 1 2 3; do
+    scp -P "$SSH_PORT" -o StrictHostKeyChecking=accept-new \
+      -o ServerAliveInterval=15 -o ServerAliveCountMax=6 ${SSH_KEY:+-i "$SSH_KEY"} \
+      "$@" && return 0
+    log "  小文件上传第 ${attempt} 次失败，重试..."
+    sleep 2
+  done
+  return 1
+}
+scp_small "$LOCAL_DIR/deploy/nginx/jevcode.conf" "$SSH_HOST:/tmp/jevcode.conf" \
+  || log "WARN nginx 配置上传失败（不影响本次发布，bootstrap 时才需要）"
 
 # ---------- 4. 解包并原子切换 ----------
 log "解包并切换软链..."
 ssh "${SSH_OPTS[@]}" "$SSH_HOST" bash -s <<REMOTE
 set -euo pipefail
 cd ${REMOTE_ROOT}/releases/${RELEASE_ID}
-tar -xzf /tmp/jevcode-${RELEASE_ID}.tar.gz
-rm -f /tmp/jevcode-${RELEASE_ID}.tar.gz
+tar -xzf ${REMOTE_TARBALL}
+rm -f ${REMOTE_TARBALL}
 
 # 备份当前指向，便于回滚
 if [ -L ${REMOTE_ROOT}/current ]; then
