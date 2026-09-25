@@ -4,7 +4,7 @@
  * Jev 门 2（发布是否合格）→ 部署 → 记录。
  *
  * 两级 Jev 门设计（Jev 轮 9 判定 two_stage 0.95）：
- *   门 1（intake）：变化是否值得发布？发布到哪个位置？
+ *   门 1（intake）：变化是否值得发布？
  *   门 2（release）：组装好的 release 是否合格上线？
  *
  * 用法：node scripts/pipeline.mjs [--dry-run] [--skip-fetch]
@@ -208,11 +208,6 @@ async function gate1(fetchReport, pending, trigger) {
         instructions: 'Considering the accumulated batch and code trigger together, is it worth publishing to production now?',
         criteria: { true: 'Yes: publish the accumulated batch now', false: 'No: keep accumulating' },
       },
-      placement: {
-        type: 'choice',
-        instructions: 'Where does this update belong?',
-        criteria: { ecosystem_page: 'The ecosystem page only', also_homepage: 'Ecosystem page plus homepage stats if shown', defer: 'Nowhere yet, hold' },
-      },
     }
   );
 }
@@ -284,24 +279,19 @@ if (skipGate1) {
     process.exit(1);
   }
   const worth = g1.worth_publishing.noul >= 0.5;
-  const placement = g1.placement.choice;
-  say(`gate1: worth=${g1.worth_publishing.noul} placement=${placement}`);
-  // 记下判定后端：Jev 与 clavue 对同一输入可能给出不同 placement，
-  // 出了问题要能一眼看出这一轮是谁判的（此前日志完全没记，排查得靠猜）。
+  say(`gate1: worth=${g1.worth_publishing.noul}`);
+  // 记下判定后端：出问题时能一眼看出这一轮是谁判的（此前日志完全没记，排查得靠猜）。
   writeLog('gate1', { fetchReport, pending, trigger, backend: JUDGE_BACKEND, gate1: g1 });
-  if (!worth || placement === 'defer') {
+  if (!worth) {
     say('gate1: HOLD — not publishing this cycle');
     // HOLD 是 exit 0，cron 只在非零退出时告警，于是「连续多天不发布」和
     // 「按设计跳过」在日志里长得一样（实测停摆数天无人察觉）。
-    // 落一个显眼标记：连续 HOLD 的次数、判定后端、以及 worth/placement 是否自相矛盾。
-    if (worth && placement === 'defer') {
-      say(`gate1: 注意 — worth=${g1.worth_publishing.noul}（值得发布）却判 defer（无处可放），两问自相矛盾`);
-    }
+    // 落一个显眼标记：连续 HOLD 的次数、判定后端。
     const holdFile = `.research/pipeline-logs/HOLD-${new Date().toISOString().slice(0, 10)}.txt`;
     const prevHold = existsSync(holdFile) ? readFileSync(holdFile, 'utf8') : '';
     const streak = prevHold.split('\n').filter((line) => line.startsWith('本轮 HOLD')).length + 1;
     writeFileSync(holdFile, `${prevHold}本轮 HOLD #${streak} ` +
-      `worth=${g1.worth_publishing.noul.toFixed(3)} placement=${placement} ` +
+      `worth=${g1.worth_publishing.noul.toFixed(3)} ` +
       `backend=${JUDGE_BACKEND} pending=${Object.keys(pending.pending).length} trigger=${trigger}\n`);
     say(`gate1: 连续 HOLD 第 ${streak} 轮，标记写入 ${holdFile}`);
     restoreFetched();
