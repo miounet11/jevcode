@@ -362,11 +362,13 @@ const changes = DRY
   ? (() => {
       // 用 name-only 列文件名，避免解析 porcelain：它的行首有状态列，
       // 一旦被 trim 掉，按固定宽度切片就会切进文件名（实测切出 "cripts/..."）。
-      const modified = run('git diff --name-only -- .').trim();
+      // 必须比 HEAD 而不是默认的「工作区 vs 索引」：后者看不见已 git add 的改动，
+      // 一旦有暂存文件，预览会谎报 "no pending changes"（实测确认）。
+      const modified = run('git diff --name-only HEAD -- .').trim();
       const untracked = run('git ls-files --others --exclude-standard -- .').trim();
       const files = [...modified.split('\n'), ...untracked.split('\n')].map((s) => s.trim()).filter(Boolean);
       if (!files.length) return 'dry-run: no pending changes';
-      const stat = run('git diff --stat -- .').trim().split('\n').slice(-1)[0] ?? '';
+      const stat = run('git diff --stat HEAD -- .').trim().split('\n').slice(-1)[0] ?? '';
       return `dry-run preview of ${files.length} pending file(s): ${files.slice(0, 4).join(', ')}${files.length > 4 ? ', …' : ''}${stat ? '; ' + stat : ''}`;
     })()
   : run('git log -1 --stat --oneline').trim().split('\n').slice(0, 5).join('; ');
