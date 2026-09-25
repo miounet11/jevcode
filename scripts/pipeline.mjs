@@ -353,7 +353,23 @@ if (!buildOk || !checkOk) {
   writeLog('gate2-skipped-mech-fail', { buildOk, checkOk });
   process.exit(1);
 }
-const changes = run('git log -1 --stat --oneline').trim().split('\n').slice(0, 5).join('; ');
+// 发布内容描述。必须区分干跑与真实模式：
+// 干跑不提交，`git log -1` 返回的是【上一次】提交，于是门 2 评的是别的东西
+// （实测：干跑把上一个管线提交流当成发布内容，ready=0.41 误判为不连贯；
+//  换成真实的生态刷新描述后 ready=0.77~0.83 通过）。
+// 干跑改为直接描述待发布的未提交改动。
+const changes = DRY
+  ? (() => {
+      // 用 name-only 列文件名，避免解析 porcelain：它的行首有状态列，
+      // 一旦被 trim 掉，按固定宽度切片就会切进文件名（实测切出 "cripts/..."）。
+      const modified = run('git diff --name-only -- .').trim();
+      const untracked = run('git ls-files --others --exclude-standard -- .').trim();
+      const files = [...modified.split('\n'), ...untracked.split('\n')].map((s) => s.trim()).filter(Boolean);
+      if (!files.length) return 'dry-run: no pending changes';
+      const stat = run('git diff --stat -- .').trim().split('\n').slice(-1)[0] ?? '';
+      return `dry-run preview of ${files.length} pending file(s): ${files.slice(0, 4).join(', ')}${files.length > 4 ? ', …' : ''}${stat ? '; ' + stat : ''}`;
+    })()
+  : run('git log -1 --stat --oneline').trim().split('\n').slice(0, 5).join('; ');
 let g2;
 try {
   g2 = await gate2(buildOk, checkOk, linkReport, changes);
