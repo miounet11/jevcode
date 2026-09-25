@@ -1,0 +1,230 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, useTranslations, type Lang } from '../../../i18n/ui';
+import { pulseEntries, pulseCategories, categorize } from '../../../data/community';
+
+/**
+ * 单条社区脉搏介绍页。
+ *
+ * 目的：索引页此前每条都是两个站外直链，点一下就离开本站。这里给每条一个
+ * 停留页——展示该条目的【全部既有字段】（原文摘录全文、作者、时间、传播量、
+ * 分类），站外链接只出现在本页，且必须显式标注。
+ *
+ * 不新增任何文案：条目只有 text 一个正文来源，没有 title/description 字段，
+ * 因此正文直接使用既有 text（索引页截 8 行，本页不截断），不代写摘要。
+ *
+ * slug 用既有 id（19 位数字，144 条唯一，已核验），不自造 slug。
+ */
+export function getStaticPaths() {
+  const paths: Array<{ params: { lang: string; id: string } }> = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const entry of pulseEntries) {
+      paths.push({ params: { lang, id: entry.id } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const entry = pulseEntries.find((e) => e.id === Astro.params.id);
+
+if (!entry) {
+  // 静态构建下不会走到：路径只由 pulseEntries 生成，未知 id 根本不会产出页面，
+  // 线上由 nginx try_files → 404.html（实测 /en/community/<未知>/ 返回 404）。
+  throw new Error(`unknown pulse entry: ${Astro.params.id}`);
+}
+
+const t = useTranslations(lang);
+const path = `/${lang}/community/${entry.id}/`;
+
+const copy =
+  lang === 'zh'
+    ? {
+        crumb: '社区脉搏',
+        metaAuthor: '作者',
+        metaDate: '发布时间',
+        metaViews: '阅读',
+        metaLikes: '点赞',
+        metaCategory: '分类',
+        post: '查看原推',
+        project: '项目链接',
+        outbound: '站外链接',
+        back: '← 返回社区脉搏',
+        more: '同类条目',
+        prev: '上一条',
+        next: '下一条',
+        note: '条目为英文原文摘录，筛选标准：显著传播量或附项目链接；经 Jev 批级相关性判定。本站未逐条核实其真实性。',
+      }
+    : {
+        crumb: 'Community pulse',
+        metaAuthor: 'Author',
+        metaDate: 'Posted',
+        metaViews: 'Views',
+        metaLikes: 'Likes',
+        metaCategory: 'Category',
+        post: 'View original',
+        project: 'Project',
+        outbound: 'External links',
+        back: '← Back to community pulse',
+        more: 'More in this category',
+        prev: 'Previous',
+        next: 'Next',
+        note: 'Entries are excerpts of original posts. Inclusion bar: significant engagement or an attached project link; batch relevance judged by Jev. We have not independently verified each claim.',
+      };
+
+const fmt = (n: number) => (n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M` : n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
+const dateShort = (iso: string) => iso.slice(0, 10);
+
+// 分类标题走既有 8 语言 title，不新编
+const catKey = categorize(entry.text);
+const cat = pulseCategories.find((c) => c.key === catKey);
+const catTitle = cat ? (cat.title[lang] ?? cat.title.en) : catKey;
+
+// 同类内的前后条：站内导航，避免本站内还需要回索引重新找
+const siblings = pulseEntries.filter((e) => categorize(e.text) === catKey);
+const idx = siblings.findIndex((e) => e.id === entry.id);
+const prev = idx > 0 ? siblings[idx - 1] : undefined;
+const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : undefined;
+const hrefOf = (e: (typeof pulseEntries)[number]) => `/${lang}/community/${e.id}/`;
+
+// description 必须是原文摘录（项目既有约定），按码点截断避免切开代理对
+const flat = entry.text.replace(/\s+/g, ' ').trim();
+const desc = Array.from(flat).slice(0, 160).join('') + (Array.from(flat).length > 160 ? '…' : '');
+const pageTitle = `@${entry.screenName} · ${dateShort(entry.date)}`;
+---
+
+<BaseLayout lang={lang} title={pageTitle} description={desc} path={path}>
+  <section class="section">
+    <div class="wrap">
+      <main class="doc">
+        <p class="doc__breadcrumb">
+          <a href={`/${lang}/`}>{t('site.name')}</a> /
+          <a href={`/${lang}/community/`}>{copy.crumb}</a> / @{entry.screenName}
+        </p>
+
+        <h1 class="doc__title">@{entry.screenName}</h1>
+        <p class="doc__desc">{entry.author}</p>
+
+        <div class="pmeta">
+          <span class="pmeta__item">
+            <span class="pmeta__k">{copy.metaDate}</span>
+            <span class="pmeta__v">{dateShort(entry.date)}</span>
+          </span>
+          <span class="pmeta__item">
+            <span class="pmeta__k">{copy.metaViews}</span>
+            <span class="pmeta__v">▲ {fmt(entry.views)}</span>
+          </span>
+          <span class="pmeta__item">
+            <span class="pmeta__k">{copy.metaLikes}</span>
+            <span class="pmeta__v">★ {fmt(entry.likes)}</span>
+          </span>
+          <span class="pmeta__item">
+            <span class="pmeta__k">{copy.metaCategory}</span>
+            <span class="pmeta__v">{catTitle}</span>
+          </span>
+        </div>
+
+        <blockquote class="pquote">
+          <p class="pquote__text" lang="en">{entry.text}</p>
+        </blockquote>
+
+        <section class="pout" aria-label={copy.outbound}>
+          <div class="pout__row">
+            <a class="btn btn--ghost" href={entry.url} target="_blank" rel="noopener noreferrer">
+              {copy.post} ↗
+            </a>
+            {entry.projectUrl && (
+              <a class="btn btn--ghost" href={entry.projectUrl} target="_blank" rel="noopener noreferrer">
+                {copy.project} ↗
+              </a>
+            )}
+          </div>
+          <p class="pout__hint">{copy.note}</p>
+        </section>
+
+        {(prev || next) && (
+          <nav class="pager" aria-label="Pagination">
+            {prev ? (
+              <a class="pager__link" href={hrefOf(prev)}>
+                <div class="pager__dir">← {copy.prev}</div>
+                <div class="pager__name">@{prev.screenName}</div>
+              </a>
+            ) : (
+              <span></span>
+            )}
+            {next && (
+              <a class="pager__link pager__link--next" href={hrefOf(next)}>
+                <div class="pager__dir">{copy.next} →</div>
+                <div class="pager__name">@{next.screenName}</div>
+              </a>
+            )}
+          </nav>
+        )}
+
+        <p class="pback">
+          <a href={`/${lang}/community/`}>{copy.back}</a>
+        </p>
+      </main>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pmeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    margin: 18px 0 22px;
+  }
+  .pmeta__item {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+  }
+  .pmeta__k {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+  .pmeta__v {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--fg-muted);
+  }
+  .pquote {
+    margin: 0 0 26px;
+    padding: 18px 20px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-border);
+    border-radius: var(--radius);
+  }
+  .pquote__text {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--fg-muted);
+    white-space: pre-line;
+  }
+  .pout {
+    margin-bottom: 26px;
+  }
+  .pout__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .pout__hint {
+    margin: 12px 0 0;
+    color: var(--fg-dim);
+    font-size: 12.5px;
+    border-left: 3px solid var(--border-strong);
+    padding-left: 10px;
+    max-width: 72ch;
+  }
+  .pback {
+    margin-top: 26px;
+    font-size: 13px;
+  }
+</style>
