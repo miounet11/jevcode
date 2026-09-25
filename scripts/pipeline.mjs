@@ -217,29 +217,6 @@ async function gate1(fetchReport, pending, trigger) {
   );
 }
 
-/** 门 1 复核：单次采样会出现自相矛盾的答案——worth 高（值得发布）却 placement=defer（无处可放）。
- *  两个问题语义重叠，都在回答「现在要不要发」，矛盾时应当复核而不是让低置信的一方单独否决。
- *
- *  实测（2026-09-25 真实 cron）：worth=0.940 配 placement=defer(conf 0.66)，
- *  同输入复判 4 次全部为 ecosystem_page(0.71~0.86)，即 defer 是采样噪声。
- *  用单次抖动静默卡住整轮，会让累积批次天天重判、可能持续 HOLD 而站点久不更新。
- *
- *  这里只做「矛盾时再采两次、按多数定 placement」，判定标准与阈值均未改动。 */
-async function gate1Resolved(fetchReport, pending, trigger) {
-  const first = await gate1(fetchReport, pending, trigger);
-  const worthNow = first.worth_publishing.noul >= 0.5;
-  if (!worthNow || first.placement.choice !== 'defer') return first;
-
-  const samples = [first];
-  for (let i = 0; i < 2; i += 1) samples.push(await gate1(fetchReport, pending, trigger));
-  const publishable = samples.filter((s) => s.worth_publishing.noul >= 0.5);
-  const tally = {};
-  for (const s of publishable) tally[s.placement.choice] = (tally[s.placement.choice] ?? 0) + 1;
-  const [winner, count] = Object.entries(tally).sort((a, b) => b[1] - a[1])[0] ?? [];
-  say(`gate1: 矛盾复核 ${samples.length} 次 -> ${JSON.stringify(tally)}，取 ${winner}(${count})`);
-  return publishable.find((s) => s.placement.choice === winner) ?? first;
-}
-
 // ---------- 门 2：release ----------
 async function gate2(buildOk, checkOk, linkReport, changes) {
   return judge(
@@ -300,7 +277,7 @@ if (skipGate1) {
   }
   let g1;
   try {
-    g1 = await gate1Resolved(fetchReport, pending, trigger);
+    g1 = await gate1(fetchReport, pending, trigger);
   } catch (err) {
     say(`gate1 FAILED (${err.message}) — 还原抓取写入`);
     restoreFetched();
