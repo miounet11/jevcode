@@ -14,6 +14,17 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const CHECK = process.argv.includes('--check');
 const TOKEN = process.env.GITHUB_TOKEN;
 
+// 未认证时限额是 60/h，本项目有 200+ 仓库，必然触发限流并长时间阻塞。
+// 实测：无 token 的 cron 轮到抓取阶段挂起 10 分钟以上，CPU 几乎为 0，看上去像卡死。
+// 这里提前说清楚，并限制整轮等待预算，避免静默挂一小时。
+if (!TOKEN) {
+  console.error('警告：未设置 GITHUB_TOKEN，将受 60/h 未认证限额限制（本轮仓库数远超该额度）');
+}
+
+/** 整轮限流等待预算。超过就失败退出，而不是无限期挂着。 */
+const RATE_LIMIT_WAIT_BUDGET_MS = Number(process.env.RATE_LIMIT_WAIT_BUDGET_MS ?? 90_000);
+let waitedMs = 0;
+
 const src = readFileSync('src/data/ecosystem.ts', 'utf8');
 // 吸收条目用双引号、原始条目用单引号，两种都要认，否则漏刷大部分仓库
 // 同时按 url 排掉非 GitHub 条目：生态页也收录 HuggingFace 模型与站点，
@@ -40,10 +51,19 @@ async function fetchOne(repo, attempt = 1) {
   if (res.status === 404) return { repo, gone: true };
   if (res.status === 403 || res.status === 429) {
     if (attempt <= 3) {
-      // rate limit：等 reset 或退避
+      // rate limit：等 reset 或退避，但整轮等待有上限，避免无限期挂着
       const reset = Number(res.headers.get('x-ratelimit-reset') ?? 0);
-      const wait = reset ? Math.min(Math.max(reset * 1000 - Date.now(), 1000), 3600_000) : attempt * 5000;
-      console.error(`  ${repo}: 限流，等 ${Math.round(wait / 1000)}s`);
+      const proposed = reset ? Math.min(Math.max(reset * 1000 - Date.now(), 1000), 3600_000) : attempt * 5000;
+      const remaining = RATE_LIMIT_WAIT_BUDGET_MS - waitedMs;
+      if (remaining <= 0) {
+        throw new Error(
+          `${repo}: 限流等待超出预算（已等 ${Math.round(waitedMs / 1000)}s / 上限 ${RATE_LIMIT_WAIT_BUDGET_MS / 1000}s）`
+          + `${TOKEN ? '' : '；未设置 GITHUB_TOKEN，限额仅 60/h'}`,
+        );
+      }
+      const wait = Math.min(proposed, remaining);
+      waitedMs += wait;
+      console.error(`  ${repo}: 限流，等 ${Math.round(wait / 1000)}s（累计 ${Math.round(waitedMs / 1000)}s）`);
       await new Promise((r) => setTimeout(r, wait));
       return fetchOne(repo, attempt + 1);
     }

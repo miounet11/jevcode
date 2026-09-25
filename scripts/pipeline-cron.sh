@@ -70,7 +70,28 @@ fi
 set -a
 source .env
 set +a
-export GITHUB_TOKEN="${GITHUB_TOKEN:-$(gh auth token 2>/dev/null || true)}"
+# GitHub token：cron 脱离 GUI 会话时，gh 的 keychain 凭据可能读不到，
+# 旧写法用 `|| true` 把失败静默吞掉，抓取就退到未认证的 60/h 限额死等（实测卡 10 分钟以上）。
+# 这里显式告警，并且把失败当作失败处理，不静默继续。
+if [[ -z "${GITHUB_TOKEN:-}" ]]; then
+  export GITHUB_TOKEN="$(gh auth token 2>/dev/null || true)"
+fi
+if [[ -z "${GITHUB_TOKEN:-}" ]]; then
+  echo "[cron] 告警：GITHUB_TOKEN 为空（gh auth token 未能取得凭据）"
+  echo "[cron]       抓取将受 60/h 未认证限额限制，211 个仓库必然触发限流。"
+  mark ALERT "GITHUB_TOKEN 缺失：抓取会因未认证限额而长时间阻塞"
+  exit 1
+fi
+# 令牌可用性预检：确认额度足够覆盖一轮抓取，避免跑到一半卡在限流等待。
+CORE_REMAIN="$(curl -sS -m 15 -H "Authorization: Bearer $GITHUB_TOKEN" \
+  https://api.github.com/rate_limit 2>/dev/null \
+  | python3 -c 'import json,sys;print(json.load(sys.stdin)["resources"]["core"]["remaining"])' 2>/dev/null || echo unknown)"
+echo "[cron] GitHub core 剩余额度：$CORE_REMAIN"
+if [[ "$CORE_REMAIN" != "unknown" && "$CORE_REMAIN" -lt 500 ]]; then
+  echo "[cron] 告警：GitHub 剩余额度不足（$CORE_REMAIN）"
+  mark ALERT "GitHub 额度不足：$CORE_REMAIN"
+  exit 1
+fi
 
 if [[ "${JUDGE_BACKEND:-clavue}" == "jev" ]]; then
   if [[ -z "${TYPESAFE_API_KEY:-}" ]]; then
