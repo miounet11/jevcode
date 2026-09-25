@@ -77,6 +77,23 @@ async function fetchOne(repo, attempt = 1) {
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
 
 const changes = [];
+/** 取某个 repo 的项目块文本（从 repo: 行到下一个项目对象或数组结尾）。
+ *  不能用 `[^}]*?` 之类的粗略正则：块内的 desc/decisionPoint 自带 `}`，会失配。 */
+function blockOf(text, repo) {
+  const start = text.indexOf(`repo: "${repo}"`) >= 0
+    ? text.indexOf(`repo: "${repo}"`)
+    : text.indexOf(`repo: '${repo}'`);
+  if (start < 0) return '';
+  const next = text.indexOf('\n  {', start);
+  return text.slice(start, next < 0 ? text.length : next);
+}
+
+// 已记录为归档的仓库集合。归档是【一次性事件】：若每轮都上报，
+// accumulate() 会把它写成 force:true，而 trigger 判定中 kind==='archived' 恒真，
+// 于是 trigger 永远为真、+10% 累积阈值形同虚设，每轮都白跑一次门 1 判定。
+// 实测：0xNatoshi/jev-codex-router 归档后，连跑两次 fetch 都重复出现在 changes 里。
+const archivedKnown = new Set(repos.filter((repo) => /archived: true/.test(blockOf(src, repo))));
+
 const results = [];
 for (const repo of repos) {
   const j = await fetchOne(repo);
@@ -86,7 +103,7 @@ for (const repo of repos) {
     continue;
   }
   results.push(j);
-  if (j.archived) changes.push({ repo, kind: 'archived' });
+  if (j.archived && !archivedKnown.has(repo)) changes.push({ repo, kind: 'archived' });
 }
 
 // 与现有值 diff（stars/forks），逐 repo 查找（贪婪一次性匹配会错位）
@@ -98,6 +115,7 @@ for (const repo of repos) {
 
 const data = repos.map((repo, i) => ({ repo, ...oldMap[repo], fresh: results[i] }));
 let updated = 0;
+let archivedMarked = 0;
 for (const d of data) {
   if (!d.fresh) continue;
   if (d.stars !== d.fresh.stargazers_count || d.forks !== d.fresh.forks_count) {
@@ -130,6 +148,17 @@ for (const d of data) {
   const next = out.replace(re, `$1${d.fresh.stargazers_count}$2${d.fresh.forks_count}$3`);
   if (next !== out) updated++;
   out = next;
+
+  // 归档状态必须落盘，否则下一轮又当成「新归档」重复上报（见 archivedKnown 注释）。
+  if (d.fresh.archived && !archivedKnown.has(d.repo)) {
+    const blockRe = new RegExp(`(repo: ['"]${esc(d.repo)}['"],[\\s\\S]*?\\n    category: [^\\n]+\\n)`);
+    const marked = out.replace(blockRe, '$1    archived: true,\n');
+    if (marked !== out) {
+      out = marked;
+      archivedMarked++;
+    }
+    archivedKnown.add(d.repo);
+  }
 }
 writeFileSync('src/data/ecosystem.ts', out);
-console.log(JSON.stringify({ repo_count: repos.length, files_updated: 1, stat_entries_updated: updated, changes }, null, 2));
+console.log(JSON.stringify({ repo_count: repos.length, files_updated: 1, stat_entries_updated: updated, archived_marked: archivedMarked, changes }, null, 2));
