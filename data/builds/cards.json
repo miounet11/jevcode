@@ -19239,6 +19239,58 @@
       "d": "2026-09-24",
       "url": "https://x.com/x_alex_schaff/status/2103230166789144822",
       "source": "syndication+jev"
+    },
+    {
+      "id": "2103138113384292825",
+      "sn": "flof_fly",
+      "name": "Florian",
+      "t": "just built a TUI that trades LTC/USD",
+      "x": "just built a TUI that trades LTC/USD it uses HTT + Jev AI (laya) as final filtering those decision/classifier models fail bad at math stuff coupling them with some tailored indicat…",
+      "cat": "Trading & markets",
+      "u": "Market analysis",
+      "lang": "en",
+      "d": "2026-09-24",
+      "url": "https://x.com/flof_fly/status/2103138113384292825",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103138372726182363",
+      "sn": "GabiDev98",
+      "name": "gabidev",
+      "t": "Vault risk classification.",
+      "x": "Vault risk classification. I pulled the signals that matter for Morpho vault risk (allocations, LLTV, utilization, idle, oracle, curator, APY sanity, liquidity and more) across 50…",
+      "cat": "Research & data",
+      "u": "Market analysis",
+      "lang": "en",
+      "d": "2026-09-24",
+      "url": "https://x.com/GabiDev98/status/2103138372726182363",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103077057794314275",
+      "sn": "liuzhimin_bot",
+      "name": "柳智敏",
+      "t": "把它接入我写的扫链插件里面，去执行一个简单的二元判断",
+      "x": "把它接入我写的扫链插件里面，去执行一个简单的二元判断 这两天一直在高强度的用，结果回到Console一看才花了五分钱 https://t.co/IbYB3LqUZo",
+      "cat": "Dev tools",
+      "u": "Code generation",
+      "lang": "zh",
+      "d": "2026-09-24",
+      "url": "https://x.com/liuzhimin_bot/status/2103077057794314275",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103218656490455041",
+      "sn": "vstrofago",
+      "name": "vstro",
+      "t": "🦇 Introducing Vigia: a lookout for your @Twitch chat, powered by #jev @typesafeai .",
+      "x": "🦇 Introducing Vigia: a lookout for your @Twitch chat, powered by #jev @typesafeai . Rules in plain language, real anti-spoiler protection, and the best questions sent straight to y…",
+      "cat": "Safety & moderation",
+      "u": "Moderation",
+      "lang": "en",
+      "d": "2026-09-24",
+      "url": "https://x.com/vstrofago/status/2103218656490455041",
+      "source": "syndication+jev"
     }
   ],
   "rejected": [
@@ -59193,8 +59245,96 @@
       "title": "none",
       "title_in_text": false,
       "date": "2026-09-24"
+    },
+    {
+      "id": "2103209794823659727",
+      "artifact": 0.25,
+      "uses_jev": 0.58,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-24"
+    },
+    {
+      "id": "2103069151330025768",
+      "artifact": 0.38,
+      "uses_jev": 0.87,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-24"
+    },
+    {
+      "id": "2103240729141367265",
+      "artifact": 0.75,
+      "uses_jev": 0.9,
+      "title": "Rebuilt some coreutils with Jev and its not even funny how useful those tools are already: https://t.co/1c4IE4oLD6",
+      "title_in_text": true,
+      "date": "2026-09-24"
+    },
+    {
+      "id": "2103074056954364099",
+      "artifact": 0.19,
+      "uses_jev": 0.24,
+      "title": "none",
+      "title_in_text": false,
+      "date": ""
+    },
+    {
+      "id": "2103138180769677781",
+      "artifact": 0.2,
+      "uses_jev": 0.25,
+      "title": "none",
+      "title_in_text": false,
+      "date": ""
+    },
+    {
+      "id": "2103198350757765262",
+      "artifact": 0.91,
+      "uses_jev": 0.41,
+      "title": "I playfully created this extension in like 10 minutes, and it is working so well, to be honest.",
+      "title_in_text": true,
+      "date": "2026-09-24"
+    },
+    {
+      "id": "2103076980208066582",
+      "artifact": 0.98,
+      "uses_jev": 0.97,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-24"
+    },
+    {
+      "id": "2103189548322967730",
+      "artifact": 0.37,
+      "uses_jev": 0.32,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-24"
+    },
+    {
+      "id": "2103205544366428350",
+      "artifact": 0.68,
+      "uses_jev": 0.65,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-24"
+    },
+    {
+      "id": "2102850118261338304",
+      "artifact": 0.89,
+      "uses_jev": 0.18,
+      "title": "با #typeScript یه UI آفلاین اورده بالا که هرچی بنویسید داینامیک پیشنهاد مرتبط میده…",
+      "title_in_text": true,
+      "date": "2026-09-23"
+    },
+    {
+      "id": "2102867823412523112",
+      "artifact": 0.17,
+      "uses_jev": 0.24,
+      "title": "none",
+      "title_in_text": false,
+      "date": ""
     }
   ],
-  "updated": "2026-09-24T23:22:55.724Z",
-  "total": 1480
+  "updated": "2026-09-25T05:36:01.164Z",
+  "total": 1484
 }
