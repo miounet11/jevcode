@@ -46,6 +46,39 @@ mark() {
   echo "[cron] $prefix 写入 $f"
 }
 
+# 棘轮：连续未成功发布的轮数。
+# SKIPPED 是 exit 0、不写 ALERT，于是 9-21~9-24 连续 4 天跳过无人察觉，内容
+# 4 天没更新。成功发布即归零，累积到阈值升级为 ALERT——「只许变好」得有人盯着。
+STREAK_FILE="$LOG_DIR/.publish-streak"
+STREAK_ALERT_AT="${STREAK_ALERT_AT:-3}"
+
+streak_bump() {
+  local n=0
+  if [[ -f "$STREAK_FILE" ]]; then
+    n="$(tr -dc '0-9' < "$STREAK_FILE" 2>/dev/null)" || n=0
+  fi
+  n=$(( ${n:-0} + 1 ))
+  echo "$n" > "$STREAK_FILE"
+  echo "$n"
+}
+
+streak_reset() { echo 0 > "$STREAK_FILE"; }
+
+# 本轮是否真的发布出去了：管线成功发布时会写 released 事件
+# （注意文件名用 UTC 日期，与 writeLog 的 toISOString().slice(0,10) 对齐）
+published_today() {
+  grep -q '"stage":"released"' "$LOG_DIR/$(date -u +%F).jsonl" 2>/dev/null
+}
+
+streak_check() {
+  local n
+  n="$(streak_bump)"
+  echo "[cron] 连续未发布第 $n 轮"
+  if [[ "$n" -ge "$STREAK_ALERT_AT" ]]; then
+    mark ALERT "连续 $n 轮未成功发布：内容已 $n 天未更新"
+  fi
+}
+
 echo "===== $(date -u +%FT%TZ) cron cycle ====="
 
 # 前置检查必须早于 source .env：set -e 下 source 缺失文件会直接中止，
@@ -111,22 +144,65 @@ fi
 if [[ -n "$(git status --porcelain)" ]]; then
   echo "[cron] 工作区不干净，跳过本轮（避免卷入手工改动）"
   mark SKIPPED "管线跳过整轮：工作区不干净（存在未提交改动）"
+  streak_check
   exit 0
 fi
 
-# 失败可见：非零退出时写醒目告警文件（cron 日志默认没人看）
+# 运行超时护栏：成功一轮实测约 3.7 分钟（released elapsed_ms=223074），但抓取
+# 退到未认证限额时会死等（见上方 token 注释「实测� 10 分钟以上」，9-25 正是靠
+# 人肉终止才停下）。macOS 无 timeout 命令、系统 bash 为 3.2（无 wait -n），
+# 故用后台 + 轮询实现；超时按 timeout(1) 约定记退出码 124。
+PIPELINE_TIMEOUT="${PIPELINE_TIMEOUT:-900}"
 set +e
-node scripts/pipeline.mjs "$@"
+node scripts/pipeline.mjs "$@" &
+PIPE_PID=$!
+WAITED=0
+TIMED_OUT=0
+while kill -0 "$PIPE_PID" 2>/dev/null; do
+  if [[ "$WAITED" -ge "$PIPELINE_TIMEOUT" ]]; then
+    echo "[cron] 运行超过 ${PIPELINE_TIMEOUT}s，向管线（pid $PIPE_PID）发送 SIGTERM"
+    kill -TERM "$PIPE_PID" 2>/dev/null
+    sleep 10
+    if kill -0 "$PIPE_PID" 2>/dev/null; then
+      echo "[cron] 仍未退出，发送 SIGKILL"
+      kill -KILL "$PIPE_PID" 2>/dev/null
+    fi
+    TIMED_OUT=1
+    break
+  fi
+  sleep 5
+  WAITED=$((WAITED + 5))
+done
+wait "$PIPE_PID"
 code=$?
 set -e
+if [[ "$TIMED_OUT" == "1" ]]; then
+  code=124
+fi
+
+# 失败可见：非零退出时写醒目告警文件（cron 日志默认没人看）
 if [[ "$code" -ne 0 ]]; then
   ALERT="$LOG_DIR/ALERT-$(date -u +%F).txt"
   {
-    echo "管线失败 $(date -u +%FT%TZ) 退出码 $code"
+    if [[ "$TIMED_OUT" == "1" ]]; then
+      echo "管线运行超时（>${PIPELINE_TIMEOUT}s）被终止"
+      echo "时间：$(date -u +%FT%TZ)"
+    else
+      echo "管线失败 $(date -u +%FT%TZ) 退出码 $code"
+    fi
     echo "查看：tail -50 $LOG_DIR/cron.log"
   } > "$ALERT"
   echo "[cron] 管线失败（退出码 $code），告警写入 $ALERT"
+  streak_check
   echo "===== cycle failed ====="
   exit "$code"
+fi
+
+# 棘轮：只有真的发出去了才归零（退出码 0 也可能是 HOLD/累积，不算发布）
+if published_today; then
+  streak_reset
+  echo "[cron] 本轮已发布，棘轮归零"
+else
+  streak_check
 fi
 echo "===== cycle end ====="
