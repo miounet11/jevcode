@@ -52,6 +52,13 @@ mark() {
 STREAK_FILE="$LOG_DIR/.publish-streak"
 STREAK_ALERT_AT="${STREAK_ALERT_AT:-3}"
 
+# 干跑（--dry-run）是人工验证路径，不该计入棘轮：跑一次手动验证就把「连续未
+# 发布」少算一轮，指标就失真了（实测 2026-09-26：手动干跑把计数从 1 顶到 2）。
+IS_DRY=0
+for a in "$@"; do
+  if [[ "$a" == "--dry-run" ]]; then IS_DRY=1; fi
+done
+
 streak_bump() {
   local n=0
   if [[ -f "$STREAK_FILE" ]]; then
@@ -71,6 +78,10 @@ published_today() {
 }
 
 streak_check() {
+  if [[ "$IS_DRY" == "1" ]]; then
+    echo "[cron] 干跑，棘轮不计"
+    return 0
+  fi
   local n
   n="$(streak_bump)"
   echo "[cron] 连续未发布第 $n 轮"
