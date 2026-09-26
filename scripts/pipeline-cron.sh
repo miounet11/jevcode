@@ -96,7 +96,7 @@ echo "===== $(date -u +%FT%TZ) cron cycle ====="
 # 导致后面的告警分支永远走不到（实测：exit 1 但无 ALERT，故障静默）。
 for bin in node npm git gh; do
   if ! command -v "$bin" >/dev/null 2>&1; then
-    echo "[cron] 致命：找不到 $bin（PATH=$PATH）"
+    echo "[cron] 致命：找不到 ${bin}（PATH=${PATH}）"
     FAILED=1
   fi
 done
@@ -132,7 +132,7 @@ CORE_REMAIN="$(curl -sS -m 15 -H "Authorization: Bearer $GITHUB_TOKEN" \
   | python3 -c 'import json,sys;print(json.load(sys.stdin)["resources"]["core"]["remaining"])' 2>/dev/null || echo unknown)"
 echo "[cron] GitHub core 剩余额度：$CORE_REMAIN"
 if [[ "$CORE_REMAIN" != "unknown" && "$CORE_REMAIN" -lt 500 ]]; then
-  echo "[cron] 告警：GitHub 剩余额度不足（$CORE_REMAIN）"
+  echo "[cron] 告警：GitHub 剩余额度不足（${CORE_REMAIN}）"
   mark ALERT "GitHub 额度不足：$CORE_REMAIN"
   exit 1
 fi
@@ -171,7 +171,7 @@ WAITED=0
 TIMED_OUT=0
 while kill -0 "$PIPE_PID" 2>/dev/null; do
   if [[ "$WAITED" -ge "$PIPELINE_TIMEOUT" ]]; then
-    echo "[cron] 运行超过 ${PIPELINE_TIMEOUT}s，向管线（pid $PIPE_PID）发送 SIGTERM"
+    echo "[cron] 运行超过 ${PIPELINE_TIMEOUT}s，向管线（pid ${PIPE_PID}）发送 SIGTERM"
     kill -TERM "$PIPE_PID" 2>/dev/null
     sleep 10
     if kill -0 "$PIPE_PID" 2>/dev/null; then
@@ -219,7 +219,7 @@ if [[ "$code" -ne 0 ]]; then
     fi
     echo "查看：tail -50 $LOG_DIR/cron.log"
   } > "$ALERT"
-  echo "[cron] 管线失败（退出码 $code），告警写入 $ALERT"
+  echo "[cron] 管线失败（退出码 ${code}），告警写入 $ALERT"
   streak_check
   echo "===== cycle failed ====="
   exit "$code"
