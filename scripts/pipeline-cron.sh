@@ -160,7 +160,7 @@ if [[ -n "$(git status --porcelain)" ]]; then
 fi
 
 # 运行超时护栏：成功一轮实测约 3.7 分钟（released elapsed_ms=223074），但抓取
-# 退到未认证限额时会死等（见上方 token 注释「实测� 10 分钟以上」，9-25 正是靠
+# 退到未认证限额时会死等（见上方 token 注释「实测卡 10 分钟以上」，9-25 正是靠
 # 人肉终止才停下）。macOS 无 timeout 命令、系统 bash 为 3.2（无 wait -n），
 # 故用后台 + 轮询实现；超时按 timeout(1) 约定记退出码 124。
 PIPELINE_TIMEOUT="${PIPELINE_TIMEOUT:-900}"
@@ -189,6 +189,22 @@ code=$?
 set -e
 if [[ "$TIMED_OUT" == "1" ]]; then
   code=124
+fi
+
+# 门 2 HOLD（退出码 2）是「按设计不发布」，不是故障：与故障分开处理，不写
+# 「管线失败」ALERT——否则「内容不值得发」和「build 挂了」长得一样，告警就
+# 没人信了。与门 1 HOLD 用 exit 0 的处理对齐，同样计入棘轮。
+if [[ "$code" -eq 2 ]]; then
+  HOLD_MARK="$LOG_DIR/HOLD-G2-$(date -u +%F).txt"
+  {
+    echo "门 2 HOLD：本轮内容经判定不值得发布（非故障）"
+    echo "时间：$(date -u +%FT%TZ)"
+    echo "查看：tail -50 $LOG_DIR/cron.log"
+  } > "$HOLD_MARK"
+  echo "[cron] 门 2 HOLD，标记写入 $HOLD_MARK"
+  streak_check
+  echo "===== cycle end（门 2 HOLD）====="
+  exit 0
 fi
 
 # 失败可见：非零退出时写醒目告警文件（cron 日志默认没人看）

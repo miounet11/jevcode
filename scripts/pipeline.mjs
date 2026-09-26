@@ -7,6 +7,11 @@
  *   门 1（intake）：变化是否值得发布？
  *   门 2（release）：组装好的 release 是否合格上线？
  *
+ * 退出码（cron 依赖它区分「按设计不发布」与「故障」）：
+ *   0  正常结束，含门 1 HOLD、累积未达阈值等按设计不发布的路径
+ *   1  故障：机制检查失败（build/check/link）或判定后端调用失败
+ *   2  门 2 HOLD：内容经判定不值得发布，非故障
+ *
  * 用法：node scripts/pipeline.mjs [--dry-run] [--skip-fetch]
  *   --dry-run    跑全流程但不 commit/不 deploy（验证用）
  *   --skip-fetch 跳过抓取（调试门与部署段）
@@ -390,7 +395,10 @@ writeLog('gate2', { gate2: g2, i18nReport });
 if (!ready) {
   say('gate2: HOLD — release blocked by Jev');
   restoreFetched();
-  process.exit(1);
+  // 退出码 2 =「按设计不发布」，与 1（机制/API 故障）区分开：cron 侧据此不再
+  // 写成「管线失败」ALERT。此前二者混用 exit 1，告警分不清是内容不值得发还是
+  // 管线坏了（实测两轮干跑门 2 均 HOLD，按旧逻辑会连报「失败」）。
+  process.exit(2);
 }
 
 // 6. 部署
