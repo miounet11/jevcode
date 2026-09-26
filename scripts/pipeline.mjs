@@ -316,6 +316,7 @@ if (!DRY) {
 let buildOk = false;
 let checkOk = false;
 let linkReport = 'not run';
+let i18nReport = 'not run';
 try {
   run('npm run build', { stdio: 'inherit' });
   buildOk = true;
@@ -332,15 +333,27 @@ if (buildOk) {
     checkOk = false;
   }
   linkReport = await linkCheck();
+  // i18n 完整性：i18n-gaps.mjs 退出码 1 表示有缺口（它本就是为 CI 卡点写的）。
+  // 但这里只记录与告警、不阻断发布——en 是回退源，缺翻译只会静默回退成英文、
+  // 页面不破损，翻译没跟上不该停掉生态数据刷新。
+  try {
+    run('node scripts/i18n-gaps.mjs');
+    i18nReport = 'ok';
+  } catch {
+    i18nReport = 'gaps';
+  }
 }
 
-say(`build=${buildOk} check=${checkOk} links=${linkReport}`);
+say(`build=${buildOk} check=${checkOk} links=${linkReport} i18n=${i18nReport}`);
+if (i18nReport === 'gaps') {
+  say('i18n: 存在翻译缺口（en 为回退源，页面不破损）；运行 node scripts/i18n-gaps.mjs 看清单');
+}
 
 // 5. 门 2
 if (!buildOk || !checkOk) {
   say('gate2 skipped: mechanical gates failed');
   restoreFetched();
-  writeLog('gate2-skipped-mech-fail', { buildOk, checkOk });
+  writeLog('gate2-skipped-mech-fail', { buildOk, checkOk, i18nReport });
   process.exit(1);
 }
 // 发布内容描述。必须区分干跑与真实模式：
@@ -372,7 +385,7 @@ try {
 }
 const ready = g2.release_ready.noul >= 0.5;
 say(`gate2: ready=${g2.release_ready.noul} risk=${g2.risk.score}/3 (conf ${g2.risk.confidence})`);
-writeLog('gate2', { gate2: g2 });
+writeLog('gate2', { gate2: g2, i18nReport });
 
 if (!ready) {
   say('gate2: HOLD — release blocked by Jev');
