@@ -14,22 +14,10 @@ import { DatabaseSync } from 'node:sqlite';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
+import { PLANS, WINDOWS } from './plans.mjs';
 
-/** 时间窗长度（毫秒） */
-export const WINDOWS = {
-  day: 24 * 60 * 60 * 1000,
-  week: 7 * 24 * 60 * 60 * 1000,
-  month: 30 * 24 * 60 * 60 * 1000,
-};
-
-/**
- * 套餐额度。null = 该窗口不限。
- * free.day = 25 是用户明确给出的口径；其余为占位，待定价决策。
- */
-export const PLANS = {
-  free: { day: 25, week: null, month: null },
-  paid: { day: 500, week: null, month: null },
-};
+// 转发出去，既有调用方（与测试）的 import 路径不变
+export { PLANS, WINDOWS };
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS users (

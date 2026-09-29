@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, type Lang } from '../../i18n/ui';
+import { PLANS } from '../../../server/plans.mjs';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const path = `/${lang}/pricing/`;
+
+const copy = lang === 'zh'
+  ? {
+      title: '价格',
+      lead: '免费用完就升级。所有档位都用同一个判定后端，区别只在额度。',
+      freeName: '免费',
+      paidName: '专业',
+      per: '每月',
+      ctaFree: '开始使用',
+      ctaPaid: '升级',
+      quota: '判定次数',
+      perDay: '每天',
+      perMonth: '每月',
+      unlimited: '不限',
+      cols: { feature: '包含', free: '免费', paid: '专业' },
+      rows: [
+        ['判定接口调用', '每日 25 次', '每日 500 次'],
+        ['历史记录与分享链接', '有', '有'],
+        ['API Key', '1 个', '多个'],
+        ['支持', '社区', '邮件'],
+      ],
+      note: '额度按日窗口滑动计算。付费档位价格待定，当前仅展示结构与额度。',
+      back: '先去试一次',
+    }
+  : {
+      title: 'Pricing',
+      lead: 'Use it free, upgrade when you need more. Every tier runs the same judgment backend — only the allowance differs.',
+      freeName: 'Free',
+      paidName: 'Pro',
+      per: 'per month',
+      ctaFree: 'Get started',
+      ctaPaid: 'Upgrade',
+      quota: 'Judgments',
+      perDay: 'per day',
+      perMonth: 'per month',
+      unlimited: 'unlimited',
+      cols: { feature: 'Includes', free: 'Free', paid: 'Pro' },
+      rows: [
+        ['Judgment API calls', '25 per day', '500 per day'],
+        ['History and share links', 'Yes', 'Yes'],
+        ['API keys', '1', 'Multiple'],
+        ['Support', 'Community', 'Email'],
+      ],
+      note: 'Allowances use a rolling daily window. Pro pricing is not final yet — this shows structure and quota only.',
+      back: 'Try a judgment first',
+    };
+
+const fmt = (v: number | null | undefined): string =>
+  v == null ? copy.unlimited : String(v);
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+  <section class="section">
+    <div class="wrap pricing">
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{copy.title}</p>
+      <h1>{copy.title}</h1>
+      <p class="pricing__lead">{copy.lead}</p>
+
+      <div class="pricing__cards">
+        <div class="pricing__card">
+          <h2>{copy.freeName}</h2>
+          <p class="pricing__price"><b>$0</b></p>
+          <p class="pricing__quota">
+            {copy.quota}: <b>{fmt(PLANS.free.day)}</b> {copy.perDay}
+          </p>
+          <a class="btn btn--ghost" href={`/${lang}/login/`}>{copy.ctaFree}</a>
+        </div>
+
+        <div class="pricing__card pricing__card--featured">
+          <h2>{copy.paidName}</h2>
+          <p class="pricing__price"><b>TBD</b> <span>{copy.per}</span></p>
+          <p class="pricing__quota">
+            {copy.quota}: <b>{fmt(PLANS.paid.day)}</b> {copy.perDay}
+          </p>
+          <a class="btn btn--primary" href={`/${lang}/login/`}>{copy.ctaPaid}</a>
+        </div>
+      </div>
+
+      <table class="pricing__table">
+        <thead>
+          <tr>
+            <th>{copy.cols.feature}</th>
+            <th>{copy.cols.free}</th>
+            <th>{copy.cols.paid}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {copy.rows.map(([label, free, paid]) => (
+            <tr>
+              <td>{label}</td>
+              <td>{free}</td>
+              <td>{paid}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <p class="pricing__note">{copy.note}</p>
+      <a class="btn btn--ghost" href={`/${lang}/try/`}>{copy.back}</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pricing { max-width: 860px; }
+  .pricing h1 { font-size: clamp(34px, 5vw, 52px); letter-spacing: -0.04em; margin: 12px 0; }
+  .pricing__lead { color: var(--fg-muted); max-width: 62ch; }
+  .pricing__cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 28px 0; }
+  .pricing__card {
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    padding: 20px;
+    background: var(--bg-elev);
+    display: grid;
+    gap: 10px;
+  }
+  .pricing__card--featured { border-color: var(--accent); }
+  .pricing__card h2 { margin: 0; font-size: 18px; }
+  .pricing__price { margin: 0; font-size: 30px; letter-spacing: -0.03em; }
+  .pricing__price span { font-size: 13px; color: var(--fg-dim); }
+  .pricing__quota { margin: 0; color: var(--fg-muted); font-size: 14px; }
+  .pricing__table { width: 100%; border-collapse: collapse; margin: 8px 0 20px; font-size: 14px; }
+  .pricing__table th, .pricing__table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); }
+  .pricing__table th { color: var(--fg-dim); font-weight: 500; }
+  .pricing__note { color: var(--fg-dim); font-size: 13px; margin-bottom: 18px; }
+</style>
