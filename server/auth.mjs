@@ -122,13 +122,23 @@ export function withSessions(accounts, { sessionTtlMs = 30 * 24 * 60 * 60 * 1000
       const cred = qCred.get(user.id);
       if (!cred || !verifyPassword(password, cred.password)) return bad;
 
+      const { token, expiresAt } = this.issueSession(user.id, at);
+      return { ok: true, token, expiresAt, user };
+    },
+
+    /**
+     * 只签发会话，不校验口令。给 OTP 等无密码流程用。
+     * 调用方必须自己先完成身份校验；这个函数本身不做任何鉴权。
+     */
+    issueSession(userId, at = Date.now()) {
+      if (!qUserById.get(userId)) throw new Error('no such user');
       const token = randomBytes(32).toString('base64url');
       const id = randomUUID();
       const expiresAt = at + sessionTtlMs;
       db.prepare(
         'INSERT INTO sessions (id, user_id, hash, created_at, expires_at) VALUES (?, ?, ?, ?, ?)'
-      ).run(id, user.id, sha256(token), at, expiresAt);
-      return { ok: true, token, expiresAt, user };
+      ).run(id, userId, sha256(token), at, expiresAt);
+      return { token, expiresAt };
     },
 
     /** 校验会话 token；过期或已吊销返回 null */
