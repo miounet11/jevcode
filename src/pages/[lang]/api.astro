@@ -1,0 +1,244 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, type Lang } from '../../i18n/ui';
+import { JUDGE_PRICE_CENTS, SIGNUP_CREDIT_CENTS, centsToUsd } from '../../../server/plans.mjs';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const path = `/${lang}/api/`;
+
+const copy = lang === 'zh'
+  ? {
+      title: 'API',
+      lead: `用 API Key 从你的程序调用判定。注册即送 $${centsToUsd(SIGNUP_CREDIT_CENTS)}，每次判定 $${centsToUsd(JUDGE_PRICE_CENTS)}，用完为止。`,
+      getKeyLead: '在账户页签发一个 Key。明文只显示一次，服务端只保留 sha256。',
+      getKey: '去账户页签发 Key',
+      authTitle: '认证',
+      authLead: '所有 /v1/* 请求都要带 Bearer Key。只认 Key，不认浏览器会话 Cookie——把网页登录状态和计费调用分开。',
+      endpointsTitle: '端点',
+      epJudge: '跑一次判定，扣 1 美分。',
+      epMe: '当前用户、余额、累计消费。',
+      epUsage: '余额、累计消费，以及最近的消费流水。',
+      reqTitle: '请求体（/v1/judge）',
+      reqState: 'state',
+      reqStateDesc: '被判定的文本，8–4000 字符。',
+      reqQuestions: 'questions',
+      reqQuestionsDesc: '最多 6 个问题，键名需为小写字母开头的标识符。',
+      typesTitle: '问题类型',
+      typeNoul: '相关程度，返回 0–1 的浮点数。',
+      typeConf: '置信度，返回 0–1 的浮点数。',
+      typeChoice: '从给定选项里选一个，返回被选中的字符串。',
+      respTitle: '响应',
+      respCredit: '本次调用后的余额。',
+      creditTitle: 'credit 结构',
+      creditFields: [
+        ['cents', '剩余额度，整数「分」。'],
+        ['usd', '同一数值的美元字符串。'],
+        ['judgmentsLeft', '还能跑多少次判定（floor(cents / 单价)）。'],
+      ],
+      errTitle: '错误',
+      errTh: '状态',
+      errCodes: [
+        ['401', 'unauthorized / invalid_api_key', '缺少或无效的 API Key。'],
+        ['400', 'invalid_request', 'state 太短或没有问题。'],
+        ['429', 'quota_exceeded', '余额不足，带 retry-after。'],
+        ['502', 'upstream_unavailable', '判定后端暂时不可用，本次不扣费。'],
+      ],
+      exampleTitle: '示例',
+      ctaTry: '先去试用页试一次',
+      ctaPricing: '看价格',
+    }
+  : {
+      title: 'API',
+      lead: `Call judgments from your own program with an API key. Sign up and get $${centsToUsd(SIGNUP_CREDIT_CENTS)} in credit, billed at $${centsToUsd(JUDGE_PRICE_CENTS)} per judgment until it runs out.`,
+      getKeyLead: 'Issue a key on your account page. The plaintext is shown once; the server keeps only its sha256.',
+      getKey: 'Get a key on your account page',
+      authTitle: 'Authentication',
+      authLead: 'Every /v1/* request needs a Bearer key. Keys only — session cookies are not accepted, so browser sign-in and billed API calls stay separate.',
+      endpointsTitle: 'Endpoints',
+      epJudge: 'Run one judgment. Costs 1 cent.',
+      epMe: 'Current user, balance, and total spend.',
+      epUsage: 'Balance, total spend, and recent ledger entries.',
+      reqTitle: 'Request body (/v1/judge)',
+      reqState: 'state',
+      reqStateDesc: 'The text to judge, 8–4000 chars.',
+      reqQuestions: 'questions',
+      reqQuestionsDesc: 'Up to 6 questions; keys must be lowercase-letter identifiers.',
+      typesTitle: 'Question types',
+      typeNoul: 'Relevance, returns a float 0–1.',
+      typeConf: 'Confidence, returns a float 0–1.',
+      typeChoice: 'Pick one of the given options; returns the chosen string.',
+      respTitle: 'Response',
+      respCredit: 'Balance after this call.',
+      creditTitle: 'The credit object',
+      creditFields: [
+        ['cents', 'Remaining balance as integer cents.'],
+        ['usd', 'The same value as a USD string.'],
+        ['judgmentsLeft', 'Judgments you can still run (floor(cents / price)).'],
+      ],
+      errTitle: 'Errors',
+      errTh: 'Status',
+      errCodes: [
+        ['401', 'unauthorized / invalid_api_key', 'Missing or invalid API key.'],
+        ['400', 'invalid_request', 'State too short, or no questions.'],
+        ['429', 'quota_exceeded', 'Not enough balance; includes retry-after.'],
+        ['502', 'upstream_unavailable', 'Judgment backend is down. Not charged.'],
+      ],
+      exampleTitle: 'Example',
+      ctaTry: 'Try one in the playground first',
+      ctaPricing: 'See pricing',
+    };
+
+const curlExample = `curl https://api.jevcode.ai/v1/judge \\
+  -H "Authorization: Bearer jev_..." \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "state": "The build failed on the second job, then passed after a retry.",
+    "questions": {
+      "relevance":   { "type": "noul",       "instructions": "Is this about CI?" },
+      "confidence":  { "type": "confidence", "instructions": "How sure are you?" },
+      "severity":    { "type": "choice",     "instructions": "Pick one.",
+                       "options": ["low", "medium", "high"] }
+    }
+  }'`;
+
+const okExample = `{
+  "id": "k3f9a1c2b4d5",
+  "model": "clavue-jev",
+  "answers": {
+    "relevance":  { "noul": 0.92 },
+    "confidence": { "noul": 0.78 },
+    "severity":   { "choice": "medium" }
+  },
+  "credit": { "cents": 499, "usd": "4.99", "judgmentsLeft": 499 }
+}`;
+
+const creditExample = `{
+  "cents": 499,
+  "usd": "4.99",
+  "judgmentsLeft": 499
+}`;
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+  <section class="section">
+    <div class="wrap api">
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{copy.title}</p>
+      <h1>{copy.title}</h1>
+      <p class="api__lead">{copy.lead}</p>
+
+      <div class="api__key">
+        <p>{copy.getKeyLead}</p>
+        <a class="btn btn--primary" href={`/${lang}/account/`}>{copy.getKey}</a>
+      </div>
+
+      <h2>{copy.authTitle}</h2>
+      <p class="api__lead">{copy.authLead}</p>
+      <pre class="api__code"><code>{`Authorization: Bearer jev_...`}</code></pre>
+
+      <h2>{copy.endpointsTitle}</h2>
+      <table class="api__table">
+        <tbody>
+          <tr><td><code>POST /v1/judge</code></td><td>{copy.epJudge}</td></tr>
+          <tr><td><code>GET /v1/me</code></td><td>{copy.epMe}</td></tr>
+          <tr><td><code>GET /v1/usage</code></td><td>{copy.epUsage}</td></tr>
+        </tbody>
+      </table>
+
+      <h2>{copy.reqTitle}</h2>
+      <table class="api__table">
+        <tbody>
+          <tr><td><code>{copy.reqState}</code></td><td>{copy.reqStateDesc}</td></tr>
+          <tr><td><code>{copy.reqQuestions}</code></td><td>{copy.reqQuestionsDesc}</td></tr>
+        </tbody>
+      </table>
+
+      <h3>{copy.typesTitle}</h3>
+      <table class="api__table">
+        <tbody>
+          <tr><td><code>noul</code></td><td>{copy.typeNoul}</td></tr>
+          <tr><td><code>confidence</code></td><td>{copy.typeConf}</td></tr>
+          <tr><td><code>choice</code></td><td>{copy.typeChoice}</td></tr>
+        </tbody>
+      </table>
+
+      <h2>{copy.respTitle}</h2>
+      <p class="api__lead">{copy.respCredit}</p>
+      <pre class="api__code"><code>{okExample}</code></pre>
+
+      <h3>{copy.creditTitle}</h3>
+      <pre class="api__code"><code>{creditExample}</code></pre>
+      <table class="api__table">
+        <tbody>
+          {copy.creditFields.map(([field, desc]) => (
+            <tr><td><code>{field}</code></td><td>{desc}</td></tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h2>{copy.errTitle}</h2>
+      <table class="api__table">
+        <thead>
+          <tr><th>{copy.errTh}</th><th>error</th><th></th></tr>
+        </thead>
+        <tbody>
+          {copy.errCodes.map(([status, code, desc]) => (
+            <tr>
+              <td><code>{status}</code></td>
+              <td><code>{code}</code></td>
+              <td>{desc}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h2>{copy.exampleTitle}</h2>
+      <pre class="api__code"><code>{curlExample}</code></pre>
+
+      <div class="api__cta">
+        <a class="btn btn--ghost" href={`/${lang}/try/`}>{copy.ctaTry}</a>
+        <a class="btn btn--ghost" href={`/${lang}/pricing/`}>{copy.ctaPricing}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .api { max-width: 820px; }
+  .api h1 { font-size: clamp(34px, 5vw, 52px); letter-spacing: -0.04em; margin: 12px 0; }
+  .api h2 { font-size: 22px; margin: 34px 0 10px; }
+  .api h3 { font-size: 17px; margin: 22px 0 8px; }
+  .api__lead { color: var(--fg-muted); max-width: 64ch; }
+  .api__key {
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    padding: 18px 20px;
+    background: var(--bg-elev);
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+    margin: 22px 0;
+  }
+  .api__key p { margin: 0; color: var(--fg-muted); }
+  .api__table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0 4px; }
+  .api__table th, .api__table td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .api__table th { color: var(--fg-dim); font-weight: 500; }
+  .api__table td:first-child { white-space: nowrap; }
+  .api__code {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    margin: 8px 0 4px;
+  }
+  .api__code code { background: none; padding: 0; }
+  .api__cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+</style>

@@ -44,6 +44,7 @@ const copy = lang === 'zh'
       kindJudge: '判定',
       kindTopup: '充值',
       spent: '累计消费',
+      apiDocs: 'API 文档',
     }
   : {
       title: 'Your account',
@@ -77,6 +78,7 @@ const copy = lang === 'zh'
       kindJudge: 'Judgment',
       kindTopup: 'Top-up',
       spent: 'Total spent',
+      apiDocs: 'API docs',
     };
 ---
 
@@ -118,6 +120,7 @@ const copy = lang === 'zh'
 
           <div class="acct__actions">
             <button class="btn btn--primary" type="button" id="issue">{copy.issue}</button>
+            <a class="btn btn--ghost" href={`/${lang}/api/`}>{copy.apiDocs}</a>
             <button class="btn btn--ghost" type="button" id="logout">{copy.logout}</button>
           </div>
           <p class="acct__newkey" id="newkey" hidden></p>
