@@ -82,7 +82,7 @@ try {
     const b = await r.json().catch(() => ({}));
     ok('注册成功 → 201', r.status === 201, `得到 ${r.status} ${JSON.stringify(b)}`);
     ok('返回用户信息', b.user && b.user.email === EMAIL, JSON.stringify(b.user));
-    ok('返回初始额度 25', b.remaining && b.remaining.day === 25, JSON.stringify(b.remaining));
+    ok('返回注册赠送 $5', b.credit && b.credit.cents === 500, JSON.stringify(b.credit));
     ok('下发会话 Cookie', !!cookie, `cookie=${cookie.slice(0, 24)}`);
     const raw = r.headers.getSetCookie ? r.headers.getSetCookie().join(';') : '';
     ok('Cookie 为 HttpOnly（前端脚本读不到）', /HttpOnly/i.test(raw), raw);
@@ -113,7 +113,7 @@ try {
     const okL = await post('/api/auth/login', { email: EMAIL, password: PASSWORD });
     const lb = await okL.json().catch(() => ({}));
     ok('正确密码 → 200', okL.status === 200, `得到 ${okL.status}`);
-    ok('登录后拿到额度', lb.remaining && typeof lb.remaining.day === 'number');
+    ok('登录后拿到余额', lb.credit && typeof lb.credit.cents === 'number', JSON.stringify(lb.credit));
   }
 
   console.log('\n会话');
@@ -122,6 +122,20 @@ try {
     const b = await me.json().catch(() => ({}));
     ok('带 Cookie → 200', me.status === 200, `得到 ${me.status}`);
     ok('/me 返回邮箱', b.user && b.user.email === EMAIL);
+  }
+
+  console.log('\n消费明细 /api/auth/ledger');
+  {
+    const r = await get('/api/auth/ledger');
+    const b = await r.json().catch(() => ({}));
+    ok('ledger → 200', r.status === 200, `得到 ${r.status}`);
+    ok('返回余额 $5', b.credit && b.credit.cents === 500, JSON.stringify(b.credit));
+    ok('注册赠送入账一笔', Array.isArray(b.entries) && b.entries.some(
+      (e) => e.kind === 'signup_credit' && e.cents === 500), JSON.stringify(b.entries));
+    ok('累计消费为 0', b.spentCents === 0, String(b.spentCents));
+
+    const out = await fetch(`${base}/api/auth/ledger`);
+    ok('未登录访问 ledger → 401', out.status === 401, `得到 ${out.status}`);
   }
 
   console.log('\nAPI Key 控制台');
@@ -157,11 +171,11 @@ try {
     else if (r.status === 502 || b.error === 'upstream') skip('key 判定 → 200', '上游判定不可达');
     else {
       ok('key 判定 → 200', r.status === 200, `得到 ${r.status} ${JSON.stringify(b).slice(0, 120)}`);
-      ok('响应带 remaining', b.remaining && typeof b.remaining.day === 'number', JSON.stringify(b.remaining));
+      ok('响应带 credit', b.credit && typeof b.credit.cents === 'number', JSON.stringify(b.credit));
 
       const me = await get('/api/auth/me');
       const mb = await me.json().catch(() => ({}));
-      ok('额度已扣减到 24', mb.remaining && mb.remaining.day === 24, JSON.stringify(mb.remaining));
+      ok('余额已扣到 499 美分', mb.credit && mb.credit.cents === 499, JSON.stringify(mb.credit));
     }
   }
 

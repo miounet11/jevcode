@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { languages, type Lang } from '../../i18n/ui';
-import { PLANS } from '../../../server/plans.mjs';
+import { SIGNUP_CREDIT_CENTS, JUDGE_PRICE_CENTS, centsToUsd, SIGNUP_JUDGMENTS } from '../../../server/plans.mjs';
 
 export const prerender = true;
 
@@ -15,51 +15,51 @@ const path = `/${lang}/pricing/`;
 const copy = lang === 'zh'
   ? {
       title: '价格',
-      lead: '免费用完就升级。所有档位都用同一个判定后端，区别只在额度。',
+      lead: '注册即送 $5 额度，账号+密码即可开始，不需要邮箱验证。按次计费，用完为止。',
       freeName: '免费',
       paidName: '专业',
       per: '每月',
       ctaFree: '开始使用',
       ctaPaid: '升级',
-      quota: '判定次数',
-      perDay: '每天',
-      perMonth: '每月',
-      unlimited: '不限',
+      quota: '赠送额度',
+      unit: '每次判定',
+      signup: '注册赠送',
+      runs: '次可用',
       cols: { feature: '包含', free: '免费', paid: '专业' },
       rows: [
-        ['判定接口调用', '每日 25 次', '每日 500 次'],
+        ['注册赠送', '$5.00', '待定'],
+        ['判定计费', '$0.01 / 次', '待定'],
         ['历史记录与分享链接', '有', '有'],
         ['API Key', '1 个', '多个'],
         ['支持', '社区', '邮件'],
       ],
-      note: '额度按日窗口滑动计算。付费档位价格待定，当前仅展示结构与额度。',
+      note: '当前只有免费档：注册送 $5，按每次判定 $0.01 计费，用完为止。付费档价格待定。',
       back: '先去试一次',
     }
   : {
       title: 'Pricing',
-      lead: 'Use it free, upgrade when you need more. Every tier runs the same judgment backend — only the allowance differs.',
+      lead: 'Sign up and get $5 in credit. Account and password only — no email verification. Pay per judgment until it runs out.',
       freeName: 'Free',
       paidName: 'Pro',
       per: 'per month',
       ctaFree: 'Get started',
       ctaPaid: 'Upgrade',
-      quota: 'Judgments',
-      perDay: 'per day',
-      perMonth: 'per month',
-      unlimited: 'unlimited',
+      quota: 'Signup credit',
+      unit: 'per judgment',
+      signup: 'Signup credit',
+      runs: 'judgments',
       cols: { feature: 'Includes', free: 'Free', paid: 'Pro' },
       rows: [
-        ['Judgment API calls', '25 per day', '500 per day'],
+        ['Signup credit', '$5.00', 'TBD'],
+        ['Per judgment', '$0.01', 'TBD'],
         ['History and share links', 'Yes', 'Yes'],
         ['API keys', '1', 'Multiple'],
         ['Support', 'Community', 'Email'],
       ],
-      note: 'Allowances use a rolling daily window. Pro pricing is not final yet — this shows structure and quota only.',
+      note: 'One free tier for now: $5 on signup, billed at $0.01 per judgment until it runs out. Paid tier pricing is not final.',
       back: 'Try a judgment first',
     };
 
-const fmt = (v: number | null | undefined): string =>
-  v == null ? copy.unlimited : String(v);
 ---
 
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
@@ -74,7 +74,10 @@ const fmt = (v: number | null | undefined): string =>
           <h2>{copy.freeName}</h2>
           <p class="pricing__price"><b>$0</b></p>
           <p class="pricing__quota">
-            {copy.quota}: <b>{fmt(PLANS.free.day)}</b> {copy.perDay}
+            {copy.signup}: <b>${centsToUsd(SIGNUP_CREDIT_CENTS)}</b>
+          </p>
+          <p class="pricing__quota">
+            {copy.unit}: <b>${centsToUsd(JUDGE_PRICE_CENTS)}</b> &middot; {SIGNUP_JUDGMENTS} {copy.runs}
           </p>
           <a class="btn btn--ghost" href={`/${lang}/login/`}>{copy.ctaFree}</a>
         </div>
@@ -83,7 +86,7 @@ const fmt = (v: number | null | undefined): string =>
           <h2>{copy.paidName}</h2>
           <p class="pricing__price"><b>TBD</b> <span>{copy.per}</span></p>
           <p class="pricing__quota">
-            {copy.quota}: <b>{fmt(PLANS.paid.day)}</b> {copy.perDay}
+            {copy.quota}: <b>TBD</b>
           </p>
           <a class="btn btn--primary" href={`/${lang}/login/`}>{copy.ctaPaid}</a>
         </div>

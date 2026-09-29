@@ -281,18 +281,17 @@ const server = createServer(async (req, res) => {
       if (req.method === 'GET' && url.pathname === '/v1/me') {
         send(res, 200, {
           user: { id: userId, email: resolved.user.email, plan: resolved.user.plan },
-          remaining: accounts.remaining(userId),
-          usage: accounts.usage(userId),
+          credit: accounts.balance(userId),
+          spentCents: accounts.spentCents(userId),
         });
         return;
       }
 
       if (req.method === 'GET' && url.pathname === '/v1/usage') {
-        const since = Date.now() - 30 * 24 * 60 * 60 * 1000;
         send(res, 200, {
-          remaining: accounts.remaining(userId),
-          usage: accounts.usage(userId),
-          events: accounts.events(userId, since).slice(0, 200),
+          credit: accounts.balance(userId),
+          spentCents: accounts.spentCents(userId),
+          entries: accounts.entries(userId, 200),
         });
         return;
       }
@@ -319,7 +318,7 @@ const server = createServer(async (req, res) => {
           res.end(JSON.stringify({
             error: 'quota_exceeded',
             message: quota.reason,
-            remaining: quota.remaining || {},
+            credit: quota.balance || null,
           }));
           return;
         }
@@ -330,11 +329,15 @@ const server = createServer(async (req, res) => {
         } catch (err) {
           // 上游失败要退回额度，不能让用户白扣
           accounts.refund(userId, 1);
-          const status = err.status && err.status >= 400 && err.status < 600 ? err.status : 502;
-          send(res, status === 401 || status === 403 ? 502 : status, {
-            error: 'upstream_error',
-            message: err.detail || 'judgment failed',
-            remaining: accounts.remaining(userId),
+          // 上游的 4xx/5xx 一律折算成 502：对外只表达「判定后端暂不可用」，
+          // 不透传上游状态码（曾把上游 500 原样透出，用户以为是我们挂了）。
+          const upstream = err && err.message === 'upstream';
+          send(res, upstream ? 502 : 500, {
+            error: upstream ? 'upstream_unavailable' : 'request_failed',
+            message: upstream
+              ? (err.detail || 'judgment backend is temporarily unavailable')
+              : 'internal error',
+            credit: accounts.balance(userId),
           });
           return;
         }
@@ -357,7 +360,7 @@ const server = createServer(async (req, res) => {
           id,
           model: record.model,
           answers: record.answers,
-          remaining: accounts.remaining(userId),
+          credit: accounts.balance(userId),
         });
         return;
       }
@@ -423,7 +426,7 @@ const server = createServer(async (req, res) => {
         setSessionCookie(res, r.token, r.expiresAt);
         send(res, 200, {
           user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
-          remaining: accounts.remaining(r.user.id),
+          credit: accounts.balance(r.user.id),
           created: r.created,
         });
         return;
@@ -444,7 +447,7 @@ const server = createServer(async (req, res) => {
         setSessionCookie(res, login.token, login.expiresAt);
         send(res, 201, {
           user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
-          remaining: accounts.remaining(r.user.id),
+          credit: accounts.balance(r.user.id),
         });
         return;
       }
@@ -460,7 +463,7 @@ const server = createServer(async (req, res) => {
         setSessionCookie(res, r.token, r.expiresAt);
         send(res, 200, {
           user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
-          remaining: accounts.remaining(r.user.id),
+          credit: accounts.balance(r.user.id),
         });
         return;
       }
@@ -472,6 +475,21 @@ const server = createServer(async (req, res) => {
         return;
       }
 
+      // 消费明细：单独端点，避免 /me 每次都拖一串流水
+      if (req.method === 'GET' && url.pathname === '/api/auth/ledger') {
+        const me = currentUser(req);
+        if (!me) {
+          send(res, 401, { error: 'not signed in' });
+          return;
+        }
+        send(res, 200, {
+          credit: accounts.balance(me.user.id),
+          spentCents: accounts.spentCents(me.user.id),
+          entries: accounts.entries(me.user.id, 100),
+        });
+        return;
+      }
+
       if (req.method === 'GET' && url.pathname === '/api/auth/me') {
         const me = currentUser(req);
         if (!me) {
@@ -480,7 +498,7 @@ const server = createServer(async (req, res) => {
         }
         send(res, 200, {
           user: { id: me.user.id, email: me.user.email, plan: me.user.plan },
-          remaining: accounts.remaining(me.user.id),
+          credit: accounts.balance(me.user.id),
           keys: accounts.listKeys(me.user.id).map((k) => ({
             id: k.id, prefix: k.prefix, label: k.label,
             createdAt: k.created_at, revokedAt: k.revoked_at,
@@ -580,7 +598,7 @@ const server = createServer(async (req, res) => {
             'content-type': 'application/json; charset=utf-8',
             'cache-control': 'no-store',
           });
-          res.end(JSON.stringify({ error: quota.reason, remaining: quota.remaining || {} }));
+          res.end(JSON.stringify({ error: quota.reason, credit: quota.balance || null }));
           return;
         }
       } else if (!allow(ip)) {
@@ -611,15 +629,23 @@ const server = createServer(async (req, res) => {
       await mkdir(DATA, { recursive: true });
       await writeFile(path.join(DATA, `${id}.json`), JSON.stringify(record));
       const payload = { ...record };
-      if (userId && accounts) payload.remaining = accounts.remaining(userId) || {};
+      if (userId && accounts) payload.credit = accounts.balance(userId) || {};
       send(res, 200, payload);
       return;
     }
 
     send(res, 404, { error: 'not found' });
   } catch (err) {
-    const status = err.status && err.status < 500 ? 502 : 500;
-    send(res, status, { error: err.detail || 'request failed' });
+    // 上游故障一律以 502 上报，别把上游的 5xx 原样透传成我们自己的 5xx——
+    // 那会让用户以为是我们挂了，而不是判定后端暂时不可用。
+    // 上游的 4xx（如 key 失效）也不该原样透传，那暴露的是我们与上游的关系。
+    const upstream = err && err.message === 'upstream';
+    const status = upstream ? 502 : 500;
+    send(res, status, {
+      error: upstream ? 'upstream_unavailable' : 'request_failed',
+      // 详情只在 5xx 给出，且透传上游的说明，便于用户判断是否该重试
+      detail: upstream ? (err.detail || 'judgment backend is temporarily unavailable') : undefined,
+    });
   }
 });
 

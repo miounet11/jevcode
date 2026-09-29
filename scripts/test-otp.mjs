@@ -178,7 +178,7 @@ test('验码登录：首次自动建账号，再次登录复用同一账号', as
   assert.equal(first.user.email, 'new@example.com');
   assert.equal(first.user.plan, 'free');
   assert.ok(auth.resolveSession(first.token, t0 + 2), '应拿到可用会话');
-  assert.equal(a.remaining(first.user.id).day, 25, '新账号应有 25 额度');
+  assert.equal(a.balance(first.user.id).cents, 500, '新账号应有 $5 额度');
 
   const { MIN_RESEND_MS } = otp._limits;
   const t1 = t0 + MIN_RESEND_MS + 1;

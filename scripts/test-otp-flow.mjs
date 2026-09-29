@@ -127,7 +127,7 @@ try {
     const b = await r.json().catch(() => ({}));
     ok('验码 → 200', r.status === 200, `得到 ${r.status} ${JSON.stringify(b).slice(0, 140)}`);
     ok('标记为首次建号', b.created === true, String(b.created));
-    ok('返回 25 额度', b.remaining && b.remaining.day === 25, JSON.stringify(b.remaining));
+    ok('返回注册赠送 $5', b.credit && b.credit.cents === 500, JSON.stringify(b.credit));
     ok('下发会话 Cookie', !!cookie, cookie.slice(0, 24));
 
     const me = await get('/api/auth/me');
@@ -161,7 +161,7 @@ try {
       else {
         const jb = await jr.json().catch(() => ({}));
         ok('用 key 判定 → 200', jr.status === 200, `得到 ${jr.status}`);
-        ok('额度扣到 24', jb.remaining && jb.remaining.day === 24, JSON.stringify(jb.remaining));
+        ok('余额扣到 499 美分', jb.credit && jb.credit.cents === 499, JSON.stringify(jb.credit));
       }
     }
   }

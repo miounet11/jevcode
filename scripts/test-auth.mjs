@@ -145,12 +145,13 @@ test('会话 token 明文不落库（只存 sha256）', () => {
   assert.equal(rows[0].hash.length, 64);
 });
 
-test('会话与账号额度打通：登录用户的判定用量可查', () => {
+test('会话与账号余额打通：注册送 $5，消费可查', () => {
   const { a, auth } = fresh();
   auth.register('quota@example.com', 'a-good-password');
   const { token, user } = auth.login('quota@example.com', 'a-good-password');
   assert.equal(auth.resolveSession(token).user.id, user.id);
-  assert.equal(a.remaining(user.id).day, 25);
+  assert.equal(a.balance(user.id).cents, 500, '注册应送 $5');
   a.consume(user.id, 3);
-  assert.equal(a.remaining(user.id).day, 22);
+  assert.equal(a.balance(user.id).cents, 497, '每次判定扣 1 美分');
+  assert.equal(a.balance(user.id).usd, '4.97');
 });

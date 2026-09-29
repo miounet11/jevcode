@@ -14,12 +14,12 @@ const path = `/${lang}/account/`;
 const copy = lang === 'zh'
   ? {
       title: '我的账户',
-      lead: '查看额度、签发与吊销 API Key。',
+      lead: '查看余额与消费、签发与吊销 API Key。',
       loading: '加载中…',
       notSignedIn: '尚未登录。',
       signIn: '去登录',
-      remaining: '剩余额度',
-      perDay: '今日剩余',
+      remaining: '余额',
+      perDay: '可用于判定',
       email: '邮箱',
       plan: '套餐',
       keys: 'API Key',
@@ -35,8 +35,15 @@ const copy = lang === 'zh'
       active: '可用',
       logout: '登出',
       confirmRevoke: '确认吊销这个 Key？使用它的程序会立刻失效。',
-      usageTitle: '用量',
-      used: '已用',
+      ledger: '消费明细',
+      ledNone: '还没有消费记录。',
+      ledTime: '时间',
+      ledKind: '类型',
+      ledAmount: '金额',
+      kindSignup: '注册赠送',
+      kindJudge: '判定',
+      kindTopup: '充值',
+      spent: '累计消费',
     }
   : {
       title: 'Your account',
@@ -44,8 +51,8 @@ const copy = lang === 'zh'
       loading: 'Loading…',
       notSignedIn: 'You are not signed in.',
       signIn: 'Sign in',
-      remaining: 'Remaining',
-      perDay: 'left today',
+      remaining: 'Balance',
+      perDay: 'judgments left',
       email: 'Email',
       plan: 'Plan',
       keys: 'API keys',
@@ -61,8 +68,15 @@ const copy = lang === 'zh'
       active: 'Active',
       logout: 'Sign out',
       confirmRevoke: 'Revoke this key? Any program using it stops working immediately.',
-      usageTitle: 'Usage',
-      used: 'used',
+      ledger: 'Ledger',
+      ledNone: 'No entries yet.',
+      ledTime: 'Time',
+      ledKind: 'Type',
+      ledAmount: 'Amount',
+      kindSignup: 'Signup credit',
+      kindJudge: 'Judgment',
+      kindTopup: 'Top-up',
+      spent: 'Total spent',
     };
 ---
 
@@ -81,7 +95,11 @@ const copy = lang === 'zh'
           <div><dt>{copy.plan}</dt><dd id="f-plan">—</dd></div>
           <div>
             <dt>{copy.remaining}</dt>
-            <dd><b id="f-remaining">—</b> <span>{copy.perDay}</span></dd>
+            <dd><b id="f-remaining">—</b> <span id="f-left"></span></dd>
+          </div>
+          <div>
+            <dt>{copy.spent}</dt>
+            <dd><b id="f-spent">—</b></dd>
           </div>
         </dl>
 
@@ -104,12 +122,23 @@ const copy = lang === 'zh'
           </div>
           <p class="acct__newkey" id="newkey" hidden></p>
         </div>
+
+        <div class="acct__keys">
+          <h2>{copy.ledger}</h2>
+          <p class="acct__none" id="led-none">{copy.ledNone}</p>
+          <table class="acct__table" id="led-table" hidden>
+            <thead>
+              <tr><th>{copy.ledTime}</th><th>{copy.ledKind}</th><th>{copy.ledAmount}</th></tr>
+            </thead>
+            <tbody id="led-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
 </BaseLayout>
 
-<script define:vars={{ copy, signInPath: `/${lang}/login/` }}>
+<script define:vars={{ copy, signInPath: `/${lang}/login/`, locale: lang === 'zh' ? 'zh-CN' : 'en-US' }}>
   const msg = document.getElementById('msg');
   const body = document.getElementById('body');
 
@@ -191,13 +220,68 @@ const copy = lang === 'zh'
       body.hidden = false;
       document.getElementById('f-email').textContent = esc(data.user.email);
       document.getElementById('f-plan').textContent = esc(data.user.plan);
-      const rem = data.remaining || {};
+      const bal = data.credit || {};
       document.getElementById('f-remaining').textContent =
-        rem.day == null ? '∞' : esc(rem.day);
+        bal.usd == null ? '—' : `$${esc(bal.usd)}`;
+      document.getElementById('f-left').textContent =
+        bal.judgmentsLeft == null ? '' : `${esc(bal.judgmentsLeft)} ${copy.perDay}`;
+      document.getElementById('f-spent').textContent =
+        data.spentCents == null ? '—' : `$${esc((data.spentCents / 100).toFixed(2))}`;
       renderKeys(data.keys);
+      loadLedger();
     } catch {
       showSignedOut();
     }
+  }
+
+  /** 消费明细：正数入账、负数消费 */
+  function renderLedger(entries) {
+    const table = document.getElementById('led-table');
+    const none = document.getElementById('led-none');
+    const tb = document.getElementById('led-body');
+    tb.replaceChildren();
+
+    if (!entries || entries.length === 0) {
+      none.hidden = false; table.hidden = true; return;
+    }
+    none.hidden = true; table.hidden = false;
+
+    const kindLabel = (k) =>
+      ({ signup_credit: copy.kindSignup, judge: copy.kindJudge, topup: copy.kindTopup }[k] || k);
+
+    for (const e of entries) {
+      const tr = document.createElement('tr');
+
+      const tdTime = document.createElement('td');
+      // 用本地时区展示：toISOString() 会给 UTC，中国用户看到的时间会偏 8 小时
+      tdTime.textContent = e.ts
+        ? new Date(e.ts).toLocaleString(locale, {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit',
+          })
+        : '—';
+
+      const tdKind = document.createElement('td');
+      tdKind.textContent = kindLabel(e.kind);
+
+      const tdAmt = document.createElement('td');
+      const usd = (Math.abs(e.cents) / 100).toFixed(2);
+      tdAmt.textContent = (e.cents < 0 ? '−' : '+') + '$' + usd;
+      if (e.cents > 0) tdAmt.className = 'acct__credit-in';
+
+      tr.append(tdTime, tdKind, tdAmt);
+      tb.append(tr);
+    }
+  }
+
+  /** 明细要单独取一次（/me 不带流水） */
+  async function loadLedger() {
+    try {
+      const r = await fetch('/api/auth/ledger', { credentials: 'same-origin' });
+      if (!r.ok) return;
+      const d = await r.json();
+      renderLedger(d.entries);
+    } catch { /* 明细拿不到不影响主要信息 */ }
   }
 
   document.getElementById('issue').addEventListener('click', async (e) => {

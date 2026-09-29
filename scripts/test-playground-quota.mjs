@@ -4,7 +4,7 @@
  *
  * 用法：node scripts/test-playground-quota.mjs
  *
- * 会真�上游判定（消耗真实额度），但只调用必要的次数；默认用 25 次里的一部分。
+ * 会真实调用上游判定（消耗真实额度），但只调用必要的次数。
  * 上游不可达时相关断言会跳过而不是误报失败。
  */
 
@@ -12,7 +12,7 @@ import { spawn } from 'node:child_process';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { openAccounts, PLANS } from '../server/accounts.mjs';
+import { openAccounts, SIGNUP_CREDIT_CENTS } from '../server/accounts.mjs';
 
 const PORT = 8793;
 const dir = mkdtempSync(path.join(tmpdir(), 'jev-pg-'));
@@ -78,6 +78,9 @@ try {
   }
   console.log(`服务已启动 :${PORT}\n`);
 
+  // 上游判定是否可达：不可达时判定会失败并退回额度，扣减类断言应跳过而非误报失败。
+  let upstreamUp = false;
+
   console.log('鉴权');
   {
     const r = await call(validBody, { authorization: 'Bearer jev_totally_invalid' });
@@ -87,11 +90,13 @@ try {
     const body2 = await r2.json().catch(() => ({}));
     if (r2.status === 502 || body2.error === 'upstream') {
       skip('有效 key → 200', '上游判定不可达');
-      skip('响应带 remaining', '上游判定不可达');
+      skip('响应带 credit', '上游判定不可达');
+      skip('响应记录归属用户', '上游判定不可达');
     } else {
+      upstreamUp = true;
       ok('有效 key → 200', r2.status === 200, `得到 ${r2.status} ${JSON.stringify(body2).slice(0,120)}`);
-      ok('响应带 remaining', body2.remaining && typeof body2.remaining.day === 'number',
-         JSON.stringify(body2.remaining));
+      ok('响应带 credit', body2.credit && typeof body2.credit.cents === 'number',
+         JSON.stringify(body2.credit));
       ok('响应记录归属用户', body2.userId === user.id);
     }
   }
@@ -99,8 +104,13 @@ try {
   console.log('\n额度扣减');
   {
     const l2 = openAccounts(dbPath);
-    const used = l2.usage(user.id).day;
-    ok('用量已随调用递减额度', used === 1, `实际已用 ${used}`);
+    const used = l2.balance(user.id).cents;
+    if (upstreamUp) {
+      ok('余额已随调用扣减（500→499 美分）', used === 499, `实际余额 ${used}`);
+    } else {
+      // 上游不可用时判定失败已退回额度，余额应保持 500——这条顺带验证了退款路径。
+      ok('上游失败后退回额度（余额仍为 500）', used === 500, `实际余额 ${used}`);
+    }
     l2.close();
   }
 
@@ -108,16 +118,16 @@ try {
   {
     // 直接把剩余额度一次性用光，再打一次应被拒
     const l3 = openAccounts(dbPath);
-    const left = l3.remaining(user.id).day;
+    const left = l3.balance(user.id).judgmentsLeft;
     if (left > 0) l3.consume(user.id, left);
-    const after = l3.usage(user.id).day;
+    const after = l3.balance(user.id).cents;
     l3.close();
 
     const r = await call(validBody, { authorization: 'Bearer ' + key });
     const b = await r.json().catch(() => ({}));
     ok('额度用尽 → 429', r.status === 429, `得到 ${r.status}`);
-    ok('拒绝原因可读', /quota-exhausted/.test(b.error || ''), b.error);
-    ok('用尽后未误扣', after === PLANS.free.day, `用量 ${after}`);
+    ok('拒绝原因可读', /insufficient_credit/.test(b.error || ''), b.error);
+    ok('用尽后未误扣', after === 0, `余额 ${after}`);
   }
 
   console.log('\n匿名路径不受影响');

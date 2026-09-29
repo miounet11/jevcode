@@ -113,12 +113,12 @@ try {
     const me = await get('/v1/me', key);
     const mb = await me.json().catch(() => ({}));
     ok('/v1/me → 200', me.status === 200, `得到 ${me.status}`);
-    ok('返回额度 25', mb.remaining && mb.remaining.day === 25, JSON.stringify(mb.remaining));
+    ok('返回注册赠送 $5', mb.credit && mb.credit.cents === 500, JSON.stringify(mb.credit));
 
     const us = await get('/v1/usage', key);
     const ub = await us.json().catch(() => ({}));
     ok('/v1/usage → 200', us.status === 200, `得到 ${us.status}`);
-    ok('usage 含 events 数组', Array.isArray(ub.events));
+    ok('usage 含 entries 数组', Array.isArray(ub.entries));
   }
 
   console.log('\n/v1/judge 判定（真实上游）');
@@ -137,12 +137,12 @@ try {
          typeof b.answers?.q1?.noul === 'number', JSON.stringify(b.answers));
       ok('响应含 model', typeof b.model === 'string', String(b.model));
       ok('响应含 id', typeof b.id === 'string' && b.id.length === 12, String(b.id));
-      ok('响应带 remaining=24', b.remaining && b.remaining.day === 24, JSON.stringify(b.remaining));
+      ok('响应带 credit=499', b.credit && b.credit.cents === 499, JSON.stringify(b.credit));
       judgedId = b.id || '';
 
       const me = await get('/v1/me', key);
       const mb = await me.json();
-      ok('库里用量已记为 1', mb.usage && mb.usage.day === 1, JSON.stringify(mb.usage));
+      ok('库里已扣 1 美分', mb.credit && mb.credit.cents === 499, JSON.stringify(mb.credit));
     }
   }
 
@@ -150,7 +150,7 @@ try {
   {
     // 直接打满额度，验证 429 与 retry-after
     const l = openAccounts(dbPath);
-    const left = l.remaining(user.id).day;
+    const left = l.balance(user.id).judgmentsLeft;
     if (left > 0) l.consume(user.id, left);
     l.close();
 
@@ -162,7 +162,7 @@ try {
 
     const me = await get('/v1/me', key);
     const mb = await me.json();
-    ok('用尽后未误增用量', mb.usage.day === 25, JSON.stringify(mb.usage));
+    ok('用尽后余额为 0', mb.credit && mb.credit.cents === 0, JSON.stringify(mb.credit));
   }
 
   console.log('\n上游失败必须退款');
@@ -170,7 +170,7 @@ try {
     // 用独立用户（额度干净），以必然失败的 choice 题型触发上游报错，
     // 验证额度被退回。若上游对 choice 的行为变了，本段整体跳过。
     const l = openAccounts(dbPath);
-    const before = l.usage(user2.id).day;
+    const before = l.balance(user2.id).cents;
     l.close();
 
     const r = await post('/v1/judge', {
@@ -185,7 +185,7 @@ try {
       skip('上游失败 → 非 200 并退款', '上游未配置，无法触发');
     } else {
       const l2 = openAccounts(dbPath);
-      const after = l2.usage(user2.id).day;
+      const after = l2.balance(user2.id).cents;
       l2.close();
       ok('上游失败返回错误', r.status >= 400, `得到 ${r.status}`);
       ok('失败后额度已退回（用量未增加）', after === before, `前 ${before} 后 ${after}`);
