@@ -13,8 +13,13 @@ REPO="/Volumes/MobileDrive/devpc/jevcode"
 LOG_DIR="$REPO/.research/pipeline-logs"
 # macOS cron 的默认 PATH 只有 /usr/bin:/bin，找不到 homebrew 装的 node/npm/gh。
 # 显式补全，并额外兜底常见安装位置（Intel mac 为 /usr/local/bin）。
-export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-CRON_LINE="30 9 * * * cd $REPO && PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin bash scripts/pipeline-cron.sh >> $LOG_DIR/cron.log 2>&1"
+#
+# /usr/bin/git 是 xcode-select 的转发器：Xcode 一升级、而许可只同意到旧版本时，
+# 它就直接打印 "You have not agreed to the Xcode license agreements" 并退出 69。
+# 2026-09-29 Xcode 升到 27.0（许可仍停在 26.3）正是如此，当天 cron 因此崩掉。
+# CommandLineTools 自带的 git 不走这条转发、不受许可影响，实测可用，故前置兜底。
+export PATH="/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+CRON_LINE="30 9 * * * cd $REPO && PATH=/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin bash scripts/pipeline-cron.sh >> $LOG_DIR/cron.log 2>&1"
 
 if [[ "${1:-}" == "--install" ]]; then
   # 幂等安装
@@ -100,6 +105,17 @@ for bin in node npm git gh; do
     FAILED=1
   fi
 done
+
+# 光有 git 不够，得能真正跑起来：Xcode 许可未同意时 /usr/bin/git 存在但一调用
+# 就退出 69。命令行存在而不可用 = 后面每一步静默失败（`git status` 空输出还会
+# 让干净度检查误判为「工作区干净」而放行），所以这里做一次功能性探测。
+if [[ "${FAILED:-0}" != "1" ]]; then
+  if ! GIT_VER="$(git --version 2>&1)"; then
+    echo "[cron] 致命：git 存在但不可用 → ${GIT_VER}"
+    echo "[cron] 提示：若为 Xcode 许可，请运行 sudo xcodebuild -license"
+    FAILED=1
+  fi
+fi
 if [[ ! -f .env ]]; then
   echo "[cron] 致命：.env 不存在"
   FAILED=1
@@ -152,7 +168,16 @@ else
 fi
 
 # 只在干净工作区跑（避免把手工未提交改动卷进自动发布）
-if [[ -n "$(git status --porcelain)" ]]; then
+# 必须显式判退出码：git 失败时命令替换为空串，`-n ""` 为假 → 被误判成「工作区
+# 干净」而放行，一路跑到管线内部才炸（2026-09-29 Xcode 许可故障即由此进入，
+# 表现为 cron 崩在 pipeline.mjs:308 而不是在这一步干净地拦下）。
+git_status_out=""
+if ! git_status_out="$(git status --porcelain 2>&1)"; then
+  echo "[cron] 致命：git status 无法执行，工作区状态未知 → ${git_status_out}"
+  mark ALERT "管线前置检查失败：git status 无法执行（工作区状态未知）"
+  exit 1
+fi
+if [[ -n "$git_status_out" ]]; then
   echo "[cron] 工作区不干净，跳过本轮（避免卷入手工改动）"
   mark SKIPPED "管线跳过整轮：工作区不干净（存在未提交改动）"
   streak_check
