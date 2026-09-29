@@ -1,0 +1,260 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, type Lang } from '../../i18n/ui';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const path = `/${lang}/account/`;
+
+const copy = lang === 'zh'
+  ? {
+      title: '我的账户',
+      lead: '查看额度、签发与吊销 API Key。',
+      loading: '加载中…',
+      notSignedIn: '尚未登录。',
+      signIn: '去登录',
+      remaining: '剩余额度',
+      perDay: '今日剩余',
+      email: '邮箱',
+      plan: '套餐',
+      keys: 'API Key',
+      noKeys: '还没有 Key。',
+      issue: '签发新 Key',
+      issuing: '签发中…',
+      newKeyWarn: '这个 Key 只显示这一次，请立刻保存。',
+      prefix: '前缀',
+      label: '备注',
+      created: '创建于',
+      revoke: '吊销',
+      revoked: '已吊销',
+      active: '可用',
+      logout: '登出',
+      confirmRevoke: '确认吊销这个 Key？使用它的程序会立刻失效。',
+      usageTitle: '用量',
+      used: '已用',
+    }
+  : {
+      title: 'Your account',
+      lead: 'See your allowance, and issue or revoke API keys.',
+      loading: 'Loading…',
+      notSignedIn: 'You are not signed in.',
+      signIn: 'Sign in',
+      remaining: 'Remaining',
+      perDay: 'left today',
+      email: 'Email',
+      plan: 'Plan',
+      keys: 'API keys',
+      noKeys: 'No keys yet.',
+      issue: 'Issue new key',
+      issuing: 'Issuing…',
+      newKeyWarn: 'This key is shown once. Save it now.',
+      prefix: 'Prefix',
+      label: 'Label',
+      created: 'Created',
+      revoke: 'Revoke',
+      revoked: 'Revoked',
+      active: 'Active',
+      logout: 'Sign out',
+      confirmRevoke: 'Revoke this key? Any program using it stops working immediately.',
+      usageTitle: 'Usage',
+      used: 'used',
+    };
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+  <section class="section">
+    <div class="wrap acct">
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{copy.title}</p>
+      <h1>{copy.title}</h1>
+      <p class="acct__lead">{copy.lead}</p>
+
+      <p class="acct__msg" id="msg" role="status" aria-live="polite">{copy.loading}</p>
+
+      <div id="body" hidden>
+        <dl class="acct__facts">
+          <div><dt>{copy.email}</dt><dd id="f-email">—</dd></div>
+          <div><dt>{copy.plan}</dt><dd id="f-plan">—</dd></div>
+          <div>
+            <dt>{copy.remaining}</dt>
+            <dd><b id="f-remaining">—</b> <span>{copy.perDay}</span></dd>
+          </div>
+        </dl>
+
+        <div class="acct__keys">
+          <h2>{copy.keys}</h2>
+          <p class="acct__none" id="keys-none">{copy.noKeys}</p>
+          <table class="acct__table" id="keys-table" hidden>
+            <thead>
+              <tr>
+                <th>{copy.prefix}</th><th>{copy.label}</th>
+                <th>{copy.created}</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="keys-body"></tbody>
+          </table>
+
+          <div class="acct__actions">
+            <button class="btn btn--primary" type="button" id="issue">{copy.issue}</button>
+            <button class="btn btn--ghost" type="button" id="logout">{copy.logout}</button>
+          </div>
+          <p class="acct__newkey" id="newkey" hidden></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ copy, signInPath: `/${lang}/login/` }}>
+  const msg = document.getElementById('msg');
+  const body = document.getElementById('body');
+
+  const esc = (s) => String(s == null ? '' : s);
+
+  function showSignedOut() {
+    msg.textContent = copy.notSignedIn;
+    const a = document.createElement('a');
+    a.href = signInPath;
+    a.textContent = copy.signIn;
+    msg.append(' ', a);
+  }
+
+  function renderKeys(keys) {
+    const table = document.getElementById('keys-table');
+    const none = document.getElementById('keys-none');
+    const tb = document.getElementById('keys-body');
+    tb.replaceChildren();
+
+    if (!keys || keys.length === 0) {
+      none.hidden = false; table.hidden = true; return;
+    }
+    none.hidden = true; table.hidden = false;
+
+    for (const k of keys) {
+      const tr = document.createElement('tr');
+
+      const tdPrefix = document.createElement('td');
+      const code = document.createElement('code');
+      code.textContent = esc(k.prefix) + '…';
+      tdPrefix.append(code);
+
+      const tdLabel = document.createElement('td');
+      tdLabel.textContent = k.label ? esc(k.label) : '—';
+
+      const tdCreated = document.createElement('td');
+      tdCreated.textContent = k.createdAt ? new Date(k.createdAt).toISOString().slice(0, 10) : '—';
+
+      const tdAct = document.createElement('td');
+      if (k.revokedAt) {
+        const span = document.createElement('span');
+        span.className = 'acct__revoked';
+        span.textContent = copy.revoked;
+        tdAct.append(span);
+      } else {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn btn--ghost acct__revoke';
+        b.textContent = copy.revoke;
+        b.addEventListener('click', async () => {
+          if (!window.confirm(copy.confirmRevoke)) return;
+          b.disabled = true;
+          try {
+            const r = await fetch('/api/keys/revoke', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify({ id: k.id }),
+            });
+            if (r.ok) { await load(); return; }
+            b.disabled = false;
+          } catch { b.disabled = false; }
+        });
+        tdAct.append(b);
+      }
+
+      tr.append(tdPrefix, tdLabel, tdCreated, tdAct);
+      tb.append(tr);
+    }
+  }
+
+  async function load() {
+    try {
+      const res = await fetch('/api/auth/me', { credentials: 'same-origin' });
+      if (res.status === 401) { showSignedOut(); return; }
+      const data = await res.json();
+
+      msg.textContent = '';
+      body.hidden = false;
+      document.getElementById('f-email').textContent = esc(data.user.email);
+      document.getElementById('f-plan').textContent = esc(data.user.plan);
+      const rem = data.remaining || {};
+      document.getElementById('f-remaining').textContent =
+        rem.day == null ? '∞' : esc(rem.day);
+      renderKeys(data.keys);
+    } catch {
+      showSignedOut();
+    }
+  }
+
+  document.getElementById('issue').addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    const label = btn.textContent;
+    btn.textContent = copy.issuing;
+    try {
+      const r = await fetch('/api/keys', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ label: 'web' }),
+      });
+      const d = await r.json().catch(() => ({}));
+      const box = document.getElementById('newkey');
+      if (r.ok && d.key) {
+        box.hidden = false;
+        box.replaceChildren();
+        const warn = document.createElement('strong');
+        warn.textContent = copy.newKeyWarn;
+        const code = document.createElement('code');
+        code.textContent = d.key;
+        box.append(warn, code);
+        await load();
+      }
+    } finally {
+      btn.disabled = false;
+      btn.textContent = label;
+    }
+  });
+
+  document.getElementById('logout').addEventListener('click', async () => {
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+    window.location.assign(signInPath);
+  });
+
+  load();
+</script>
+
+<style>
+  .acct { max-width: 720px; }
+  .acct h1 { font-size: clamp(30px, 4vw, 42px); letter-spacing: -0.04em; margin: 12px 0; }
+  .acct__lead { color: var(--fg-muted); }
+  .acct__msg { color: var(--fg-muted); min-height: 1.4em; }
+  .acct__facts { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin: 18px 0 28px; }
+  .acct__facts dt { color: var(--fg-dim); font-size: 13px; }
+  .acct__facts dd { margin: 4px 0 0; }
+  .acct__facts span { font-size: 13px; color: var(--fg-dim); }
+  .acct__keys { border-top: 1px solid var(--border); padding-top: 20px; }
+  .acct__keys h2 { font-size: 18px; }
+  .acct__table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .acct__table th, .acct__table td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); }
+  .acct__table th { color: var(--fg-dim); font-weight: 500; }
+  .acct__none { color: var(--fg-dim); font-size: 14px; }
+  .acct__actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .acct__newkey { margin-top: 14px; display: grid; gap: 6px; font-size: 14px; }
+  .acct__newkey code { word-break: break-all; }
+  .acct__revoked { color: var(--fg-dim); font-size: 13px; }
+</style>

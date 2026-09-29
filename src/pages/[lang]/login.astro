@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, type Lang } from '../../i18n/ui';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const path = `/${lang}/login/`;
+
+const copy = lang === 'zh'
+  ? {
+      title: '登录',
+      lead: '登录后可获得每日额度、签发 API Key、查看用量。',
+      email: '邮箱',
+      password: '密码',
+      signIn: '登录',
+      signUp: '注册',
+      toSignUp: '还没有账号？注册',
+      toSignIn: '已有账号？登录',
+      working: '处理中…',
+      needFields: '请填写邮箱和密码。',
+      failed: '登录失败，请检查邮箱与密码。',
+      weakPw: '密码至少 8 位。',
+      dupEmail: '该邮箱已注册。',
+      signUpOk: '注册成功，正在进入账户页…',
+      goAccount: '去账户页',
+    }
+  : {
+      title: 'Sign in',
+      lead: 'Sign in to get a daily allowance, issue API keys, and see your usage.',
+      email: 'Email',
+      password: 'Password',
+      signIn: 'Sign in',
+      signUp: 'Create account',
+      toSignUp: 'No account yet? Create one',
+      toSignIn: 'Already have an account? Sign in',
+      working: 'Working…',
+      needFields: 'Please fill in both email and password.',
+      failed: 'Sign-in failed. Check your email and password.',
+      weakPw: 'Password must be at least 8 characters.',
+      dupEmail: 'That email is already registered.',
+      signUpOk: 'Account created. Taking you to your account…',
+      goAccount: 'Go to account',
+    };
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+  <section class="section">
+    <div class="wrap auth">
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{copy.title}</p>
+      <h1>{copy.title}</h1>
+      <p class="auth__lead">{copy.lead}</p>
+
+      <form class="auth__form" id="auth-form" data-mode="login" novalidate>
+        <label class="auth__field">
+          <span>{copy.email}</span>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </label>
+        <label class="auth__field">
+          <span>{copy.password}</span>
+          <input id="password" name="password" type="password"
+                 autocomplete="current-password" minlength="8" required />
+        </label>
+
+        <div class="auth__actions">
+          <button class="btn btn--primary" type="submit" id="submit">{copy.signIn}</button>
+          <button class="btn btn--ghost" type="button" id="toggle">{copy.toSignUp}</button>
+        </div>
+        <p class="auth__msg" id="msg" role="status" aria-live="polite"></p>
+        <a class="auth__link" id="account-link" href={`/${lang}/account/`} hidden>{copy.goAccount}</a>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ copy, accountPath: `/${lang}/account/` }}>
+  const form = document.getElementById('auth-form');
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const submit = document.getElementById('submit');
+  const toggle = document.getElementById('toggle');
+  const msg = document.getElementById('msg');
+  const accountLink = document.getElementById('account-link');
+
+  let mode = 'login';
+
+  function render() {
+    const isLogin = mode === 'login';
+    submit.textContent = isLogin ? copy.signIn : copy.signUp;
+    toggle.textContent = isLogin ? copy.toSignUp : copy.toSignIn;
+    password.setAttribute('autocomplete', isLogin ? 'current-password' : 'new-password');
+  }
+  render();
+
+  toggle.addEventListener('click', () => {
+    mode = mode === 'login' ? 'register' : 'login';
+    msg.textContent = '';
+    render();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msg.textContent = '';
+
+    const em = email.value.trim();
+    const pw = password.value;
+    if (!em || !pw) { msg.textContent = copy.needFields; return; }
+    if (mode === 'register' && pw.length < 8) { msg.textContent = copy.weakPw; return; }
+
+    submit.disabled = true;
+    const label = submit.textContent;
+    submit.textContent = copy.working;
+
+    try {
+      const res = await fetch(`/api/auth/${mode === 'login' ? 'login' : 'register'}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ email: em, password: pw }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        if (mode === 'register') {
+          msg.textContent = copy.signUpOk;
+        }
+        accountLink.hidden = false;
+        window.location.assign(accountPath);
+        return;
+      }
+
+      // 服务端错误按类型给出可读文案，不直接抛英文原文
+      if (res.status === 400 && /already registered/i.test(data.error || '')) {
+        msg.textContent = copy.dupEmail;
+      } else if (res.status === 400 && /password/i.test(data.error || '')) {
+        msg.textContent = copy.weakPw;
+      } else {
+        msg.textContent = copy.failed;
+      }
+    } catch {
+      msg.textContent = copy.failed;
+    } finally {
+      submit.disabled = false;
+      submit.textContent = label;
+    }
+  });
+</script>
+
+<style>
+  .auth { max-width: 460px; }
+  .auth h1 { font-size: clamp(30px, 4vw, 42px); letter-spacing: -0.04em; margin: 12px 0; }
+  .auth__lead { color: var(--fg-muted); margin-bottom: 22px; }
+  .auth__form { display: grid; gap: 14px; }
+  .auth__field { display: grid; gap: 6px; font-size: 14px; color: var(--fg-muted); }
+  .auth__field input {
+    padding: 10px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    background: var(--bg-elev);
+    color: var(--fg);
+    font: inherit;
+  }
+  .auth__actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .auth__msg { min-height: 1.4em; margin: 0; color: var(--fg-muted); font-size: 14px; }
+  .auth__link { font-size: 14px; }
+</style>
