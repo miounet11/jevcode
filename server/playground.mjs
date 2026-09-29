@@ -25,12 +25,47 @@ const MAX_QUESTIONS = 6;
 const ACCOUNTS_DB = process.env.PLAYGROUND_ACCOUNTS_DB || '';
 
 let accounts = null;
+let auth = null;
 if (ACCOUNTS_DB) {
   const { openAccounts } = await import('./accounts.mjs');
+  const { withSessions } = await import('./auth.mjs');
   accounts = openAccounts(ACCOUNTS_DB);
+  auth = withSessions(accounts);
 }
 
 const hits = new Map();
+
+const SESSION_COOKIE = 'jev_session';
+
+/** 从 Cookie 头取会话 token */
+function sessionToken(req) {
+  const raw = req.headers.cookie || '';
+  for (const part of raw.split(';')) {
+    const [k, ...v] = part.trim().split('=');
+    if (k === SESSION_COOKIE) return decodeURIComponent(v.join('='));
+  }
+  return '';
+}
+
+/** 会话 Cookie。HttpOnly + SameSite=Lax：前端脚本读不到，跨站请求不带上。 */
+function setSessionCookie(res, token, expiresAt) {
+  const maxAge = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
+  res.setHeader('set-cookie',
+    `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}`);
+}
+
+function clearSessionCookie(res) {
+  res.setHeader('set-cookie', `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`);
+}
+
+/** 当前登录用户；未登录返回 null */
+function currentUser(req) {
+  if (!auth) return null;
+  const t = sessionToken(req);
+  if (!t) return null;
+  const s = auth.resolveSession(t);
+  return s ? { user: s.user, session: s } : null;
+}
 
 function clientIp(req) {
   const fwd = req.headers['x-forwarded-for'];
@@ -180,6 +215,124 @@ const server = createServer(async (req, res) => {
       return;
     }
 
+    // ---- 账号：注册 / 登录 / 登出 / 我是谁 ----
+    if (url.pathname.startsWith('/api/auth/')) {
+      if (!auth) {
+        send(res, 503, { error: 'accounts are not configured' });
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/auth/register') {
+        const b = await readBody(req);
+        const r = auth.register(String(b.email || ''), String(b.password || ''));
+        if (!r.ok) {
+          send(res, 400, { error: r.reason });
+          return;
+        }
+        const login = auth.login(String(b.email || '').trim().toLowerCase(), String(b.password || ''));
+        if (!login.ok) {
+          send(res, 500, { error: 'registered but login failed' });
+          return;
+        }
+        setSessionCookie(res, login.token, login.expiresAt);
+        send(res, 201, {
+          user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
+          remaining: accounts.remaining(r.user.id),
+        });
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/auth/login') {
+        const b = await readBody(req);
+        const r = auth.login(String(b.email || ''), String(b.password || ''));
+        if (!r.ok) {
+          // 统一 401，不区分账号不存在与密码错误
+          send(res, 401, { error: r.reason });
+          return;
+        }
+        setSessionCookie(res, r.token, r.expiresAt);
+        send(res, 200, {
+          user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
+          remaining: accounts.remaining(r.user.id),
+        });
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/auth/logout') {
+        auth.logout(sessionToken(req));
+        clearSessionCookie(res);
+        send(res, 200, { ok: true });
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/auth/me') {
+        const me = currentUser(req);
+        if (!me) {
+          send(res, 401, { error: 'not signed in' });
+          return;
+        }
+        send(res, 200, {
+          user: { id: me.user.id, email: me.user.email, plan: me.user.plan },
+          remaining: accounts.remaining(me.user.id),
+          keys: accounts.listKeys(me.user.id).map((k) => ({
+            id: k.id, prefix: k.prefix, label: k.label,
+            createdAt: k.created_at, revokedAt: k.revoked_at,
+          })),
+        });
+        return;
+      }
+
+      send(res, 404, { error: 'not found' });
+      return;
+    }
+
+    // ---- 控制台：签发 / 吊销 API key（需登录）----
+    if (req.method === 'POST' && url.pathname === '/api/keys') {
+      if (!auth) {
+        send(res, 503, { error: 'accounts are not configured' });
+        return;
+      }
+      const me = currentUser(req);
+      if (!me) {
+        send(res, 401, { error: 'not signed in' });
+        return;
+      }
+      const b = await readBody(req);
+      const label = String(b.label || '').slice(0, 64);
+      const { key, record } = accounts.issueKey(me.user.id, label);
+      send(res, 201, {
+        // 明文 key 只在此出现一次，服务端只留 sha256
+        key,
+        id: record.id,
+        prefix: record.prefix,
+        label: record.label,
+        notice: 'Store this key now. It cannot be shown again.',
+      });
+      return;
+    }
+
+    if (req.method === 'POST' && url.pathname === '/api/keys/revoke') {
+      if (!auth) {
+        send(res, 503, { error: 'accounts are not configured' });
+        return;
+      }
+      const me = currentUser(req);
+      if (!me) {
+        send(res, 401, { error: 'not signed in' });
+        return;
+      }
+      const b = await readBody(req);
+      const id = String(b.id || '');
+      // 只能吊销自己的 key
+      const mine = accounts.listKeys(me.user.id).some((k) => k.id === id);
+      if (!mine) {
+        send(res, 404, { error: 'no such key for this account' });
+        return;
+      }
+      send(res, 200, { ok: accounts.revokeKey(id) });
+      return;
+    }
+
     if (req.method === 'POST' && url.pathname === '/api/try') {
       if (!KEY) {
         send(res, 503, { error: 'playground key is not configured' });
@@ -194,18 +347,26 @@ const server = createServer(async (req, res) => {
         return;
       }
 
-      // 鉴权分两路：带了 key 的走账号额度（跨 IP 生效，换 IP 刷不掉）；
-      // 没带的退回匿名 IP 限频，保持试用可用。
-      const auth = req.headers.authorization || '';
-      const presented = auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
+      // 鉴权三路：会话 Cookie（网页登录）→ Bearer API key（程序调用）→ 匿名 IP 限频。
+      // 前两者走账号额度（跨 IP 生效，换 IP 刷不掉），第三条保持试用可用。
       let userId = null;
-      if (presented) {
+      const session = currentUser(req);
+      // 注意别命名为 auth：会遮蔽模块级的 auth（withSessions 返回值）。
+      const authHeader = req.headers.authorization || '';
+      const presented = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+
+      if (session) {
+        userId = session.user.id;
+      } else if (presented) {
         const resolved = accounts ? accounts.resolveKey(presented) : null;
         if (!resolved) {
           send(res, 401, { error: 'invalid api key' });
           return;
         }
         userId = resolved.user.id;
+      }
+
+      if (userId) {
         const quota = accounts.consume(userId, 1);
         if (!quota.ok) {
           res.writeHead(429, {
