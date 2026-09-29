@@ -31,6 +31,25 @@ test('verifyPassword 对畸形输入不抛异常、一律返回 false', () => {
   }
 });
 
+test('伪造的空/短哈希不得通过任意口令（防认证绕过）', () => {
+  // 空哈希会让 expected 与 scrypt 结果都是零长 buffer，timingSafeEqual 判等
+  // → 任意口令通过。这条曾真实存在，靠长度校验挡住。
+  const forged = [
+    'scrypt$32768$8$1$$',              // 空盐空哈希
+    'scrypt$32768$8$1$c2FsdA$',        // 空哈希
+    'scrypt$32768$8$1$$aGFzaA',        // 空盐
+    'scrypt$32768$8$1$c2FsdA$aGFzaA',  // 哈希长度不足
+  ];
+  for (const f of forged) {
+    assert.equal(verifyPassword('any-password-at-all', f), false, `伪造记录应被拒: ${f}`);
+    assert.equal(verifyPassword('', f), false, `空口令也不得通过: ${f}`);
+  }
+  // 正规 hash 不受影响
+  const good = hashPassword('correct horse');
+  assert.equal(verifyPassword('correct horse', good), true);
+  assert.equal(verifyPassword('wrong horse', good), false);
+});
+
 test('注册 → 登录 → 会话可用', () => {
   const { auth } = fresh();
   const reg = auth.register('User@Example.com', 'a-good-password');

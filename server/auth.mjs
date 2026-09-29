@@ -33,15 +33,24 @@ export function verifyPassword(password, stored) {
   const parts = stored.split('$');
   if (parts.length !== 6 || parts[0] !== 'scrypt') return false;
   const [, N, r, p, saltB64, hashB64] = parts;
+
+  // 长度与盐都必须校验。不校验的话，伪造的空哈希（如 scrypt$N$r$p$$）会让
+  // expected 变成零长 buffer，scryptSync 也返回零长，两个空 buffer 被
+  // timingSafeEqual 判等 → 任意口令都能通过。已用探针实测复现。
   let expected;
+  let salt;
   try {
     expected = Buffer.from(hashB64, 'base64url');
+    salt = Buffer.from(saltB64, 'base64url');
   } catch {
     return false;
   }
+  if (expected.length !== SCRYPT.keylen) return false;
+  if (salt.length === 0) return false;
+
   let actual;
   try {
-    actual = scryptSync(password, Buffer.from(saltB64, 'base64url'), expected.length, {
+    actual = scryptSync(password, salt, expected.length, {
       N: Number(N), r: Number(r), p: Number(p), maxmem: 128 * Number(N) * Number(r) * 2,
     });
   } catch {

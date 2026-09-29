@@ -26,11 +26,31 @@ const ACCOUNTS_DB = process.env.PLAYGROUND_ACCOUNTS_DB || '';
 
 let accounts = null;
 let auth = null;
+let otp = null;
 if (ACCOUNTS_DB) {
   const { openAccounts } = await import('./accounts.mjs');
   const { withSessions } = await import('./auth.mjs');
   accounts = openAccounts(ACCOUNTS_DB);
   auth = withSessions(accounts);
+
+  // 验证码登录：需要一条发信通道。没有通道就不启用该功能（端点返回 503），
+  // 但密码登录照常可用——不能因为邮件没配就把整个账号体系拖down。
+  const { makeMailer } = await import('./mailer.mjs');
+  let mailer = null;
+  try {
+    mailer = makeMailer();
+  } catch (err) {
+    console.error(`[mail] 通道配置有误，验证码登录已禁用：${err.message}`);
+  }
+  if (mailer) {
+    const { withOtp } = await import('./otp.mjs');
+    otp = withOtp(accounts, {
+      deliver: (email, code) => mailer.send(email, code),
+    });
+    console.log(`[mail] 验证码通道：${mailer.name}`);
+  } else {
+    console.log('[mail] 未配置发信通道，验证码登录不可用（密码登录不受影响）');
+  }
 }
 
 const hits = new Map();
@@ -350,6 +370,62 @@ const server = createServer(async (req, res) => {
     if (url.pathname.startsWith('/api/auth/')) {
       if (!auth) {
         send(res, 503, { error: 'accounts are not configured' });
+        return;
+      }
+
+      // 验证码登录：请求发码
+      if (req.method === 'POST' && url.pathname === '/api/auth/otp/request') {
+        if (!otp) {
+          send(res, 503, { error: 'code_login_unavailable', message: 'email delivery is not configured' });
+          return;
+        }
+        const b = await readBody(req);
+        const r = await otp.request(String(b.email || ''));
+        if (!r.ok) {
+          // 「太频繁」给 429 并带重试秒数，其余按 400（不区分邮箱是否存在）
+          if (r.reason === 'too soon') {
+            const secs = Math.max(1, Math.ceil((r.retryAfterMs || 0) / 1000));
+            res.writeHead(429, {
+              'content-type': 'application/json; charset=utf-8',
+              'retry-after': String(secs),
+              'cache-control': 'no-store',
+            });
+            res.end(JSON.stringify({ error: 'too_many_requests', message: `Please wait ${secs}s before requesting another code.` }));
+            return;
+          }
+          if (r.reason === 'too many requests') {
+            send(res, 429, { error: 'too_many_requests', message: 'Too many codes requested for this address. Try again later.' });
+            return;
+          }
+          if (/delivery failed/.test(r.reason)) {
+            send(res, 502, { error: 'delivery_failed', message: 'Could not send the code. Try again shortly.' });
+            return;
+          }
+          send(res, 400, { error: 'invalid_request', message: r.reason });
+          return;
+        }
+        send(res, 200, { ok: true, expiresAt: r.expiresAt });
+        return;
+      }
+
+      // 验证码登录：验证码换会话（首次自动建号）
+      if (req.method === 'POST' && url.pathname === '/api/auth/otp/verify') {
+        if (!otp) {
+          send(res, 503, { error: 'code_login_unavailable', message: 'email delivery is not configured' });
+          return;
+        }
+        const b = await readBody(req);
+        const r = otp.loginWithCode(String(b.email || ''), String(b.code || ''), auth);
+        if (!r.ok) {
+          send(res, 401, { error: 'invalid_code', message: 'The code is invalid or has expired.' });
+          return;
+        }
+        setSessionCookie(res, r.token, r.expiresAt);
+        send(res, 200, {
+          user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
+          remaining: accounts.remaining(r.user.id),
+          created: r.created,
+        });
         return;
       }
 
