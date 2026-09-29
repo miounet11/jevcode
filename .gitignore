@@ -26,12 +26,10 @@ data/builds/raw/
 .pipeline/
 
 # 会话工作产物（规划草稿含内网地址，曾在 main 上泄漏过，见提交记录）
-.clavue/plans/
-.clavue/runs/
-.clavue/coordination/
-.clavue/worktrees/
-.clavue/task/
-.clavue/settings.local.json
+# 整体忽略：此前逐条列举，Clavue 每新增一个子目录就会漏一个（journal/ 就是
+# 第 7 个漏网的），工作区因此变脏、管线连续跳过。.clavue/ 下当前无任何文件
+# 被 git 追踪，整体忽略不会丢东西。
+.clavue/
 
 # 管线运行日志（机器生成，不纳入版本控制）
 .research/pipeline-logs/
