@@ -20,6 +20,15 @@ const DATA = process.env.PLAYGROUND_DATA || '/var/www/jevcode/shared/runs';
 const HOUR_LIMIT = 20;
 const MAX_STATE = 4000;
 const MAX_QUESTIONS = 6;
+// 账号账本：未配置时服务照常跑，只是没有 key 鉴权（保留匿名 IP 限频）。
+// 配置后，带 key 的请求走账号额度，不带 key 的仍走匿名限频。
+const ACCOUNTS_DB = process.env.PLAYGROUND_ACCOUNTS_DB || '';
+
+let accounts = null;
+if (ACCOUNTS_DB) {
+  const { openAccounts } = await import('./accounts.mjs');
+  accounts = openAccounts(ACCOUNTS_DB);
+}
 
 const hits = new Map();
 
@@ -177,10 +186,6 @@ const server = createServer(async (req, res) => {
         return;
       }
       const ip = clientIp(req);
-      if (!allow(ip)) {
-        send(res, 429, { error: 'hourly limit reached' });
-        return;
-      }
       const body = await readBody(req);
       const state = String(body.state || '').trim().slice(0, MAX_STATE);
       const questions = cleanQuestions(body.questions);
@@ -188,7 +193,42 @@ const server = createServer(async (req, res) => {
         send(res, 400, { error: 'state and at least one valid question are required' });
         return;
       }
-      const result = await judge(state, questions);
+
+      // 鉴权分两路：带了 key 的走账号额度（跨 IP 生效，换 IP 刷不掉）；
+      // 没带的退回匿名 IP 限频，保持试用可用。
+      const auth = req.headers.authorization || '';
+      const presented = auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
+      let userId = null;
+      if (presented) {
+        const resolved = accounts ? accounts.resolveKey(presented) : null;
+        if (!resolved) {
+          send(res, 401, { error: 'invalid api key' });
+          return;
+        }
+        userId = resolved.user.id;
+        const quota = accounts.consume(userId, 1);
+        if (!quota.ok) {
+          res.writeHead(429, {
+            'content-type': 'application/json; charset=utf-8',
+            'cache-control': 'no-store',
+          });
+          res.end(JSON.stringify({ error: quota.reason, remaining: quota.remaining || {} }));
+          return;
+        }
+      } else if (!allow(ip)) {
+        send(res, 429, { error: 'hourly limit reached' });
+        return;
+      }
+
+      // 判定失败要把额度退回去——否则上游抖动会白扣用户的次数。
+      let result;
+      try {
+        result = await judge(state, questions);
+      } catch (err) {
+        if (userId && accounts) accounts.refund(userId, 1);
+        throw err;
+      }
+
       const id = randomBytes(9).toString('base64url').slice(0, 12).toLowerCase();
       const record = {
         id,
@@ -197,10 +237,14 @@ const server = createServer(async (req, res) => {
         questions,
         answers: result.answers || {},
         model: result.model || MODEL,
+        // 归属用户（匿名则为 null），供用量审计与后续计费对账
+        userId,
       };
       await mkdir(DATA, { recursive: true });
       await writeFile(path.join(DATA, `${id}.json`), JSON.stringify(record));
-      send(res, 200, record);
+      const payload = { ...record };
+      if (userId && accounts) payload.remaining = accounts.remaining(userId) || {};
+      send(res, 200, payload);
       return;
     }
 
