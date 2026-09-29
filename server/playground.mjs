@@ -215,6 +215,137 @@ const server = createServer(async (req, res) => {
       return;
     }
 
+    // ---- 正式 API（api.jevcode.ai）：只认 API key，不认 Cookie ----
+    // 与 /api/try 的分工：/api/try 是网页试用（Cookie 或匿名限频），
+    // /v1/* 是给程序调用的正式接口，必须带 Bearer key，且响应形态与上游一致。
+    if (url.pathname.startsWith('/v1/')) {
+      if (!KEY) {
+        send(res, 503, { error: 'service_unavailable', message: 'judgment backend is not configured' });
+        return;
+      }
+      if (!accounts) {
+        send(res, 503, { error: 'service_unavailable', message: 'accounts are not configured' });
+        return;
+      }
+
+      // 认证：只接受 Bearer key（不接受会话 Cookie）
+      const authHeader = req.headers.authorization || '';
+      const presented = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+      if (!presented) {
+        res.writeHead(401, {
+          'content-type': 'application/json; charset=utf-8',
+          'www-authenticate': 'Bearer realm="jevcode"',
+          'cache-control': 'no-store',
+        });
+        res.end(JSON.stringify({
+          error: 'unauthorized',
+          message: 'Missing API key. Send it as: Authorization: Bearer jev_...',
+        }));
+        return;
+      }
+      const resolved = accounts.resolveKey(presented);
+      if (!resolved) {
+        res.writeHead(401, {
+          'content-type': 'application/json; charset=utf-8',
+          'www-authenticate': 'Bearer realm="jevcode"',
+          'cache-control': 'no-store',
+        });
+        res.end(JSON.stringify({
+          error: 'invalid_api_key',
+          message: 'The API key is invalid or revoked.',
+        }));
+        return;
+      }
+      const userId = resolved.user.id;
+
+      if (req.method === 'GET' && url.pathname === '/v1/me') {
+        send(res, 200, {
+          user: { id: userId, email: resolved.user.email, plan: resolved.user.plan },
+          remaining: accounts.remaining(userId),
+          usage: accounts.usage(userId),
+        });
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/v1/usage') {
+        const since = Date.now() - 30 * 24 * 60 * 60 * 1000;
+        send(res, 200, {
+          remaining: accounts.remaining(userId),
+          usage: accounts.usage(userId),
+          events: accounts.events(userId, since).slice(0, 200),
+        });
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/v1/judge') {
+        const body = await readBody(req);
+        const state = String(body.state || '').trim().slice(0, MAX_STATE);
+        const questions = cleanQuestions(body.questions);
+        if (state.length < 8 || !questions) {
+          send(res, 400, {
+            error: 'invalid_request',
+            message: 'state (min 8 chars) and at least one valid question are required',
+          });
+          return;
+        }
+
+        const quota = accounts.consume(userId, 1);
+        if (!quota.ok) {
+          res.writeHead(429, {
+            'content-type': 'application/json; charset=utf-8',
+            'retry-after': '60',
+            'cache-control': 'no-store',
+          });
+          res.end(JSON.stringify({
+            error: 'quota_exceeded',
+            message: quota.reason,
+            remaining: quota.remaining || {},
+          }));
+          return;
+        }
+
+        let result;
+        try {
+          result = await judge(state, questions);
+        } catch (err) {
+          // 上游失败要退回额度，不能让用户白扣
+          accounts.refund(userId, 1);
+          const status = err.status && err.status >= 400 && err.status < 600 ? err.status : 502;
+          send(res, status === 401 || status === 403 ? 502 : status, {
+            error: 'upstream_error',
+            message: err.detail || 'judgment failed',
+            remaining: accounts.remaining(userId),
+          });
+          return;
+        }
+
+        const id = randomBytes(9).toString('base64url').slice(0, 12).toLowerCase();
+        const record = {
+          id,
+          createdAt: new Date().toISOString(),
+          state,
+          questions,
+          answers: result.answers || {},
+          model: result.model || MODEL,
+          userId,
+        };
+        await mkdir(DATA, { recursive: true });
+        await writeFile(path.join(DATA, `${id}.json`), JSON.stringify(record));
+
+        // 响应形态与上游一致（model + answers），额外附 id 与 remaining 便于对账
+        send(res, 200, {
+          id,
+          model: record.model,
+          answers: record.answers,
+          remaining: accounts.remaining(userId),
+        });
+        return;
+      }
+
+      send(res, 404, { error: 'not_found', message: `No such endpoint: ${url.pathname}` });
+      return;
+    }
+
     // ---- 账号：注册 / 登录 / 登出 / 我是谁 ----
     if (url.pathname.startsWith('/api/auth/')) {
       if (!auth) {

@@ -60,6 +60,14 @@ const searchUi = {
       </nav>
 
       <div class="site-header__actions">
+        <a
+          class="header-auth"
+          href={`/${lang}/login/`}
+          data-auth-link
+          data-account-label={t('nav.account')}
+          data-account-href={`/${lang}/account/`}
+        >{t('nav.signin')}</a>
+
         <button type="button" class="search-toggle" data-search-open aria-label={searchUi[lang].label} title={searchUi[lang].label}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
             <circle cx="11" cy="11" r="7"></circle>
@@ -204,6 +212,26 @@ const searchUi = {
       }
     }, 160);
   });
+
+  // 顶栏登录入口：已登录则显示「我的账户」，未登录显示「登录」。
+  // 静态站无法在建站时知道会话状态，只能客户端问一次；失败就保持默认的
+  // 「登录」——不能因为接口抖动让入口消失。
+  (async () => {
+    const link = document.querySelector<HTMLAnchorElement>('[data-auth-link]');
+    if (!link) return;
+    const accountLabel = link.dataset.accountLabel;
+    const accountHref = link.dataset.accountHref;
+    if (!accountLabel || !accountHref) return;
+    try {
+      const r = await fetch('/api/auth/me', { credentials: 'same-origin' });
+      if (r.ok) {
+        link.textContent = accountLabel;
+        link.href = accountHref;
+      }
+    } catch {
+      /* 保持默认的登录入口 */
+    }
+  })();
 </script>
 
 <style>
@@ -230,6 +258,25 @@ const searchUi = {
   .search-toggle:hover {
     color: var(--fg-muted);
     border-color: var(--accent-border);
+  }
+  .header-auth {
+    color: var(--fg-muted);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12.5px;
+    white-space: nowrap;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .header-auth:hover {
+    color: var(--fg);
+    border-color: var(--accent-border);
+  }
+  @media (max-width: 760px) {
+    .header-auth {
+      padding: 5px 9px;
+      font-size: 12px;
+    }
   }
   .search-toggle__label {
     max-width: 130px;

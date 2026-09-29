@@ -12,7 +12,7 @@
     "playground": "node server/playground.mjs",
     "check": "astro check",
     "test": "node --test scripts/test-accounts.mjs scripts/test-auth.mjs",
-    "test:e2e": "node scripts/test-auth-flow.mjs && node scripts/test-playground-quota.mjs",
+    "test:e2e": "node scripts/test-auth-flow.mjs && node scripts/test-playground-quota.mjs && node scripts/test-api-v1.mjs",
     "test:all": "npm test && npm run test:e2e && npm run check"
   },
   "dependencies": {
