@@ -10,7 +10,10 @@
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "playground": "node server/playground.mjs",
-    "check": "astro check"
+    "check": "astro check",
+    "test": "node --test scripts/test-accounts.mjs scripts/test-auth.mjs",
+    "test:e2e": "node scripts/test-auth-flow.mjs && node scripts/test-playground-quota.mjs",
+    "test:all": "npm test && npm run test:e2e && npm run check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",

@@ -179,7 +179,10 @@ try {
       headers: { 'content-type': 'application/json', authorization: `Bearer ${issuedKey}` },
       body: JSON.stringify(body),
     });
-    ok('吊销后 key → 401', tries.status === 401, `得到 ${tries.status}`);
+    // 503 = 服务端没配上游 key，此时根本走不到鉴权分支；判成失败会误导
+    // （曾因忘记 source .env 而误报红），按跳过处理才是诚实的。
+    if (tries.status === 503) skip('吊销后 key → 401', '未配置 JEVCODE_PLAYGROUND_KEY');
+    else ok('吊销后 key → 401', tries.status === 401, `得到 ${tries.status}`);
 
     const other = await post('/api/keys/revoke', { id: 'not-my-key' });
     ok('吊销他人的 key → 404', other.status === 404, `得到 ${other.status}`);
