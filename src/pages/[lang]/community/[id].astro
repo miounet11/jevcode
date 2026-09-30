@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { languages, useTranslations, type Lang } from '../../../i18n/ui';
+import { languages, useTranslations, pick, type Lang } from '../../../i18n/ui';
 import { pulseEntries, pulseCategories, categorize } from '../../../data/community';
+import * as cmCopy from '../../../i18n/pages/community';
 
 /**
  * 单条社区脉搏介绍页。
@@ -37,40 +38,22 @@ if (!entry) {
 const t = useTranslations(lang);
 const path = `/${lang}/community/${entry.id}/`;
 
-const copy =
-  lang === 'zh'
-    ? {
-        crumb: '社区脉搏',
-        metaAuthor: '作者',
-        metaDate: '发布时间',
-        metaViews: '阅读',
-        metaLikes: '点赞',
-        metaCategory: '分类',
-        post: '查看原推',
-        project: '项目链接',
-        outbound: '站外链接',
-        back: '← 返回社区脉搏',
-        more: '同类条目',
-        prev: '上一条',
-        next: '下一条',
-        note: '条目为英文原文摘录，筛选标准：显著传播量或附项目链接；经 Jev 批级相关性判定。本站未逐条核实其真实性。',
-      }
-    : {
-        crumb: 'Community pulse',
-        metaAuthor: 'Author',
-        metaDate: 'Posted',
-        metaViews: 'Views',
-        metaLikes: 'Likes',
-        metaCategory: 'Category',
-        post: 'View original',
-        project: 'Project',
-        outbound: 'External links',
-        back: '← Back to community pulse',
-        more: 'More in this category',
-        prev: 'Previous',
-        next: 'Next',
-        note: 'Entries are excerpts of original posts. Inclusion bar: significant engagement or an attached project link; batch relevance judged by Jev. We have not independently verified each claim.',
-      };
+const copy = {
+  crumb: pick(lang, cmCopy.title),
+  metaAuthor: pick(lang, cmCopy.metaAuthor),
+  metaDate: pick(lang, cmCopy.metaDate),
+  metaViews: pick(lang, cmCopy.metaViews),
+  metaLikes: pick(lang, cmCopy.metaLikes),
+  metaCategory: pick(lang, cmCopy.metaCategory),
+  post: pick(lang, cmCopy.post),
+  project: pick(lang, cmCopy.project),
+  outbound: pick(lang, cmCopy.outbound),
+  back: pick(lang, cmCopy.back),
+  more: pick(lang, cmCopy.more),
+  prev: pick(lang, cmCopy.prev),
+  next: pick(lang, cmCopy.next),
+  note: pick(lang, cmCopy.detailNote),
+};
 
 const fmt = (n: number) => (n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M` : n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
 const dateShort = (iso: string) => iso.slice(0, 10);
@@ -130,11 +113,11 @@ const pageTitle = `@${entry.screenName} · ${dateShort(entry.date)}`;
 
         <section class="pout" aria-label={copy.outbound}>
           <div class="pout__row">
-            <a class="btn btn--ghost" href={entry.url} target="_blank" rel="noopener noreferrer">
+            <a class="btn btn--ghost" href={entry.url} target="_blank" rel="nofollow noopener noreferrer">
               {copy.post} ↗
             </a>
             {entry.projectUrl && (
-              <a class="btn btn--ghost" href={entry.projectUrl} target="_blank" rel="noopener noreferrer">
+              <a class="btn btn--ghost" href={entry.projectUrl} target="_blank" rel="nofollow noopener noreferrer">
                 {copy.project} ↗
               </a>
             )}

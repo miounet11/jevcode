@@ -1,80 +1,60 @@
 ---
-title: System One models
-description: System One is a class of models built for fast, structured decisions. Jev is the first, and its output can be consumed by software directly.
+title: System One
+description: "JevCode's own page on System One. clavue-jev answers a state with typed questions: noul, confidence, and choice."
 section: concepts
 order: 10
-tags: ['system-one', 'architecture']
-source: docs.typesafe.ai/concepts/system-one
+tags: ['system-one', 'clavue-jev']
 ---
 
-## Definition
+## Written on JevCode
 
-System One models are a class of AI models built to make **fast, structured decisions that software can use directly**. Jev is TypeSafe's flagship model and the first System One model.
+This page is ours. It describes the call **this site** actually serves.
 
-The problem they solve: conventional language models emit free-form text, while software needs values of a known type. System One internalises that conversion — the question declares the output type, and the model answers within it.
+JevCode is the home of Jev. The model is **clavue-jev**, and we hold it as the best Jev in the world today. A System One call here means: one state, a handful of typed questions, and a response named `clavue-jev`.
 
-## Division of labour with System Two
+## The job
 
-The naming borrows from dual-process theory in cognitive science, and the meaning is direct:
+Software needs a value of a known type. A chat reply is a string you then have to parse. clavue-jev takes the type in the question, so the answer is already a float or one of your options.
 
-| | System One | System Two |
-| :--- | :--- | :--- |
-| Character | Fast, intuitive, focused | Slow, deliberate, multi-step |
-| Typical tasks | Judgement, classification, scoring, verification | Complex reasoning, long-horizon planning |
-| Latency | Low and predictable | Higher, grows with thinking length |
-| Output | Typed and constrained | Free-form text |
-| Cost | Low | High |
+Use it for the judgments you run all day: which queue, whether a line is in scope, whether to let an action through. When the work is open-ended writing, use a text model, and let clavue-jev decide whether that text is safe to act on.
 
-They are not substitutes. The typical production pattern is for System One to carry the overwhelming majority of high-frequency judgements, escalating to System Two or a human only when deep reasoning is genuinely needed.
-
-## A worked example: refund requests
-
-The flow in the official docs illustrates how the two layers cooperate:
-
-1. **Build a state** — pack the customer's message, the relevant transactions, and the refund policy into one state.
-2. **Ask in parallel** — ask three independent questions at once: whether a refund was requested, whether the evidence indicates a duplicate charge, and whether the policy supports a refund.
-3. **Combine in code** — combine the three answers with deterministic business checks, then route to action or review.
-
-Note the **independence** of the questions in step 2: they do not influence each other, which is the precondition for packing them into a single request.
-
-## Why typed output is the crux
-
-Because System One models return **typed, constrained outputs rather than free-form text**, your code can inspect and combine the answers into predictable workflows.
-
-Compare the integration complexity:
-
-```python
-# Conventional: parse, validate, handle format drift
-raw = llm.complete("Is this ticket about billing? Answer yes or no.")
-is_billing = raw.strip().lower().startswith("y")  # brittle, many edge cases
-
-# System One: the value is already typed
-response = client.system_one(
-    state=ticket,
-    questions={"billing": Noul(instructions="Is this ticket about billing?")},
-)
-is_billing = response.nouls["billing"].noul  # float, 0..1
-```
-
-The second returns a type within a known domain — a Choice is always one of your options, a Score lies within your levels, a Noul is always a float from 0 to 1.
-
-## Confidence: letting the model say "I don't know"
-
-System One answers also carry [confidence](/en/concepts/confidence/), so you can decide when to act and when to escalate to a person or a reasoning model. This is the foundation of trustworthy systems — **if a system cannot express honest uncertainty, it cannot be trusted**.
-
-## How to call it
-
-Through a client [SDK](/en/sdk/) or the HTTP API:
+## The call
 
 ```http
-POST https://api.typesafe.ai/v1/systemone
+POST https://api.jevcode.ai/v1/judge
+Authorization: Bearer jev_...
+Content-Type: application/json
 ```
 
-The `model` field in the request selects which model handles the call. The default alias is `jev-latest`.
+```json
+{
+  "state": "The invoice was paid twice on Tuesday.",
+  "questions": {
+    "duplicate": {
+      "type": "noul",
+      "instructions": "Does this describe a duplicate charge?"
+    },
+    "sure": {
+      "type": "confidence",
+      "instructions": "How sure is that judgment?"
+    },
+    "lane": {
+      "type": "choice",
+      "instructions": "Which queue should take it?",
+      "options": ["billing", "fraud", "ignore"]
+    }
+  }
+}
+```
 
-## Further reading
+`state` is text, 8 to 4000 characters. `questions` holds at most six items. Keys start with a lowercase letter. A choice may send `options` or `criteria`. This server folds `options` into criteria before the model sees them.
 
-- [State](/en/concepts/state/) — organising the context you send
-- [Primitives](/en/primitives/) — the three typed question types
-- [Patterns](/en/patterns/) — how production systems organise these calls
-- [How to build with System One](https://docs.typesafe.ai/concepts/how-to-build-with-system-one) — the official end-to-end workflow guide
+The response includes `"model": "clavue-jev"`. You are billed on input tokens after a successful call. Output is free. The numbers are on the [pricing](/en/pricing/) page.
+
+## Keep going
+
+- [State](/en/concepts/state/)
+- [Confidence](/en/concepts/confidence/)
+- [Choice, Noul, and the rest](/en/primitives/)
+- [API](/en/api/)
+- [Live scenes](/en/scenes/)

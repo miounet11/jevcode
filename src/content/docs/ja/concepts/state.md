@@ -1,99 +1,38 @@
 ---
-title: "状態"
-description: "State は、モデルに評価させる内容です。その3つの形態、コンテキストの構成方法、および言語サポートの制限を理解しましょう。"
+title: 状態
+description: 状態は clavue-jev が判定するテキストです。この API では 8 から 4000 文字の文字列ひとつで、同じ呼び出しの全質問がそれを見ます。
 section: concepts
 order: 20
-tags: ['state', 'context']
-source: docs.typesafe.ai/concepts/state
-translatedFrom: zh
+tags: ['state', 'clavue-jev']
 ---
 
-## State とは
+## 状態
 
-**State** は、System One モデルに評価させる対象です。これはカスタマーサポートのメッセージ、テキストの断片、またはアプリケーションの現在の状態などになります。これを API リクエストの `state` フィールドに含め、質問と一緒に送信します。
+**状態**は clavue-jev が判定するテキストです。`POST /v1/judge` では 8 から 4000 文字の文字列ひとつです。同じリクエストの質問はすべてこの文字列を見ます。質問同士は相手の答えを読みません。
 
-1 回のリクエストで**1つの state** を用いて**1つ以上の質問**を評価します。すべての質問は同じ state を参照し、**独立して**評価されます。1つのリクエスト内で [Choice](/ja/primitives/choice/)、[Score](/ja/primitives/score/)、[Noul](/ja/primitives/noul/) の質問を混在させることができます。
-
-## 3つの形式
-
-### 文字列
-
-最もシンプルな state は、通常の文字列です：
-
-```python
-state = "My card was charged twice."
-```
-
-状況が単純で、単一のテキストだけで済む場合に適しています。
-
-### オブジェクト
-
-意思決定において複数の部分を比較する必要がある場合、関連情報をオブジェクトとしてまとめ、各部分に記述的な名前を付けます：
+判定に必要な事実をその文字列に入れてください。書いていない事実は、モデルにはありません。独立した質問は同じリクエストに最大六つまで置けます。前の答えが必要な質問は、その答えを新しい状態に書いて二回目を呼びます。
 
 ```json
 {
-  "ticket": {
-    "subject": "Duplicate charge",
-    "messages": [
-      {"from": "customer", "text": "I was charged twice for order A-104. Please refund the duplicate."},
-      {"from": "support", "text": "We are checking the charges."}
-    ]
-  },
-  "order": {
-    "id": "A-104",
-    "charges": [
-      {"amount_usd": 49, "status": "captured"},
-      {"amount_usd": 49, "status": "captured"}
-    ]
-  },
-  "refund_policy": "Duplicate charges are eligible for a refund."
+  "state": "The invoice was paid twice on Tuesday.",
+  "questions": {
+    "duplicate": {
+      "type": "noul",
+      "instructions": "Does this describe a duplicate charge?"
+    },
+    "sure": {
+      "type": "confidence",
+      "instructions": "How sure is that judgment?"
+    },
+    "lane": {
+      "type": "choice",
+      "instructions": "Which queue should take it?",
+      "options": ["billing", "fraud", "ignore"]
+    }
+  }
 }
 ```
 
-これは、会話、注文情報、ポリシーのすべてを含んでいるにもかかわらず、**1つの** state です。仕様では、**ほとんどのリクエストでオブジェクトを使用すること**を推奨しています。これにより、各部分に記述的な名前が付けられ、相互の関係性が明確に保たれます。
-
-### 配列
-
-メッセージのシーケンスやレコードのシーケンスに適しています：
-
-```python
-state = ["Hi", "My customer number is TS1337.", "My card was charged twice."]
-```
-
-| 形式 | 用途 | 例 |
-| :--- | :--- | :--- |
-| 文字列 | 1つのメッセージ、記事、テキスト | `"My card was charged twice."` |
-| オブジェクト | 名前付きフィールド、関連レコード、アプリケーションの状態 | 上記の JSON を参照 |
-| 配列 | メッセージまたはレコードのシーケンス | 上記の配列を参照 |
-
-## コンテンツと質問の分離
-
-これは Jev を使用する際に最も重要なメンタルモデルの一つです：
-
-- **State にはコンテンツと事実が含まれます。** 返金リクエスト、注文記録、返金ポリシーなどはすべて state に含めます。
-- **質問は判断すべき内容を定義します。** 「ユーザーは返金を求めているか」「ポリシーは返金を支持しているか」などが質問となります。
-
-判断ロジックを state に書き込まないでください。state は、専門家の前に材料を並べたときに提示されるべきものです。つまり、専門家のグループに材料を提示し、各自に判断を仰ぐようなイメージです。
-
-## 言語サポート
-
-Jev は**プレーンテキスト**を受け取ります。state は文字列、JSON オブジェクト、またはテキストの配列でなければなりません。
-
-- **画像、音声、動画はサポートされていません。**
-- テキスト以外の入力は、事前にテキストまたは構造化フィールドに前処理し、state として渡す必要があります。
-- **Jev の主要な学習言語は英語です。** 他の言語（日本語、中国語、韓国語を含む）も受け付けますが、現時点では精度が低いです。
-
-最後の項目は中国語ユーザーにとって特に重要です。ビジネスで中国語コンテンツを扱う場合は、重要なパイプラインを本番環境にデプロイする前に、実際のデータを用いて精度を検証することをお勧めします。高リスクな意思決定については、state に英語の要約を追加するか、信頼度が低い場合は人間のオペレーターにエスカレーションすることを検討してください。
-
-## バジェットと制限
-
-- 1リクエストあたりのコンテキストは 64k トークンです：これは `state` と**すべての**質問をカバーします。
-- 32k トークン：これは `state` と**最も長い1つの**質問をカバーします。
-- モデルは state を1回だけ読み取り、その後すべての質問を並列で評価します。そのため、複数の質問を1つのリクエストにパッケージ化しても、追加の遅延コストはほとんどかかりません。[ファンアウトパターン](/ja/patterns/fan-out/) を参照してください。
-- 精度は state のサイズに応じて変動します。公式ドキュメントの `Jev 1.13 jaggedness` セクションで詳しく議論されています。
-
-## 関連
-
-- [質問プリミティブ](/ja/primitives/) — instructions と criteria を用いて質問を構成する方法
-- [信頼度](/ja/concepts/confidence/) — 戻り値を用いて動作を制御する方法
-- [API リファレンス](https://docs.typesafe.ai/api) — リクエストスキーマ
+- [System One](/ja/concepts/system-one/)
+- [確からしさ](/ja/concepts/confidence/)
+- [API](/ja/api/)

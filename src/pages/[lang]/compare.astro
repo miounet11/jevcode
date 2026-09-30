@@ -1,0 +1,433 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../i18n/ui';
+import { compareCases } from '../../data/compare-cases';
+import * as cmpCopy from '../../i18n/pages/compare';
+import * as homeCopy from '../../i18n/pages/home';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const path = `/${lang}/compare/`;
+const title = pick(lang, cmpCopy.title);
+const description = pick(lang, cmpCopy.description);
+const clientCopyJson = JSON.stringify(pick(lang, cmpCopy.client)).replaceAll('<', '\\u003c');
+const batchLimit = 40;
+const trialLabels = pick(lang, homeCopy.trialLabels);
+
+const counts = compareCases.reduce<Record<string, number>>((acc, item) => {
+  acc[item.category] = (acc[item.category] ?? 0) + 1;
+  return acc;
+}, {});
+---
+
+<BaseLayout lang={lang} title={title} description={description} path={path}>
+  <section class="section">
+    <div class="wrap compare" data-compare-lang={lang}>
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{pick(lang, cmpCopy.eyebrow)}</p>
+      <h1>{title}</h1>
+      <p class="compare__lead">{description}</p>
+      <p class="compare__note">
+        {pick(lang, cmpCopy.note).replace('{n}', String(compareCases.length)).replace('{batch}', String(batchLimit))}
+      </p>
+      <aside class="compare__narration" aria-live="polite">
+        <h2>{pick(lang, cmpCopy.narration)}</h2>
+        <ol id="cmp-narration"></ol>
+      </aside>
+
+      <div class="compare__play">
+        <div>
+          <h2>{pick(lang, cmpCopy.matchTitle)}</h2>
+          <p>{pick(lang, cmpCopy.matchLead)}</p>
+        </div>
+        <pre id="cmp-board" class="compare__board"></pre>
+        <div class="compare__actions">
+          <button class="btn btn--primary" id="cmp-play" type="button">{pick(lang, cmpCopy.askBoth)}</button>
+          <button class="btn btn--ghost" id="cmp-deal" type="button">{pick(lang, cmpCopy.newBoard)}</button>
+        </div>
+        <div id="cmp-play-result" class="compare__pair"></div>
+      </div>
+
+      <div class="compare__toolbar">
+        <div class="compare__filters" id="cmp-filters" role="tablist">
+          {[
+            ['all', pick(lang, cmpCopy.all), compareCases.length],
+            ['match3', trialLabels['match3'], counts.match3],
+            ['urgency', trialLabels['urgency'], counts.urgency],
+            ['intent', trialLabels['intent'], counts.intent],
+            ['billing', trialLabels['billing'], counts.billing],
+            ['safety', trialLabels['safety'], counts.safety],
+            ['route', trialLabels['route'], counts.route],
+            ['language', trialLabels['language'], counts.language],
+            ['priority', trialLabels['priority'], counts.priority],
+            ['sentiment', trialLabels['sentiment'], counts.sentiment],
+          ].map(([id, label, n]) => (
+            <button type="button" data-filter={id} class={id === 'all' ? 'is-on' : ''}>{label} {n}</button>
+          ))}
+        </div>
+        <div class="compare__actions">
+          <button class="btn btn--primary" id="cmp-run" type="button">{pick(lang, cmpCopy.runUntested).replace('{n}', '16')}</button>
+          <button class="btn btn--ghost" id="cmp-rerun" type="button">{pick(lang, cmpCopy.retestFilter)}</button>
+          <button class="btn btn--ghost" id="cmp-clear" type="button">{pick(lang, cmpCopy.clearScores)}</button>
+        </div>
+      </div>
+
+      <div id="cmp-summary" class="compare__summary" hidden></div>
+      <p id="cmp-status" class="compare__status"></p>
+      <div id="cmp-list" class="compare__list"></div>
+    </div>
+  </section>
+  <script type="application/json" id="cmp-copy" is:inline set:html={clientCopyJson} />
+</BaseLayout>
+
+<script>
+  import { compareCases } from '../../data/compare-cases';
+  import { makePuzzle } from '../../lib/match3.mjs';
+  const clientCopy = JSON.parse(document.getElementById('cmp-copy')?.textContent || '{}');
+
+  const root = document.querySelector('[data-compare-lang]');
+  const zh = root?.getAttribute('data-compare-lang') === 'zh';
+  const text = {
+    ...clientCopy,
+    summary: (s) =>
+      clientCopy.summaryTpl
+        .replace('{oursHit}', String(s.oursHit)).replace('{oursN}', String(s.oursN))
+        .replace('{offHit}', String(s.offHit)).replace('{offN}', String(s.offN))
+        .replace('{agree}', String(s.agree)).replace('{agreeN}', String(s.agreeN))
+        .replace('{oursMedian}', String(s.oursMedian ?? '–')).replace('{offMedian}', String(s.offMedian ?? '–')),
+  };
+
+  const boardEl = document.getElementById('cmp-board');
+  const playResultEl = document.getElementById('cmp-play-result');
+  const listEl = document.getElementById('cmp-list');
+  const summaryEl = document.getElementById('cmp-summary');
+  const statusEl = document.getElementById('cmp-status');
+  const scores = new Map();
+  let filter = 'all';
+  let runToken = 0;
+  let puzzle = makePuzzle(Date.now() % 100000) || makePuzzle(1);
+
+  function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  }
+
+  function median(values) {
+    if (!values.length) return null;
+    const sorted = values.slice().sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[mid] : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
+  }
+
+  function pct(side, choice) {
+    const value = side?.probabilities?.[choice];
+    return typeof value === 'number' ? `${Math.round(value * 100)}%` : '';
+  }
+
+  function sideCard(side, marked) {
+    if (!side) return `<p class="compare__pending">${esc(text.pending)}</p>`;
+    if (!side.ok) return `<p class="compare__bad">${esc(text.error)} · ${esc(side.error || '')}</p>`;
+    const width = typeof side.probabilities?.[side.choice] === 'number' ? Math.round(side.probabilities[side.choice] * 100) : 0;
+    const stamp = marked === text.hit ? 'is-hit' : marked === text.miss ? 'is-miss' : '';
+    return `<p class="compare__choice ${stamp}"><b>${esc(side.choice)}</b> <span>${esc(pct(side, side.choice))}</span></p><div class="compare__track ${stamp}"><i style="width:${width}%"></i></div><p class="compare__ms">${esc(side.ms)} ms · ${esc(marked || '')}</p>`;
+  }
+
+  function verdictLine(item, row) {
+    if (!row?.ours && !row?.official) return { tone: '', text: '' };
+    const oursHit = row.ours?.ok && item.accept.includes(row.ours.choice);
+    const peerHit = row.official?.ok && item.accept.includes(row.official.choice);
+    const faster = row.ours?.ok && row.official?.ok && row.ours.ms < row.official.ms;
+    if (oursHit && !peerHit) return { tone: 'is-win', text: clientCopy.win };
+    if (oursHit && peerHit && faster) return { tone: 'is-win', text: clientCopy.bothFast };
+    if (oursHit && peerHit) return { tone: 'is-even', text: clientCopy.both };
+    if (!oursHit && peerHit) return { tone: 'is-lose', text: clientCopy.lose };
+    if (row.ours?.ok && row.official?.ok && row.ours.choice === row.official.choice) return { tone: 'is-even', text: clientCopy.sameMiss };
+    return { tone: 'is-split', text: clientCopy.split };
+  }
+
+  function mark(item, side) {
+    if (!side?.ok) return '';
+    return item.accept.includes(side.choice) ? text.hit : text.miss;
+  }
+
+  function paintBoard() {
+    if (!boardEl || !puzzle) return;
+    boardEl.textContent = puzzle.context.split('\n').slice(1).join('\n');
+  }
+
+  function visibleCases() {
+    return filter === 'all' ? compareCases : compareCases.filter((item) => item.category === filter);
+  }
+
+  function summarize(items) {
+    let oursHit = 0, oursN = 0, offHit = 0, offN = 0, agree = 0, agreeN = 0;
+    const oursMs = [];
+    const offMs = [];
+    for (const item of items) {
+      const row = scores.get(item.id);
+      if (!row) continue;
+      if (row.ours?.ok) {
+        oursN += 1;
+        if (item.accept.includes(row.ours.choice)) oursHit += 1;
+        oursMs.push(row.ours.ms);
+      }
+      if (row.official?.ok) {
+        offN += 1;
+        if (item.accept.includes(row.official.choice)) offHit += 1;
+        offMs.push(row.official.ms);
+      }
+      if (row.ours?.ok && row.official?.ok) {
+        agreeN += 1;
+        if (row.ours.choice === row.official.choice) agree += 1;
+      }
+    }
+    return { oursHit, oursN, offHit, offN, agree, agreeN, oursMedian: median(oursMs), offMedian: median(offMs) };
+  }
+
+  function renderList() {
+    const items = visibleCases();
+    const stats = summarize(items);
+    if (summaryEl) {
+      const any = stats.oursN + stats.offN > 0;
+      summaryEl.hidden = !any;
+      summaryEl.textContent = any ? text.summary(stats) : '';
+    }
+    if (!listEl) return;
+    listEl.innerHTML = items.map((item) => {
+      const row = scores.get(item.id);
+      const verdict = verdictLine(item, row);
+      const oursMark = mark(item, row?.ours);
+      const peerMark = mark(item, row?.official);
+      const stampOf = (marked) => (marked === text.hit ? 'is-hit' : marked === text.miss ? 'is-miss' : '');
+      return `<article class="compare__row ${verdict.tone}" data-id="${esc(item.id)}">
+        <header>
+          <b>${esc(item.title)}</b>
+          <span>${esc(item.category)}</span>
+        </header>
+        ${verdict.text ? `<p class="compare__verdict ${verdict.tone}">${esc(verdict.text)}</p>` : ''}
+        <p class="compare__q">${esc(item.question)}</p>
+        <pre>${esc(item.context)}</pre>
+        <p class="compare__expect">${clientCopy.expected}: ${esc(item.accept.join(' / '))}</p>
+        <div class="compare__pair">
+          <div class="${stampOf(oursMark)}"><span>${esc(text.ours)}</span>${sideCard(row?.ours, oursMark)}</div>
+          <div class="${stampOf(peerMark)}"><span>${esc(text.official)}</span>${sideCard(row?.official, peerMark)}</div>
+        </div>
+        <button type="button" data-retest="${esc(item.id)}">${clientCopy.retest}</button>
+      </article>`;
+    }).join('');
+  }
+
+  async function ask(items) {
+    const response = await fetch('/api/compare', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        items: items.map((item) => ({
+          id: item.id,
+          context: item.context,
+          question: item.question,
+          choices: item.choices,
+        })),
+      }),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (response.status === 429) throw new Error(text.limit);
+    if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+    return data;
+  }
+
+  const narrationEl = document.getElementById('cmp-narration');
+  const narrations = [];
+  const seenNarration = new Set();
+
+  function when(ts) {
+    const date = new Date(ts);
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleString(zh ? 'zh-CN' : 'en', { hour12: false, month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function paintNarration() {
+    if (!narrationEl) return;
+    narrationEl.innerHTML = narrations.slice(0, 40).map((entry) => {
+      const line = zh ? entry.narration?.zh : entry.narration?.en;
+      return `<li><time>${esc(when(entry.ts))}</time>${esc(line || '')}</li>`;
+    }).join('') || `<li class="compare__pending">${esc(clientCopy.noRecords)}</li>`;
+  }
+
+  function remember(list) {
+    const fresh = [];
+    for (const entry of list || []) {
+      if (!entry?.narration) continue;
+      const key = `${entry.ts}|${entry.id}`;
+      if (seenNarration.has(key)) continue;
+      seenNarration.add(key);
+      fresh.push(entry);
+    }
+    if (!fresh.length) return;
+    narrations.unshift(...fresh);
+    paintNarration();
+  }
+
+  async function runList(items) {
+    const token = ++runToken;
+    if (statusEl) statusEl.textContent = text.running;
+    try {
+      for (let i = 0; i < items.length; i += 8) {
+        if (token !== runToken) return;
+        const chunk = items.slice(i, i + 8);
+        const data = await ask(chunk);
+        const results = data.results || [];
+        remember([].concat(data.recorded || []).reverse());
+        for (const result of results) scores.set(result.id, result);
+        renderList();
+        if (statusEl) statusEl.textContent = `${Math.min(i + chunk.length, items.length)} / ${items.length}`;
+      }
+      if (statusEl && token === runToken) statusEl.textContent = '';
+    } catch (err) {
+      if (statusEl) statusEl.textContent = err.message;
+    }
+  }
+
+  function deal(seed) {
+    puzzle = makePuzzle(seed) || makePuzzle(1);
+    paintBoard();
+    if (playResultEl) playResultEl.innerHTML = '';
+  }
+
+  document.getElementById('cmp-deal')?.addEventListener('click', () => deal(Date.now() % 100000));
+  document.getElementById('cmp-play')?.addEventListener('click', async (event) => {
+    const button = event.currentTarget;
+    if (!puzzle || !(button instanceof HTMLButtonElement)) return;
+    button.disabled = true;
+    if (playResultEl) playResultEl.innerHTML = `<p>${esc(text.running)}</p>`;
+    try {
+      const data = await ask([{ ...puzzle, id: 'match3-live' }]);
+      remember([].concat(data.recorded || []).reverse());
+      const result = data.results?.[0];
+      const oursHit = puzzle.accept.includes(result?.ours?.choice);
+      const offHit = puzzle.accept.includes(result?.official?.choice);
+      if (playResultEl) {
+        playResultEl.innerHTML = `<div><span>${esc(text.ours)}</span>${sideCard(result?.ours)}<small>${oursHit ? esc(text.hit) : esc(text.miss)}</small></div><div><span>${esc(text.official)}</span>${sideCard(result?.official)}<small>${offHit ? esc(text.hit) : esc(text.miss)}</small></div>`;
+      }
+    } catch (err) {
+      if (playResultEl) playResultEl.textContent = err.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  document.getElementById('cmp-filters')?.addEventListener('click', (event) => {
+    const button = event.target instanceof HTMLElement ? event.target.closest('button') : null;
+    if (!button) return;
+    filter = button.dataset.filter || 'all';
+    document.querySelectorAll('#cmp-filters button').forEach((el) => el.classList.toggle('is-on', el === button));
+    renderList();
+  });
+
+  document.getElementById('cmp-run')?.addEventListener('click', () => {
+    const pending = visibleCases().filter((item) => !scores.has(item.id)).slice(0, 16);
+    if (pending.length) runList(pending);
+    else if (statusEl) statusEl.textContent = text.empty;
+  });
+  document.getElementById('cmp-rerun')?.addEventListener('click', () => runList(visibleCases()));
+  document.getElementById('cmp-clear')?.addEventListener('click', () => {
+    runToken += 1;
+    scores.clear();
+    if (statusEl) statusEl.textContent = '';
+    renderList();
+  });
+  listEl?.addEventListener('click', (event) => {
+    const button = event.target instanceof HTMLElement ? event.target.closest('[data-retest]') : null;
+    if (!button) return;
+    const item = compareCases.find((row) => row.id === button.getAttribute('data-retest'));
+    if (item) runList([item]);
+  });
+
+  paintBoard();
+  renderList();
+  paintNarration();
+  fetch('/api/compare/recent?limit=24')
+    .then((response) => (response.ok ? response.json() : null))
+    .then((data) => remember(data?.entries))
+    .catch(() => {});
+</script>
+
+<style>
+  .compare h1 { font-size: clamp(36px, 5vw, 56px); letter-spacing: -0.04em; margin: 12px 0; }
+  .compare__lead, .compare__note { color: var(--fg-muted); max-width: 72ch; }
+  .compare__note { font-size: 14px; }
+  .compare__narration {
+    margin-top: 18px;
+    padding: 16px 18px;
+    max-height: 280px;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+  }
+  .compare__narration h2 { margin: 0 0 10px; font-size: 16px; }
+  .compare__narration ol { margin: 0; padding-left: 1.15em; display: grid; gap: 10px; }
+  .compare__narration li { color: var(--fg-muted); font-size: 14px; }
+  .compare__narration time { display: block; margin-bottom: 2px; color: var(--fg-dim); font-size: 11px; }
+  .compare__play, .compare__row {
+    margin-top: 22px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+  }
+  .compare__play h2 { margin: 0 0 8px; font-size: 22px; }
+  .compare__board, .compare__row pre {
+    margin: 12px 0;
+    padding: 12px;
+    border-radius: 10px;
+    background: var(--bg-code);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+  }
+  .compare__actions, .compare__filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .compare__toolbar { margin-top: 28px; display: grid; gap: 12px; }
+  .compare__filters button, .compare__row button {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--fg-muted);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font: inherit;
+    cursor: pointer;
+  }
+  .compare__filters button.is-on { color: var(--fg); border-color: var(--accent-border); background: var(--accent-soft); }
+  .compare__summary, .compare__status { margin-top: 14px; }
+  .compare__summary { padding: 12px 14px; border-radius: var(--radius); background: var(--accent-soft); }
+  .compare__status { color: var(--fg-dim); min-height: 1.2em; }
+  .compare__row header { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .compare__row header span, .compare__row header em { color: var(--fg-dim); font-size: 12px; font-style: normal; }
+  .compare__q, .compare__expect { color: var(--fg-muted); font-size: 14px; }
+  .compare__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .compare__pair > div { padding: 10px 12px; border-radius: 10px; background: var(--bg); }
+  .compare__pair span, .compare__ms, .compare__pair small { color: var(--fg-dim); font-size: 12px; }
+  .compare__row.is-win { box-shadow: inset 3px 0 0 var(--accent); }
+  .compare__row.is-lose { box-shadow: inset 3px 0 0 var(--rose); }
+  .compare__choice { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 8px 0; font-size: 26px; font-weight: 650; letter-spacing: -0.04em; }
+  .compare__choice.is-hit b { color: var(--accent); }
+  .compare__choice.is-miss b { color: var(--rose); }
+  .compare__verdict { margin: 10px 0; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); font-size: 20px; font-weight: 650; letter-spacing: -0.03em; }
+  .compare__verdict.is-win { color: var(--fg); background: var(--accent-soft); border-color: var(--accent-border); }
+  .compare__verdict.is-lose, .compare__verdict.is-split { color: var(--rose); border-color: color-mix(in srgb, var(--rose) 35%, var(--border)); }
+  .compare__verdict.is-even { color: var(--fg-muted); }
+  .compare__track { height: 10px; border-radius: 99px; background: var(--bg-elev-2); overflow: hidden; }
+  .compare__track i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent-strong), var(--accent)); transition: width 0.55s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .compare__track.is-miss i { background: var(--rose); }
+  .compare__pair > div.is-hit { background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent-border); }
+  .compare__pair > div.is-miss { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rose) 40%, var(--border)); }
+  .compare__bad { color: var(--rose); }
+  .compare__row button { margin-top: 8px; }
+  @media (max-width: 720px) {
+    .compare__pair { grid-template-columns: 1fr; }
+  }
+</style>

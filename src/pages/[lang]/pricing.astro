@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { languages, type Lang } from '../../i18n/ui';
-import { SIGNUP_CREDIT_CENTS, JUDGE_PRICE_CENTS, centsToUsd, SIGNUP_JUDGMENTS } from '../../../server/plans.mjs';
+import { languages, pick, type Lang } from '../../i18n/ui';
+import * as pricingCopy from '../../i18n/pages/pricing';
+import { SIGNUP_CREDIT_CENTS, SIGNUP_INPUT_TOKENS, centsToUsd } from '../../../server/plans.mjs';
 
 export const prerender = true;
 
@@ -11,54 +12,23 @@ export function getStaticPaths() {
 
 const lang = Astro.params.lang as Lang;
 const path = `/${lang}/pricing/`;
+const signupUsd = centsToUsd(SIGNUP_CREDIT_CENTS);
+const tokenCount = SIGNUP_INPUT_TOKENS.toLocaleString('en-US');
 
-const copy = lang === 'zh'
-  ? {
-      title: '价格',
-      lead: '注册即送 $5 额度，账号+密码即可开始，不需要邮箱验证。按次计费，用完为止。',
-      freeName: '免费',
-      paidName: '专业',
-      per: '每月',
-      ctaFree: '开始使用',
-      ctaPaid: '升级',
-      quota: '赠送额度',
-      unit: '每次判定',
-      signup: '注册赠送',
-      runs: '次可用',
-      cols: { feature: '包含', free: '免费', paid: '专业' },
-      rows: [
-        ['注册赠送', '$5.00', '待定'],
-        ['判定计费', '$0.01 / 次', '待定'],
-        ['历史记录与分享链接', '有', '有'],
-        ['API Key', '1 个', '多个'],
-        ['支持', '社区', '邮件'],
-      ],
-      note: '当前只有免费档：注册送 $5，按每次判定 $0.01 计费，用完为止。付费档价格待定。',
-      back: '先去试一次',
-    }
-  : {
-      title: 'Pricing',
-      lead: 'Sign up and get $5 in credit. Account and password only — no email verification. Pay per judgment until it runs out.',
-      freeName: 'Free',
-      paidName: 'Pro',
-      per: 'per month',
-      ctaFree: 'Get started',
-      ctaPaid: 'Upgrade',
-      quota: 'Signup credit',
-      unit: 'per judgment',
-      signup: 'Signup credit',
-      runs: 'judgments',
-      cols: { feature: 'Includes', free: 'Free', paid: 'Pro' },
-      rows: [
-        ['Signup credit', '$5.00', 'TBD'],
-        ['Per judgment', '$0.01', 'TBD'],
-        ['History and share links', 'Yes', 'Yes'],
-        ['API keys', '1', 'Multiple'],
-        ['Support', 'Community', 'Email'],
-      ],
-      note: 'One free tier for now: $5 on signup, billed at $0.01 per judgment until it runs out. Paid tier pricing is not final.',
-      back: 'Try a judgment first',
-    };
+const copy = {
+  title: pick(lang, pricingCopy.title),
+  lead: pick(lang, pricingCopy.lead),
+  scheme: pick(lang, pricingCopy.scheme),
+  perMillion: pick(lang, pricingCopy.perMillion),
+  outputFree: pick(lang, pricingCopy.outputFree),
+  signup: pick(lang, pricingCopy.signup),
+  inputTokens: pick(lang, pricingCopy.inputTokens),
+  cta: pick(lang, pricingCopy.cta),
+  cols: pick(lang, pricingCopy.cols),
+  rows: pick(lang, pricingCopy.rows).map(([a, b]) => [a, b.replace('{credit}', `$${signupUsd}`).replace('{tokens}', tokenCount)] as [string, string]),
+  note: pick(lang, pricingCopy.note),
+  back: pick(lang, pricingCopy.back),
+};
 
 ---
 
@@ -70,42 +40,29 @@ const copy = lang === 'zh'
       <p class="pricing__lead">{copy.lead}</p>
 
       <div class="pricing__cards">
-        <div class="pricing__card">
-          <h2>{copy.freeName}</h2>
-          <p class="pricing__price"><b>$0</b></p>
-          <p class="pricing__quota">
-            {copy.signup}: <b>${centsToUsd(SIGNUP_CREDIT_CENTS)}</b>
-          </p>
-          <p class="pricing__quota">
-            {copy.unit}: <b>${centsToUsd(JUDGE_PRICE_CENTS)}</b> &middot; {SIGNUP_JUDGMENTS} {copy.runs}
-          </p>
-          <a class="btn btn--ghost" href={`/${lang}/login/`}>{copy.ctaFree}</a>
-        </div>
-
         <div class="pricing__card pricing__card--featured">
-          <h2>{copy.paidName}</h2>
-          <p class="pricing__price"><b>TBD</b> <span>{copy.per}</span></p>
+          <h2>{copy.scheme}</h2>
+          <p class="pricing__price"><b>$0.042</b> <span>{copy.perMillion}</span></p>
+          <p class="pricing__quota">{copy.outputFree}</p>
           <p class="pricing__quota">
-            {copy.quota}: <b>TBD</b>
+            {copy.signup}: <b>${signupUsd}</b> &middot; {tokenCount} {copy.inputTokens}
           </p>
-          <a class="btn btn--primary" href={`/${lang}/login/`}>{copy.ctaPaid}</a>
+          <a class="btn btn--primary" href={`/${lang}/login/`}>{copy.cta}</a>
         </div>
       </div>
 
       <table class="pricing__table">
         <thead>
           <tr>
-            <th>{copy.cols.feature}</th>
-            <th>{copy.cols.free}</th>
-            <th>{copy.cols.paid}</th>
+            <th>{copy.cols.item}</th>
+            <th>{copy.cols.value}</th>
           </tr>
         </thead>
         <tbody>
-          {copy.rows.map(([label, free, paid]) => (
+          {copy.rows.map(([label, value]) => (
             <tr>
               <td>{label}</td>
-              <td>{free}</td>
-              <td>{paid}</td>
+              <td>{value}</td>
             </tr>
           ))}
         </tbody>
@@ -121,7 +78,7 @@ const copy = lang === 'zh'
   .pricing { max-width: 860px; }
   .pricing h1 { font-size: clamp(34px, 5vw, 52px); letter-spacing: -0.04em; margin: 12px 0; }
   .pricing__lead { color: var(--fg-muted); max-width: 62ch; }
-  .pricing__cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 28px 0; }
+  .pricing__cards { display: grid; gap: 16px; max-width: 420px; margin: 28px 0; }
   .pricing__card {
     border: 1px solid var(--border-strong);
     border-radius: 14px;

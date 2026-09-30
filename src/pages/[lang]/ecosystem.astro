@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
-import { languages, useTranslations, type Lang } from '../../i18n/ui';
+import { languages, useTranslations, pick, type Lang } from '../../i18n/ui';
 import { projectsByCategory, projects, dataAsOf } from '../../data/ecosystem';
+import * as ecoCopy from '../../i18n/pages/ecosystem';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -41,43 +42,23 @@ const topTopics = [...topicCounts.entries()]
   .sort((a, b) => b[1] - a[1])
   .map(([name, n]) => ({ name, n }));
 
-const copy =
-  lang === 'zh'
-    ? {
-        title: '社区生态',
-        lead: '围绕 Jev 与 TypeSafe System One 模型构建的公开项目。可按分类与语言筛选。',
-        statProjects: '收录项目',
-        statStars: '合计 stars',
-        statLanguages: '编程语言',
-        snapshot: `快照日期 ${dataAsOf}，stars 会随时间变化。`,
-        forks: 'forks',
-        filterAll: '全部',
-        filterLanguage: '语言',
-        filterTopic: '主题',
-        searchPlaceholder: '搜索项目名、描述…',
-        noResult: '没有匹配的项目。',
-        // 客户端筛选后替换 {n}，故同时提供模板
-        shownTpl: '显示 {n} 个项目',
-        shown: (n: number) => `显示 ${n} 个项目`,
-        decision: 'Jev 在这里做什么',
-      }
-    : {
-        title: 'Ecosystem',
-        lead: 'Public projects built around Jev and the TypeSafe System One model. Filter by category and language.',
-        statProjects: 'Projects',
-        statStars: 'Combined stars',
-        statLanguages: 'Languages',
-        snapshot: `Snapshot taken ${dataAsOf}; star counts drift over time.`,
-        forks: 'forks',
-        filterAll: 'All',
-        filterLanguage: 'Language',
-        filterTopic: 'Topic',
-        searchPlaceholder: 'Search name or description…',
-        noResult: 'No matching projects.',
-        shownTpl: '{n} projects shown',
-        shown: (n: number) => `${n} projects shown`,
-        decision: 'What Jev does here',
-      };
+const copy = {
+  title: pick(lang, ecoCopy.title),
+  lead: pick(lang, ecoCopy.lead),
+  statProjects: pick(lang, ecoCopy.statProjects),
+  statStars: pick(lang, ecoCopy.statStars),
+  statLanguages: pick(lang, ecoCopy.statLanguages),
+  snapshot: pick(lang, ecoCopy.snapshot).replace('{date}', dataAsOf),
+  forks: pick(lang, ecoCopy.forks),
+  filterAll: pick(lang, ecoCopy.filterAll),
+  filterLanguage: pick(lang, ecoCopy.filterLanguage),
+  filterTopic: pick(lang, ecoCopy.filterTopic),
+  searchPlaceholder: pick(lang, ecoCopy.searchPlaceholder),
+  noResult: pick(lang, ecoCopy.noResult),
+  shownTpl: pick(lang, ecoCopy.shownTpl),
+  shown: (n: number) => pick(lang, ecoCopy.shownTpl).replace('{n}', String(n)),
+  decision: pick(lang, ecoCopy.decision),
+};
 ---
 
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
@@ -150,7 +131,7 @@ const copy =
                 data-topics={(p.topics ?? []).join(' ')}
                 data-search={`${p.repo} ${p.desc[lang] ?? p.desc.en} ${(p.topics ?? []).join(' ')}`.toLowerCase()}
               >
-                <a class="project-name" href={p.url} target="_blank" rel="noopener noreferrer">
+                <a class="project-name" href={p.url} target="_blank" rel="nofollow noopener noreferrer">
                   <span class="project-repo">{p.repo}</span>
                   <span class="project-cat">{category.title[lang]}</span>
                 </a>

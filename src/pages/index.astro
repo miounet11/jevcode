@@ -14,6 +14,9 @@ const target = `/${defaultLang}/`;
 <!doctype html>
 <html lang={defaultLang}>
   <head>
+    <script is:inline>
+      (() => { try { const s=localStorage.getItem('theme'); document.documentElement.dataset.theme = (s==='light'||s==='dark')?s:(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'); } catch { document.documentElement.dataset.theme='dark'; } })();
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>JevCode</title>
@@ -28,20 +31,29 @@ const target = `/${defaultLang}/`;
     <style>
       :root {
         color-scheme: dark;
+        --bg: #08090c;
+        --fg-muted: #9aa3b2;
+        --accent: #2dd4bf;
+      }
+      :root[data-theme='light'] {
+        color-scheme: light;
+        --bg: #f7f8fa;
+        --fg-muted: #55606f;
+        --accent: #0d9488;
       }
       body {
         margin: 0;
         min-height: 100vh;
         display: grid;
         place-items: center;
-        background: #08090c;
-        color: #9aa3b2;
+        background: var(--bg);
+        color: var(--fg-muted);
         font-family: ui-sans-serif, system-ui, -apple-system, 'PingFang SC',
           'Microsoft YaHei', sans-serif;
         font-size: 13px;
       }
       a {
-        color: #2dd4bf;
+        color: var(--accent);
       }
     </style>
   </head>

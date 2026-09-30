@@ -4,11 +4,10 @@
  *
  * 用法：node scripts/test-api-v1.mjs
  *
- * 设计契约（实测上游得出）：
- *   - 只有 noul 题型能返回答案；choice 会让上游报
- *     "The decision head returned no answers."
+ * 设计契约：
  *   - /v1/* 只认 Bearer API key，不接受会话 Cookie
- *   - 上游失败必须退回额度（用户不能白扣）
+ *   - choice 的 options 会在服务端收成 criteria 再转发
+ *   - 按输入 token 计费，上游成功后才扣；失败不扣
  */
 
 import { spawn } from 'node:child_process';
@@ -137,12 +136,15 @@ try {
          typeof b.answers?.q1?.noul === 'number', JSON.stringify(b.answers));
       ok('响应含 model', typeof b.model === 'string', String(b.model));
       ok('响应含 id', typeof b.id === 'string' && b.id.length === 12, String(b.id));
-      ok('响应带 credit=499', b.credit && b.credit.cents === 499, JSON.stringify(b.credit));
+      ok('响应 credit 已按输入 token 扣减',
+         b.credit && b.credit.microUsd < 5_000_000 && b.credit.microUsd > 0,
+         JSON.stringify(b.credit));
       judgedId = b.id || '';
 
       const me = await get('/v1/me', key);
       const mb = await me.json();
-      ok('库里已扣 1 美分', mb.credit && mb.credit.cents === 499, JSON.stringify(mb.credit));
+      ok('库里已扣微美元', mb.credit && mb.credit.microUsd < 5_000_000 && mb.credit.microUsd > 0,
+         JSON.stringify(mb.credit));
     }
   }
 
@@ -150,8 +152,8 @@ try {
   {
     // 直接打满额度，验证 429 与 retry-after
     const l = openAccounts(dbPath);
-    const left = l.balance(user.id).judgmentsLeft;
-    if (left > 0) l.consume(user.id, left);
+    const left = l.balance(user.id).inputTokensLeft;
+    if (left > 0) l.chargeInputTokens(user.id, left);
     l.close();
 
     const r = await post('/v1/judge', goodBody, key);
@@ -170,7 +172,7 @@ try {
     // 用独立用户（额度干净），以必然失败的 choice 题型触发上游报错，
     // 验证额度被退回。若上游对 choice 的行为变了，本段整体跳过。
     const l = openAccounts(dbPath);
-    const before = l.balance(user2.id).cents;
+    const before = l.balance(user2.id).microUsd;
     l.close();
 
     const r = await post('/v1/judge', {
@@ -185,7 +187,7 @@ try {
       skip('上游失败 → 非 200 并退款', '上游未配置，无法触发');
     } else {
       const l2 = openAccounts(dbPath);
-      const after = l2.balance(user2.id).cents;
+      const after = l2.balance(user2.id).microUsd;
       l2.close();
       ok('上游失败返回错误', r.status >= 400, `得到 ${r.status}`);
       ok('失败后额度已退回（用量未增加）', after === before, `前 ${before} 后 ${after}`);

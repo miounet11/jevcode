@@ -43,6 +43,88 @@
   --doc-maxw: 780px;
 
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+
+  /* 派生/结构性色：集中于此，便于浅色模式整体覆盖 */
+  --accent-contrast: #04201c;
+  --fg-strong: #ffffff;
+  --code-inline-fg: #7dd3fc;
+  --header-bg: rgba(8, 9, 12, 0.82);
+  --header-bg-solid: rgba(8, 9, 12, 0.97);
+  --overlay-bg: rgba(14, 16, 21, 0.96);
+  --overlay-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --surface-hi: rgba(255, 255, 255, 0.02);
+  --surface-hi-strong: rgba(255, 255, 255, 0.04);
+  --page-glow: rgba(45, 212, 191, 0.08);
+  --hero-glow-a: rgba(45, 212, 191, 0.16);
+  --hero-glow-b: rgba(167, 139, 250, 0.07);
+  --brand-glow: rgba(45, 212, 191, 0.24);
+  --hero-title-a: #ffffff;
+  --hero-title-b: #a9b4c4;
+  --btn-primary-a: #5eead4;
+  --btn-primary-b: #14b8a6;
+  --btn-primary-a-hover: #99f6e4;
+  --btn-primary-b-hover: #2dd4bf;
+  --btn-primary-glow: rgba(45, 212, 191, 0.7);
+  --card-hover-tint: rgba(45, 212, 191, 0.05);
+  --notice-bg: rgba(251, 191, 36, 0.09);
+  --notice-border: rgba(251, 191, 36, 0.3);
+  --notice-fg: #fde68a;
+}
+
+/* ---------- 浅色主题 ----------
+   由 <html data-theme> 切换；未设置时沿用上面的深色默认值。 */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f7f8fa;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #eef1f6;
+  --bg-code: #f2f4f8;
+
+  --fg: #14171f;
+  --fg-muted: #55606f;
+  --fg-dim: #8a93a3;
+
+  --accent: #0f766e;
+  --accent-strong: #115e59;
+  --accent-soft: rgba(15, 118, 110, 0.1);
+  --accent-border: rgba(15, 118, 110, 0.34);
+
+  --violet: #7c3aed;
+  --amber: #b45309;
+  --rose: #e11d48;
+
+  --border: #e2e6ee;
+  --border-strong: #cbd2df;
+
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 8px 24px -12px rgba(16, 24, 40, 0.14);
+
+  --accent-contrast: #ffffff;
+  --fg-strong: #0b0d12;
+  --code-inline-fg: #0e7490;
+  --header-bg: rgba(255, 255, 255, 0.82);
+  --header-bg-solid: rgba(255, 255, 255, 0.97);
+  --overlay-bg: rgba(255, 255, 255, 0.98);
+  --overlay-shadow: 0 16px 40px rgba(16, 24, 40, 0.16);
+  --grid-line: rgba(16, 24, 40, 0.05);
+  --surface-hi: rgba(16, 24, 40, 0.02);
+  --surface-hi-strong: rgba(16, 24, 40, 0.05);
+  --page-glow: rgba(13, 148, 136, 0.07);
+  --hero-glow-a: rgba(13, 148, 136, 0.14);
+  --hero-glow-b: rgba(124, 58, 237, 0.06);
+  --brand-glow: rgba(13, 148, 136, 0.2);
+  --hero-title-a: #14171f;
+  --hero-title-b: #5b6676;
+  --btn-primary-a: #0f766e;
+  --btn-primary-b: #115e59;
+  --btn-primary-a-hover: #0d9488;
+  --btn-primary-b-hover: #0f766e;
+  --btn-primary-glow: rgba(13, 148, 136, 0.45);
+  --card-hover-tint: rgba(13, 148, 136, 0.06);
+  --notice-bg: rgba(180, 83, 9, 0.08);
+  --notice-border: rgba(180, 83, 9, 0.3);
+  --notice-fg: #92400e;
 }
 
 *,
@@ -60,7 +142,7 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(45, 212, 191, 0.08), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 50% -10%, var(--page-glow), transparent 50%),
     var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
@@ -98,7 +180,7 @@ img {
   left: -9999px;
   top: 0;
   background: var(--accent);
-  color: #04201c;
+  color: var(--accent-contrast);
   padding: 10px 16px;
   z-index: 100;
   border-radius: 0 0 var(--radius) 0;
@@ -114,7 +196,7 @@ img {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(8, 9, 12, 0.82);
+  background: var(--header-bg);
   backdrop-filter: blur(14px) saturate(160%);
   border-bottom: 1px solid var(--border);
 }
@@ -145,7 +227,7 @@ img {
   height: 26px;
   display: block;
   flex-shrink: 0;
-  filter: drop-shadow(0 2px 7px rgba(45, 212, 191, 0.24));
+  filter: drop-shadow(0 2px 7px var(--brand-glow));
 }
 .brand__sub {
   color: var(--fg-dim);
@@ -245,8 +327,8 @@ img {
   padding: 6px;
   border: 1px solid var(--border-strong);
   border-radius: 12px;
-  background: rgba(14, 16, 21, 0.96);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  background: var(--overlay-bg);
+  box-shadow: var(--overlay-shadow);
 }
 .lang-menu__panel a {
   display: block;
@@ -279,8 +361,8 @@ img {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: radial-gradient(ellipse at 50% 0%, black 20%, transparent 72%);
   pointer-events: none;
@@ -294,8 +376,8 @@ img {
   transform: translateX(-50%);
   background: radial-gradient(
     ellipse at center,
-    rgba(45, 212, 191, 0.16) 0%,
-    rgba(167, 139, 250, 0.07) 38%,
+    var(--hero-glow-a) 0%,
+    var(--hero-glow-b) 38%,
     transparent 68%
   );
   pointer-events: none;
@@ -334,7 +416,7 @@ img {
   font-weight: 650;
   margin: 0 0 18px;
   max-width: 13ch;
-  background: linear-gradient(160deg, #ffffff 12%, #a9b4c4 96%);
+  background: linear-gradient(160deg, var(--hero-title-a) 12%, var(--hero-title-b) 96%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -361,7 +443,7 @@ img {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface-hi);
   line-height: 0;
 }
 .figure img {
@@ -393,12 +475,12 @@ img {
   transform: translateY(-1px);
 }
 .btn--primary {
-  background: linear-gradient(180deg, #5eead4, var(--accent-strong));
-  color: #04201c;
-  box-shadow: 0 8px 24px -10px rgba(45, 212, 191, 0.7);
+  background: linear-gradient(180deg, var(--btn-primary-a), var(--btn-primary-b));
+  color: var(--accent-contrast);
+  box-shadow: 0 8px 24px -10px var(--btn-primary-glow);
 }
 .btn--primary:hover {
-  background: linear-gradient(180deg, #99f6e4, #2dd4bf);
+  background: linear-gradient(180deg, var(--btn-primary-a-hover), var(--btn-primary-b-hover));
 }
 .btn--ghost {
   border-color: var(--border-strong);
@@ -539,18 +621,18 @@ img {
 .card {
   display: block;
   position: relative;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 42%), var(--bg-elev);
+  background: linear-gradient(180deg, var(--surface-hi), transparent 42%), var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 26px 24px;
   color: var(--fg);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 1px 0 var(--surface-hi-strong);
   transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease;
 }
 .card:hover {
   text-decoration: none;
   border-color: var(--accent-border);
-  background: linear-gradient(180deg, rgba(45, 212, 191, 0.05), transparent 46%), var(--bg-elev-2);
+  background: linear-gradient(180deg, var(--card-hover-tint), transparent 46%), var(--bg-elev-2);
   transform: translateY(-2px);
 }
 .card__badge {
@@ -756,7 +838,7 @@ img {
   color: var(--accent);
 }
 .prose strong {
-  color: #fff;
+  color: var(--fg-strong);
   font-weight: 650;
 }
 .prose blockquote {
@@ -797,7 +879,7 @@ img {
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 1.5px 6px;
-  color: #7dd3fc;
+  color: var(--code-inline-fg);
   word-break: break-word;
 }
 .prose pre {
@@ -896,12 +978,12 @@ img {
 
 /* 语言回退提示 */
 .fallback-note {
-  background: rgba(251, 191, 36, 0.09);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: var(--notice-bg);
+  border: 1px solid var(--notice-border);
   border-radius: var(--radius);
   padding: 11px 16px;
   font-size: 14px;
-  color: #fde68a;
+  color: var(--notice-fg);
   margin-bottom: 26px;
 }
 
@@ -1004,7 +1086,7 @@ img {
     align-items: stretch;
     gap: 4px;
     padding: 12px 24px 18px;
-    background: rgba(8, 9, 12, 0.97);
+    background: var(--header-bg-solid);
     backdrop-filter: blur(14px) saturate(160%);
     border-bottom: 1px solid var(--border);
     display: none;
@@ -1167,4 +1249,149 @@ img {
   border-top: 1px solid var(--border);
   font-size: 13px;
   color: var(--fg-dim);
+}
+
+/* ============================================================
+   UI 精修层（polish）
+   目标：对齐 cursor.com / grok.com 一类产品站的视觉与手感。
+   只做新增与覆盖，不改动上方既有声明，浅色主题沿用原有 token 覆盖机制。
+   ============================================================ */
+
+:root {
+  /* 缓动与节奏 */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.14s;
+  --dur: 0.22s;
+  --dur-slow: 0.4s;
+
+  /* 精致描边与高光 */
+  --hairline: rgba(255, 255, 255, 0.07);
+  --hairline-strong: rgba(255, 255, 255, 0.12);
+  --focus-ring: rgba(45, 212, 191, 0.55);
+
+  /* 层级阴影：由轻到重 */
+  --elev-1: 0 1px 1px rgba(0, 0, 0, 0.28), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
+  --elev-2: 0 2px 4px rgba(0, 0, 0, 0.32), 0 14px 32px -14px rgba(0, 0, 0, 0.7);
+  --elev-3: 0 4px 10px rgba(0, 0, 0, 0.36), 0 28px 64px -24px rgba(0, 0, 0, 0.8);
+}
+:root[data-theme='light'] {
+  --hairline: rgba(16, 24, 40, 0.08);
+  --hairline-strong: rgba(16, 24, 40, 0.14);
+  --focus-ring: rgba(13, 148, 136, 0.45);
+  --elev-1: 0 1px 2px rgba(16, 24, 40, 0.06), 0 2px 6px -2px rgba(16, 24, 40, 0.1);
+  --elev-2: 0 2px 6px rgba(16, 24, 40, 0.07), 0 16px 36px -16px rgba(16, 24, 40, 0.18);
+  --elev-3: 0 4px 12px rgba(16, 24, 40, 0.08), 0 32px 72px -28px rgba(16, 24, 40, 0.24);
+}
+
+/* 排版节奏：更紧的行高、更明确的光学对齐 */
+body {
+  font-feature-settings: 'cv11', 'ss01';
+  font-variant-ligatures: contextual;
+}
+h1, h2, h3, h4 {
+  letter-spacing: -0.014em;
+  line-height: 1.18;
+}
+h1 { letter-spacing: -0.024em; }
+
+/* 可见焦点：仅键盘触发，不干扰鼠标 */
+:where(a, button, [tabindex], summary):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* 平滑主题切换与更轻的选区 */
+::selection { background: var(--accent-soft); }
+html { transition: background-color var(--dur) var(--ease-out); }
+
+/* ---------- 顶栏：更薄、更清晰的分隔 ---------- */
+.site-header {
+  border-bottom: 1px solid var(--hairline);
+  transition: background var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+.site-header.is-stuck {
+  box-shadow: 0 1px 0 var(--hairline), 0 8px 24px -20px rgba(0, 0, 0, 0.6);
+}
+.site-header a { transition: color var(--dur-fast) var(--ease-out); }
+
+/* ---------- 按钮：统一高度、触感与按压 ---------- */
+.btn {
+  min-height: 42px;
+  padding: 10px 20px;
+  border-radius: 9px;
+  letter-spacing: -0.006em;
+  transition: transform var(--dur-fast) var(--ease-out),
+    background var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0) scale(0.985); }
+.btn--primary {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 10px 26px -12px var(--btn-primary-glow);
+}
+.btn--primary:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 14px 32px -12px var(--btn-primary-glow);
+}
+.btn--ghost {
+  border-color: var(--hairline-strong);
+  background: linear-gradient(180deg, var(--surface-hi), transparent), var(--bg-elev);
+}
+.btn--ghost:hover {
+  border-color: var(--accent-border);
+  box-shadow: var(--elev-1);
+}
+:where(.btn, .card, .chip, .tab):focus-visible { outline-offset: 3px; }
+
+/* ---------- 卡片：更克制的圆角、悬停高光走指针 ---------- */
+.card {
+  border-color: var(--hairline);
+  border-radius: 14px;
+  box-shadow: inset 0 1px 0 var(--hairline), var(--elev-1);
+  transition: transform var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    background var(--dur) var(--ease-out);
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: inset 0 1px 0 var(--hairline-strong), var(--elev-2);
+}
+.card__title { letter-spacing: -0.012em; }
+.card__desc { text-wrap: pretty; }
+
+/* ---------- 章节标题：更明确的层级与副标题对比 ---------- */
+.section__title {
+  letter-spacing: -0.02em;
+  line-height: 1.16;
+  text-wrap: balance;
+}
+.section__lead {
+  text-wrap: pretty;
+  max-width: 68ch;
+}
+
+/* ---------- 段落文本：避免孤字、提升长文可读性 ---------- */
+p, li { text-wrap: pretty; }
+.doc :where(p, li) { max-width: 72ch; }
+
+/* ---------- 表格与代码：更清晰的边界 ---------- */
+:where(table) { border-collapse: separate; border-spacing: 0; }
+:where(thead th) { letter-spacing: 0.01em; }
+:where(pre, code) { font-variant-ligatures: none; }
+
+/* ---------- 列表卡片里的链接：悬停位移更轻 ---------- */
+.library a, .cluster a { transition: color var(--dur-fast) var(--ease-out); }
+
+/* ---------- 动效可访问性 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

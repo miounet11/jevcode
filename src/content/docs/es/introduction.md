@@ -1,68 +1,27 @@
 ---
-title: "Conoce Jev"
-description: "Jev es el modelo insignia de TypeSafe y el primer modelo de System One. Convierte estados no estructurados y preguntas tipadas en decisiones tipadas que el software puede utilizar directamente."
+title: JevCode
+description: JevCode es la casa de Jev. El modelo es clavue-jev, el mejor Jev del mundo hoy. Una llamada envía un estado y preguntas tipadas, y devuelve un juicio con el que el software puede ramificar.
 section: start
 order: 10
-tags: ['overview', 'system-one']
-source: docs.typesafe.ai/introduction
-translatedFrom: zh
+tags: ['overview', 'clavue-jev']
 ---
 
-## Comprensión en una frase
+## JevCode
 
-Jev no es un modelo de chat. Le proporcionas **estado** (state) y **preguntas tipadas** (typed questions), y devuelve **decisiones tipadas** (typed decisions): una opción, una puntuación o una probabilidad booleana, cada una acompañada de una **confianza** (confidence).
+JevCode es la casa de Jev. El modelo de este sitio es **clavue-jev**. Lo construimos, lo servimos y lo sostenemos como el mejor Jev del mundo hoy.
 
-Esta posición determina la diferencia fundamental con los modelos conversacionales:
+jev-1.13.0 aparece en la página de comparación, con la misma pregunta. No es el modelo que este sitio ofrece.
 
-| Dimensión | Modelo conversacional | Jev |
-| :--- | :--- | :--- |
-| Salida | Texto libre | Resultado estructurado con un esquema fijo |
-| Uso | Generación, conversación, cadenas de razonamiento | Clasificación, enrutamiento, puntuación, validación, guardrails |
-| Integración | Análisis de la salida del modelo | Consumo directo del valor devuelto, sin necesidad de análisis con expresiones regulares |
-| Confianza | Generalmente ausente | Presente en cada respuesta |
-| Latencia | Nivel de segundos, crece con la longitud de la salida | Baja y estable |
+clavue-jev no es un modelo de chat. Envías un **estado** y hasta seis **preguntas tipadas**. Devuelve campos que un programa puede leer.
 
-## Por qué se necesita una «capa de decisión»
+| Pregunta | Vuelta |
+| :--- | :--- |
+| `noul` | Número de 0 a 1. Cuánto es sí. |
+| `confidence` | Número de 0 a 1. Cuánto aguanta el juicio. |
+| `choice` | Una de las opciones que enviaste. |
 
-Al integrar LLMs en sistemas empresariales, el dolor más común es que el modelo devuelve un texto en lenguaje natural, lo que obliga a escribir un analizador, gestionar casos límite y adivinar si la respuesta es correcta. Jev abstrae esta capa: la propia pregunta declara el tipo de salida, y el modelo debe responder según el esquema.
-
-```json
-{
-  "department": {
-    "type": "choice",
-    "instructions": "Which team should handle this",
-    "criteria": {
-      "billing": "Payment or subscription issues",
-      "technical": "Bugs or integration problems",
-      "sales": "Pricing or account questions"
-    }
-  }
-}
-```
-
-El valor devuelto es uno de `billing` / `technical` / `sales`, junto con un nivel de confianza. Sin análisis, sin formatos de respaldo.
-
-## Tres primitivas de pregunta
-
-Todas las decisiones se reducen a tres tipos de preguntas. Esta es la abstracción central de Jev; comprenderlas es comprender todo el sistema:
-
-- **[Choice](/es/primitives/choice/)** — Selecciona una opción de entre un conjunto de candidatos mutuamente excluyentes. Se utiliza para la identificación de intenciones, el enrutamiento de tickets y la selección de acciones.
-- **[Score](/es/primitives/score/)** — Asigna una puntuación según una escala o criterios de evaluación. Se utiliza para la clasificación por relevancia, la evaluación de calidad y la clasificación de riesgos.
-- **[Noul](/es/primitives/noul/)** — Responde a una pregunta de sí/no, devolviendo la probabilidad de que la respuesta sea «sí». Se utiliza para la validación de contenido, la verificación de afirmaciones y los guardrails.
-
-En una sola solicitud se pueden combinar estos tres tipos de preguntas. El modelo lee el estado una sola vez y luego evalúa todas las preguntas en paralelo.
-
-## Posicionamiento de System One
-
-System One es una categoría de modelos diseñados específicamente para «tomar decisiones rápidas y estructuradas que el software pueda utilizar directamente». Jev es el primer modelo de esta categoría. No sustituye a los modelos de razonamiento tipo System Two, sino que complementa su分工 (división de trabajo):
-
-- **System One**: Juicios de alta frecuencia, baja latencia y estructurados. Son una evolución de las instrucciones if/else en las cadenas de procesamiento empresarial.
-- **System Two**: Tareas complejas que requieren razonamiento en múltiples pasos y cadenas de pensamiento largas.
-
-En la práctica, es común utilizar System One en abundancia dentro de la cadena de procesamiento para realizar una distribución rápida, y solo escalar a modelos más potentes cuando realmente se necesita un razonamiento profundo, lo que reduce los costes y la latencia.
-
-## Siguientes pasos
-
-- [Inicio rápido en 5 minutos](/es/quickstart/) — Obtén tu clave de API y realiza tu primera llamada
-- [Conceptos clave](/es/concepts/system-one/) — Comprende System One y los modelos de estado
-- [Patrones de arquitectura](/es/patterns/) — Descubre cómo organizar estas llamadas en entornos de producción
+- [System One](/es/concepts/system-one/)
+- [Estado](/es/concepts/state/)
+- [Certeza](/es/concepts/confidence/)
+- [Probar](/es/try/)
+- [API](/es/api/)

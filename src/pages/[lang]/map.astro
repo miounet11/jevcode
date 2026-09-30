@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Cluster from '../../components/Cluster.astro';
+import { languages, pick, type Lang } from '../../i18n/ui';
+import { clusterGroups, clusterText, pageHref } from '../../data/cluster';
+import * as mapCopy from '../../i18n/pages/map';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const path = `/${lang}/map/`;
+const title = pick(lang, mapCopy.title);
+const description = pick(lang, mapCopy.description);
+
+const list = clusterGroups.flatMap((group) =>
+  group.items
+    .filter((item) => item.href !== '/map/')
+    .map((item) => ({
+      name: clusterText(lang, item.title),
+      url: new URL(pageHref(lang, item.href), Astro.site).href,
+    })),
+);
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: title,
+  itemListElement: list.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.name,
+    url: item.url,
+  })),
+};
+---
+
+<BaseLayout lang={lang} title={title} description={description} path={path} cluster={false}>
+  <section class="section">
+    <div class="wrap directory-page">
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{title}</p>
+      <h1>{title}</h1>
+      <p class="directory-page__lead">{description}</p>
+      <p class="directory-page__lead" set:html={pick(lang, mapCopy.lead).replaceAll('{lang}', lang)} />
+      <Cluster lang={lang} path={path} variant="map" />
+    </div>
+  </section>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemList).replaceAll('<', '\\u003c')} />
+</BaseLayout>
+
+<style>
+  .directory-page { max-width: 860px; }
+  .directory-page h1 { font-size: clamp(34px, 5vw, 52px); letter-spacing: -0.04em; margin: 12px 0; }
+  .directory-page__lead { color: var(--fg-muted); max-width: 66ch; }
+  .directory-page__lead a { color: var(--accent-strong); }
+</style>

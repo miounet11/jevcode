@@ -175,7 +175,9 @@ try {
 
       const me = await get('/api/auth/me');
       const mb = await me.json().catch(() => ({}));
-      ok('余额已扣到 499 美分', mb.credit && mb.credit.cents === 499, JSON.stringify(mb.credit));
+      ok('余额已按输入 token 扣减',
+        mb.credit && mb.credit.microUsd < 5_000_000 && mb.credit.microUsd > 0,
+        JSON.stringify(mb.credit));
     }
   }
 

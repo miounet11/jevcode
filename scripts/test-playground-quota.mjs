@@ -12,7 +12,7 @@ import { spawn } from 'node:child_process';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { openAccounts, SIGNUP_CREDIT_CENTS } from '../server/accounts.mjs';
+import { openAccounts, SIGNUP_CREDIT_MICROUSD } from '../server/accounts.mjs';
 
 const PORT = 8793;
 const dir = mkdtempSync(path.join(tmpdir(), 'jev-pg-'));
@@ -104,12 +104,11 @@ try {
   console.log('\n额度扣减');
   {
     const l2 = openAccounts(dbPath);
-    const used = l2.balance(user.id).cents;
+    const used = l2.balance(user.id).microUsd;
     if (upstreamUp) {
-      ok('余额已随调用扣减（500→499 美分）', used === 499, `实际余额 ${used}`);
+      ok('余额已按输入 token 扣减', used < SIGNUP_CREDIT_MICROUSD && used > 0, `实际微美元 ${used}`);
     } else {
-      // 上游不可用时判定失败已退回额度，余额应保持 500——这条顺带验证了退款路径。
-      ok('上游失败后退回额度（余额仍为 500）', used === 500, `实际余额 ${used}`);
+      ok('上游失败不扣费', used === SIGNUP_CREDIT_MICROUSD, `实际微美元 ${used}`);
     }
     l2.close();
   }
@@ -118,9 +117,9 @@ try {
   {
     // 直接把剩余额度一次性用光，再打一次应被拒
     const l3 = openAccounts(dbPath);
-    const left = l3.balance(user.id).judgmentsLeft;
-    if (left > 0) l3.consume(user.id, left);
-    const after = l3.balance(user.id).cents;
+    const left = l3.balance(user.id).inputTokensLeft;
+    if (left > 0) l3.chargeInputTokens(user.id, left);
+    const after = l3.balance(user.id).microUsd;
     l3.close();
 
     const r = await call(validBody, { authorization: 'Bearer ' + key });

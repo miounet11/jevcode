@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
-import { languages, useTranslations, type Lang } from '../../i18n/ui';
+import { languages, useTranslations, pick, type Lang } from '../../i18n/ui';
 import ownCards from '../../../data/builds/cards.json';
+import * as buildsCopy from '../../i18n/pages/builds';
 
 // 只展示本站用 Jev 判定出的卡片。没有卡片时照常渲染空页，
 // 不再退回竞品镜像——镜像只作候选 id 来源，不是本站产出。
@@ -33,42 +34,23 @@ const path = `/${lang}/builds/`;
 const t = useTranslations(lang);
 const fmt = (n: number) => new Intl.NumberFormat('en').format(n);
 
-const copy =
-  lang === 'zh'
-    ? {
-        title: 'Jev 动态',
-        lead: '公开帖子原文由本站用 Jev 判定。标题必须是原文里的连续摘录；判定不通过的帖子不会出现。这不是本站核实过的生产案例。',
-        collected: '索引条目',
-        analysed: '本站已判定',
-        authors: '作者',
-        updated: `本站判定更新于 ${snapshot.updated}。`,
-        source: '查看来源',
-        category: '分类',
-        usecase: '用途',
-        all: '全部',
-        search: '搜索标题或正文…',
-        shownTpl: '显示 {n} 条',
-        empty: '没有匹配的动态。',
-        post: '原帖',
-        link: '链接',
-      }
-    : {
-        title: 'Jev builds',
-        lead: 'Public posts judged here with Jev. A title is kept only when it is a contiguous excerpt of the post. Posts that fail the judgment are omitted. This is not a verified production-case list.',
-        collected: 'Indexed posts',
-        analysed: 'Judged here',
-        authors: 'Authors',
-        updated: `Judged here at ${snapshot.updated}.`,
-        source: 'View source',
-        category: 'Category',
-        usecase: 'Use',
-        all: 'All',
-        search: 'Search title or text…',
-        shownTpl: '{n} shown',
-        empty: 'No matching builds.',
-        post: 'Post',
-        link: 'Link',
-      };
+const copy = {
+  title: pick(lang, buildsCopy.title),
+  lead: pick(lang, buildsCopy.lead),
+  collected: pick(lang, buildsCopy.collected),
+  analysed: pick(lang, buildsCopy.analysed),
+  authors: pick(lang, buildsCopy.authors),
+  updated: pick(lang, buildsCopy.updated).replace('{date}', snapshot.updated),
+  source: pick(lang, buildsCopy.source),
+  category: pick(lang, buildsCopy.category),
+  usecase: pick(lang, buildsCopy.usecase),
+  all: pick(lang, buildsCopy.all),
+  search: pick(lang, buildsCopy.search),
+  shownTpl: pick(lang, buildsCopy.shownTpl),
+  empty: pick(lang, buildsCopy.empty),
+  post: pick(lang, buildsCopy.post),
+  link: pick(lang, buildsCopy.link),
+};
 
 const categories = snapshot.categories.filter((entry) => entry[0]);
 const usecases = snapshot.usecases.filter((entry) => entry[0]);

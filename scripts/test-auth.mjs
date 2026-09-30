@@ -151,7 +151,8 @@ test('会话与账号余额打通：注册送 $5，消费可查', () => {
   const { token, user } = auth.login('quota@example.com', 'a-good-password');
   assert.equal(auth.resolveSession(token).user.id, user.id);
   assert.equal(a.balance(user.id).cents, 500, '注册应送 $5');
-  a.consume(user.id, 3);
-  assert.equal(a.balance(user.id).cents, 497, '每次判定扣 1 美分');
-  assert.equal(a.balance(user.id).usd, '4.97');
+  assert.equal(a.balance(user.id).microUsd, 5_000_000);
+  a.chargeInputTokens(user.id, 1000);
+  assert.equal(a.balance(user.id).microUsd, 5_000_000 - 42, '1000 个输入 token 扣 42 微美元');
+  assert.equal(a.balance(user.id).usd, '4.999958');
 });

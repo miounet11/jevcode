@@ -1,14 +1,12 @@
 /**
- * 账号与额度账本 —— 会员体系的地基。
+ * 账号与额度账本。
  *
- * 回答两个服务端必须知道的问题：谁在用、还剩多少钱。
+ * 余额不走「当前值」字段，而是按事件行累加（充值为正、消费为负）。
+ * ledger.cents 这个列名是历史遗留：单位已是微美元（1 USD = 1_000_000）。
+ * 旧库在第一次打开时把原美分乘 10000，并用 schema_meta.ledger_unit 保证只做一次。
  *
- * 口径（刻意保持简单）：注册送 $5，账号+密码即可，按次扣费，用完为止。
- * 存储用 node:sqlite（Node 22.5+ 内置，零外部依赖）。
- *
- * 余额不走「当前值」字段，而是**按事件行累加**（充值为正、消费为负）。
- * 这样账目可审计、可对账，也不会因为并发写把余额写花；余额查询是
- * SUM 聚合，量级在这（单机、每用户几百行）完全够用。
+ * 扣费与 jev-1.13.0 相同：只按输入 token，每百万 $0.042，输出免费。
+ * credit() 的金额参数仍是美分，写入时换算成微美元。
  */
 
 import { DatabaseSync } from 'node:sqlite';
@@ -16,10 +14,16 @@ import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import {
-  SIGNUP_CREDIT_CENTS, JUDGE_PRICE_CENTS, centsToUsd, SIGNUP_JUDGMENTS, PLAN_META,
+  SIGNUP_CREDIT_CENTS, SIGNUP_CREDIT_MICROUSD, MICROUSD_PER_CENT,
+  centsToUsd, microUsdToUsd, inputCostMicroUsd, inputTokensLeft, PLAN_META,
+  INPUT_USD_PER_MILLION, OUTPUT_USD_PER_MILLION, SIGNUP_INPUT_TOKENS,
 } from './plans.mjs';
 
-export { SIGNUP_CREDIT_CENTS, JUDGE_PRICE_CENTS, centsToUsd, SIGNUP_JUDGMENTS, PLAN_META };
+export {
+  SIGNUP_CREDIT_CENTS, SIGNUP_CREDIT_MICROUSD, MICROUSD_PER_CENT,
+  centsToUsd, microUsdToUsd, inputCostMicroUsd, inputTokensLeft, PLAN_META,
+  INPUT_USD_PER_MILLION, OUTPUT_USD_PER_MILLION, SIGNUP_INPUT_TOKENS,
+};
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS users (
@@ -37,7 +41,7 @@ CREATE TABLE IF NOT EXISTS api_keys (
   created_at  INTEGER NOT NULL,
   revoked_at  INTEGER
 );
--- 账目流水：正数为入账（注册赠送、充值），负数为消费
+-- 账目流水：正数为入账，负数为消费。cents 列的单位是微美元。
 CREATE TABLE IF NOT EXISTS ledger (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id     TEXT NOT NULL REFERENCES users(id),
@@ -46,11 +50,33 @@ CREATE TABLE IF NOT EXISTS ledger (
   kind        TEXT NOT NULL,
   ref         TEXT
 );
+CREATE TABLE IF NOT EXISTS schema_meta (
+  k TEXT PRIMARY KEY,
+  v TEXT NOT NULL
+);
 CREATE INDEX IF NOT EXISTS idx_ledger_user ON ledger(user_id, ts);
 CREATE INDEX IF NOT EXISTS idx_keys_hash ON api_keys(hash);
 `;
 
 const sha256 = (s) => createHash('sha256').update(s).digest('hex');
+
+/** 旧账本的整数是美分。乘 10000 变成微美元，只做一次。 */
+function migrateLedgerUnit(db) {
+  db.exec('BEGIN IMMEDIATE');
+  try {
+    const unit = db.prepare("SELECT v FROM schema_meta WHERE k = 'ledger_unit'").get();
+    if (!unit) {
+      db.prepare('UPDATE ledger SET cents = cents * ?').run(MICROUSD_PER_CENT);
+      db.prepare("INSERT INTO schema_meta (k, v) VALUES ('ledger_unit', 'microusd')").run();
+    } else if (unit.v !== 'microusd') {
+      throw new Error(`unknown ledger unit: ${unit.v}`);
+    }
+    db.exec('COMMIT');
+  } catch (err) {
+    db.exec('ROLLBACK');
+    throw err;
+  }
+}
 
 /**
  * 打开（或创建）账本。
@@ -63,6 +89,7 @@ export function openAccounts(dbPath) {
   db.exec('PRAGMA journal_mode = WAL');
   db.exec('PRAGMA foreign_keys = ON');
   db.exec(SCHEMA);
+  migrateLedgerUnit(db);
 
   const qUserByEmail = db.prepare('SELECT * FROM users WHERE email = ?');
   const qUserById = db.prepare('SELECT * FROM users WHERE id = ?');
@@ -71,15 +98,26 @@ export function openAccounts(dbPath) {
     'SELECT COALESCE(SUM(cents), 0) AS c FROM ledger WHERE user_id = ?'
   );
 
-  /** 余额（美分） */
-  function balanceCents(userId) {
+  /** 余额，微美元（列名仍是 cents） */
+  function balanceMicro(userId) {
     return Number(qBalance.get(userId).c);
   }
 
-  /** 记一笔账。正数入账、负数消费，由调用方决定符号。 */
-  function record(userId, cents, kind, ref = null, at = Date.now()) {
+  function presentBalance(microUsd) {
+    const tokens = inputTokensLeft(microUsd);
+    return {
+      cents: Math.round(microUsd / MICROUSD_PER_CENT),
+      usd: microUsdToUsd(microUsd),
+      microUsd,
+      inputTokensLeft: tokens,
+      judgmentsLeft: tokens,
+    };
+  }
+
+  /** 记一笔账。金额是微美元。正数入账、负数消费。 */
+  function record(userId, microUsd, kind, ref = null, at = Date.now()) {
     db.prepare('INSERT INTO ledger (user_id, ts, cents, kind, ref) VALUES (?, ?, ?, ?, ?)')
-      .run(userId, at, cents, kind, ref);
+      .run(userId, at, microUsd, kind, ref);
   }
 
   return {
@@ -91,80 +129,81 @@ export function openAccounts(dbPath) {
       db.prepare('INSERT INTO users (id, email, plan, created_at) VALUES (?, ?, ?, ?)').run(
         id, email, plan, at
       );
-      record(id, SIGNUP_CREDIT_CENTS, 'signup_credit', null, at);
+      record(id, SIGNUP_CREDIT_MICROUSD, 'signup_credit', null, at);
       return qUserById.get(id);
     },
 
     getUser: (id) => qUserById.get(id) || null,
     getUserByEmail: (email) => qUserByEmail.get(email) || null,
 
-    /** 余额（美分） */
-    balanceCents,
+    /** 余额，微美元 */
+    balanceMicro,
 
-    /** 面向展示的余额信息 */
+    /**
+     * 面向展示的余额。cents 四舍五入到美分，避免一次不足 1 美分的调用
+     * 把 $5.00 显示成 $4.99。精确值看 usd / microUsd。
+     */
     balance(userId) {
       const user = qUserById.get(userId);
       if (!user) return null;
-      const cents = balanceCents(userId);
-      return {
-        cents,
-        usd: centsToUsd(cents),
-        judgmentsLeft: Math.floor(cents / JUDGE_PRICE_CENTS),
-      };
+      return presentBalance(balanceMicro(userId));
     },
 
     /**
-     * 扣一次判定费。余额不足即拒绝，不写账。
-     * 判定失败时调用 refund 退回。
+     * 按输入 token 扣费。余额不够则整笔拒绝，不写账。
+     * 调用方应在上游成功后再扣，失败不必走 refund。
      */
-    consume(userId, n = 1, at = Date.now()) {
+    chargeInputTokens(userId, tokens, at = Date.now()) {
       if (!qUserById.get(userId)) return { ok: false, reason: 'no-such-user' };
-      const cost = JUDGE_PRICE_CENTS * n;
-      const cents = balanceCents(userId);
-      if (cents < cost) {
-        return { ok: false, reason: 'insufficient_credit', balance: this.balance(userId) };
+      const n = Math.floor(Number(tokens));
+      const cost = inputCostMicroUsd(n);
+      const microUsd = balanceMicro(userId);
+      if (microUsd < cost) {
+        return { ok: false, reason: 'insufficient_credit', balance: presentBalance(microUsd) };
       }
-      record(userId, -cost, 'judge', null, at);
-      return { ok: true, balance: this.balance(userId) };
+      if (cost > 0) record(userId, -cost, 'judge', String(n), at);
+      return { ok: true, balance: this.balance(userId), cost };
     },
 
     /**
-     * 退还最近一笔判定费（上游失败时用，避免用户白扣）。
-     * @returns {boolean} 是否真的退到
+     * 删掉最近一笔判定扣费（整行）。没有可退的行则返回 false。
+     * @returns {boolean}
      */
-    refund(userId, n = 1) {
-      const cost = JUDGE_PRICE_CENTS * n;
+    refund(userId) {
       const row = db.prepare(
-        "SELECT id, cents FROM ledger WHERE user_id = ? AND kind = 'judge' AND cents <= ? ORDER BY ts DESC, id DESC LIMIT 1"
-      ).get(userId, -cost);
+        "SELECT id FROM ledger WHERE user_id = ? AND kind = 'judge' AND cents < 0 ORDER BY ts DESC, id DESC LIMIT 1"
+      ).get(userId);
       if (!row) return false;
-      if (row.cents === -cost) {
-        db.prepare('DELETE FROM ledger WHERE id = ?').run(row.id);
-      } else {
-        db.prepare('UPDATE ledger SET cents = cents + ? WHERE id = ?').run(cost, row.id);
-      }
+      db.prepare('DELETE FROM ledger WHERE id = ?').run(row.id);
       return true;
     },
 
-    /** 手工入账（充值/补偿用） */
+    /**
+     * 手工入账。cents 是美分（人看的美元分），入库时换成微美元。
+     */
     credit(userId, cents, kind = 'topup', ref = null, at = Date.now()) {
       if (!qUserById.get(userId)) return false;
       if (!Number.isInteger(cents) || cents <= 0) throw new Error('credit must be a positive integer');
-      record(userId, cents, kind, ref, at);
+      record(userId, cents * MICROUSD_PER_CENT, kind, ref, at);
       return this.balance(userId);
     },
 
-    /** 某用户的流水，新的在前 */
+    /** 某用户的流水，新的在前。cents 列是微美元，展示前要换算。 */
     entries: (userId, limit = 100) =>
       db.prepare(
         'SELECT ts, cents, kind, ref FROM ledger WHERE user_id = ? ORDER BY ts DESC, id DESC LIMIT ?'
       ).all(userId, limit),
 
-    /** 累计消费（美分） */
-    spentCents(userId) {
+    /** 累计消费，微美元 */
+    spentMicroUsd(userId) {
       return Math.abs(Number(db.prepare(
         "SELECT COALESCE(SUM(cents), 0) AS c FROM ledger WHERE user_id = ? AND cents < 0"
       ).get(userId).c));
+    },
+
+    /** 累计消费折成美分，不足 1 美分为 0 */
+    spentCents(userId) {
+      return Math.floor(this.spentMicroUsd(userId) / MICROUSD_PER_CENT);
     },
 
     /**

@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { languages, useTranslations, type Lang } from '../../i18n/ui';
+import { languages, useTranslations, pick, type Lang } from '../../i18n/ui';
 import { pulseEntries, pulseCategories, categorize } from '../../data/community';
+import * as communityCopy from '../../i18n/pages/community';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -12,26 +13,15 @@ const t = useTranslations(lang);
 
 const path = `/${lang}/community/`;
 
-const copy =
-  lang === 'zh'
-    ? {
-        title: '社区脉搏',
-        lead: 'Jev 正在被用来做什么：社区推文精选，看真实项目、演示与讨论。打开任一条可看到原文摘录全文与出处。',
-        stats: '条精选',
-        open: '查看详情',
-        asOf: '收录时间',
-        all: '全部',
-        note: '条目为英文原文摘录，筛选标准：显著传播量或附项目链接；经 Jev 批级相关性判定。',
-      }
-    : {
-        title: 'Community pulse',
-        lead: 'What Jev is being used for: curated community posts — real projects, demos, and discussion. Open any entry for the full excerpt and its source.',
-        stats: 'entries',
-        open: 'Read entry',
-        asOf: 'Collected',
-        all: 'All',
-        note: 'Entries are excerpts of original posts. Inclusion bar: significant engagement or an attached project link; batch relevance judged by Jev.',
-      };
+const copy = {
+  title: pick(lang, communityCopy.title),
+  lead: pick(lang, communityCopy.lead),
+  stats: pick(lang, communityCopy.stats),
+  open: pick(lang, communityCopy.open),
+  asOf: pick(lang, communityCopy.asOf),
+  all: pick(lang, communityCopy.all),
+  note: pick(lang, communityCopy.note),
+};
 
 const groups = pulseCategories.map((c) => ({
   key: c.key,

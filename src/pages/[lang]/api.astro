@@ -1,7 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { languages, type Lang } from '../../i18n/ui';
-import { JUDGE_PRICE_CENTS, SIGNUP_CREDIT_CENTS, centsToUsd } from '../../../server/plans.mjs';
+import { languages, pick, type Lang } from '../../i18n/ui';
+import * as apiCopy from '../../i18n/pages/api';
+import {
+  INPUT_USD_PER_MILLION, SIGNUP_CREDIT_CENTS, SIGNUP_CREDIT_MICROUSD, SIGNUP_INPUT_TOKENS, centsToUsd,
+} from '../../../server/plans.mjs';
 
 export const prerender = true;
 
@@ -12,87 +15,35 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const path = `/${lang}/api/`;
 
-const copy = lang === 'zh'
-  ? {
-      title: 'API',
-      lead: `用 API Key 从你的程序调用判定。注册即送 $${centsToUsd(SIGNUP_CREDIT_CENTS)}，每次判定 $${centsToUsd(JUDGE_PRICE_CENTS)}，用完为止。`,
-      getKeyLead: '在账户页签发一个 Key。明文只显示一次，服务端只保留 sha256。',
-      getKey: '去账户页签发 Key',
-      authTitle: '认证',
-      authLead: '所有 /v1/* 请求都要带 Bearer Key。只认 Key，不认浏览器会话 Cookie——把网页登录状态和计费调用分开。',
-      endpointsTitle: '端点',
-      epJudge: '跑一次判定，扣 1 美分。',
-      epMe: '当前用户、余额、累计消费。',
-      epUsage: '余额、累计消费，以及最近的消费流水。',
-      reqTitle: '请求体（/v1/judge）',
-      reqState: 'state',
-      reqStateDesc: '被判定的文本，8–4000 字符。',
-      reqQuestions: 'questions',
-      reqQuestionsDesc: '最多 6 个问题，键名需为小写字母开头的标识符。',
-      typesTitle: '问题类型',
-      typeNoul: '相关程度，返回 0–1 的浮点数。',
-      typeConf: '置信度，返回 0–1 的浮点数。',
-      typeChoice: '从给定选项里选一个，返回被选中的字符串。',
-      respTitle: '响应',
-      respCredit: '本次调用后的余额。',
-      creditTitle: 'credit 结构',
-      creditFields: [
-        ['cents', '剩余额度，整数「分」。'],
-        ['usd', '同一数值的美元字符串。'],
-        ['judgmentsLeft', '还能跑多少次判定（floor(cents / 单价)）。'],
-      ],
-      errTitle: '错误',
-      errTh: '状态',
-      errCodes: [
-        ['401', 'unauthorized / invalid_api_key', '缺少或无效的 API Key。'],
-        ['400', 'invalid_request', 'state 太短或没有问题。'],
-        ['429', 'quota_exceeded', '余额不足，带 retry-after。'],
-        ['502', 'upstream_unavailable', '判定后端暂时不可用，本次不扣费。'],
-      ],
-      exampleTitle: '示例',
-      ctaTry: '先去试用页试一次',
-      ctaPricing: '看价格',
-    }
-  : {
-      title: 'API',
-      lead: `Call judgments from your own program with an API key. Sign up and get $${centsToUsd(SIGNUP_CREDIT_CENTS)} in credit, billed at $${centsToUsd(JUDGE_PRICE_CENTS)} per judgment until it runs out.`,
-      getKeyLead: 'Issue a key on your account page. The plaintext is shown once; the server keeps only its sha256.',
-      getKey: 'Get a key on your account page',
-      authTitle: 'Authentication',
-      authLead: 'Every /v1/* request needs a Bearer key. Keys only — session cookies are not accepted, so browser sign-in and billed API calls stay separate.',
-      endpointsTitle: 'Endpoints',
-      epJudge: 'Run one judgment. Costs 1 cent.',
-      epMe: 'Current user, balance, and total spend.',
-      epUsage: 'Balance, total spend, and recent ledger entries.',
-      reqTitle: 'Request body (/v1/judge)',
-      reqState: 'state',
-      reqStateDesc: 'The text to judge, 8–4000 chars.',
-      reqQuestions: 'questions',
-      reqQuestionsDesc: 'Up to 6 questions; keys must be lowercase-letter identifiers.',
-      typesTitle: 'Question types',
-      typeNoul: 'Relevance, returns a float 0–1.',
-      typeConf: 'Confidence, returns a float 0–1.',
-      typeChoice: 'Pick one of the given options; returns the chosen string.',
-      respTitle: 'Response',
-      respCredit: 'Balance after this call.',
-      creditTitle: 'The credit object',
-      creditFields: [
-        ['cents', 'Remaining balance as integer cents.'],
-        ['usd', 'The same value as a USD string.'],
-        ['judgmentsLeft', 'Judgments you can still run (floor(cents / price)).'],
-      ],
-      errTitle: 'Errors',
-      errTh: 'Status',
-      errCodes: [
-        ['401', 'unauthorized / invalid_api_key', 'Missing or invalid API key.'],
-        ['400', 'invalid_request', 'State too short, or no questions.'],
-        ['429', 'quota_exceeded', 'Not enough balance; includes retry-after.'],
-        ['502', 'upstream_unavailable', 'Judgment backend is down. Not charged.'],
-      ],
-      exampleTitle: 'Example',
-      ctaTry: 'Try one in the playground first',
-      ctaPricing: 'See pricing',
-    };
+const copy = {
+  title: 'API',
+  lead: pick(lang, apiCopy.lead).replace('{credit}', `$${centsToUsd(SIGNUP_CREDIT_CENTS)}`).replace('{rate}', `$${INPUT_USD_PER_MILLION}`),
+  getKeyLead: pick(lang, apiCopy.getKeyLead),
+  getKey: pick(lang, apiCopy.getKey),
+  authTitle: pick(lang, apiCopy.authTitle),
+  authLead: pick(lang, apiCopy.authLead),
+  endpointsTitle: pick(lang, apiCopy.endpointsTitle),
+  epJudge: pick(lang, apiCopy.epJudge),
+  epMe: pick(lang, apiCopy.epMe),
+  epUsage: pick(lang, apiCopy.epUsage),
+  reqTitle: pick(lang, apiCopy.reqTitle),
+  reqStateDesc: pick(lang, apiCopy.reqStateDesc),
+  reqQuestionsDesc: pick(lang, apiCopy.reqQuestionsDesc),
+  typesTitle: pick(lang, apiCopy.typesTitle),
+  typeNoul: pick(lang, apiCopy.typeNoul),
+  typeConf: pick(lang, apiCopy.typeConf),
+  typeChoice: pick(lang, apiCopy.typeChoice),
+  respTitle: pick(lang, apiCopy.respTitle),
+  respCredit: pick(lang, apiCopy.respCredit),
+  creditTitle: pick(lang, apiCopy.creditTitle),
+  creditFields: pick(lang, apiCopy.creditFields),
+  errTitle: pick(lang, apiCopy.errTitle),
+  errTh: pick(lang, apiCopy.errTh),
+  errCodes: pick(lang, apiCopy.errCodes),
+  exampleTitle: pick(lang, apiCopy.exampleTitle),
+  ctaTry: pick(lang, apiCopy.ctaTry),
+  ctaPricing: pick(lang, apiCopy.ctaPricing),
+};
 
 const curlExample = `curl https://api.jevcode.ai/v1/judge \\
   -H "Authorization: Bearer jev_..." \\
@@ -115,13 +66,14 @@ const okExample = `{
     "confidence": { "noul": 0.78 },
     "severity":   { "choice": "medium" }
   },
-  "credit": { "cents": 499, "usd": "4.99", "judgmentsLeft": 499 }
+  "credit": { "cents": ${SIGNUP_CREDIT_CENTS}, "usd": "${centsToUsd(SIGNUP_CREDIT_CENTS)}", "microUsd": ${SIGNUP_CREDIT_MICROUSD}, "inputTokensLeft": ${SIGNUP_INPUT_TOKENS} }
 }`;
 
 const creditExample = `{
-  "cents": 499,
-  "usd": "4.99",
-  "judgmentsLeft": 499
+  "cents": ${SIGNUP_CREDIT_CENTS},
+  "usd": "${centsToUsd(SIGNUP_CREDIT_CENTS)}",
+  "microUsd": ${SIGNUP_CREDIT_MICROUSD},
+  "inputTokensLeft": ${SIGNUP_INPUT_TOKENS}
 }`;
 ---
 
@@ -153,8 +105,8 @@ const creditExample = `{
       <h2>{copy.reqTitle}</h2>
       <table class="api__table">
         <tbody>
-          <tr><td><code>{copy.reqState}</code></td><td>{copy.reqStateDesc}</td></tr>
-          <tr><td><code>{copy.reqQuestions}</code></td><td>{copy.reqQuestionsDesc}</td></tr>
+          <tr><td><code>state</code></td><td>{copy.reqStateDesc}</td></tr>
+          <tr><td><code>questions</code></td><td>{copy.reqQuestionsDesc}</td></tr>
         </tbody>
       </table>
 

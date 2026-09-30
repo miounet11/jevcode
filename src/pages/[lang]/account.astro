@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { languages, type Lang } from '../../i18n/ui';
+import { languages, pick, type Lang } from '../../i18n/ui';
+import * as accountCopy from '../../i18n/pages/account';
 
 export const prerender = true;
 
@@ -11,78 +12,43 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const path = `/${lang}/account/`;
 
-const copy = lang === 'zh'
-  ? {
-      title: '我的账户',
-      lead: '查看余额与消费、签发与吊销 API Key。',
-      loading: '加载中…',
-      notSignedIn: '尚未登录。',
-      signIn: '去登录',
-      remaining: '余额',
-      perDay: '可用于判定',
-      email: '邮箱',
-      plan: '套餐',
-      keys: 'API Key',
-      noKeys: '还没有 Key。',
-      issue: '签发新 Key',
-      issuing: '签发中…',
-      newKeyWarn: '这个 Key 只显示这一次，请立刻保存。',
-      prefix: '前缀',
-      label: '备注',
-      created: '创建于',
-      revoke: '吊销',
-      revoked: '已吊销',
-      active: '可用',
-      logout: '登出',
-      confirmRevoke: '确认吊销这个 Key？使用它的程序会立刻失效。',
-      ledger: '消费明细',
-      ledNone: '还没有消费记录。',
-      ledTime: '时间',
-      ledKind: '类型',
-      ledAmount: '金额',
-      kindSignup: '注册赠送',
-      kindJudge: '判定',
-      kindTopup: '充值',
-      spent: '累计消费',
-      apiDocs: 'API 文档',
-    }
-  : {
-      title: 'Your account',
-      lead: 'See your credit balance and spend, and issue or revoke API keys.',
-      loading: 'Loading…',
-      notSignedIn: 'You are not signed in.',
-      signIn: 'Sign in',
-      remaining: 'Balance',
-      perDay: 'judgments left',
-      email: 'Email',
-      plan: 'Plan',
-      keys: 'API keys',
-      noKeys: 'No keys yet.',
-      issue: 'Issue new key',
-      issuing: 'Issuing…',
-      newKeyWarn: 'This key is shown once. Save it now.',
-      prefix: 'Prefix',
-      label: 'Label',
-      created: 'Created',
-      revoke: 'Revoke',
-      revoked: 'Revoked',
-      active: 'Active',
-      logout: 'Sign out',
-      confirmRevoke: 'Revoke this key? Any program using it stops working immediately.',
-      ledger: 'Ledger',
-      ledNone: 'No entries yet.',
-      ledTime: 'Time',
-      ledKind: 'Type',
-      ledAmount: 'Amount',
-      kindSignup: 'Signup credit',
-      kindJudge: 'Judgment',
-      kindTopup: 'Top-up',
-      spent: 'Total spent',
-      apiDocs: 'API docs',
-    };
+const copy = {
+  title: pick(lang, accountCopy.title),
+  lead: pick(lang, accountCopy.lead),
+  loading: pick(lang, accountCopy.loading),
+  notSignedIn: pick(lang, accountCopy.notSignedIn),
+  signIn: pick(lang, accountCopy.signIn),
+  remaining: pick(lang, accountCopy.remaining),
+  perDay: pick(lang, accountCopy.perDay),
+  email: pick(lang, accountCopy.email),
+  plan: pick(lang, accountCopy.plan),
+  keys: pick(lang, accountCopy.keys),
+  noKeys: pick(lang, accountCopy.noKeys),
+  issue: pick(lang, accountCopy.issue),
+  issuing: pick(lang, accountCopy.issuing),
+  newKeyWarn: pick(lang, accountCopy.newKeyWarn),
+  prefix: pick(lang, accountCopy.prefix),
+  label: pick(lang, accountCopy.label),
+  created: pick(lang, accountCopy.created),
+  revoke: pick(lang, accountCopy.revoke),
+  revoked: pick(lang, accountCopy.revoked),
+  active: pick(lang, accountCopy.active),
+  logout: pick(lang, accountCopy.logout),
+  confirmRevoke: pick(lang, accountCopy.confirmRevoke),
+  ledger: pick(lang, accountCopy.ledger),
+  ledNone: pick(lang, accountCopy.ledNone),
+  ledTime: pick(lang, accountCopy.ledTime),
+  ledKind: pick(lang, accountCopy.ledKind),
+  ledAmount: pick(lang, accountCopy.ledAmount),
+  kindSignup: pick(lang, accountCopy.kindSignup),
+  kindJudge: pick(lang, accountCopy.kindJudge),
+  kindTopup: pick(lang, accountCopy.kindTopup),
+  spent: pick(lang, accountCopy.spent),
+  apiDocs: pick(lang, accountCopy.apiDocs),
+};
 ---
 
-<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path} index={false} cluster={false}>
   <section class="section">
     <div class="wrap acct">
       <p class="eyebrow"><span class="eyebrow__dot"></span>{copy.title}</p>
@@ -226,10 +192,11 @@ const copy = lang === 'zh'
       const bal = data.credit || {};
       document.getElementById('f-remaining').textContent =
         bal.usd == null ? '—' : `$${esc(bal.usd)}`;
+      const tokensLeft = bal.inputTokensLeft != null ? bal.inputTokensLeft : bal.judgmentsLeft;
       document.getElementById('f-left').textContent =
-        bal.judgmentsLeft == null ? '' : `${esc(bal.judgmentsLeft)} ${copy.perDay}`;
+        tokensLeft == null ? '' : `${Number(tokensLeft).toLocaleString(locale)} ${copy.perDay}`;
       document.getElementById('f-spent').textContent =
-        data.spentCents == null ? '—' : `$${esc((data.spentCents / 100).toFixed(2))}`;
+        data.spentUsd != null ? `$${esc(data.spentUsd)}` : '—';
       renderKeys(data.keys);
       loadLedger();
     } catch {
@@ -268,9 +235,10 @@ const copy = lang === 'zh'
       tdKind.textContent = kindLabel(e.kind);
 
       const tdAmt = document.createElement('td');
-      const usd = (Math.abs(e.cents) / 100).toFixed(2);
-      tdAmt.textContent = (e.cents < 0 ? '−' : '+') + '$' + usd;
-      if (e.cents > 0) tdAmt.className = 'acct__credit-in';
+      const micro = Number(e.microUsd != null ? e.microUsd : (Number(e.cents) * 10000));
+      const usd = e.usd != null ? e.usd : (Math.abs(micro) / 1_000_000).toFixed(6);
+      tdAmt.textContent = (micro < 0 ? '−' : '+') + '$' + usd;
+      if (micro > 0) tdAmt.className = 'acct__credit-in';
 
       tr.append(tdTime, tdKind, tdAmt);
       tb.append(tr);

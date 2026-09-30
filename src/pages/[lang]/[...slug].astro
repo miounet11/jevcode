@@ -4,10 +4,11 @@ import type { MarkdownHeading } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 import Toc from '../../components/Toc.astro';
-import { languages, htmlLangMap, useTranslations, type Lang } from '../../i18n/ui';
+import { languages, htmlLangMap, useTranslations, pick, type Lang } from '../../i18n/ui';
 import { sections, sectionTitle } from '../../data/site';
 import Figure from '../../components/Figure.astro';
 import { figureForDoc } from '../../data/images';
+import * as mapCopy from '../../i18n/pages/map';
 
 export async function getStaticPaths() {
   const all = await getCollection('docs', ({ data }) => !data.draft);
@@ -90,6 +91,24 @@ const toHref = (e: (typeof navSource)[number]) => `/${lang}/${norm(e.id)}/`;
 const breadcrumbSection = sectionTitle(entry.data.section, lang);
 const filteredHeadings = (headings as MarkdownHeading[]).filter((h) => h.depth === 2 || h.depth === 3);
 const figure = figureForDoc(norm(id));
+const crumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: t('site.name'),
+      item: new URL(`/${lang}/`, Astro.site).href,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: entry.data.title,
+      item: new URL(path, Astro.site).href,
+    },
+  ],
+};
 
 // 机翻标注：把 frontmatter 里的 translatedFrom 渲染为可见提示，避免被当成官方译文。
 // 用 BCP-47 码（如 zh-CN）而非语言自称，避免在非中文页面漏出汉字。
@@ -108,9 +127,11 @@ const translatedNotice = sourceLangLabel
 
     <article class="doc">
       <p class="doc__breadcrumb">
-        <a href={`/${lang}/`}>{t('site.name')}</a> / {breadcrumbSection}
+        <a href={`/${lang}/`}>{t('site.name')}</a> / <a href={`/${lang}/map/`}>{pick(lang, mapCopy.title)}</a> / {breadcrumbSection}
       </p>
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(crumbLd).replaceAll('<', '\\u003c')} />
 
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{t('docs.brand')}</p>
       <h1 class="doc__title" data-pagefind-meta="title">{entry.data.title}</h1>
       <p class="doc__desc">{entry.data.description}</p>
 

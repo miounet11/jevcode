@@ -161,7 +161,9 @@ try {
       else {
         const jb = await jr.json().catch(() => ({}));
         ok('用 key 判定 → 200', jr.status === 200, `得到 ${jr.status}`);
-        ok('余额扣到 499 美分', jb.credit && jb.credit.cents === 499, JSON.stringify(jb.credit));
+        ok('余额已按输入 token 扣减',
+          jb.credit && jb.credit.microUsd < 5_000_000 && jb.credit.microUsd > 0,
+          JSON.stringify(jb.credit));
       }
     }
   }

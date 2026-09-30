@@ -1,0 +1,512 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../i18n/ui';
+import * as scenesCopy from '../../i18n/pages/scenes';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const path = `/${lang}/scenes/`;
+const title = pick(lang, scenesCopy.title);
+const description = pick(lang, scenesCopy.description);
+const clientCopy = pick(lang, scenesCopy.client) as Record<string, unknown>;
+---
+
+<BaseLayout lang={lang} title={title} description={description} path={path}>
+  <section class="section studio">
+    <div class="wrap">
+      <p class="eyebrow"><span class="eyebrow__dot"></span>clavue-jev</p>
+      <h1>{title}</h1>
+      <p class="studio__lead">{description}</p>
+      <div class="studio__shell">
+        <div class="studio__tabs" role="tablist">
+          <button type="button" data-scene="tetris" class="is-on"><picture><source srcset="/img/icons/tetris.webp" type="image/webp" /><img src="/img/icons/tetris.png" alt="" width="28" height="28" /></picture><span>{pick(lang, scenesCopy.tabTetris)}</span></button>
+          <button type="button" data-scene="rapid"><picture><source srcset="/img/icons/rapid.webp" type="image/webp" /><img src="/img/icons/rapid.png" alt="" width="28" height="28" /></picture><span>{pick(lang, scenesCopy.tabRapid)}</span></button>
+          <button type="button" data-scene="sort"><picture><source srcset="/img/icons/sort.webp" type="image/webp" /><img src="/img/icons/sort.png" alt="" width="28" height="28" /></picture><span>{pick(lang, scenesCopy.tabSort)}</span></button>
+        </div>
+        <div class="studio__body">
+          <div class="studio__stage">
+            <picture>
+              <source id="scene-art-webp" type="image/webp" />
+              <img class="studio__art" id="scene-art" alt="" width="1200" height="686" />
+            </picture>
+            <p class="studio__verdict" id="verdict" aria-live="polite"></p>
+            <div class="studio__actions">
+              <button class="btn btn--primary" id="scene-run" type="button">{pick(lang, scenesCopy.runHere)}</button>
+              <button class="btn btn--ghost" id="scene-next" type="button">{pick(lang, scenesCopy.newBoard)}</button>
+            </div>
+            <div id="stage"></div>
+          </div>
+          <aside class="studio__code">
+            <h2>{pick(lang, scenesCopy.copyTitle)}</h2>
+            <pre id="scene-code" tabindex="-1"></pre>
+            <button class="btn btn--ghost" id="scene-copy" type="button">{pick(lang, scenesCopy.copyCode)}</button>
+            <p>{pick(lang, scenesCopy.sideNote)}</p>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ clientCopy }}>
+  const copy = {
+    ...clientCopy,
+    rapid: (hit, n) => clientCopy.rapidTpl.replace('{hit}', String(hit)).replace('{n}', String(n)),
+    sort: (hit, n) => clientCopy.sortTpl.replace('{hit}', String(hit)).replace('{n}', String(n)),
+  };
+
+  const rapidItems = [
+    { key: 'm1', text: 'Help. My payouts have been failing for 3 days and I need this resolved today.', accept: 'yes' },
+    { key: 'm2', text: 'Thanks, the invoice from March looks correct.', accept: 'no' },
+    { key: 'm3', text: 'The production database is down and customers cannot check out.', accept: 'yes' },
+    { key: 'm4', text: 'Can you send the slide deck whenever you have a free afternoon?', accept: 'no' },
+    { key: 'm5', text: 'Our card will expire in two hours and the renewal must clear before then.', accept: 'yes' },
+    { key: 'm6', text: 'Just sharing the notes from last week, no action needed.', accept: 'no' },
+  ];
+
+  const sortItems = [
+    { key: 'p1', text: 'Invoice 8821 was charged twice. Please refund the duplicate.', accept: 'billing' },
+    { key: 'p2', text: 'The login page returns 500 after we deployed the new SDK.', accept: 'technical' },
+    { key: 'p3', text: 'We want a quote for 40 more seats before Friday.', accept: 'sales' },
+    { key: 'p4', text: 'Delete all of my account data today under the privacy request.', accept: 'privacy' },
+    { key: 'p5', text: 'The webhook signature check started failing at 02:10 UTC.', accept: 'technical' },
+    { key: 'p6', text: 'Why was I billed for a plan I cancelled last month?', accept: 'billing' },
+  ];
+
+  const stageEl = document.getElementById('stage');
+  const verdictEl = document.getElementById('verdict');
+  const codeEl = document.getElementById('scene-code');
+  const artEl = document.getElementById('scene-art');
+  const artWebp = document.getElementById('scene-art-webp');
+  const runButton = document.getElementById('scene-run');
+  const nextButton = document.getElementById('scene-next');
+  const copyButton = document.getElementById('scene-copy');
+  let scene = 'tetris';
+  let tetris = null;
+  let payload = null;
+  let busy = false;
+
+  function landing(grid, col, width) {
+    for (let row = 0; row < grid.length; row += 1) {
+      let blocked = false;
+      for (let c = col; c < col + width; c += 1) if (grid[row][c]) blocked = true;
+      if (blocked) return row - 1;
+    }
+    return grid.length - 1;
+  }
+
+  function evaluate(grid, col, width) {
+    const row = landing(grid, col, width);
+    if (row < 0) return null;
+    const next = grid.map((line) => line.slice());
+    for (let c = col; c < col + width; c += 1) {
+      if (next[row][c]) return null;
+      next[row][c] = 1;
+    }
+    let holes = 0;
+    let minRow = next.length;
+    for (let c = 0; c < next[0].length; c += 1) {
+      let seen = false;
+      for (let r = 0; r < next.length; r += 1) {
+        if (next[r][c]) {
+          seen = true;
+          if (r < minRow) minRow = r;
+        } else if (seen) holes += 1;
+      }
+    }
+    return { col, row, height: next.length - minRow, holes };
+  }
+
+  function makeTetris(seed) {
+    let state = seed % 2147483647;
+    if (state <= 0) state = 7;
+    const rnd = () => {
+      state = (state * 48271) % 2147483647;
+      return state / 2147483647;
+    };
+    const rows = 8;
+    const cols = 6;
+    const width = 2;
+    const grid = Array.from({ length: rows }, () => Array(cols).fill(0));
+    for (let row = 3; row < rows; row += 1) {
+      for (let col = 0; col < cols; col += 1) {
+        if (rnd() < 0.28 + (row - 3) * 0.08) grid[row][col] = 1;
+      }
+    }
+    const scoreAll = () => {
+      const found = [];
+      for (let col = 0; col <= cols - width; col += 1) {
+        const score = evaluate(grid, col, width);
+        if (score) found.push(score);
+      }
+      return found;
+    };
+    let scored = scoreAll();
+    if (scored.length < 2) {
+      for (let row = 3; row < 6; row += 1) grid[row].fill(0);
+      scored = scoreAll();
+    }
+    if (scored.length < 2) {
+      for (let row = 0; row < rows; row += 1) grid[row].fill(0);
+      grid[rows - 1][1] = 1;
+      scored = scoreAll();
+    }
+    scored.sort((a, b) => a.height - b.height || a.holes - b.holes || a.col - b.col);
+    const best = scored.filter((item) => item.height === scored[0].height && item.holes === scored[0].holes).map((item) => String(item.col));
+    const lines = grid.map((line) => line.map((cell) => (cell ? '#' : '.')).join(''));
+    return {
+      grid,
+      width,
+      scored,
+      best,
+      options: scored.map((item) => String(item.col)),
+      state: `Tetris well, 6 columns, top row first. # is filled, . is empty. The falling piece is a horizontal bar 2 cells wide.\n${lines.join('\n')}`,
+      question: 'Which leftmost column should the 2-wide bar drop into? Answer with the column index only.',
+    };
+  }
+
+  function setVerdict(tone, text) {
+    verdictEl.className = `studio__verdict is-${tone}`;
+    verdictEl.textContent = text;
+  }
+
+  function jsTemplate(value) {
+    const escaped = String(value).replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
+    return '`' + escaped + '`';
+  }
+
+  function showCode(body) {
+    payload = body;
+    const snippet = `const response = await fetch('https://www.jevcode.ai/api/try', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({
+    state: ${jsTemplate(body.state)},
+    questions: ${JSON.stringify(body.questions, null, 2).replace(/\n/g, '\n    ')}
+  })
+});
+const result = await response.json();
+${copy.answersComment}`;
+    codeEl.textContent = snippet;
+  }
+
+  function pctOf(answer) {
+    if (!answer?.choice) return null;
+    const fromMap = answer.probabilities?.[answer.choice];
+    if (typeof fromMap === 'number') return Math.round(fromMap * 100);
+    if (typeof answer.confidence === 'number') return Math.round(answer.confidence * 100);
+    return null;
+  }
+
+  function paintTetris(choice) {
+    const spec = tetris;
+    stageEl.replaceChildren();
+    const well = document.createElement('div');
+    well.className = 'well';
+    const picked = spec.scored.find((item) => String(item.col) === choice);
+    for (let row = 0; row < spec.grid.length; row += 1) {
+      for (let col = 0; col < spec.grid[0].length; col += 1) {
+        const cell = document.createElement('i');
+        const inPiece = picked && row === picked.row && col >= picked.col && col < picked.col + spec.width;
+        if (inPiece) cell.className = spec.best.includes(choice) ? 'is-piece is-hit' : 'is-piece is-miss';
+        else if (spec.grid[row][col]) cell.className = 'is-fill';
+        well.appendChild(cell);
+      }
+    }
+    const hold = document.createElement('div');
+    hold.className = 'hold';
+    const piece = document.createElement('i');
+    piece.className = choice ? 'is-gone' : '';
+    hold.append(piece, piece.cloneNode());
+    const meta = document.createElement('p');
+    meta.className = 'studio__meta';
+    meta.textContent = choice
+      ? `${copy.columnPrefix}${choice}${copy.columnSuffix}${spec.best.includes(choice) ? '' : ` · ${copy.bestPrefix}${spec.best.join(', ')}`}`
+      : copy.dropsText;
+    stageEl.append(hold, well, meta);
+  }
+
+  function card(text) {
+    const node = document.createElement('article');
+    const body = document.createElement('p');
+    body.textContent = text;
+    node.appendChild(body);
+    return node;
+  }
+
+  function paintRapid(answers) {
+    stageEl.replaceChildren();
+    const list = document.createElement('div');
+    list.className = 'rapid';
+    rapidItems.forEach((item, index) => {
+      const node = card(item.text);
+      const answer = answers?.[item.key];
+      const stamp = document.createElement('b');
+      if (answer?.choice) {
+        const hit = answer.choice === item.accept;
+        node.classList.add(hit ? 'is-hit' : 'is-miss');
+        stamp.textContent = hit ? answer.choice : `${answer.choice} · ${item.accept}`;
+        node.style.animationDelay = `${index * 70}ms`;
+      } else {
+        stamp.textContent = '—';
+        stamp.className = 'is-quiet';
+      }
+      node.appendChild(stamp);
+      list.appendChild(node);
+    });
+    stageEl.appendChild(list);
+  }
+
+  function paintSort(answers) {
+    stageEl.replaceChildren();
+    if (!answers) {
+      const queue = document.createElement('div');
+      queue.className = 'rapid';
+      sortItems.forEach((item) => queue.appendChild(card(item.text)));
+      stageEl.appendChild(queue);
+      return;
+    }
+    const board = document.createElement('div');
+    board.className = 'bins';
+    for (const name of ['billing', 'technical', 'sales', 'privacy']) {
+      const bin = document.createElement('section');
+      bin.dataset.bin = name;
+      const title = document.createElement('h3');
+      title.textContent = copy.bins[name];
+      bin.appendChild(title);
+      board.appendChild(bin);
+    }
+    sortItems.forEach((item, index) => {
+      const node = card(item.text);
+      const answer = answers?.[item.key];
+      const known = answer?.choice && copy.bins[answer.choice];
+      const bin = known ? board.querySelector(`[data-bin="${answer.choice}"]`) : null;
+      if (answer?.choice) {
+        const hit = answer.choice === item.accept;
+        node.classList.add(hit ? 'is-hit' : 'is-miss');
+        node.style.animationDelay = `${index * 70}ms`;
+        if (!hit) {
+          const note = document.createElement('small');
+          note.textContent = `${copy.shouldBe}${copy.bins[item.accept] || item.accept}`;
+          node.appendChild(note);
+        }
+      }
+      (bin || board).appendChild(node);
+    });
+    stageEl.appendChild(board);
+  }
+
+  function currentBody() {
+    if (scene === 'rapid') {
+      const questions = {};
+      rapidItems.forEach((item, index) => {
+        questions[item.key] = {
+          type: 'choice',
+          instructions: `Does message ${index + 1} need to jump the queue? Answer yes or no.`,
+          options: ['yes', 'no'],
+        };
+      });
+      return {
+        state: `Six support messages. Judge each one on its own.\n${rapidItems.map((item, index) => `${index + 1}. ${item.text}`).join('\n')}`,
+        questions,
+      };
+    }
+    if (scene === 'sort') {
+      const questions = {};
+      sortItems.forEach((item, index) => {
+        questions[item.key] = {
+          type: 'choice',
+          instructions: `Which bin should message ${index + 1} go to?`,
+          options: ['billing', 'technical', 'sales', 'privacy'],
+        };
+      });
+      return {
+        state: `Six incoming notes. Sort each one.\n${sortItems.map((item, index) => `${index + 1}. ${item.text}`).join('\n')}`,
+        questions,
+      };
+    }
+    return {
+      state: tetris.state,
+      questions: {
+        column: { type: 'choice', instructions: tetris.question, options: tetris.options },
+      },
+    };
+  }
+
+  function renderScene() {
+    document.querySelectorAll('[data-scene]').forEach((button) => {
+      button.classList.toggle('is-on', button.getAttribute('data-scene') === scene);
+    });
+    artEl.src = `/img/scenes/${scene}.png`;
+    if (artWebp) artWebp.srcset = `/img/scenes/${scene}.webp`;
+    nextButton.hidden = scene !== 'tetris';
+    nextButton.style.display = scene === 'tetris' ? '' : 'none';
+    if (scene === 'tetris') {
+      if (!tetris) tetris = makeTetris(Date.now() % 100000);
+      paintTetris(null);
+      setVerdict('wait', copy.waitTetris);
+    } else if (scene === 'rapid') {
+      paintRapid(null);
+      setVerdict('wait', copy.waitRapid);
+    } else {
+      paintSort(null);
+      setVerdict('wait', copy.waitSort);
+    }
+    showCode(currentBody());
+  }
+
+  function applyAnswers(answers, ms) {
+    if (scene === 'tetris') {
+      const answer = answers?.column;
+      const choice = answer?.choice ? String(answer.choice) : '';
+      paintTetris(choice);
+      const hit = tetris.best.includes(choice);
+      const pct = pctOf(answer);
+      const tail = pct === null ? `${ms} ms` : `${pct}% · ${ms} ms`;
+      if (!choice) setVerdict('bad', copy.none);
+      else setVerdict(hit ? 'win' : 'lose', `${hit ? copy.best : copy.miss} · ${tail}`);
+      return;
+    }
+    const items = scene === 'rapid' ? rapidItems : sortItems;
+    if (scene === 'rapid') paintRapid(answers);
+    else paintSort(answers);
+    const hits = items.filter((item) => answers?.[item.key]?.choice === item.accept).length;
+    const tone = hits === items.length ? 'win' : hits === 0 ? 'lose' : 'even';
+    const line = scene === 'rapid' ? copy.rapid(hits, items.length) : copy.sort(hits, items.length);
+    setVerdict(tone, `${line} · ${ms} ms`);
+  }
+
+  document.querySelector('.studio__tabs')?.addEventListener('click', (event) => {
+    const button = event.target instanceof Element ? event.target.closest('[data-scene]') : null;
+    if (!(button instanceof HTMLButtonElement) || busy) return;
+    scene = button.getAttribute('data-scene') || 'tetris';
+    history.replaceState(null, '', `#${scene}`);
+    renderScene();
+  });
+
+  nextButton?.addEventListener('click', () => {
+    if (busy) return;
+    tetris = makeTetris(Date.now() % 100000);
+    renderScene();
+  });
+
+  copyButton?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(codeEl.textContent || '');
+      copyButton.textContent = copy.copied;
+      setTimeout(() => { copyButton.textContent = copy.copy; }, 1200);
+    } catch {
+      codeEl.focus();
+    }
+  });
+
+  runButton?.addEventListener('click', async () => {
+    if (busy || !payload) return;
+    busy = true;
+    runButton.disabled = true;
+    setVerdict('wait', copy.running);
+    const started = performance.now();
+    try {
+      const response = await fetch('/api/try', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.status === 429) throw new Error(copy.limit);
+      if (!response.ok) throw new Error(data.error || data.message || `HTTP ${response.status}`);
+      applyAnswers(data.answers || {}, Math.round(performance.now() - started));
+    } catch (err) {
+      setVerdict('bad', err.message);
+    } finally {
+      busy = false;
+      runButton.disabled = false;
+    }
+  });
+
+  const initial = location.hash.replace('#', '');
+  if (initial === 'rapid' || initial === 'sort' || initial === 'tetris') scene = initial;
+  renderScene();
+</script>
+
+<style is:global>
+  .studio h1 { margin: 10px 0 12px; font-size: clamp(40px, 5vw, 64px); letter-spacing: -0.045em; }
+  .studio__lead { max-width: 62ch; color: var(--fg-muted); margin: 0 0 22px; }
+  .studio__shell { overflow: hidden; border: 1px solid var(--border-strong); border-radius: 28px; background: var(--bg-elev); box-shadow: var(--shadow); }
+  .studio__tabs { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--border); }
+  .studio__tabs button {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px; border: 0; border-right: 1px solid var(--border);
+    background: transparent; color: var(--fg-muted); font: inherit; cursor: pointer;
+  }
+  .studio__tabs button:last-child { border-right: 0; }
+  .studio__tabs button.is-on { color: var(--fg); background: var(--accent-soft); box-shadow: inset 0 -2px 0 var(--accent); }
+  .studio__tabs img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
+  .studio__body { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr); }
+  .studio__stage { padding: 18px; min-width: 0; }
+  .studio__stage picture { display: block; }
+  .studio__art { width: 100%; height: 112px; object-fit: cover; border-radius: 16px; background: #0a0e1a; margin-bottom: 14px; }
+  .studio__verdict {
+    display: flex; align-items: center; gap: 10px; margin: 0; padding: 14px 16px;
+    border-radius: 16px; border: 1px solid var(--border); background: var(--bg);
+    font-size: 20px; font-weight: 650; letter-spacing: -0.03em;
+  }
+  .studio__verdict::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--fg-dim); flex: 0 0 auto; }
+  .studio__verdict.is-win { background: var(--accent-soft); border-color: var(--accent-border); color: var(--fg); }
+  .studio__verdict.is-win::before { background: var(--accent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent); }
+  .studio__verdict.is-lose, .studio__verdict.is-bad { color: var(--rose); }
+  .studio__verdict.is-lose::before, .studio__verdict.is-bad::before { background: var(--rose); }
+  .studio__verdict.is-wait, .studio__verdict.is-even { color: var(--fg-muted); }
+  .studio__actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 14px; }
+  .studio__code { padding: 18px; border-left: 1px solid var(--border); background: var(--bg); min-width: 0; }
+  .studio__code h2 { margin: 0 0 10px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-dim); }
+  .studio__code pre {
+    max-height: 460px; overflow: auto; margin: 0 0 12px; padding: 14px;
+    border-radius: 14px; background: var(--bg-code); color: var(--fg);
+    font-family: var(--font-mono); font-size: 12px; line-height: 1.45; white-space: pre-wrap;
+  }
+  .studio__code p { color: var(--fg-dim); font-size: 13px; }
+  .studio .hold { display: flex; gap: 6px; height: 28px; margin-bottom: 8px; }
+  .studio .hold i { display: block; width: 22px; height: 22px; border-radius: 5px; background: var(--accent); }
+  .studio .hold i.is-gone { opacity: 0; }
+  .studio .well { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; max-width: 248px; padding: 8px; border-radius: 16px; background: #0a0e1a; }
+  .studio .well i { display: block; aspect-ratio: 1; border-radius: 6px; background: rgba(255,255,255,0.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); }
+  .studio .well i.is-fill { background: #243044; }
+  .studio .well i.is-piece { animation: drop 0.35s ease; }
+  .studio .well i.is-piece.is-hit { background: var(--accent); }
+  .studio .well i.is-piece.is-miss { background: var(--rose); }
+  .studio__meta { margin: 8px 0 0; color: var(--fg-dim); font-family: var(--font-mono); font-size: 12px; }
+  .studio .rapid, .studio .bins { display: grid; gap: 8px; }
+  .studio .bins { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; }
+  .studio .bins section { display: grid; gap: 8px; padding: 8px; border-radius: 14px; background: var(--bg); min-height: 120px; }
+  .studio .bins h3 { margin: 0; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-dim); }
+  .studio .bins small { color: var(--fg-dim); font-size: 11px; }
+  .studio .rapid article, .studio .bins article {
+    display: flex; justify-content: space-between; gap: 10px; align-items: center;
+    padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-elev);
+  }
+  .studio .bins article { flex-direction: column; align-items: stretch; gap: 6px; }
+  .studio .rapid article p, .studio .bins article p { margin: 0; min-width: 0; flex: 1; font-size: 13px; }
+  .studio .rapid article b, .studio .bins article b { flex: 0 0 auto; }
+  .studio .rapid article.is-hit, .studio .bins article.is-hit { border-color: var(--accent-border); background: var(--accent-soft); animation: pop 0.35s ease both; }
+  .studio .rapid article.is-miss, .studio .bins article.is-miss { border-color: color-mix(in srgb, var(--rose) 45%, var(--border)); animation: pop 0.35s ease both; }
+  .studio .rapid article b, .studio .is-quiet { color: var(--fg-dim); font-size: 12px; }
+  .studio .is-hit b { color: var(--accent); }
+  .studio .is-miss b { color: var(--rose); }
+  @keyframes drop { from { transform: translateY(-18px); opacity: 0.2; } to { transform: none; opacity: 1; } }
+  @keyframes pop { from { transform: translateY(8px); opacity: 0.4; } to { transform: none; opacity: 1; } }
+  @media (max-width: 980px) {
+    .studio__body, .studio .bins { grid-template-columns: 1fr; }
+    .studio__tabs button { padding: 12px 6px; font-size: 13px; }
+    .studio__code { border-left: 0; border-top: 1px solid var(--border); }
+    .studio__stage picture { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .studio .well i.is-piece, .studio .rapid article.is-hit, .studio .bins article.is-hit, .studio .rapid article.is-miss, .studio .bins article.is-miss { animation: none; }
+  }
+</style>

@@ -53,6 +53,10 @@ export default defineConfig({
   devToolbar: { enabled: false },
   integrations: [
     sitemap({
+      filter: (page) =>
+        !page.includes('/login') &&
+        !page.includes('/account') &&
+        !page.includes('/404'),
       i18n: {
         defaultLocale: 'zh',
         locales: {

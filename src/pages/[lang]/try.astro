@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { languages, type Lang } from '../../i18n/ui';
+import { languages, pick, type Lang } from '../../i18n/ui';
+import * as tryCopy from '../../i18n/pages/try';
 
 export const prerender = true;
 
@@ -10,25 +11,16 @@ export function getStaticPaths() {
 
 const lang = Astro.params.lang as Lang;
 const path = `/${lang}/try/`;
-const copy = lang === 'zh'
-  ? {
-      title: '试一次判定',
-      lead: '不用注册。写下一段状态，Jev 返回的是带概率的判定，不是一段生成文本。结果会得到一个可以转发的链接。',
-      state: '状态',
-      run: '运行判定',
-      running: '判定中…',
-      share: '分享这次结果',
-      copied: '链接已复制',
-    }
-  : {
-      title: 'Try a judgment',
-      lead: 'No account. Write a state and Jev returns a probability, not generated prose. The result gets a link you can forward.',
-      state: 'State',
-      run: 'Run judgment',
-      running: 'Judging…',
-      share: 'Share this result',
-      copied: 'Link copied',
-    };
+const copy = {
+  title: pick(lang, tryCopy.title),
+  lead: pick(lang, tryCopy.lead),
+  state: pick(lang, tryCopy.state),
+  run: pick(lang, tryCopy.run),
+  running: pick(lang, tryCopy.running),
+  share: pick(lang, tryCopy.share),
+  copied: pick(lang, tryCopy.copied),
+};
+const clientCopy = pick(lang, tryCopy.client) as Record<string, string>;
 
 const preset = {
   state: 'Help. My payouts have been failing for 3 days and I need this resolved today.',
@@ -49,6 +41,7 @@ const preset = {
       <p class="eyebrow"><span class="eyebrow__dot"></span>Playground</p>
       <h1>{copy.title}</h1>
       <p class="try__lead">{copy.lead}</p>
+      <p class="try__lead"><a href={`/${lang}/compare/`}>{pick(lang, tryCopy.compareLink)}</a></p>
 
       <label class="try__label" for="state">{copy.state}</label>
       <textarea id="state" rows="5">{preset.state}</textarea>
@@ -64,7 +57,7 @@ const preset = {
   </section>
 </BaseLayout>
 
-<script define:vars={{ preset, copy, lang }}>
+<script define:vars={{ preset, copy, clientCopy, lang }}>
   const stateEl = document.getElementById('state');
   const runEl = document.getElementById('run');
   const errorEl = document.getElementById('error');
@@ -94,6 +87,10 @@ const preset = {
 
   runEl.addEventListener('click', async () => {
     errorEl.hidden = true;
+    const raw = stateEl.value.trim();
+    if (!raw) { errorEl.hidden = false; errorEl.textContent = clientCopy.needState; return; }
+    if (raw.length < 8) { errorEl.hidden = false; errorEl.textContent = clientCopy.tooShort; return; }
+    if (raw.length > 4000) { errorEl.hidden = false; errorEl.textContent = clientCopy.tooLong; return; }
     runEl.disabled = true;
     runEl.textContent = copy.running;
     try {
@@ -103,12 +100,12 @@ const preset = {
         body: JSON.stringify({ state: stateEl.value, questions: preset.questions }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'request failed');
+      if (!res.ok) throw new Error(clientCopy.failed);
       render(data);
       history.replaceState({}, '', `/${lang}/r/${data.id}/`);
     } catch (err) {
       errorEl.hidden = false;
-      errorEl.textContent = err.message;
+      errorEl.textContent = clientCopy.failed;
     } finally {
       runEl.disabled = false;
       runEl.textContent = copy.run;
@@ -133,7 +130,7 @@ const preset = {
     resize: vertical;
   }
   #run { margin-top: 16px; }
-  .try__error { color: #f0a8a8; }
+  .try__error { color: var(--rose); }
   .try__result { margin-top: 28px; display: grid; gap: 14px; }
   .try__bar-label, .try__choice { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
   .try__track { height: 8px; border-radius: 99px; background: var(--bg-code); overflow: hidden; margin: 6px 0 12px; }

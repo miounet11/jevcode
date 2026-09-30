@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { languages, type Lang } from '../../i18n/ui';
+import { languages, pick, type Lang } from '../../i18n/ui';
+import * as loginCopy from '../../i18n/pages/login';
 
 export const prerender = true;
 
@@ -11,44 +12,39 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const path = `/${lang}/login/`;
 
-const copy = lang === 'zh'
-  ? {
-      title: '登录',
-      lead: '注册即送 $5 额度，可签发 API Key、查看用量。账号+密码即可，不需邮箱验证。',
-      email: '邮箱',
-      password: '密码',
-      signIn: '登录',
-      signUp: '注册',
-      toSignUp: '还没有账号？注册',
-      toSignIn: '已有账号？登录',
-      working: '处理中…',
-      needFields: '请填写邮箱和密码。',
-      failed: '登录失败，请检查邮箱与密码。',
-      weakPw: '密码至少 8 位。',
-      dupEmail: '该邮箱已注册。',
-      signUpOk: '注册成功，正在进入账户页…',
-      goAccount: '去账户页',
-    }
-  : {
-      title: 'Sign in',
-      lead: 'Sign up and get $5 in credit. Issue API keys and track usage. Account and password only — no email verification.',
-      email: 'Email',
-      password: 'Password',
-      signIn: 'Sign in',
-      signUp: 'Create account',
-      toSignUp: 'No account yet? Create one',
-      toSignIn: 'Already have an account? Sign in',
-      working: 'Working…',
-      needFields: 'Please fill in both email and password.',
-      failed: 'Sign-in failed. Check your email and password.',
-      weakPw: 'Password must be at least 8 characters.',
-      dupEmail: 'That email is already registered.',
-      signUpOk: 'Account created. Taking you to your account…',
-      goAccount: 'Go to account',
-    };
+const copy = {
+  title: pick(lang, loginCopy.title),
+  lead: pick(lang, loginCopy.lead),
+  email: pick(lang, loginCopy.email),
+  password: pick(lang, loginCopy.password),
+  signIn: pick(lang, loginCopy.signIn),
+  signUp: pick(lang, loginCopy.signUp),
+  toSignUp: pick(lang, loginCopy.toSignUp),
+  toSignIn: pick(lang, loginCopy.toSignIn),
+  working: pick(lang, loginCopy.working),
+  needFields: pick(lang, loginCopy.needFields),
+  failed: pick(lang, loginCopy.failed),
+  weakPw: pick(lang, loginCopy.weakPw),
+  dupEmail: pick(lang, loginCopy.dupEmail),
+  signUpOk: pick(lang, loginCopy.signUpOk),
+  goAccount: pick(lang, loginCopy.goAccount),
+  pwRuleLen: pick(lang, loginCopy.pwRuleLen),
+  pwRuleCommon: pick(lang, loginCopy.pwRuleCommon),
+  pwRuleEmail: pick(lang, loginCopy.pwRuleEmail),
+  pwWeak: pick(lang, loginCopy.pwWeak),
+  pwMedium: pick(lang, loginCopy.pwMedium),
+  pwStrong: pick(lang, loginCopy.pwStrong),
+  captchaLabel: pick(lang, loginCopy.captchaLabel),
+  captchaPlaceholder: pick(lang, loginCopy.captchaPlaceholder),
+  captchaRefresh: pick(lang, loginCopy.captchaRefresh),
+  captchaLoading: pick(lang, loginCopy.captchaLoading),
+  captchaNeed: pick(lang, loginCopy.captchaNeed),
+  captchaWrong: pick(lang, loginCopy.captchaWrong),
+  captchaFail: pick(lang, loginCopy.captchaFail),
+};
 ---
 
-<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path} index={false} cluster={false}>
   <section class="section">
     <div class="wrap auth">
       <p class="eyebrow"><span class="eyebrow__dot"></span>{copy.title}</p>
@@ -63,8 +59,32 @@ const copy = lang === 'zh'
         <label class="auth__field">
           <span>{copy.password}</span>
           <input id="password" name="password" type="password"
-                 autocomplete="current-password" minlength="8" required />
+                 autocomplete="current-password" minlength="8"
+                 aria-describedby="pw-rules" required />
         </label>
+
+        <div class="pw" id="pw-hint" hidden>
+          <div class="pw__meter" aria-hidden="true">
+            <i id="pw-bar"></i>
+          </div>
+          <p class="pw__label"><span id="pw-level"></span></p>
+          <ul class="pw__rules" id="pw-rules">
+            <li data-rule="len">{copy.pwRuleLen}</li>
+            <li data-rule="common">{copy.pwRuleCommon}</li>
+            <li data-rule="email">{copy.pwRuleEmail}</li>
+          </ul>
+        </div>
+
+        <div class="auth__field" id="captcha-field" hidden>
+          <span>{copy.captchaLabel}</span>
+          <div class="auth__captcha">
+            <span class="auth__captcha-q" id="captcha-q">—</span>
+            <input id="captcha" name="captcha" type="text" inputmode="numeric"
+                   autocomplete="off" placeholder={copy.captchaPlaceholder}
+                   aria-describedby="captcha-q" />
+            <button class="btn btn--ghost auth__captcha-refresh" type="button" id="captcha-refresh">{copy.captchaRefresh}</button>
+          </div>
+        </div>
 
         <div class="auth__actions">
           <button class="btn btn--primary" type="submit" id="submit">{copy.signIn}</button>
@@ -86,6 +106,73 @@ const copy = lang === 'zh'
   const msg = document.getElementById('msg');
   const accountLink = document.getElementById('account-link');
 
+  // ---- 密码强度提示 ----
+  const pwRules = document.getElementById('pw-rules');
+  const pwHint = document.getElementById('pw-hint');
+  const pwBar = document.getElementById('pw-bar');
+  const pwLevel = document.getElementById('pw-level');
+  const pwRuleEls = {
+    len: pwRules.querySelector('[data-rule="len"]'),
+    common: pwRules.querySelector('[data-rule="common"]'),
+    email: pwRules.querySelector('[data-rule="email"]'),
+  };
+
+  // 常见弱密码（小样本即可，与“机器注册闸门”同一克制原则，不做完整字典）
+  const COMMON = new Set([
+    'password', 'password1', 'password123', '12345678', '123456789', '1234567890',
+    'qwertyui', 'qwerty123', '11111111', '00000000', 'iloveyou', 'admin123',
+    'letmein1', 'welcome1', 'abc12345', 'passw0rd', 'clavue123', 'jevcode123',
+  ]);
+
+  /** 与服务端 passwordProblem 对齐：至少 8 位、非常见弱密码、不等同邮箱。 */
+  function evaluatePw(pw, em) {
+    const local = (em || '').split('@')[0].toLowerCase();
+    return {
+      len: pw.length >= 8,
+      common: pw.length > 0 && !COMMON.has(pw.toLowerCase()),
+      email: pw.length > 0 && (!local || pw.toLowerCase() !== local),
+      long: pw.length >= 12,
+    };
+  }
+
+  function updatePwHint() {
+    if (mode !== 'register') { pwHint.hidden = true; return; }
+    const pw = password.value;
+    pwHint.hidden = pw.length === 0;
+    const r = evaluatePw(pw, email.value.trim());
+    for (const [k, el] of Object.entries(pwRuleEls)) {
+      if (el) el.classList.toggle('is-ok', Boolean(r[k]));
+    }
+    const passed = [r.len, r.common, r.email].filter(Boolean).length;
+    let level = 0;
+    if (passed === 3) level = r.long && /[^A-Za-z0-9]\S/.test(pw) ? 3 : 2;
+    else if (passed >= 1) level = 1;
+    pwBar.dataset.level = String(level);
+    pwLevel.textContent = level >= 3 ? copy.pwStrong : level === 2 ? copy.pwMedium : copy.pwWeak;
+  }
+
+  // ---- 验证码 ----
+  const captchaField = document.getElementById('captcha-field');
+  const captchaQ = document.getElementById('captcha-q');
+  const captchaInput = document.getElementById('captcha');
+  const captchaRefresh = document.getElementById('captcha-refresh');
+  let captchaToken = '';
+
+  async function loadCaptcha() {
+    captchaToken = '';
+    captchaQ.textContent = copy.captchaLoading;
+    captchaInput.value = '';
+    try {
+      const res = await fetch('/api/auth/captcha', { credentials: 'same-origin' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'failed');
+      captchaToken = data.token;
+      captchaQ.textContent = data.question;
+    } catch {
+      captchaQ.textContent = copy.captchaFail;
+    }
+  }
+
   let mode = 'login';
 
   function render() {
@@ -93,8 +180,14 @@ const copy = lang === 'zh'
     submit.textContent = isLogin ? copy.signIn : copy.signUp;
     toggle.textContent = isLogin ? copy.toSignUp : copy.toSignIn;
     password.setAttribute('autocomplete', isLogin ? 'current-password' : 'new-password');
+    captchaField.hidden = isLogin;
+    if (isLogin) { pwHint.hidden = true; } else { updatePwHint(); loadCaptcha(); }
   }
   render();
+
+  password.addEventListener('input', updatePwHint);
+  email.addEventListener('input', updatePwHint);
+  captchaRefresh.addEventListener('click', loadCaptcha);
 
   toggle.addEventListener('click', () => {
     mode = mode === 'login' ? 'register' : 'login';
@@ -109,7 +202,11 @@ const copy = lang === 'zh'
     const em = email.value.trim();
     const pw = password.value;
     if (!em || !pw) { msg.textContent = copy.needFields; return; }
-    if (mode === 'register' && pw.length < 8) { msg.textContent = copy.weakPw; return; }
+    if (mode === 'register') {
+      const r = evaluatePw(pw, em);
+      if (!r.len || !r.common || !r.email) { msg.textContent = copy.weakPw; updatePwHint(); return; }
+      if (!captchaInput.value.trim()) { msg.textContent = copy.captchaNeed; return; }
+    }
 
     submit.disabled = true;
     const label = submit.textContent;
@@ -120,7 +217,11 @@ const copy = lang === 'zh'
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify({ email: em, password: pw }),
+        body: JSON.stringify(
+          mode === 'register'
+            ? { email: em, password: pw, captchaToken, captchaAnswer: captchaInput.value.trim() }
+            : { email: em, password: pw },
+        ),
       });
       const data = await res.json().catch(() => ({}));
 
@@ -136,8 +237,12 @@ const copy = lang === 'zh'
       // 服务端错误按类型给出可读文案，不直接抛英文原文
       if (res.status === 400 && /already registered/i.test(data.error || '')) {
         msg.textContent = copy.dupEmail;
+      } else if (res.status === 400 && /captcha/i.test(data.error || '')) {
+        msg.textContent = copy.captchaWrong;
+        if (mode === 'register') loadCaptcha();
       } else if (res.status === 400 && /password/i.test(data.error || '')) {
         msg.textContent = copy.weakPw;
+        updatePwHint();
       } else {
         msg.textContent = copy.failed;
       }
@@ -164,6 +269,39 @@ const copy = lang === 'zh'
     color: var(--fg);
     font: inherit;
   }
+  .pw { display: grid; gap: 8px; margin-top: -2px; }
+  .pw__meter { height: 5px; border-radius: 99px; background: var(--bg-elev-2); overflow: hidden; }
+  .pw__meter i { display: block; height: 100%; width: 0; border-radius: 99px; background: var(--rose); transition: width .18s ease, background .18s ease; }
+  .pw__meter i[data-level='1'] { width: 33%; background: var(--rose); }
+  .pw__meter i[data-level='2'] { width: 66%; background: var(--amber); }
+  .pw__meter i[data-level='3'] { width: 100%; background: var(--accent); }
+  .pw__label { margin: 0; font-size: 13px; color: var(--fg-muted); }
+  .pw__rules { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 13px; color: var(--fg-dim); }
+  .pw__rules li::before { content: '○ '; }
+  .pw__rules li.is-ok { color: var(--accent); }
+  .pw__rules li.is-ok::before { content: '● '; }
+  .auth__captcha { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .auth__captcha-q {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 15px;
+    padding: 9px 12px;
+    border: 1px dashed var(--border-strong);
+    border-radius: 10px;
+    background: var(--bg-code);
+    color: var(--fg);
+    white-space: nowrap;
+  }
+  .auth__captcha input {
+    flex: 1 1 88px;
+    min-width: 88px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    background: var(--bg-elev);
+    color: var(--fg);
+    font: inherit;
+  }
+  .auth__captcha-refresh { flex: 0 0 auto; }
   .auth__actions { display: flex; gap: 10px; flex-wrap: wrap; }
   .auth__msg { min-height: 1.4em; margin: 0; color: var(--fg-muted); font-size: 14px; }
   .auth__link { font-size: 14px; }

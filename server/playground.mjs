@@ -10,13 +10,23 @@
 import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
+import { issueCaptcha, verifyCaptcha } from './captcha.mjs';
+import { appendRecords, buildRecord, cleanCompareItems, readRecent, runCompare } from './compare.mjs';
+import { billableInputTokens, cleanQuestions, toUpstreamQuestions } from './questions.mjs';
+import { MICROUSD_PER_CENT, inputCostMicroUsd, microUsdToUsd } from './plans.mjs';
 import path from 'node:path';
 
 const PORT = Number(process.env.PLAYGROUND_PORT || 8790);
 const KEY = process.env.JEVCODE_PLAYGROUND_KEY || '';
 const UPSTREAM = process.env.PLAYGROUND_UPSTREAM || 'https://api.clavue.com/v1/systemone';
 const MODEL = process.env.PLAYGROUND_MODEL || 'clavue-jev';
+const OMNI_URL = process.env.JEVCODE_OMNI_URL || 'http://192.168.2.100:31423/v1/judge';
+const OFFICIAL_URL = process.env.TYPESAFE_SYSTEMONE_URL || 'https://api.typesafe.ai/v1/systemone';
+const OFFICIAL_KEY = process.env.TYPESAFE_API_KEY || '';
+const OFFICIAL_MODEL = process.env.TYPESAFE_MODEL || 'jev-latest';
+const COMPARE_HOUR_LIMIT = 40;
 const DATA = process.env.PLAYGROUND_DATA || '/var/www/jevcode/shared/runs';
+const COMPARE_LOG = process.env.COMPARE_LOG || path.join(DATA, 'compare-log.jsonl');
 const HOUR_LIMIT = 20;
 const MAX_STATE = 4000;
 const MAX_QUESTIONS = 6;
@@ -54,6 +64,7 @@ if (ACCOUNTS_DB) {
 }
 
 const hits = new Map();
+const compareHits = new Map();
 
 const SESSION_COOKIE = 'jev_session';
 
@@ -103,6 +114,19 @@ function allow(ip) {
   }
   list.push(now);
   hits.set(ip, list);
+  return true;
+}
+
+function allowCompare(ip) {
+  const now = Date.now();
+  const windowStart = now - 60 * 60 * 1000;
+  const list = (compareHits.get(ip) || []).filter((t) => t > windowStart);
+  if (list.length >= COMPARE_HOUR_LIMIT) {
+    compareHits.set(ip, list);
+    return false;
+  }
+  list.push(now);
+  compareHits.set(ip, list);
   return true;
 }
 
@@ -164,23 +188,35 @@ async function readBody(req) {
   return JSON.parse(Buffer.concat(chunks).toString('utf8'));
 }
 
-function cleanQuestions(input) {
-  if (!input || typeof input !== 'object' || Array.isArray(input)) return null;
-  const out = {};
-  for (const [name, spec] of Object.entries(input).slice(0, MAX_QUESTIONS)) {
-    if (!/^[a-z][a-z0-9_]{0,40}$/.test(name)) continue;
-    if (!spec || typeof spec !== 'object') continue;
-    const type = spec.type;
-    const instructions = String(spec.instructions || '').slice(0, 400);
-    if (!instructions) continue;
-    if (type === 'noul' || type === 'confidence') {
-      out[name] = { type, instructions };
-    } else if (type === 'choice' && Array.isArray(spec.options)) {
-      const options = spec.options.map((o) => String(o).slice(0, 80)).filter(Boolean).slice(0, 8);
-      if (options.length >= 2) out[name] = { type, instructions, options };
-    }
+function presentEntry(entry) {
+  const micro = Number(entry.cents);
+  return {
+    ts: entry.ts,
+    kind: entry.kind,
+    ref: entry.ref,
+    microUsd: micro,
+    cents: Math.trunc(micro / MICROUSD_PER_CENT),
+    usd: microUsdToUsd(Math.abs(micro)),
+  };
+}
+
+function spendView(userId) {
+  const spentMicroUsd = accounts.spentMicroUsd(userId);
+  return {
+    spentCents: Math.floor(spentMicroUsd / MICROUSD_PER_CENT),
+    spentMicroUsd,
+    spentUsd: microUsdToUsd(spentMicroUsd),
+  };
+}
+
+/** 余额够不够覆盖这次输入。不够就不打上游。 */
+function canAfford(userId, tokens) {
+  const cost = inputCostMicroUsd(tokens);
+  const balance = accounts.balance(userId);
+  if (!balance || balance.microUsd < cost) {
+    return { ok: false, reason: 'insufficient_credit', balance };
   }
-  return Object.keys(out).length ? out : null;
+  return { ok: true, cost, balance };
 }
 
 async function judge(state, questions) {
@@ -190,7 +226,11 @@ async function judge(state, questions) {
       authorization: `Bearer ${KEY}`,
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ model: MODEL, state, questions }),
+    body: JSON.stringify({
+      model: MODEL,
+      state,
+      questions: toUpstreamQuestions(questions),
+    }),
     signal: AbortSignal.timeout(40_000),
   });
   const payload = await response.json().catch(() => ({}));
@@ -282,7 +322,7 @@ const server = createServer(async (req, res) => {
         send(res, 200, {
           user: { id: userId, email: resolved.user.email, plan: resolved.user.plan },
           credit: accounts.balance(userId),
-          spentCents: accounts.spentCents(userId),
+          ...spendView(userId),
         });
         return;
       }
@@ -290,8 +330,8 @@ const server = createServer(async (req, res) => {
       if (req.method === 'GET' && url.pathname === '/v1/usage') {
         send(res, 200, {
           credit: accounts.balance(userId),
-          spentCents: accounts.spentCents(userId),
-          entries: accounts.entries(userId, 200),
+          ...spendView(userId),
+          entries: accounts.entries(userId, 200).map(presentEntry),
         });
         return;
       }
@@ -299,7 +339,7 @@ const server = createServer(async (req, res) => {
       if (req.method === 'POST' && url.pathname === '/v1/judge') {
         const body = await readBody(req);
         const state = String(body.state || '').trim().slice(0, MAX_STATE);
-        const questions = cleanQuestions(body.questions);
+        const questions = cleanQuestions(body.questions, MAX_QUESTIONS);
         if (state.length < 8 || !questions) {
           send(res, 400, {
             error: 'invalid_request',
@@ -308,7 +348,8 @@ const server = createServer(async (req, res) => {
           return;
         }
 
-        const quota = accounts.consume(userId, 1);
+        const tokens = billableInputTokens(state, toUpstreamQuestions(questions));
+        const quota = canAfford(userId, tokens);
         if (!quota.ok) {
           res.writeHead(429, {
             'content-type': 'application/json; charset=utf-8',
@@ -327,10 +368,7 @@ const server = createServer(async (req, res) => {
         try {
           result = await judge(state, questions);
         } catch (err) {
-          // 上游失败要退回额度，不能让用户白扣
-          accounts.refund(userId, 1);
-          // 上游的 4xx/5xx 一律折算成 502：对外只表达「判定后端暂不可用」，
-          // 不透传上游状态码（曾把上游 500 原样透出，用户以为是我们挂了）。
+          // 还没扣费。上游的 4xx/5xx 一律折算成 502。
           const upstream = err && err.message === 'upstream';
           send(res, upstream ? 502 : 500, {
             error: upstream ? 'upstream_unavailable' : 'request_failed',
@@ -341,6 +379,7 @@ const server = createServer(async (req, res) => {
           });
           return;
         }
+        accounts.chargeInputTokens(userId, tokens);
 
         const id = randomBytes(9).toString('base64url').slice(0, 12).toLowerCase();
         const record = {
@@ -371,6 +410,16 @@ const server = createServer(async (req, res) => {
 
     // ---- 账号：注册 / 登录 / 登出 / 我是谁 ----
     if (url.pathname.startsWith('/api/auth/')) {
+      // 验证码：注册前的机器人闸门。不依赖账号库，故放在 auth 守卫之前。
+      if (req.method === 'GET' && url.pathname === '/api/auth/captcha') {
+        if (!KEY) {
+          send(res, 503, { error: 'captcha is not configured' });
+          return;
+        }
+        send(res, 200, issueCaptcha(KEY));
+        return;
+      }
+
       if (!auth) {
         send(res, 503, { error: 'accounts are not configured' });
         return;
@@ -434,6 +483,14 @@ const server = createServer(async (req, res) => {
 
       if (req.method === 'POST' && url.pathname === '/api/auth/register') {
         const b = await readBody(req);
+        // 先验验证码，再碰账号库：机器人拿不到合法签名就走不到注册逻辑。
+        // 仅在配置了签名密钥（KEY）时强制；未配置说明是本地/开发环境，
+        // 与「未配置 KEY 时 /api/try 走 503」同一降级原则，不放行机器注册的
+        // 前提是生产环境一定配了 KEY。
+        if (KEY && !verifyCaptcha(KEY, String(b.captchaToken || ''), String(b.captchaAnswer || ''))) {
+          send(res, 400, { error: 'captcha answer is incorrect or expired' });
+          return;
+        }
         const r = auth.register(String(b.email || ''), String(b.password || ''));
         if (!r.ok) {
           send(res, 400, { error: r.reason });
@@ -484,8 +541,8 @@ const server = createServer(async (req, res) => {
         }
         send(res, 200, {
           credit: accounts.balance(me.user.id),
-          spentCents: accounts.spentCents(me.user.id),
-          entries: accounts.entries(me.user.id, 100),
+          ...spendView(me.user.id),
+          entries: accounts.entries(me.user.id, 100).map(presentEntry),
         });
         return;
       }
@@ -499,6 +556,7 @@ const server = createServer(async (req, res) => {
         send(res, 200, {
           user: { id: me.user.id, email: me.user.email, plan: me.user.plan },
           credit: accounts.balance(me.user.id),
+          ...spendView(me.user.id),
           keys: accounts.listKeys(me.user.id).map((k) => ({
             id: k.id, prefix: k.prefix, label: k.label,
             createdAt: k.created_at, revokedAt: k.revoked_at,
@@ -566,7 +624,7 @@ const server = createServer(async (req, res) => {
       const ip = clientIp(req);
       const body = await readBody(req);
       const state = String(body.state || '').trim().slice(0, MAX_STATE);
-      const questions = cleanQuestions(body.questions);
+      const questions = cleanQuestions(body.questions, MAX_QUESTIONS);
       if (state.length < 8 || !questions) {
         send(res, 400, { error: 'state and at least one valid question are required' });
         return;
@@ -591,8 +649,9 @@ const server = createServer(async (req, res) => {
         userId = resolved.user.id;
       }
 
+      const tokens = billableInputTokens(state, toUpstreamQuestions(questions));
       if (userId) {
-        const quota = accounts.consume(userId, 1);
+        const quota = canAfford(userId, tokens);
         if (!quota.ok) {
           res.writeHead(429, {
             'content-type': 'application/json; charset=utf-8',
@@ -606,14 +665,9 @@ const server = createServer(async (req, res) => {
         return;
       }
 
-      // 判定失败要把额度退回去——否则上游抖动会白扣用户的次数。
-      let result;
-      try {
-        result = await judge(state, questions);
-      } catch (err) {
-        if (userId && accounts) accounts.refund(userId, 1);
-        throw err;
-      }
+      // 成功之后才扣。上游失败直接抛出，余额不动。匿名试用不入账。
+      const result = await judge(state, questions);
+      if (userId && accounts) accounts.chargeInputTokens(userId, tokens);
 
       const id = randomBytes(9).toString('base64url').slice(0, 12).toLowerCase();
       const record = {
@@ -631,6 +685,41 @@ const server = createServer(async (req, res) => {
       const payload = { ...record };
       if (userId && accounts) payload.credit = accounts.balance(userId) || {};
       send(res, 200, payload);
+      return;
+    }
+
+    if (req.method === 'GET' && url.pathname === '/api/compare/recent') {
+      const limit = Math.min(40, Math.max(1, Number(url.searchParams.get('limit')) || 24));
+      send(res, 200, { entries: await readRecent(COMPARE_LOG, limit) });
+      return;
+    }
+
+    // 同一道选择题打到 clavue-jev 和 jev-1.13.0。密钥留在本进程，不进浏览器。
+    if (req.method === 'POST' && url.pathname === '/api/compare') {
+      const body = await readBody(req);
+      const items = cleanCompareItems(body.items);
+      if (!items) {
+        send(res, 400, { error: 'items must be 1 to 8 choice questions' });
+        return;
+      }
+      if (!allowCompare(clientIp(req))) {
+        send(res, 429, { error: 'hourly limit reached' });
+        return;
+      }
+      const results = await runCompare(items, {
+        omniUrl: OMNI_URL,
+        officialUrl: OFFICIAL_URL,
+        officialKey: OFFICIAL_KEY,
+        officialModel: OFFICIAL_MODEL,
+        fetchImpl: fetch,
+      });
+      const recorded = results.map((result, index) => buildRecord(items[index], result));
+      try {
+        await appendRecords(COMPARE_LOG, recorded);
+      } catch (err) {
+        console.error(`[compare] log failed: ${err.message}`);
+      }
+      send(res, 200, { results, recorded });
       return;
     }
 
