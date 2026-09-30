@@ -1,27 +1,33 @@
 ---
-title: JevCode
-description: A JevCode é a casa do Jev. O modelo é o clavue-jev, o melhor Jev do mundo hoje. Uma chamada envia um estado e perguntas tipadas e devolve um julgamento em que o software pode ramificar.
+title: Conhecer o JevCode
+description: O JevCode é a casa do Jev. O modelo é o clavue-jev, o melhor Jev do mundo hoje. Uma chamada envia um estado e perguntas tipadas e devolve um julgamento em que o software pode ramificar.
 section: start
 order: 10
 tags: ['overview', 'clavue-jev']
 ---
 
-## JevCode
+## A casa do Jev
 
-A JevCode é a casa do Jev. O modelo deste site é **clavue-jev**. Nós o construímos, nós o servimos e o colocamos como o melhor Jev do mundo hoje.
+O JevCode é onde o Jev mora. O modelo que este site serve é o **clavue-jev**. Nós o construímos, nós o servimos e o colocamos como o melhor Jev do mundo hoje.
 
-O jev-1.13.0 aparece na página de comparação, na mesma pergunta. Não é o modelo que este site oferece.
+O jev-1.13.0 aparece na página de comparação. É o outro lado da mesma pergunta, para ver lado a lado. Não é o modelo que este site oferece.
 
-O clavue-jev não é um modelo de chat. Você envia um **estado** e até seis **perguntas tipadas**. Ele devolve campos que um programa pode ler.
+## O que é uma chamada
 
-| Pergunta | Volta |
+O clavue-jev não é um modelo de chat. Você envia **um estado** e até **seis perguntas tipadas**. Voltam campos que um programa lê direto:
+
+| Pergunta | Retorno |
 | :--- | :--- |
-| `noul` | Número de 0 a 1. O quanto a resposta é sim. |
-| `confidence` | Número de 0 a 1. O quanto o julgamento se sustenta. |
-| `choice` | Uma das opções que você enviou. |
+| `noul` | Um número de 0 a 1. Leia como a força do "sim". |
+| `confidence` | Um número de 0 a 1. Leia como: quão firme é este julgamento. |
+| `choice` | Uma das opções que você deu. |
 
-- [System One](/pt/concepts/system-one/)
-- [Estado](/pt/concepts/state/)
-- [Certeza](/pt/concepts/confidence/)
-- [Experimentar](/pt/try/)
-- [API](/pt/api/)
+Um modelo de chat escreve prosa. O clavue-jev devolve um valor. Esse é o trabalho do System One, o trabalho desta chamada.
+
+## Continuar lendo
+
+- [System One](/pt/concepts/system-one/) — a forma de uma chamada
+- [Estado](/pt/concepts/state/) — o texto que você envia
+- [Confiança](/pt/concepts/confidence/) — quando agir sozinho, quando parar
+- [Testar uma vez](/pt/try/) — anônimo, sem chave
+- [API](/pt/api/) — `POST /v1/judge` com uma chave

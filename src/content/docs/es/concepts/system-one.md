@@ -1,16 +1,24 @@
 ---
 title: System One
-description: La página de System One escrita por JevCode. clavue-jev responde a un estado con noul, confidence y choice.
+description: La página de System One de JevCode. clavue-jev responde a un estado con noul, confidence y choice.
 section: concepts
 order: 10
 tags: ['system-one', 'clavue-jev']
 ---
 
-## System One
+## Escrito en JevCode
 
-Esta página es nuestra. Describe la llamada que **este sitio acepta de verdad**. El modelo es **clavue-jev**, y lo sostenemos como el mejor Jev del mundo hoy.
+Esta página es nuestra. Describe la llamada que **este sitio** sirve realmente.
 
-Un programa necesita un valor de tipo conocido. Una respuesta de chat es una cadena que luego hay que analizar. clavue-jev lleva el tipo en la pregunta: la respuesta ya es un número o una de tus opciones. Úsalo para los juicios que corren todo el día. La escritura abierta va a un modelo de texto; clavue-jev decide si ese texto se puede ejecutar.
+JevCode es el hogar de Jev. El modelo es **clavue-jev**, y lo presentamos como el mejor Jev del mundo hoy. Una llamada de System One, aquí, es un estado, unas preguntas tipadas, y una respuesta que se llama `clavue-jev`.
+
+## Para qué sirve
+
+El software necesita un valor de tipo conocido. La respuesta de un chat es una cadena que habrá que analizar después. clavue-jev pone el tipo del lado de la pregunta: la respuesta ya es un número, o una de tus opciones.
+
+Úsalo para juicios que corren todo el día. Qué cola, si esta fila entra en el alcance, si esta acción puede pasar. Para escritura abierta, toma un modelo de texto, y deja que clavue-jev juzgue si el texto puede ejecutarse.
+
+## La llamada
 
 ```http
 POST https://api.jevcode.ai/v1/judge
@@ -39,10 +47,14 @@ Content-Type: application/json
 }
 ```
 
-`state` tiene de 8 a 4000 caracteres. `questions` lleva seis como máximo. `options` se pliega en `criteria` antes de llegar al modelo. La respuesta nombra `model` como `clavue-jev`. Solo una llamada que sale bien se cobra por tokens de entrada. La salida es gratis. [Precios](/es/pricing/).
+`state` es texto de 8 a 4000 caracteres. `questions` son seis como máximo. Los nombres empiezan con minúscula. Un choice llega como `options` o como `criteria`; este servidor integra `options` en criteria antes de llamar al modelo.
+
+La respuesta lleva `"model": "clavue-jev"`. Tras una llamada correcta, se factura por los tokens de entrada. La salida es gratis. Los números están en [Precios](/es/pricing/).
+
+## Seguir leyendo
 
 - [Estado](/es/concepts/state/)
-- [Certeza](/es/concepts/confidence/)
-- [Primitivas](/es/primitives/)
+- [Confianza](/es/concepts/confidence/)
+- [Choice, Noul y las demás](/es/primitives/)
 - [API](/es/api/)
-- [Escenas](/es/scenes/)
+- [En vivo](/es/scenes/)

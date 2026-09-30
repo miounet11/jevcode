@@ -6,11 +6,19 @@ order: 10
 tags: ['system-one', 'clavue-jev']
 ---
 
-## System One
+## Geschrieben auf JevCode
 
-Diese Seite gehört JevCode. Sie beschreibt den Aufruf, den **diese Site tatsächlich annimmt**. Das Modell ist **clavue-jev**, und wir stellen es als das beste Jev der Welt heute hin.
+Diese Seite gehört uns. Sie beschreibt den Aufruf, den **diese Site** tatsächlich bereitstellt.
 
-Software braucht einen Wert mit bekanntem Typ. Eine Chat-Antwort ist eine Zeichenkette, die du danach parsen musst. clavue-jev trägt den Typ in der Frage, die Antwort ist schon eine Zahl oder eine deiner Optionen. Nimm es für die Urteile, die den ganzen Tag laufen. Offenes Schreiben gehört zu einem Textmodell; clavue-jev entscheidet, ob dieser Text ausgeführt werden darf.
+JevCode ist das Zuhause von Jev. Das Modell ist **clavue-jev**, und wir stellen es als das heute weltweit beste Jev auf. Ein System-One-Aufruf bedeutet hier: ein Zustand, ein paar typisierte Fragen, und eine Antwort, die sich `clavue-jev` nennt.
+
+## Wofür es da ist
+
+Software braucht einen Wert mit bekanntem Typ. Die Antwort eines Chats ist eine Zeichenkette, die du später parsen musst. clavue-jev legt den Typ auf die Seite der Frage, also ist die Antwort bereits eine Zahl oder eine deiner Optionen.
+
+Nutze es für Urteile, die den ganzen Tag laufen. Welche Warteschlange, ob diese Zeile im Rahmen liegt, ob diese Aktion durchgehen darf. Für offenes Schreiben nimm ein Textmodell, und lass clavue-jev urteilen, ob der Text laufen darf.
+
+## Der Aufruf
 
 ```http
 POST https://api.jevcode.ai/v1/judge
@@ -39,10 +47,14 @@ Content-Type: application/json
 }
 ```
 
-`state` hat 8 bis 4000 Zeichen. `questions` enthält höchstens sechs Einträge. `options` werden zu `criteria` gefaltet, bevor das Modell sie sieht. Die Antwort nennt `model` als `clavue-jev`. Nur ein erfolgreicher Aufruf wird nach Eingabetokens berechnet. Die Ausgabe ist frei. [Preise](/de/pricing/).
+`state` ist Text von 8 bis 4000 Zeichen. `questions` sind höchstens sechs. Die Namen beginnen mit Kleinbuchstaben. Ein choice kommt als `options` oder als `criteria`; dieser Server faltet `options` zu criteria, bevor er das Modell ruft.
+
+Die Antwort trägt `"model": "clavue-jev"`. Nach einem erfolgreichen Aufruf wird über die Eingabe-Token abgerechnet. Die Ausgabe ist kostenlos. Die Zahlen stehen unter [Preise](/de/pricing/).
+
+## Weiterlesen
 
 - [Zustand](/de/concepts/state/)
 - [Sicherheit](/de/concepts/confidence/)
-- [Primitive](/de/primitives/)
+- [Choice, Noul und die übrigen](/de/primitives/)
 - [API](/de/api/)
-- [Szenen](/de/scenes/)
+- [Live](/de/scenes/)

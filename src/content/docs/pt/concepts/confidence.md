@@ -1,18 +1,20 @@
 ---
-title: Certeza
-description: Nesta API a certeza é uma pergunta à parte e devolve um número de 0 a 1. O limiar depende do custo de errar.
+title: Confiança
+description: Nesta API a confiança é uma pergunta separada e devolve um número de 0 a 1. O limite se define pelo custo de um erro.
 section: concepts
 order: 30
 tags: ['confidence', 'clavue-jev']
 ---
 
-## Certeza
+## Dois números diferentes
 
-Esta API não esconde uma certeza dentro de cada resposta. Você pede o número que quer.
+Esta API não esconde uma confiança dentro de cada resposta. Você pergunta o número que quer.
 
-- `noul` devolve `{ "noul": 0.92 }`. É o quanto a resposta é sim, não uma segunda nota de certeza.
-- `confidence` devolve `{ "noul": 0.78 }`. É o quanto o julgamento se sustenta. Peça-o ao lado da pergunta sobre a qual você pode agir.
-- `choice` devolve `{ "choice": "billing" }`, uma das opções enviadas.
+- Uma pergunta `noul` devolve `{ "noul": 0.92 }`. É a força do "sim", não uma pontuação de confiança separada.
+- Uma pergunta `confidence` devolve `{ "noul": 0.78 }`. É quão firme é este julgamento. Pergunte junto à pergunta que você quer deixar executar sozinha.
+- Uma pergunta `choice` devolve `{ "choice": "billing" }`. Uma das opções que você enviou.
+
+Quando a bifurcação importa, pergunte as duas juntas:
 
 ```json
 {
@@ -35,7 +37,17 @@ Esta API não esconde uma certeza dentro de cada resposta. Você pede o número 
 }
 ```
 
-Não há um limiar universal neste site. Um reembolso automático errado custa mais do que uma etiqueta errada numa linha de log. Número alto: a ação segura. Número baixo: uma pessoa, ou uma segunda chamada com um estado mais estreito. Olhe o seu próprio tráfego em [comparar](/pt/compare/) ou [experimentar](/pt/try/) antes de fixar o limiar.
+## Quando agir sozinho
+
+Este site não tem um limite universal. Errar num reembolso automático custa mais do que errar uma etiqueta numa linha de log. Por isso o caminho do reembolso espera um número mais alto.
+
+Um começo prático:
+
+1. Escolha a ação segura que roda quando o número é alto.
+2. Escolha o repasse quando o número é baixo (uma pessoa, ou uma segunda chamada com um estado mais estreito).
+3. Leia um lote do seu próprio tráfego em [Comparar](/pt/compare/) ou [Teste](/pt/try/) antes de fixar o limite.
+
+Não deixe o modelo mover dinheiro nem apagar dados se ele não puder dizer "não tenho certeza". Faça uma pergunta `confidence` e bifurque.
 
 - [Estado](/pt/concepts/state/)
 - [System One](/pt/concepts/system-one/)

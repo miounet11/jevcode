@@ -1,18 +1,20 @@
 ---
-title: Assurance
-description: Dans cette API, l'assurance est une question à part et renvoie un nombre de 0 à 1. Le seuil dépend du coût d'une erreur.
+title: Confiance
+description: Dans cette API, la confiance est une question à part et renvoie un nombre de 0 à 1. Le seuil se règle sur le coût d'une erreur.
 section: concepts
 order: 30
 tags: ['confidence', 'clavue-jev']
 ---
 
-## Assurance
+## Deux nombres différents
 
-Cette API ne cache pas une assurance dans chaque réponse. Vous demandez le nombre dont vous avez besoin.
+Cette API ne cache pas de confiance dans chaque réponse. Vous demandez le nombre que vous voulez.
 
-- `noul` renvoie `{ "noul": 0.92 }`. C'est la force du oui, pas un second score d'assurance.
-- `confidence` renvoie `{ "noul": 0.78 }`. C'est la solidité du jugement. Demandez-le à côté de la question sur laquelle vous pourriez agir.
-- `choice` renvoie `{ "choice": "billing" }`, l'une des options envoyées.
+- Une question `noul` renvoie `{ "noul": 0.92 }`. C'est la force du « oui », pas un score de confiance distinct.
+- Une question `confidence` renvoie `{ "noul": 0.78 }`. C'est à quel point ce jugement est solide. Posez-la à côté de la question que vous voulez laisser s'exécuter automatiquement.
+- Une question `choice` renvoie `{ "choice": "billing" }`. L'une des options que vous avez envoyées.
+
+Quand la bifurcation compte, posez les deux ensemble :
 
 ```json
 {
@@ -35,7 +37,17 @@ Cette API ne cache pas une assurance dans chaque réponse. Vous demandez le nomb
 }
 ```
 
-Il n'y a pas de seuil universel ici. Un remboursement automatique faux coûte plus qu'une étiquette fausse sur une ligne de journal. Nombre haut : l'action sûre. Nombre bas : une personne, ou un second appel avec un état plus serré. Regardez votre propre trafic sur [comparer](/fr/compare/) ou [essayer](/fr/try/) avant de figer le seuil.
+## Quand agir automatiquement
+
+Ce site n'a pas de seuil universel. Se tromper sur un remboursement automatique coûte plus cher que se tromper sur une étiquette dans une ligne de log. Le chemin du remboursement attend donc un nombre plus élevé.
+
+Un début pratique :
+
+1. Choisissez l'action sûre qui s'exécute quand le nombre est élevé.
+2. Choisissez le relais quand le nombre est bas (un humain, ou un second appel sur un état plus étroit).
+3. Lisez un lot de votre propre trafic via [Comparer](/fr/compare/) ou [Essai](/fr/try/) avant de figer le seuil.
+
+Ne laissez pas le modèle déplacer de l'argent ni effacer des données s'il ne peut pas dire « je ne suis pas sûr ». Posez une question `confidence` et bifurquez.
 
 - [État](/fr/concepts/state/)
 - [System One](/fr/concepts/system-one/)

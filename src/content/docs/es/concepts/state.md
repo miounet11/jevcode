@@ -6,33 +6,34 @@ order: 20
 tags: ['state', 'clavue-jev']
 ---
 
-## Estado
+## Qué envías
 
 El **estado** es el texto que juzga clavue-jev. En `POST /v1/judge` es una cadena de 8 a 4000 caracteres. Cada pregunta de la misma petición ve esa cadena. Las preguntas no leen las respuestas de las otras.
 
-Mete en esa cadena los hechos que el juicio necesita. Lo que no está escrito, el modelo no lo tiene. Las preguntas independientes van juntas, seis como máximo. Si una pregunta necesita la respuesta anterior, escribe esa respuesta en un estado nuevo y llama por segunda vez.
+Mete en esa cadena los hechos que el juicio necesita: el mensaje, la línea de política, los dos nombres que quieres comparar. Un hecho que no está escrito no existe para el modelo.
 
 ```json
 {
-  "state": "The invoice was paid twice on Tuesday.",
+  "state": "Usuario: me cobraron dos veces. Política: un cargo duplicado dentro de 7 días se reembolsa. Filas: martes 18:02, martes 18:04, misma tarjeta, mismo importe.",
   "questions": {
     "duplicate": {
       "type": "noul",
-      "instructions": "Does this describe a duplicate charge?"
-    },
-    "sure": {
-      "type": "confidence",
-      "instructions": "How sure is that judgment?"
-    },
-    "lane": {
-      "type": "choice",
-      "instructions": "Which queue should take it?",
-      "options": ["billing", "fraud", "ignore"]
+      "instructions": "¿Muestran estas filas un cargo duplicado?"
     }
   }
 }
 ```
 
+## Un estado, varias preguntas
+
+Las preguntas independientes viajan en la misma petición, seis como máximo. «¿Es un duplicado?» y «¿A qué cola?» pueden ir juntas. Una pregunta que necesita la respuesta anterior no puede: lánzala como segunda llamada, con la primera respuesta escrita en el estado nuevo.
+
+Pon nombre a cada parte en el texto si envías más de un hecho. «Política: … Filas: …» se juzga más fácil que tres bloques sin etiqueta.
+
+## Longitud
+
+Menos de 8 caracteres se rechaza. Más de 4000 también. Si el material no cabe, recórtalo a las líneas que la pregunta realmente necesita, o divide el trabajo en dos llamadas.
+
 - [System One](/es/concepts/system-one/)
-- [Certeza](/es/concepts/confidence/)
+- [Confianza](/es/concepts/confidence/)
 - [API](/es/api/)

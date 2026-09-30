@@ -6,33 +6,34 @@ order: 20
 tags: ['state', 'clavue-jev']
 ---
 
-## 상태
+## 보내는 것
 
-**상태**는 clavue-jev가 판정하는 텍스트입니다. `POST /v1/judge`에서 8자에서 4000자의 문자열 하나입니다. 같은 요청의 질문은 모두 이 문자열을 보고, 서로의 답은 읽지 않습니다.
+**상태**는 clavue-jev가 판정하는 텍스트입니다. `POST /v1/judge`에서는 8자에서 4000자의 문자열 하나입니다. 같은 요청의 질문은 모두 이 문자열을 보고, 질문끼리 서로의 답을 읽지 않습니다.
 
-판정에 필요한 사실을 그 문자열에 넣으십시오. 적지 않은 사실은 모델에게 없습니다. 서로 독립인 질문은 한 요청에 최대 여섯 개입니다. 앞의 답이 필요한 질문은, 그 답을 새 상태에 적어 두 번째 호출을 하십시오.
+판정에 필요한 사실을 그 문자열에 담으세요. 그 메시지, 그 정책 한 줄, 비교하려는 두 이름. 적지 않은 사실은 모델에게 없습니다.
 
 ```json
 {
-  "state": "The invoice was paid twice on Tuesday.",
+  "state": "사용자: 두 번 청구되었습니다. 정책: 7일 이내 중복 청구는 환불 대상. 청구 내역: 화요일 18:02, 화요일 18:04, 같은 카드, 같은 금액.",
   "questions": {
     "duplicate": {
       "type": "noul",
-      "instructions": "Does this describe a duplicate charge?"
-    },
-    "sure": {
-      "type": "confidence",
-      "instructions": "How sure is that judgment?"
-    },
-    "lane": {
-      "type": "choice",
-      "instructions": "Which queue should take it?",
-      "options": ["billing", "fraud", "ignore"]
+      "instructions": "이 내역이 중복 청구를 보여줍니까?"
     }
   }
 }
 ```
 
+## 하나의 상태, 여러 질문
+
+서로 독립적인 질문은 같은 요청에 최대 여섯 개까지 넣습니다. "중복 청구인가"와 "어느 큐인가"는 함께 보낼 수 있습니다. 앞선 답이 필요한 질문은 함께 보낼 수 없습니다. 그럴 때는 두 번째 호출로 만들고, 첫 답을 새 상태에 적으세요.
+
+사실이 여러 개일 때는 본문에서 각각에 이름을 붙이세요. "정책: … 청구 내역: …"가 라벨 없는 세 덩어리보다 판정하기 쉽습니다.
+
+## 길이
+
+8자 미만은 거부됩니다. 4000자를 초과해도 거부됩니다. 재료가 들어가지 않으면 그 질문에 정말 필요한 줄만 남기거나, 두 번의 호출로 나누세요.
+
 - [System One](/ko/concepts/system-one/)
-- [확신](/ko/concepts/confidence/)
+- [신뢰도](/ko/concepts/confidence/)
 - [API](/ko/api/)

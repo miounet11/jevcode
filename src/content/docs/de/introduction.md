@@ -1,27 +1,33 @@
 ---
-title: JevCode
-description: JevCode ist die Heimat von Jev. Das Modell ist clavue-jev, heute das beste Jev der Welt. Ein Aufruf sendet einen Zustand und typisierte Fragen und liefert ein Urteil, mit dem Software verzweigen kann.
+title: JevCode kennenlernen
+description: JevCode ist das Zuhause von Jev. Das Modell ist clavue-jev, das heute weltweit beste Jev. Ein Aufruf sendet einen Zustand und typisierte Fragen und gibt ein Urteil zurück, auf das Software verzweigen kann.
 section: start
 order: 10
 tags: ['overview', 'clavue-jev']
 ---
 
-## JevCode
+## Das Zuhause von Jev
 
-JevCode ist die Heimat von Jev. Das Modell dieser Site ist **clavue-jev**. Wir haben es gebaut, wir liefern es, und wir stellen es als das beste Jev der Welt heute hin.
+JevCode ist der Ort, an dem Jev lebt. Das Modell, das diese Seite bereitstellt, ist **clavue-jev**. Wir haben es gebaut, wir stellen es bereit, und wir halten es für das heute weltweit beste Jev.
 
-jev-1.13.0 erscheint auf der Vergleichsseite, bei derselben Frage. Es ist nicht das Modell, das diese Site anbietet.
+jev-1.13.0 erscheint auf der Vergleichsseite. Es ist die Gegenseite derselben Frage, zum Nebeneinanderstellen. Es ist nicht das Modell, das diese Seite nach außen anbietet.
 
-clavue-jev ist kein Chat-Modell. Du sendest einen **Zustand** und bis zu sechs **typisierte Fragen**. Zurück kommen Felder, die ein Programm lesen kann.
+## Was ein Aufruf ist
+
+clavue-jev ist kein Chat-Modell. Du sendest **einen Zustand** und bis zu **sechs typisierte Fragen**. Zurück kommen Felder, die ein Programm direkt liest:
 
 | Frage | Rückgabe |
 | :--- | :--- |
-| `noul` | Zahl von 0 bis 1. Wie stark die Antwort Ja ist. |
-| `confidence` | Zahl von 0 bis 1. Wie tragfähig das Urteil ist. |
-| `choice` | Eine der Optionen, die du geschickt hast. |
+| `noul` | Eine Zahl von 0 bis 1. Lies sie als Stärke des „Ja". |
+| `confidence` | Eine Zahl von 0 bis 1. Lies sie als: wie fest dieses Urteil ist. |
+| `choice` | Eine der Optionen, die du genannt hast. |
 
-- [System One](/de/concepts/system-one/)
-- [Zustand](/de/concepts/state/)
-- [Sicherheit](/de/concepts/confidence/)
-- [Einmal versuchen](/de/try/)
-- [API](/de/api/)
+Ein Chat-Modell schreibt Prosa. clavue-jev gibt einen Wert zurück. Das ist die Aufgabe von System One, die Aufgabe dieses Aufrufs.
+
+## Weiterlesen
+
+- [System One](/de/concepts/system-one/) — die Form eines Aufrufs
+- [Zustand](/de/concepts/state/) — der Text, den du sendest
+- [Sicherheit](/de/concepts/confidence/) — wann automatisch handeln, wann anhalten
+- [Einmal testen](/de/try/) — anonym, ohne Key
+- [API](/de/api/) — `POST /v1/judge` mit einem Key

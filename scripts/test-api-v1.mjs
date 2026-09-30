@@ -103,6 +103,31 @@ try {
     const noQ = await post('/v1/judge', { state: 'long enough state' }, key);
     ok('无 question → 400', noQ.status === 400, `得到 ${noQ.status}`);
 
+    // 文档承诺「超过 4000 字符会被拒绝」。上限按字符计，不是字节：
+    // 4000 个日文假名是 12000 字节，仍须放行。
+    // 本地校验通过后请求会打到上游；上游不可用时返回 502，同样证明它越过了校验。
+    const exact = await post('/v1/judge', {
+      state: 'あ'.repeat(4000),
+      questions: goodBody.questions,
+    }, key);
+    ok('state 恰好 4000 字符 → 未被本地校验拒绝（非 400）', exact.status !== 400, `得到 ${exact.status}`);
+
+    const over = await post('/v1/judge', {
+      state: 'あ'.repeat(4001),
+      questions: goodBody.questions,
+    }, key);
+    ok('state 超过 4000 字符 → 400', over.status === 400, `得到 ${over.status}`);
+
+    // 超长必须被拒绝而非静默截断：拒绝时不应扣费。
+    const l0 = openAccounts(dbPath);
+    const bal0 = l0.balance(user.id).microUsd;
+    l0.close();
+    await post('/v1/judge', { state: 'あ'.repeat(4001), questions: goodBody.questions }, key);
+    const l1 = openAccounts(dbPath);
+    const bal1 = l1.balance(user.id).microUsd;
+    l1.close();
+    ok('超长被拒后未扣费', bal1 === bal0, `前 ${bal0} 后 ${bal1}`);
+
     const notFound = await post('/v1/nope', {}, key);
     ok('未知路径 → 404', notFound.status === 404, `得到 ${notFound.status}`);
   }

@@ -6,13 +6,15 @@ order: 30
 tags: ['confidence', 'clavue-jev']
 ---
 
-## Sicherheit
+## Zwei verschiedene Zahlen
 
 Diese API versteckt keine Sicherheit in jeder Antwort. Du fragst nach der Zahl, die du willst.
 
-- `noul` liefert `{ "noul": 0.92 }`. Das ist, wie stark die Antwort Ja ist, keine zweite Sicherheitszahl.
-- `confidence` liefert `{ "noul": 0.78 }`. Das ist, wie tragfähig das Urteil ist. Frag es neben der Frage, auf die du handeln willst.
-- `choice` liefert `{ "choice": "billing" }`, eine der gesendeten Optionen.
+- Eine `noul`-Frage liefert `{ "noul": 0.92 }`. Das ist die Stärke des „Ja", kein eigener Sicherheitswert.
+- Eine `confidence`-Frage liefert `{ "noul": 0.78 }`. Das ist, wie fest dieses Urteil ist. Frag sie neben der Frage, die du automatisch ausführen lassen willst.
+- Eine `choice`-Frage liefert `{ "choice": "billing" }`. Eine der Optionen, die du gesendet hast.
+
+Wenn die Verzweigung wichtig ist, frag beide zusammen:
 
 ```json
 {
@@ -35,7 +37,17 @@ Diese API versteckt keine Sicherheit in jeder Antwort. Du fragst nach der Zahl, 
 }
 ```
 
-Es gibt hier keine universelle Schwelle. Eine falsche automatische Erstattung kostet mehr als ein falsches Tag an einer Logzeile. Bei einer hohen Zahl die sichere Aktion, bei einer niedrigen Zahl ein Mensch oder ein zweiter Aufruf mit engerem Zustand. Sieh dir eigenen Verkehr auf [Vergleich](/de/compare/) oder [Ausprobieren](/de/try/) an, bevor du die Schwelle festlegst.
+## Wann automatisch handeln
+
+Diese Seite hat keine allgemeingültige Schwelle. Eine automatische Erstattung falsch auszuführen kostet mehr als ein falsches Tag in einer Log-Zeile. Deshalb wartet der Erstattungspfad auf eine höhere Zahl.
+
+Ein praktischer Anfang:
+
+1. Wähle die sichere Aktion, die bei hoher Zahl läuft.
+2. Wähle die Übergabe bei niedriger Zahl (ein Mensch, oder ein zweiter Aufruf mit engerem Zustand).
+3. Lies eine Charge deines eigenen Verkehrs über [Vergleich](/de/compare/) oder [Test](/de/try/), bevor du die Schwelle festlegst.
+
+Lass das Modell kein Geld bewegen und keine Daten löschen, wenn es nicht „ich bin unsicher" sagen kann. Frag eine `confidence`-Frage und verzweige.
 
 - [Zustand](/de/concepts/state/)
 - [System One](/de/concepts/system-one/)

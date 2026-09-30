@@ -338,12 +338,19 @@ const server = createServer(async (req, res) => {
 
       if (req.method === 'POST' && url.pathname === '/v1/judge') {
         const body = await readBody(req);
-        const state = String(body.state || '').trim().slice(0, MAX_STATE);
+        const state = String(body.state || '').trim();
         const questions = cleanQuestions(body.questions, MAX_QUESTIONS);
         if (state.length < 8 || !questions) {
           send(res, 400, {
             error: 'invalid_request',
             message: 'state (min 8 chars) and at least one valid question are required',
+          });
+          return;
+        }
+        if (state.length > MAX_STATE) {
+          send(res, 400, {
+            error: 'invalid_request',
+            message: `state exceeds ${MAX_STATE} characters`,
           });
           return;
         }
@@ -623,10 +630,14 @@ const server = createServer(async (req, res) => {
       }
       const ip = clientIp(req);
       const body = await readBody(req);
-      const state = String(body.state || '').trim().slice(0, MAX_STATE);
+      const state = String(body.state || '').trim();
       const questions = cleanQuestions(body.questions, MAX_QUESTIONS);
       if (state.length < 8 || !questions) {
         send(res, 400, { error: 'state and at least one valid question are required' });
+        return;
+      }
+      if (state.length > MAX_STATE) {
+        send(res, 400, { error: `state exceeds ${MAX_STATE} characters` });
         return;
       }
 
