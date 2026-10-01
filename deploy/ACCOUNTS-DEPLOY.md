@@ -27,16 +27,24 @@
 
 ## 上线前必须做的三件事
 
-### 1. 在 env 文件里加账号库路径
+### 1. 在 env 文件里加账号库路径与运行环境
 
-`/etc/jevcode/playground.env` 增加一行：
+`/etc/jevcode/playground.env` 增加两行：
 
 ```
 PLAYGROUND_ACCOUNTS_DB=/var/lib/jevcode-accounts/accounts.db
+NODE_ENV=production
 ```
 
-**不加的后果**：服务照常跑，但 `/api/auth/*`、`/api/keys` 与 `/v1/*` 一律
-返回 `503 accounts are not configured`，登录/注册/API 调用全部失败。
+**不加 `PLAYGROUND_ACCOUNTS_DB` 的后果**：服务照常跑，但 `/api/auth/*`、
+`/api/keys` 与 `/v1/*` 一律返回 `503 accounts are not configured`，登录/注册/API
+调用全部失败。
+
+**不加 `NODE_ENV=production` 的后果**：`server/mailer.mjs` 会把运行环境判为非生产，
+在没配 `MAIL_TRANSPORT` 时退回 `console` 发信通道——`/api/auth/otp/*` 返回 `200`，
+且**验证码被明文写进服务日志**（本该被生产护栏拦住）。密码注册/登录不受影响，
+但验证码登录会以「看起来可用、实际发不出信」的形态漏出去。设了之后未配发信通道
+时 `/api/auth/otp/*` 正确返回 `503 code_login_unavailable`。
 
 目录要先建好并给运行用户写权限（service 里没配 `User=`，即以 root 运行）：
 
