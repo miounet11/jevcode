@@ -103,10 +103,31 @@ curl -sS https://api.jevcode.ai/v1/me -H "Authorization: Bearer jev_..."
 
 ## 数据与备份
 
-单个 SQLite 文件（WAL 模式）。备份直接复制即可，注意连同 `-wal`、`-shm`：
+单个 SQLite 文件（`PLAYGROUND_ACCOUNTS_DB`），WAL 模式。**不要用 `cp` 直接拷
+`.db`**：WAL 下主文件可能只有几 KB，数据大半在 `-wal` 里，拷出来会缺数据。
+生产机也没装 `sqlite3`，别指望 `.backup` 命令。
+
+用仓库里的脚本，它走 `node:sqlite` 的 `VACUUM INTO` 导出自洽快照，并做
+`integrity_check` 与 users 行数比对：
 
 ```bash
-sqlite3 /var/lib/jevcode-accounts/accounts.db ".backup /root/accounts-$(date +%F).db"
+# 手动备份一次
+set -a; . /etc/jevcode/playground.env; set +a
+node /opt/jevcode-playground/backup-accounts.mjs
+# 产物在 /var/backups/jevcode-accounts/accounts-<UTC时间戳>.db
+```
+
+已装定时任务 `/etc/cron.d/jevcode-backup`（每小时一次，保留最近 168 份）。
+日志写到 `/var/log/jevcode-backup.log`。改保留份数用 `BACKUP_KEEP`。
+
+**恢复**：停服 → 用快照覆盖 `accounts.db` 并删掉同目录 `-wal`/`-shm`
+→ 起服。
+
+```bash
+systemctl stop jevcode-playground
+cp /var/backups/jevcode-accounts/accounts-<时间戳>.db /var/lib/jevcode-accounts/accounts.db
+rm -f /var/lib/jevcode-accounts/accounts.db-wal /var/lib/jevcode-accounts/accounts.db-shm
+systemctl start jevcode-playground
 ```
 
 口令是 scrypt 散列、会话与 API Key 只存 sha256——库泄露不等于凭据泄露。
