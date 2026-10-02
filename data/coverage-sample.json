@@ -1,0 +1,3482 @@
+[
+  {
+    "id": "cov-ecommerce-urgency-01",
+    "industry": "ecommerce",
+    "dimension": "urgency",
+    "tag": "sla-breach",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: buyer reports the order is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-07",
+    "industry": "ecommerce",
+    "dimension": "billing-dispute",
+    "tag": "data-loss",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-ecommerce-toxicity-05",
+    "industry": "ecommerce",
+    "dimension": "toxicity",
+    "tag": "audit-trail",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: The product listing instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-ecommerce-category-04",
+    "industry": "ecommerce",
+    "dimension": "category",
+    "tag": "auto-renewal",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: All order processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-ecommerce-financial-advice-02",
+    "industry": "ecommerce",
+    "dimension": "financial-advice",
+    "tag": "chargeback",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: Given my GMV, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-fintech-urgency-01",
+    "industry": "fintech",
+    "dimension": "urgency",
+    "tag": "performance",
+    "scene": "chat",
+    "stage": "response",
+    "context": "Chat message: account holder reports the transaction is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-fintech-billing-dispute-07",
+    "industry": "fintech",
+    "dimension": "billing-dispute",
+    "tag": "outage",
+    "scene": "social",
+    "stage": "qa",
+    "context": "Social post: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-fintech-toxicity-05",
+    "industry": "fintech",
+    "dimension": "toxicity",
+    "tag": "localization",
+    "scene": "email",
+    "stage": "intake",
+    "context": "Email received: The payout instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-fintech-category-04",
+    "industry": "fintech",
+    "dimension": "category",
+    "tag": "privacy",
+    "scene": "transcript",
+    "stage": "escalation",
+    "context": "Call transcript: All transaction processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-fintech-financial-advice-02",
+    "industry": "fintech",
+    "dimension": "financial-advice",
+    "tag": "refund",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: Given my settlement rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-banking-urgency-01",
+    "industry": "banking",
+    "dimension": "urgency",
+    "tag": "third-party",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: customer reports the wire transfer is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-banking-billing-dispute-07",
+    "industry": "banking",
+    "dimension": "billing-dispute",
+    "tag": "sla-breach",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-banking-toxicity-05",
+    "industry": "banking",
+    "dimension": "toxicity",
+    "tag": "auto-renewal",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: The statement instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-banking-category-04",
+    "industry": "banking",
+    "dimension": "category",
+    "tag": "churn-risk",
+    "scene": "form",
+    "stage": "follow-up",
+    "context": "Form submission: All wire transfer processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-banking-financial-advice-02",
+    "industry": "banking",
+    "dimension": "financial-advice",
+    "tag": "regression",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: Given my balance, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-insurance-urgency-01",
+    "industry": "insurance",
+    "dimension": "urgency",
+    "tag": "accessibility",
+    "scene": "review",
+    "stage": "triage",
+    "context": "Review posted: policyholder reports the claim is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-insurance-billing-dispute-07",
+    "industry": "insurance",
+    "dimension": "billing-dispute",
+    "tag": "performance",
+    "scene": "chat",
+    "stage": "response",
+    "context": "Chat message: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-insurance-toxicity-05",
+    "industry": "insurance",
+    "dimension": "toxicity",
+    "tag": "privacy",
+    "scene": "alert",
+    "stage": "audit",
+    "context": "Alert fired: The policy instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-insurance-category-04",
+    "industry": "insurance",
+    "dimension": "category",
+    "tag": "data-loss",
+    "scene": "sms",
+    "stage": "routing",
+    "context": "SMS: All claim processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-insurance-financial-advice-02",
+    "industry": "insurance",
+    "dimension": "financial-advice",
+    "tag": "audit-trail",
+    "scene": "social",
+    "stage": "qa",
+    "context": "Social post: Given my loss ratio, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-healthcare-urgency-01",
+    "industry": "healthcare",
+    "dimension": "urgency",
+    "tag": "deadline",
+    "scene": "alert",
+    "stage": "escalation",
+    "context": "Alert fired: patient reports the appointment is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-healthcare-billing-dispute-07",
+    "industry": "healthcare",
+    "dimension": "billing-dispute",
+    "tag": "third-party",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-healthcare-toxicity-05",
+    "industry": "healthcare",
+    "dimension": "toxicity",
+    "tag": "churn-risk",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: The treatment plan instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-healthcare-category-04",
+    "industry": "healthcare",
+    "dimension": "category",
+    "tag": "outage",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: All appointment processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-healthcare-financial-advice-02",
+    "industry": "healthcare",
+    "dimension": "financial-advice",
+    "tag": "localization",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: Given my wait time, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-pharma-urgency-01",
+    "industry": "pharma",
+    "dimension": "urgency",
+    "tag": "security",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: clinician reports the prescription is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-pharma-billing-dispute-07",
+    "industry": "pharma",
+    "dimension": "billing-dispute",
+    "tag": "accessibility",
+    "scene": "review",
+    "stage": "triage",
+    "context": "Review posted: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-pharma-toxicity-05",
+    "industry": "pharma",
+    "dimension": "toxicity",
+    "tag": "data-loss",
+    "scene": "transcript",
+    "stage": "escalation",
+    "context": "Call transcript: The batch record instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-pharma-category-04",
+    "industry": "pharma",
+    "dimension": "category",
+    "tag": "sla-breach",
+    "scene": "note",
+    "stage": "intake",
+    "context": "Internal note: All prescription processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-pharma-financial-advice-02",
+    "industry": "pharma",
+    "dimension": "financial-advice",
+    "tag": "auto-renewal",
+    "scene": "chat",
+    "stage": "response",
+    "context": "Chat message: Given my adherence, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-telehealth-urgency-01",
+    "industry": "telehealth",
+    "dimension": "urgency",
+    "tag": "chargeback",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: patient reports the session is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-telehealth-billing-dispute-07",
+    "industry": "telehealth",
+    "dimension": "billing-dispute",
+    "tag": "deadline",
+    "scene": "alert",
+    "stage": "escalation",
+    "context": "Alert fired: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-telehealth-toxicity-05",
+    "industry": "telehealth",
+    "dimension": "toxicity",
+    "tag": "outage",
+    "scene": "form",
+    "stage": "follow-up",
+    "context": "Form submission: The prescription refill instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-telehealth-category-04",
+    "industry": "telehealth",
+    "dimension": "category",
+    "tag": "performance",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: All session processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-telehealth-financial-advice-02",
+    "industry": "telehealth",
+    "dimension": "financial-advice",
+    "tag": "privacy",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: Given my no-show rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-education-urgency-01",
+    "industry": "education",
+    "dimension": "urgency",
+    "tag": "refund",
+    "scene": "form",
+    "stage": "qa",
+    "context": "Form submission: student reports the enrollment is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-education-billing-dispute-07",
+    "industry": "education",
+    "dimension": "billing-dispute",
+    "tag": "security",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-education-toxicity-05",
+    "industry": "education",
+    "dimension": "toxicity",
+    "tag": "sla-breach",
+    "scene": "sms",
+    "stage": "routing",
+    "context": "SMS: The course instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-education-category-04",
+    "industry": "education",
+    "dimension": "category",
+    "tag": "third-party",
+    "scene": "support-ticket",
+    "stage": "audit",
+    "context": "Ticket: All enrollment processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-education-financial-advice-02",
+    "industry": "education",
+    "dimension": "financial-advice",
+    "tag": "churn-risk",
+    "scene": "review",
+    "stage": "triage",
+    "context": "Review posted: Given my completion rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-edtech-urgency-01",
+    "industry": "edtech",
+    "dimension": "urgency",
+    "tag": "regression",
+    "scene": "sms",
+    "stage": "intake",
+    "context": "SMS: learner reports the subscription is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-edtech-billing-dispute-07",
+    "industry": "edtech",
+    "dimension": "billing-dispute",
+    "tag": "chargeback",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-edtech-toxicity-05",
+    "industry": "edtech",
+    "dimension": "toxicity",
+    "tag": "performance",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: The lesson instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-edtech-category-04",
+    "industry": "edtech",
+    "dimension": "category",
+    "tag": "accessibility",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: All subscription processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-edtech-financial-advice-02",
+    "industry": "edtech",
+    "dimension": "financial-advice",
+    "tag": "data-loss",
+    "scene": "alert",
+    "stage": "escalation",
+    "context": "Alert fired: Given my retention, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-university-urgency-01",
+    "industry": "university",
+    "dimension": "urgency",
+    "tag": "audit-trail",
+    "scene": "api-payload",
+    "stage": "response",
+    "context": "API payload field: applicant reports the application is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-university-billing-dispute-07",
+    "industry": "university",
+    "dimension": "billing-dispute",
+    "tag": "refund",
+    "scene": "form",
+    "stage": "qa",
+    "context": "Form submission: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-university-toxicity-05",
+    "industry": "university",
+    "dimension": "toxicity",
+    "tag": "third-party",
+    "scene": "note",
+    "stage": "intake",
+    "context": "Internal note: The transcript instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-university-category-04",
+    "industry": "university",
+    "dimension": "category",
+    "tag": "deadline",
+    "scene": "email",
+    "stage": "escalation",
+    "context": "Email received: All application processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-university-financial-advice-02",
+    "industry": "university",
+    "dimension": "financial-advice",
+    "tag": "outage",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: Given my acceptance rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-saas-urgency-01",
+    "industry": "saas",
+    "dimension": "urgency",
+    "tag": "localization",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: admin reports the subscription is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-saas-billing-dispute-07",
+    "industry": "saas",
+    "dimension": "billing-dispute",
+    "tag": "regression",
+    "scene": "sms",
+    "stage": "intake",
+    "context": "SMS: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-saas-toxicity-05",
+    "industry": "saas",
+    "dimension": "toxicity",
+    "tag": "accessibility",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: The workspace instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-saas-category-04",
+    "industry": "saas",
+    "dimension": "category",
+    "tag": "security",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: All subscription processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-saas-financial-advice-02",
+    "industry": "saas",
+    "dimension": "financial-advice",
+    "tag": "sla-breach",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: Given my churn, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-paas-urgency-01",
+    "industry": "paas",
+    "dimension": "urgency",
+    "tag": "auto-renewal",
+    "scene": "social",
+    "stage": "triage",
+    "context": "Social post: operator reports the instance is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-paas-billing-dispute-07",
+    "industry": "paas",
+    "dimension": "billing-dispute",
+    "tag": "audit-trail",
+    "scene": "api-payload",
+    "stage": "response",
+    "context": "API payload field: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-paas-toxicity-05",
+    "industry": "paas",
+    "dimension": "toxicity",
+    "tag": "deadline",
+    "scene": "support-ticket",
+    "stage": "audit",
+    "context": "Ticket: The deployment instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-paas-category-04",
+    "industry": "paas",
+    "dimension": "category",
+    "tag": "chargeback",
+    "scene": "alert",
+    "stage": "routing",
+    "context": "Alert fired: All instance processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-paas-financial-advice-02",
+    "industry": "paas",
+    "dimension": "financial-advice",
+    "tag": "performance",
+    "scene": "form",
+    "stage": "qa",
+    "context": "Form submission: Given my uptime, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-cybersecurity-urgency-01",
+    "industry": "cybersecurity",
+    "dimension": "urgency",
+    "tag": "privacy",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: SOC analyst reports the incident is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-cybersecurity-billing-dispute-07",
+    "industry": "cybersecurity",
+    "dimension": "billing-dispute",
+    "tag": "localization",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-cybersecurity-toxicity-05",
+    "industry": "cybersecurity",
+    "dimension": "toxicity",
+    "tag": "security",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: The alert rule instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-cybersecurity-category-04",
+    "industry": "cybersecurity",
+    "dimension": "category",
+    "tag": "refund",
+    "scene": "log",
+    "stage": "qa",
+    "context": "Log line: All incident processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-cybersecurity-financial-advice-02",
+    "industry": "cybersecurity",
+    "dimension": "financial-advice",
+    "tag": "third-party",
+    "scene": "sms",
+    "stage": "intake",
+    "context": "SMS: Given my MTTR, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-devtools-urgency-01",
+    "industry": "devtools",
+    "dimension": "urgency",
+    "tag": "churn-risk",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: developer reports the build is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-devtools-billing-dispute-07",
+    "industry": "devtools",
+    "dimension": "billing-dispute",
+    "tag": "auto-renewal",
+    "scene": "social",
+    "stage": "triage",
+    "context": "Social post: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-devtools-toxicity-05",
+    "industry": "devtools",
+    "dimension": "toxicity",
+    "tag": "chargeback",
+    "scene": "email",
+    "stage": "escalation",
+    "context": "Email received: The pipeline instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-devtools-category-04",
+    "industry": "devtools",
+    "dimension": "category",
+    "tag": "regression",
+    "scene": "transcript",
+    "stage": "intake",
+    "context": "Call transcript: All build processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-devtools-financial-advice-02",
+    "industry": "devtools",
+    "dimension": "financial-advice",
+    "tag": "accessibility",
+    "scene": "api-payload",
+    "stage": "response",
+    "context": "API payload field: Given my build time, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-gaming-urgency-01",
+    "industry": "gaming",
+    "dimension": "urgency",
+    "tag": "data-loss",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: player reports the match is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-gaming-billing-dispute-07",
+    "industry": "gaming",
+    "dimension": "billing-dispute",
+    "tag": "privacy",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-gaming-toxicity-05",
+    "industry": "gaming",
+    "dimension": "toxicity",
+    "tag": "refund",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: The skin instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-gaming-category-04",
+    "industry": "gaming",
+    "dimension": "category",
+    "tag": "audit-trail",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: All match processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-gaming-financial-advice-02",
+    "industry": "gaming",
+    "dimension": "financial-advice",
+    "tag": "deadline",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: Given my DAU, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-media-urgency-01",
+    "industry": "media",
+    "dimension": "urgency",
+    "tag": "outage",
+    "scene": "review",
+    "stage": "qa",
+    "context": "Review posted: viewer reports the article is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-media-billing-dispute-07",
+    "industry": "media",
+    "dimension": "billing-dispute",
+    "tag": "churn-risk",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-media-toxicity-05",
+    "industry": "media",
+    "dimension": "toxicity",
+    "tag": "regression",
+    "scene": "alert",
+    "stage": "routing",
+    "context": "Alert fired: The video instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-media-category-04",
+    "industry": "media",
+    "dimension": "category",
+    "tag": "localization",
+    "scene": "sms",
+    "stage": "audit",
+    "context": "SMS: All article processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-media-financial-advice-02",
+    "industry": "media",
+    "dimension": "financial-advice",
+    "tag": "security",
+    "scene": "social",
+    "stage": "triage",
+    "context": "Social post: Given my watch time, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-streaming-urgency-01",
+    "industry": "streaming",
+    "dimension": "urgency",
+    "tag": "sla-breach",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: subscriber reports the stream is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-streaming-billing-dispute-07",
+    "industry": "streaming",
+    "dimension": "billing-dispute",
+    "tag": "data-loss",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-streaming-toxicity-05",
+    "industry": "streaming",
+    "dimension": "toxicity",
+    "tag": "audit-trail",
+    "scene": "log",
+    "stage": "qa",
+    "context": "Log line: The playlist instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-streaming-category-04",
+    "industry": "streaming",
+    "dimension": "category",
+    "tag": "auto-renewal",
+    "scene": "api-payload",
+    "stage": "triage",
+    "context": "API payload field: All stream processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-streaming-financial-advice-02",
+    "industry": "streaming",
+    "dimension": "financial-advice",
+    "tag": "chargeback",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: Given my buffering rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-adtech-urgency-01",
+    "industry": "adtech",
+    "dimension": "urgency",
+    "tag": "performance",
+    "scene": "log",
+    "stage": "response",
+    "context": "Log line: advertiser reports the campaign is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-adtech-billing-dispute-07",
+    "industry": "adtech",
+    "dimension": "billing-dispute",
+    "tag": "outage",
+    "scene": "review",
+    "stage": "qa",
+    "context": "Review posted: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-adtech-toxicity-05",
+    "industry": "adtech",
+    "dimension": "toxicity",
+    "tag": "localization",
+    "scene": "transcript",
+    "stage": "intake",
+    "context": "Call transcript: The creative instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-adtech-category-04",
+    "industry": "adtech",
+    "dimension": "category",
+    "tag": "privacy",
+    "scene": "note",
+    "stage": "escalation",
+    "context": "Internal note: All campaign processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-adtech-financial-advice-02",
+    "industry": "adtech",
+    "dimension": "financial-advice",
+    "tag": "refund",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: Given my CTR, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-marketing-urgency-01",
+    "industry": "marketing",
+    "dimension": "urgency",
+    "tag": "third-party",
+    "scene": "transcript",
+    "stage": "audit",
+    "context": "Call transcript: marketer reports the lead is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-marketing-billing-dispute-07",
+    "industry": "marketing",
+    "dimension": "billing-dispute",
+    "tag": "sla-breach",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-marketing-toxicity-05",
+    "industry": "marketing",
+    "dimension": "toxicity",
+    "tag": "auto-renewal",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: The email blast instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-marketing-category-04",
+    "industry": "marketing",
+    "dimension": "category",
+    "tag": "churn-risk",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: All lead processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-marketing-financial-advice-02",
+    "industry": "marketing",
+    "dimension": "financial-advice",
+    "tag": "regression",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: Given my conversion, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-crm-urgency-01",
+    "industry": "crm",
+    "dimension": "urgency",
+    "tag": "accessibility",
+    "scene": "form",
+    "stage": "triage",
+    "context": "Form submission: account manager reports the deal is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-crm-billing-dispute-07",
+    "industry": "crm",
+    "dimension": "billing-dispute",
+    "tag": "performance",
+    "scene": "log",
+    "stage": "response",
+    "context": "Log line: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-crm-toxicity-05",
+    "industry": "crm",
+    "dimension": "toxicity",
+    "tag": "privacy",
+    "scene": "sms",
+    "stage": "audit",
+    "context": "SMS: The contact record instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-crm-category-04",
+    "industry": "crm",
+    "dimension": "category",
+    "tag": "data-loss",
+    "scene": "support-ticket",
+    "stage": "routing",
+    "context": "Ticket: All deal processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-crm-financial-advice-02",
+    "industry": "crm",
+    "dimension": "financial-advice",
+    "tag": "audit-trail",
+    "scene": "review",
+    "stage": "qa",
+    "context": "Review posted: Given my pipeline value, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-logistics-urgency-01",
+    "industry": "logistics",
+    "dimension": "urgency",
+    "tag": "deadline",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: shipper reports the shipment is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-logistics-billing-dispute-07",
+    "industry": "logistics",
+    "dimension": "billing-dispute",
+    "tag": "third-party",
+    "scene": "transcript",
+    "stage": "audit",
+    "context": "Call transcript: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-logistics-toxicity-05",
+    "industry": "logistics",
+    "dimension": "toxicity",
+    "tag": "churn-risk",
+    "scene": "api-payload",
+    "stage": "triage",
+    "context": "API payload field: The parcel instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-logistics-category-04",
+    "industry": "logistics",
+    "dimension": "category",
+    "tag": "outage",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: All shipment processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-logistics-financial-advice-02",
+    "industry": "logistics",
+    "dimension": "financial-advice",
+    "tag": "localization",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: Given my on-time rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-supplychain-urgency-01",
+    "industry": "supplychain",
+    "dimension": "urgency",
+    "tag": "security",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: supplier reports the purchase order is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-supplychain-billing-dispute-07",
+    "industry": "supplychain",
+    "dimension": "billing-dispute",
+    "tag": "accessibility",
+    "scene": "form",
+    "stage": "triage",
+    "context": "Form submission: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-supplychain-toxicity-05",
+    "industry": "supplychain",
+    "dimension": "toxicity",
+    "tag": "data-loss",
+    "scene": "note",
+    "stage": "escalation",
+    "context": "Internal note: The SKU instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-supplychain-category-04",
+    "industry": "supplychain",
+    "dimension": "category",
+    "tag": "sla-breach",
+    "scene": "email",
+    "stage": "intake",
+    "context": "Email received: All purchase order processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-supplychain-financial-advice-02",
+    "industry": "supplychain",
+    "dimension": "financial-advice",
+    "tag": "auto-renewal",
+    "scene": "log",
+    "stage": "response",
+    "context": "Log line: Given my fill rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-manufacturing-urgency-01",
+    "industry": "manufacturing",
+    "dimension": "urgency",
+    "tag": "chargeback",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: plant operator reports the work order is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-manufacturing-billing-dispute-07",
+    "industry": "manufacturing",
+    "dimension": "billing-dispute",
+    "tag": "deadline",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-manufacturing-toxicity-05",
+    "industry": "manufacturing",
+    "dimension": "toxicity",
+    "tag": "outage",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: The assembly line instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-manufacturing-category-04",
+    "industry": "manufacturing",
+    "dimension": "category",
+    "tag": "performance",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: All work order processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-manufacturing-financial-advice-02",
+    "industry": "manufacturing",
+    "dimension": "financial-advice",
+    "tag": "privacy",
+    "scene": "transcript",
+    "stage": "audit",
+    "context": "Call transcript: Given my OEE, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-automotive-urgency-01",
+    "industry": "automotive",
+    "dimension": "urgency",
+    "tag": "refund",
+    "scene": "social",
+    "stage": "qa",
+    "context": "Social post: driver reports the vehicle is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-automotive-billing-dispute-07",
+    "industry": "automotive",
+    "dimension": "billing-dispute",
+    "tag": "security",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-automotive-toxicity-05",
+    "industry": "automotive",
+    "dimension": "toxicity",
+    "tag": "sla-breach",
+    "scene": "support-ticket",
+    "stage": "routing",
+    "context": "Ticket: The part instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-automotive-category-04",
+    "industry": "automotive",
+    "dimension": "category",
+    "tag": "third-party",
+    "scene": "alert",
+    "stage": "audit",
+    "context": "Alert fired: All vehicle processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-automotive-financial-advice-02",
+    "industry": "automotive",
+    "dimension": "financial-advice",
+    "tag": "churn-risk",
+    "scene": "form",
+    "stage": "triage",
+    "context": "Form submission: Given my recall rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-aerospace-urgency-01",
+    "industry": "aerospace",
+    "dimension": "urgency",
+    "tag": "regression",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: crew reports the flight is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-aerospace-billing-dispute-07",
+    "industry": "aerospace",
+    "dimension": "billing-dispute",
+    "tag": "chargeback",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-aerospace-toxicity-05",
+    "industry": "aerospace",
+    "dimension": "toxicity",
+    "tag": "performance",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: The component instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-aerospace-category-04",
+    "industry": "aerospace",
+    "dimension": "category",
+    "tag": "accessibility",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: All flight processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-aerospace-financial-advice-02",
+    "industry": "aerospace",
+    "dimension": "financial-advice",
+    "tag": "data-loss",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: Given my dispatch reliability, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-energy-urgency-01",
+    "industry": "energy",
+    "dimension": "urgency",
+    "tag": "audit-trail",
+    "scene": "chat",
+    "stage": "response",
+    "context": "Chat message: grid operator reports the meter is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-energy-billing-dispute-07",
+    "industry": "energy",
+    "dimension": "billing-dispute",
+    "tag": "refund",
+    "scene": "social",
+    "stage": "qa",
+    "context": "Social post: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-energy-toxicity-05",
+    "industry": "energy",
+    "dimension": "toxicity",
+    "tag": "third-party",
+    "scene": "email",
+    "stage": "intake",
+    "context": "Email received: The turbine instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-energy-category-04",
+    "industry": "energy",
+    "dimension": "category",
+    "tag": "deadline",
+    "scene": "transcript",
+    "stage": "escalation",
+    "context": "Call transcript: All meter processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-energy-financial-advice-02",
+    "industry": "energy",
+    "dimension": "financial-advice",
+    "tag": "outage",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: Given my load factor, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-utilities-urgency-01",
+    "industry": "utilities",
+    "dimension": "urgency",
+    "tag": "localization",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: ratepayer reports the service account is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-utilities-billing-dispute-07",
+    "industry": "utilities",
+    "dimension": "billing-dispute",
+    "tag": "regression",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-utilities-toxicity-05",
+    "industry": "utilities",
+    "dimension": "toxicity",
+    "tag": "accessibility",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: The meter reading instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-utilities-category-04",
+    "industry": "utilities",
+    "dimension": "category",
+    "tag": "security",
+    "scene": "form",
+    "stage": "follow-up",
+    "context": "Form submission: All service account processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-utilities-financial-advice-02",
+    "industry": "utilities",
+    "dimension": "financial-advice",
+    "tag": "sla-breach",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: Given my outage minutes, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-telecom-urgency-01",
+    "industry": "telecom",
+    "dimension": "urgency",
+    "tag": "auto-renewal",
+    "scene": "review",
+    "stage": "triage",
+    "context": "Review posted: subscriber reports the line is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-telecom-billing-dispute-07",
+    "industry": "telecom",
+    "dimension": "billing-dispute",
+    "tag": "audit-trail",
+    "scene": "chat",
+    "stage": "response",
+    "context": "Chat message: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-telecom-toxicity-05",
+    "industry": "telecom",
+    "dimension": "toxicity",
+    "tag": "deadline",
+    "scene": "alert",
+    "stage": "audit",
+    "context": "Alert fired: The SIM instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-telecom-category-04",
+    "industry": "telecom",
+    "dimension": "category",
+    "tag": "chargeback",
+    "scene": "sms",
+    "stage": "routing",
+    "context": "SMS: All line processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-telecom-financial-advice-02",
+    "industry": "telecom",
+    "dimension": "financial-advice",
+    "tag": "performance",
+    "scene": "social",
+    "stage": "qa",
+    "context": "Social post: Given my drop rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-realestate-urgency-01",
+    "industry": "realestate",
+    "dimension": "urgency",
+    "tag": "privacy",
+    "scene": "alert",
+    "stage": "escalation",
+    "context": "Alert fired: tenant reports the listing is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-realestate-billing-dispute-07",
+    "industry": "realestate",
+    "dimension": "billing-dispute",
+    "tag": "localization",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-realestate-toxicity-05",
+    "industry": "realestate",
+    "dimension": "toxicity",
+    "tag": "security",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: The lease instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-realestate-category-04",
+    "industry": "realestate",
+    "dimension": "category",
+    "tag": "refund",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: All listing processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-realestate-financial-advice-02",
+    "industry": "realestate",
+    "dimension": "financial-advice",
+    "tag": "third-party",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: Given my days on market, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-construction-urgency-01",
+    "industry": "construction",
+    "dimension": "urgency",
+    "tag": "churn-risk",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: site manager reports the change order is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-construction-billing-dispute-07",
+    "industry": "construction",
+    "dimension": "billing-dispute",
+    "tag": "auto-renewal",
+    "scene": "review",
+    "stage": "triage",
+    "context": "Review posted: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-construction-toxicity-05",
+    "industry": "construction",
+    "dimension": "toxicity",
+    "tag": "chargeback",
+    "scene": "transcript",
+    "stage": "escalation",
+    "context": "Call transcript: The blueprint instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-construction-category-04",
+    "industry": "construction",
+    "dimension": "category",
+    "tag": "regression",
+    "scene": "note",
+    "stage": "intake",
+    "context": "Internal note: All change order processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-construction-financial-advice-02",
+    "industry": "construction",
+    "dimension": "financial-advice",
+    "tag": "accessibility",
+    "scene": "chat",
+    "stage": "response",
+    "context": "Chat message: Given my schedule variance, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-legal-urgency-01",
+    "industry": "legal",
+    "dimension": "urgency",
+    "tag": "data-loss",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: client reports the matter is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-legal-billing-dispute-07",
+    "industry": "legal",
+    "dimension": "billing-dispute",
+    "tag": "privacy",
+    "scene": "alert",
+    "stage": "escalation",
+    "context": "Alert fired: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-legal-toxicity-05",
+    "industry": "legal",
+    "dimension": "toxicity",
+    "tag": "refund",
+    "scene": "form",
+    "stage": "follow-up",
+    "context": "Form submission: The contract instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-legal-category-04",
+    "industry": "legal",
+    "dimension": "category",
+    "tag": "audit-trail",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: All matter processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-legal-financial-advice-02",
+    "industry": "legal",
+    "dimension": "financial-advice",
+    "tag": "deadline",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: Given my billable hours, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-hr-urgency-01",
+    "industry": "hr",
+    "dimension": "urgency",
+    "tag": "outage",
+    "scene": "form",
+    "stage": "qa",
+    "context": "Form submission: candidate reports the requisition is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-hr-billing-dispute-07",
+    "industry": "hr",
+    "dimension": "billing-dispute",
+    "tag": "churn-risk",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-hr-toxicity-05",
+    "industry": "hr",
+    "dimension": "toxicity",
+    "tag": "regression",
+    "scene": "sms",
+    "stage": "routing",
+    "context": "SMS: The offer letter instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-hr-category-04",
+    "industry": "hr",
+    "dimension": "category",
+    "tag": "localization",
+    "scene": "support-ticket",
+    "stage": "audit",
+    "context": "Ticket: All requisition processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-hr-financial-advice-02",
+    "industry": "hr",
+    "dimension": "financial-advice",
+    "tag": "security",
+    "scene": "review",
+    "stage": "triage",
+    "context": "Review posted: Given my time to hire, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-recruiting-urgency-01",
+    "industry": "recruiting",
+    "dimension": "urgency",
+    "tag": "sla-breach",
+    "scene": "sms",
+    "stage": "intake",
+    "context": "SMS: recruiter reports the application is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-recruiting-billing-dispute-07",
+    "industry": "recruiting",
+    "dimension": "billing-dispute",
+    "tag": "data-loss",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-recruiting-toxicity-05",
+    "industry": "recruiting",
+    "dimension": "toxicity",
+    "tag": "audit-trail",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: The interview instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-recruiting-category-04",
+    "industry": "recruiting",
+    "dimension": "category",
+    "tag": "auto-renewal",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: All application processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-recruiting-financial-advice-02",
+    "industry": "recruiting",
+    "dimension": "financial-advice",
+    "tag": "chargeback",
+    "scene": "alert",
+    "stage": "escalation",
+    "context": "Alert fired: Given my offer accept rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-government-urgency-01",
+    "industry": "government",
+    "dimension": "urgency",
+    "tag": "performance",
+    "scene": "api-payload",
+    "stage": "response",
+    "context": "API payload field: citizen reports the benefit claim is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-government-billing-dispute-07",
+    "industry": "government",
+    "dimension": "billing-dispute",
+    "tag": "outage",
+    "scene": "form",
+    "stage": "qa",
+    "context": "Form submission: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-government-toxicity-05",
+    "industry": "government",
+    "dimension": "toxicity",
+    "tag": "localization",
+    "scene": "note",
+    "stage": "intake",
+    "context": "Internal note: The form instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-government-category-04",
+    "industry": "government",
+    "dimension": "category",
+    "tag": "privacy",
+    "scene": "email",
+    "stage": "escalation",
+    "context": "Email received: All benefit claim processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-government-financial-advice-02",
+    "industry": "government",
+    "dimension": "financial-advice",
+    "tag": "refund",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: Given my processing time, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-nonprofit-urgency-01",
+    "industry": "nonprofit",
+    "dimension": "urgency",
+    "tag": "third-party",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: donor reports the donation is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-nonprofit-billing-dispute-07",
+    "industry": "nonprofit",
+    "dimension": "billing-dispute",
+    "tag": "sla-breach",
+    "scene": "sms",
+    "stage": "intake",
+    "context": "SMS: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-nonprofit-toxicity-05",
+    "industry": "nonprofit",
+    "dimension": "toxicity",
+    "tag": "auto-renewal",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: The grant instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-nonprofit-category-04",
+    "industry": "nonprofit",
+    "dimension": "category",
+    "tag": "churn-risk",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: All donation processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-nonprofit-financial-advice-02",
+    "industry": "nonprofit",
+    "dimension": "financial-advice",
+    "tag": "regression",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: Given my donor retention, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-travel-urgency-01",
+    "industry": "travel",
+    "dimension": "urgency",
+    "tag": "accessibility",
+    "scene": "social",
+    "stage": "triage",
+    "context": "Social post: traveler reports the booking is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-travel-billing-dispute-07",
+    "industry": "travel",
+    "dimension": "billing-dispute",
+    "tag": "performance",
+    "scene": "api-payload",
+    "stage": "response",
+    "context": "API payload field: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-travel-toxicity-05",
+    "industry": "travel",
+    "dimension": "toxicity",
+    "tag": "privacy",
+    "scene": "support-ticket",
+    "stage": "audit",
+    "context": "Ticket: The itinerary instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-travel-category-04",
+    "industry": "travel",
+    "dimension": "category",
+    "tag": "data-loss",
+    "scene": "alert",
+    "stage": "routing",
+    "context": "Alert fired: All booking processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-travel-financial-advice-02",
+    "industry": "travel",
+    "dimension": "financial-advice",
+    "tag": "audit-trail",
+    "scene": "form",
+    "stage": "qa",
+    "context": "Form submission: Given my load factor, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-hospitality-urgency-01",
+    "industry": "hospitality",
+    "dimension": "urgency",
+    "tag": "deadline",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: guest reports the reservation is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-hospitality-billing-dispute-07",
+    "industry": "hospitality",
+    "dimension": "billing-dispute",
+    "tag": "third-party",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-hospitality-toxicity-05",
+    "industry": "hospitality",
+    "dimension": "toxicity",
+    "tag": "churn-risk",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: The room instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-hospitality-category-04",
+    "industry": "hospitality",
+    "dimension": "category",
+    "tag": "outage",
+    "scene": "log",
+    "stage": "qa",
+    "context": "Log line: All reservation processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-hospitality-financial-advice-02",
+    "industry": "hospitality",
+    "dimension": "financial-advice",
+    "tag": "localization",
+    "scene": "sms",
+    "stage": "intake",
+    "context": "SMS: Given my occupancy, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-restaurant-urgency-01",
+    "industry": "restaurant",
+    "dimension": "urgency",
+    "tag": "security",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: diner reports the delivery order is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-restaurant-billing-dispute-07",
+    "industry": "restaurant",
+    "dimension": "billing-dispute",
+    "tag": "accessibility",
+    "scene": "social",
+    "stage": "triage",
+    "context": "Social post: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-restaurant-toxicity-05",
+    "industry": "restaurant",
+    "dimension": "toxicity",
+    "tag": "data-loss",
+    "scene": "email",
+    "stage": "escalation",
+    "context": "Email received: The dish instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-restaurant-category-04",
+    "industry": "restaurant",
+    "dimension": "category",
+    "tag": "sla-breach",
+    "scene": "transcript",
+    "stage": "intake",
+    "context": "Call transcript: All delivery order processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-restaurant-financial-advice-02",
+    "industry": "restaurant",
+    "dimension": "financial-advice",
+    "tag": "auto-renewal",
+    "scene": "api-payload",
+    "stage": "response",
+    "context": "API payload field: Given my turn time, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-retail-urgency-01",
+    "industry": "retail",
+    "dimension": "urgency",
+    "tag": "chargeback",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: shopper reports the return is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-retail-billing-dispute-07",
+    "industry": "retail",
+    "dimension": "billing-dispute",
+    "tag": "deadline",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-retail-toxicity-05",
+    "industry": "retail",
+    "dimension": "toxicity",
+    "tag": "outage",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: The receipt instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-retail-category-04",
+    "industry": "retail",
+    "dimension": "category",
+    "tag": "performance",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: All return processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-retail-financial-advice-02",
+    "industry": "retail",
+    "dimension": "financial-advice",
+    "tag": "privacy",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: Given my sell-through, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-marketplace-urgency-01",
+    "industry": "marketplace",
+    "dimension": "urgency",
+    "tag": "refund",
+    "scene": "review",
+    "stage": "qa",
+    "context": "Review posted: seller reports the listing is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ]
+  },
+  {
+    "id": "cov-marketplace-billing-dispute-07",
+    "industry": "marketplace",
+    "dimension": "billing-dispute",
+    "tag": "security",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: The charge matches our plan, I just need the receipt.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ]
+  },
+  {
+    "id": "cov-marketplace-toxicity-05",
+    "industry": "marketplace",
+    "dimension": "toxicity",
+    "tag": "sla-breach",
+    "scene": "alert",
+    "stage": "routing",
+    "context": "Alert fired: The seller payout instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ]
+  },
+  {
+    "id": "cov-marketplace-category-04",
+    "industry": "marketplace",
+    "dimension": "category",
+    "tag": "third-party",
+    "scene": "sms",
+    "stage": "audit",
+    "context": "SMS: All listing processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ]
+  },
+  {
+    "id": "cov-marketplace-financial-advice-02",
+    "industry": "marketplace",
+    "dimension": "financial-advice",
+    "tag": "churn-risk",
+    "scene": "social",
+    "stage": "triage",
+    "context": "Social post: Given my take rate, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ]
+  }
+]

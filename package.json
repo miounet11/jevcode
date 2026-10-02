@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "playground": "node server/playground.mjs",
     "check": "astro check",
-    "test": "node --test scripts/test-accounts.mjs scripts/test-auth.mjs scripts/test-otp.mjs scripts/test-mailer.mjs scripts/test-mailer-production.mjs scripts/test-compare.mjs scripts/test-questions.mjs scripts/test-ops-scripts.mjs",
+    "test": "node --test scripts/test-accounts.mjs scripts/test-auth.mjs scripts/test-otp.mjs scripts/test-mailer.mjs scripts/test-mailer-production.mjs scripts/test-compare.mjs scripts/test-questions.mjs scripts/test-ops-scripts.mjs scripts/test-coverage-corpus.mjs",
+    "coverage:gen": "node scripts/gen-coverage-cases.mjs && node scripts/gen-coverage-catalog.mjs",
     "test:e2e": "node scripts/test-auth-flow.mjs && node scripts/test-playground-quota.mjs && node scripts/test-api-v1.mjs",
     "test:all": "npm test && npm run test:e2e && npm run check"
   },
