@@ -9,6 +9,7 @@
  *   - systemd 单元是否 active（jevcode-playground、jevcode-intake、nginx）
  *   - 本机 HTTP 健康端点（playground :8790/health、intake :8787/api/health）
  *   - 公网端点 https://www.jevcode.ai/api/health
+ *   - 账号库备份新鲜度（最新快照是否在 BACKUP_MAX_AGE_MIN 分钟内）
  *
  * 告警出口（按序优先）：
  *   ALERT_WEBHOOK_URL  设了就 POST 一份 JSON（适配 Slack/飞书/自建等）
@@ -32,6 +33,13 @@ const HTTP_TARGETS = process.env.HEALTHCHECK_HTTP === undefined
 const TIMEOUT_MS = Number(process.env.HEALTHCHECK_TIMEOUT_MS || 8000);
 const HOST = process.env.HEALTHCHECK_HOST || 'jevcode';
 
+// 备份目录与新鲜度阈值。显式置空（HEALTHCHECK_BACKUP_DIR=）表示不检查该项。
+const BACKUP_DIR = process.env.HEALTHCHECK_BACKUP_DIR === undefined
+  ? '/var/backups/jevcode-accounts'
+  : process.env.HEALTHCHECK_BACKUP_DIR;
+const BACKUP_MAX_AGE_MIN = Number(process.env.HEALTHCHECK_BACKUP_MAX_AGE_MIN || 180);
+const BACKUP_GLOB_RE = /^accounts-(\d{8}T\d{6})Z\.db$/;
+
 const failures = [];
 
 async function checkUnit(name) {
@@ -51,6 +59,46 @@ async function checkHttp(url) {
     if (!res.ok) failures.push({ kind: 'http', target: url, detail: `HTTP ${res.status}` });
   } catch (err) {
     failures.push({ kind: 'http', target: url, detail: `请求失败：${err && err.message ? err.message : err}` });
+  }
+}
+
+async function checkBackup() {
+  // 备份 cron 静默坏掉时，光看目录「有文件」不够——要确认最新一份足够新。
+  const { readdirSync } = await import('node:fs');
+  const target = `备份目录 ${BACKUP_DIR}`;
+  let files;
+  try {
+    files = readdirSync(BACKUP_DIR);
+  } catch (err) {
+    failures.push({ kind: 'backup', target, detail: `无法读取目录：${err && err.message ? err.message : err}` });
+    return;
+  }
+
+  const stamps = files
+    .map((f) => BACKUP_GLOB_RE.exec(f))
+    .filter(Boolean)
+    .map((m) => {
+      const s = m[1]; // YYYYMMDDTHHMMSS
+      const t = Date.UTC(
+        Number(s.slice(0, 4)), Number(s.slice(4, 6)) - 1, Number(s.slice(6, 8)),
+        Number(s.slice(9, 11)), Number(s.slice(11, 13)), Number(s.slice(13, 15)),
+      );
+      return t;
+    })
+    .filter((t) => Number.isFinite(t));
+
+  if (stamps.length === 0) {
+    failures.push({ kind: 'backup', target, detail: '目录里没有任何快照文件' });
+    return;
+  }
+
+  const newest = Math.max(...stamps);
+  const ageMin = (Date.now() - newest) / 60000;
+  if (ageMin > BACKUP_MAX_AGE_MIN) {
+    failures.push({
+      kind: 'backup', target,
+      detail: `最新快照已过期：${Math.round(ageMin)} 分钟前（阈值 ${BACKUP_MAX_AGE_MIN} 分钟）`,
+    });
   }
 }
 
@@ -86,10 +134,12 @@ async function main() {
   await Promise.all([
     ...UNIT_NAMES.map(checkUnit),
     ...HTTP_TARGETS.map(checkHttp),
+    ...(BACKUP_DIR ? [checkBackup()] : []),
   ]);
 
   if (failures.length === 0) {
-    console.log(`[healthcheck] OK（units=${UNIT_NAMES.length} http=${HTTP_TARGETS.length}）`);
+    const backupNote = BACKUP_DIR ? ` backup<=${BACKUP_MAX_AGE_MIN}min` : ' backup=off';
+    console.log(`[healthcheck] OK（units=${UNIT_NAMES.length} http=${HTTP_TARGETS.length}${backupNote}）`);
     process.exit(0);
   }
 

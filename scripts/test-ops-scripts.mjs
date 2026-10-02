@@ -139,6 +139,7 @@ test('巡检：全部健康 → 退出 0 且不产生告警', async () => {
   try {
     const r = await run('scripts/healthcheck.mjs', [], {
       HEALTHCHECK_UNITS: '', // 关掉 systemd 检查（测试机无这些单元）
+      HEALTHCHECK_BACKUP_DIR: '', // 与测试机无关，关掉备份新鲜度检查
       HEALTHCHECK_HTTP: `http://127.0.0.1:${port}/health`,
     });
     assert.equal(r.code, 0, `应退出 0，实际 ${r.code}：${r.out}`);
@@ -163,6 +164,7 @@ test('巡检：HEALTHCHECK_UNITS= 空串表示不检查单元（不被默认值�
   try {
     const r = await run('scripts/healthcheck.mjs', [], {
       HEALTHCHECK_UNITS: '',
+      HEALTHCHECK_BACKUP_DIR: '',
       HEALTHCHECK_HTTP: `http://127.0.0.1:${port}/health`,
     });
     assert.match(r.out, /units=0/, `应报告 units=0，实际：${r.out}`);
@@ -197,6 +199,82 @@ test('巡检：配了 ALERT_WEBHOOK_URL 时告警真的被 POST 出去', async (
   }
 });
 
+test('巡检：备份新鲜 → 通过（退出 0）', async () => {
+  const port = await freePort();
+  const srv = createServer((_, res) => { res.writeHead(200); res.end('{}'); });
+  await new Promise((r) => srv.listen(port, '127.0.0.1', r));
+  const bk = mkdtempSync(path.join(tmpdir(), 'jev-hcbk-'));
+  try {
+    const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\..+/, 'Z').replace('Z', ''); // YYYYMMDDTHHMMSS
+    writeFileSync(path.join(bk, `accounts-${stamp}Z.db`), 'x');
+    const r = await run('scripts/healthcheck.mjs', [], {
+      HEALTHCHECK_UNITS: '',
+      HEALTHCHECK_HTTP: `http://127.0.0.1:${port}/health`,
+      HEALTHCHECK_BACKUP_DIR: bk,
+    });
+    assert.equal(r.code, 0, `新鲜备份应退出 0，实际 ${r.code}：${r.out}`);
+    assert.match(r.out, /backup<=/, '健康输出应带上备份检查状态');
+  } finally {
+    srv.close(); rmSync(bk, { recursive: true, force: true });
+  }
+});
+
+test('巡检：备份过期 → 退出 1 且报 backup 项', async () => {
+  const port = await freePort();
+  const srv = createServer((_, res) => { res.writeHead(200); res.end('{}'); });
+  await new Promise((r) => srv.listen(port, '127.0.0.1', r));
+  const bk = mkdtempSync(path.join(tmpdir(), 'jev-hcbk-'));
+  try {
+    const old = new Date(Date.now() - 200 * 60000).toISOString().replace(/[-:]/g, '').replace(/\..+/, 'Z').replace('Z', '');
+    writeFileSync(path.join(bk, `accounts-${old}Z.db`), 'x');
+    const r = await run('scripts/healthcheck.mjs', [], {
+      HEALTHCHECK_UNITS: '',
+      HEALTHCHECK_HTTP: `http://127.0.0.1:${port}/health`,
+      HEALTHCHECK_BACKUP_DIR: bk,
+    });
+    assert.equal(r.code, 1, `过期备份应退出 1，实际 ${r.code}`);
+    assert.match(r.out, /backup/, '应报告 backup 异常');
+    assert.match(r.out, /过期/, '应说明快照已过期');
+  } finally {
+    srv.close(); rmSync(bk, { recursive: true, force: true });
+  }
+});
+
+test('巡检：备份目录为空 → 退出 1', async () => {
+  const port = await freePort();
+  const srv = createServer((_, res) => { res.writeHead(200); res.end('{}'); });
+  await new Promise((r) => srv.listen(port, '127.0.0.1', r));
+  const bk = mkdtempSync(path.join(tmpdir(), 'jev-hcbk-'));
+  try {
+    const r = await run('scripts/healthcheck.mjs', [], {
+      HEALTHCHECK_UNITS: '',
+      HEALTHCHECK_HTTP: `http://127.0.0.1:${port}/health`,
+      HEALTHCHECK_BACKUP_DIR: bk,
+    });
+    assert.equal(r.code, 1, `空备份目录应退出 1，实际 ${r.code}`);
+    assert.match(r.out, /没有任何快照/, '应说明目录里没有快照');
+  } finally {
+    srv.close(); rmSync(bk, { recursive: true, force: true });
+  }
+});
+
+test('巡检：HEALTHCHECK_BACKUP_DIR= 置空表示关闭备份检查', async () => {
+  const port = await freePort();
+  const srv = createServer((_, res) => { res.writeHead(200); res.end('{}'); });
+  await new Promise((r) => srv.listen(port, '127.0.0.1', r));
+  try {
+    const r = await run('scripts/healthcheck.mjs', [], {
+      HEALTHCHECK_UNITS: '',
+      HEALTHCHECK_HTTP: `http://127.0.0.1:${port}/health`,
+      HEALTHCHECK_BACKUP_DIR: '',
+    });
+    assert.equal(r.code, 0, `关闭备份检查应退出 0，实际 ${r.code}`);
+    assert.match(r.out, /backup=off/, '应显示备份检查已关闭');
+  } finally {
+    srv.close();
+  }
+});
+
 test('巡检：健康时不投递告警（避免告警疲劳）', async () => {
   const got = [];
   const healthPort = await freePort();
@@ -208,6 +286,7 @@ test('巡检：健康时不投递告警（避免告警疲劳）', async () => {
   try {
     const r = await run('scripts/healthcheck.mjs', [], {
       HEALTHCHECK_UNITS: '',
+      HEALTHCHECK_BACKUP_DIR: '',
       HEALTHCHECK_HTTP: `http://127.0.0.1:${healthPort}/health`,
       ALERT_WEBHOOK_URL: `http://127.0.0.1:${hookPort}/hook`,
     });
