@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 与生产一致：服务器跑 Node 22（node:sqlite 需要 >= 22.5）
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 安装依赖
+        run: npm ci
+
+      # 单测：锁住账号/会话/验证码/计费/发信通道等核心契约。
+      # 其中 test-mailer* 守住「生产未配发信通道时验证码不泄露」这条安全契约。
+      - name: 单元测试
+        run: npm test
+
+      # 构建门禁：部署依赖构建产物，构建失败即阻断合并。
+      - name: 构建站点
+        run: npm run build
