@@ -132,6 +132,22 @@ systemctl start jevcode-playground
 
 口令是 scrypt 散列、会话与 API Key 只存 sha256——库泄露不等于凭据泄露。
 
+## 监控与告警
+
+`/etc/cron.d/jevcode-healthcheck` 每 5 分钟巡检关键服务与端点（`jevcode-playground`、
+`jevcode-intake`、`nginx` 的 active 状态，以及本机与公网健康端点）。结果写
+`/var/log/jevcode-healthcheck.log`；正常静默，失败非零退出。
+
+要真正把告警发出去，在 env 里配 `ALERT_WEBHOOK_URL`（POST JSON，适配 Slack/
+飞书/自建）。**当前未配**，所以告警只落日志——这是仍欠的一环。日志由
+`/etc/logrotate.d/jevcode` 每周轮转、保留 8 份。
+
+手动巡检：
+
+```bash
+node /opt/jevcode-playground/healthcheck.mjs   # 全绿时输出 OK 并退出 0
+```
+
 ## 验证码登录（可选）
 
 发信通道靠 `MAIL_TRANSPORT` / SMTP 相关 env 配置；没配则 `/api/auth/otp/*`
