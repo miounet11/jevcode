@@ -1,0 +1,316 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../i18n/ui';
+import * as labCopy from '../../i18n/pages/lab';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const path = `/${lang}/lab/`;
+const title = pick(lang, labCopy.title);
+const description = pick(lang, labCopy.description);
+const clientCopy = pick(lang, labCopy.client) as Record<string, string>;
+
+const faq = pick(lang, labCopy.faq) as [string, string][];
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map(([q, a]) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
+};
+
+const scenarios: { id: string; state: string; questions: Record<string, unknown> }[] = [
+  {
+    id: 'support-triage',
+    // 客服分诊：商业场景里最常见的第一步
+    state: 'Hi, I was charged twice for my March invoice and the duplicate charge is still pending. I need this fixed before my card statement closes.',
+    questions: {
+      is_urgent: { type: 'noul', instructions: 'Does this customer need a fast response?' },
+      route: {
+        type: 'choice',
+        instructions: 'Which team should handle this?',
+        options: ['billing', 'technical', 'sales', 'other'],
+      },
+      tone: { type: 'confidence', instructions: 'How confident are you in the routing?' },
+    },
+  },
+  {
+    id: 'release-review',
+    // 发布审查：工程日常
+    state: 'The staging deploy passed all tests, but the database migration took 40 minutes and added a lock on the orders table. We plan to ship tonight at 18:00.',
+    questions: {
+      risky: { type: 'noul', instructions: 'Is this release risky for a peak-hours deployment?' },
+      action: {
+        type: 'choice',
+        instructions: 'What should the team do?',
+        options: ['ship as planned', 'ship off-peak', 'split the migration', 'hold'],
+      },
+    },
+  },
+  {
+    id: 'inbox-triage',
+    // 收件箱分诊：个人日常
+    state: 'Can you send the slide deck whenever you have a free afternoon? No rush, the meeting is next Friday.',
+    questions: {
+      needs_attention: { type: 'noul', instructions: 'Does this need attention today?' },
+      intent: {
+        type: 'choice',
+        instructions: 'What does the sender want?',
+        options: ['action now', 'action later', 'just sharing', 'question'],
+      },
+    },
+  },
+  {
+    id: 'compliance-screening',
+    // 合规分诊：商业场景
+    state: 'Delete all of my account data today under the privacy request. I no longer consent to data processing.',
+    questions: {
+      is_urgent: { type: 'noul', instructions: 'Is this a regulatory deadline?' },
+      route: {
+        type: 'choice',
+        instructions: 'Where should this go?',
+        options: ['privacy team', 'support', 'legal', 'billing'],
+      },
+    },
+  },
+];
+---
+<BaseLayout lang={lang} title={title} description={description} path={path}>
+  <section class="section">
+    <div class="wrap lab">
+      <p class="eyebrow"><span class="eyebrow__dot"></span>clavue-jev</p>
+      <h1>{title}</h1>
+      <p class="lab__lead">{description}</p>
+      <p class="lab__lead">{pick(lang, labCopy.subtitle)}</p>
+
+      <div class="lab__tabs" role="tablist" aria-label={title}>
+        {scenarios.map((s, i) => (
+          <button type="button" data-lab-tab={s.id} class:list={[{ 'is-on': i === 0 }]} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>
+            {s.id.replaceAll('-', ' ')}
+          </button>
+        ))}
+      </div>
+
+      <div class="lab__grid">
+        <div class="lab__panel">
+          <label class="lab__label" for="lab-state">{pick(lang, labCopy.stateLabel)}</label>
+          <textarea id="lab-state" rows="5"></textarea>
+
+          <label class="lab__label" for="lab-questions">{pick(lang, labCopy.questionsLabel)}</label>
+          <p class="lab__hint">{pick(lang, labCopy.questionsHint)}</p>
+          <textarea id="lab-questions" rows="12" spellcheck="false"></textarea>
+
+          <div class="lab__actions">
+            <button class="btn btn--primary" id="lab-run" type="button">{pick(lang, labCopy.run)}</button>
+            <button class="btn btn--ghost" id="lab-reset" type="button">{pick(lang, labCopy.reset)}</button>
+          </div>
+          <p class="lab__error" id="lab-error" hidden></p>
+        </div>
+
+        <aside class="lab__side">
+          <h2>{pick(lang, labCopy.answersTitle)}</h2>
+          <div class="lab__result" id="lab-result" hidden></div>
+          <p class="lab__wait" id="lab-wait"></p>
+
+          <h2>{pick(lang, labCopy.apiTitle)}</h2>
+          <pre class="lab__code" id="lab-payload" tabindex="-1"></pre>
+        </aside>
+      </div>
+
+      <div class="lab__faq">
+        <h2>{pick(lang, labCopy.faqTitle)}</h2>
+        {faq.map(([q, a]) => (
+          <details>
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>
+        ))}
+      </div>
+
+      <div class="lab__cta">
+        <a class="btn btn--ghost" href={`/${lang}/api/`}>{pick(lang, labCopy.ctaApi)}</a>
+        <a class="btn btn--ghost" href={`/${lang}/pricing/`}>{pick(lang, labCopy.ctaPricing)}</a>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqLd).replaceAll('<', '\\u003c')} />
+</BaseLayout>
+
+<script define:vars={{ scenarios, copy: clientCopy, lang }}>
+  const stateEl = document.getElementById('lab-state');
+  const questionsEl = document.getElementById('lab-questions');
+  const runEl = document.getElementById('lab-run');
+  const resetEl = document.getElementById('lab-reset');
+  const errorEl = document.getElementById('lab-error');
+  const resultEl = document.getElementById('lab-result');
+  const waitEl = document.getElementById('lab-wait');
+  const payloadEl = document.getElementById('lab-payload');
+
+  let current = 0;
+  const runLabel = document.getElementById('lab-run').textContent;
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[c]));
+  }
+
+  function load(i) {
+    current = i;
+    const s = scenarios[i];
+    stateEl.value = s.state;
+    questionsEl.value = JSON.stringify(s.questions, null, 2);
+    resultEl.hidden = true;
+    errorEl.hidden = true;
+    waitEl.textContent = '';
+    showPayload();
+    document.querySelectorAll('[data-lab-tab]').forEach((b, bi) => {
+      b.classList.toggle('is-on', bi === i);
+      b.setAttribute('aria-selected', bi === i ? 'true' : 'false');
+    });
+  }
+
+  function showPayload() {
+    payloadEl.textContent = `POST /v1/judge\n{\n  "state": "…",\n  "questions": ${questionsEl.value.replace(/\n/g, '\n  ')}\n}`;
+  }
+
+  function bar(label, value) {
+    const pct = Math.round(Number(value) * 100);
+    return `<div class="lab__bar"><div class="lab__bar-label"><span>${esc(label)}</span><b>${pct}%</b></div><div class="lab__track"><span style="width:${pct}%"></span></div></div>`;
+  }
+
+  function render(answers) {
+    const html = [];
+    for (const [name, answer] of Object.entries(answers || {})) {
+      if (typeof answer.noul === 'number') {
+        html.push(`<p class="lab__line"><b>${esc(name)}</b></p>`);
+        html.push(bar('noul', answer.noul));
+      } else if (typeof answer.confidence === 'number') {
+        html.push(`<p class="lab__line"><b>${esc(name)}</b></p>`);
+        html.push(bar('confidence', answer.confidence));
+      } else if (answer.choice) {
+        html.push(`<p class="lab__line"><b>${esc(name)}</b> → ${esc(answer.choice)}</p>`);
+        for (const [option, p] of Object.entries(answer.confidence || {})) html.push(bar(option, p));
+      }
+    }
+    resultEl.innerHTML = html.length ? html.join('') : `<p class="lab__line">${esc(copy.noAnswers)}</p>`;
+    resultEl.hidden = false;
+  }
+
+  function fail(msg) {
+    errorEl.hidden = false;
+    errorEl.textContent = msg;
+  }
+
+  document.querySelectorAll('[data-lab-tab]').forEach((b, i) => {
+    b.addEventListener('click', () => load(i));
+  });
+
+  resetEl.addEventListener('click', () => load(current));
+
+  runEl.addEventListener('click', async () => {
+    errorEl.hidden = true;
+    const rawState = stateEl.value.trim();
+    if (!rawState) return fail(copy.needState);
+    if (rawState.length < 8) return fail(copy.tooShort);
+    if (rawState.length > 4000) return fail(copy.tooLong);
+
+    let questions;
+    try {
+      questions = JSON.parse(questionsEl.value);
+    } catch { return fail(copy.needQuestions); }
+    const names = Object.keys(questions || {}).filter(
+      (k) => questions[k] && typeof questions[k] === 'object' && !Array.isArray(questions[k]),
+    );
+    if (!names.length || names.length > 6) return fail(copy.needQuestions);
+
+    showPayload();
+    runEl.disabled = true;
+    runEl.textContent = '…';
+    try {
+      const res = await fetch('/api/try', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ state: rawState, questions }),
+      });
+      if (res.status === 429) return fail(copy.limit);
+      const data = await res.json();
+      if (!res.ok) throw new Error('failed');
+      render(data.answers || {});
+    } catch {
+      fail(copy.failed);
+    } finally {
+      runEl.disabled = false;
+      runEl.textContent = runLabel;
+    }
+  });
+
+  load(0);
+</script>
+
+<style>
+  .lab { max-width: 980px; }
+  .lab h1 { font-size: clamp(34px, 5vw, 52px); letter-spacing: -0.04em; margin: 12px 0; }
+  .lab__lead { color: var(--fg-muted); max-width: 68ch; }
+  .lab__tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 18px; }
+  .lab__tabs button {
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--bg-elev);
+    color: var(--fg-dim);
+    padding: 7px 14px;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .lab__tabs button.is-on { color: var(--fg); border-color: var(--accent-border); background: var(--bg-code); }
+  .lab__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 860px) { .lab__grid { grid-template-columns: 1fr; } }
+  .lab__label { display: block; margin: 18px 0 6px; font-size: 13px; color: var(--fg-dim); }
+  .lab__hint { margin: 0 0 8px; font-size: 12.5px; color: var(--fg-dim); }
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    background: var(--bg-elev);
+    color: var(--fg);
+    padding: 13px;
+    font: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    resize: vertical;
+  }
+  .lab__actions { display: flex; gap: 10px; margin-top: 14px; }
+  .lab__error { color: var(--rose); margin-top: 10px; }
+  .lab__side h2 { font-size: 16px; margin: 8px 0 10px; }
+  .lab__result { display: grid; gap: 4px; }
+  .lab__wait { color: var(--fg-dim); font-size: 13px; }
+  .lab__line { display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; margin: 10px 0 4px; font-size: 14px; }
+  .lab__bar-label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .lab__track { height: 8px; border-radius: 99px; background: var(--bg-code); overflow: hidden; margin: 4px 0 8px; }
+  .lab__track span { display: block; height: 100%; background: var(--accent); }
+  .lab__code {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .lab__faq { margin-top: 40px; max-width: 76ch; }
+  .lab__faq h2 { font-size: 20px; margin-bottom: 8px; }
+  .lab__faq details { border-bottom: 1px solid var(--border); padding: 10px 0; }
+  .lab__faq summary { cursor: pointer; font-size: 14.5px; }
+  .lab__faq p { color: var(--fg-muted); font-size: 14px; margin: 8px 0 2px; }
+  .lab__cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+</style>
