@@ -113,6 +113,62 @@ const scenarios: { id: string; state: string; questions: Record<string, unknown>
       certainty: { type: 'confidence', instructions: 'How confident are you in this decision?' },
     },
   },
+  {
+    id: 'healthcare-triage',
+    // 医疗分诊：医疗行业，语料维度 medical-triage 的演示面
+    state: 'Patient message: I have had a dull chest pressure for two days, it gets worse when I climb stairs, and I felt short of breath this morning. No fainting, no fever.',
+    questions: {
+      urgent_care: { type: 'noul', instructions: 'Does this need urgent medical attention?' },
+      channel: {
+        type: 'choice',
+        instructions: 'Where should this patient be directed?',
+        options: ['emergency now', 'same-day clinic', 'routine appointment', 'self-care advice'],
+      },
+      certainty: { type: 'confidence', instructions: 'How confident are you in this triage?' },
+    },
+  },
+  {
+    id: 'fintech-compliance',
+    // 金融合规：金融科技行业，语料维度 financial-advice / compliance 的演示面
+    state: 'Customer chat: My savings are losing value, should I move everything into crypto and leveraged ETFs this week? I just lost my job and need the money to double fast.',
+    questions: {
+      advice_request: { type: 'noul', instructions: 'Is the customer asking for personalized financial advice?' },
+      handling: {
+        type: 'choice',
+        instructions: 'How should the assistant respond?',
+        options: ['generic education only', 'offer licensed advisor', 'answer the picks directly', 'refuse and close chat'],
+      },
+      vulnerable: { type: 'confidence', instructions: 'How likely is this a vulnerable-customer situation?' },
+    },
+  },
+  {
+    id: 'insurance-claim',
+    // 保险理赔：保险行业，语料维度 billing-dispute / escalation 的演示面
+    state: 'Policyholder email: My water damage claim was denied because the adjuster said the pipe burst was "gradual wear". The plumber report says a sudden pipe failure on Feb 3. This is my third denial.',
+    questions: {
+      deserves_escalation: { type: 'noul', instructions: 'Does this claim deserve escalation for re-review?' },
+      next_step: {
+        type: 'choice',
+        instructions: 'What is the right next step?',
+        options: ['re-review with plumber report', 'uphold denial', 'request more documents', 'send goodwill payment'],
+      },
+      certainty: { type: 'confidence', instructions: 'How confident are you in this handling?' },
+    },
+  },
+  {
+    id: 'logistics-exception',
+    // 物流异常：物流行业，语料维度 urgency / routing 的演示面
+    state: 'Driver tablet alert: Reefer trailer 7 showing 4°C instead of the required -18°C for the frozen pharma load. Destination warehouse is 90 minutes away, next rest stop is 20 minutes.',
+    questions: {
+      stop_now: { type: 'noul', instructions: 'Should the driver stop immediately?' },
+      dispatch: {
+        type: 'choice',
+        instructions: 'What should dispatch instruct?',
+        options: ['return to depot', 'continue to destination', 'stop and swap trailer', 'continue and monitor'],
+      },
+      certainty: { type: 'confidence', instructions: 'How confident are you in this instruction?' },
+    },
+  },
 ];
 ---
 <BaseLayout lang={lang} title={title} description={description} path={path}>

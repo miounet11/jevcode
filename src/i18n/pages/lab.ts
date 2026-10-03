@@ -46,6 +46,10 @@ export const tabs: Localized<Record<string, string>> = {
     'compliance-screening': '合规分诊',
     'candidate-screening': '招聘筛选',
     'content-moderation': '内容审核',
+    'healthcare-triage': '医疗分诊',
+    'fintech-compliance': '金融合规',
+    'insurance-claim': '保险理赔',
+    'logistics-exception': '物流异常',
   },
   en: {
     'support-triage': 'Support triage',
@@ -54,6 +58,10 @@ export const tabs: Localized<Record<string, string>> = {
     'compliance-screening': 'Compliance routing',
     'candidate-screening': 'Candidate screening',
     'content-moderation': 'Content moderation',
+    'healthcare-triage': 'Medical triage',
+    'fintech-compliance': 'Fintech compliance',
+    'insurance-claim': 'Insurance claim',
+    'logistics-exception': 'Logistics exception',
   },
   ja: {
     'support-triage': 'サポート仕分け',
@@ -62,6 +70,10 @@ export const tabs: Localized<Record<string, string>> = {
     'compliance-screening': 'コンプライアンス',
     'candidate-screening': '候補者スクリーニング',
     'content-moderation': 'コンテンツモデレーション',
+    'healthcare-triage': '医療トリアージ',
+    'fintech-compliance': 'フィンテック コンプライアンス',
+    'insurance-claim': '保険請求',
+    'logistics-exception': '物流例外対応',
   },
   ko: {
     'support-triage': '고객 지원 분류',
@@ -70,6 +82,10 @@ export const tabs: Localized<Record<string, string>> = {
     'compliance-screening': '컴플라이언스 라우팅',
     'candidate-screening': '지원자 스크리닝',
     'content-moderation': '콘텐츠 검토',
+    'healthcare-triage': '의료 트리아지',
+    'fintech-compliance': '핀테크 컴플라이언스',
+    'insurance-claim': '보험 청구',
+    'logistics-exception': '물류 예외',
   },
   de: {
     'support-triage': 'Support-Triage',
@@ -78,6 +94,10 @@ export const tabs: Localized<Record<string, string>> = {
     'compliance-screening': 'Compliance-Routing',
     'candidate-screening': 'Kandidaten-Screening',
     'content-moderation': 'Inhaltsmoderation',
+    'healthcare-triage': 'Medizinische Triage',
+    'fintech-compliance': 'Fintech-Compliance',
+    'insurance-claim': 'Versicherungsanspruch',
+    'logistics-exception': 'Logistik-Ausnahme',
   },
   fr: {
     'support-triage': 'Triage support',
@@ -86,6 +106,10 @@ export const tabs: Localized<Record<string, string>> = {
     'compliance-screening': 'Routage conformité',
     'candidate-screening': 'Présélection de candidats',
     'content-moderation': 'Modération de contenu',
+    'healthcare-triage': 'Triage médical',
+    'fintech-compliance': 'Conformité fintech',
+    'insurance-claim': 'Réclamation d’assurance',
+    'logistics-exception': 'Exception logistique',
   },
   es: {
     'support-triage': 'Clasificación de soporte',
@@ -94,6 +118,10 @@ export const tabs: Localized<Record<string, string>> = {
     'compliance-screening': 'Enrutado de cumplimiento',
     'candidate-screening': 'Cribado de candidatos',
     'content-moderation': 'Moderación de contenido',
+    'healthcare-triage': 'Tríaje médico',
+    'fintech-compliance': 'Cumplimiento fintech',
+    'insurance-claim': 'Reclamación de seguro',
+    'logistics-exception': 'Excepción logística',
   },
   pt: {
     'support-triage': 'Triagem de suporte',
@@ -102,6 +130,10 @@ export const tabs: Localized<Record<string, string>> = {
     'compliance-screening': 'Roteamento de conformidade',
     'candidate-screening': 'Triagem de candidatos',
     'content-moderation': 'Moderação de conteúdo',
+    'healthcare-triage': 'Triagem médica',
+    'fintech-compliance': 'Conformidade fintech',
+    'insurance-claim': 'Reclamação de seguro',
+    'logistics-exception': 'Exceção logística',
   },
 };
 
