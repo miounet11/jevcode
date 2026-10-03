@@ -20,30 +20,37 @@ export function chunk(items, size) {
  * @param {string[]} axes  要汇总的维度名
  */
 export function summarize(results, cases, side, axes) {
-  const byId = new Map(cases.map((c) => [c.id, c]));
+  const resultById = new Map(results.map((r) => [r.id, r]));
   const buckets = Object.fromEntries(axes.map((a) => [a, new Map()]));
-  const totals = { total: 0, answered: 0, hit: 0, errors: 0 };
+  // total 以语料为准，不是以收到的结果为准：否则「丢题」会被排除在分母外，
+  // 报表会把丢题渲染成满分，掩盖真实故障。
+  const totals = { total: cases.length, missing: 0, answered: 0, hit: 0, errors: 0 };
 
-  for (const r of results) {
-    const c = byId.get(r.id);
-    if (!c) continue;
-    const s = r[side];
-    totals.total++;
+  for (const c of cases) {
+    const r = resultById.get(c.id);
+    const s = r ? r[side] : null;
+
+    // 没有结果（整批失败、被服务端丢弃）算丢题；有结果但未 ok 算出错。
+    const missing = !r || !s;
     const answered = Boolean(s && s.ok);
     const isHit = answered && c.accept.includes(s.choice);
 
-    if (answered) totals.answered++; else totals.errors++;
+    if (missing) totals.missing++;
+    else if (answered) totals.answered++;
+    else totals.errors++;
     if (isHit) totals.hit++;
 
-    // 无论是否答对都要落进 bucket：否则「全部出错」的取值会从报表里消失，
+    // 无论丢题/出错/答对都要落进 bucket：否则该取值会从报表里消失，
     // 恰好掩盖最该被注意的失败项。
     for (const axis of axes) {
       const key = c[axis];
       if (key === undefined) continue;
       const m = buckets[axis];
-      const b = m.get(key) || { answered: 0, hit: 0, errors: 0, n: 0 };
+      const b = m.get(key) || { n: 0, missing: 0, answered: 0, errors: 0, hit: 0 };
       b.n++;
-      if (answered) { b.answered++; if (isHit) b.hit++; } else { b.errors++; }
+      if (missing) b.missing++;
+      else if (answered) { b.answered++; if (isHit) b.hit++; }
+      else b.errors++;
       m.set(key, b);
     }
   }
@@ -54,6 +61,7 @@ export function summarize(results, cases, side, axes) {
       .map(([key, b]) => ({
         key,
         n: b.n,
+        missing: b.missing,
         answered: b.answered,
         errors: b.errors,
         hit: b.hit,
@@ -70,6 +78,18 @@ export function summarize(results, cases, side, axes) {
   };
 }
 
+/**
+ * 评测是否应判失败：丢题 + 出错占比超过阈值即为失败。
+ * 分母用 total（= 语料条数），所以「一批都没成」也会判失败，不会因为
+ * total 为 0 而误判为成功。
+ */
+export function shouldFail(summary, threshold = 0.5) {
+  const total = summary.totals.total;
+  if (!total) return true; // 没有任何语料被评到，视为失败
+  const bad = summary.totals.missing + summary.totals.errors;
+  return bad > total * threshold;
+}
+
 /** 把汇总渲染成 Markdown 报表 */
 export function renderReport(summary, meta = {}) {
   const pct = (x) => (x == null ? '—' : `${(x * 100).toFixed(1)}%`);
@@ -79,15 +99,20 @@ export function renderReport(summary, meta = {}) {
   if (meta.generatedAt) lines.push(`- 生成时间：${meta.generatedAt}`);
   if (meta.model) lines.push(`- 被测模型：${meta.model}`);
   if (meta.sample != null) lines.push(`- 语料条数：${meta.sample}`);
-  lines.push(`- 总命中率：**${pct(summary.totals.accuracy)}**（命中 ${summary.totals.hit} / 已答 ${summary.totals.answered} / 出错 ${summary.totals.errors}）`);
+  const t = summary.totals;
+  lines.push(`- 总命中率：**${pct(t.accuracy)}**（命中 ${t.hit} / 已答 ${t.answered} / 出错 ${t.errors} / 丢题 ${t.missing ?? 0}，分母 ${t.total}）`);
+  if (t.missing) {
+    lines.push('');
+    lines.push(`> ⚠️ 有 ${t.missing} 条未拿到结果（丢题）。命中率只按已答计算，不代表全部语料。`);
+  }
   lines.push('');
   for (const [axis, rows] of Object.entries(summary.byAxis)) {
     lines.push(`## ${axis}`);
     lines.push('');
-    lines.push('| 取值 | 命中率 | 命中 | 已答 | 出错 |');
-    lines.push('| --- | ---: | ---: | ---: | ---: |');
+    lines.push('| 取值 | 命中率 | 命中 | 已答 | 出错 | 丢题 |');
+    lines.push('| --- | ---: | ---: | ---: | ---: | ---: |');
     for (const r of rows) {
-      lines.push(`| ${r.key} | ${pct(r.accuracy)} | ${r.hit} | ${r.answered} | ${r.errors} |`);
+      lines.push(`| ${r.key} | ${pct(r.accuracy)} | ${r.hit} | ${r.answered} | ${r.errors} | ${r.missing ?? 0} |`);
     }
     lines.push('');
   }

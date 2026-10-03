@@ -15,6 +15,7 @@
  *   --sleep MS        批间隔，默认 90000（避开比较频控 40 批/小时）
  *   --dry             不发请求，只打印将评测的条数与维度分布
  *   --out PATH        报表输出，默认 docs/coverage-report.md
+ *   --max-fail R      丢题+出错占比超过 R 即判失败并非零退出，默认 0.5
  *
  * 退避：命中 429（频控）时等待 retry 后重试该批，最多 3 次。
  */
@@ -22,12 +23,12 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { chunk, summarize, renderReport, misses } from './lib/coverage-eval.mjs';
+import { chunk, summarize, renderReport, misses, shouldFail } from './lib/coverage-eval.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function parseArgs(argv) {
-  const a = { base: 'http://127.0.0.1:8790', cases: 'data/coverage-sample.json', limit: 0, sleep: 90000, dry: false, out: 'docs/coverage-report.md', tag: [], dimension: [], industry: [] };
+  const a = { base: 'http://127.0.0.1:8790', cases: 'data/coverage-sample.json', limit: 0, sleep: 90000, dry: false, out: 'docs/coverage-report.md', maxFail: 0.5, tag: [], dimension: [], industry: [] };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     const next = () => argv[++i];
@@ -35,6 +36,7 @@ function parseArgs(argv) {
     else if (k === '--cases') a.cases = next();
     else if (k === '--limit') a.limit = Number(next());
     else if (k === '--sleep') a.sleep = Number(next());
+    else if (k === '--max-fail') a.maxFail = Number(next());
     else if (k === '--out') a.out = next();
     else if (k === '--dry') a.dry = true;
     else if (k === '--tag') a.tag.push(next());
@@ -135,7 +137,12 @@ const outPath = path.resolve(ROOT, args.out);
 if (!existsSync(path.dirname(outPath))) mkdirSync(path.dirname(outPath), { recursive: true });
 writeFileSync(outPath, report);
 console.log(`\n报表已写出 ${args.out}`);
-console.log(`总命中率（ours）: ${summaryOurs.totals.accuracy == null ? '—' : (summaryOurs.totals.accuracy * 100).toFixed(1) + '%'}`);
+const t = summaryOurs.totals;
+console.log(`总命中率（ours）: ${t.accuracy == null ? '—' : (t.accuracy * 100).toFixed(1) + '%'}`);
+console.log(`  命中 ${t.hit} / 已答 ${t.answered} / 出错 ${t.errors} / 丢题 ${t.missing} / 语料 ${t.total}`);
 
-// 评测到一定比例出错时以非零退出，便于 CI/告警识别
-if (summaryOurs.totals.errors > summaryOurs.totals.total * 0.5) process.exit(1);
+// 丢题 + 出错占比过高即判失败（分母是语料条数，所以「一批都没成」也会非零退出）
+if (shouldFail(summaryOurs, args.maxFail)) {
+  console.error(`评测失败：丢题 ${t.missing} + 出错 ${t.errors} 超过阈值`);
+  process.exit(1);
+}

@@ -11,7 +11,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { chunk, summarize, renderReport, misses } from './lib/coverage-eval.mjs';
+import { chunk, summarize, renderReport, misses, shouldFail } from './lib/coverage-eval.mjs';
 
 const cases = [
   { id: 'a', accept: ['yes'], industry: 'ecommerce', dimension: 'urgency', tag: 'outage', scene: 'chat', stage: 'intake' },
@@ -80,6 +80,51 @@ test('misses：只挑未命中的已答题，并对回语料字段', () => {
 test('misses：limit 生效', () => {
   const results = cases.map((c) => ({ id: c.id, ours: ok('zzz') }));
   assert.equal(misses(results, cases, 'ours', 2).length, 2);
+});
+
+test('丢题计入分母：只收到部分结果不会把命中率算成满分', () => {
+  // 8 条语料，只回了 2 条且都命中。裸遍历 results 会得到 100%，是错的。
+  const many = Array.from({ length: 8 }, (_, i) => ({
+    id: `c${i}`, accept: ['yes'], industry: 'e', dimension: 'u', tag: 't', scene: 's', stage: 'g',
+  }));
+  const partial = [
+    { id: 'c0', ours: ok('yes') },
+    { id: 'c1', ours: ok('yes') },
+  ];
+  const s = summarize(partial, many, 'ours', ['industry']);
+  assert.equal(s.totals.total, 8, '分母应是语料条数 8');
+  assert.equal(s.totals.missing, 6, '未收到结果的 6 条应记为丢题');
+  assert.equal(s.totals.answered, 2);
+  assert.equal(s.totals.accuracy, 1, '命中率仍按已答算，但 missing 必须暴露');
+  assert.equal(s.byAxis.industry.find((r) => r.key === 'e').missing, 6, '丢题要进维度 bucket');
+});
+
+test('shouldFail：一批都没成必须判失败（旧实现 total=0 会误判为成功）', () => {
+  const s = summarize([], cases, 'ours', ['industry']);
+  assert.equal(s.totals.total, cases.length);
+  assert.equal(s.totals.missing, cases.length);
+  assert.equal(shouldFail(s, 0.5), true, '全部丢题应判失败');
+  // 空语料也视为失败，避免「没跑任何东西」被当成功
+  assert.equal(shouldFail(summarize([], [], 'ours', ['industry']), 0.5), true);
+});
+
+test('shouldFail：少量丢题且多数命中时不判失败', () => {
+  const many = Array.from({ length: 8 }, (_, i) => ({
+    id: `d${i}`, accept: ['yes'], industry: 'e', dimension: 'u', tag: 't', scene: 's', stage: 'g',
+  }));
+  const results = many.map((c) => ({ id: c.id, ours: ok('yes') }));
+  assert.equal(shouldFail(summarize(results, many, 'ours', ['industry']), 0.5), false);
+});
+
+test('renderReport 出现丢题时给出显式警示', () => {
+  const many = Array.from({ length: 4 }, (_, i) => ({
+    id: `m${i}`, accept: ['yes'], industry: 'e', dimension: 'u', tag: 't', scene: 's', stage: 'g',
+  }));
+  const s = summarize([{ id: 'm0', ours: ok('yes') }], many, 'ours', ['industry']);
+  const md = renderReport(s, { sample: many.length });
+  assert.match(md, /丢题/, '应出现丢题字样');
+  assert.match(md, /⚠️/, '应给出警示');
+  assert.match(md, /分母 4/, '应显示分母为语料条数');
 });
 
 test('renderReport 含总数与各维度小节', () => {
