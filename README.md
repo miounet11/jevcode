@@ -25,6 +25,7 @@ Jev 是 TypeSafe 的 System One 决策模型：你给它**状态 + 类型化问�
 - 5 分钟上手：https://www.jevcode.ai/zh/quickstart/
 - 问题原语：https://www.jevcode.ai/zh/primitives/
 - 架构模式：https://www.jevcode.ai/zh/patterns/
+- 判定实验室：https://www.jevcode.ai/zh/lab/ （6 个真实场景可编辑试跑，请求形态与 POST /v1/judge 一致）
 - 社区生态：https://www.jevcode.ai/zh/ecosystem/
 
 ## 配图一览

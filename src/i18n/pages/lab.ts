@@ -37,6 +37,74 @@ export const stateLabel: Localized<string> = {
   zh: '输入（state）', en: 'Input (state)', ja: '入力（state）', ko: '입력(state)', de: 'Eingabe (state)', fr: 'Entrée (state)', es: 'Entrada (state)', pt: 'Entrada (state)',
 };
 
+/** 场景 tab 的本地化标签，术语对齐各语言 description。缺 key 时页面回退到英文 id。 */
+export const tabs: Localized<Record<string, string>> = {
+  zh: {
+    'support-triage': '客服分诊',
+    'release-review': '发布审查',
+    'inbox-triage': '收件箱分诊',
+    'compliance-screening': '合规分诊',
+    'candidate-screening': '招聘筛选',
+    'content-moderation': '内容审核',
+  },
+  en: {
+    'support-triage': 'Support triage',
+    'release-review': 'Release review',
+    'inbox-triage': 'Inbox triage',
+    'compliance-screening': 'Compliance routing',
+    'candidate-screening': 'Candidate screening',
+    'content-moderation': 'Content moderation',
+  },
+  ja: {
+    'support-triage': 'サポート仕分け',
+    'release-review': 'リリース審査',
+    'inbox-triage': '受信トレイ仕分け',
+    'compliance-screening': 'コンプライアンス',
+    'candidate-screening': '候補者スクリーニング',
+    'content-moderation': 'コンテンツモデレーション',
+  },
+  ko: {
+    'support-triage': '고객 지원 분류',
+    'release-review': '릴리스 검토',
+    'inbox-triage': '받은편지함 분류',
+    'compliance-screening': '컴플라이언스 라우팅',
+    'candidate-screening': '지원자 스크리닝',
+    'content-moderation': '콘텐츠 검토',
+  },
+  de: {
+    'support-triage': 'Support-Triage',
+    'release-review': 'Release-Review',
+    'inbox-triage': 'Posteingang-Sortierung',
+    'compliance-screening': 'Compliance-Routing',
+    'candidate-screening': 'Kandidaten-Screening',
+    'content-moderation': 'Inhaltsmoderation',
+  },
+  fr: {
+    'support-triage': 'Triage support',
+    'release-review': 'Revue de release',
+    'inbox-triage': 'Triage de la boîte mail',
+    'compliance-screening': 'Routage conformité',
+    'candidate-screening': 'Présélection de candidats',
+    'content-moderation': 'Modération de contenu',
+  },
+  es: {
+    'support-triage': 'Clasificación de soporte',
+    'release-review': 'Revisión de releases',
+    'inbox-triage': 'Clasificación del buzón',
+    'compliance-screening': 'Enrutado de cumplimiento',
+    'candidate-screening': 'Cribado de candidatos',
+    'content-moderation': 'Moderación de contenido',
+  },
+  pt: {
+    'support-triage': 'Triagem de suporte',
+    'release-review': 'Revisão de release',
+    'inbox-triage': 'Triagem da caixa de entrada',
+    'compliance-screening': 'Roteamento de conformidade',
+    'candidate-screening': 'Triagem de candidatos',
+    'content-moderation': 'Moderação de conteúdo',
+  },
+};
+
 export const questionsLabel: Localized<string> = {
   zh: '问题（questions）', en: 'Questions', ja: '質問（questions）', ko: '질문(questions)', de: 'Fragen (questions)', fr: 'Questions', es: 'Preguntas (questions)', pt: 'Perguntas (questions)',
 };

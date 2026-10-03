@@ -14,6 +14,11 @@ const path = `/${lang}/lab/`;
 const title = pick(lang, labCopy.title);
 const description = pick(lang, labCopy.description);
 const clientCopy = pick(lang, labCopy.client) as Record<string, string>;
+// running 在 lab.ts 是独立导出，这里并进客户端文案，避免脚本里读 undefined
+clientCopy.running = pick(lang, labCopy.running);
+// tab 本地化标签：优先取当前语言的译名，缺 key 回退英文 id（与旧行为一致）
+const tabLabels = (labCopy.tabs?.[lang] ?? {}) as Record<string, string>;
+const tabLabel = (id: string) => tabLabels[id] ?? id.replaceAll('-', ' ');
 
 const faq = pick(lang, labCopy.faq) as [string, string][];
 const faqLd = {
@@ -121,7 +126,7 @@ const scenarios: { id: string; state: string; questions: Record<string, unknown>
       <div class="lab__tabs" role="tablist" aria-label={title}>
         {scenarios.map((s, i) => (
           <button type="button" data-lab-tab={s.id} class:list={[{ 'is-on': i === 0 }]} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>
-            {s.id.replaceAll('-', ' ')}
+            {tabLabel(s.id)}
           </button>
         ))}
       </div>
@@ -262,7 +267,7 @@ const scenarios: { id: string; state: string; questions: Record<string, unknown>
 
     showPayload();
     runEl.disabled = true;
-    runEl.textContent = '…';
+    runEl.textContent = copy.running;
     try {
       const res = await fetch('/api/try', {
         method: 'POST',
