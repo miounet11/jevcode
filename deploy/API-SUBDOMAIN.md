@@ -34,21 +34,28 @@ curl -X POST https://api.jevcode.ai/v1/judge \
   "id": "abc123def456",
   "model": "clavue-jev-4b",
   "answers": { "q1": { "noul": 0.98 } },
-  "remaining": { "day": 24 }
+  "credit": {
+    "cents": 490,
+    "usd": "4.900026",
+    "microUsd": 4900026,
+    "inputTokensLeft": 116667285,
+    "judgmentsLeft": 116667285
+  }
 }
 ```
 
 ### 题型限制（实测）
 
 **只有 `noul` 题型会返回答案。** `choice` 题型会让上游返回
-`The decision head returned no answers.`，本服务会转成 4xx/5xx 并**退回额度**。
+`The decision head returned no answers.`，本服务会转成 4xx/5xx 且**不扣费**——
+扣费只发生在上游成功之后。
 在题型问题解决前，对外文档只承诺 `noul`。
 
-### 额度与限流
+### 额度与计费
 
-- 免费档每日 25 次，按自然日窗口滑动计算
-- 超出返回 `429`，带 `retry-after`，响应体含 `remaining`
-- 判定失败（上游错误）会退回本次额度，不会白扣
+- 按输入 token 计费：每百万 $0.042，输出免费；注册即送 $5
+- 余额不够覆盖本次输入时返回 `429`（`error: "quota_exceeded"`），带 `retry-after`，响应体含 `credit`
+- 判定失败（上游错误）不扣费——扣费发生在上游成功之后，不会白扣
 - 上游 rate limit 为 5r/s，**不随套餐提升**——要扩需改上游服务端配置
 
 ## 上线三步（在服务器上执行）
@@ -118,7 +125,7 @@ curl -sS -X POST https://api.jevcode.ai/v1/judge \
   -d '{"state":"上线验证用的一段上下文","questions":{"q1":{"type":"noul","instructions":"相关吗？"}}}'
 ```
 
-预期 `200` 且 `remaining.day` 比上一次少 1。
+预期 `200` 且 `credit.usd` 比上一次减少（按本次输入 token 计费）。
 
 ## 安全说明
 

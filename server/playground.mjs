@@ -401,7 +401,7 @@ const server = createServer(async (req, res) => {
         await mkdir(DATA, { recursive: true });
         await writeFile(path.join(DATA, `${id}.json`), JSON.stringify(record));
 
-        // 响应形态与上游一致（model + answers），额外附 id 与 remaining 便于对账
+        // 响应形态与上游一致（model + answers），额外附 id 与 credit 便于对账
         send(res, 200, {
           id,
           model: record.model,
