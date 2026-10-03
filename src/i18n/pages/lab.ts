@@ -18,7 +18,7 @@ export const description: Localized<string> = {
   ko: '고객 지원 분류, 청구 분쟁, 릴리스 검토, 컴플라이언스 라우팅, 지원자 스크리닝, 콘텐츠 검토—일상과 업무의 실제 시나리오를 여기서 무료로 조정하고 프로그램에 바로 적용하세요.',
   de: 'Support-Triage, Rechnungsstreitigkeiten, Release-Review, Compliance-Routing, Kandidaten-Screening, Inhaltsmoderation — echte Alltags- und Geschäftsszenarien. Hier kostenlos abstimmen, dann ins eigene Programm übernehmen.',
   fr: 'Triage support, litiges de facturation, revue de release, routage conformité, présélection de candidats, modération de contenu — des scénarios réels du quotidien et des affaires. Ajustez-les ici gratuitement, puis intégrez-les à votre programme.',
-  es: 'Trío de soporte, disputas de facturación, revisión de releases, enrutado de cumplimiento, cribado de candidatos, moderación de contenido: escenarios reales del día a día y del negocio. Ajusta aquí gratis y llévalo a tu programa.',
+  es: 'Clasificación de soporte, disputas de facturación, revisión de releases, enrutado de cumplimiento, cribado de candidatos, moderación de contenido: escenarios reales del día a día y del negocio. Ajusta aquí gratis y llévalo a tu programa.',
   pt: 'Triagem de suporte, disputas de cobrança, revisão de release, roteamento de conformidade, triagem de candidatos, moderação de conteúdo — cenários reais do dia a dia e dos negócios. Ajuste aqui de graça e leve para o seu programa.',
 };
 

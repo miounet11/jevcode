@@ -80,6 +80,34 @@ const scenarios: { id: string; state: string; questions: Record<string, unknown>
       },
     },
   },
+  {
+    id: 'candidate-screening',
+    // 招聘筛选：商业场景
+    state: 'Candidate has 6 years of backend experience and strong Go and Kubernetes skills, but our role needs weekend on-call and they can only do weekday on-call. Salary expectation sits 10% above our band.',
+    questions: {
+      shortlist: { type: 'noul', instructions: 'Should this candidate move to the next round?' },
+      concern: {
+        type: 'choice',
+        instructions: 'What is the main concern?',
+        options: ['schedule fit', 'salary fit', 'skills fit', 'none'],
+      },
+      certainty: { type: 'confidence', instructions: 'How confident are you in this screening?' },
+    },
+  },
+  {
+    id: 'content-moderation',
+    // 内容审核：商业场景
+    state: "This product review says: 'The battery died within a week and support ignored three tickets. Complete waste of money — do not buy.' There is no profanity and no personal information.",
+    questions: {
+      violates: { type: 'noul', instructions: 'Does this post break the community rules?' },
+      action: {
+        type: 'choice',
+        instructions: 'What should moderators do?',
+        options: ['publish', 'flag for review', 'remove'],
+      },
+      certainty: { type: 'confidence', instructions: 'How confident are you in this decision?' },
+    },
+  },
 ];
 ---
 <BaseLayout lang={lang} title={title} description={description} path={path}>
