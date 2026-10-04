@@ -25,3 +25,5 @@ node scripts/eval-coverage.mjs --cases data/coverage-cases.json --industry suppl
 node scripts/eval-coverage.mjs --cases data/coverage-cases.json --industry telehealth --industry travel --sleep 90000 --out docs/coverage-full/telehealth.md
 node scripts/eval-coverage.mjs --cases data/coverage-cases.json --industry university --industry utilities --sleep 90000 --out docs/coverage-full/university.md
 echo "全量分片评测完成"
+node scripts/aggregate-coverage.mjs --log $(ls .data/runs/compare-log*.jsonl | tr '
+' ',' | sed 's/,$//')
