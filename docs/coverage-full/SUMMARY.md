@@ -1,9 +1,9 @@
 # JEV 全量覆盖评测总表
 
-- 生成时间：2026-10-04T11:15:29.887Z
-- 数据源：.data/runs/compare-log-shard1-adtech-backup.jsonl, .data/runs/compare-log-shard2-automotive-backup.jsonl, .data/runs/compare-log-shard3-construction-backup.jsonl, .data/runs/compare-log-shard12-full.jsonl, .data/runs/compare-log.jsonl
+- 生成时间：2026-10-04T12:16:54.291Z
+- 数据源：.data/runs/compare-log-shard1-adtech-backup.jsonl, .data/runs/compare-log-shard2-automotive-backup.jsonl, .data/runs/compare-log-shard3-construction-backup.jsonl, .data/runs/compare-log-shard12-full.jsonl, .data/runs/compare-log-shard5-pre-retry-backup.jsonl, .data/runs/compare-log-shard6-education-backup.jsonl, .data/runs/compare-log.jsonl
 - 语料：7680 条 / 40 行业
-- 总命中：**ours 88.5%**（1476/1668，出错 0）| peer 94.1%（1569/1668，出错 2）
+- 总命中：**ours 88.1%**（2089/2370，出错 0）| peer 93.6%（2218/2370，出错 3）
 - ⚠ 已答不足应有 90% 的行业行为日志轮转残值，以 docs/coverage-full/<行业>.md 分片报表为准
 
 ## industry
@@ -16,13 +16,13 @@
 | banking | 85.4% | 164 | 192 | 0 | 92.2% | 177 | 0 |
 | construction | 85.9% | 165 | 192 | 0 | 94.8% | 182 | 0 |
 | crm | 88.5% | 170 | 192 | 0 | 93.8% | 180 | 0 |
-| cybersecurity ⚠ | 92.9% | 26 | 28 | 0 | 100.0% | 28 | 0 |
-| devtools ⚠ | 100.0% | 5 | 5 | 0 | 100.0% | 5 | 0 |
-| ecommerce ⚠ | 85.9% | 55 | 64 | 0 | 85.9% | 55 | 0 |
+| cybersecurity ⚠ | 84.5% | 87 | 103 | 0 | 89.3% | 92 | 0 |
+| devtools | 90.1% | 173 | 192 | 0 | 92.2% | 177 | 0 |
+| ecommerce | 87.0% | 167 | 192 | 0 | 93.8% | 180 | 0 |
 | edtech | 88.5% | 170 | 192 | 0 | 93.2% | 179 | 2 |
-| education ⚠ | 93.9% | 77 | 82 | 0 | 97.6% | 80 | 0 |
-| energy ⚠ | 100.0% | 5 | 5 | 0 | 100.0% | 5 | 0 |
-| fintech ⚠ | 100.0% | 5 | 5 | 0 | 100.0% | 5 | 0 |
+| education | 88.5% | 170 | 192 | 0 | 93.2% | 179 | 0 |
+| energy | 88.0% | 169 | 192 | 0 | 93.2% | 179 | 1 |
+| fintech ⚠ | 100.0% | 20 | 20 | 0 | 100.0% | 20 | 0 |
 | gaming ⚠ | 100.0% | 5 | 5 | 0 | 100.0% | 5 | 0 |
 | government ⚠ | 100.0% | 5 | 5 | 0 | 100.0% | 5 | 0 |
 | healthcare ⚠ | 100.0% | 5 | 5 | 0 | 100.0% | 5 | 0 |
@@ -55,27 +55,27 @@
 
 | 维度 | ours 命中率 | ours 命中 | 已答 | 出错 | peer 命中率 | peer 命中 | peer 出错 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| actionability | 95.3% | 61 | 64 | 0 | 59.4% | 38 | 0 |
-| billing-dispute | 96.9% | 93 | 96 | 0 | 97.9% | 94 | 0 |
-| category | 84.3% | 75 | 89 | 0 | 100.0% | 89 | 0 |
-| compliance | 95.3% | 61 | 64 | 0 | 98.4% | 63 | 0 |
-| content-moderation | 76.6% | 49 | 64 | 0 | 96.9% | 62 | 0 |
-| data-access | 92.2% | 59 | 64 | 0 | 100.0% | 64 | 0 |
-| escalation | 82.1% | 46 | 56 | 0 | 100.0% | 56 | 0 |
-| financial-advice | 87.5% | 84 | 96 | 0 | 94.8% | 91 | 0 |
-| fraud | 73.2% | 41 | 56 | 0 | 92.9% | 52 | 2 |
-| intent | 98.6% | 71 | 72 | 0 | 100.0% | 72 | 0 |
-| language | 92.2% | 59 | 64 | 0 | 100.0% | 64 | 0 |
-| medical-triage | 78.1% | 50 | 64 | 0 | 100.0% | 64 | 0 |
-| next-action | 86.7% | 52 | 60 | 0 | 95.0% | 57 | 0 |
-| pii | 100.0% | 64 | 64 | 0 | 90.6% | 58 | 0 |
-| priority | 76.6% | 49 | 64 | 0 | 79.7% | 51 | 0 |
-| quality | 92.2% | 59 | 64 | 0 | 75.0% | 48 | 0 |
-| risk-level | 67.9% | 38 | 56 | 0 | 80.4% | 45 | 0 |
-| routing | 100.0% | 56 | 56 | 0 | 98.2% | 55 | 0 |
-| safety | 75.0% | 54 | 72 | 0 | 100.0% | 72 | 0 |
-| sentiment | 98.4% | 63 | 64 | 0 | 100.0% | 64 | 0 |
-| spam | 87.5% | 49 | 56 | 0 | 98.2% | 55 | 0 |
-| topic | 68.8% | 44 | 64 | 0 | 87.5% | 56 | 0 |
-| toxicity | 100.0% | 96 | 96 | 0 | 100.0% | 96 | 0 |
-| urgency | 100.0% | 103 | 103 | 0 | 100.0% | 103 | 0 |
+| actionability | 95.8% | 92 | 96 | 0 | 59.4% | 57 | 0 |
+| billing-dispute | 96.6% | 113 | 117 | 0 | 97.4% | 114 | 0 |
+| category | 81.8% | 99 | 121 | 0 | 100.0% | 121 | 0 |
+| compliance | 94.3% | 83 | 88 | 0 | 98.9% | 87 | 0 |
+| content-moderation | 79.2% | 76 | 96 | 0 | 96.9% | 93 | 0 |
+| data-access | 90.6% | 87 | 96 | 0 | 100.0% | 96 | 0 |
+| escalation | 81.8% | 72 | 88 | 0 | 100.0% | 88 | 0 |
+| financial-advice | 86.3% | 107 | 124 | 0 | 95.2% | 118 | 0 |
+| fraud | 75.0% | 66 | 88 | 0 | 94.3% | 83 | 2 |
+| intent | 99.0% | 103 | 104 | 0 | 100.0% | 104 | 0 |
+| language | 94.3% | 83 | 88 | 0 | 100.0% | 88 | 0 |
+| medical-triage | 78.1% | 75 | 96 | 0 | 100.0% | 96 | 0 |
+| next-action | 84.4% | 81 | 96 | 0 | 93.8% | 90 | 0 |
+| pii | 100.0% | 88 | 88 | 0 | 89.8% | 79 | 1 |
+| priority | 77.3% | 68 | 88 | 0 | 81.8% | 72 | 0 |
+| quality | 92.7% | 89 | 96 | 0 | 75.0% | 72 | 0 |
+| risk-level | 69.8% | 67 | 96 | 0 | 76.0% | 73 | 0 |
+| routing | 100.0% | 88 | 88 | 0 | 97.7% | 86 | 0 |
+| safety | 75.0% | 72 | 96 | 0 | 100.0% | 96 | 0 |
+| sentiment | 98.9% | 87 | 88 | 0 | 100.0% | 88 | 0 |
+| spam | 89.8% | 79 | 88 | 0 | 98.9% | 87 | 0 |
+| topic | 68.8% | 66 | 96 | 0 | 85.4% | 82 | 0 |
+| toxicity | 100.0% | 117 | 117 | 0 | 100.0% | 117 | 0 |
+| urgency | 100.0% | 131 | 131 | 0 | 100.0% | 131 | 0 |
