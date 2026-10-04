@@ -72,5 +72,18 @@ for (const d of dims) {
   const s = stat(c => c.dimension === d);
   lines.push(row(d, s));
 }
+// ours miss 按模板聚合：维度名-序号 归并（同一模板跨行业复用），供修复线优先级参考
+const missTop = {};
+for (const [id, e] of seen) {
+  const c = byId.get(id);
+  if (!e.ours?.ok) continue;
+  if (c.accept.includes(e.ours.choice)) continue;
+  const k = id.replace(/^cov-[a-z0-9]+-/, '').replace(/-\d+$/, '');
+  if (!missTop[k]) missTop[k] = { n: 0, inds: new Set() };
+  missTop[k].n++; missTop[k].inds.add(c.industry);
+}
+const missArr = Object.entries(missTop).sort((a, b) => b[1].n - a[1].n);
+lines.push('', '## miss 模板（ours 未命中，按频次降序）', '', '| 模板 | miss 数 | 涉及行业 |', '| --- | ---: | ---: |');
+for (const [k, v] of missArr) lines.push('| ' + k + ' | ' + v.n + ' | ' + v.inds.size + ' |');
 fs.writeFileSync('docs/coverage-full/SUMMARY.md', lines.join('\n') + '\n');
 console.log('已写 docs/coverage-full/SUMMARY.md，覆盖', all.n, '条');
