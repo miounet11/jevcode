@@ -14,7 +14,7 @@ for ((i=(START-1)*2; i<TOTAL; i+=2)); do
   echo "=== 分片 $SHARD/20: $A + $B 开始 $(date -u +%FT%TZ) ==="
   node scripts/eval-coverage.mjs --cases data/coverage-cases.json --industry "$A" --industry "$B" --sleep 90000 --out "docs/coverage-full/$A.md" || { echo "分片 $SHARD 失败，停止"; exit 1; }
   echo "=== 分片 $SHARD/20 完成 $(date -u +%FT%TZ) ==="
-  # 立即备份：从 compare-log-norotate.jsonl 过滤该分片行业
-  node scripts/backup-shard.mjs .data/runs/compare-log-norotate.jsonl "$A" "$B" || echo "警告：分片 $SHARD 备份失败"
+  # 立即备份：从 compare-log-v2.jsonl 过滤该分片行业
+  node scripts/backup-shard.mjs .data/runs/compare-log-v2.jsonl "$A" "$B" || echo "警告：分片 $SHARD 备份失败"
 done
 echo "全部分片完成 $(date -u +%FT%TZ)"

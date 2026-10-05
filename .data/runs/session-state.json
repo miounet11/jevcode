@@ -1,0 +1,64 @@
+{
+ "updated": "2026-10-04T11:48:47.752Z",
+ "shards_done": [
+  "adtech",
+  "aerospace",
+  "automotive",
+  "banking",
+  "construction",
+  "crm",
+  "cybersecurity",
+  "devtools",
+  "ecommerce",
+  "edtech",
+  "education",
+  "energy",
+  "fintech",
+  "gaming",
+  "government",
+  "healthcare"
+ ],
+ "shards_running": "shard9 hospitality+hr 批1/48",
+ "backups": [
+  ".data/runs/compare-log-shard1-adtech-backup.jsonl",
+  ".data/runs/compare-log-shard2-automotive-backup.jsonl",
+  ".data/runs/compare-log-shard3-construction-backup.jsonl",
+  ".data/runs/compare-log-shard12-full.jsonl",
+  ".data/runs/compare-log-shard5-pre-retry-backup.jsonl"
+ ],
+ "sop_per_shard": [
+  "1. 分片完成后 cp 主日志为 compare-log-shardN-<industry>-backup.jsonl（防轮转）",
+  "2. COMPARE_LOG=全备份,主日志 node scripts/verify-shard.mjs <indA> <indB>（日志可能被裁，结果仅参考）",
+  "3. 以 docs/coverage-full/<indA>.md 报表为准：已答 384/丢题 0/出错 0 才算闭环",
+  "4. 报表 miss 表 → 模板 id，与 .data/miss-templates-snapshot.json 比对，新模板追加行业记录",
+  "5. node scripts/aggregate-coverage.mjs --log 全部备份,主日志 刷新 SUMMARY.md（残值行自动 ⚠）",
+  "6. 全部分片完成后统一 commit（本轮已有 b7cbbe6，后续每 3-4 分片一批）"
+ ],
+ "known_issues": [
+  "playground appendRecords 400KB/300 行轮转会裁日志：分片4 cybersecurity 36 条已永久丢失，报表不受影响",
+  "aggregate-coverage.mjs --out 参数未生效（硬编码写 SUMMARY.md），验证重跑后需 git checkout 还原",
+  "peer 侧 edtech fraud-03/08 两次 unreachable（5s 超时）为上游偶发，已在报表口径内"
+ ],
+ "snapshot": "43 模板 / 186 行业记录（分片1-5）；Top 频次: safety-06/07、priority-02 ×8",
+ "corpus_health": "7680 条 / 40 行业 / 24 维度全部健康（192×40、id 唯一、accept 非空）",
+ "last_commit": "分片8报表+SUMMARY 已提交",
+ "fix_prep": {
+  "miss_ids": ".data/runs/miss-ids-shards1-6.json (291 条, 分片1-6)",
+  "finetune_samples": ".data/runs/finetune-miss-shards1-6.jsonl (385 条, 校验通过)",
+  "regress_script": ".data/runs/regress-miss-fix.sh (bash -n 通过, 未执行—等全量评测后)",
+  "judge_endpoint": "http://192.168.2.100:31423/v1/judge (RTX 3080, nf4, 实测复现 safety-06/07→review、priority-02→critical)",
+  "note": "修复线执行需用户确认：291 样本上集群微调 → regress 脚本验证修复率 → 8 行业复测"
+ },
+ "p0_defect": {
+  "found": "2026-10-05 (本轮)",
+  "issue_1": "playground 日志 400KB 截断丢数据：appendRecords 在 >400KB 时只保留最后 300 行，分片 9（hospitality+hr）384 条只剩 156 条，hr 仅 5/192。",
+  "issue_2": "重启 playground 时未加载 .env，TYPESAFE_API_KEY 用了环境里的旧值（sk-130e5a…），.env 正确值是 apikey_2250…，导致对照上游 HTTP 401，污染分片 9 重跑 + 分片 11 全部 peer 数据。",
+  "root_cause": "server/compare.mjs:217 appendRecords 的 400KB/300 行截断策略 + 启动 playground 未 source .env。",
+  "fix": [
+   "401 数据已隔离：compare-log-401-polluted{,-logistics,-hospitality}.jsonl（重命名为 -401-polluted 后缀，不参与聚合）。",
+   "playground 带 .env 重启（pid 82345），COMPARE_LOG 指向 .data/runs/compare-log-v2.jsonl，验证 key 前缀 apikey_225010 且探针 peer 侧 ok:true / jev-1.13.0。",
+   "驱动器 scripts/run-remaining-coordinated.sh 备份源改指 compare-log-v2.jsonl，从分片 9 重跑（覆盖 9-20），每分片完成立即按行业过滤备份。"
+  ],
+  "verified": "v2 日志 17 行，peer 出错 0；驱动器 pid 29507 跑分片 9（hospitality+hr）批 1/48。"
+ }
+}
