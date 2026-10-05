@@ -8,13 +8,20 @@ const args = process.argv.slice(2);
 // 从 SUMMARY.md 的「数据源」行复制回来重跑时，分隔符是 ", "，必须 trim，
 // 否则路径带前导空格直接 ENOENT。
 const parseLogs = (s) => s.split(',').map(x => x.trim()).filter(Boolean);
+const RUNS_DIR = '.data/runs';
+// 目录可能整个不存在（全新 checkout、只跑过 --dry）。readdirSync 会抛原始
+// ENOENT 栈，把下面那句友好提示变成不可达代码，所以先判存在再读。
+const discovered = fs.existsSync(RUNS_DIR)
+  ? fs.readdirSync(RUNS_DIR).filter(f => /^compare-log.*\.jsonl$/.test(f)).sort()
+  : [];
 const logPaths = args.includes('--log')
   ? parseLogs(args[args.indexOf('--log') + 1])
   // 401 污染文件已改名为 quarantine-*，不匹配此通配，不会被算进来
-  : fs.readdirSync('.data/runs').filter(f => /^compare-log.*\.jsonl$/.test(f)).sort()
-      .map(f => '.data/runs/' + f);
+  : discovered.map(f => RUNS_DIR + '/' + f);
 if (logPaths.length === 0) {
-  console.error('未找到任何 compare-log*.jsonl，请传 --log 或先跑 eval-coverage');
+  console.error('未找到任何 compare-log*.jsonl'
+    + (fs.existsSync(RUNS_DIR) ? '' : '（' + RUNS_DIR + ' 目录不存在）')
+    + '，请传 --log 或先跑 eval-coverage');
   process.exit(1);
 }
 const cases = JSON.parse(fs.readFileSync('data/coverage-cases.json', 'utf8'));
@@ -75,7 +82,9 @@ const lines = [
   '- 数据源：' + logPaths.join(', '),
   '- 语料：' + cases.length + ' 条 / ' + industries.length + ' 行业',
   '- 总命中：**ours ' + all.rate + '**（' + all.hit + '/' + all.n + '，出错 ' + all.err + '）| peer ' + all.pRate + '（' + all.pHit + '/' + all.n + '，出错 ' + all.pErr + '）',
-  '- 语料进度：' + completeCount() + ' / ' + cases.length + ' 条（' + completeInd() + ' / ' + industries.length + ' 行业已跑齐）',
+  // 行业口径必须带阈值写明：incomplete 是按「已答 < 90% 应有」筛的，
+  // 若写成「已跑齐」，157/192 这类残值行业会被读成已完成——正是这张表要防的误读。
+  '- 语料进度：' + answeredCount() + ' / ' + cases.length + ' 条已答（' + industriesAtLeast90() + ' / ' + industries.length + ' 行业已答≥90%）',
   peerAuthBroken ? '- ⚠ 已剔除对照侧 401 的 ' + peerAuthBroken + ' 条记录（凭据未生效，整行不计）' : '',
   incomplete.length
     ? '- ⚠ 以下 ' + incomplete.length + ' 个行业已答不足应有 90%，为日志轮转残值，以 docs/coverage-full/<行业>.md 分片报表为准：' + incomplete.map((i) => '`' + i + '`').join(' ')
@@ -86,12 +95,13 @@ const lines = [
   '| 行业 | ours 命中率 | ours 命中 | 已答 | 出错 | peer 命中率 | peer 命中 | peer 出错 |',
   '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |',
 ];
-function completeCount() {
+// seen 的每个 id 都来自语料（读循环里已按 byId 过滤），所以条目数即已答条数
+function answeredCount() {
   let n = 0;
   for (const [, e] of seen) n++;
   return n;
 }
-function completeInd() {
+function industriesAtLeast90() {
   return industries.length - incomplete.length;
 }
 

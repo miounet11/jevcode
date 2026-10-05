@@ -298,10 +298,58 @@ test('聚合：语料进度 + 残值行业逐个点名，不只丢一句通用�
     writeFileSync(path.join(dir, '.data/runs/compare-log-a.jsonl'), rows.join('\n') + '\n');
     execFileSync(process.execPath, [path.join(ROOT, 'scripts/aggregate-coverage.mjs')], { cwd: dir, encoding: 'utf8', timeout: 30000 });
     const md = readFileSync(path.join(dir, 'docs/coverage-full/SUMMARY.md'), 'utf8');
-    assert.match(md, /语料进度：11 \/ 20 条（1 \/ 2 行业已跑齐）/, '应给出条数与行业数两个口径的进度');
+    assert.match(md, /语料进度：11 \/ 20 条已答（1 \/ 2 行业已答≥90%）/, '应给出条数与行业数两个口径的进度，且写明阈值口径');
     assert.match(md, /以下 1 个行业已答不足应有 90%/, '应给出残值行业数量');
     assert.match(md, /`travel`/, '应逐个点名残值行业');
     assert.doesNotMatch(md, /`ecommerce`/, '跑齐的行业不该被点名');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('聚合：.data/runs 目录不存在时给友好提示并非零退出，不抛原始 ENOENT 栈', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-agg-nodir-'));
+  try {
+    mkdirSync(path.join(dir, 'data'), { recursive: true });
+    writeFileSync(path.join(dir, 'data/coverage-cases.json'), JSON.stringify(
+      [{ id: 'a', accept: ['yes'], industry: 'ecommerce', dimension: 'urgency' }],
+    ));
+    // 故意不建 .data/runs
+    let err = '';
+    let code = 0;
+    try {
+      execFileSync(process.execPath, [path.join(ROOT, 'scripts/aggregate-coverage.mjs')], { cwd: dir, encoding: 'utf8', timeout: 30000, stdio: 'pipe' });
+    } catch (e) {
+      code = e.status;
+      err = (e.stderr || '') + (e.stdout || '');
+    }
+    assert.equal(code, 1, '应为退出码 1');
+    assert.match(err, /目录不存在/, '应说明目录缺失');
+    assert.doesNotMatch(err, /ENOENT/, '不应把原始 ENOENT 栈抛给用户');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('聚合：进度文案写明 90% 阈值口径，残值行业不得被读成已跑齐', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-agg-wording-'));
+  try {
+    mkdirSync(path.join(dir, 'data'), { recursive: true });
+    mkdirSync(path.join(dir, 'docs/coverage-full'), { recursive: true });
+    mkdirSync(path.join(dir, '.data/runs'), { recursive: true });
+    // travel 10 条语料只答 9 条：未达 100% 但已过 90% 阈值，两个口径都要如实反映
+    const cases = [];
+    for (const ind of ['ecommerce', 'travel']) {
+      for (let i = 0; i < 10; i++) cases.push({ id: `${ind[0]}${i}`, accept: ['yes'], industry: ind, dimension: 'urgency' });
+    }
+    writeFileSync(path.join(dir, 'data/coverage-cases.json'), JSON.stringify(cases));
+    const rows = cases.filter((c) => c.industry === 'ecommerce' || c.id !== 't9')
+      .map((c) => JSON.stringify({ ts: '2026-10-05T00:00:00Z', id: c.id, ours: { ok: true, choice: 'yes' }, peer: { ok: true, choice: 'yes' } }));
+    writeFileSync(path.join(dir, '.data/runs/compare-log-a.jsonl'), rows.join('\n') + '\n');
+    execFileSync(process.execPath, [path.join(ROOT, 'scripts/aggregate-coverage.mjs')], { cwd: dir, encoding: 'utf8', timeout: 30000 });
+    const md = readFileSync(path.join(dir, 'docs/coverage-full/SUMMARY.md'), 'utf8');
+    assert.match(md, /语料进度：19 \/ 20 条已答（2 \/ 2 行业已答≥90%）/, '进度须区分「已答条数」与「行业过 90% 阈值」两个口径');
+    assert.doesNotMatch(md, /行业已跑齐/, '不得用「已跑齐」描述阈值口径，容易把 19/20 读成完成');
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
