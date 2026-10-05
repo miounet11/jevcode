@@ -5,9 +5,17 @@ import fs from 'fs';
 
 const args = process.argv.slice(2);
 const logArg = args.includes('--log') ? args[args.indexOf('--log') + 1] : '.data/runs/compare-log.jsonl';
-const logPaths = logArg.split(',');
+// 从 SUMMARY.md 的「数据源」行复制回来重跑时，分隔符是 ", "，必须 trim，
+// 否则路径带前导空格直接 ENOENT。
+const logPaths = logArg.split(',').map(s => s.trim()).filter(Boolean);
 const cases = JSON.parse(fs.readFileSync('data/coverage-cases.json', 'utf8'));
 const byId = new Map(cases.map(c => [c.id, c]));
+// 对照侧 401 = 凭据没生效（重启 playground 未 source .env），这类记录整行作废。
+// 不能只看 peer.ok：ours 侧仍有效，但 peer 命中率会因此被系统性低估。
+// 关键：在「挑最新一条」之前就跳过 401。若先取最新再删，同一 id 上更早的
+// 好记录会被更新的 401 行连坐丢弃（修复凭据后重跑同一批就会命中这个坑）。
+const isPeerAuthBroken = (e) => typeof e?.peer?.error === 'string' && /\b401\b|authentication_error/.test(e.peer.error);
+const peerAuthBrokenIds = new Set();
 const seen = new Map();
 for (const lp of logPaths) {
   for (const line of fs.readFileSync(lp, 'utf8').split('\n')) {
@@ -15,6 +23,7 @@ for (const lp of logPaths) {
     try {
       const e = JSON.parse(line);
       if (!e.id || !byId.has(e.id)) continue;
+      if (isPeerAuthBroken(e)) { peerAuthBrokenIds.add(e.id); continue; }
       const prev = seen.get(e.id);
       const ts = e.ts ? Date.parse(e.ts) : 0;
       const prevTs = prev?.ts ? Date.parse(prev.ts) : -1;
@@ -22,13 +31,7 @@ for (const lp of logPaths) {
     } catch {}
   }
 }
-
-// 对照侧 401 = 凭据没生效（重启 playground 未 source .env），这类记录整行作废。
-// 不能只看 peer.ok：ours 侧仍有效，但 peer 命中率会因此被系统性低估。
-const isPeerAuthBroken = (e) => typeof e.peer?.error === 'string' && /\b401\b|authentication_error/.test(e.peer.error);
-let peerAuthBroken = 0;
-for (const [, e] of seen) if (isPeerAuthBroken(e)) peerAuthBroken++;
-for (const [id, e] of [...seen]) if (isPeerAuthBroken(e)) seen.delete(id);
+const peerAuthBroken = peerAuthBrokenIds.size;
 
 const stat = (pred) => {
   let n = 0, hit = 0, err = 0, pHit = 0, pErr = 0;
