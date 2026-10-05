@@ -257,3 +257,52 @@ test('聚合：--log 支持 ", " 分隔（从 SUMMARY 数据源行复制重跑�
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('聚合：省略 --log 时自动发现全部 compare-log*.jsonl，且跳过 quarantine', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-agg-auto-'));
+  try {
+    mkdirSync(path.join(dir, 'data'), { recursive: true });
+    mkdirSync(path.join(dir, 'docs/coverage-full'), { recursive: true });
+    mkdirSync(path.join(dir, '.data/runs'), { recursive: true });
+    writeFileSync(path.join(dir, 'data/coverage-cases.json'), JSON.stringify(
+      ['a', 'b', 'c'].map((id) => ({ id, accept: ['yes'], industry: 'ecommerce', dimension: 'urgency' })),
+    ));
+    const row = (id) => JSON.stringify({ ts: '2026-10-05T00:00:00Z', id, ours: { ok: true, choice: 'yes' }, peer: { ok: true, choice: 'yes' } });
+    writeFileSync(path.join(dir, '.data/runs/compare-log-1.jsonl'), row('a') + '\n');
+    writeFileSync(path.join(dir, '.data/runs/compare-log-2.jsonl'), row('b') + '\n');
+    // 401 污染文件已改名 quarantine-*，自动发现不得把它算进来
+    writeFileSync(path.join(dir, '.data/runs/quarantine-compare-log-401-polluted.jsonl'), row('c') + '\n');
+    const out = execFileSync(process.execPath, [path.join(ROOT, 'scripts/aggregate-coverage.mjs')], { cwd: dir, encoding: 'utf8', timeout: 30000 });
+    const md = readFileSync(path.join(dir, 'docs/coverage-full/SUMMARY.md'), 'utf8');
+    assert.match(out, /覆盖 2 条/, '应只发现两个 compare-log，quarantine 被排除');
+    assert.doesNotMatch(md, /compare-log-1\.jsonl, \.data\/runs\/compare-log-2\.jsonl, \.data\/runs\/quarantine/, '数据源不应含 quarantine 文件');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('聚合：语料进度 + 残值行业逐个点名，不只丢一句通用警示', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-agg-prog-'));
+  try {
+    mkdirSync(path.join(dir, 'data'), { recursive: true });
+    mkdirSync(path.join(dir, 'docs/coverage-full'), { recursive: true });
+    mkdirSync(path.join(dir, '.data/runs'), { recursive: true });
+    // ecommerce 10 条语料全答；travel 10 条语料只答 1 条（应被点名）
+    const cases = [];
+    for (const ind of ['ecommerce', 'travel']) {
+      for (let i = 0; i < 10; i++) cases.push({ id: `${ind[0]}${i}`, accept: ['yes'], industry: ind, dimension: 'urgency' });
+    }
+    writeFileSync(path.join(dir, 'data/coverage-cases.json'), JSON.stringify(cases));
+    const answered = cases.filter((c) => c.industry === 'ecommerce' || c.id === 't0');
+    const rows = answered.map((c) => JSON.stringify({ ts: '2026-10-05T00:00:00Z', id: c.id, ours: { ok: true, choice: 'yes' }, peer: { ok: true, choice: 'yes' } }));
+    writeFileSync(path.join(dir, '.data/runs/compare-log-a.jsonl'), rows.join('\n') + '\n');
+    execFileSync(process.execPath, [path.join(ROOT, 'scripts/aggregate-coverage.mjs')], { cwd: dir, encoding: 'utf8', timeout: 30000 });
+    const md = readFileSync(path.join(dir, 'docs/coverage-full/SUMMARY.md'), 'utf8');
+    assert.match(md, /语料进度：11 \/ 20 条（1 \/ 2 行业已跑齐）/, '应给出条数与行业数两个口径的进度');
+    assert.match(md, /以下 1 个行业已答不足应有 90%/, '应给出残值行业数量');
+    assert.match(md, /`travel`/, '应逐个点名残值行业');
+    assert.doesNotMatch(md, /`ecommerce`/, '跑齐的行业不该被点名');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

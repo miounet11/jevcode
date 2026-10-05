@@ -1,13 +1,22 @@
 // 全量覆盖评测聚合报表：读 compare-log（可多个，逗号分隔），输出 7680 条总表
 // 用法: node scripts/aggregate-coverage.mjs [--log .data/runs/compare-log.jsonl,.data/runs/compare-log-shard1-adtech-backup.jsonl]
+// 省略 --log 时自动发现 .data/runs/compare-log*.jsonl（不传参数即得全量，漏备份不会再静默少算）
 // 多日志时按每行 ts 字段取时间最新的行（不依赖文件顺序；无 ts 字段的行视为最早）
 import fs from 'fs';
 
 const args = process.argv.slice(2);
-const logArg = args.includes('--log') ? args[args.indexOf('--log') + 1] : '.data/runs/compare-log.jsonl';
 // 从 SUMMARY.md 的「数据源」行复制回来重跑时，分隔符是 ", "，必须 trim，
 // 否则路径带前导空格直接 ENOENT。
-const logPaths = logArg.split(',').map(s => s.trim()).filter(Boolean);
+const parseLogs = (s) => s.split(',').map(x => x.trim()).filter(Boolean);
+const logPaths = args.includes('--log')
+  ? parseLogs(args[args.indexOf('--log') + 1])
+  // 401 污染文件已改名为 quarantine-*，不匹配此通配，不会被算进来
+  : fs.readdirSync('.data/runs').filter(f => /^compare-log.*\.jsonl$/.test(f)).sort()
+      .map(f => '.data/runs/' + f);
+if (logPaths.length === 0) {
+  console.error('未找到任何 compare-log*.jsonl，请传 --log 或先跑 eval-coverage');
+  process.exit(1);
+}
 const cases = JSON.parse(fs.readFileSync('data/coverage-cases.json', 'utf8'));
 const byId = new Map(cases.map(c => [c.id, c]));
 // 对照侧 401 = 凭据没生效（重启 playground 未 source .env），这类记录整行作废。
@@ -50,28 +59,42 @@ const stat = (pred) => {
 const row = (label, s) => '| ' + label + ' | ' + s.rate + ' | ' + s.hit + ' | ' + s.n + ' | ' + s.err + ' | ' + s.pRate + ' | ' + s.pHit + ' | ' + s.pErr + ' |';
 
 const all = stat(() => true);
-// 各行业应有 192 条；日志被 playground 轮转裁剪（400KB 保 300 行）后，
-// 覆盖不全的行业行会以残值出现（如 cybersecurity 28/192），直接入表会误导。
+// 各行业应有 192 条；日志被 playground 轮转裁剪后，覆盖不全的行业行会以
+// 残值出现（如 cybersecurity 28/192），直接入表会误导。
 // 这里对已答 < 90% 应有的行业行标注 ⚠，并在头部说明以该分片报表为准。
 const expectPerInd = (ind) => cases.filter(c => c.industry === ind).length;
+const industries = [...new Set(cases.map(c => c.industry))].sort();
+const incomplete = industries.filter((ind) => {
+  const s = stat(c => c.industry === ind);
+  return s.n < expectPerInd(ind) * 0.9;
+});
 const lines = [
   '# JEV 全量覆盖评测总表',
   '',
   '- 生成时间：' + new Date().toISOString(),
   '- 数据源：' + logPaths.join(', '),
-  '- 语料：' + cases.length + ' 条 / ' + new Set(cases.map(c => c.industry)).size + ' 行业',
-  '- 总命中：**ours ' + all.rate + '**（' + all.hit + '/' + all.n + '，出错 ' + all.err + '）| peer ' + all.pRate + '（' + pHit0(all) + '/' + all.n + '，出错 ' + all.pErr + '）',
-  '- ⚠ 已答不足应有 90% 的行业行为日志轮转残值，以 docs/coverage-full/<行业>.md 分片报表为准',
+  '- 语料：' + cases.length + ' 条 / ' + industries.length + ' 行业',
+  '- 总命中：**ours ' + all.rate + '**（' + all.hit + '/' + all.n + '，出错 ' + all.err + '）| peer ' + all.pRate + '（' + all.pHit + '/' + all.n + '，出错 ' + all.pErr + '）',
+  '- 语料进度：' + completeCount() + ' / ' + cases.length + ' 条（' + completeInd() + ' / ' + industries.length + ' 行业已跑齐）',
   peerAuthBroken ? '- ⚠ 已剔除对照侧 401 的 ' + peerAuthBroken + ' 条记录（凭据未生效，整行不计）' : '',
+  incomplete.length
+    ? '- ⚠ 以下 ' + incomplete.length + ' 个行业已答不足应有 90%，为日志轮转残值，以 docs/coverage-full/<行业>.md 分片报表为准：' + incomplete.map((i) => '`' + i + '`').join(' ')
+    : '- ✓ 全部分片已跑齐，报表与语料口径一致',
   '',
   '## industry',
   '',
   '| 行业 | ours 命中率 | ours 命中 | 已答 | 出错 | peer 命中率 | peer 命中 | peer 出错 |',
   '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |',
 ];
-function pHit0(s) { return s.pHit; }
+function completeCount() {
+  let n = 0;
+  for (const [, e] of seen) n++;
+  return n;
+}
+function completeInd() {
+  return industries.length - incomplete.length;
+}
 
-const industries = [...new Set(cases.map(c => c.industry))].sort();
 for (const ind of industries) {
   const s = stat(c => c.industry === ind);
   const flag = s.n < expectPerInd(ind) * 0.9 ? ' ⚠' : '';
