@@ -219,6 +219,14 @@ function canAfford(userId, tokens) {
   return { ok: true, cost, balance };
 }
 
+// 12 位 [a-z0-9] 的 run id。/lang/r/{id} 分享页路由与 /api/runs/{id} 都按 [a-z0-9]{12} 匹配，
+// 旧的 base64url 生成会产出 '-'/'_'（约 32%），导致分享链接 404。
+function runId() {
+  let id = '';
+  while (id.length < 12) id += (randomBytes(1)[0] % 36).toString(36);
+  return id.slice(0, 12);
+}
+
 async function judge(state, questions) {
   const response = await fetch(UPSTREAM, {
     method: 'POST',
@@ -388,7 +396,9 @@ const server = createServer(async (req, res) => {
         }
         accounts.chargeInputTokens(userId, tokens);
 
-        const id = randomBytes(9).toString('base64url').slice(0, 12).toLowerCase();
+        // id 必须全部落在 [a-z0-9]，否则 /lang/r/ 分享页路由（页内正则同样约束）打不开。
+        // base64url 会产出 '-'/'_'，实测约 32% 的 id 含连字符 → 分享链接 404。改用 base36 补齐 12 位。
+        const id = runId();
         const record = {
           id,
           createdAt: new Date().toISOString(),
@@ -680,7 +690,8 @@ const server = createServer(async (req, res) => {
       const result = await judge(state, questions);
       if (userId && accounts) accounts.chargeInputTokens(userId, tokens);
 
-      const id = randomBytes(9).toString('base64url').slice(0, 12).toLowerCase();
+      // 同上：id 用 base36 补齐 12 位，保证 [a-z0-9]，分享页路由才能命中
+      const id = runId();
       const record = {
         id,
         createdAt: new Date().toISOString(),
