@@ -23,6 +23,13 @@ for (const lp of logPaths) {
   }
 }
 
+// 对照侧 401 = 凭据没生效（重启 playground 未 source .env），这类记录整行作废。
+// 不能只看 peer.ok：ours 侧仍有效，但 peer 命中率会因此被系统性低估。
+const isPeerAuthBroken = (e) => typeof e.peer?.error === 'string' && /\b401\b|authentication_error/.test(e.peer.error);
+let peerAuthBroken = 0;
+for (const [, e] of seen) if (isPeerAuthBroken(e)) peerAuthBroken++;
+for (const [id, e] of [...seen]) if (isPeerAuthBroken(e)) seen.delete(id);
+
 const stat = (pred) => {
   let n = 0, hit = 0, err = 0, pHit = 0, pErr = 0;
   for (const [id, e] of seen) {
@@ -52,6 +59,7 @@ const lines = [
   '- 语料：' + cases.length + ' 条 / ' + new Set(cases.map(c => c.industry)).size + ' 行业',
   '- 总命中：**ours ' + all.rate + '**（' + all.hit + '/' + all.n + '，出错 ' + all.err + '）| peer ' + all.pRate + '（' + pHit0(all) + '/' + all.n + '，出错 ' + all.pErr + '）',
   '- ⚠ 已答不足应有 90% 的行业行为日志轮转残值，以 docs/coverage-full/<行业>.md 分片报表为准',
+  peerAuthBroken ? '- ⚠ 已剔除对照侧 401 的 ' + peerAuthBroken + ' 条记录（凭据未生效，整行不计）' : '',
   '',
   '## industry',
   '',
