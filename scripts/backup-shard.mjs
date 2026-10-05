@@ -18,6 +18,10 @@ if (filtered.length === 0) {
   process.exit(1);
 }
 
-const outFile = `.data/runs/compare-log-${industries[0]}-backup.jsonl`;
+// 文件名必须带上全部行业：原来只取 industries[0]，分片 realestate+recruiting
+// 会全部写进 compare-log-realestate-backup.jsonl，recruiting 既没进文件名、
+// 也没被单独备份，排查时按名找会以为丢数据。排序保证同分片重跑同名可覆盖。
+// 仍匹配 aggregate-coverage.mjs 的 /^compare-log.*\.jsonl$/，自动发现不受影响。
+const outFile = `.data/runs/compare-log-${[...industries].sort().join('-')}-backup.jsonl`;
 fs.writeFileSync(outFile, filtered.map(e => JSON.stringify(e)).join('\n') + '\n');
-console.log(`已备份 ${filtered.length} 条到 ${outFile}`);
+console.log(`已备份 ${filtered.length} 条到 ${outFile}（${industries.join('/')}）`);

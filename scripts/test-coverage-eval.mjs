@@ -12,7 +12,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, rmSync, writeFileSync, readFileSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -350,6 +350,50 @@ test('聚合：进度文案写明 90% 阈值口径，残值行业不得被读成
     const md = readFileSync(path.join(dir, 'docs/coverage-full/SUMMARY.md'), 'utf8');
     assert.match(md, /语料进度：19 \/ 20 条已答（2 \/ 2 行业已答≥90%）/, '进度须区分「已答条数」与「行业过 90% 阈值」两个口径');
     assert.doesNotMatch(md, /行业已跑齐/, '不得用「已跑齐」描述阈值口径，容易把 19/20 读成完成');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('备份：分片两行业的文件名必须都带行业，不能只取 industries[0]', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-bak-'));
+  try {
+    mkdirSync(path.join(dir, '.data/runs'), { recursive: true });
+    const rows = [];
+    for (const ind of ['realestate', 'recruiting']) {
+      for (let i = 0; i < 2; i++) {
+        rows.push(JSON.stringify({ ts: '2026-10-05T00:00:00Z', id: `cov-${ind}-x${i}`, ours: { ok: true, choice: 'a' } }));
+      }
+    }
+    const log = path.join(dir, '.data/runs/compare-log-v2.jsonl');
+    writeFileSync(log, rows.join('\n') + '\n');
+    const out = execFileSync(process.execPath, [path.join(ROOT, 'scripts/backup-shard.mjs'), log, 'realestate', 'recruiting'],
+      { cwd: dir, encoding: 'utf8', timeout: 30000 });
+    const files = readdirSync(path.join(dir, '.data/runs')).filter((f) => f.startsWith('compare-log-') && f.endsWith('-backup.jsonl'));
+    assert.equal(files.length, 1, '应只产出一个备份文件');
+    assert.equal(files[0], 'compare-log-realestate-recruiting-backup.jsonl', '两个行业都要进文件名');
+    assert.match(out, /已备份 4 条/, '应报告实际条数');
+    const saved = readFileSync(path.join(dir, '.data/runs', files[0]), 'utf8').split('\n').filter(Boolean);
+    assert.equal(saved.length, 4, '两个行业的数据都应写入');
+    // 自动发现正则不能被新命名破坏
+    assert.match(files[0], /^compare-log.*\.jsonl$/, '新文件名须仍匹配 aggregate 的自动发现通配');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('备份：同分片重跑文件名稳定（排序后 join），不产生重复文件', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-bak2-'));
+  try {
+    mkdirSync(path.join(dir, '.data/runs'), { recursive: true });
+    const log = path.join(dir, '.data/runs/compare-log-v2.jsonl');
+    writeFileSync(log, JSON.stringify({ ts: '2026-10-05T00:00:00Z', id: 'cov-saas-a0', ours: { ok: true, choice: 'a' } }) + '\n');
+    // 两种参数顺序都应落到同一个文件
+    execFileSync(process.execPath, [path.join(ROOT, 'scripts/backup-shard.mjs'), log, 'saas', 'streaming'], { cwd: dir, encoding: 'utf8', timeout: 30000 });
+    execFileSync(process.execPath, [path.join(ROOT, 'scripts/backup-shard.mjs'), log, 'streaming', 'saas'], { cwd: dir, encoding: 'utf8', timeout: 30000 });
+    const files = readdirSync(path.join(dir, '.data/runs')).filter((f) => f.endsWith('-backup.jsonl'));
+    assert.equal(files.length, 1, '参数顺序不同不应产生第二个文件');
+    assert.equal(files[0], 'compare-log-saas-streaming-backup.jsonl');
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
