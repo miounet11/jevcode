@@ -375,8 +375,8 @@ const faqSchema = {
   const stageEl = document.getElementById('bench-stage');
   const nowEl = document.getElementById('bench-now');
   const narrationEl = document.getElementById('trial-narration');
-  const runButton = document.getElementById('bench-run');
-  const catButton = document.getElementById('bench-run-cat');
+  const runButton = document.getElementById('bench-run') as HTMLButtonElement | null;
+  const catButton = document.getElementById('bench-run-cat') as HTMLButtonElement | null;
 
   function itemsIn(name) {
     return compareCases.filter((item) => item.category === name).slice(0, 5);
@@ -414,9 +414,9 @@ const faqSchema = {
       if (result.ours?.ok && result.official?.ok && result.ours.choice === result.official.choice) totals.agree += 1;
     }
     for (const key of Object.keys(totals)) {
-      const node = document.querySelector(`[data-meter="${key}"]`);
+      const node = document.querySelector(`[data-meter="${key}"]`) as HTMLElement | null;
       if (!node) continue;
-      const next = String(totals[key]);
+      const next = String(totals[key as keyof typeof totals]);
       if (node.textContent !== next) {
         node.textContent = next;
         node.classList.remove('is-tick');
@@ -478,7 +478,7 @@ const faqSchema = {
         const bar = panel.querySelector('[data-bar]');
         if (choice) choice.textContent = '…';
         if (stamp) stamp.textContent = '';
-        if (bar) bar.style.width = '42%';
+        if (bar) (bar as HTMLElement).style.width = '42%';
       }
     });
     if (verdictEl && on) {
@@ -612,7 +612,7 @@ const faqSchema = {
         paintStage();
       }
       paintMeters();
-    } catch (err) {
+    } catch (err: any) {
       setRunning(false);
       if (verdictEl) {
         verdictEl.className = 'bench__verdict is-bad';

@@ -111,8 +111,8 @@ const counts = compareCases.reduce<Record<string, number>>((acc, item) => {
   let runToken = 0;
   let puzzle = makePuzzle(Date.now() % 100000) || makePuzzle(1);
 
-  function esc(value) {
-    return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+  function esc(value: unknown) {
+    return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as Record<string, string>)[ch]);
   }
 
   function median(values) {
@@ -127,7 +127,7 @@ const counts = compareCases.reduce<Record<string, number>>((acc, item) => {
     return typeof value === 'number' ? `${Math.round(value * 100)}%` : '';
   }
 
-  function sideCard(side, marked) {
+  function sideCard(side?: any, marked?: string) {
     if (!side) return `<p class="compare__pending">${esc(text.pending)}</p>`;
     if (!side.ok) return `<p class="compare__bad">${esc(text.error)} · ${esc(side.error || '')}</p>`;
     const width = typeof side.probabilities?.[side.choice] === 'number' ? Math.round(side.probabilities[side.choice] * 100) : 0;
@@ -286,7 +286,7 @@ const counts = compareCases.reduce<Record<string, number>>((acc, item) => {
         if (statusEl) statusEl.textContent = `${Math.min(i + chunk.length, items.length)} / ${items.length}`;
       }
       if (statusEl && token === runToken) statusEl.textContent = '';
-    } catch (err) {
+    } catch (err: any) {
       if (statusEl) statusEl.textContent = err.message;
     }
   }
@@ -312,7 +312,7 @@ const counts = compareCases.reduce<Record<string, number>>((acc, item) => {
       if (playResultEl) {
         playResultEl.innerHTML = `<div><span>${esc(text.ours)}</span>${sideCard(result?.ours)}<small>${oursHit ? esc(text.hit) : esc(text.miss)}</small></div><div><span>${esc(text.official)}</span>${sideCard(result?.official)}<small>${offHit ? esc(text.hit) : esc(text.miss)}</small></div>`;
       }
-    } catch (err) {
+    } catch (err: any) {
       if (playResultEl) playResultEl.textContent = err.message;
     } finally {
       button.disabled = false;
