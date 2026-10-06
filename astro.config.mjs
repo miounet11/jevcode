@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 import sitemap from '@astrojs/sitemap';
+import { lastmodSerialize } from './scripts/sitemap-lastmod.mjs';
 
 export default defineConfig({
   site: 'https://www.jevcode.ai',
@@ -53,10 +54,21 @@ export default defineConfig({
   devToolbar: { enabled: false },
   integrations: [
     sitemap({
-      filter: (page) =>
-        !page.includes('/login') &&
-        !page.includes('/account') &&
-        !page.includes('/404'),
+      serialize: lastmodSerialize,
+      filter: (page) => {
+        if (
+          page.includes('/login') ||
+          page.includes('/account') ||
+          page.includes('/404')
+        ) {
+          return false;
+        }
+        // community 详情页只让 en/zh 进 sitemap（页面本身已 noindex，见
+        // community/[id].astro）；1160 个机翻短页稀释爬取预算，让给文档页
+        const m = page.match(/\/([a-z]{2})\/community\/\d+\/?$/);
+        if (m && m[1] !== 'en' && m[1] !== 'zh') return false;
+        return true;
+      },
       i18n: {
         defaultLocale: 'zh',
         locales: {

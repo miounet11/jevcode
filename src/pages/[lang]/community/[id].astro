@@ -74,9 +74,13 @@ const hrefOf = (e: (typeof pulseEntries)[number]) => `/${lang}/community/${e.id}
 const flat = entry.text.replace(/\s+/g, ' ').trim();
 const desc = Array.from(flat).slice(0, 160).join('') + (Array.from(flat).length > 160 ? '…' : '');
 const pageTitle = `@${entry.screenName} · ${dateShort(entry.date)}`;
+// community 详情页是机翻短页（145 条 × 8 语言），只让 en/zh 进索引：
+// 其余 6 语言 noindex，把爬取预算让给文档页，也避免 scaled-content 质量降权
+// 波及全站。sitemap 同步剔除（见 astro.config.mjs 的 filter）。
+const detailIndex = lang === 'en' || lang === 'zh';
 ---
 
-<BaseLayout lang={lang} title={pageTitle} description={desc} path={path}>
+<BaseLayout lang={lang} title={pageTitle} description={desc} path={path} index={detailIndex}>
   <section class="section">
     <div class="wrap">
       <main class="doc">

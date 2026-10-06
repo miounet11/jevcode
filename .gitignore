@@ -38,3 +38,6 @@ data/builds/raw/
 
 __pycache__/
 *.pyc
+
+# IndexNow 密钥（public/<key>.txt 才是要部署的，密钥本身不留仓库）
+.indexnow-key
