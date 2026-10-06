@@ -221,9 +221,13 @@ function canAfford(userId, tokens) {
 
 // 12 位 [a-z0-9] 的 run id。/lang/r/{id} 分享页路由与 /api/runs/{id} 都按 [a-z0-9]{12} 匹配，
 // 旧的 base64url 生成会产出 '-'/'_'（约 32%），导致分享链接 404。
+// 取 252 以内的字节做均匀映射（256 = 7*36 + 4，简单 %36 会让 4 个字符高出 15% 概率）。
 function runId() {
   let id = '';
-  while (id.length < 12) id += (randomBytes(1)[0] % 36).toString(36);
+  while (id.length < 12) {
+    const b = randomBytes(1)[0];
+    if (b < 252) id += (b % 36).toString(36);
+  }
   return id.slice(0, 12);
 }
 
