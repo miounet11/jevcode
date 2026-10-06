@@ -60,7 +60,8 @@ async def main() -> None:
             },
         )
 
-    answer = response.answers["priority"]           # .choice == "p1"
+    answer = response.answers["priority"]
+    print(answer.choice)                            # "p1"
     confidence = answer.confidence                  # 0.93 — route on it directly
 ```
 
