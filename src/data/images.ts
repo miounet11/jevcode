@@ -233,6 +233,18 @@ export const docFigures: Record<string, Figure> = {
     height: 768,
     alt: { zh: '令牌流经过三道护栏，部分被拦下', en: 'A token stream passing three guardrails, some blocked' },
   },
+  'cases/content-moderation': {
+    src: 'img/cases/content-moderation',
+    width: 1344,
+    height: 768,
+    alt: { zh: '内容流经审查网关后按类别分流', en: 'A content stream routed by category through a moderation gate' },
+  },
+  'cases/kev-api-compatibility': {
+    src: 'img/cases/kev-api-compatibility',
+    width: 1344,
+    height: 768,
+    alt: { zh: '逐项核对的兼容性清单与认证徽章', en: 'A conformance checklist verified item by item, with a certification badge' },
+  },
   'cases/parallel-questions': {
     src: 'img/cases/parallel-questions',
     width: 1344,
@@ -256,6 +268,18 @@ export const docFigures: Record<string, Figure> = {
     width: 1344,
     height: 768,
     alt: { zh: '逐级放大、按需下钻的级联判断', en: 'A cascade that narrows down in successive stages' },
+  },
+  'cases/structured-output': {
+    src: 'img/cases/structured-output',
+    width: 1344,
+    height: 768,
+    alt: { zh: '散乱输出经约束后变成规整结构', en: 'Scattered output constrained into a tidy structure' },
+  },
+  'cases/jev-alternatives': {
+    src: 'img/cases/jev-alternatives',
+    width: 1344,
+    height: 768,
+    alt: { zh: '多个替代方案在天平上与基准权衡', en: 'Several alternatives weighed against a baseline on a balance scale' },
   },
   'cases/semantic-find': {
     src: 'img/cases/semantic-find',
