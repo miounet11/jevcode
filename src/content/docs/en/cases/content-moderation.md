@@ -43,7 +43,8 @@ MODERATION_RULES = {
 }
 
 async def moderate(client: AsyncTypeSafeClient, message: str) -> dict:
-    response = await client.system_one(state=message, questions=MODERATION_RULES)
+    async with client:
+        response = await client.system_one(state=message, questions=MODERATION_RULES)
     return {rule: response.answers[rule] for rule in MODERATION_RULES}
 ```
 

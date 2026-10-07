@@ -62,7 +62,7 @@ async def main() -> None:
 
     answer = response.answers["priority"]
     print(answer.choice)                            # "p1"
-    confidence = answer.confidence                  # 0.93 — route on it directly
+    print(answer.confidence)                        # 0.93 — route on it directly
 ```
 
 What you get back is not a string to parse. It is a **typed value with a probability
