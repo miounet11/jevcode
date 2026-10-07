@@ -14,7 +14,7 @@ member wrote it down as a testable spec: [jevcompat](https://github.com/mandu5/j
 docs, the OpenAPI file, or SDK source. Then the suite was run against the eight
 most-starred open servers implementing the API.
 
-**Kev-0.8B (`2874258`, MLX, M1 Pro) passes every MUST: 32/32**, including:
+**Kev-0.8B (`2874258`, MLX, M1 Pro) is one of two servers that pass every MUST: 32/32**, including:
 
 - choice options accepted up to the 255-option limit
 - score levels accepted up to the 10-level limit
@@ -31,23 +31,29 @@ reproducible on your own machine.
 
 ## What conformance does not cover
 
-The two SHOULD-level notes the author filed back are the interesting part, because
-both are places where a byte-identical response can still be a worse answer:
+The suite also tracks SHOULD-level requirements (Kev passes 10 of 12; the two
+misses are auth-error responses, untested because the reported run ran with auth
+off, and one further check was not exercised because the server never produced the
+error it covers). The two SHOULD-level notes the author filed back are the more
+interesting part, because both are places where a byte-identical response can
+still be a worse answer:
 
 **Score confidence normalization.** Kev computes score confidence as
-`1 − E|level − mode| / (L − 1)`; TypeSafe's documented example spreads the same
-evidence differently across the scale. A client comparing confidence numbers across
-backends will see different distributions for identical judgement quality. If you
-route on absolute thresholds (the [confidence-routing](/en/patterns/confidence-routing/)
-pattern), calibrate per backend — or route on the raw distribution, which both
-backends expose.
+`1 − E|level − mode| / (L − 1)`; TypeSafe's documented examples compute
+`1 − E|level − mode| / D`, where `D` is the distribution's spread. Same evidence,
+different denominator — measured on a 3-level question, Kev returned confidence
+0.7535 where the reference formula gives 0.260. A client comparing confidence
+numbers across backends will see different distributions for identical judgement
+quality. If you route on absolute thresholds (the
+[confidence-routing](/en/patterns/confidence-routing/) pattern), calibrate per
+backend — or route on the raw distribution, which both backends expose.
 
 **Long-context degradation is a model property, not a spec violation.** The suite
 passes; accuracy beyond Kev's 384-token training context does not survive into the
-spec. On SemIf's pinned selections, Kev-9B scored 0.92 inside the training context
-but 0.75–0.79 on longer documents — see the
+spec. On the suite's TypeSafe selections, Kev-9B scored 0.92 inside the training
+context but 0.75–0.79 on longer documents (Kev-4B: 0.88 / 0.88 / 0.81) — see the
 [long-context recipe](https://github.com/jaredpalmer/kev/issues/48) for the full
-breakdown and mitigation (state trimming, question-local evidence). The
+breakdown and the author's proposed fixes. The
 [state design](/en/concepts/state/) guidance applies to any backend: keep the state
 the size of the decision, not the size of the page.
 
