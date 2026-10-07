@@ -1,0 +1,482 @@
+[
+ {
+  "repo": "jev-ultrafast",
+  "num": 203,
+  "title": "TEXT_VALUE contract mismatch: model returning {\"text\": null} for missing values triggers generic malformed payload error",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/203",
+  "state": "open",
+  "cluster": "浏览器 agent 的字段定位",
+  "angle": "cases/agent 决策页",
+  "target": "use-case-map 扩展"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 202,
+  "title": "TYPE_TEXT helper context omits element ID and outer form container metadata",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/202",
+  "state": "open",
+  "cluster": "浏览器 agent 的字段定位",
+  "angle": "cases/agent 决策页",
+  "target": "use-case-map 扩展"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 198,
+  "title": "TYPE_TEXT helper cannot distinguish same-labeled fields: field_context carries no element identity or nearby form context",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/198",
+  "state": "open",
+  "cluster": "浏览器 agent 的字段定位",
+  "angle": "cases/agent 决策页",
+  "target": "use-case-map 扩展"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 191,
+  "title": "TYPE_TEXT cache key has no element identity: a stale fill's cached text can be typed into a different same-labeled field",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/191",
+  "state": "open",
+  "cluster": "浏览器 agent 的字段定位",
+  "angle": "cases/agent 决策页",
+  "target": "use-case-map 扩展"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 187,
+  "title": "Idea: Multi-Stage Agent Architecture for Improved Decision Accuracy",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/187",
+  "state": "open",
+  "cluster": "多阶段与混合架构",
+  "angle": "patterns 复合页",
+  "target": "patterns/composite"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 158,
+  "title": "post_json treats HTTP 200 with an error body as a successful response",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/158",
+  "state": "open",
+  "cluster": "agent 可靠性与重试",
+  "angle": "新页：reliability patterns",
+  "target": "新页：reliability"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 157,
+  "title": "One transient text-model failure aborts the whole run — no retry in field_text",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/157",
+  "state": "open",
+  "cluster": "浏览器 agent 的字段定位",
+  "angle": "cases/agent 决策页",
+  "target": "use-case-map 扩展"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 149,
+  "title": "Could the visible page state preserve more semantic structure?",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/149",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 133,
+  "title": "choose() can return raw KeyError for an off-envelope HTTP-200 response",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/133",
+  "state": "open",
+  "cluster": "agent 可靠性与重试",
+  "angle": "新页：reliability patterns",
+  "target": "新页：reliability"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 132,
+  "title": "Stale action ids can select a different live control without an error",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/132",
+  "state": "open",
+  "cluster": "浏览器 agent 的字段定位",
+  "angle": "cases/agent 决策页",
+  "target": "use-case-map 扩展"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 120,
+  "title": "Expose a confidence gate for ordinary browser actions",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/120",
+  "state": "open",
+  "cluster": "置信度与校准",
+  "angle": "patterns/confidence-routing 配套实验页",
+  "target": "新页：confidence 实测"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 94,
+  "title": "A failed post-action observation (page_changed: null) disables the three-repeat no-progress check, so a stalled run keeps spending model calls",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/94",
+  "state": "open",
+  "cluster": "agent 可靠性与重试",
+  "angle": "新页：reliability patterns",
+  "target": "新页：reliability"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 87,
+  "title": "Model responses with invalid JSON leak decoder errors",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/87",
+  "state": "open",
+  "cluster": "agent 可靠性与重试",
+  "angle": "新页：reliability patterns",
+  "target": "新页：reliability"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 51,
+  "title": "Windows: owned tab is backgrounded, modal menus do not paint in time, Flights demo always returns BLOCKED",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/51",
+  "state": "open",
+  "cluster": "agent 可靠性与重试",
+  "angle": "新页：reliability patterns",
+  "target": "新页：reliability"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 36,
+  "title": "Missing TEXT_MODEL_API_KEY crashes mid-run; code default base URL differs from .env.example",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/36",
+  "state": "open",
+  "cluster": "上手与安装摩擦",
+  "angle": "quickstart FAQ 补充",
+  "target": "faq"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 23,
+  "title": "Element table misses clickable non-native elements, so suggestion rows are unreachable",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/23",
+  "state": "open",
+  "cluster": "浏览器 agent 的字段定位",
+  "angle": "cases/agent 决策页",
+  "target": "use-case-map 扩展"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 21,
+  "title": "How can I get the TYPESAFE_API_KEY?",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/21",
+  "state": "open",
+  "cluster": "上手与安装摩擦",
+  "angle": "quickstart FAQ 补充",
+  "target": "faq"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 16,
+  "title": "Setup friction: SOCKS proxy crash on startup; browser-harness attaches to the user's real browser by default",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/16",
+  "state": "open",
+  "cluster": "上手与安装摩擦",
+  "angle": "quickstart FAQ 补充",
+  "target": "faq"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 5,
+  "title": "Fix Windows static asset decoding in demo server",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/5",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 1,
+  "title": "Library API: first observation can return an empty action space; agent terminates with BLOCKED instead of retrying",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/1",
+  "state": "open",
+  "cluster": "agent 可靠性与重试",
+  "angle": "新页：reliability patterns",
+  "target": "新页：reliability"
+ },
+ {
+  "repo": "kev",
+  "num": 215,
+  "title": "Ascend NPU support for the Qwen3.5 checkpoints: would you take it in-tree?",
+  "url": "https://github.com/jaredpalmer/kev/issues/215",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 205,
+  "title": "Idea: Multi-Stage Agent Architecture for Improved Decision Accuracy",
+  "url": "https://github.com/jaredpalmer/kev/issues/205",
+  "state": "open",
+  "cluster": "多阶段与混合架构",
+  "angle": "patterns 复合页",
+  "target": "patterns/composite"
+ },
+ {
+  "repo": "kev",
+  "num": 170,
+  "title": "serve: default_device() trusts is_available() and SIGSEGVs on ROCm wheels lacking the local arch (gfx1151); no --device flag",
+  "url": "https://github.com/jaredpalmer/kev/issues/170",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 162,
+  "title": "8-bit MLX on Kev-4B 139fdd94: five development suites against bf16",
+  "url": "https://github.com/jaredpalmer/kev/issues/162",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 161,
+  "title": "Score questions: first-slot rate and an identical-option control on kev-0.8b",
+  "url": "https://github.com/jaredpalmer/kev/issues/161",
+  "state": "open",
+  "cluster": "置信度与校准",
+  "angle": "patterns/confidence-routing 配套实验页",
+  "target": "新页：confidence 实测"
+ },
+ {
+  "repo": "kev",
+  "num": 159,
+  "title": "pip install kev installs a different package (PyPI name collision)",
+  "url": "https://github.com/jaredpalmer/kev/issues/159",
+  "state": "open",
+  "cluster": "agent 可靠性与重试",
+  "angle": "新页：reliability patterns",
+  "target": "新页：reliability"
+ },
+ {
+  "repo": "kev",
+  "num": 126,
+  "title": "4 bit quantization using bitsandbytes works great",
+  "url": "https://github.com/jaredpalmer/kev/issues/126",
+  "state": "closed",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 123,
+  "title": "Add requirements.txt",
+  "url": "https://github.com/jaredpalmer/kev/issues/123",
+  "state": "closed",
+  "cluster": "上手与安装摩擦",
+  "angle": "quickstart FAQ 补充",
+  "target": "faq"
+ },
+ {
+  "repo": "kev",
+  "num": 111,
+  "title": "[RFC] Post-Training Roadmap: Enhancing Automation Coverage (5% Error Budget), Permutation Invariance, and Ordinal Metrics",
+  "url": "https://github.com/jaredpalmer/kev/issues/111",
+  "state": "open",
+  "cluster": "置信度与校准",
+  "angle": "patterns/confidence-routing 配套实验页",
+  "target": "新页：confidence 实测"
+ },
+ {
+  "repo": "kev",
+  "num": 107,
+  "title": "Serving: remaining work after batching and fused kernels (#93, #97)",
+  "url": "https://github.com/jaredpalmer/kev/issues/107",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 96,
+  "title": "Add dynamic batching for concurrent inference requests",
+  "url": "https://github.com/jaredpalmer/kev/issues/96",
+  "state": "closed",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 95,
+  "title": "Conformance report: Kev-0.8B passes all 32 MUSTs of a Jev API spec; two SHOULD notes",
+  "url": "https://github.com/jaredpalmer/kev/issues/95",
+  "state": "closed",
+  "cluster": "浏览器 agent 的字段定位",
+  "angle": "cases/agent 决策页",
+  "target": "use-case-map 扩展"
+ },
+ {
+  "repo": "kev",
+  "num": 78,
+  "title": "Add dockerfile",
+  "url": "https://github.com/jaredpalmer/kev/issues/78",
+  "state": "closed",
+  "cluster": "上手与安装摩擦",
+  "angle": "quickstart FAQ 补充",
+  "target": "faq"
+ },
+ {
+  "repo": "kev",
+  "num": 77,
+  "title": "`probs()` on hybrid backbones re-encodes the state per question; only `serve.py` uses the prefix path",
+  "url": "https://github.com/jaredpalmer/kev/issues/77",
+  "state": "closed",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 76,
+  "title": "Kev llama.cpp target",
+  "url": "https://github.com/jaredpalmer/kev/issues/76",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 71,
+  "title": "Embedded Device Support (Jetson) and Profiling",
+  "url": "https://github.com/jaredpalmer/kev/issues/71",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 67,
+  "title": "LiteRT / Android export for Kev-0.8B",
+  "url": "https://github.com/jaredpalmer/kev/issues/67",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 64,
+  "title": "vLLM support for inference",
+  "url": "https://github.com/jaredpalmer/kev/issues/64",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 48,
+  "title": "Long-context recipe (v10): Kev loses accuracy on documents longer than its 384-token training context",
+  "url": "https://github.com/jaredpalmer/kev/issues/48",
+  "state": "open",
+  "cluster": "长上下文与 state 设计",
+  "angle": "faq+concepts/state",
+  "target": "concepts/state 补充节"
+ },
+ {
+  "repo": "kev",
+  "num": 34,
+  "title": "Quickstart fails on Python 3.14: torch pin (<2.9) has no cp314 wheels",
+  "url": "https://github.com/jaredpalmer/kev/issues/34",
+  "state": "closed",
+  "cluster": "上手与安装摩擦",
+  "angle": "quickstart FAQ 补充",
+  "target": "faq"
+ },
+ {
+  "repo": "kev",
+  "num": 33,
+  "title": "`choice` probabilities are rounded to 2 decimals, which can break TypeSafe's `validate_choice` when a question has many options",
+  "url": "https://github.com/jaredpalmer/kev/issues/33",
+  "state": "closed",
+  "cluster": "置信度与校准",
+  "angle": "patterns/confidence-routing 配套实验页",
+  "target": "新页：confidence 实测"
+ },
+ {
+  "repo": "kev",
+  "num": 32,
+  "title": "Kev in GGUF and a single-binary executable to serve with a Typesafe-compatible API without Python or Pytorch",
+  "url": "https://github.com/jaredpalmer/kev/issues/32",
+  "state": "open",
+  "cluster": "部署与量化",
+  "angle": "新页：self-hosting 指南",
+  "target": "新页：self-hosting"
+ },
+ {
+  "repo": "kev",
+  "num": 28,
+  "title": "Getting kev to work with images ?",
+  "url": "https://github.com/jaredpalmer/kev/issues/28",
+  "state": "open",
+  "cluster": "生态与兼容性",
+  "angle": "ecosystem 页数据补充",
+  "target": "ecosystem"
+ },
+ {
+  "repo": "kev",
+  "num": 12,
+  "title": "Frozen suite loading fails with Windows line endings and locale encoding",
+  "url": "https://github.com/jaredpalmer/kev/issues/12",
+  "state": "closed",
+  "cluster": "上手与安装摩擦",
+  "angle": "quickstart FAQ 补充",
+  "target": "faq"
+ },
+ {
+  "repo": "kev",
+  "num": 5,
+  "title": "ValueError: state exceeds 384 tokens: 550",
+  "url": "https://github.com/jaredpalmer/kev/issues/5",
+  "state": "closed",
+  "cluster": "长上下文与 state 设计",
+  "angle": "faq+concepts/state",
+  "target": "concepts/state 补充节"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 152,
+  "title": "Community project built on a bounded Jev loop: Jev Social",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/152",
+  "state": "open",
+  "cluster": "社区项目",
+  "angle": "ecosystem 收录",
+  "target": "ecosystem"
+ },
+ {
+  "repo": "jev-ultrafast",
+  "num": 145,
+  "title": "Community project built on this: jev-browse (agent-callable loop, MCP, benchmark harness), with ideas for #16, #93, #120, #132",
+  "url": "https://github.com/browser-use/jev-ultrafast/issues/145",
+  "state": "open",
+  "cluster": "社区项目",
+  "angle": "ecosystem 收录",
+  "target": "ecosystem"
+ },
+ {
+  "repo": "kev",
+  "num": 95,
+  "title": "Conformance report: Kev-0.8B passes all 32 MUSTs of a Jev API spec; two SHOULD notes",
+  "url": "https://github.com/jaredpalmer/kev/issues/95",
+  "state": "closed",
+  "cluster": "生态与兼容性",
+  "angle": "第三方一致性 32/32 实测数据",
+  "target": "新页：api-compatibility"
+ }
+]
