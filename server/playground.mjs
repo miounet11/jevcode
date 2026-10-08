@@ -232,12 +232,13 @@ function runId() {
 }
 
 async function judge(state, questions) {
+  const headers = { 'content-type': 'application/json' };
+  // 配了成员 key 就带上（正式部署走这条路）；没配就不带，让上游落到
+  // guest 日配额。不能总塞 Bearer：空 key 或占位符会被上游 401 拒掉。
+  if (KEY && !KEY.startsWith('jev_test_')) headers.authorization = `Bearer ${KEY}`;
   const response = await fetch(UPSTREAM, {
     method: 'POST',
-    headers: {
-      authorization: `Bearer ${KEY}`,
-      'content-type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({
       model: MODEL,
       state,

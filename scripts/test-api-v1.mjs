@@ -36,6 +36,9 @@ ledger.close();
 const child = spawn(process.execPath, ['server/playground.mjs'], {
   env: {
     ...process.env,
+    // /v1/* 在没有 JEVCODE_PLAYGROUND_KEY 时直接 503（真实部署由 systemd env
+    // 提供）。测试自给自足：没有就造一把，别依赖本机 shell。
+    JEVCODE_PLAYGROUND_KEY: process.env.JEVCODE_PLAYGROUND_KEY || 'jev_test_key_not_a_real_secret',
     PLAYGROUND_PORT: String(PORT),
     PLAYGROUND_ACCOUNTS_DB: dbPath,
     PLAYGROUND_DATA: path.join(dir, 'runs'),
