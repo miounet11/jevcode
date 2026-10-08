@@ -5,7 +5,7 @@ export const title: Localized<string> = {
 };
 
 export const lead: Localized<string> = {
-  zh: '不用注册。写下一段状态，Jev 返回的是带概率的判定，不是一段生成文本。结果会得到一个可以转发的链接。',
+  zh: '不用注册。写一段情况说明，Jev 直接给出判断和把握度，还给你一个能转发的链接。',
   en: 'No account. Write a state and Jev returns a probability, not generated prose. The result gets a link you can forward.',
   ja: '登録は不要です。状態を書くと、Jev は生成された文章ではなく確率付きの判定を返します。結果には転送できるリンクが付きます。',
   ko: '가입이 필요 없습니다. 상태를 적으면 Jev는 생성된 문장이 아니라 확률이 있는 판정을 반환합니다. 결과에는 전달할 수 있는 링크가 붙습니다.',
@@ -16,19 +16,19 @@ export const lead: Localized<string> = {
 };
 
 export const state: Localized<string> = {
-  zh: '状态', en: 'State', ja: '状態', ko: '상태', de: 'Zustand', fr: 'État', es: 'Estado', pt: 'Estado',
+  zh: '情况说明', en: 'State', ja: '状態', ko: '상태', de: 'Zustand', fr: 'État', es: 'Estado', pt: 'Estado',
 };
 
 export const run: Localized<string> = {
-  zh: '运行判定', en: 'Run judgment', ja: '判定を実行', ko: '판정 실행', de: 'Urteil ausführen', fr: 'Lancer le jugement', es: 'Ejecutar juicio', pt: 'Executar julgamento',
+  zh: '开始判断', en: 'Run judgment', ja: '判定を実行', ko: '판정 실행', de: 'Urteil ausführen', fr: 'Lancer le jugement', es: 'Ejecutar juicio', pt: 'Executar julgamento',
 };
 
 export const running: Localized<string> = {
-  zh: '判定中…', en: 'Judging…', ja: '判定中…', ko: '판정 중…', de: 'Wird beurteilt…', fr: 'Jugement…', es: 'Juzgando…', pt: 'Julgando…',
+  zh: '正在判断…', en: 'Judging…', ja: '判定中…', ko: '판정 중…', de: 'Wird beurteilt…', fr: 'Jugement…', es: 'Juzgando…', pt: 'Julgando…',
 };
 
 export const share: Localized<string> = {
-  zh: '分享这次结果', en: 'Share this result', ja: 'この結果を共有', ko: '이 결과 공유', de: 'Dieses Ergebnis teilen', fr: 'Partager ce résultat', es: 'Compartir este resultado', pt: 'Compartilhar este resultado',
+  zh: '分享结果', en: 'Share this result', ja: 'この結果を共有', ko: '이 결과 공유', de: 'Dieses Ergebnis teilen', fr: 'Partager ce résultat', es: 'Compartir este resultado', pt: 'Compartilhar este resultado',
 };
 
 export const copied: Localized<string> = {
@@ -41,7 +41,7 @@ export const compareLink: Localized<string> = {
 
 /** 客户端脚本文案。 */
 export const client: Localized<Record<string, string>> = {
-  zh: { needState: '请先写下一段状态。', failed: '判定失败，请稍后再试。', tooLong: 'state 最长 4000 字符。', tooShort: 'state 至少 8 个字符。' },
+  zh: { needState: '先写一段情况说明。', failed: '没跑成，等一下再试。', tooLong: '最长 4000 字，删一点再试。', tooShort: '太短了，至少写 8 个字。' },
   en: { needState: 'Write a state first.', failed: 'The judgment failed. Try again later.', tooLong: 'state is capped at 4000 characters.', tooShort: 'state needs at least 8 characters.' },
   ja: { needState: '先に状態を書いてください。', failed: '判定に失敗しました。しばらくしてからお試しください。', tooLong: 'state は最大 4000 文字です。', tooShort: 'state は 8 文字以上必要です。' },
   ko: { needState: '먼저 상태를 적어 주세요.', failed: '판정에 실패했습니다. 잠시 후 다시 시도하세요.', tooLong: 'state는 최대 4000자입니다.', tooShort: 'state는 최소 8자입니다.' },

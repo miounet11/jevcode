@@ -1,18 +1,18 @@
 import type { Localized } from '../ui';
 
 export const title: Localized<string> = {
-  zh: '我的账户', en: 'Your account', ja: 'アカウント', ko: '내 계정', de: 'Dein Konto', fr: 'Votre compte', es: 'Tu cuenta', pt: 'Sua conta',
+  zh: '我的账户', en: 'Your account', ja: 'マイアカウント', ko: '내 계정', de: 'Mein Konto', fr: 'Mon compte', es: 'Mi cuenta', pt: 'Minha conta',
 };
 
 export const lead: Localized<string> = {
-  zh: '查看余额与消费、签发与吊销 API Key。',
-  en: 'See your credit balance and spend, and issue or revoke API keys.',
-  ja: '残高と利用状況の確認、API Key の発行と失効。',
-  ko: '잔액과 사용 내역을 확인하고 API Key를 발급하거나 폐기합니다.',
-  de: 'Guthaben und Verbrauch einsehen, API Keys ausstellen oder widerrufen.',
-  fr: 'Voir votre solde et vos dépenses, émettre ou révoquer des clés API.',
-  es: 'Consulta tu saldo y gasto, y emite o revoca claves de API.',
-  pt: 'Veja seu saldo e gastos, e emita ou revogue chaves de API.',
+  zh: '看余额和花销，创建或停用密钥。',
+  en: 'See your balance and spending, create or disable keys.',
+  ja: '残高と使った金額を確認し、キーを作成や停止できます。',
+  ko: '잔액과 사용 금액을 확인하고 키를 만들거나 끌 수 있습니다.',
+  de: 'Guthaben und Ausgaben ansehen, Keys erstellen oder stoppen.',
+  fr: 'Voir votre solde et vos dépenses, créer ou désactiver des clés.',
+  es: 'Mira tu saldo y lo gastado, crea o desactiva claves.',
+  pt: 'Veja seu saldo e gastos, crie ou desative chaves.',
 };
 
 export const loading: Localized<string> = {
@@ -20,7 +20,7 @@ export const loading: Localized<string> = {
 };
 
 export const notSignedIn: Localized<string> = {
-  zh: '尚未登录。', en: 'You are not signed in.', ja: 'まだログインしていません。', ko: '아직 로그인하지 않았습니다.', de: 'Du bist nicht angemeldet.', fr: 'Vous n\'êtes pas connecté.', es: 'No has iniciado sesión.', pt: 'Você não está conectado.',
+  zh: '你还没登录。', en: 'You are not signed in.', ja: 'まだログインしていません。', ko: '아직 로그인하지 않았습니다.', de: 'Du bist nicht angemeldet.', fr: 'Vous n\'êtes pas connecté.', es: 'No has iniciado sesión.', pt: 'Você não está conectado.',
 };
 
 export const signIn: Localized<string> = {
@@ -32,7 +32,7 @@ export const remaining: Localized<string> = {
 };
 
 export const perDay: Localized<string> = {
-  zh: '剩余输入 token', en: 'input tokens left', ja: '残り入力トークン', ko: '남은 입력 토큰', de: 'verbleibende Eingabe-Token', fr: "tokens d'entrée restants", es: 'tokens de entrada restantes', pt: 'tokens de entrada restantes',
+  zh: '剩余额度', en: 'credit left', ja: '残り额度', ko: '남은 크레딧', de: 'Restguthaben', fr: 'crédit restant', es: 'crédito restante', pt: 'crédito restante',
 };
 
 export const email: Localized<string> = {
@@ -44,85 +44,92 @@ export const plan: Localized<string> = {
 };
 
 export const keys: Localized<string> = {
-  zh: 'API Key', en: 'API keys', ja: 'API Key', ko: 'API Key', de: 'API Keys', fr: 'Clés API', es: 'Claves de API', pt: 'Chaves de API',
+  zh: '密钥', en: 'Keys', ja: 'キー', ko: '키', de: 'Keys', fr: 'Clés', es: 'Claves', pt: 'Chaves',
 };
 
 export const noKeys: Localized<string> = {
-  zh: '还没有 Key。', en: 'No keys yet.', ja: 'まだ Key がありません。', ko: '아직 Key가 없습니다.', de: 'Noch keine Keys.', fr: 'Aucune clé pour le moment.', es: 'Aún no hay claves.', pt: 'Ainda sem chaves.',
+  zh: '还没有密钥，点下面按钮创建一把。',
+  en: 'No keys yet. Use the button below to create one.',
+  ja: 'まだキーがありません。下のボタンで作成できます。',
+  ko: '아직 키가 없습니다. 아래 버튼으로 만들 수 있습니다.',
+  de: 'Noch keine Keys. Erstelle unten einen.',
+  fr: 'Aucune clé pour le moment. Créez-en une ci-dessous.',
+  es: 'Aún no hay claves. Crea una con el botón de abajo.',
+  pt: 'Ainda sem chaves. Crie uma com o botão abaixo.',
 };
 
 export const issue: Localized<string> = {
-  zh: '签发新 Key', en: 'Issue new key', ja: '新しい Key を発行', ko: '새 Key 발급', de: 'Neuen Key ausstellen', fr: 'Émettre une nouvelle clé', es: 'Emitir nueva clave', pt: 'Emitir nova chave',
+  zh: '新建密钥', en: 'New key', ja: 'キーを作成', ko: '키 만들기', de: 'Neuen Key erstellen', fr: 'Créer une clé', es: 'Crear clave', pt: 'Criar chave',
 };
 
 export const issuing: Localized<string> = {
-  zh: '签发中…', en: 'Issuing…', ja: '発行中…', ko: '발급 중…', de: 'Wird ausgestellt…', fr: 'Émission…', es: 'Emitiendo…', pt: 'Emitindo…',
+  zh: '创建中…', en: 'Creating…', ja: '作成中…', ko: '만드는 중…', de: 'Wird erstellt…', fr: 'Création…', es: 'Creando…', pt: 'Criando…',
 };
 
 export const newKeyWarn: Localized<string> = {
-  zh: '这个 Key 只显示这一次，请立刻保存。',
+  zh: '密钥只显示这一次，请马上保存。',
   en: 'This key is shown once. Save it now.',
-  ja: 'この Key は今回だけ表示されます。すぐに保存してください。',
-  ko: '이 Key는 이번 한 번만 표시됩니다. 즉시 저장하세요.',
-  de: 'Dieser Key wird nur einmal angezeigt. Speichere ihn jetzt.',
+  ja: 'キーは今回だけ表示されます。今すぐ保存してください。',
+  ko: '키는 이번 한 번만 표시됩니다. 지금 저장하세요.',
+  de: 'Dieser Key wird nur einmal angezeigt. Jetzt speichern.',
   fr: "Cette clé n'est affichée qu'une fois. Enregistrez-la maintenant.",
   es: 'Esta clave se muestra una sola vez. Guárdala ahora.',
   pt: 'Esta chave é exibida uma única vez. Salve-a agora.',
 };
 
 export const prefix: Localized<string> = {
-  zh: '前缀', en: 'Prefix', ja: 'プレフィックス', ko: '접두사', de: 'Präfix', fr: 'Préfixe', es: 'Prefijo', pt: 'Prefixo',
+  zh: '编号', en: 'ID', ja: 'ID', ko: 'ID', de: 'ID', fr: 'ID', es: 'ID', pt: 'ID',
 };
 
 export const label: Localized<string> = {
-  zh: '备注', en: 'Label', ja: 'ラベル', ko: '라벨', de: 'Label', fr: 'Étiquette', es: 'Etiqueta', pt: 'Rótulo',
+  zh: '备注', en: 'Note', ja: 'メモ', ko: '메모', de: 'Notiz', fr: 'Note', es: 'Nota', pt: 'Nota',
 };
 
 export const created: Localized<string> = {
-  zh: '创建于', en: 'Created', ja: '作成', ko: '생성', de: 'Erstellt', fr: 'Créée', es: 'Creada', pt: 'Criada',
+  zh: '创建时间', en: 'Created', ja: '作成日', ko: '만든 날', de: 'Erstellt', fr: 'Créée le', es: 'Creada', pt: 'Criada em',
 };
 
 export const revoke: Localized<string> = {
-  zh: '吊销', en: 'Revoke', ja: '失効', ko: '폐기', de: 'Widerrufen', fr: 'Révoquer', es: 'Revocar', pt: 'Revogar',
+  zh: '停用', en: 'Disable', ja: '停止', ko: '끄기', de: 'Deaktivieren', fr: 'Désactiver', es: 'Desactivar', pt: 'Desativar',
 };
 
 export const revoked: Localized<string> = {
-  zh: '已吊销', en: 'Revoked', ja: '失効済み', ko: '폐기됨', de: 'Widerrufen', fr: 'Révoquée', es: 'Revocada', pt: 'Revogada',
+  zh: '已停用', en: 'Disabled', ja: '停止済み', ko: '꺼짐', de: 'Deaktiviert', fr: 'Désactivée', es: 'Desactivada', pt: 'Desativada',
 };
 
 export const active: Localized<string> = {
-  zh: '可用', en: 'Active', ja: '有効', ko: '사용 가능', de: 'Aktiv', fr: 'Active', es: 'Activa', pt: 'Ativa',
+  zh: '可用', en: 'Active', ja: '使用中', ko: '사용 중', de: 'Aktiv', fr: 'Active', es: 'Activa', pt: 'Ativa',
 };
 
 export const logout: Localized<string> = {
-  zh: '登出', en: 'Sign out', ja: 'ログアウト', ko: '로그아웃', de: 'Abmelden', fr: 'Se déconnecter', es: 'Cerrar sesión', pt: 'Sair',
+  zh: '退出', en: 'Sign out', ja: 'ログアウト', ko: '로그아웃', de: 'Abmelden', fr: 'Se déconnecter', es: 'Cerrar sesión', pt: 'Sair',
 };
 
 export const confirmRevoke: Localized<string> = {
-  zh: '确认吊销这个 Key？使用它的程序会立刻失效。',
-  en: 'Revoke this key? Any program using it stops working immediately.',
-  ja: 'この Key を失効させますか？使用中のプログラムは即座に動かなくなります。',
-  ko: '이 Key를 폐기할까요? 사용 중인 프로그램이 즉시 작동을 멈춥니다.',
-  de: 'Diesen Key widerrufen? Jedes Programm, das ihn nutzt, funktioniert sofort nicht mehr.',
-  fr: 'Révoquer cette clé ? Tout programme qui l\'utilise cesse de fonctionner immédiatement.',
-  es: '¿Revocar esta clave? Cualquier programa que la use deja de funcionar de inmediato.',
-  pt: 'Revogar esta chave? Qualquer programa que a use para de funcionar imediatamente.',
+  zh: '确定停用？用这把密钥的程序会立刻断开。',
+  en: 'Disable this key? Programs using it will stop right away.',
+  ja: '停止しますか？このキーを使うプログラムはすぐに動かなくなります。',
+  ko: '끄시겠습니까? 이 키를 쓰는 프로그램이 바로 멈춥니다.',
+  de: 'Diesen Key deaktivieren? Programme, die ihn nutzen, stoppen sofort.',
+  fr: 'Désactiver cette clé ? Les programmes qui l\'utilisent s\'arrêtent aussitôt.',
+  es: '¿Desactivar esta clave? Los programas que la usan se detienen al instante.',
+  pt: 'Desativar esta chave? Programas que a usam param imediatamente.',
 };
 
 export const ledger: Localized<string> = {
-  zh: '消费明细', en: 'Ledger', ja: '利用明細', ko: '사용 내역', de: 'Abrechnung', fr: 'Relevé', es: 'Movimientos', pt: 'Extrato',
+  zh: '消费记录', en: 'Spending', ja: '利用履歴', ko: '사용 기록', de: 'Ausgaben', fr: 'Dépenses', es: 'Gastos', pt: 'Gastos',
 };
 
 export const ledNone: Localized<string> = {
-  zh: '还没有消费记录。', en: 'No entries yet.', ja: 'まだ記録がありません。', ko: '아직 기록이 없습니다.', de: 'Noch keine Einträge.', fr: 'Aucune entrée pour le moment.', es: 'Aún no hay movimientos.', pt: 'Ainda sem lançamentos.',
+  zh: '还没有消费记录。', en: 'No spending yet.', ja: 'まだ履歴がありません。', ko: '아직 기록이 없습니다.', de: 'Noch keine Ausgaben.', fr: 'Aucune dépense pour le moment.', es: 'Aún no hay gastos.', pt: 'Ainda sem gastos.',
 };
 
 export const ledTime: Localized<string> = {
-  zh: '时间', en: 'Time', ja: '日時', ko: '시간', de: 'Zeit', fr: 'Date', es: 'Hora', pt: 'Hora',
+  zh: '时间', en: 'When', ja: '日時', ko: '시간', de: 'Zeit', fr: 'Quand', es: 'Cuándo', pt: 'Quando',
 };
 
 export const ledKind: Localized<string> = {
-  zh: '类型', en: 'Type', ja: '種類', ko: '유형', de: 'Typ', fr: 'Type', es: 'Tipo', pt: 'Tipo',
+  zh: '类型', en: 'What', ja: '種類', ko: '구분', de: 'Art', fr: 'Quoi', es: 'Qué', pt: 'O quê',
 };
 
 export const ledAmount: Localized<string> = {
@@ -130,7 +137,7 @@ export const ledAmount: Localized<string> = {
 };
 
 export const kindSignup: Localized<string> = {
-  zh: '注册赠送', en: 'Signup credit', ja: '登録特典', ko: '가입 크레딧', de: 'Anmeldeguthaben', fr: "Crédit d'inscription", es: 'Crédito de registro', pt: 'Crédito de cadastro',
+  zh: '注册赠送', en: 'Signup bonus', ja: '登録特典', ko: '가입 보너스', de: 'Anmeldebonus', fr: 'Bonus d\'inscription', es: 'Bono de registro', pt: 'Bônus de cadastro',
 };
 
 export const kindJudge: Localized<string> = {
@@ -142,9 +149,9 @@ export const kindTopup: Localized<string> = {
 };
 
 export const spent: Localized<string> = {
-  zh: '累计消费', en: 'Total spent', ja: '累計利用', ko: '누적 사용', de: 'Gesamt ausgegeben', fr: 'Total dépensé', es: 'Total gastado', pt: 'Total gasto',
+  zh: '累计花费', en: 'Total spent', ja: '合計利用額', ko: '총 사용액', de: 'Insgesamt ausgegeben', fr: 'Total dépensé', es: 'Total gastado', pt: 'Total gasto',
 };
 
 export const apiDocs: Localized<string> = {
-  zh: 'API 文档', en: 'API docs', ja: 'API ドキュメント', ko: 'API 문서', de: 'API-Doku', fr: 'Doc API', es: 'Doc de API', pt: 'Doc da API',
+  zh: '开发文档', en: 'Developer docs', ja: '開発ドキュメント', ko: '개발 문서', de: 'Entwicklerdoku', fr: 'Doc développeur', es: 'Doc para devs', pt: 'Doc para devs',
 };

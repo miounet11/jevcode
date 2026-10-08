@@ -12,7 +12,7 @@ export const title: Localized<string> = {
 };
 
 export const description: Localized<string> = {
-  zh: 'JevCode 只提供 clavue-jev 的判定。这里用同一道选择题对比 clavue-jev 和 jev-1.13.0，每次结果会记下来，写在旁白里。',
+  zh: 'JevCode 只提供 clavue-jev 的判断。这里用同一道选择题对比 clavue-jev 和 jev-1.13.0，每次结果都会记进记录板。',
   en: 'JevCode serves clavue-jev. The same choice question is sent to clavue-jev and jev-1.13.0, and every result is kept as narration.',
   ja: 'JevCode が提供するのは clavue-jev の判定のみです。ここでは同じ選択問題を clavue-jev と jev-1.13.0 に送り、結果はすべてナレーションに記録します。',
   ko: 'JevCode는 clavue-jev의 판정만 제공합니다. 여기서는 같은 선택 문제를 clavue-jev와 jev-1.13.0에 보내고, 결과는 모두 나레이션에 기록합니다.',
@@ -27,12 +27,12 @@ export const eyebrow: Localized<string> = {
 };
 
 export const narration: Localized<string> = {
-  zh: '旁白', en: 'Narration', ja: 'ナレーション', ko: '나레이션', de: 'Erzählung', fr: 'Narration', es: 'Narración', pt: 'Narração',
+  zh: '记录板', en: 'Narration', ja: 'ナレーション', ko: '나레이션', de: 'Erzählung', fr: 'Narration', es: 'Narración', pt: 'Narração',
 };
 
 /** 含插值 {n} 与 {batch} */
 export const note: Localized<string> = {
-  zh: '题库 {n} 道，全部是选择题，有标准答案。左边是 clavue-jev，右边是 jev-1.13.0。跑过的题会留在旁白里。每小时每 IP 最多 {batch} 次批量请求。',
+  zh: '共 {n} 道选择题，都有标准答案。左边是 clavue-jev，右边是 jev-1.13.0。做过的题会留在记录板里。每小时每 IP 最多 {batch} 次批量请求。',
   en: '{n} choice questions, each with an expected answer. Left is clavue-jev, right is jev-1.13.0. Finished runs stay in the narration. {batch} batch requests per IP per hour.',
   ja: '全問 {n} 問の選択問題で、正解があります。左が clavue-jev、右が jev-1.13.0。実行済みの問題はナレーションに残ります。IP あたり 1 時間 {batch} 回のバッチリクエストまで。',
   ko: '전부 {n}문항의 선택 문제이며 정답이 있습니다. 왼쪽이 clavue-jev, 오른쪽이 jev-1.13.0입니다. 실행한 문제는 나레이션에 남습니다. IP당 시간당 배치 요청 {batch}회까지.',

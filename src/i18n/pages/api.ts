@@ -13,7 +13,7 @@ export const lead: Localized<string> = {
 };
 
 export const getKeyLead: Localized<string> = {
-  zh: '在账户页签发一个 Key。明文只显示一次，服务端只保留 sha256。',
+  zh: '在我的账户页创建一把密钥。明文只显示一次，网站只存加密指纹。',
   en: 'Issue a key on your account page. The plaintext is shown once; the server keeps only its sha256.',
   ja: 'アカウントページで Key を発行します。平文は一度だけ表示され、サーバーは sha256 のみを保持します。',
   ko: '계정 페이지에서 Key를 발급합니다. 평문은 한 번만 표시되며 서버는 sha256만 보관합니다.',
@@ -24,7 +24,7 @@ export const getKeyLead: Localized<string> = {
 };
 
 export const getKey: Localized<string> = {
-  zh: '去账户页签发 Key', en: 'Get a key on your account page', ja: 'アカウントページで Key を発行', ko: '계정 페이지에서 Key 발급', de: 'Key auf der Kontoseite ausstellen', fr: 'Obtenir une clé sur votre compte', es: 'Obtener una clave en tu cuenta', pt: 'Obter uma chave na sua conta',
+  zh: '去我的账户创建密钥', en: 'Get a key on your account page', ja: 'アカウントページで Key を発行', ko: '계정 페이지에서 Key 발급', de: 'Key auf der Kontoseite ausstellen', fr: 'Obtenir une clé sur votre compte', es: 'Obtener una clave en tu cuenta', pt: 'Obter uma chave na sua conta',
 };
 
 export const authTitle: Localized<string> = {
@@ -58,11 +58,11 @@ export const epJudge: Localized<string> = {
 };
 
 export const epMe: Localized<string> = {
-  zh: '当前用户、余额、累计消费。', en: 'Current user, balance, and total spend.', ja: '現在のユーザー、残高、累計利用。', ko: '현재 사용자, 잔액, 누적 사용.', de: 'Aktueller Nutzer, Guthaben und Gesamtausgaben.', fr: 'Utilisateur actuel, solde et dépenses totales.', es: 'Usuario actual, saldo y gasto total.', pt: 'Usuário atual, saldo e gasto total.',
+  zh: '查当前用户、余额和累计花费。', en: 'Current user, balance, and total spend.', ja: '現在のユーザー、残高、累計利用。', ko: '현재 사용자, 잔액, 누적 사용.', de: 'Aktueller Nutzer, Guthaben und Gesamtausgaben.', fr: 'Utilisateur actuel, solde et dépenses totales.', es: 'Usuario actual, saldo y gasto total.', pt: 'Usuário atual, saldo e gasto total.',
 };
 
 export const epUsage: Localized<string> = {
-  zh: '余额、累计消费，以及最近的消费流水。', en: 'Balance, total spend, and recent ledger entries.', ja: '残高、累計利用、直近の利用明細。', ko: '잔액, 누적 사용, 최근 사용 내역.', de: 'Guthaben, Gesamtausgaben und jüngste Abrechnungsposten.', fr: 'Solde, dépenses totales et dernières écritures.', es: 'Saldo, gasto total y movimientos recientes.', pt: 'Saldo, gasto total e lançamentos recentes.',
+  zh: '查余额、累计花费和最近记录。', en: 'Balance, total spend, and recent ledger entries.', ja: '残高、累計利用、直近の利用明細。', ko: '잔액, 누적 사용, 최근 사용 내역.', de: 'Guthaben, Gesamtausgaben und jüngste Abrechnungsposten.', fr: 'Solde, dépenses totales et dernières écritures.', es: 'Saldo, gasto total y movimientos recientes.', pt: 'Saldo, gasto total e lançamentos recentes.',
 };
 
 export const reqTitle: Localized<string> = {
@@ -70,7 +70,7 @@ export const reqTitle: Localized<string> = {
 };
 
 export const reqStateDesc: Localized<string> = {
-  zh: '被判定的文本，8–4000 字符。', en: 'The text to judge, 8–4000 chars.', ja: '判定するテキスト、8〜4000 文字。', ko: '판정할 텍스트, 8–4000자.', de: 'Der zu beurteilende Text, 8–4000 Zeichen.', fr: 'Le texte à juger, 8 à 4000 caractères.', es: 'El texto a juzgar, 8–4000 caracteres.', pt: 'O texto a julgar, 8–4000 caracteres.',
+  zh: '要判断的文本，8–4000 字。', en: 'The text to judge, 8–4000 chars.', ja: '判定するテキスト、8〜4000 文字。', ko: '판정할 텍스트, 8–4000자.', de: 'Der zu beurteilende Text, 8–4000 Zeichen.', fr: 'Le texte à juger, 8 à 4000 caractères.', es: 'El texto a juzgar, 8–4000 caracteres.', pt: 'O texto a julgar, 8–4000 caracteres.',
 };
 
 export const reqQuestionsDesc: Localized<string> = {

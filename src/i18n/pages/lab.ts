@@ -1,7 +1,7 @@
 import type { Localized } from '../ui';
 
 export const title: Localized<string> = {
-  zh: '判定实验室：用真实场景测 clavue-jev',
+  zh: '练兵场：用真实场景试 clavue-jev',
   en: 'Judgment Lab: test clavue-jev on real scenarios',
   ja: '判定ラボ：実際のシナリオで clavue-jev を試す',
   ko: '판정 실험실: 실제 시나리오로 clavue-jev 테스트',
@@ -12,7 +12,7 @@ export const title: Localized<string> = {
 };
 
 export const description: Localized<string> = {
-  zh: '客服、账单、发布审查、合规分诊、招聘筛选、内容审核——从日常到商业的真实场景，免费在这里调一遍，满意了再进你的程序。',
+  zh: '客服、账单、发布审查、合规分诊、招聘筛选、内容审核——日常和商业里的真实情况，免费在这里试一遍，满意了再搬进你的程序。',
   en: 'Support triage, billing disputes, release review, compliance routing, candidate screening, content moderation — real daily and business scenarios. Tune them here for free, then ship them into your program.',
   ja: 'サポート仕分け、請求、リリース審査、コンプライアンス、候補者スクリーニング、コンテンツモデレーション——日常から業務までの実際のシナリオを無料で調整し、そのまま自分のプログラムへ。',
   ko: '고객 지원 분류, 청구 분쟁, 릴리스 검토, 컴플라이언스 라우팅, 지원자 스크리닝, 콘텐츠 검토—일상과 업무의 실제 시나리오를 여기서 무료로 조정하고 프로그램에 바로 적용하세요.',
@@ -23,7 +23,7 @@ export const description: Localized<string> = {
 };
 
 export const subtitle: Localized<string> = {
-  zh: '改题面、改输入，当场看判定怎么变。所有场景的请求形态都和 POST /v1/judge 一致，调好就能搬走。',
+  zh: '改问题、改输入，当场看判断怎么变。这里的请求写法和 POST /v1/judge 完全一样，调好就能搬走。',
   en: 'Edit the questions, edit the input, and see the judgment move on the spot. Every scenario uses the same shape as POST /v1/judge — tune it here, then take it with you.',
   ja: '質問と入力を編集して、判定の変化をその場で確認します。すべてのシナリオは POST /v1/judge と同じ形なので、調整後にそのまま持ち出せます。',
   ko: '질문과 입력을 편집하고 판정 변화를 즉시 확인하세요. 모든 시나리오는 POST /v1/judge와 같은 형태라 조정 후 그대로 가져갈 수 있습니다.',
@@ -34,7 +34,7 @@ export const subtitle: Localized<string> = {
 };
 
 export const stateLabel: Localized<string> = {
-  zh: '输入（state）', en: 'Input (state)', ja: '入力（state）', ko: '입력(state)', de: 'Eingabe (state)', fr: 'Entrée (state)', es: 'Entrada (state)', pt: 'Entrada (state)',
+  zh: '输入内容', en: 'Input (state)', ja: '入力（state）', ko: '입력(state)', de: 'Eingabe (state)', fr: 'Entrée (state)', es: 'Entrada (state)', pt: 'Entrada (state)',
 };
 
 /** 场景 tab 的本地化标签，术语对齐各语言 description。缺 key 时页面回退到英文 id。 */
@@ -180,7 +180,7 @@ export const recordsTitle: Localized<string> = {
 };
 
 export const recordsNote: Localized<string> = {
-  zh: '每天从覆盖语料补进实验室，并记下当次判定的选项和模型。这不是公开对照页的题库。',
+  zh: '每天自动补入新场景，并记下当次的选项和模型。这里不是公开对比页的题目。',
   en: 'The lab adds coverage scenarios each day and records that run’s choice and model. This is not the public comparison bank.',
   ja: 'ラボは毎日カバレッジ用例を追加し、その回の選択とモデルを記録します。公開比較の題庫ではありません。',
   ko: '랩은 매일 커버리지 시나리오를 더하고 그 실행의 선택과 모델을 기록합니다. 공개 비교 문제은행이 아닙니다.',
@@ -200,8 +200,8 @@ export const faqTitle: Localized<string> = {
 
 export const faq: Localized<[string, string][]> = {
   zh: [
-    ['实验室是免费的吗？', '是。这里的调用走匿名试用额度，每小时 20 次，不注册也能用。'],
-    ['和正式 API 有什么区别？', '请求形态完全一致。差别只在计费：正式调用用 API Key 走 /v1/judge，按输入 token 扣余额。'],
+    ['练兵场是免费的吗？', '是。这里的调用走匿名试用额度，每小时 20 次，不注册也能用。'],
+    ['和正式 API 有什么区别？', '请求写法完全一样。差别只在计费：正式调用用密钥走 /v1/judge，按输入字数扣余额。'],
     ['能测自己的业务场景吗？', '能。把你的文本贴进输入框，把问题改成你的业务判断，运行后即可看到结果。'],
     ['判定结果稳定吗？', '同一段输入可能有小幅波动。要不要更稳，可以用 confidence 问题观察把握程度，或在代码里设阈值。'],
   ],
