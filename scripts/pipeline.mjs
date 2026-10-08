@@ -471,11 +471,18 @@ const changes = DRY
       // 一旦被 trim 掉，按固定宽度切片就会切进文件名（实测切出 "cripts/..."）。
       // 必须比 HEAD 而不是默认的「工作区 vs 索引」：后者看不见已 git add 的改动，
       // 一旦有暂存文件，预览会谎报 "no pending changes"（实测确认）。
+      // 只统计会真正进发布的路径：.data/ 与未跟踪的 docs/coverage-full/ 是评测
+      // 产物，guard 豁免它们，STAGE_FILES 也不含它们——把 51 个噪音文件塞进
+      // 描述会让门 2 把「1456 files changed」误判为 High risk / not ready
+      // （2026-10-09 干跑实测 ready=0.0008，同描述去掉噪音后 ready=0.987）。
       const modified = run('git diff --name-only HEAD -- .').trim();
       const untracked = run('git ls-files --others --exclude-standard -- .').trim();
-      const files = [...modified.split('\n'), ...untracked.split('\n')].map((s) => s.trim()).filter(Boolean);
+      const files = [...modified.split('\n'), ...untracked.split('\n')]
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .filter((file) => !file.startsWith('.data/') && !file.startsWith('docs/coverage-full/'));
       if (!files.length) return 'dry-run: no pending changes';
-      const stat = run('git diff --stat HEAD -- .').trim().split('\n').slice(-1)[0] ?? '';
+      const stat = run('git diff --stat HEAD -- src/data data/builds public/data src').trim().split('\n').slice(-1)[0] ?? '';
       return `dry-run preview of ${files.length} pending file(s): ${files.slice(0, 4).join(', ')}${files.length > 4 ? ', …' : ''}${stat ? '; ' + stat : ''}`;
     })()
   : run('git log -1 --stat --oneline').trim().split('\n').slice(0, 5).join('; ');
