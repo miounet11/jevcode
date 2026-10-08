@@ -13,7 +13,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn, execFile } from 'node:child_process';
-import { mkdtempSync, rmSync, existsSync, writeFileSync, readdirSync } from 'node:fs';
+import { mkdtempSync, rmSync, existsSync, writeFileSync, readFileSync, readdirSync } from 'node:fs';
+import { blockingDirty } from './pipeline-guard.mjs';
+import { applyMetrics, insertEntries, mergeTweets, tweetsFromSearch } from './lib/community-x.mjs';
+import { nextScenarios } from './lib/lab-supplement.mjs';
 import { tmpdir } from 'node:os';
 import net from 'node:net';
 import path from 'node:path';
@@ -197,6 +200,92 @@ test('巡检：配了 ALERT_WEBHOOK_URL 时告警真的被 POST 出去', async (
   } finally {
     srv.close();
   }
+});
+
+test('日更脏区判断忽略 .data 和未跟踪的 coverage-full，拦住 src', () => {
+  const porcelain = [
+    ' M .data/runs/compare-log-hospitality-backup.jsonl',
+    '?? .data/runs/foo.jsonl',
+    '?? docs/coverage-full/extra.md',
+    ' M docs/coverage-full/SUMMARY.md',
+    ' M src/data/ecosystem.ts',
+  ].join('\n');
+  const blocking = blockingDirty(porcelain);
+  assert.equal(blocking.some((line) => line.includes('.data/')), false);
+  assert.equal(blocking.some((line) => line.includes('docs/coverage-full/extra.md')), false);
+  assert.ok(blocking.some((line) => line.includes('docs/coverage-full/SUMMARY.md')));
+  assert.ok(blocking.some((line) => line.includes('src/data/ecosystem.ts')));
+});
+
+test('社区指标原位替换，新推文去重并封顶', () => {
+  const src = [
+    'export const pulseEntries = [',
+    '  {',
+    '    id: "1",',
+    '    views: 10,',
+    '    likes: 2,',
+    '  },',
+    '];',
+    '',
+  ].join('\n');
+  const updated = applyMetrics(src, [{ id: '1', views: 11, likes: 3 }]);
+  assert.match(updated, /views: 11/);
+  assert.match(updated, /likes: 3/);
+  const incoming = tweetsFromSearch({
+    data: [
+      { id: '1', text: 'dup', author_id: 'u1', created_at: '2026-10-01T00:00:00.000Z', public_metrics: { impression_count: 5, like_count: 1 } },
+      { id: '2', text: 'Jev update', author_id: 'u2', created_at: '2026-10-02T00:00:00.000Z', public_metrics: { impression_count: 9, like_count: 4 } },
+      ...Array.from({ length: 10 }, (_, i) => ({
+        id: String(10 + i),
+        text: `post ${i}`,
+        author_id: 'u2',
+        created_at: '2026-10-03T00:00:00.000Z',
+        public_metrics: { impression_count: 1, like_count: 1 },
+      })),
+    ],
+    includes: { users: [{ id: 'u1', name: 'Ann', username: 'ann' }, { id: 'u2', name: 'Bo', username: 'bo' }] },
+  });
+  const added = mergeTweets(['1'], incoming, 8);
+  assert.equal(added.length, 8);
+  assert.equal(added.some((tweet) => tweet.id === '1'), false);
+  assert.equal(added[0].id, '2');
+  assert.equal(added[0].screenName, 'bo');
+  const inserted = insertEntries(updated, added.slice(0, 1));
+  assert.match(inserted, /id: "2"/);
+  assert.equal(inserted.match(/id: "2"/g).length, 1);
+});
+
+test('实验室补充不重复已有场景，也不把 cov- 写进对照题库', () => {
+  const coverage = [
+    { id: 'cov-a', context: 'hello world context', question: 'Q?', choices: ['yes', 'no'], accept: ['yes'] },
+    { id: 'cov-b', context: 'second context here', question: 'Q2?', choices: ['a', 'b', 'c'], accept: ['a'] },
+    { id: 'builtin', context: 'not a coverage id', question: 'q', choices: ['a', 'b'], accept: ['a'] },
+  ];
+  const out = nextScenarios(coverage, new Set(['builtin', 'cov-a']), 4);
+  assert.equal(out.length, 1);
+  assert.equal(out[0].id, 'cov-b');
+  assert.equal(out[0].questions.answer.type, 'choice');
+  assert.deepEqual(out[0].questions.answer.options, ['a', 'b', 'c']);
+  const index = JSON.parse(readFileSync(new URL('../server/case-index.json', import.meta.url), 'utf8'));
+  assert.equal(Object.keys(index).some((key) => key.startsWith('cov-')), false);
+});
+
+test('intake 监听 8791，nginx 不再把 intake 反代到 8787', () => {
+  const py = readFileSync(new URL('../deploy/intake/server.py', import.meta.url), 'utf8');
+  const example = readFileSync(new URL('../deploy/intake/intake.env.example', import.meta.url), 'utf8');
+  const nginx = readFileSync(new URL('../deploy/nginx/jevcode.conf', import.meta.url), 'utf8');
+  const health = readFileSync(new URL('./healthcheck.mjs', import.meta.url), 'utf8');
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  assert.match(py, /JEVCODE_INTAKE_PORT", "8791"/);
+  assert.match(example, /JEVCODE_INTAKE_PORT=8791/);
+  assert.match(health, /127\.0\.0\.1:8791\/api\/health/);
+  assert.doesNotMatch(health, /8787/);
+  assert.doesNotMatch(nginx, /proxy_pass http:\/\/127\.0\.0\.1:8787/);
+  assert.match(nginx, /proxy_pass http:\/\/127\.0\.0\.1:8791/);
+  assert.doesNotMatch(pipeline, /git add -A/);
+  assert.match(pipeline, /src\/data\/community\.ts/);
+  assert.match(pipeline, /src\/data\/lab-supplement\.json/);
+  assert.match(pipeline, /src\/data\/lab-records\.json/);
 });
 
 test('巡检：备份新鲜 → 通过（退出 0）', async () => {

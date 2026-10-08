@@ -9,21 +9,23 @@ export interface Props {
   lang: Lang;
   title: string;
   description?: string;
-  /** 用于 hreflang 与 canonical */
+  /** 用于 hreflang 与语言切换。canonical 默认也用它 */
   path: string;
+  /** 缺译文的回退页改指向已有语言的 URL，path 仍是当前语言路径 */
+  canonicalPath?: string;
   /** 登录、账户、404 不进索引 */
   index?: boolean;
   /** 首页和目录页自己渲染相关链接 */
   cluster?: boolean;
 }
 
-const { lang, title, description, path, index = true, cluster = true } = Astro.props;
+const { lang, title, description, path, index = true, cluster = true, canonicalPath } = Astro.props;
 const t = useTranslations(lang);
 const siteName = t('site.name');
 const fullTitle = title === siteName ? `${siteName} — ${t('site.tagline')}` : `${title} | ${siteName}`;
 const desc = description ?? t('site.description');
 
-const canonical = new URL(path, Astro.site).href;
+const canonical = new URL(canonicalPath ?? path, Astro.site).href;
 const altPaths: Record<string, string> = {};
 for (const l of Object.keys(languages) as Lang[]) {
   // 去掉已有的语言前缀（任意受支持语言），再拼目标语言

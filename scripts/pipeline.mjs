@@ -58,8 +58,25 @@ function say(msg) {
  *  动态卡片的两个产物同样由抓取阶段写入，必须一起还原。 */
 const FETCHED_FILES = [
   'src/data/ecosystem.ts',
+  'src/data/community.ts',
   'data/builds/cards.json',
   'public/data/jev-cards.json',
+  'src/data/lab-supplement.json',
+  'src/data/lab-records.json',
+];
+/** 允许进入自动提交的路径。其余工作区改动留在原地，不进这次发布。 */
+const STAGE_FILES = [
+  'src/data/ecosystem.ts',
+  'src/data/community.ts',
+  'data/builds/cards.json',
+  'public/data/jev-cards.json',
+  'src/data/lab-supplement.json',
+  'src/data/lab-records.json',
+];
+const SIDE_FILES = [
+  'src/data/community.ts',
+  'src/data/lab-supplement.json',
+  'src/data/lab-records.json',
 ];
 function restoreFetched() {
   if (SKIP_FETCH) return;
@@ -94,6 +111,59 @@ function refreshBuilds() {
   return after - before;
 }
 
+/** X 指标与新推文。失败只告警，不让生态抓取一起中止。 */
+function refreshCommunity() {
+  try {
+    const out = run('node scripts/fetch-community-x.mjs');
+    say(`community: ${String(out).trim().split('\n').pop()}`);
+  } catch (err) {
+    const tail = `${err.stdout ?? ''}\n${err.stderr ?? ''}`.trim().split('\n').slice(-6).join(' | ');
+    say(`WARN X 社区刷新失败（不阻塞生态发布）: ${tail.slice(0, 400)}`);
+  }
+}
+
+/** 实验室补充场景并记录 clavue-jev 的选项。失败只告警。 */
+function refreshLab() {
+  try {
+    say(`lab supplement: ${String(run('node scripts/supplement-lab.mjs')).trim()}`);
+  } catch (err) {
+    say(`WARN 实验室补充失败（不阻塞生态发布）: ${String(err.stdout || err.message).slice(0, 240)}`);
+  }
+  try {
+    say(`lab record: ${String(run('node scripts/record-lab.mjs')).trim()}`);
+  } catch (err) {
+    say(`WARN 实验室记录失败（不阻塞生态发布）: ${String(err.stdout || err.message).slice(0, 240)}`);
+  }
+}
+
+function porcelainPaths() {
+  return run('git status --porcelain').split('\n').map((line) => {
+    if (!line.trim()) return '';
+    let file = line.slice(3);
+    if (file.includes(' -> ')) file = file.slice(file.lastIndexOf(' -> ') + 4);
+    if (file.startsWith('"') && file.endsWith('"')) file = file.slice(1, -1);
+    return file;
+  }).filter(Boolean);
+}
+
+function hasSideContent() {
+  const paths = new Set(porcelainPaths());
+  return SIDE_FILES.some((file) => paths.has(file));
+}
+
+function checkoutFiles(files) {
+  for (const file of files) {
+    try {
+      if (run(`git status --porcelain -- ${file}`).trim()) {
+        run(`git checkout -- ${file}`);
+        say(`restored ${file}`);
+      }
+    } catch (err) {
+      say(`WARN 还原 ${file} 失败: ${err.message}`);
+    }
+  }
+}
+
 function run(cmd, opts = {}) {
   return execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...opts });
 }
@@ -104,7 +174,15 @@ async function judge(state, questions) {
   if (JUDGE_BACKEND === 'jev') {
     return judgeViaJev(state, questions);
   }
-  return judgeViaClavue(state, questions);
+  try {
+    return await judgeViaClavue(state, questions);
+  } catch (err) {
+    // 本地 clavue key 全部 401 时，日更不能停在门上。TypeSafe 是仓库里已经
+    // 配置的另一条判定，只在 clavue 明确拒绝 token 时顶上，并写进日志。
+    if (!/401/.test(String(err.message)) || !process.env.TYPESAFE_API_KEY) throw err;
+    say('WARN clavue judge 401，本轮改用 TypeSafe 判定');
+    return judgeViaJev(state, questions);
+  }
 }
 
 async function judgeViaJev(state, questions) {
@@ -249,72 +327,90 @@ if (!SKIP_FETCH) {
   // 动态卡片独立于生态门控：每条都由 build-jev-cards.mjs 判定过（自有产物 +
   // 确实用到 Jev + 标题必须是原文摘录），自身即质量门，不再过门 1。
   buildsAdded = refreshBuilds();
+  refreshCommunity();
+  refreshLab();
 }
 
 // 2. 门 1（含批量累积）
-// 生态数据没变化、但动态卡片有新增时，不该整轮跳过，否则 builds 长期不刷新。
-if (fetchReport.changes.length === 0 && !SKIP_FETCH && buildsAdded === 0) {
+// 星标没有跨过阈值时，社区指标、新推文和实验室补充仍要发布。
+// 星标文件和「只改了 updated 时间戳」的卡片不跟着这路出去。
+let publishEco = false;
+const sideReady = () => buildsAdded > 0 || hasSideContent();
+if (fetchReport.changes.length === 0 && !SKIP_FETCH && !sideReady()) {
   say('gate1: no changes, nothing to do');
   restoreFetched();
   writeLog('skipped-no-changes');
   process.exit(0);
 }
-// 生态数据没变化、只有 builds 新增时，门 1 无内容可判：直接进构建与门 2。
-// 不能落进下面的累积分支，否则 trigger 为假会 restoreFetched() 把刚判出的卡片还原掉。
-const skipGate1 = !SKIP_FETCH && fetchReport.changes.length === 0 && buildsAdded > 0;
+const skipGate1 = !SKIP_FETCH && fetchReport.changes.length === 0 && sideReady();
 if (skipGate1) {
-  say(`gate1: skipped (only builds changed, +${buildsAdded} cards) — 直接构建`);
+  say(`gate1: skipped (side updates only, builds +${buildsAdded}) — 直接构建`);
 } else {
   const pending = loadPending();
   const trigger = accumulate(fetchReport, pending);
   savePending(pending);
   say(`pending batch: ${Object.keys(pending.pending).length} repos, trigger=${trigger}`);
   if (!trigger) {
-    say('gate1: below magnitude threshold, accumulating');
-    restoreFetched();
-    writeLog('accumulating', { pending });
-    process.exit(0);
-  }
-  let g1;
-  try {
-    g1 = await gate1(fetchReport, pending, trigger);
-  } catch (err) {
-    say(`gate1 FAILED (${err.message}) — 还原抓取写入`);
-    restoreFetched();
-    process.exit(1);
-  }
-  const worth = g1.worth_publishing.noul >= 0.5;
-  say(`gate1: worth=${g1.worth_publishing.noul}`);
-  // 记下判定后端：出问题时能一眼看出这一轮是谁判的（此前日志完全没记，排查得靠猜）。
-  writeLog('gate1', { fetchReport, pending, trigger, backend: JUDGE_BACKEND, gate1: g1 });
-  if (!worth) {
-    say('gate1: HOLD — not publishing this cycle');
-    // HOLD 是 exit 0，cron 只在非零退出时告警，于是「连续多天不发布」和
-    // 「按设计跳过」在日志里长得一样（实测停摆数天无人察觉）。
-    // 落一个显眼标记：连续 HOLD 的次数、判定后端。
-    const holdFile = `.research/pipeline-logs/HOLD-${new Date().toISOString().slice(0, 10)}.txt`;
-    const prevHold = existsSync(holdFile) ? readFileSync(holdFile, 'utf8') : '';
-    const streak = prevHold.split('\n').filter((line) => line.startsWith('本轮 HOLD')).length + 1;
-    writeFileSync(holdFile, `${prevHold}本轮 HOLD #${streak} ` +
-      `worth=${g1.worth_publishing.noul.toFixed(3)} ` +
-      `backend=${JUDGE_BACKEND} pending=${Object.keys(pending.pending).length} trigger=${trigger}\n`);
-    say(`gate1: 连续 HOLD 第 ${streak} 轮，标记写入 ${holdFile}`);
-    restoreFetched();
-    process.exit(0);
+    if (!sideReady()) {
+      say('gate1: below magnitude threshold, accumulating');
+      restoreFetched();
+      writeLog('accumulating', { pending });
+      process.exit(0);
+    }
+    say('gate1: below magnitude; publishing community/lab/builds only');
+    writeLog('accumulating-side', { pending, buildsAdded });
+  } else {
+    let g1;
+    try {
+      g1 = await gate1(fetchReport, pending, trigger);
+    } catch (err) {
+      if (!sideReady()) {
+        say(`gate1 FAILED (${err.message}) — 还原抓取写入`);
+        restoreFetched();
+        process.exit(1);
+      }
+      say(`WARN gate1 FAILED (${err.message})；生态批次留下，社区/实验室继续`);
+      g1 = null;
+    }
+    if (g1) {
+      const worth = g1.worth_publishing.noul >= 0.5;
+      say(`gate1: worth=${g1.worth_publishing.noul}`);
+      writeLog('gate1', { fetchReport, pending, trigger, backend: JUDGE_BACKEND, gate1: g1 });
+      if (!worth) {
+        say('gate1: HOLD — ecosystem batch stays pending');
+        const holdFile = `.research/pipeline-logs/HOLD-${new Date().toISOString().slice(0, 10)}.txt`;
+        const prevHold = existsSync(holdFile) ? readFileSync(holdFile, 'utf8') : '';
+        const streak = prevHold.split('\n').filter((line) => line.startsWith('本轮 HOLD')).length + 1;
+        writeFileSync(holdFile, `${prevHold}本轮 HOLD #${streak} ` +
+          `worth=${g1.worth_publishing.noul.toFixed(3)} ` +
+          `backend=${JUDGE_BACKEND} pending=${Object.keys(pending.pending).length} trigger=${trigger}\n`);
+        say(`gate1: 连续 HOLD 第 ${streak} 轮，标记写入 ${holdFile}`);
+        if (!sideReady()) {
+          restoreFetched();
+          process.exit(0);
+        }
+        say('gate1 HOLD; publishing community/lab/builds only');
+      } else {
+        publishEco = true;
+      }
+    }
   }
 }
 
-// 3. 提交
-const dirty = run('git status --porcelain').trim();
-if (!dry_has_changes(dirty)) {
-  say('no uncommitted changes after fetch; nothing to release');
+// 3. 提交。只暂存白名单里这一轮真正要发的文件。
+if (!publishEco) checkoutFiles(['src/data/ecosystem.ts']);
+if (buildsAdded === 0) checkoutFiles(['data/builds/cards.json', 'public/data/jev-cards.json']);
+const stage = porcelainPaths().filter((file) => STAGE_FILES.includes(file));
+if (!stage.length) {
+  say('no whitelisted changes to release');
   restoreFetched();
   process.exit(0);
 }
 if (!DRY) {
-  run('git add -A');
-  run('git commit -m "chore(eco): 生态数据自动刷新 (' + new Date().toISOString().slice(0, 10) + ')" --quiet');
-  say('committed');
+  for (const file of stage) run(`git add -- ${file}`);
+  const stamp = new Date().toISOString().slice(0, 10);
+  run(`git commit -m ${JSON.stringify(`chore(eco): 生态数据自动刷新 (${stamp}): ${stage.join(', ')}`)} --quiet`);
+  say(`committed ${stage.join(', ')}`);
 }
 
 // 4. 构建 + 检查
@@ -334,8 +430,11 @@ if (buildOk) {
     // tail -3 会恰好切掉 "- 0 errors" 行导致永远 check=false（实测踩坑）。
     const checkOut = run('npm run check 2>&1');
     checkOk = /- 0 errors/.test(checkOut) && !/error ts\(/.test(checkOut);
-  } catch {
+    if (!checkOk) say(`check tail:\n${checkOut.split('\n').slice(-40).join('\n')}`);
+  } catch (err) {
     checkOk = false;
+    const blob = `${err.stdout ?? ''}\n${err.stderr ?? ''}`;
+    say(`check tail:\n${blob.split('\n').slice(-40).join('\n')}`);
   }
   linkReport = await linkCheck();
   // i18n 完整性：i18n-gaps.mjs 退出码 1 表示有缺口（它本就是为 CI 卡点写的）。
@@ -422,6 +521,12 @@ p.last_release = new Date().toISOString();
 savePending(p);
 say(`pending batch cleared (${cleared} repos)`);
 writeLog('released', { cleared });
+try {
+  const out = run('node scripts/indexnow-submit.mjs');
+  say(`indexnow: ${String(out).trim().split('\n').slice(-3).join(' | ')}`);
+} catch (err) {
+  say(`WARN IndexNow 提交失败（不回滚已发布版本）: ${String(err.stdout || err.message).slice(0, 240)}`);
+}
 
 // ---------- helpers ----------
 function dry_has_changes(d) {

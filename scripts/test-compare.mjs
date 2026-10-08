@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
 import { clearingMoves, hasMatch, makePuzzle, swap } from '../src/lib/match3.mjs';
 import { buildRecord, cleanCompareItems, readOfficial, readOmniRow, runCompare } from '../server/compare.mjs';
 
@@ -9,6 +10,13 @@ const sample = {
   question: 'Does this message convey urgency?',
   choices: ['yes', 'no'],
 };
+
+test('case-index does not contain coverage corpus ids', () => {
+  const index = JSON.parse(readFileSync(new URL('../server/case-index.json', import.meta.url), 'utf8'));
+  const keys = Object.keys(index);
+  assert.ok(keys.length > 0);
+  assert.equal(keys.some((key) => key.startsWith('cov-')), false);
+});
 
 test('cleanCompareItems accepts a choice question and rejects duplicates', () => {
   assert.equal(cleanCompareItems([sample])?.length, 1);

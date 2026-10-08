@@ -11,6 +11,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 /** 语言前缀集合，用于识别 URL 形态 */
@@ -63,6 +64,39 @@ function lastmodFor(pathname) {
   const value = result ?? repoLatestTime();
   cache.set(pathname, value);
   return value;
+}
+
+const DOC_RE = /^\/([a-z]{2})\/(cases|concepts|patterns|primitives|sdk)\/([a-z0-9-]+)\/$/;
+const ROOT_DOC_RE = /^\/([a-z]{2})\/(introduction|quickstart)\/$/;
+
+/**
+ * sitemap filter。缺源文件的语言页不进 sitemap：它们只是英文回退，
+ * 仍带着自己的 canonical 会把同一篇文档拆成 8 个「刚更新」的 URL。
+ * community 详情只留 en/zh。login / account / 404 不收录。
+ * @param {string} page
+ */
+export function sitemapInclude(page) {
+  let pathname = page;
+  try {
+    pathname = new URL(page).pathname;
+  } catch {
+    /* 调用方已经传入路径 */
+  }
+  if (!pathname.endsWith('/')) pathname = `${pathname}/`;
+  if (pathname.includes('/login') || pathname.includes('/account') || pathname.includes('/404')) {
+    return false;
+  }
+  const community = pathname.match(/^\/([a-z]{2})\/community\/\d+\/$/);
+  if (community && community[1] !== 'en' && community[1] !== 'zh') return false;
+  const doc = pathname.match(DOC_RE);
+  if (doc) {
+    return existsSync(path.join(repoRoot, 'src/content/docs', doc[1], doc[2], `${doc[3]}.md`));
+  }
+  const rootDoc = pathname.match(ROOT_DOC_RE);
+  if (rootDoc) {
+    return existsSync(path.join(repoRoot, 'src/content/docs', rootDoc[1], `${rootDoc[2]}.md`));
+  }
+  return true;
 }
 
 /** sitemap 插件的 serialize 钩子：item = { url, ... } */

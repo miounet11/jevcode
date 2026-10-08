@@ -121,7 +121,7 @@ const translatedNotice = sourceLangLabel
   : undefined;
 ---
 
-<BaseLayout lang={lang} title={entry.data.title} description={entry.data.description} path={path}>
+<BaseLayout lang={lang} title={entry.data.title} description={entry.data.description} path={path} index={!isFallback} canonicalPath={isFallback ? `/en/${slug}/` : undefined}>
   <div class="wrap docs-shell">
     <Sidebar lang={lang} currentId={isFallback ? id : entry.id} />
 

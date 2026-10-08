@@ -17,7 +17,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 
-const { lastmodSerialize } = await import('./sitemap-lastmod.mjs');
+const { lastmodSerialize, sitemapInclude } = await import('./sitemap-lastmod.mjs');
 
 const gitTime = (p) =>
   execFileSync('git', ['log', '-1', '--format=%cI', '--', p]).toString().trim();
@@ -67,4 +67,13 @@ test('结尾无斜杠的 URL 也能匹配', () => {
   const withSlash = lastmodSerialize({ url: url('/en/sdk/python/') });
   const noSlash = lastmodSerialize({ url: url('/en/sdk/python') });
   assert.equal(noSlash.lastmod, withSlash.lastmod);
+});
+
+test('sitemap 丢掉没有源 markdown 的语言 URL', () => {
+  assert.equal(sitemapInclude(url('/zh/cases/content-moderation/')), false);
+  assert.equal(sitemapInclude(url('/en/cases/content-moderation/')), true);
+  assert.equal(sitemapInclude(url('/zh/cases/jev-alternatives/')), true);
+  assert.equal(sitemapInclude(url('/ja/community/2101000339948282090/')), false);
+  assert.equal(sitemapInclude(url('/en/community/2101000339948282090/')), true);
+  assert.equal(sitemapInclude(url('/en/login/')), false);
 });

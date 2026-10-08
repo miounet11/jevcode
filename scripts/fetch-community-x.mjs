@@ -1,136 +1,206 @@
 #!/usr/bin/env node
 /**
- * 社区脉搏数据刷新：从 X API v2 批量刷新 src/data/community.ts 的 views / likes。
+ * 社区脉搏刷新：更新已有推文的 views/likes，并按上限补入 X 近期相关推文。
  *
  * 用法：node scripts/fetch-community-x.mjs [--check]
- *   --check 只输出 diff（JSON），不写文件
+ *   --check 只输出 JSON，不写文件
  *
- * Token：环境变量 X_BEARER_TOKEN 优先，否则读 .pipeline/x_token.txt（gitignored）。
+ * Token：X_BEARER_TOKEN，否则 .pipeline/x_token.txt（gitignored）。不要打印 token。
  *
- * 省配额设计：批量端点 GET /2/tweets?ids=a,b,c（≤100 id/次），
- * 144 条推文全量刷新只需 2 次调用；单条 GET 是 450/15min，批量同理，远够用。
- * 只取 tweet.fields=public_metrics，不 expansions、不 user fields，最小响应体。
+ * 新推文：GET /2/tweets/search/recent。有 CLAVUE_API_KEYS 时逐条问是否与
+ * Jev / TypeSafe / clavue / noul 相关；没有判定 key 时只刷新指标、不写入新推文。
+ * 搜索 400/403 只告警，已有指标仍会刷新。单轮最多新增 8 条，不删除已下线的旧推文。
  */
 
-import { readFileSync, writeFileSync } from 'node:fs';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import {
+  applyMetrics,
+  extractIds,
+  insertEntries,
+  mergeTweets,
+  metricsOf,
+  tweetsFromSearch,
+} from './lib/community-x.mjs';
 
-const CHECK = process.argv.includes('--check');
 const SRC = 'src/data/community.ts';
+const SEARCH_QUERY = '(Jev OR jev) (TypeSafe OR typesafe OR clavue OR noul) -is:retweet';
+const NEW_CAP = 8;
 
 function loadToken() {
   if (process.env.X_BEARER_TOKEN) return process.env.X_BEARER_TOKEN.trim();
-  const p = '.pipeline/x_token.txt';
-  if (existsSync(p)) return readFileSync(p, 'utf8').trim();
-  console.error('错误：未找到 token（设 X_BEARER_TOKEN 或写 .pipeline/x_token.txt）');
-  process.exit(1);
+  const file = '.pipeline/x_token.txt';
+  if (existsSync(file)) return readFileSync(file, 'utf8').trim();
+  return '';
 }
 
-const TOKEN = loadToken();
-
-// 提取全部推文 id（条目 id 与 url 中的 status id 一致，已验证 144/144）
-const src = readFileSync(SRC, 'utf8');
-const ids = [...src.matchAll(/id: "(\d+)"/g)].map((m) => m[1]);
-if (ids.length === 0) {
-  console.error('错误：community.ts 中未提取到任何 id');
-  process.exit(1);
-}
-const uniqueIds = [...new Set(ids)];
-if (uniqueIds.length !== ids.length) {
-  console.error(`错误：id 有重复（${ids.length} 条中出现 ${uniqueIds.length} 个唯一值），中止以防错写`);
-  process.exit(1);
-}
-console.error(`发现 ${uniqueIds.length} 条推文`);
-
-// 批量拉取，100 id/次
-function chunks(arr, n) {
+function chunks(arr, size) {
   const out = [];
-  for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
   return out;
 }
 
-/** public_metrics 里的浏览量字段名历经改动（impressions/impression_count/views），
- *  全部兜住，取第一个存在的数值。 */
-function viewsOf(pm) {
-  for (const k of ['impression_count', 'impressions', 'views']) {
-    const v = pm?.[k];
-    if (typeof v === 'number') return v;
-    if (v && typeof v === 'object' && typeof v.count === 'number') return v.count;
-  }
-  return undefined;
-}
-
-const fresh = new Map(); // id -> { views, likes }
-const gone = new Set(); // 已删除/不可见的 id
-let remainingHeader = null;
-
-for (const chunk of chunks(uniqueIds, 100)) {
-  const url = `https://api.twitter.com/2/tweets?ids=${chunk.join(',')}&tweet.fields=public_metrics`;
+async function xGet(token, url) {
   const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${TOKEN}`, 'User-Agent': 'jevcode-pipeline' },
+    headers: { Authorization: `Bearer ${token}`, 'User-Agent': 'jevcode-pipeline' },
   });
-  remainingHeader = res.headers.get('x-rate-limit-remaining');
-  if (res.status === 401 || res.status === 403) {
-    console.error(`错误：token 无效或无权限（HTTP ${res.status}）`);
+  const text = await res.text();
+  let body = null;
+  try { body = text ? JSON.parse(text) : null; } catch { body = { raw: text.slice(0, 180) }; }
+  return { status: res.status, body, remaining: res.headers.get('x-rate-limit-remaining') };
+}
+
+async function relevantByClavue(tweet, key) {
+  const url = process.env.CLAVUE_URL ?? 'https://api.clavue.com/v1/judge';
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      question: 'Is this post about Jev, TypeSafe, clavue, or noul?',
+      context: String(tweet.text ?? '').slice(0, 500),
+      choices: ['no', 'yes'],
+    }),
+  });
+  if (!res.ok) return { status: res.status, ok: false };
+  const body = await res.json();
+  const yes = body.probabilities?.yes ?? (body.choice === 'yes' ? 1 : 0);
+  return { status: 200, ok: yes >= 0.5 };
+}
+
+async function relevantByTypesafe(tweet) {
+  const key = process.env.TYPESAFE_API_KEY;
+  if (!key) return { status: 0, ok: false };
+  const res = await fetch('https://api.typesafe.ai/v1/systemone', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      state: String(tweet.text ?? '').slice(0, 500),
+      model: process.env.TYPESAFE_MODEL || 'jev-latest',
+      questions: {
+        about: {
+          type: 'choice',
+          instructions: 'Is this post about Jev, TypeSafe, clavue, or noul?',
+          criteria: {
+            yes: 'The post is about Jev, TypeSafe, clavue, or noul',
+            no: 'The post is about something else',
+          },
+        },
+      },
+    }),
+  });
+  if (!res.ok) return { status: res.status, ok: false };
+  const body = await res.json();
+  return { status: 200, ok: body.answers?.about?.choice === 'yes' };
+}
+
+/** 有判定才放行。clavue key 被拒绝时改用已配置的 TypeSafe，仍不写入未判定推文。 */
+async function keepRelevant(tweets) {
+  const keys = (process.env.CLAVUE_API_KEYS ?? '').split(',').map((key) => key.trim()).filter(Boolean);
+  if (!keys.length && !process.env.TYPESAFE_API_KEY) {
+    return { kept: [], warn: 'no judge key; refreshed metrics only, new posts not added' };
+  }
+  const kept = [];
+  let warn = null;
+  let useTypesafe = keys.length === 0;
+  for (const tweet of tweets) {
+    if (kept.length >= NEW_CAP) break;
+    let result;
+    if (!useTypesafe) {
+      result = await relevantByClavue(tweet, keys[0]);
+      if (result.status === 401 && process.env.TYPESAFE_API_KEY) {
+        useTypesafe = true;
+        warn = 'clavue judge 401; gated new posts with TypeSafe';
+        result = await relevantByTypesafe(tweet);
+      }
+    } else {
+      result = await relevantByTypesafe(tweet);
+    }
+    if (result.status !== 200) {
+      return { kept, warn: warn ?? `judge HTTP ${result.status || 'unavailable'}; stopped adding new posts` };
+    }
+    if (result.ok) kept.push(tweet);
+  }
+  return { kept, warn };
+}
+
+export async function refreshCommunity({ token, check = false, src = readFileSync(SRC, 'utf8') } = {}) {
+  const report = {
+    tweet_count: 0,
+    metrics_updated: 0,
+    added: 0,
+    warn: null,
+    wrote: false,
+  };
+  if (!token) {
+    report.warn = 'missing X bearer token';
+    return report;
+  }
+  const ids = extractIds(src);
+  const uniqueIds = [...new Set(ids)];
+  report.tweet_count = uniqueIds.length;
+  if (uniqueIds.length !== ids.length) {
+    report.warn = 'duplicate ids in community.ts';
+    return report;
+  }
+
+  const fresh = [];
+  for (const chunk of chunks(uniqueIds, 100)) {
+    const url = `https://api.twitter.com/2/tweets?ids=${chunk.join(',')}&tweet.fields=public_metrics`;
+    const res = await xGet(token, url);
+    if (res.status === 401 || res.status === 403 || res.status === 429 || res.status >= 400) {
+      report.warn = `metrics HTTP ${res.status}`;
+      return report;
+    }
+    for (const tweet of res.body?.data ?? []) {
+      const metrics = metricsOf(tweet.public_metrics);
+      if (metrics.views === undefined || metrics.likes === undefined) continue;
+      fresh.push({ id: String(tweet.id), views: metrics.views, likes: metrics.likes });
+    }
+  }
+
+  let next = applyMetrics(src, fresh);
+  report.metrics_updated = fresh.filter((row) => {
+    const before = src.match(new RegExp(`id: "${row.id}",[\\s\\S]*?\\n    views: (\\d+),\\s*\\n    likes: (\\d+),`));
+    return before && (Number(before[1]) !== row.views || Number(before[2]) !== row.likes);
+  }).length;
+
+  const params = new URLSearchParams({
+    query: SEARCH_QUERY,
+    max_results: '10',
+    'tweet.fields': 'created_at,public_metrics',
+    expansions: 'author_id',
+    'user.fields': 'name,username',
+  });
+  const search = await xGet(token, `https://api.twitter.com/2/tweets/search/recent?${params}`);
+  let incoming = [];
+  if (search.status === 400 || search.status === 403 || search.status >= 400) {
+    report.warn = `search HTTP ${search.status}; metrics still applied`;
+  } else {
+    const gated = await keepRelevant(tweetsFromSearch(search.body));
+    incoming = mergeTweets(extractIds(next), gated.kept, NEW_CAP);
+    if (gated.warn) report.warn = gated.warn;
+  }
+  if (incoming.length) {
+    next = insertEntries(next, incoming);
+    report.added = incoming.length;
+  }
+  report.wrote = next !== src;
+  if (report.wrote && !check) writeFileSync(SRC, next);
+  return report;
+}
+
+const isMain = process.argv[1]
+  && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
+
+if (isMain) {
+  const token = loadToken();
+  const report = await refreshCommunity({
+    token,
+    check: process.argv.includes('--check'),
+  });
+  console.log(JSON.stringify(report));
+  if (!token || report.warn === 'missing X bearer token' || report.warn === 'duplicate ids in community.ts' || /^metrics HTTP /.test(report.warn ?? '')) {
     process.exit(1);
   }
-  if (res.status === 429) {
-    const reset = Number(res.headers.get('x-rate-limit-reset') ?? 0);
-    console.error(`错误：429 限流${reset ? `，重置于 ${new Date(reset * 1000).toISOString()}` : ''}。批量刷新仅 2 次调用，等窗口重置即可。`);
-    process.exit(1);
-  }
-  if (!res.ok) {
-    console.error(`错误：HTTP ${res.status} ${await res.text().catch(() => '')}`);
-    process.exit(1);
-  }
-  const j = await res.json();
-  for (const t of j.data ?? []) {
-    const pm = t.public_metrics ?? {};
-    fresh.set(t.id, { views: viewsOf(pm), likes: pm.like_count ?? pm.likes });
-  }
-  // 不在 data 里的 id 即已删除/不可见（响应 errors 数组会说明），跳过不写
-  for (const e of j.errors ?? []) {
-    if (e.resource_id) gone.add(e.resource_id);
-  }
 }
-
-console.error(`API 返回 ${fresh.size} 条，不可见/已删除 ${gone.size} 条；本轮剩余配额 x-rate-limit-remaining: ${remainingHeader}`);
-if (gone.size) console.error(`不可见 id：${[...gone].join(', ')}`);
-
-// 与现值 diff：按 id 定位块，块内唯一 views/likes 行原位替换
-const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const changes = [];
-const updates = []; // { id, views, likes }
-for (const id of uniqueIds) {
-  if (gone.has(id)) continue;
-  const f = fresh.get(id);
-  if (!f || f.views === undefined || f.likes === undefined) {
-    console.error(`警告：id ${id} 缺 metrics，跳过`);
-    continue;
-  }
-  const re = new RegExp(`(id: "${esc(id)}",[\\s\\S]*?\\n    views: )(\\d+)(,\\s*\\n    likes: )(\\d+)(,)`);
-  const m = src.match(re);
-  if (!m) {
-    console.error(`警告：id ${id} 未匹配到条目块，跳过`);
-    continue;
-  }
-  const oldViews = Number(m[2]);
-  const oldLikes = Number(m[4]);
-  if (oldViews !== f.views || oldLikes !== f.likes) {
-    changes.push({ id, views: `${oldViews} -> ${f.views}`, likes: `${oldLikes} -> ${f.likes}` });
-    updates.push({ id, views: f.views, likes: f.likes });
-  }
-}
-
-if (CHECK || changes.length === 0) {
-  console.log(JSON.stringify({ tweet_count: uniqueIds.length, changed: changes.length, changes }, null, 2));
-  process.exit(0);
-}
-
-let out = src;
-for (const u of updates) {
-  const re = new RegExp(`(id: "${esc(u.id)}",[\\s\\S]*?\\n    views: )\\d+(,\\s*\\n    likes: )\\d+(,)`);
-  out = out.replace(re, `$1${u.views}$2${u.likes}$3`);
-}
-writeFileSync(SRC, out);
-console.log(JSON.stringify({ tweet_count: uniqueIds.length, files_updated: 1, entries_updated: updates.length, changes }, null, 2));

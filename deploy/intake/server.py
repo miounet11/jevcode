@@ -28,7 +28,7 @@ from pathlib import Path
 TOKEN = os.environ.get("JEVCODE_INTAKE_TOKEN", "")
 INBOX = Path(os.environ.get("JEVCODE_INTAKE_INBOX", "/var/lib/jevcode-intake/inbox"))
 BIND = os.environ.get("JEVCODE_INTAKE_BIND", "127.0.0.1")
-PORT = int(os.environ.get("JEVCODE_INTAKE_PORT", "8787"))
+PORT = int(os.environ.get("JEVCODE_INTAKE_PORT", "8791"))
 
 # 单次请求体积上限；nginx 侧另有 client_max_body_size，两层都设防
 MAX_BODY = 512 * 1024

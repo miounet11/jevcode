@@ -7,7 +7,7 @@
  *
  * 检查项：
  *   - systemd 单元是否 active（jevcode-playground、jevcode-intake、nginx）
- *   - 本机 HTTP 健康端点（playground :8790/health、intake :8787/api/health）
+ *   - 本机 HTTP 健康端点（playground :8790/health、intake :8791/api/health）
  *   - 公网端点 https://www.jevcode.ai/api/health
  *   - 账号库备份新鲜度（最新快照是否在 BACKUP_MAX_AGE_MIN 分钟内）
  *
@@ -27,7 +27,7 @@ const UNIT_NAMES = process.env.HEALTHCHECK_UNITS === undefined
   : splitCsv(process.env.HEALTHCHECK_UNITS);
 
 const HTTP_TARGETS = process.env.HEALTHCHECK_HTTP === undefined
-  ? ['http://127.0.0.1:8790/health', 'http://127.0.0.1:8787/api/health', 'https://www.jevcode.ai/api/health']
+  ? ['http://127.0.0.1:8790/health', 'http://127.0.0.1:8791/api/health', 'https://www.jevcode.ai/api/health']
   : splitCsv(process.env.HEALTHCHECK_HTTP);
 
 const TIMEOUT_MS = Number(process.env.HEALTHCHECK_TIMEOUT_MS || 8000);

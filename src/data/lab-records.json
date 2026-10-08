@@ -1,0 +1,30 @@
+[
+  {
+    "id": "cov-ecommerce-urgency-01",
+    "ts": "2026-10-08T11:52:39.165Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "jev-1.13.0"
+  },
+  {
+    "id": "cov-ecommerce-urgency-02",
+    "ts": "2026-10-08T11:52:40.028Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "jev-1.13.0"
+  },
+  {
+    "id": "cov-ecommerce-urgency-03",
+    "ts": "2026-10-08T11:52:40.902Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "jev-1.13.0"
+  },
+  {
+    "id": "cov-ecommerce-urgency-04",
+    "ts": "2026-10-08T11:52:41.772Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "jev-1.13.0"
+  }
+]

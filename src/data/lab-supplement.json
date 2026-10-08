@@ -1,0 +1,58 @@
+[
+  {
+    "id": "cov-ecommerce-urgency-01",
+    "state": "Ticket: buyer reports the order is failing right now and needs it fixed today.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-urgency-02",
+    "state": "Chat message: Production product listing has been down 20 minutes; customers are blocked.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-urgency-03",
+    "state": "Email received: A page just fired: primary database refusing connections for the order.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-urgency-04",
+    "state": "Review posted: chargeback detected in production, GMV degrading by the minute.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
+  }
+]

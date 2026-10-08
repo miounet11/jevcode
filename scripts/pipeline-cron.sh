@@ -177,11 +177,23 @@ if ! git_status_out="$(git status --porcelain 2>&1)"; then
   mark ALERT "管线前置检查失败：git status 无法执行（工作区状态未知）"
   exit 1
 fi
-if [[ -n "$git_status_out" ]]; then
-  echo "[cron] 工作区不干净，跳过本轮（避免卷入手工改动）"
-  mark SKIPPED "管线跳过整轮：工作区不干净（存在未提交改动）"
+# .data/ 和未跟踪的 docs/coverage-full/ 不挡住日更。src/、public/ 以及
+# 已跟踪的 coverage-full 修改仍然整轮跳过，避免把手工改动发布出去。
+set +e
+blocking="$(printf '%s\n' "$git_status_out" | node scripts/pipeline-guard.mjs)"
+guard_code=$?
+set -e
+if [[ "$guard_code" -eq 2 ]]; then
+  echo "[cron] 工作区有会进入发布的改动，跳过本轮"
+  echo "$blocking"
+  mark SKIPPED "管线跳过整轮：工作区有会进入发布的未提交改动"
   streak_check
   exit 0
+fi
+if [[ "$guard_code" -ne 0 ]]; then
+  echo "[cron] 致命：脏区判断失败（退出码 ${guard_code}）"
+  mark ALERT "管线前置检查失败：脏区判断失败"
+  exit 1
 fi
 
 # 运行超时护栏：成功一轮实测约 3.7 分钟（released elapsed_ms=223074），但抓取

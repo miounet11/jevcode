@@ -168,6 +168,28 @@ export const answersTitle: Localized<string> = {
   zh: '判定结果', en: 'Answers', ja: '判定結果', ko: '판정 결과', de: 'Antworten', fr: 'Réponses', es: 'Respuestas', pt: 'Respostas',
 };
 
+export const recordsTitle: Localized<string> = {
+  zh: '已记录的补充场景',
+  en: 'Recorded supplements',
+  ja: '記録した追加シナリオ',
+  ko: '기록된 추가 시나리오',
+  de: 'Aufgezeichnete Ergänzungen',
+  fr: 'Scénarios enregistrés',
+  es: 'Escenarios registrados',
+  pt: 'Cenários registrados',
+};
+
+export const recordsNote: Localized<string> = {
+  zh: '每天从覆盖语料补进实验室，并记下当次判定的选项和模型。这不是公开对照页的题库。',
+  en: 'The lab adds coverage scenarios each day and records that run’s choice and model. This is not the public comparison bank.',
+  ja: 'ラボは毎日カバレッジ用例を追加し、その回の選択とモデルを記録します。公開比較の題庫ではありません。',
+  ko: '랩은 매일 커버리지 시나리오를 더하고 그 실행의 선택과 모델을 기록합니다. 공개 비교 문제은행이 아닙니다.',
+  de: 'Das Lab ergänzt täglich Abdeckungsfälle und speichert die Wahl und das Modell dieses Laufs. Das ist nicht die öffentliche Vergleichsbank.',
+  fr: 'Le lab ajoute chaque jour des cas de couverture et enregistre le choix et le modèle de ce passage. Ce n’est pas la banque de comparaison publique.',
+  es: 'El laboratorio añade cada día casos de cobertura y registra la elección y el modelo de esa pasada. No es el banco público de comparación.',
+  pt: 'O laboratório acrescenta casos de cobertura por dia e registra a escolha e o modelo dessa rodada. Não é o banco público de comparação.',
+};
+
 export const apiTitle: Localized<string> = {
   zh: '请求形态（与 POST /v1/judge 一致）', en: 'Request shape (same as POST /v1/judge)', ja: 'リクエスト形（POST /v1/judge と同じ）', ko: '요청 형태(POST /v1/judge와 동일)', de: 'Anfrageform (wie POST /v1/judge)', fr: 'Forme de la requête (identique à POST /v1/judge)', es: 'Forma de la petición (igual que POST /v1/judge)', pt: 'Forma da requisição (igual ao POST /v1/judge)',
 };

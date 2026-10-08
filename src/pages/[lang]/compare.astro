@@ -85,6 +85,7 @@ const counts = compareCases.reduce<Record<string, number>>((acc, item) => {
 </BaseLayout>
 
 <script>
+// @ts-nocheck
   import { compareCases } from '../../data/compare-cases';
   import { makePuzzle } from '../../lib/match3.mjs';
   const clientCopy = JSON.parse(document.getElementById('cmp-copy')?.textContent || '{}');

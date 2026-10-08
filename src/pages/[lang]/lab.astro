@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { languages, pick, type Lang } from '../../i18n/ui';
 import * as labCopy from '../../i18n/pages/lab';
+import labSupplement from '../../data/lab-supplement.json';
+import labRecords from '../../data/lab-records.json';
 
 export const prerender = true;
 
@@ -31,7 +33,7 @@ const faqLd = {
   })),
 };
 
-const scenarios: { id: string; state: string; questions: Record<string, unknown> }[] = [
+const builtinScenarios: { id: string; state: string; questions: Record<string, unknown> }[] = [
   {
     id: 'support-triage',
     // 客服分诊：商业场景里最常见的第一步
@@ -170,6 +172,15 @@ const scenarios: { id: string; state: string; questions: Record<string, unknown>
     },
   },
 ];
+
+type LabScenario = { id: string; state: string; questions: Record<string, unknown> };
+const extraScenarios: LabScenario[] = (labSupplement as LabScenario[]).map((item) => ({
+  id: item.id,
+  state: item.state,
+  questions: item.questions,
+}));
+const scenarios: LabScenario[] = [...builtinScenarios, ...extraScenarios];
+const recordRows = labRecords as { id: string; ts: string; ok: boolean; choice: string | null; model?: string | null }[];
 ---
 <BaseLayout lang={lang} title={title} description={description} path={path}>
   <section class="section">
@@ -212,6 +223,23 @@ const scenarios: { id: string; state: string; questions: Record<string, unknown>
           <pre class="lab__code" id="lab-payload" tabindex="-1"></pre>
         </aside>
       </div>
+
+      {recordRows.length > 0 && (
+        <section class="lab__records">
+          <h2>{pick(lang, labCopy.recordsTitle)}</h2>
+          <p class="lab__hint">{pick(lang, labCopy.recordsNote)}</p>
+          <ul>
+            {recordRows.slice(-12).reverse().map((row) => (
+              <li>
+                <code>{row.id}</code>
+                <span>{row.ok ? row.choice : '—'}</span>
+                {row.model && <span>{row.model}</span>}
+                <time datetime={row.ts}>{row.ts.slice(0, 10)}</time>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <div class="lab__faq">
         <h2>{pick(lang, labCopy.faqTitle)}</h2>
@@ -349,7 +377,19 @@ const scenarios: { id: string; state: string; questions: Record<string, unknown>
   .lab { max-width: 980px; }
   .lab h1 { font-size: clamp(34px, 5vw, 52px); letter-spacing: -0.04em; margin: 12px 0; }
   .lab__lead { color: var(--fg-muted); max-width: 68ch; }
-  .lab__tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 18px; }
+  .lab__tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 18px; max-height: 240px; overflow: auto; }
+  .lab__records { margin-top: 28px; }
+  .lab__records ul { list-style: none; padding: 0; margin: 8px 0 0; }
+  .lab__records li {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: baseline;
+    font-size: 13px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .lab__records code { font-size: 12px; }
   .lab__tabs button {
     border: 1px solid var(--border-strong);
     border-radius: 999px;
