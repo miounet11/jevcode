@@ -5,7 +5,7 @@ export const title: Localized<string> = {
 };
 
 export const lead: Localized<string> = {
-  zh: '与 jev-1.13.0 同一计费方案：只按输入 token 计费，输出免费。每百万输入 token $0.042（每十亿 $42）。注册赠送 $5，按这个单价扣到用完。',
+  zh: '和 jev-1.13.0 同一个收费方案：只按输入收钱，输出免费。每百万输入 token $0.042（每十亿 $42）。注册就送 $5，按这个单价扣到用完。',
   en: 'Same billing as jev-1.13.0: input tokens only, output free. $0.042 per million input tokens ($42 per billion). Sign up and get $5, drawn at that rate until it runs out.',
   ja: 'jev-1.13.0 と同じ課金方式：入力トークンのみ、出力は無料。入力トークン 100 万あたり $0.042（10 億あたり $42）。登録で $5 が付き、同じ単価で使い切るまで差し引かれます。',
   ko: 'jev-1.13.0과 같은 과금 방식: 입력 토큰만, 출력 무료. 입력 토큰 100만 개당 $0.042(10억 개당 $42). 가입 시 $5가 지급되며 같은 단가로 소진될 때까지 차감됩니다.',
@@ -40,7 +40,7 @@ export const cta: Localized<string> = {
 };
 
 export const cols: Localized<{ item: string; value: string }> = {
-  zh: { item: '项目', value: '口径' },
+  zh: { item: '项目', value: '价格' },
   en: { item: 'Item', value: 'Rate' },
   ja: { item: '項目', value: '基準' },
   ko: { item: '항목', value: '기준' },
@@ -55,11 +55,11 @@ export const rows: Localized<[string, string][]> = {
   zh: [
     ['输入', '$0.042 / 百万 token（$42 / 十亿）'],
     ['输出', '$0'],
-    ['注册赠送', '${credit}，约 {tokens} 个输入 token'],
-    ['上下文（jev-1.13.0 公布）', '单次 64K token；state 与最长的问题各 32K'],
-    ['速率（jev-1.13.0 公布）', '100K token/s，40 请求/s，随负载调整'],
-    ['匿名试用', '每 IP 每小时 20 次，不计费'],
-    ['本站单次上限', 'state 最长 4000 字符，最多 6 个问题'],
+    ['注册赠送', '${credit}，约够写 {tokens} 个 token 的输入'],
+    ['一次能读多少（jev-1.13.0 公布）', '单次 64K token；情况说明和最长的问题各 32K'],
+    ['处理速度（jev-1.13.0 公布）', '每秒 100K token，每秒 40 次请求，随负载调整'],
+    ['不注册试用', '每个 IP 每小时 20 次，不扣钱'],
+    ['单次上限', '情况说明最长 4000 字，最多 6 个问题'],
   ],
   en: [
     ['Input', '$0.042 / million tokens ($42 / billion)'],
@@ -127,7 +127,7 @@ export const rows: Localized<[string, string][]> = {
 };
 
 export const note: Localized<string> = {
-  zh: '上游不返回 token 用量。已登录的调用按实际送出的内容计费：state 与 questions 的 JSON（选择题的 options 会先收成 criteria）拼在一起，按 UTF-8 字节数除以 4、向上取整，至少记 1 个 token。判定成功后才扣费。',
+  zh: '上游不返回 token 用量。已登录的调用按实际送出的内容收费：情况说明加问题的 JSON（选择题的选项会先收成 criteria）拼在一起，按 UTF-8 字节数除以 4、向上取整，至少记 1 个 token。判断成功才扣费。',
   en: 'The upstream call does not return token usage. Signed-in calls are metered on what we send: the state plus the questions JSON (choice options are folded into criteria first). UTF-8 bytes divided by 4, rounded up, at least 1 token. Charged only after a successful judgment.',
   ja: '上流はトークン使用量を返しません。ログイン済みの呼び出しは実際に送った内容で計量します：state と questions の JSON（選択問題の options は先に criteria へまとめます）を連結し、UTF-8 のバイト数を 4 で割って切り上げ、最低 1 トークン。判定が成功した後にのみ課金されます。',
   ko: '업스트림은 토큰 사용량을 반환하지 않습니다. 로그인한 호출은 실제로 보낸 내용으로 계량합니다: state와 questions의 JSON(선택 문제의 options는 먼저 criteria로 합칩니다)을 이어 붙여 UTF-8 바이트를 4로 나눈 뒤 올림, 최소 1토큰. 판정이 성공한 뒤에만 과금됩니다.',
@@ -140,3 +140,4 @@ export const note: Localized<string> = {
 export const back: Localized<string> = {
   zh: '先去试一次', en: 'Try a judgment first', ja: 'まず 1 回試す', ko: '먼저 한 번 시도', de: 'Zuerst eine ausprobieren', fr: "Essayer d'abord", es: 'Probar antes', pt: 'Testar antes',
 };
+

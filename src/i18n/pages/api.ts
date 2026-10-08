@@ -2,7 +2,7 @@ import type { Localized } from '../ui';
 
 /** lead 里含 {credit}/{rate} 插值，渲染时由调用点替换。 */
 export const lead: Localized<string> = {
-  zh: '用 API Key 从你的程序调用判定。注册即送 ${credit}。与 jev-1.13.0 相同：只按输入 token 计费，每百万 ${rate}，输出免费。',
+  zh: '用密钥在自己的程序里调用判断。注册就送 ${credit}。收费和 jev-1.13.0 相同：只按输入收钱，每百万 ${rate}，输出免费。',
   en: 'Call judgments from your own program with an API key. Sign up and get ${credit} in credit. Same as jev-1.13.0: input tokens only, ${rate} per million, output free.',
   ja: 'API Key を使って自分のプログラムから判定を呼び出します。登録で ${credit} 分のクレジットが付きます。jev-1.13.0 と同じく入力トークンのみ、100 万あたり ${rate}、出力は無料です。',
   ko: 'API Key로 자신의 프로그램에서 판정을 호출합니다. 가입 시 ${credit} 크레딧이 지급됩니다. jev-1.13.0과 같이 입력 토큰만, 100만 개당 ${rate}, 출력 무료입니다.',
@@ -47,7 +47,7 @@ export const endpointsTitle: Localized<string> = {
 };
 
 export const epJudge: Localized<string> = {
-  zh: '跑一次判定。按本次输入 token 计费，成功后才扣；上游失败不扣。',
+  zh: '跑一次判断。按本次输入收钱，成功才扣；上游失败不扣。',
   en: 'Run one judgment. Billed on the input tokens of this call, and only after it succeeds. Upstream failures are not charged.',
   ja: '判定を 1 回実行します。今回の入力トークンで課金され、成功後にのみ差し引かれます。上流の失敗は課金されません。',
   ko: '판정을 한 번 실행합니다. 이번 호출의 입력 토큰으로 과금되며 성공한 뒤에만 차감됩니다. 업스트림 실패는 과금되지 않습니다.',
