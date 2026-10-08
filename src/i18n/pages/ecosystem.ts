@@ -5,7 +5,7 @@ export const title: Localized<string> = {
 };
 
 export const lead: Localized<string> = {
-  zh: '围绕 Jev 与 TypeSafe System One 模型构建的公开项目。可按分类与语言筛选。',
+  zh: '大家在用 Jev 做的项目，可以按分类和语言筛选。',
   en: 'Public projects built around Jev and the TypeSafe System One model. Filter by category and language.',
   ja: 'Jev と TypeSafe System One モデルを中心にした公開プロジェクト。分類と言語で絞り込めます。',
   ko: 'Jev와 TypeSafe System One 모델을 중심으로 한 공개 프로젝트. 분류와 언어로 필터링할 수 있습니다.',
@@ -16,11 +16,11 @@ export const lead: Localized<string> = {
 };
 
 export const statProjects: Localized<string> = {
-  zh: '收录项目', en: 'Projects', ja: '収録プロジェクト', ko: '수록 프로젝트', de: 'Projekte', fr: 'Projets', es: 'Proyectos', pt: 'Projetos',
+  zh: '项目', en: 'Projects', ja: '収録プロジェクト', ko: '수록 프로젝트', de: 'Projekte', fr: 'Projets', es: 'Proyectos', pt: 'Projetos',
 };
 
 export const statStars: Localized<string> = {
-  zh: '合计 stars', en: 'Combined stars', ja: '合計 star', ko: '합계 star', de: 'Sterne gesamt', fr: 'Étoiles cumulées', es: 'Estrellas totales', pt: 'Estrelas totais',
+  zh: '星标总数', en: 'Combined stars', ja: '合計 star', ko: '합계 star', de: 'Sterne gesamt', fr: 'Étoiles cumulées', es: 'Estrellas totales', pt: 'Estrelas totais',
 };
 
 export const statLanguages: Localized<string> = {

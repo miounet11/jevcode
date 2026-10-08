@@ -12,7 +12,7 @@ export const title: Localized<string> = {
 };
 
 export const lead: Localized<string> = {
-  zh: 'Jev 正在被用来做什么：社区推文精选，看真实项目、演示与讨论。打开任一条可看到原文摘录全文与出处。',
+  zh: '大家在用 Jev 做什么：社区帖子精选。点开任意一条，看原话和出处。',
   en: 'What Jev is being used for: curated community posts — real projects, demos, and discussion. Open any entry for the full excerpt and its source.',
   ja: 'Jev が何に使われているか：コミュニティ投稿の抜粋。実際のプロジェクト、デモ、議論が見られます。各項目を開くと抜粋の全文と出典が読めます。',
   ko: 'Jev가 어디에 쓰이는지: 커뮤니티 게시물 선별. 실제 프로젝트, 데모, 토론을 볼 수 있습니다. 항목을 열면 발췌 전문과 출처를 볼 수 있습니다.',
@@ -23,11 +23,11 @@ export const lead: Localized<string> = {
 };
 
 export const stats: Localized<string> = {
-  zh: '条精选', en: 'entries', ja: '件の抜粋', ko: '개 항목', de: 'Einträge', fr: 'entrées', es: 'entradas', pt: 'entradas',
+  zh: '条', en: 'entries', ja: '件の抜粋', ko: '개 항목', de: 'Einträge', fr: 'entrées', es: 'entradas', pt: 'entradas',
 };
 
 export const open: Localized<string> = {
-  zh: '查看详情', en: 'Read entry', ja: '詳細を見る', ko: '자세히 보기', de: 'Eintrag lesen', fr: "Lire l'entrée", es: 'Leer entrada', pt: 'Ler entrada',
+  zh: '看详情', en: 'Read entry', ja: '詳細を見る', ko: '자세히 보기', de: 'Eintrag lesen', fr: "Lire l'entrée", es: 'Leer entrada', pt: 'Ler entrada',
 };
 
 export const asOf: Localized<string> = {
@@ -39,7 +39,7 @@ export const all: Localized<string> = {
 };
 
 export const note: Localized<string> = {
-  zh: '条目为英文原文摘录，筛选标准：显著传播量或附项目链接；经 Jev 批级相关性判定。',
+  zh: '都是英文原话摘录。入选标准：传播广或附项目链接，相关性由 Jev 批量判断。',
   en: 'Entries are excerpts of original posts. Inclusion bar: significant engagement or an attached project link; batch relevance judged by Jev.',
   ja: '項目は原文（英語）の抜粋です。採用基準は顕著な拡散量、またはプロジェクトリンクの添付。関連性は Jev のバッチ判定によります。',
   ko: '항목은 원문(영어) 발췌입니다. 선정 기준은 뚜렷한 확산량 또는 프로젝트 링크 첨부이며, 관련성은 Jev의 배치 판정으로 결정됩니다.',
@@ -51,7 +51,7 @@ export const note: Localized<string> = {
 
 /** 条目详情页（community/[id]）。 */
 export const detailNote: Localized<string> = {
-  zh: '条目为英文原文摘录，筛选标准：显著传播量或附项目链接；经 Jev 批级相关性判定。本站未逐条核实其真实性。',
+  zh: '都是英文原话摘录。入选标准：传播广或附项目链接，相关性由 Jev 批量判断。本站没有逐条核实。',
   en: 'Entries are excerpts of original posts. Inclusion bar: significant engagement or an attached project link; batch relevance judged by Jev. We have not independently verified each claim.',
   ja: '項目は原文（英語）の抜粋です。採用基準は顕著な拡散量、またはプロジェクトリンクの添付。関連性は Jev のバッチ判定によります。当サイトは各項目の真偽を個別に検証していません。',
   ko: '항목은 원문(영어) 발췌입니다. 선정 기준은 뚜렷한 확산량 또는 프로젝트 링크 첨부이며, 관련성은 Jev의 배치 판정으로 결정됩니다. 이 사이트는 각 항목의 진위를 개별적으로 검증하지 않았습니다.',

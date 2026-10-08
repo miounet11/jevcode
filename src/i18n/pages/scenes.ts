@@ -1,11 +1,11 @@
 import type { Localized } from '../ui';
 
 export const title: Localized<string> = {
-  zh: '现场', en: 'Live scenes', ja: 'ライブ', ko: '라이브', de: 'Live', fr: 'Scènes en direct', es: 'Escenas en vivo', pt: 'Cenas ao vivo',
+  zh: '实况演示', en: 'Live scenes', ja: 'ライブ', ko: '라이브', de: 'Live', fr: 'Scènes en direct', es: 'Escenas en vivo', pt: 'Cenas ao vivo',
 };
 
 export const description: Localized<string> = {
-  zh: '俄罗斯方块、六题连判和分拣。复制同一段调用，再用本站复测。',
+  zh: '俄罗斯方块、连环六判和分拣。看它怎么判断，再复制同一段代码自己跑。',
   en: 'Tetris, six rapid judgments, and a sort. Copy the call and run it here again.',
   ja: 'テトリス、6 問の連続判定、仕分け。同じ呼び出しをコピーして、当サイトで再実行できます。',
   ko: '테트리스, 6문항 연속 판정, 분류. 같은 호출을 복사해 이 사이트에서 다시 실행하세요.',
@@ -20,7 +20,7 @@ export const tabTetris: Localized<string> = {
 };
 
 export const tabRapid: Localized<string> = {
-  zh: '快速判断', en: 'Rapid', ja: '高速判定', ko: '빠른 판정', de: 'Schnell', fr: 'Rapide', es: 'Rápido', pt: 'Rápido',
+  zh: '连环六判', en: 'Rapid', ja: '高速判定', ko: '빠른 판정', de: 'Schnell', fr: 'Rapide', es: 'Rápido', pt: 'Rápido',
 };
 
 export const tabSort: Localized<string> = {
@@ -28,7 +28,7 @@ export const tabSort: Localized<string> = {
 };
 
 export const runHere: Localized<string> = {
-  zh: '用本站复测', en: 'Run it here', ja: '当サイトで再実行', ko: '이 사이트에서 재실행', de: 'Hier erneut ausführen', fr: 'Réexécuter ici', es: 'Ejecutar aquí', pt: 'Executar aqui',
+  zh: '在这页重跑', en: 'Run it here', ja: '当サイトで再実行', ko: '이 사이트에서 재실행', de: 'Hier erneut ausführen', fr: 'Réexécuter ici', es: 'Ejecutar aquí', pt: 'Executar aqui',
 };
 
 export const newBoard: Localized<string> = {
@@ -44,7 +44,7 @@ export const copyCode: Localized<string> = {
 };
 
 export const sideNote: Localized<string> = {
-  zh: '复测打到本站 /api/try，匿名每小时 20 次。带钥匙的正式调用是 POST /v1/judge。',
+  zh: '重跑走的是本站 /api/try，匿名每小时 20 次。正式调用带密钥，走 POST /v1/judge。',
   en: 'Retest posts to /api/try on this site, 20 anonymous calls an hour. The keyed call is POST /v1/judge.',
   ja: '再実行は当サイトの /api/try へ。匿名は 1 時間 20 回です。キー付きの正式な呼び出しは POST /v1/judge。',
   ko: '재실행은 이 사이트의 /api/try로 갑니다. 익명은 시간당 20회입니다. 키가 있는 정식 호출은 POST /v1/judge입니다.',
@@ -57,11 +57,11 @@ export const sideNote: Localized<string> = {
 /** 注入客户端脚本的文案。 */
 export const client: Localized<Record<string, unknown>> = {
   zh: {
-    waitTetris: '还没落子。复测后，横条会落到 clavue-jev 选的那一列。',
-    waitRapid: '六条消息还在台上。一次调用一起判断。',
-    waitSort: '六件事还在入口。一次调用分进四个格子。',
+    waitTetris: '还没开始。重跑后，横条会落到 clavue-jev 选的那一列。',
+    waitRapid: '六条消息在台上，一次调用全部判断。',
+    waitSort: '六件事在门口，一次调用分进四个格子。',
     running: 'clavue-jev 正在看…',
-    limit: '这一小时的试用次数用完了，过一会再测。',
+    limit: '这一小时的试用次数用完了，过一会再试。',
     copied: '已复制',
     copy: '复制代码',
     best: '落在最优列',

@@ -1,7 +1,7 @@
 import type { Localized } from '../ui';
 
 export const title: Localized<string> = {
-  zh: '站内目录',
+  zh: '网站地图',
   en: 'Site directory',
   ja: 'サイト内ディレクトリ',
   ko: '사이트 디렉터리',
@@ -12,7 +12,7 @@ export const title: Localized<string> = {
 };
 
 export const description: Localized<string> = {
-  zh: 'JevCode 的试用、文档、案例和价格都列在这一页。读完可以继续留在本站。',
+  zh: '试用、文档、案例和价格，一页找全。所有链接都在本站。',
   en: 'Every JevCode page for trying clavue-jev, reading the docs, and opening a case. The next link stays on this site.',
   ja: 'clavue-jev を試し、ドキュメントを読み、事例を開くための全ページをこの 1 ページに。次のリンクも当サイト内です。',
   ko: 'clavue-jev를 체험하고 문서를 읽고 사례를 여는 모든 페이지를 이 한 페이지에. 다음 링크도 이 사이트 안에 있습니다.',
@@ -23,7 +23,7 @@ export const description: Localized<string> = {
 };
 
 export const lead: Localized<string> = {
-  zh: '模型只有 clavue-jev。想马上看结果，去<a href="/{lang}/scenes/">现场</a>或<a href="/{lang}/try/">试一次判定</a>。想看怎么计费，去<a href="/{lang}/pricing/">价格</a>。想看写法，从<a href="/{lang}/quickstart/">快速开始</a>进文档。',
+  zh: '模型只有 clavue-jev。想马上看结果，去<a href="/{lang}/scenes/">实况演示</a>或<a href="/{lang}/try/">试一次判断</a>。想看怎么收费，去<a href="/{lang}/pricing/">价格</a>。想学写法，从<a href="/{lang}/quickstart/">快速开始</a>进文档。',
   en: 'The model is clavue-jev. For a result now, open <a href="/{lang}/scenes/">live scenes</a> or <a href="/{lang}/try/">try a judgment</a>. Billing is on <a href="/{lang}/pricing/">pricing</a>. The write-up starts at the <a href="/{lang}/quickstart/">quick start</a>.',
   ja: 'モデルは clavue-jev のみです。すぐに結果を見るなら<a href="/{lang}/scenes/">ライブ</a>か<a href="/{lang}/try/">判定を 1 回試す</a>へ。料金は<a href="/{lang}/pricing/">価格</a>、書き方は<a href="/{lang}/quickstart/">クイックスタート</a>からドキュメントへ。',
   ko: '모델은 clavue-jev뿐입니다. 결과를 바로 보려면 <a href="/{lang}/scenes/">라이브</a> 또는 <a href="/{lang}/try/">판정 한 번 시도</a>로 가세요. 요금은 <a href="/{lang}/pricing/">가격</a>, 작성법은 <a href="/{lang}/quickstart/">빠른 시작</a>에서 문서로 들어갑니다.',

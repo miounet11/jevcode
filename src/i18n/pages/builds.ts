@@ -5,7 +5,7 @@ export const title: Localized<string> = {
 };
 
 export const lead: Localized<string> = {
-  zh: '公开帖子原文由本站用 Jev 判定。标题必须是原文里的连续摘录；判定不通过的帖子不会出现。这不是本站核实过的生产案例。',
+  zh: '网上的帖子，本站用 Jev 判断后收录。标题必须是原话摘录，判断不过关的不会出现。内容不代表本站核实过的案例。',
   en: 'Public posts judged here with Jev. A title is kept only when it is a contiguous excerpt of the post. Posts that fail the judgment are omitted. This is not a verified production-case list.',
   ja: '公開投稿の原文を当サイトが Jev で判定します。タイトルは原文からの連続した抜粋でなければなりません。判定を通らない投稿は掲載されません。当サイトが検証した本番事例の一覧ではありません。',
   ko: '공개 게시물 원문을 이 사이트가 Jev로 판정합니다. 제목은 원문에서 연속된 발췌여야 합니다. 판정을 통과하지 못한 게시물은 표시되지 않습니다. 이 사이트가 검증한 프로덕션 사례 목록이 아닙니다.',
@@ -16,11 +16,11 @@ export const lead: Localized<string> = {
 };
 
 export const collected: Localized<string> = {
-  zh: '索引条目', en: 'Indexed posts', ja: '索引済み', ko: '색인 항목', de: 'Indexierte Beiträge', fr: 'Publications indexées', es: 'Publicaciones indexadas', pt: 'Publicações indexadas',
+  zh: '已收录', en: 'Indexed posts', ja: '索引済み', ko: '색인 항목', de: 'Indexierte Beiträge', fr: 'Publications indexées', es: 'Publicaciones indexadas', pt: 'Publicações indexadas',
 };
 
 export const analysed: Localized<string> = {
-  zh: '本站已判定', en: 'Judged here', ja: '当サイトで判定済み', ko: '이 사이트에서 판정함', de: 'Hier beurteilt', fr: 'Jugées ici', es: 'Juzgadas aquí', pt: 'Julgadas aqui',
+  zh: '已判断', en: 'Judged here', ja: '当サイトで判定済み', ko: '이 사이트에서 판정함', de: 'Hier beurteilt', fr: 'Jugées ici', es: 'Juzgadas aquí', pt: 'Julgadas aqui',
 };
 
 export const authors: Localized<string> = {
@@ -29,7 +29,7 @@ export const authors: Localized<string> = {
 
 /** 含插值 {date}，渲染时把快照更新时间填入。 */
 export const updated: Localized<string> = {
-  zh: '本站判定更新于 {date}。', en: 'Judged here at {date}.', ja: '当サイトの判定更新は {date}。', ko: '이 사이트의 판정 갱신: {date}.', de: 'Hier beurteilt am {date}.', fr: 'Jugées ici le {date}.', es: 'Juzgadas aquí el {date}.', pt: 'Julgadas aqui em {date}.',
+  zh: '判断更新于 {date}。', en: 'Judged here at {date}.', ja: '当サイトの判定更新は {date}。', ko: '이 사이트의 판정 갱신: {date}.', de: 'Hier beurteilt am {date}.', fr: 'Jugées ici le {date}.', es: 'Juzgadas aquí el {date}.', pt: 'Julgadas aqui em {date}.',
 };
 
 export const source: Localized<string> = {
