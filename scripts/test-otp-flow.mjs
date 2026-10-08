@@ -116,7 +116,9 @@ try {
     const r = await post('/api/auth/otp/verify', { email: EMAIL, code: wrong });
     ok('错码 → 401', r.status === 401, `得到 ${r.status}`);
     const me = await get('/api/auth/me');
-    ok('错码后仍未登录', me.status === 401, `得到 ${me.status}`);
+    // guest 站点：未登录是 200 + user:null（不再用 401 表达未登录）
+    const meb = await me.json().catch(() => ({}));
+    ok('错码后仍未登录', me.status === 200 && meb.user === null, `得到 ${me.status} ${JSON.stringify(meb)}`);
   }
 
   console.log('\n正确码登录（首次自动建号）');
@@ -173,7 +175,10 @@ try {
     const r = await post('/api/auth/logout');
     ok('登出 → 200', r.status === 200, `得到 ${r.status}`);
     const me = await get('/api/auth/me');
-    ok('登出后 /me → 401', me.status === 401, `得到 ${me.status}`);
+    // guest 站点：登出后是 200 + user:null
+    ok('登出后 /me → 200 + user:null', me.status === 200, `得到 ${me.status}`);
+    const mob = await me.json().catch(() => ({}));
+    ok('登出后 /me 返回 user:null', mob.user === null, JSON.stringify(mob));
   }
 } catch (e) {
   if (!/no mailer|no code/.test(String(e.message))) {

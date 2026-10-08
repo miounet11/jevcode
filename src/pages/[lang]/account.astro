@@ -182,8 +182,11 @@ const copy = {
   async function load() {
     try {
       const res = await fetch('/api/auth/me', { credentials: 'same-origin' });
+      // 未登录现在返回 200 + user:null（guest 站点不再用 401 表达未登录），
+      // 401 分支只兼容尚未重发布时的旧服务端。
       if (res.status === 401) { showSignedOut(); return; }
       const data = await res.json();
+      if (!data.user) { showSignedOut(); return; }
 
       msg.textContent = '';
       body.hidden = false;

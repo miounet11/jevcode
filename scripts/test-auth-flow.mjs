@@ -100,7 +100,10 @@ try {
   {
     cookie = '';
     const me1 = await get('/api/auth/me');
-    ok('无 Cookie 访问 /me → 401', me1.status === 401, `得到 ${me1.status}`);
+    // guest 站点：未登录是 200 + user:null（浏览器控制台不该出现 401 红字）
+    ok('无 Cookie 访问 /me → 200 + user:null', me1.status === 200, `得到 ${me1.status}`);
+    const me1b = await me1.json().catch(() => ({}));
+    ok('未登录 /me 返回 user:null', me1b.user === null, JSON.stringify(me1b));
 
     const bad = await post('/api/auth/login', { email: EMAIL, password: 'wrong-password' });
     ok('密码错误 → 401', bad.status === 401, `得到 ${bad.status}`);
@@ -209,7 +212,10 @@ try {
     const r = await post('/api/auth/logout');
     ok('登出 → 200', r.status === 200, `得到 ${r.status}`);
     const me = await get('/api/auth/me');
-    ok('登出后 /me → 401', me.status === 401, `得到 ${me.status}`);
+    // 登出后同样回到 200 + user:null
+    ok('登出后 /me → 200 + user:null', me.status === 200, `得到 ${me.status}`);
+    const mb2 = await me.json().catch(() => ({}));
+    ok('登出后 /me 返回 user:null', mb2.user === null, JSON.stringify(mb2));
   }
 } finally {
   child.kill('SIGTERM');

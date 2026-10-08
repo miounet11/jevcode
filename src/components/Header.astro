@@ -255,9 +255,14 @@ const themeToggleUi = {
     if (!accountLabel || !accountHref) return;
     try {
       const r = await fetch('/api/auth/me', { credentials: 'same-origin' });
+      // 未登录是 200 + user:null（guest 站点约定，不再用 401）。
+      // 旧服务端 401 时 r.ok 为 false，同样落回默认登录入口。
       if (r.ok) {
-        link.textContent = accountLabel;
-        link.href = accountHref;
+        const me = await r.json();
+        if (me.user) {
+          link.textContent = accountLabel;
+          link.href = accountHref;
+        }
       }
     } catch {
       /* 保持默认的登录入口 */

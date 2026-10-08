@@ -571,7 +571,10 @@ const server = createServer(async (req, res) => {
       if (req.method === 'GET' && url.pathname === '/api/auth/me') {
         const me = currentUser(req);
         if (!me) {
-          send(res, 401, { error: 'not signed in' });
+          // 站点允许 guest（/api/try 有匿名 IP 限频），「我是谁」探测未登录时
+          // 返回 200 + { user: null }，而不是 401——浏览器控制台会把 401 记成
+          // 红色报错，用户误判成故障；前端（Header/account）只需判断 user。
+          send(res, 200, { user: null });
           return;
         }
         send(res, 200, {
