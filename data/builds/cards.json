@@ -21748,6 +21748,981 @@
       "d": "2026-09-25",
       "url": "https://x.com/kevinkern/status/2103582044538523925",
       "source": "syndication+jev"
+    },
+    {
+      "id": "2103444866122293334",
+      "sn": "sector_sol",
+      "name": "SECTOR",
+      "t": "run Jev, Claude Code and Codex from 1 API. this repo does it for $0.",
+      "x": "run Jev, Claude Code and Codex from 1 API. this repo does it for $0. no account. no cloud. no platform fee. it's called HarnessRouter. 2.6K stars, Apache-2.0, runs on your own mach…",
+      "cat": "Ops & infrastructure",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/sector_sol/status/2103444866122293334",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103326122314453197",
+      "sn": "ik11235",
+      "name": "ik-fib",
+      "t": "文章を返さないAI「Jev」を試してみた ── 社内問い合わせのエスカレーション先は判定できるか｜ik-fib https://t.co/lmtRB2rCYs #zenn #Jev",
+      "x": "文章を返さないAI「Jev」を試してみた ── 社内問い合わせのエスカレーション先は判定できるか｜ik-fib https://t.co/lmtRB2rCYs #zenn #Jev",
+      "cat": "Research & data",
+      "u": "Support triage",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/ik11235/status/2103326122314453197",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103406856114774144",
+      "sn": "noclipepe",
+      "name": "noclipepe",
+      "t": "I MADE JEV AND OPUS 5.5 PLAY TETRIS. JEV DIED IN 92 SECONDS AND STILL WON.",
+      "x": "I MADE JEV AND OPUS 5.5 PLAY TETRIS. JEV DIED IN 92 SECONDS AND STILL WON. Both got legal moves with their calculated outcomes. Most lines wins. JEV 16 lines • 76 pieces Topped out…",
+      "cat": "Games & real time",
+      "u": "Game logic",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/noclipepe/status/2103406856114774144",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103476201268326705",
+      "sn": "0xMorlex",
+      "name": "Morlex",
+      "t": "i wired jev into the loop so opus stops wasting expensive reasoning on decisions that should take milliseconds.",
+      "x": "i wired jev into the loop so opus stops wasting expensive reasoning on decisions that should take milliseconds. Here's how the setup works: step 1 → map where the model wastes effo…",
+      "cat": "Research & data",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/0xMorlex/status/2103476201268326705",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103431095286972431",
+      "sn": "AHSeslami",
+      "name": "امیرحسین اسلامی",
+      "t": "🚀 ترکیب Jev + Opus 5.5 باعث شد هزینه و زمان اجرای ورک فلوی  من حدود ۸۰٪ کاهش پیدا کنه.",
+      "x": "🚀 ترکیب Jev + Opus 5.5 باعث شد هزینه و زمان اجرای ورک فلوی من حدود ۸۰٪ کاهش پیدا کنه. 🧠 Opus کارهای سخت و پیچیده و بخش اصلیِ استدلال رو انجام می‌ده. ⚙️ Jev تصمیم می‌گیره چه اطلاعات…",
+      "cat": "Research & data",
+      "u": "Support triage",
+      "lang": "fa",
+      "d": "2026-09-25",
+      "url": "https://x.com/AHSeslami/status/2103431095286972431",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103628271719956723",
+      "sn": "0xAIGOAT",
+      "name": "AI_GOAT",
+      "t": "I plugged it into Agora ConvoAI as a semantic turn detector. Agora's silence VAD is off. every turn decision comes from text.",
+      "x": "I plugged it into Agora ConvoAI as a semantic turn detector. Agora's silence VAD is off. every turn decision comes from text. \"uh-huh\" → 0.03. hold. \"wait, stop\" → https://t.co/zj1…",
+      "cat": "Dev tools",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/0xAIGOAT/status/2103628271719956723",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103375079380058602",
+      "sn": "LiorNsnd",
+      "name": "Loutchone",
+      "t": "I turned NVIDIA’s stock chart into a track.",
+      "x": "I turned NVIDIA’s stock chart into a track. NVIDIA STOCK MARKET + JEV + HERMES + STRUDEL = MUSIC This is September 24. The price drives the melody, trading volume shapes the drums,…",
+      "cat": "Trading & markets",
+      "u": "Content drafting",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/LiorNsnd/status/2103375079380058602",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103450014143947164",
+      "sn": "filip_hric",
+      "name": "Filip Hric",
+      "t": "Playwright CLI + Jev is 98% cheaper and TWICE as fast compared Playwright MCP",
+      "x": "Playwright CLI + Jev is 98% cheaper and TWICE as fast compared Playwright MCP Decided to test out Jev by TypeSafe AI and hook it up to Playwright CLI. I compared the results with P…",
+      "cat": "Research & data",
+      "u": "Browser control",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/filip_hric/status/2103450014143947164",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103526104191406535",
+      "sn": "LiorNsnd",
+      "name": "Loutchone",
+      "t": "j’ai pris les données de la séance du 24 septembre et je les ai données à Jev + Hermes pour en faire un morceau sur Strudel.",
+      "x": "j’ai pris les données de la séance du 24 septembre et je les ai données à Jev + Hermes pour en faire un morceau sur Strudel. le prix pilote la mélodie et le volume des échanges jou…",
+      "cat": "Content & growth",
+      "u": "Code generation",
+      "lang": "fr",
+      "d": "2026-09-25",
+      "url": "https://x.com/LiorNsnd/status/2103526104191406535",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103515249815245030",
+      "sn": "WarBornePhoenix",
+      "name": "Saman Pandey",
+      "t": "AI agents shouldn't get unlimited access to your infra",
+      "x": "AI agents shouldn't get unlimited access to your infra Jevrail is a pre-execution safety layer powered by Jev, that evaluates agent commands before they hit your shell, blocking de…",
+      "cat": "Safety & moderation",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/WarBornePhoenix/status/2103515249815245030",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103583148575768597",
+      "sn": "Godefroy",
+      "name": "Godefroy",
+      "t": "Jev vs Claude, same robot, same instructions.",
+      "x": "Jev vs Claude, same robot, same instructions. 233 ms vs 2 s. And yes, it sulks when you insult it. 1x speed, sound on. https://t.co/6GevXQzd8i",
+      "cat": "Research & data",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/Godefroy/status/2103583148575768597",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103393201767993716",
+      "sn": "amos_gyamfi",
+      "name": "Amos Gyamfi",
+      "t": "I used Jev to moderate messages in Stream Chat. Block or flag harmful messages before they reach users. https://t.co/zsQPn2zcU2",
+      "x": "I used Jev to moderate messages in Stream Chat. Block or flag harmful messages before they reach users. https://t.co/zsQPn2zcU2",
+      "cat": "Safety & moderation",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/amos_gyamfi/status/2103393201767993716",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103536277874430048",
+      "sn": "rewind02",
+      "name": "rewind",
+      "t": "you give it an image + a question + options, it returns a probability for each one",
+      "x": "you give it an image + a question + options, it returns a probability for each one that's exactly what a game loop needs: - every ~100ms, crop the https://t.co/jb6OHNiBaJ",
+      "cat": "Agents & browsers",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/rewind02/status/2103536277874430048",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103402881487389012",
+      "sn": "MLflow",
+      "name": "MLflow",
+      "t": "We compared Jev, TypeSafe’s model for structured decisions, with GPT, Claude, and DeepSeek using MLflow.",
+      "x": "We compared Jev, TypeSafe’s model for structured decisions, with GPT, Claude, and DeepSeek using MLflow. On 30 human-labeled QA examples, Jev matched the best agreement at lower co…",
+      "cat": "Research & data",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/MLflow/status/2103402881487389012",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103466855029702861",
+      "sn": "Arindam_1729",
+      "name": "Arindam Majumder 𝕏",
+      "t": "Built a quick model router with @LangChain , using @typesafeai ’s Jev as the middleware/router layer and @nebiustf models underneath.",
+      "x": "Built a quick model router with @LangChain , using @typesafeai ’s Jev as the middleware/router layer and @nebiustf models underneath. The router switches between GLM 5.3 Flash and…",
+      "cat": "Triage & routing",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/Arindam_1729/status/2103466855029702861",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103445480084848654",
+      "sn": "arisa4672",
+      "name": "Arisa(^^)",
+      "t": "最近話題のJevでデザインサポートツールを4つ作った事を記事に書きました！",
+      "x": "最近話題のJevでデザインサポートツールを4つ作った事を記事に書きました！ 秒で結果を出してくれるのは、忙しい制作中にすごく助かります♪ ユーザーインタビューの深掘り質問アドバイスは、結構使えそうなので勉強も兼ねて精度上げ頑張ります^ ^ https://t.co/vx4y7ShnWS",
+      "cat": "Dev tools",
+      "u": "Content drafting",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/arisa4672/status/2103445480084848654",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103277639037517999",
+      "sn": "jeffscottward",
+      "name": "jeffscottworld",
+      "t": "I couldn't find a JEV implementation for Omarchy, so I made one.  https://t.co/RsOeOsn2y3",
+      "x": "I couldn't find a JEV implementation for Omarchy, so I made one. https://t.co/RsOeOsn2y3",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/jeffscottward/status/2103277639037517999",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103405949725847767",
+      "sn": "oliver__com",
+      "name": "James Oliver | Profit Focused SEO",
+      "t": "Funnels keywords into TOFU/MOFU/BOFU and the four intents, clusters them, maps the site structure.",
+      "x": "Funnels keywords into TOFU/MOFU/BOFU and the four intents, clusters them, maps the site structure. Link in the comments 👇 https://t.co/cbpC8Wa2bT",
+      "cat": "Tools & apps",
+      "u": "Market analysis",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/oliver__com/status/2103405949725847767",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103369779772072089",
+      "sn": "realtoburner",
+      "name": "Real To Burner Transition is Real",
+      "t": "I built jev-browser-wingman: an open-source tool that lets AI coding agents (Claude Code, opencode, etc.) use your real, logged-in Chrome.",
+      "x": "I built jev-browser-wingman: an open-source tool that lets AI coding agents (Claude Code, opencode, etc.) use your real, logged-in Chrome. The big LLM still plans. @typesafeai's sm…",
+      "cat": "Agents & browsers",
+      "u": "Browser control",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/realtoburner/status/2103369779772072089",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103595808117416294",
+      "sn": "cop_on_fire",
+      "name": "Denis Timonin",
+      "t": "I built a tiny agent with Jev that roasts every excuse until I actually get up. making me stop procrastinating :)",
+      "x": "I built a tiny agent with Jev that roasts every excuse until I actually get up. making me stop procrastinating :) 6 times a day it pings me in Telegram with a desk drill and a wate…",
+      "cat": "Content & growth",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/cop_on_fire/status/2103595808117416294",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103484925378695600",
+      "sn": "de1lymoon",
+      "name": "Alex",
+      "t": "→ pdf files and papers",
+      "x": "→ pdf files and papers → lectures and long-form videos Opus: handles the actual https://t.co/TXGQ0kJK1u",
+      "cat": "Research & data",
+      "u": "Research assistant",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/de1lymoon/status/2103484925378695600",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103451269226725688",
+      "sn": "CodesSound",
+      "name": "Shantanav mukherjee",
+      "t": "Full Architecture explained below in the thread",
+      "x": "Full Architecture explained below in the thread Check out the comments for the link! https://t.co/fZZNcrwAbj",
+      "cat": "Games & real time",
+      "u": "Game logic",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/CodesSound/status/2103451269226725688",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103318963006357752",
+      "sn": "LakshOnline",
+      "name": "Lakshmi narayana",
+      "t": "new: i wired typesafe's jev into a real pipeline and ran it for real. no mockups, no stubbed apis.",
+      "x": "new: i wired typesafe's jev into a real pipeline and ran it for real. no mockups, no stubbed apis. what held up: a 7-of-9 filter rate on real calls, sub-second triage, and 3 bugs h…",
+      "cat": "Ops & infrastructure",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/LakshOnline/status/2103318963006357752",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103487252425023870",
+      "sn": "eachlabs",
+      "name": "each::labs",
+      "t": "Post and hope, or know before you post?",
+      "x": "Post and hope, or know before you post? We built a viral checker to find out. Jev scores your content on ~50 virality criteria in under half a second. Opus 5.5 roasts or hypes the…",
+      "cat": "Content & growth",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/eachlabs/status/2103487252425023870",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103621821614498062",
+      "sn": "kenjik30000",
+      "name": "ケンジ | HR×AI実践者",
+      "t": "しかも確信度つきなので、確信度が低い回答だけ人間が読む。全部読む必要がなくなります。",
+      "x": "しかも確信度つきなので、確信度が低い回答だけ人間が読む。全部読む必要がなくなります。",
+      "cat": "Research & data",
+      "u": "Support triage",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/kenjik30000/status/2103621821614498062",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103553740938625030",
+      "sn": "jreuben1",
+      "name": "(((JReuben1)))",
+      "t": "Jevmem – automatic project memory for Claude Code, built on Jev https://t.co/GPf32yhGF9",
+      "x": "Jevmem – automatic project memory for Claude Code, built on Jev https://t.co/GPf32yhGF9",
+      "cat": "Dev tools",
+      "u": "Code generation",
+      "lang": "cs",
+      "d": "2026-09-25",
+      "url": "https://x.com/jreuben1/status/2103553740938625030",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103551166432866429",
+      "sn": "ellfyy_",
+      "name": "Elf",
+      "t": "JEV just processed 4,700 decisions for $1.83. Claude is still working on the same batch at $47",
+      "x": "JEV just processed 4,700 decisions for $1.83. Claude is still working on the same batch at $47 I visualized it as a race: 4,700 requests drop into both models at the same time. Jev…",
+      "cat": "Ops & infrastructure",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/ellfyy_/status/2103551166432866429",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103319038021578933",
+      "sn": "QianXigua01",
+      "name": "钱西瓜AI",
+      "t": "用 Jev 做了个小红书小组件「你的领导人格」。",
+      "x": "用 Jev 做了个小红书小组件「你的领导人格」。 Jev 真的很适合这种明确的小判断：输入一句原话，直接返回程序可用的人格分类，不用解析模型的长回复。 「对齐下颗粒度」→ 拼豆大师 「你的思考在哪里？」→ 苏格拉底 「十分钟后发我」→ 急急国王 你的领导是哪一种？来出战😂👇 https://t.co/MgCSUaG5MA",
+      "cat": "Content & growth",
+      "u": "Code generation",
+      "lang": "zh",
+      "d": "2026-09-25",
+      "url": "https://x.com/QianXigua01/status/2103319038021578933",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103627240550375573",
+      "sn": "KA95doteth",
+      "name": "kingabdul.eτh",
+      "t": "incredible things are being built with claude opus 5.5. Jev is a System One Model, not LLM",
+      "x": "incredible things are being built with claude opus 5.5. Jev is a System One Model, not LLM coded out a chess app allowing play of different modes/difficulty (Stockfish/Hybrid). Sto…",
+      "cat": "Games & real time",
+      "u": "Market analysis",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/KA95doteth/status/2103627240550375573",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103416727035916682",
+      "sn": "whyweru",
+      "name": "Felix Waweru",
+      "t": "Introducing the most powerful magic 8 ball powered by Jev",
+      "x": "Introducing the most powerful magic 8 ball powered by Jev Try it out yourself, or try linking a github repo and ask it any question https://t.co/dnoCEBuMg5",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/whyweru/status/2103416727035916682",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103496821574402493",
+      "sn": "rajaraodv",
+      "name": "Raja Rao DV",
+      "t": "I mapped an entire movie by mood for about 5 cents (Jev @typesafeai + @GraphonAI).",
+      "x": "I mapped an entire movie by mood for about 5 cents (Jev @typesafeai + @GraphonAI). Moods like: Funny, Scary, Thrilling, Suspenseful etc. Around 7,000 AI analyses for roughly $0.05…",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/rajaraodv/status/2103496821574402493",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103481396027142162",
+      "sn": "Tugrul_Guner",
+      "name": "Tugrul Guner",
+      "t": "I built a game where you describe an ecosystem in plain English, then watch whether anything survives.",
+      "x": "I built a game where you describe an ecosystem in plain English, then watch whether anything survives. LifePot uses Jev to turn your inputs into species, feeding relationships and…",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/Tugrul_Guner/status/2103481396027142162",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103434204977434842",
+      "sn": "aritra933",
+      "name": "Aritra Sinha",
+      "t": "I recently built an agentic bacterial gene-annotation framework designed to separate two things AI agents often blur together-",
+      "x": "I recently built an agentic bacterial gene-annotation framework designed to separate two things AI agents often blur together- What should I analyse next? vs. What does the biologi…",
+      "cat": "Research & data",
+      "u": "Research assistant",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/aritra933/status/2103434204977434842",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103615117955068239",
+      "sn": "jevpadrh",
+      "name": "JevPad",
+      "t": "With how viral Jev has been going in the past few days, it only made sense to build JevPad.",
+      "x": "With how viral Jev has been going in the past few days, it only made sense to build JevPad. JevPad is a launchpad where each coin has a linked Jev agent, each Jev handles creator r…",
+      "cat": "Content & growth",
+      "u": "Content drafting",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/jevpadrh/status/2103615117955068239",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103424897087386004",
+      "sn": "katapad",
+      "name": "桟よしお@特級𝕏Rエンジニア",
+      "t": "超高速AIのJevでショートスリーパーかどうか判定するやつを作りました。",
+      "x": "超高速AIのJevでショートスリーパーかどうか判定するやつを作りました。 基本はまぶたで判定ですが、頭が前に倒れたり、横に倒れてもロングスリーパー扱いされます https://t.co/ZyCEKSyvYP",
+      "cat": "Tools & apps",
+      "u": "Content drafting",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/katapad/status/2103424897087386004",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103350930632827141",
+      "sn": "yukkurim_dev",
+      "name": "ゆっくりーむ",
+      "t": "AmazonのサクラチェックをJevにやらせる拡張機能「AmazonJevチェッカー」を作りました。",
+      "x": "AmazonのサクラチェックをJevにやらせる拡張機能「AmazonJevチェッカー」を作りました。 商品ページを開くだけで、レビューを分析して ・サクラ度スコア（0〜100） ・判定の確かさ ・疑われる操作を表示します。 このルンバは15点で「信頼できる」判定でした https://t.co/BwkHhEGsvq",
+      "cat": "Safety & moderation",
+      "u": "Code generation",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/yukkurim_dev/status/2103350930632827141",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103290795465884069",
+      "sn": "sudeendra",
+      "name": "Sudeendra P",
+      "t": "Built 3 small POCs with Jev & Monid. Real runs, real numbers, no spec-sheet stats.",
+      "x": "Built 3 small POCs with Jev & Monid. Real runs, real numbers, no spec-sheet stats. POC 1 — spend guardrail POC 2 — deterministic route POC 3 — multi-source agent + verify step http…",
+      "cat": "Content & growth",
+      "u": "Other",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/sudeendra/status/2103290795465884069",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103619293950656798",
+      "sn": "0xwhippa",
+      "name": "Whippa",
+      "t": "it's called JEV Terminal. basically it does all the boring homework you're supposed to do before buying a memecoin but never actually do",
+      "x": "it's called JEV Terminal. basically it does all the boring homework you're supposed to do before buying a memecoin but never actually do you paste https://t.co/PWQKB0t7aN",
+      "cat": "Tools & apps",
+      "u": "Other",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/0xwhippa/status/2103619293950656798",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103478706010542518",
+      "sn": "harsha_varma02",
+      "name": "Harsha Varma",
+      "t": "Seen many #Jev & #Laya demos claiming",
+      "x": "Seen many #Jev & #Laya demos claiming \"AI solved the Rubik's cube\" while just running math algorithms in the backend. Solving with math permutations is easy. Thinking like humans t…",
+      "cat": "Agents & browsers",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/harsha_varma02/status/2103478706010542518",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103512155672957088",
+      "sn": "MiracleTShirt09",
+      "name": "みらくるＴしゃつ@AX",
+      "t": "Jevの判定機能作ったから実用的になってきた。",
+      "x": "Jevの判定機能作ったから実用的になってきた。 XAI機能つけてくれねーかなJev。 https://t.co/OGplSGDAyi",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/MiracleTShirt09/status/2103512155672957088",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103530256913367449",
+      "sn": "aklsh22",
+      "name": "Akilesh Kannan 🥢",
+      "t": "pi install npm:jevort",
+      "x": "pi install npm:jevort https://t.co/SQMzgrTbw1",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/aklsh22/status/2103530256913367449",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103501070471500056",
+      "sn": "bijitghosh21",
+      "name": "Bijit Ghosh",
+      "t": "I’m going deep on how I built an agentic harness with Jev",
+      "x": "I’m going deep on how I built an agentic harness with Jev where the decision layer sits across routing, memory, retrieval, tool execution, and loop control, and how it changes orch…",
+      "cat": "Agents & browsers",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/bijitghosh21/status/2103501070471500056",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103479500394967062",
+      "sn": "prIo_Ol",
+      "name": "gatorp",
+      "t": "Jev cut my Codex research agent's input tokens by 67% and its tool rounds in half.",
+      "x": "Jev cut my Codex research agent's input tokens by 67% and its tool rounds in half. jev-digest is an open-source MCP tool: @typesafeai's Jev picks only the passages that answer the…",
+      "cat": "Dev tools",
+      "u": "Data extraction",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/prIo_Ol/status/2103479500394967062",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103395550037205281",
+      "sn": "LacorteMichele",
+      "name": "Mic",
+      "t": "Tested on real failure data.",
+      "x": "Tested on real failure data. https://t.co/a4CRz9Ky7I https://t.co/iJXrvCMq2I",
+      "cat": "Research & data",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/LacorteMichele/status/2103395550037205281",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103384494434881828",
+      "sn": "aad34210",
+      "name": "Takashi Minoda",
+      "t": "#Jev https://t.co/L6PiTtqogs",
+      "x": "#Jev https://t.co/L6PiTtqogs",
+      "cat": "Dev tools",
+      "u": "Code generation",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/aad34210/status/2103384494434881828",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103414740336664751",
+      "sn": "ArthurLabMRP",
+      "name": "Arthur Marques",
+      "t": "Built Yes or No JEV with Opus 5.5: upload a table, ask one yes/no question, watch every row get answered in https://t.co/1BgY9Cphrm",
+      "x": "Built Yes or No JEV with Opus 5.5: upload a table, ask one yes/no question, watch every row get answered in https://t.co/1BgY9Cphrm",
+      "cat": "Tools & apps",
+      "u": "Data extraction",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/ArthurLabMRP/status/2103414740336664751",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103344958497305064",
+      "sn": "sermakarevich",
+      "name": "Sergii Makarevych",
+      "t": "I run quite intense tests on sensitivity,  use jev as a cli tool for LLMs and spend 8 cents. https://t.co/E50miqFKX1",
+      "x": "It seems like $5 we got from @typesafeai would be enough for years to come. I run quite intense tests on sensitivity, use jev as a cli tool for LLMs and spend 8 cents. https://t.co…",
+      "cat": "Dev tools",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/sermakarevich/status/2103344958497305064",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103540631876366726",
+      "sn": "felix94123",
+      "name": "Felix",
+      "t": "We built a fresh set of 362 items published after both models shipped (new arXiv papers, Stack",
+      "x": "We built a fresh set of 362 items published after both models shipped (new arXiv papers, Stack",
+      "cat": "Research & data",
+      "u": "Research assistant",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/felix94123/status/2103540631876366726",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103273845331464376",
+      "sn": "vasanth_sreeram",
+      "name": "Vasanth",
+      "t": "Just made Jev smarter, with 1M context and multimodal and open sourced ur welcome @typesafeai https://t.co/arPwAsqxcM",
+      "x": "Just made Jev smarter, with 1M context and multimodal and open sourced ur welcome @typesafeai https://t.co/arPwAsqxcM",
+      "cat": "Dev tools",
+      "u": "Other",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/vasanth_sreeram/status/2103273845331464376",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103478225473036298",
+      "sn": "dbreunig",
+      "name": "Drew Breunig",
+      "t": "@CompleteSkeptic Just added support for Jev in DSPy, with an optimizer that works with existing metrics. https://t.co/Z34wvjwQMb",
+      "x": "@CompleteSkeptic Just added support for Jev in DSPy, with an optimizer that works with existing metrics. https://t.co/Z34wvjwQMb",
+      "cat": "Dev tools",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/dbreunig/status/2103478225473036298",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103444184736915549",
+      "sn": "uhnkitcalorieya",
+      "name": "Ankit Kalluraya | AI QA Engineer | AI Engineer",
+      "t": "Built with Jev (TypeSafe AI) + jevlang + FastAPI.",
+      "x": "Built with Jev (TypeSafe AI) + jevlang + FastAPI. 4th project. Each one teaches something the docs don't.",
+      "cat": "Dev tools",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/uhnkitcalorieya/status/2103444184736915549",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103353093471793537",
+      "sn": "komaki_s60",
+      "name": "くれとん",
+      "t": "今まさにやってた。daikoプログラムの概念図。検証工程を加えてjevが大活躍する。 https://t.co/8Ype6uRloY",
+      "x": "今まさにやってた。daikoプログラムの概念図。検証工程を加えてjevが大活躍する。 https://t.co/8Ype6uRloY",
+      "cat": "Tools & apps",
+      "u": "Content drafting",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/komaki_s60/status/2103353093471793537",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103579148375515363",
+      "sn": "argentAIOS",
+      "name": "Titaniumbot",
+      "t": "I just put Jebadiah 9B v2 up on Hugging Face.",
+      "x": "I just put Jebadiah 9B v2 up on Hugging Face. It's system 1 open source Jev-like decision model. You give it a situation and a typed question, and it gives you a probability for ev…",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/argentAIOS/status/2103579148375515363",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103460159796510873",
+      "sn": "nhu_hoang",
+      "name": "Nhu Hoang",
+      "t": "Stop paying generation prices for yes/no in LLM with Jev.",
+      "x": "Stop paying generation prices for yes/no in LLM with Jev. In my @TDataScience post, I tested Jev on 3,080 bank messages. Jev beats Qwen on accuracy (81.1% vs 76.4%) and is fast eno…",
+      "cat": "Tools & apps",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/nhu_hoang/status/2103460159796510873",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103582569002676514",
+      "sn": "imohitmayank",
+      "name": "Mohit",
+      "t": "Jev is about 9.5 points more accurate on Quora duplicate detection. GLiNER2.5-Decide is much faster on my Mac.",
+      "x": "Jev is about 9.5 points more accurate on Quora duplicate detection. GLiNER2.5-Decide is much faster on my Mac. I wanted a clean head-to-head on the same job, so I took a balanced 1…",
+      "cat": "Research & data",
+      "u": "Research assistant",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/imohitmayank/status/2103582569002676514",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103469771916554646",
+      "sn": "SNOKSEC",
+      "name": "SNOK",
+      "t": "HAL 9000 was 100% sure the AE-35 unit would fail. It didn't.",
+      "x": "HAL 9000 was 100% sure the AE-35 unit would fail. It didn't. We tested Jev in the cloud and a local Laya on a Mac on 30 tickets: accuracy, SAP-means-fire-alarm traps, and a confide…",
+      "cat": "Research & data",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/SNOKSEC/status/2103469771916554646",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103399380552179737",
+      "sn": "bolubeyi44",
+      "name": "bolubeyi44",
+      "t": "ethereum:0xba11d00c5f74255f56a5e366f4f77f5a186d7f55 on the Hype Meter",
+      "x": "ethereum:0xba11d00c5f74255f56a5e366f4f77f5a186d7f55 on the Hype Meter HYPE 63/100 (how loud) LEGIT 63/100 (how real) Verdict: REAL BUSINESS Not a recommendation. Jev decides: https…",
+      "cat": "Research & data",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/bolubeyi44/status/2103399380552179737",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103414618546655681",
+      "sn": "jetwaniavinash",
+      "name": "Jetwani Avinash",
+      "t": "A 10th: deciding what a coding agent should remember.",
+      "x": "A 10th: deciding what a coding agent should remember. I run Jev on every Claude Code message (decision? bug? replaces an older one?) and save the keepers to JEVMEM.md in the repo.…",
+      "cat": "Dev tools",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/jetwaniavinash/status/2103414618546655681",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103475703220179023",
+      "sn": "ramenumaiwhy",
+      "name": "kenty",
+      "t": "Jevにチャリでギュられるゲーム作ってみた https://t.co/n7O9svbLtV",
+      "x": "Jevにチャリでギュられるゲーム作ってみた https://t.co/n7O9svbLtV",
+      "cat": "Games & real time",
+      "u": "Code generation",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/ramenumaiwhy/status/2103475703220179023",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103485392913838374",
+      "sn": "himanshu231204",
+      "name": "Himanshu",
+      "t": "pip install jev-model-router →",
+      "x": "pip install jev-model-router → https://t.co/UWguQBngsU https://t.co/ZbGAOeiipl",
+      "cat": "Research & data",
+      "u": "Support triage",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/himanshu231204/status/2103485392913838374",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103537417235877942",
+      "sn": "povedaai",
+      "name": "Luis Poveda",
+      "t": "Meet Sharky 🦈: a Jev-style model for cybersecurity.",
+      "x": "Meet Sharky 🦈: a Jev-style model for cybersecurity. Following the Jev-style fever, I fine-tuned a MiniCPM4-0.5B model to act as a \"System One\" model, allowing it to identify at lig…",
+      "cat": "Ops & infrastructure",
+      "u": "Data extraction",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/povedaai/status/2103537417235877942",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103484924452057326",
+      "sn": "f_lombardo",
+      "name": "Franco Lombardo 🇺🇦",
+      "t": "I've just released a new version of #LLPhant that supports #Jev, the new tool from TypeSafe AI for making decision with #AI",
+      "x": "I've just released a new version of #LLPhant that supports #Jev, the new tool from TypeSafe AI for making decision with #AI https://t.co/ENqp3QX05U",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/f_lombardo/status/2103484924452057326",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103465813441118671",
+      "sn": "_pratikpakhale",
+      "name": "Pratik",
+      "t": "I finally got some time to play with @typesafeai's jev, and the first thing I built was an extension to keep my X timeline clean!",
+      "x": "I finally got some time to play with @typesafeai's jev, and the first thing I built was an extension to keep my X timeline clean! You just create rules for the kind of content you…",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/_pratikpakhale/status/2103465813441118671",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103525193964474684",
+      "sn": "automatedmarktr",
+      "name": "Automated Marketer",
+      "t": "Jev AI doesn't write. It only decides.",
+      "x": "Jev AI doesn't write. It only decides. Tested inside Claude Code: 100 emails, same answer 89/100 $0.002 vs $0.27 150 yes/no decisions for a fifth of a cent Full test in the reply 👇…",
+      "cat": "Research & data",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/automatedmarktr/status/2103525193964474684",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103499660208013569",
+      "sn": "Zat0ichi",
+      "name": "Steve Rioux",
+      "t": "@Davidproulx Pour les joueurs d'échecs, j'ai fait un bot qui utilise Jev pour jouer: https://t.co/V1yXbDlVLy",
+      "x": "@Davidproulx Pour les joueurs d'échecs, j'ai fait un bot qui utilise Jev pour jouer: https://t.co/V1yXbDlVLy C'est gratuit!",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "fr",
+      "d": "2026-09-25",
+      "url": "https://x.com/Zat0ichi/status/2103499660208013569",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103570891070190075",
+      "sn": "wiatrdev",
+      "name": "Michał Wiatr",
+      "t": "My JevT++ demo checks model plans against the current game state before execution. Watch the decision graph alongside Mario:",
+      "x": "My JevT++ demo checks model plans against the current game state before execution. Watch the decision graph alongside Mario: https://t.co/HJSalb5yCf #JEV #LocalAI AI-assisted.",
+      "cat": "Dev tools",
+      "u": "Game logic",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/wiatrdev/status/2103570891070190075",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103552222483411252",
+      "sn": "itsjustmatrix",
+      "name": "nikhil",
+      "t": "I cleaned it for ~$1–2 with a cheap classifier (TypeSafe's Jev), then fine-tuned a small https://t.co/h925EjgdOX",
+      "x": "I cleaned it for ~$1–2 with a cheap classifier (TypeSafe's Jev), then fine-tuned a small https://t.co/h925EjgdOX",
+      "cat": "Research & data",
+      "u": "Data extraction",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/itsjustmatrix/status/2103552222483411252",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103446133813248488",
+      "sn": "suffro_",
+      "name": "Lorenzo",
+      "t": "Built DecGuard, an open-source reliability layer for probabilistic AI decisions.",
+      "x": "Built DecGuard, an open-source reliability layer for probabilistic AI decisions. Contracts, calibration, fuzzing, regression tests, replay and CI gates — across interchangeable bac…",
+      "cat": "Dev tools",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/suffro_/status/2103446133813248488",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103354485385118085",
+      "sn": "PandeyKart27234",
+      "name": "Kartikey Pandey",
+      "t": "Paint-by-numbers: my code makes the sheet, @typesafeai's Jev picks every paint.",
+      "x": "Paint-by-numbers: my code makes the sheet, @typesafeai's Jev picks every paint. 37,856 decisions. 35 seconds. 24 cents. Video at 4x. The trick: Jev only answers multiple-choice que…",
+      "cat": "Tools & apps",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/PandeyKart27234/status/2103354485385118085",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103545132217983045",
+      "sn": "DistillAI1",
+      "name": "Distill AI",
+      "t": "https://t.co/DESTshXSTu",
+      "x": "https://t.co/DESTshXSTu @github #DistillAI #GitHub #Robotics https://t.co/PorUiNPX7A",
+      "cat": "Research & data",
+      "u": "Other",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/DistillAI1/status/2103545132217983045",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103606222062784756",
+      "sn": "yuto_seeda",
+      "name": "yuto",
+      "t": "Jevで今買うべきなのか？を判断させるアプリ作った！",
+      "x": "Jevで今買うべきなのか？を判断させるアプリ作った！ オンボーディングで自分の買い物の傾向を理解してもらって、最終判断をJevにしてもらうやつ 自分が買うかどうかガチで迷う時に、コイントス以外の決め方の参考にしてもらえれば嬉しいです https://t.co/050T8wrUju",
+      "cat": "Tools & apps",
+      "u": "Other",
+      "lang": "ja",
+      "d": "2026-09-25",
+      "url": "https://x.com/yuto_seeda/status/2103606222062784756",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103487211585073598",
+      "sn": "adnankhan_93",
+      "name": "Adnan",
+      "t": "built fastest jev voice browser agent. Latency ~400 ms https://t.co/J74HlmXM1t",
+      "x": "built fastest jev voice browser agent. Latency ~400 ms https://t.co/J74HlmXM1t",
+      "cat": "Agents & browsers",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/adnankhan_93/status/2103487211585073598",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103568260662997071",
+      "sn": "Vish1shth",
+      "name": "Vishishth",
+      "t": "Used Jev to analyse UNGA 81 speeches.",
+      "x": "Used Jev to analyse UNGA 81 speeches. https://t.co/QYqjB1cAyq @typesafeai @CompleteSkeptic #UN #UNGA https://t.co/jtvnISJzFW",
+      "cat": "Research & data",
+      "u": "Research assistant",
+      "lang": "et",
+      "d": "2026-09-25",
+      "url": "https://x.com/Vish1shth/status/2103568260662997071",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103547174801793513",
+      "sn": "akzh4n",
+      "name": "Akzhan Kalimatov",
+      "t": "Early mentioned about the JEV model, and I decided to give it a try on a use case.",
+      "x": "Early mentioned about the JEV model, and I decided to give it a try on a use case. By click on any Polymarket card, and the model gives its probability, while the extension display…",
+      "cat": "Trading & markets",
+      "u": "Market analysis",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/akzh4n/status/2103547174801793513",
+      "source": "syndication+jev"
+    },
+    {
+      "id": "2103485735357788230",
+      "sn": "boogerbuttcheek",
+      "name": "bub",
+      "t": "Made a game where you convince Jev to let you into the afterlife",
+      "x": "Made a game where you convince Jev to let you into the afterlife https://t.co/M9ETyXesJQ",
+      "cat": "Games & real time",
+      "u": "Code generation",
+      "lang": "en",
+      "d": "2026-09-25",
+      "url": "https://x.com/boogerbuttcheek/status/2103485735357788230",
+      "source": "syndication+jev"
     }
   ],
   "rejected": [
@@ -66678,8 +67653,1280 @@
       "title": "What the Jev #04: I built an agent that DMs me when I'm being an ass on Slack. (I can be lol)",
       "title_in_text": true,
       "date": "2026-09-25"
+    },
+    {
+      "id": "2103447708237283763",
+      "artifact": 0.99661,
+      "uses_jev": 0.999999,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103434685141635509",
+      "artifact": 0.011158,
+      "uses_jev": 1,
+      "title": "JevとOpenAI互換APIを同じテストで比較できるツールが公開されていたのでGemma4と比較してるけどJevはやっぱり一般的なタスクが得意だなぁ",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103330604360364125",
+      "artifact": 0.028008,
+      "uses_jev": 1,
+      "title": "話題のJEVをcodexに導入したらクレジットの消費量もかなりおさえることができたので実験が捗ってる https://t.co/3Lzs1NaSLK",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103416798121230373",
+      "artifact": 0.09739,
+      "uses_jev": 1,
+      "title": "llm-jp-evalの評価データの一部（NLI、QA、HE-JAなど）を使ってJevの性能を検証してみました。日本語タスクでどのくらい使えるのか気になる方はぜひ！",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103439384175685768",
+      "artifact": 0.00998,
+      "uses_jev": 1,
+      "title": "Jevにストアレビューが「要望」「不具合報告」「好意的な感想」「苦情」etc... の仕訳してもらっているんだけど、めちゃくちゃ安い！8.2万件の仕訳で$5.98だって！ https://t.co/kZbg9YAY1H",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103555411983163641",
+      "artifact": 0.04725,
+      "uses_jev": 1,
+      "title": "最近話題のJevで、自然言語で入力された曲の雰囲気とこれまでのコード進行から次のコード進行考えるマッシーン。",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103364981697966381",
+      "artifact": 0.055618,
+      "uses_jev": 1,
+      "title": "jev使ったオセロゲーム作った",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103379236828623257",
+      "artifact": 0.028221,
+      "uses_jev": 1,
+      "title": "Interesting use case with Jev by @typesafeai and Opus 5.5 - Phone Use Automation.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103539897000923211",
+      "artifact": 0.999773,
+      "uses_jev": 0.754915,
+      "title": "Here is what it did instead. It tightened the one filter that matters: the gap between the real https://t.co/NphttFbiJp",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103303398972170404",
+      "artifact": 0.015724,
+      "uses_jev": 0.998601,
+      "title": "Seeing Jev attract this hype felt like a full-circle moment. Isn't this just LLM + https://t.co/yhsfiRehrz",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103527840968806559",
+      "artifact": 0.018352,
+      "uses_jev": 1,
+      "title": "i call it nitro. three models, one job each, and only one of them ever writes a word",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103574633807315001",
+      "artifact": 0.018317,
+      "uses_jev": 0.00483,
+      "title": "Jev called the shots. GPT-6 Astra wrote the code.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103520325568720952",
+      "artifact": 1,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103525504435589341",
+      "artifact": 0.004102,
+      "uses_jev": 0.861538,
+      "title": "I built a prison escape game with Opus 5.5 + Jev",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103521288803467670",
+      "artifact": 0.01292,
+      "uses_jev": 1,
+      "title": "Introducing Doom or Bloom",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103451330677506440",
+      "artifact": 0.61878,
+      "uses_jev": 1,
+      "title": "Opus5.5とJevで𝕏をTiktok風にしてみた https://t.co/2mMfJv1emH",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103523171752112207",
+      "artifact": 0.009413,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103551660211454415",
+      "artifact": 0.004265,
+      "uses_jev": 0.030676,
+      "title": "→ pick relevant sources before loading the context",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103499518415417739",
+      "artifact": 0.02174,
+      "uses_jev": 1,
+      "title": "読解力のテストの評価をJevに切り替えました。やけに採点が厳しくなって、100点がなくなってしまいました。実際には100点でなくても天井になっている気はしますが、時短にはなるのでこのまま使ってみます。（約15分、3.3Mtok、$0.14）",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103585459704054153",
+      "artifact": 0.562177,
+      "uses_jev": 1,
+      "title": "wired up jev to play shards (a collectable card game for agents). it got its butt kicked by the bot 😅. iterating.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103577140365029407",
+      "artifact": 0.998644,
+      "uses_jev": 0.020508,
+      "title": "20 f*cking useful JEV skills, 20 repos, 5 layers, 28.4k stars combined, snapshot September 2026. One https://t.co/viutQtrtJM",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103370519580143858",
+      "artifact": 0.644225,
+      "uses_jev": 0.036288,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103520422277124533",
+      "artifact": 0.999589,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103619071816225022",
+      "artifact": 0.056444,
+      "uses_jev": 0.003824,
+      "title": "One logo 30s launch film. Every frame is Opus 5.5 wrote Code",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103631125923156405",
+      "artifact": 0.999995,
+      "uses_jev": 0.213541,
+      "title": "4Bの「判断専用」モデル Fern をつくった。",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103310162815533091",
+      "artifact": 0.999699,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103454676104737213",
+      "artifact": 0.277669,
+      "uses_jev": 1,
+      "title": "We put Jev through real Bolna calls, across routing, judging and extraction, to see how it actually held up outside a",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103555634402926774",
+      "artifact": 0.00365,
+      "uses_jev": 1,
+      "title": "Project Thanos: ask any web page a question, and everything else snaps out of existence..",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103513489180426627",
+      "artifact": 0.998601,
+      "uses_jev": 0.535098,
+      "title": "Opus 5.5 just tried to DROP a production database with 1.2M payment records. TWICE. Luckily Jev was watching every command.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103523222683549834",
+      "artifact": 0.120232,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103491326138548449",
+      "artifact": 0.999979,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103562357268238352",
+      "artifact": 0.125065,
+      "uses_jev": 0.999993,
+      "title": "@sydneyrunkle @Hacubu @allietheicon Jev as an agentic search reranker w/MCP",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103605766737563991",
+      "artifact": 0.999998,
+      "uses_jev": 0.012723,
+      "title": "i recently came across drex, an alternative to @typesafeai jev and quickly built this to try things out for a client demo",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103343076710519212",
+      "artifact": 0.010798,
+      "uses_jev": 1,
+      "title": "https://t.co/bkzWJC1Xoc",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103550750672699473",
+      "artifact": 0.894052,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103531394895086038",
+      "artifact": 0.139631,
+      "uses_jev": 1,
+      "title": "I am now indexing @solana tokens using @typesafeai JEV x @clawddevs x @supermemory",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103397316199845990",
+      "artifact": 0.403567,
+      "uses_jev": 0.999023,
+      "title": "I made Jev grade every Starter Story video.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103449736762028428",
+      "artifact": 0.045522,
+      "uses_jev": 0.914901,
+      "title": "Vault risk classification for @kamino vaults.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103394743090855964",
+      "artifact": 0.414899,
+      "uses_jev": 1,
+      "title": "Jev習作② テキストの「サビ」を可視化",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103537455496327209",
+      "artifact": 0.036631,
+      "uses_jev": 1,
+      "title": "Full build + how to race your own bees 👇 https://t.co/UTPZJQPr7I",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103376275746501098",
+      "artifact": 0.01524,
+      "uses_jev": 0.199932,
+      "title": "none",
+      "title_in_text": false,
+      "date": ""
+    },
+    {
+      "id": "2103430257575620941",
+      "artifact": 0.021896,
+      "uses_jev": 1,
+      "title": "話題のAI「Jev」で、Figmaプラグインなど4つを試作。",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103378563793891381",
+      "artifact": 0.082402,
+      "uses_jev": 0.999999,
+      "title": "JevとLaya使って配信コメント欄フィルター実装した",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103443471939817978",
+      "artifact": 0.186539,
+      "uses_jev": 0.307358,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103520054583464321",
+      "artifact": 0.636353,
+      "uses_jev": 0.999998,
+      "title": "Nice. For measuring calibration + selective risk of Jev decisions in DSPy (offline + reproducible):",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103441246370791548",
+      "artifact": 0.002531,
+      "uses_jev": 0.991389,
+      "title": "I tested Jev and Gemini on 300 customer requests.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103493068272095398",
+      "artifact": 0.262133,
+      "uses_jev": 1,
+      "title": "https://t.co/CoDJjVuceK",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103537670773506059",
+      "artifact": 0.159217,
+      "uses_jev": 1,
+      "title": "if you haven't tried Jev, you're missing out. i built three projects using Jev in the easiest way possible",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103478968141922438",
+      "artifact": 0.999981,
+      "uses_jev": 0.004538,
+      "title": "(no excerpt)",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103584024694538531",
+      "artifact": 0.290578,
+      "uses_jev": 1,
+      "title": "🤯 Honestly - I can't get enough of this:",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103459265331794297",
+      "artifact": 0.999997,
+      "uses_jev": 0.162646,
+      "title": "Built- Magic Jev Ball. it's like a Magic 8 Ball, but powered by Jev (duh)",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103582665077035231",
+      "artifact": 0.016826,
+      "uses_jev": 0.196518,
+      "title": "i told the stack if a call is a pick, a score, or a yes/no, it never touches a frontier model",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103494254853242938",
+      "artifact": 0.086323,
+      "uses_jev": 0.999998,
+      "title": "- put together a sick bench including Rattata and Weedle",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103313356308529624",
+      "artifact": 0.996278,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103380064197075374",
+      "artifact": 0.118181,
+      "uses_jev": 0.991208,
+      "title": "Feed is still WIP (free affiliate catalogs for now).",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103523970343702758",
+      "artifact": 0.999722,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103428600095555831",
+      "artifact": 0.019625,
+      "uses_jev": 0.999901,
+      "title": "@plotarmordev @jackyk02 nope, \"competitor\" is by far the wrong wording here, at least for me.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103399607296278712",
+      "artifact": 0.36659,
+      "uses_jev": 0.988039,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103477731455533262",
+      "artifact": 0.999997,
+      "uses_jev": 0.997817,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103282706654413039",
+      "artifact": 0.009879,
+      "uses_jev": 0.999999,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103398123351552478",
+      "artifact": 0.139631,
+      "uses_jev": 0.009477,
+      "title": "这周看到很多人讨论 Jev，我想到一个很具体的场景：专业审校软件已经把疑点找出来了，但它给出的报告太厚，编辑难以逐条等量处理。 https://t.co/EXAGdTtpZc",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103493772021543415",
+      "artifact": 0.145115,
+      "uses_jev": 1,
+      "title": "Just got done adding @fastinoAI new gliner decide model to our jev bench and it came in near the bottom 😬 https://t.co/op2xOYCozp",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103540375000437119",
+      "artifact": 0.171061,
+      "uses_jev": 1,
+      "title": "Since there is no SDK for OpenRouter/Jev in Rust. A simple HTTP request using `reqwest` does the trick! https://t.co/etY5qKRm2u",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103483255785996377",
+      "artifact": 0.080069,
+      "uses_jev": 0.073165,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103535875435225230",
+      "artifact": 0.135346,
+      "uses_jev": 0.999998,
+      "title": "We turned TypeSafe Jev into a real-time feed scanner for X.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103317955471876320",
+      "artifact": 0.035948,
+      "uses_jev": 0.999981,
+      "title": "Getting your first customers is super hard. So I tried the easy way with AI.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103569948782248228",
+      "artifact": 1,
+      "uses_jev": 0.441673,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103409361318191555",
+      "artifact": 0.301568,
+      "uses_jev": 0.999984,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103562466185678918",
+      "artifact": 0.998364,
+      "uses_jev": 0.999974,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103347810649133399",
+      "artifact": 0.07836,
+      "uses_jev": 1,
+      "title": "I replaced OpenAI with Jev for property classification for https://t.co/Eqf0YmkA2Q",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103566272910721121",
+      "artifact": 0.024048,
+      "uses_jev": 0.99999,
+      "title": "Three weeks ago I published my Grok Bot desk that made me six figs. This sits on top of it.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103561873710842337",
+      "artifact": 0.065605,
+      "uses_jev": 1,
+      "title": "Control a SolveIt dialog via the (very fast) Jev model! 🙂 https://t.co/rvhHtPgIg8",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103523638553006588",
+      "artifact": 0.999943,
+      "uses_jev": 0.32595,
+      "title": "J'ai intégré JEV pour traiter le rapprochement entre les virements et les loyer pour surveiller qui paye quoi.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103282001893879967",
+      "artifact": 0.057493,
+      "uses_jev": 0.997232,
+      "title": "Having some fun testing Afterwave and @typesafeai on my iOS project SafeFaces.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103420555752063205",
+      "artifact": 0.082994,
+      "uses_jev": 0.999999,
+      "title": "エースジョブにJev導入してみました！プロダクト導入は早い方なのではないかと思います！",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103562439388221770",
+      "artifact": 0.999831,
+      "uses_jev": 0.336331,
+      "title": "everyone's making demos with Jev",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103538643751030882",
+      "artifact": 0.206894,
+      "uses_jev": 0.999999,
+      "title": "Lo que sí tenía claro era la estética: una gasolinera de EE. UU.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103339098589241783",
+      "artifact": 0.48438,
+      "uses_jev": 0.439266,
+      "title": "from an actual benchmark run: 7 of 9 items never reached an expensive stage.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103634128658973044",
+      "artifact": 0.999966,
+      "uses_jev": 0.999994,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103297776121675842",
+      "artifact": 0.255529,
+      "uses_jev": 1,
+      "title": "Jev面接対策サイトのLPができた https://t.co/1aSzCvfV6p",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103588818448527497",
+      "artifact": 0.057918,
+      "uses_jev": 1,
+      "title": "Testing @typesafeai  #jev as a judge in Multisynapse evals.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103572439502328316",
+      "artifact": 0.0052,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103399026247045573",
+      "artifact": 0.740174,
+      "uses_jev": 0.999987,
+      "title": "Grok Bot had already build the scaffold for an MVP & passed Jev’s doc to figure https://t.co/BIYT1amggp",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103482195717628017",
+      "artifact": 0.144873,
+      "uses_jev": 0.999998,
+      "title": "Use serverless GPUs and ai_query to apply structured decisions directly to governed data",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103497887162470801",
+      "artifact": 0.236516,
+      "uses_jev": 0.999999,
+      "title": "@bodryachog Набросал концепт Jev ревьюера для нейрослопа, используя уже существующие наработки в AI review.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103475393047011451",
+      "artifact": 0.982955,
+      "uses_jev": 0.524395,
+      "title": "every ticket gets the same three questions: who owns it, how urgent, is it a bug. four https://t.co/tOGNOhD8Bb",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103561873795027265",
+      "artifact": 0.240775,
+      "uses_jev": 0.20947,
+      "title": "I put two AI bots in the same world at night. one of them got eaten.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103408517608816960",
+      "artifact": 0.746139,
+      "uses_jev": 0.999989,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103499900755509555",
+      "artifact": 1,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103630407728079341",
+      "artifact": 0.013849,
+      "uses_jev": 1,
+      "title": "much of the heavy lifting is done using libraries like chess.js, Stockfish, react-chessboard, etc.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103506460416295231",
+      "artifact": 0.012552,
+      "uses_jev": 1,
+      "title": "「フルボイス + 文字起こし(Groq) + 自由入力 + 選択(Jev)」これがノベルゲーの新しい形だと思います。 https://t.co/HwDB8LGe9y",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103498511052349837",
+      "artifact": 0.169543,
+      "uses_jev": 0.999998,
+      "title": "assumed the local decision model would win on latency. it didn't",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103413783670763985",
+      "artifact": 0.134548,
+      "uses_jev": 0.999988,
+      "title": "Tried the Jev + Opus 5.5 pattern: Jev makes every typed step decision, the frontier model only plans, codes and critiques.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103396258262216957",
+      "artifact": 1,
+      "uses_jev": 0.999979,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103530775433871669",
+      "artifact": 0.999859,
+      "uses_jev": 0.243418,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103490874298527748",
+      "artifact": 0.202601,
+      "uses_jev": 1,
+      "title": "I made Jev from @typesafeai speed up code review 4x https://t.co/MaPDlxdcjV",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103404913112039803",
+      "artifact": 0.02581,
+      "uses_jev": 1,
+      "title": "Opus 5.5 is helping me recreate BF3 flight physics to make a high skill based Dogfighting game run through the browser.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103316800591302798",
+      "artifact": 0.011137,
+      "uses_jev": 0.999999,
+      "title": "用Jev 跑了一次企业简历筛选：962 份简历 × 25 个 JD，对比 DeepSeek V4.1 Flash。",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103420578829140436",
+      "artifact": 0.073696,
+      "uses_jev": 0.999996,
+      "title": "全日本人が欲しいコピペ機能ってこうじゃないかな？",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103404566448660749",
+      "artifact": 0.850469,
+      "uses_jev": 0.763484,
+      "title": "@ember_arlynx None, because Waterfall is for Lean, not Rocq",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103510948690763822",
+      "artifact": 0.990786,
+      "uses_jev": 0.245808,
+      "title": "Single-pass bi-encoders give you 50ms multi-task routing on a local GPU for $0, no prompt parsing needed.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103417875155325412",
+      "artifact": 0.209227,
+      "uses_jev": 1,
+      "title": "Jev, a TypeSafe model that only decides, made me add a third term to the rule I built Kitsuno on.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103354364421369999",
+      "artifact": 0.190272,
+      "uses_jev": 0.386763,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103314182271914228",
+      "artifact": 0.998132,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103466207227859184",
+      "artifact": 0.095687,
+      "uses_jev": 0.999999,
+      "title": "JEV is built to intelligently decide which Claude model fits the task instead of blindly using the most https://t.co/yQP4OIpjqj",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103496486868996331",
+      "artifact": 0.008008,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103530218007015816",
+      "artifact": 0.005555,
+      "uses_jev": 0.999988,
+      "title": "I GAVE MY DOG AN AI DECISION BRAIN. IT CHOSE HOT DOGS 12 TIMES.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103576481310167118",
+      "artifact": 1,
+      "uses_jev": 0.459076,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103493579901411622",
+      "artifact": 0.434941,
+      "uses_jev": 0.999997,
+      "title": "If you're struggling to free up Gmail space too, check it out 👇",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103507676282200135",
+      "artifact": 0.999999,
+      "uses_jev": 0.020274,
+      "title": "We tested JEV on AI news.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103528719394500971",
+      "artifact": 0.157655,
+      "uses_jev": 0.014392,
+      "title": "JEV + Opus 5.5 is an INSANE combo for customer research",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103499045826380022",
+      "artifact": 0.999991,
+      "uses_jev": 0.999987,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103479915152589098",
+      "artifact": 0.422505,
+      "uses_jev": 1,
+      "title": "I ran 30,000+ news, launches and events through ~200,000 JEV calls to build a live radar for AI, models, agents and tech.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103477748442472559",
+      "artifact": 0.073696,
+      "uses_jev": 0.999995,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103435588817072431",
+      "artifact": 0.056862,
+      "uses_jev": 0.999999,
+      "title": "サクーッとJEV使ったXフィルター(Chrome拡張)をバイブコード",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103586663825862849",
+      "artifact": 0.806243,
+      "uses_jev": 0.999931,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103409797731160264",
+      "artifact": 0.999913,
+      "uses_jev": 0.06489,
+      "title": "Chapter one of Don Quixote, 1,878 words, part-of-speech tagged by Jev (@typesafeai ) and Claude Opus 5.5. Time, accuracy, cost:",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103475405768516043",
+      "artifact": 0.628863,
+      "uses_jev": 0.039713,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103518328090394626",
+      "artifact": 1,
+      "uses_jev": 0.245627,
+      "title": "https://t.co/sRYxMcftXi",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103587164647043260",
+      "artifact": 0.0047,
+      "uses_jev": 0.999788,
+      "title": "Three agents: host asks questions, referee validates them, contestant answers them. You can play along against it and pick topic.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103448613615489385",
+      "artifact": 0.999997,
+      "uses_jev": 0.314471,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103422701243191532",
+      "artifact": 0.997144,
+      "uses_jev": 0.5794,
+      "title": "Sunday: Seahawks at Commanders.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103451322779615384",
+      "artifact": 0.047426,
+      "uses_jev": 0.999916,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103534779417198896",
+      "artifact": 0.050331,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103524203467305309",
+      "artifact": 0.169131,
+      "uses_jev": 0.238284,
+      "title": "If you thought JevJev was cool with Jev under the hood, I cannot wait for you to meet Jeff, powered by this puppy: https://t.co/SCw83zoOAG",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103537829850832938",
+      "artifact": 0.188623,
+      "uses_jev": 0.99979,
+      "title": "The idea was pretty simple: build a product that checks any website for compliance with UAE laws and the specific free zones we care about",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103608782626680857",
+      "artifact": 0.999999,
+      "uses_jev": 1,
+      "title": "(no excerpt)",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103603340072681882",
+      "artifact": 0.263884,
+      "uses_jev": 0.334589,
+      "title": "I just tried again with eauto. Here are results https://t.co/CcpFte5iqd",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103490877029069146",
+      "artifact": 0.176104,
+      "uses_jev": 1,
+      "title": "It starts by building a tree of different chunks of code and passing it to Jev. https://t.co/n6tqTxxuei",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103565114419089553",
+      "artifact": 0.999995,
+      "uses_jev": 0.47658,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103434309356937373",
+      "artifact": 0.990678,
+      "uses_jev": 0.999649,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103575293558652983",
+      "artifact": 0.086942,
+      "uses_jev": 0.999999,
+      "title": "Com o jev-gateway do @oviniciuslana, a decisão de tool vai direto pro Jev a $0.042/M tokens.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103374967387640072",
+      "artifact": 0.99999,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103354139526979988",
+      "artifact": 0.979668,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103467740921270523",
+      "artifact": 0.017045,
+      "uses_jev": 0.199932,
+      "title": "none",
+      "title_in_text": false,
+      "date": ""
+    },
+    {
+      "id": "2103423575814439222",
+      "artifact": 0.106691,
+      "uses_jev": 0.162613,
+      "title": "In knowledge management I see two immediate places: routing notes into categories, and cutting tokens before expensive",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103457839318433857",
+      "artifact": 0.28398,
+      "uses_jev": 0.999999,
+      "title": "Jev-Omni for Quality Inspection, looking at lemons on a roller line, running fully local on MacBook 🍋",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103525194899853553",
+      "artifact": 0.997989,
+      "uses_jev": 0.268558,
+      "title": "Stop paying your top model to answer yes or no.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103500993657000178",
+      "artifact": 0.187142,
+      "uses_jev": 0.699049,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103596262734082488",
+      "artifact": 0.413004,
+      "uses_jev": 0.999972,
+      "title": "Browser with jev built-in.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103544096270766307",
+      "artifact": 0.183009,
+      "uses_jev": 0.999999,
+      "title": "Using Jev in my fraud screening process now. https://t.co/5SckGiTBwF",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103560180810330283",
+      "artifact": 0.999998,
+      "uses_jev": 0.289975,
+      "title": "Cooked up this goal-oriented harness that combines system 1 + system 2 thinking https://t.co/c8VcnHdqAE",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103556175820464597",
+      "artifact": 0.999955,
+      "uses_jev": 0.906983,
+      "title": "(no excerpt)",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103547015305248848",
+      "artifact": 0.103976,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103524927857201505",
+      "artifact": 0.999996,
+      "uses_jev": 0.118385,
+      "title": "Didn’t plan a long session. Just poked at Jev and wrote a tiny BPE.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103416944217207236",
+      "artifact": 0.214034,
+      "uses_jev": 1,
+      "title": "https://t.co/AkG9u7z8RS",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103476705583108186",
+      "artifact": 0.163579,
+      "uses_jev": 0.999713,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103529434921967639",
+      "artifact": 0.999995,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103548251693531424",
+      "artifact": 0.695958,
+      "uses_jev": 1,
+      "title": "coded a jevved up pomodoro app that forces me to stay on task 🍅",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103336866745589971",
+      "artifact": 0.257578,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103602320252551394",
+      "artifact": 0.999977,
+      "uses_jev": 1,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103487487175995435",
+      "artifact": 0.316581,
+      "uses_jev": 0.999997,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103475447384375480",
+      "artifact": 0.370681,
+      "uses_jev": 0.956166,
+      "title": "Aimed Jev at a tricky problem: finding the next page element on a webpage.",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103547095802094018",
+      "artifact": 0.030329,
+      "uses_jev": 0.999997,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103595155877998908",
+      "artifact": 0.095349,
+      "uses_jev": 0.999999,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103414203604422985",
+      "artifact": 0.981919,
+      "uses_jev": 0.139396,
+      "title": "Why does Laya beat Jev at Snake? Game code does the thinking and hands it answers: \"Safe. Best route to food.\"",
+      "title_in_text": true,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103469886278160791",
+      "artifact": 0.957358,
+      "uses_jev": 0.999885,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103521148655063409",
+      "artifact": 0.2227,
+      "uses_jev": 0.999998,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
+    },
+    {
+      "id": "2103411312898523493",
+      "artifact": 0.966156,
+      "uses_jev": 0.999998,
+      "title": "none",
+      "title_in_text": false,
+      "date": "2026-09-25"
     }
   ],
-  "updated": "2026-10-04T01:35:14.431Z",
-  "total": 1673
+  "updated": "2026-10-09T10:25:50.182Z",
+  "total": 1748
 }
