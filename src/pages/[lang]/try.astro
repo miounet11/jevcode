@@ -41,7 +41,7 @@ const preset = {
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
   <section class="section">
     <div class="wrap try">
-      <p class="eyebrow"><span class="eyebrow__dot"></span>Playground</p>
+      <p class="eyebrow"><span class="eyebrow__dot"></span>免费试用</p>
       <h1>{copy.title}</h1>
       <p class="try__lead">{copy.lead}</p>
       <p class="try__lead"><a href={`/${lang}/compare/`}>{pick(lang, tryCopy.compareLink)}</a></p>
@@ -100,6 +100,7 @@ const preset = {
     if (raw.length < 8) { errorEl.hidden = false; errorEl.textContent = clientCopy.tooShort; return; }
     if (raw.length > 4000) { errorEl.hidden = false; errorEl.textContent = clientCopy.tooLong; return; }
     runEl.disabled = true;
+    runEl.classList.add('is-loading');
     runEl.textContent = copy.running;
     try {
       const res = await fetch('/api/try', {
@@ -116,6 +117,7 @@ const preset = {
       errorEl.textContent = clientCopy.failed;
     } finally {
       runEl.disabled = false;
+      runEl.classList.remove('is-loading');
       runEl.textContent = copy.run;
     }
   });
@@ -125,7 +127,7 @@ const preset = {
   .try { max-width: 760px; }
   .try h1 { font-size: clamp(36px, 5vw, 56px); letter-spacing: -0.04em; margin: 12px 0; }
   .try__lead { color: var(--fg-muted); max-width: 62ch; }
-  .try__label { display: block; margin: 22px 0 8px; font-size: 13px; color: var(--fg-dim); }
+  .try__label { display: block; margin: 22px 0 8px; font-size: 13px; font-weight: 600; color: var(--fg-muted); }
   textarea {
     width: 100%;
     box-sizing: border-box;
@@ -136,8 +138,15 @@ const preset = {
     padding: 14px;
     font: inherit;
     resize: vertical;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  #run { margin-top: 16px; }
+  textarea:focus {
+    outline: none;
+    border-color: var(--accent-border);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  #run { margin-top: 16px; min-width: 140px; justify-content: center; }
+  #run.is-loading { opacity: 0.75; cursor: progress; }
   .try__error { color: var(--rose); }
   .try__result { margin-top: 28px; display: grid; gap: 14px; }
   .try__cta {

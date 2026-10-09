@@ -30,14 +30,14 @@ function isActive(href: string, match: string[]) {
 }
 
 const searchUi = {
-  zh: { label: '搜索', placeholder: '搜索文档…' },
-  en: { label: 'Search', placeholder: 'Search docs…' },
-  ja: { label: '検索', placeholder: 'ドキュメントを検索…' },
-  ko: { label: '검색', placeholder: '문서 검색…' },
-  de: { label: 'Suche', placeholder: 'Dokumente suchen…' },
-  fr: { label: 'Recherche', placeholder: 'Rechercher dans la doc…' },
-  es: { label: 'Buscar', placeholder: 'Buscar en la documentación…' },
-  pt: { label: 'Buscar', placeholder: 'Pesquisar na documentação…' },
+  zh: { label: '搜索', placeholder: '搜文档，试试「置信度」', empty: '没有找到，换个词试试' },
+  en: { label: 'Search', placeholder: 'Search docs, try "confidence"', empty: 'Nothing found. Try another word.' },
+  ja: { label: '検索', placeholder: 'ドキュメントを検索', empty: '見つかりません。別の語で試してください' },
+  ko: { label: '검색', placeholder: '문서 검색', empty: '결과가 없습니다. 다른 검색어를 시도하세요' },
+  de: { label: 'Suche', placeholder: 'Dokumente durchsuchen', empty: 'Nichts gefunden. Anderes Wort versuchen.' },
+  fr: { label: 'Recherche', placeholder: 'Rechercher dans la doc', empty: 'Aucun résultat. Essayez un autre mot.' },
+  es: { label: 'Buscar', placeholder: 'Buscar en la documentación', empty: 'Sin resultados. Prueba otra palabra.' },
+  pt: { label: 'Buscar', placeholder: 'Pesquisar na documentação', empty: 'Nada encontrado. Tente outra palavra.' },
 } as const;
 
 const themeToggleUi = {
@@ -141,7 +141,7 @@ const themeToggleUi = {
         <input type="search" data-search-input placeholder={searchUi[lang].placeholder} aria-label={searchUi[lang].label} autocomplete="off" />
         <button type="button" class="search-modal__close" data-search-close aria-label="Esc">Esc</button>
       </div>
-      <div class="search-modal__results" data-search-results></div>
+      <div class="search-modal__results" data-search-results data-search-empty={searchUi[lang].empty}></div>
     </div>
   </dialog>
 </header>
@@ -224,7 +224,7 @@ const themeToggleUi = {
       const res = await activeQuery;
       if (!results) return;
       if (res.results.length === 0) {
-        results.textContent = '—';
+        results.textContent = results.dataset.searchEmpty ?? '—';
         results.classList.add('is-empty');
         return;
       }

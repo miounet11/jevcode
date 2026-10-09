@@ -270,6 +270,12 @@ const copy = {
     background: var(--bg-elev);
     color: var(--fg);
     font: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .auth__field input:focus {
+    outline: none;
+    border-color: var(--accent-border);
+    box-shadow: 0 0 0 3px var(--accent-soft);
   }
   .pw { display: grid; gap: 8px; margin-top: -2px; }
   .pw__meter { height: 5px; border-radius: 99px; background: var(--bg-elev-2); overflow: hidden; }
