@@ -54,5 +54,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-urgency-05",
+    "state": "Alert fired: Please send last month summary sometime next week. No rush.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-urgency-06",
+    "state": "Log line: The product listing label is two pixels off; fix before next quarter planning.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-urgency-07",
+    "state": "Call transcript: When convenient, add me to the newsletter about order.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-urgency-08",
+    "state": "Form submission: Planning next quarter offsite; would like a product listing quote eventually.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
   }
 ]
