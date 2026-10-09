@@ -12,13 +12,21 @@
  *   node scripts/build-jev-cards.mjs --limit 5
  *   node scripts/build-jev-cards.mjs --ids 2102850740527964492,2102578703666413804
  *
- * 需要 TYPESAFE_API_KEY。原始帖子写到 data/builds/raw/，判定写到 data/builds/cards.json。
+ * 需要 CLAVUE_API_KEYS（默认后端）或 TYPESAFE_API_KEY（JUDGE_BACKEND=jev）。
+ * 原始帖子写到 data/builds/raw/，判定写到 data/builds/cards.json。
  */
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 
 const KEY = process.env.TYPESAFE_API_KEY;
-if (!KEY) {
-  console.error('缺少 TYPESAFE_API_KEY');
+const CLAVUE_KEYS = (process.env.CLAVUE_API_KEYS ?? '').split(',').map((key) => key.trim()).filter(Boolean);
+// 默认 clavue（typesafe 端点已 451 地域封锁，本机无法访问）；JUDGE_BACKEND=jev 走旧端点
+const BACKEND = (process.env.JUDGE_BACKEND ?? 'clavue') === 'jev' ? 'jev' : 'clavue';
+if (BACKEND === 'jev' && !KEY) {
+  console.error('缺少 TYPESAFE_API_KEY（JUDGE_BACKEND=jev）');
+  process.exit(1);
+}
+if (BACKEND === 'clavue' && !CLAVUE_KEYS.length) {
+  console.error('缺少 CLAVUE_API_KEYS（默认 clavue 后端）');
   process.exit(1);
 }
 
@@ -131,48 +139,56 @@ async function judge(tweet) {
   const text = String(tweet.text ?? '').trim();
   // 帖子长度差异大；窗口太短会让长帖的标题行落在窗口之外，被判成 none。
   const state = text.slice(0, 1800);
-  const response = await fetchWithRetry('https://api.typesafe.ai/v1/systemone', {
+  const questions = {
+    artifact: {
+      type: 'noul',
+      instructions: 'Does the author present an artifact of their own in this post?',
+      criteria: {
+        true: 'The post names or links the author\'s own product, tool, demo, repo, or measured result.',
+        false: 'The post is only a reaction, quote, or news item without the author\'s own artifact.',
+      },
+    },
+    uses_jev: {
+      type: 'noul',
+      instructions: 'Does that artifact use Jev or System One?',
+      criteria: {
+        true: 'The post says the artifact is powered by, built with, or measured on Jev or System One.',
+        false: 'Jev is absent, or it is only the topic of discussion rather than a component of the artifact.',
+      },
+    },
+    title: {
+      type: 'choice',
+      instructions: 'Which line is a verbatim excerpt that states what was built? Choose none if no such excerpt exists.',
+      // clavue 对单选项 choice 返回 502 Decision head failed——候选行为 0 时
+      // 整个 criteria 只剩 none。补一个固定选项保证 ≥2。
+      criteria: Object.fromEntries([...new Set(state.split('\n').map((line) => line.trim()).filter((line) => line.length >= 8 && line.length <= 140)), 'none', '(no excerpt)'].map((line) => [line, null])),
+    },
+    category: {
+      type: 'choice',
+      instructions: 'Which category best fits the thing being shown?',
+      criteria: Object.fromEntries(CATEGORIES.map((item) => [item, null])),
+    },
+    usecase: {
+      type: 'choice',
+      instructions: 'Which use fits the thing being shown?',
+      criteria: Object.fromEntries(USES.map((item) => [item, null])),
+    },
+  };
+  // clavue 端点（/v1/judge）与 typesafe systemone 同形：state + model + questions。
+  // 两端点返回的 answers 结构一致（title 的 criteria 键是长句，clavue 原样回传 choice）。
+  const url = BACKEND === 'jev'
+    ? 'https://api.typesafe.ai/v1/systemone'
+    : (process.env.CLAVUE_URL ?? 'https://api.clavue.com/v1/judge');
+  const response = await fetchWithRetry(url, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${KEY}`,
+      Authorization: `Bearer ${BACKEND === 'jev' ? KEY : CLAVUE_KEYS[0]}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       state,
-      model: 'jev-latest',
-      questions: {
-        artifact: {
-          type: 'noul',
-          instructions: 'Does the author present an artifact of their own in this post?',
-          criteria: {
-            true: 'The post names or links the author\'s own product, tool, demo, repo, or measured result.',
-            false: 'The post is only a reaction, quote, or news item without the author\'s own artifact.',
-          },
-        },
-        uses_jev: {
-          type: 'noul',
-          instructions: 'Does that artifact use Jev or System One?',
-          criteria: {
-            true: 'The post says the artifact is powered by, built with, or measured on Jev or System One.',
-            false: 'Jev is absent, or it is only the topic of discussion rather than a component of the artifact.',
-          },
-        },
-        title: {
-          type: 'choice',
-          instructions: 'Which line is a verbatim excerpt that states what was built? Choose none if no such excerpt exists.',
-          criteria: Object.fromEntries([...new Set(state.split('\n').map((line) => line.trim()).filter((line) => line.length >= 8 && line.length <= 140)), 'none'].map((line) => [line, null])),
-        },
-        category: {
-          type: 'choice',
-          instructions: 'Which category best fits the thing being shown?',
-          criteria: Object.fromEntries(CATEGORIES.map((item) => [item, null])),
-        },
-        usecase: {
-          type: 'choice',
-          instructions: 'Which use fits the thing being shown?',
-          criteria: Object.fromEntries(USES.map((item) => [item, null])),
-        },
-      },
+      model: BACKEND === 'jev' ? 'jev-latest' : 'clavue-jev',
+      questions,
     }),
   });
   if (!response.ok) {
