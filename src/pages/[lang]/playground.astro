@@ -10,15 +10,15 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Lang };
 
 const primitiveBadge: Record<string, Record<Lang, string>> = {
-  noul: { zh: '原语 · Noul', en: 'Primitive · Noul', ja: 'プリミティブ・Noul', ko: '프리미티브 · Noul', de: 'Primitiv · Noul', fr: 'Primitive · Noul', es: 'Primitiva · Noul', pt: 'Primitiva · Noul' },
-  choice: { zh: '原语 · Choice', en: 'Primitive · Choice', ja: 'プリミティブ・Choice', ko: '프리미티브 · Choice', de: 'Primitiv · Choice', fr: 'Primitive · Choice', es: 'Primitiva · Choice', pt: 'Primitiva · Choice' },
-  score: { zh: '原语 · Score', en: 'Primitive · Score', ja: 'プリミティブ・Score', ko: '프리미티브 · Score', de: 'Primitiv · Score', fr: 'Primitive · Score', es: 'Primitiva · Score', pt: 'Primitiva · Score' },
+  noul: { zh: '问法 · 是或否', en: 'Ask · Yes or no', ja: '質問 · はい／いいえ', ko: '질문 · 예/아니오', de: 'Fragen · Ja oder Nein', fr: 'Question · Oui ou non', es: 'Pregunta · Sí o no', pt: 'Pergunta · Sim ou não' },
+  choice: { zh: '问法 · 选一项', en: 'Ask · Pick one', ja: '質問 · 選ぶ', ko: '질문 · 고르기', de: 'Fragen · Eines wählen', fr: 'Question · Choisir', es: 'Pregunta · Elegir una', pt: 'Pergunta · Escolher uma' },
+  score: { zh: '问法 · 打分', en: 'Ask · Score', ja: '質問 · スコア', ko: '질문 · 점수', de: 'Fragen · Bewerten', fr: 'Question · Noter', es: 'Pregunta · Puntuar', pt: 'Pergunta · Pontuar' },
   pipeline: { zh: '管线模式', en: 'Pipeline pattern', ja: 'パイプラインパターン', ko: '파이프라인 패턴', de: 'Pipeline-Muster', fr: 'Pattern de pipeline', es: 'Patrón de pipeline', pt: 'Padrão de pipeline' },
 };
 
 const ui = {
   title: {
-    zh: 'Playground：亲手感受判断模型',
+    zh: '示例演示：亲手感受判断模型',
     en: 'Playground: feel what a judgment model does',
     ja: 'Playground：判断モデルを体験する',
     ko: 'Playground: 판단 모델을 직접 느끼다',
