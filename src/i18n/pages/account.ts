@@ -155,3 +155,11 @@ export const spent: Localized<string> = {
 export const apiDocs: Localized<string> = {
   zh: '开发文档', en: 'Developer docs', ja: '開発ドキュメント', ko: '개발 문서', de: 'Entwicklerdoku', fr: 'Doc développeur', es: 'Doc para devs', pt: 'Doc para devs',
 };
+
+export const copyKey: Localized<string> = {
+  zh: '复制密钥', en: 'Copy key', ja: 'キーをコピー', ko: '키 복사', de: 'Key kopieren', fr: 'Copier la clé', es: 'Copiar clave', pt: 'Copiar chave',
+};
+
+export const copied: Localized<string> = {
+  zh: '已复制', en: 'Copied', ja: 'コピーしました', ko: '복사됨', de: 'Kopiert', fr: 'Copié', es: 'Copiado', pt: 'Copiado',
+};

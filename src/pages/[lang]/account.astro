@@ -45,6 +45,8 @@ const copy = {
   kindTopup: pick(lang, accountCopy.kindTopup),
   spent: pick(lang, accountCopy.spent),
   apiDocs: pick(lang, accountCopy.apiDocs),
+  copyKey: pick(lang, accountCopy.copyKey),
+  copied: pick(lang, accountCopy.copied),
 };
 ---
 
@@ -279,7 +281,21 @@ const copy = {
         warn.textContent = copy.newKeyWarn;
         const code = document.createElement('code');
         code.textContent = d.key;
-        box.append(warn, code);
+        // 一键复制：新密钥明文只出现一次，别让用户手动划选
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'btn btn--ghost acct__copy';
+        copyBtn.textContent = copy.copyKey;
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(d.key);
+            copyBtn.textContent = copy.copied;
+            copyBtn.disabled = true;
+          } catch {
+            /* 复制失败就保持原样，用户仍可手动选择 */
+          }
+        });
+        box.append(warn, code, copyBtn);
         await load();
       }
     } finally {
@@ -312,7 +328,8 @@ const copy = {
   .acct__table th { color: var(--fg-dim); font-weight: 500; }
   .acct__none { color: var(--fg-dim); font-size: 14px; }
   .acct__actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
-  .acct__newkey { margin-top: 14px; display: grid; gap: 6px; font-size: 14px; }
-  .acct__newkey code { word-break: break-all; }
+  .acct__newkey { margin-top: 14px; display: grid; gap: 8px; justify-items: start; font-size: 14px; padding: 14px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--bg-elev); }
+  .acct__newkey code { word-break: break-all; padding: 8px 10px; background: var(--bg-code); border-radius: 8px; display: block; }
+  .acct__copy { min-height: 36px; padding: 6px 14px; font-size: 14px; }
   .acct__revoked { color: var(--fg-dim); font-size: 13px; }
 </style>
