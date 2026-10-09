@@ -19,6 +19,9 @@ const copy = {
   running: pick(lang, tryCopy.running),
   share: pick(lang, tryCopy.share),
   copied: pick(lang, tryCopy.copied),
+  ctaTitle: pick(lang, tryCopy.ctaTitle),
+  ctaLead: pick(lang, tryCopy.ctaLead),
+  ctaButton: pick(lang, tryCopy.ctaButton),
 };
 const clientCopy = pick(lang, tryCopy.client) as Record<string, string>;
 
@@ -52,6 +55,11 @@ const preset = {
       <div class="try__result" id="result" hidden>
         <div id="bars"></div>
         <a class="btn btn--ghost" id="share" href="#"></a>
+        <aside class="try__cta">
+          <p class="try__cta-title">{copy.ctaTitle}</p>
+          <p class="try__cta-lead">{copy.ctaLead}</p>
+          <a class="btn btn--primary" href={`/${lang}/login/?mode=register`}>{copy.ctaButton}</a>
+        </aside>
       </div>
     </div>
   </section>
@@ -132,6 +140,15 @@ const preset = {
   #run { margin-top: 16px; }
   .try__error { color: var(--rose); }
   .try__result { margin-top: 28px; display: grid; gap: 14px; }
+  .try__cta {
+    margin-top: 8px; padding: 18px;
+    border: 1px solid var(--border-strong); border-radius: 12px;
+    background: var(--bg-elev);
+    display: grid; gap: 8px; justify-items: start;
+  }
+  .try__cta-title { font-weight: 600; margin: 0; }
+  .try__cta-lead { margin: 0; font-size: 14px; color: var(--fg-dim); }
+  .try__cta .btn { margin-top: 6px; }
   .try__bar-label, .try__choice { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
   .try__track { height: 8px; border-radius: 99px; background: var(--bg-code); overflow: hidden; margin: 6px 0 12px; }
   .try__track span { display: block; height: 100%; background: var(--accent); }

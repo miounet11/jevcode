@@ -39,6 +39,33 @@ export const compareLink: Localized<string> = {
   zh: '看 clavue-jev 和 jev-1.13.0 的同题对比', en: 'Compare clavue-jev with jev-1.13.0 on the same questions', ja: 'clavue-jev と jev-1.13.0 の同問比較を見る', ko: 'clavue-jev와 jev-1.13.0의 같은 문제 비교 보기', de: 'clavue-jev mit jev-1.13.0 bei denselben Fragen vergleichen', fr: 'Comparer clavue-jev et jev-1.13.0 sur les mêmes questions', es: 'Comparar clavue-jev con jev-1.13.0 en las mismas preguntas', pt: 'Comparar clavue-jev com jev-1.13.0 nas mesmas perguntas',
 };
 
+/** 判定结果下方的注册引导条 */
+export const ctaTitle: Localized<string> = {
+  zh: '想把这个判断接进你的程序？',
+  en: 'Want this judgment in your own program?',
+  ja: 'この判定を自分のプログラムに組み込みたい？',
+  ko: '이 판정을 프로그램에 연결하고 싶으신가요?',
+  de: 'Dieses Urteil in dein Programm einbauen?',
+  fr: 'Envie d’intégrer ce jugement à votre programme ?',
+  es: '¿Quieres integrar este juicio en tu programa?',
+  pt: 'Quer integrar este julgamento no seu programa?',
+};
+
+export const ctaLead: Localized<string> = {
+  zh: '注册就送 $5 额度，一个 API 调用就能跑同样的判断。',
+  en: 'Sign up for $5 in credit — one API call runs the same judgment.',
+  ja: '登録で $5 分のクレジット。API 呼び出し 1 回で同じ判定が動きます。',
+  ko: '가입 시 $5 크레딧. API 호출 한 번으로 같은 판정을 실행합니다.',
+  de: 'Anmeldung mit $5 Guthaben – ein API-Aufruf startet dasselbe Urteil.',
+  fr: 'Inscription avec 5 $ de crédit — un appel API lance le même jugement.',
+  es: 'Regístrate con $5 de crédito: una llamada a la API ejecuta el mismo juicio.',
+  pt: 'Cadastre-se com $5 de crédito — uma chamada de API executa o mesmo julgamento.',
+};
+
+export const ctaButton: Localized<string> = {
+  zh: '注册领 $5', en: 'Sign up for $5', ja: '登録して $5 をもらう', ko: '가입하고 $5 받기', de: 'Für $5 anmelden', fr: 'S’inscrire pour 5 $', es: 'Registrarse por $5', pt: 'Cadastrar por $5',
+};
+
 /** 客户端脚本文案。 */
 export const client: Localized<Record<string, string>> = {
   zh: { needState: '先写一段情况说明。', failed: '没跑成，等一下再试。', tooLong: '最长 4000 字，删一点再试。', tooShort: '太短了，至少写 8 个字。' },
