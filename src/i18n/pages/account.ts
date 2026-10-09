@@ -106,14 +106,19 @@ export const logout: Localized<string> = {
 };
 
 export const confirmRevoke: Localized<string> = {
-  zh: '确定停用？用这把密钥的程序会立刻断开。',
-  en: 'Disable this key? Programs using it will stop right away.',
-  ja: '停止しますか？このキーを使うプログラムはすぐに動かなくなります。',
-  ko: '끄시겠습니까? 이 키를 쓰는 프로그램이 바로 멈춥니다.',
-  de: 'Diesen Key deaktivieren? Programme, die ihn nutzen, stoppen sofort.',
-  fr: 'Désactiver cette clé ? Les programmes qui l\'utilisent s\'arrêtent aussitôt.',
-  es: '¿Desactivar esta clave? Los programas que la usan se detienen al instante.',
-  pt: 'Desativar esta chave? Programas que a usam param imediatamente.',
+  zh: '确认停用', en: 'Confirm disable', ja: '停止を確認', ko: '끄기 확인', de: 'Deaktivieren bestätigen', fr: 'Confirmer la désactivation', es: 'Confirmar desactivación', pt: 'Confirmar desativação',
+};
+
+/** 密钥表格下方的轻提示：说明停用后果，代替弹窗里的小字 */
+export const revokeNote: Localized<string> = {
+  zh: '停用后用这把密钥的程序会立刻断开。',
+  en: 'Disabling stops any program using the key right away.',
+  ja: '停止すると、このキーを使うプログラムはすぐに動かなくなります。',
+  ko: '끄면 이 키를 쓰는 프로그램이 바로 멈춥니다.',
+  de: 'Beim Deaktivieren stoppen Programme, die den Key nutzen, sofort.',
+  fr: 'Désactiver arrête aussitôt les programmes qui utilisent la clé.',
+  es: 'Al desactivar, los programas que usan la clave se detienen al instante.',
+  pt: 'Ao desativar, programas que usam a chave param imediatamente.',
 };
 
 export const ledger: Localized<string> = {

@@ -35,6 +35,7 @@ const copy = {
   active: pick(lang, accountCopy.active),
   logout: pick(lang, accountCopy.logout),
   confirmRevoke: pick(lang, accountCopy.confirmRevoke),
+  revokeNote: pick(lang, accountCopy.revokeNote),
   ledger: pick(lang, accountCopy.ledger),
   ledNone: pick(lang, accountCopy.ledNone),
   ledTime: pick(lang, accountCopy.ledTime),
@@ -85,6 +86,7 @@ const copy = {
             </thead>
             <tbody id="keys-body"></tbody>
           </table>
+          <p class="acct__hint">{copy.revokeNote}</p>
 
           <div class="acct__actions">
             <button class="btn btn--primary" type="button" id="issue">{copy.issue}</button>
@@ -159,8 +161,25 @@ const copy = {
         b.type = 'button';
         b.className = 'btn btn--ghost acct__revoke';
         b.textContent = copy.revoke;
+        // 两段式确认：第一次点变成红色确认按钮（就地，不弹窗），5 秒不点自动还原。
+        // 原生 window.confirm 样式突兀且不可定制，就地确认让后果文字就在按钮旁边。
+        let armed = false;
+        let disarmTimer;
+        const disarm = () => {
+          armed = false;
+          b.textContent = copy.revoke;
+          b.classList.remove('acct__revoke--armed');
+        };
         b.addEventListener('click', async () => {
-          if (!window.confirm(copy.confirmRevoke)) return;
+          if (!armed) {
+            armed = true;
+            b.textContent = copy.confirmRevoke;
+            b.classList.add('acct__revoke--armed');
+            clearTimeout(disarmTimer);
+            disarmTimer = setTimeout(disarm, 5000);
+            return;
+          }
+          clearTimeout(disarmTimer);
           b.disabled = true;
           try {
             const r = await fetch('/api/keys/revoke', {
@@ -171,7 +190,8 @@ const copy = {
             });
             if (r.ok) { await load(); return; }
             b.disabled = false;
-          } catch { b.disabled = false; }
+            disarm();
+          } catch { b.disabled = false; disarm(); }
         });
         tdAct.append(b);
       }
@@ -332,4 +352,7 @@ const copy = {
   .acct__newkey code { word-break: break-all; padding: 8px 10px; background: var(--bg-code); border-radius: 8px; display: block; }
   .acct__copy { min-height: 36px; padding: 6px 14px; font-size: 14px; }
   .acct__revoked { color: var(--fg-dim); font-size: 13px; }
+  .acct__hint { margin: 8px 0 0; font-size: 12.5px; color: var(--fg-dim); }
+  .acct__revoke--armed { border-color: var(--rose); color: var(--rose); }
+  .acct__revoke--armed:hover { border-color: var(--rose); background: var(--bg-elev-2); box-shadow: none; }
 </style>
