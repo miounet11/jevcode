@@ -110,5 +110,69 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-intent-01",
+    "state": "Chat message: This is the third time the order broke. Unacceptable.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-intent-02",
+    "state": "Email received: Where can I find the docs for the product listing?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-intent-03",
+    "state": "Review posted: Please add SSO support for our workspace so the buyer can log in.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-intent-04",
+    "state": "Alert fired: Thanks, the new product listing flow is a huge improvement.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
   }
 ]
