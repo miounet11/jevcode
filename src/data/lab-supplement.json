@@ -174,5 +174,69 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-intent-05",
+    "state": "Log line: Your GMV reporting is wrong again and nobody replies.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-intent-06",
+    "state": "Call transcript: How do I export the order to CSV?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-intent-07",
+    "state": "Form submission: Can you raise our seat limit for the order?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-intent-08",
+    "state": "SMS: The onboarding for the product listing was smooth, great work.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
   }
 ]
