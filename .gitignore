@@ -36,6 +36,9 @@ data/builds/raw/
 .research/pipeline-state/
 .research/qmuse/
 
+# 本地工作产物（机器生成的抓取原始数据、miss 分析、compare-log 备份等，不进公开仓库）
+/.data/
+
 __pycache__/
 *.pyc
 
