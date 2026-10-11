@@ -430,11 +430,16 @@ if (buildOk) {
     // tail -3 会恰好切掉 "- 0 errors" 行导致永远 check=false（实测踩坑）。
     const checkOut = run('npm run check 2>&1');
     checkOk = /- 0 errors/.test(checkOut) && !/error ts\(/.test(checkOut);
-    if (!checkOk) say(`check tail:\n${checkOut.split('\n').slice(-40).join('\n')}`);
+    if (!checkOk) {
+      say(`check tail:\n${checkOut.split('\n').slice(-40).join('\n')}`);
+      // 把完整报错写进 JSONL 日志，避免 cron.log 里被折叠、事后无法定位是哪条 error（10-01~10-04 踩坑）。
+      writeLog('check-fail-detail', { checkOk: false, checkOut: checkOut.slice(-4000) });
+    }
   } catch (err) {
     checkOk = false;
     const blob = `${err.stdout ?? ''}\n${err.stderr ?? ''}`;
     say(`check tail:\n${blob.split('\n').slice(-40).join('\n')}`);
+    writeLog('check-fail-detail', { checkOk: false, checkOut: blob.slice(-4000) });
   }
   linkReport = await linkCheck();
   // i18n 完整性：i18n-gaps.mjs 退出码 1 表示有缺口（它本就是为 CI 卡点写的）。
