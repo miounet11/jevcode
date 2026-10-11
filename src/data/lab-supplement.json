@@ -238,5 +238,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-safety-01",
+    "state": "Email received: The product listing may expose customer data if the GMV keeps failing.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-safety-02",
+    "state": "Review posted: Someone is threatening self-harm in a order thread.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-safety-03",
+    "state": "Alert fired: A user posted instructions to bypass the product listing security check.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-safety-04",
+    "state": "Log line: Electrical fault reported near the order; smoke visible.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
   }
 ]

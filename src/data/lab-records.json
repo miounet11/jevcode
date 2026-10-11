@@ -110,5 +110,33 @@
     "ok": true,
     "choice": "praise",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-safety-01",
+    "ts": "2026-10-11T01:32:24.481Z",
+    "ok": true,
+    "choice": "review",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-safety-02",
+    "ts": "2026-10-11T01:32:25.999Z",
+    "ok": true,
+    "choice": "review",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-safety-03",
+    "ts": "2026-10-11T01:32:27.157Z",
+    "ok": true,
+    "choice": "review",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-safety-04",
+    "ts": "2026-10-11T01:32:28.294Z",
+    "ok": true,
+    "choice": "review",
+    "model": "clavue-jev"
   }
 ]
