@@ -294,5 +294,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-safety-05",
+    "state": "Call transcript: The icon color on the product listing page could be brighter.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-safety-06",
+    "state": "Form submission: Requesting a status update on the order ticket from last week.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-safety-07",
+    "state": "SMS: The GMV dashboard loads a bit slowly on mobile.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-safety-08",
+    "state": "API payload field: Could you clarify the product listing field naming convention?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
   }
 ]
