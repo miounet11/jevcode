@@ -350,5 +350,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-compliance-01",
+    "state": "Review posted: We need to store order data for EU customers outside the EU.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-compliance-02",
+    "state": "Alert fired: Marketing wants to email all buyer contacts about the product listing.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-compliance-03",
+    "state": "Log line: Requesting the order under a data subject access request.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-compliance-04",
+    "state": "Call transcript: The product listing will process payment card numbers directly.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
   }
 ]

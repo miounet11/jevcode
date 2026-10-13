@@ -166,5 +166,33 @@
     "ok": true,
     "choice": "safe",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-compliance-01",
+    "ts": "2026-10-13T01:33:12.176Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-compliance-02",
+    "ts": "2026-10-13T01:33:14.255Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-compliance-03",
+    "ts": "2026-10-13T01:33:15.544Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-compliance-04",
+    "ts": "2026-10-13T01:33:16.943Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
   }
 ]
