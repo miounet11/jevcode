@@ -25,7 +25,7 @@ const rows = briefs as Brief[];
 export function getStaticPaths() {
   const paths: Array<{ params: { lang: string; id: string } }> = [];
   for (const lang of Object.keys(languages)) {
-    for (const row of rows) paths.push({ params: { lang, id: row.id } });
+    for (const row of briefs as Brief[]) paths.push({ params: { lang, id: row.id } });
   }
   return paths;
 }
