@@ -275,6 +275,12 @@ export const docFigures: Record<string, Figure> = {
     height: 768,
     alt: { zh: '散乱输出经约束后变成规整结构', en: 'Scattered output constrained into a tidy structure' },
   },
+  'cases/llm-router': {
+    src: 'img/cases/llm-router',
+    width: 1344,
+    height: 768,
+    alt: { zh: '一条请求分成三条处理路径，其中一条被点亮', en: 'One request splitting into three handler paths, with one path lit' },
+  },
   'cases/jev-alternatives': {
     src: 'img/cases/jev-alternatives',
     width: 1344,
