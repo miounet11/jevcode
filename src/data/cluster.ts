@@ -115,6 +115,8 @@ export const clusterGroups: ClusterGroup[] = [
         desc: T('上面这些页面的总表。', 'The full list of the pages above.', '上記ページの一覧。', '위 페이지들의 전체 목록.', 'Die vollständige Liste der Seiten oben.', 'La liste complète des pages ci-dessus.', 'La lista completa de las páginas anteriores.', 'A lista completa das páginas acima.') },
       { href: '/ecosystem/', title: T('生态目录', 'Ecosystem', 'エコシステム', '생태계', 'Ökosystem', 'Écosystème', 'Ecosistema', 'Ecossistema'),
         desc: T('社区项目按类别浏览。', 'Community projects by category.', 'コミュニティプロジェクトを分類別に。', '커뮤니티 프로젝트를 분류별로.', 'Community-Projekte nach Kategorie.', 'Projets communautaires par catégorie.', 'Proyectos de la comunidad por categoría.', 'Projetos da comunidade por categoria.') },
+      { href: '/briefs/', title: T('每日案例', 'Daily cases', '毎日の事例', '매일의 사례', 'Tägliche Fälle', 'Cas du jour', 'Casos diarios', 'Casos diários'),
+        desc: T('每天从覆盖语料发布下一批案例。', 'The next batch of coverage cases, each day.', 'カバーコーパスの次の一群を毎日。', '커버리지 말뭉치의 다음 묶음을 매일.', 'Jeden Tag die nächste Gruppe aus dem Korpus.', 'Le lot suivant du corpus, chaque jour.', 'El siguiente lote del banco, cada día.', 'O lote seguinte do banco, todos os dias.') },
       { href: '/community/', title: T('社区', 'Community', 'コミュニティ', '커뮤니티', 'Community', 'Communauté', 'Comunidad', 'Comunidade'),
         desc: T('公开讨论，每条注明出处。', 'Public posts, each with its source.', '公開の議論。各項目に出典付き。', '공개 토론. 각 항목에 출처 표기.', 'Öffentliche Beiträge, jeder mit Quelle.', 'Des publications publiques, chacune avec sa source.', 'Publicaciones públicas, cada una con su fuente.', 'Publicações públicas, cada uma com sua fonte.') },
       { href: '/builds/', title: T('动态', 'Builds', '動き', '소식', 'Builds', 'Builds', 'Builds', 'Builds'),

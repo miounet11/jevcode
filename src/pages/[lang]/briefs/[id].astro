@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, useTranslations, type Lang } from '../../../i18n/ui';
+import * as copySrc from '../../../i18n/pages/briefs';
+import briefs from '../../../data/daily-briefs.json';
+
+type Judgment = { ok: boolean; choice: string | null; model: string | null; ts: string };
+type Brief = {
+  id: string;
+  published: string;
+  industry: string;
+  dimension: string;
+  tag: string;
+  scene: string;
+  stage: string;
+  context: string;
+  question: string;
+  choices: string[];
+  accept: string[];
+  judgment: Judgment | null;
+};
+
+const rows = briefs as Brief[];
+
+export function getStaticPaths() {
+  const paths: Array<{ params: { lang: string; id: string } }> = [];
+  for (const lang of Object.keys(languages)) {
+    for (const row of rows) paths.push({ params: { lang, id: row.id } });
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+const entry = rows.find((row) => row.id === Astro.params.id);
+if (!entry) throw new Error(`unknown brief: ${Astro.params.id}`);
+
+const path = `/${lang}/briefs/${entry.id}/`;
+const copy = {
+  crumb: pick(lang, copySrc.title),
+  back: pick(lang, copySrc.back),
+  published: pick(lang, copySrc.published),
+  context: pick(lang, copySrc.contextLabel),
+  question: pick(lang, copySrc.questionLabel),
+  choices: pick(lang, copySrc.choicesLabel),
+  accept: pick(lang, copySrc.acceptLabel),
+  judgment: pick(lang, copySrc.judgmentLabel),
+  noJudgment: pick(lang, copySrc.noJudgment),
+};
+const flat = entry.context.replace(/\s+/g, ' ').trim();
+const desc = Array.from(flat).slice(0, 160).join('') + (Array.from(flat).length > 160 ? '…' : '');
+const pageTitle = Array.from(entry.question).slice(0, 80).join('');
+const detailIndex = lang === 'en' || lang === 'zh';
+const idx = rows.findIndex((row) => row.id === entry.id);
+const prev = idx > 0 ? rows[idx - 1] : undefined;
+const next = idx >= 0 && idx < rows.length - 1 ? rows[idx + 1] : undefined;
+const hrefOf = (row: Brief) => `/${lang}/briefs/${row.id}/`;
+---
+
+<BaseLayout lang={lang} title={pageTitle} description={desc} path={path} index={detailIndex}>
+  <section class="section">
+    <div class="wrap">
+      <main class="doc">
+        <p class="doc__breadcrumb">
+          <a href={`/${lang}/`}>{t('site.name')}</a>
+          /
+          <a href={`/${lang}/briefs/`}>{copy.crumb}</a>
+          / {entry.id}
+        </p>
+        <h1 class="doc__title">{entry.question}</h1>
+        <p class="doc__desc">{entry.industry} · {entry.dimension} · {entry.scene}</p>
+        <div class="pmeta">
+          <span class="pmeta__item"><span class="pmeta__k">{copy.published}</span><span class="pmeta__v">{entry.published}</span></span>
+          <span class="pmeta__item"><span class="pmeta__k">tag</span><span class="pmeta__v">{entry.tag}</span></span>
+          <span class="pmeta__item"><span class="pmeta__k">stage</span><span class="pmeta__v">{entry.stage}</span></span>
+        </div>
+        <h2>{copy.context}</h2>
+        <blockquote class="pquote"><p class="pquote__text" lang="en">{entry.context}</p></blockquote>
+        <h2>{copy.question}</h2>
+        <p lang="en">{entry.question}</p>
+        <h2>{copy.choices}</h2>
+        <ul>
+          {entry.choices.map((choice) => <li><code>{choice}</code></li>)}
+        </ul>
+        <h2>{copy.accept}</h2>
+        {entry.accept.length
+          ? <ul>{entry.accept.map((choice) => <li><code>{choice}</code></li>)}</ul>
+          : <p>—</p>}
+        <h2>{copy.judgment}</h2>
+        {entry.judgment?.ok && entry.judgment.choice
+          ? <p><code>{entry.judgment.choice}</code> · {entry.judgment.model} · {entry.judgment.ts.slice(0, 10)}</p>
+          : <p>{copy.noJudgment}</p>}
+        {(prev || next) && (
+          <nav class="pager" aria-label="Pagination">
+            {prev ? (
+              <a class="pager__link" href={hrefOf(prev)}>
+                <div class="pager__dir">←</div>
+                <div class="pager__name">{prev.id}</div>
+              </a>
+            ) : <span></span>}
+            {next && (
+              <a class="pager__link pager__link--next" href={hrefOf(next)}>
+                <div class="pager__dir">→</div>
+                <div class="pager__name">{next.id}</div>
+              </a>
+            )}
+          </nav>
+        )}
+        <p class="pback"><a href={`/${lang}/briefs/`}>{copy.back}</a></p>
+      </main>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pmeta { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 18px 0 22px; }
+  .pmeta__item { display: flex; align-items: baseline; gap: 7px; }
+  .pmeta__k { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.62; }
+  .pquote { margin: 8px 0 22px; padding: 12px 16px; border-left: 3px solid var(--accent); }
+  .pquote__text { margin: 0; white-space: pre-wrap; }
+  .pback { margin-top: 28px; }
+</style>

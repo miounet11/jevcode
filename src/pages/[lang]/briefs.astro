@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { languages, useTranslations, pick, type Lang } from '../../i18n/ui';
+import * as copySrc from '../../i18n/pages/briefs';
+import briefs from '../../data/daily-briefs.json';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+const path = `/${lang}/briefs/`;
+const copy = {
+  title: pick(lang, copySrc.title),
+  lead: pick(lang, copySrc.lead),
+  total: pick(lang, copySrc.totalLabel),
+  latest: pick(lang, copySrc.latestLabel),
+};
+const rows = [...briefs].reverse();
+const shown = rows.slice(0, 100);
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+  <section class="section">
+    <div class="wrap">
+      <main class="doc">
+        <p class="doc__breadcrumb">
+          <a href={`/${lang}/`}>{t('site.name')}</a> / {copy.title}
+        </p>
+        <h1 class="doc__title">{copy.title}</h1>
+        <p class="doc__desc">{copy.lead}</p>
+        <p>{copy.total} {briefs.length}. {copy.latest}</p>
+        <ul class="blist">
+          {shown.map((row) => (
+            <li>
+              <a href={`/${lang}/briefs/${row.id}/`}>{row.question}</a>
+              <span class="blist__meta">{row.published} · {row.industry} · {row.dimension}</span>
+            </li>
+          ))}
+        </ul>
+      </main>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blist { list-style: none; padding: 0; margin: 22px 0 0; }
+  .blist li { padding: 12px 0; border-bottom: 1px solid var(--line, rgba(255,255,255,0.08)); }
+  .blist a { display: block; }
+  .blist__meta { display: block; margin-top: 4px; font-size: 13px; opacity: 0.62; }
+</style>

@@ -63,6 +63,7 @@ const FETCHED_FILES = [
   'public/data/jev-cards.json',
   'src/data/lab-supplement.json',
   'src/data/lab-records.json',
+  'src/data/daily-briefs.json',
 ];
 /** 允许进入自动提交的路径。其余工作区改动留在原地，不进这次发布。 */
 const STAGE_FILES = [
@@ -72,11 +73,13 @@ const STAGE_FILES = [
   'public/data/jev-cards.json',
   'src/data/lab-supplement.json',
   'src/data/lab-records.json',
+  'src/data/daily-briefs.json',
 ];
 const SIDE_FILES = [
   'src/data/community.ts',
   'src/data/lab-supplement.json',
   'src/data/lab-records.json',
+  'src/data/daily-briefs.json',
 ];
 function restoreFetched() {
   if (SKIP_FETCH) return;
@@ -133,6 +136,17 @@ function refreshLab() {
     say(`lab record: ${String(run('node scripts/record-lab.mjs')).trim()}`);
   } catch (err) {
     say(`WARN 实验室记录失败（不阻塞生态发布）: ${String(err.stdout || err.message).slice(0, 240)}`);
+  }
+}
+
+/** 覆盖语料的下一批案例。失败只告警，不挡住其余发布。 */
+function refreshBriefs() {
+  try {
+    const out = run('node scripts/daily-briefs.mjs');
+    say(`briefs: ${String(out).trim().split('\n').pop()}`);
+  } catch (err) {
+    const tail = `${err.stdout ?? ''}\n${err.stderr ?? ''}`.trim().split('\n').slice(-4).join(' | ');
+    say(`WARN 每日案例失败（不阻塞生态发布）: ${tail.slice(0, 400)}`);
   }
 }
 
@@ -329,6 +343,7 @@ if (!SKIP_FETCH) {
   buildsAdded = refreshBuilds();
   refreshCommunity();
   refreshLab();
+  refreshBriefs();
 }
 
 // 2. 门 1（含批量累积）

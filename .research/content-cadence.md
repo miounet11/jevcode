@@ -13,15 +13,23 @@
 3. `src/`、`public/` 以及其它未忽略的未提交文件会让整轮跳过。`.data/`、未跟踪的 `docs/coverage-full/`、以及 `.cursor/` 不挡。
 4. 发出去的路径：白名单提交 → `git push origin main` → `./deploy/deploy.sh` → `scripts/indexnow-submit.mjs`。IndexNow 只通知 Bing、Yandex、Seznam。
 
-没有合格的新文章时，这一轮数据刷新就是当天的发布。
+## 每天至少 50 篇
 
-## 新文章怎么算合适
+`scripts/daily-briefs.mjs` 在日更抓取之后运行。它从 `data/coverage-cases.json` 取还没发过的 50 条，追加到 `src/data/daily-briefs.json`，页面在 `/<lang>/briefs/<id>/`。
 
-[new-term-radar](https://github.com/miounet11/new-term-radar) 只做选词入口，不接进 `scripts/pipeline.mjs`，不自动写页面。
+一篇只用语料里已有的字段：行业、维度、场景、状态原句、问题、选项、语料接受的选项。有 `CLAVUE_API_KEYS` 时逐条调用 clavue-jev，只记下返回且落在选项里的结果。调用失败就留空，不编造选项。
 
-一天最多准备一篇。没有合格候选就不写。
+en 和 zh 进 sitemap。另外六种语言照样生成，但 noindex，避免薄页占爬取预算。
 
-合格的一篇要同时满足：
+语料约 7680 条。每天 50 篇大约够 153 天。没有剩余合格条目时，脚本记 `added: 0`，当天不重复发布旧篇。
+
+关键词长文不进这 50 篇，也不由雷达自动写。
+
+## 关键词长文怎么算合适
+
+[new-term-radar](https://github.com/miounet11/new-term-radar) 只做选词入口，不接进 `scripts/pipeline.mjs`。
+
+合格的一篇长文要同时满足：
 
 - 是会长期被搜的通用词，能写成 `choice`、`confidence` 或 `noul`。
 - 请求是 `POST https://api.jevcode.ai/v1/judge`。`state` 为 8 到 4000 个字符，问题最多 6 道。`choice` 用 `options` 或 `criteria`。
