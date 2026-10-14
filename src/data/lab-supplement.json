@@ -406,5 +406,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-compliance-05",
+    "state": "Form submission: Update the footer copyright year on the product listing page.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-compliance-06",
+    "state": "SMS: Rename the internal order label to match the new brand.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-compliance-07",
+    "state": "API payload field: Adjust the GMV chart tooltip text.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-compliance-08",
+    "state": "Internal note: Change the button color on the product listing settings screen.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
   }
 ]
