@@ -1232,5 +1232,1227 @@
       "model": "clavue-jev",
       "ts": "2026-10-14T14:45:52.050Z"
     }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-03",
+    "industry": "ecommerce",
+    "dimension": "sentiment",
+    "tag": "privacy",
+    "scene": "sms",
+    "stage": "intake",
+    "context": "SMS: Your agent hung up while I explained the GMV outage.",
+    "question": "What is the sentiment of this message?",
+    "choices": [
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "accept": [
+      "negative"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "negative",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:35:52.127Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-04",
+    "industry": "ecommerce",
+    "dimension": "sentiment",
+    "tag": "accessibility",
+    "scene": "api-payload",
+    "stage": "triage",
+    "context": "API payload field: Third order failure this week and still no reply.",
+    "question": "What is the sentiment of this message?",
+    "choices": [
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "accept": [
+      "negative"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "negative",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:35:53.693Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-05",
+    "industry": "ecommerce",
+    "dimension": "sentiment",
+    "tag": "localization",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: Attached is last month usage for the product listing.",
+    "question": "What is the sentiment of this message?",
+    "choices": [
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "accept": [
+      "neutral"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "neutral",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:35:54.788Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-06",
+    "industry": "ecommerce",
+    "dimension": "sentiment",
+    "tag": "performance",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: We will send the signed order form tomorrow.",
+    "question": "What is the sentiment of this message?",
+    "choices": [
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "accept": [
+      "neutral"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "neutral",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:35:56.471Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-07",
+    "industry": "ecommerce",
+    "dimension": "sentiment",
+    "tag": "regression",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: Greatly appreciate the product listing walkthrough.",
+    "question": "What is the sentiment of this message?",
+    "choices": [
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "accept": [
+      "positive"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "positive",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:35:57.568Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-08",
+    "industry": "ecommerce",
+    "dimension": "sentiment",
+    "tag": "outage",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: The GMV discrepancy remains unresolved.",
+    "question": "What is the sentiment of this message?",
+    "choices": [
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "accept": [
+      "negative"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "negative",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:35:58.744Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-01",
+    "industry": "ecommerce",
+    "dimension": "language",
+    "tag": "accessibility",
+    "scene": "form",
+    "stage": "follow-up",
+    "context": "Form submission: The order keeps failing every morning.",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "en"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "en",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:35:59.858Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-02",
+    "industry": "ecommerce",
+    "dimension": "language",
+    "tag": "localization",
+    "scene": "sms",
+    "stage": "intake",
+    "context": "SMS: 请问 order 的发票在哪里下载？",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "zh"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "zh",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:00.943Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-03",
+    "industry": "ecommerce",
+    "dimension": "language",
+    "tag": "performance",
+    "scene": "api-payload",
+    "stage": "triage",
+    "context": "API payload field: product listing の設定方法を教えてください。",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "ja"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "ja",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:02.067Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-04",
+    "industry": "ecommerce",
+    "dimension": "language",
+    "tag": "regression",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: Il order non si carica più da ieri.",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "other"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "other",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:03.228Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-05",
+    "industry": "ecommerce",
+    "dimension": "language",
+    "tag": "outage",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: Please reset the product listing for our workspace.",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "en"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "en",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:04.329Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-06",
+    "industry": "ecommerce",
+    "dimension": "language",
+    "tag": "chargeback",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: 我们的 GMV 数据一直不对，请检查。",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "zh"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "zh",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:10.498Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-07",
+    "industry": "ecommerce",
+    "dimension": "language",
+    "tag": "churn-risk",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: order のエラーが再発しています。",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "ja"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "ja",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:12.128Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-08",
+    "industry": "ecommerce",
+    "dimension": "language",
+    "tag": "deadline",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: Le GMV affiche une valeur incorrecte.",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "other"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "other",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:13.232Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-01",
+    "industry": "ecommerce",
+    "dimension": "pii",
+    "tag": "regression",
+    "scene": "sms",
+    "stage": "intake",
+    "context": "SMS: The order record shows the client full address and ID number.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:14.823Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-02",
+    "industry": "ecommerce",
+    "dimension": "pii",
+    "tag": "outage",
+    "scene": "api-payload",
+    "stage": "triage",
+    "context": "API payload field: A buyer pasted their passport number into the product listing ticket.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:16.006Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-03",
+    "industry": "ecommerce",
+    "dimension": "pii",
+    "tag": "chargeback",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: Card ending 4242 and date of birth were included in the order.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:17.159Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-04",
+    "industry": "ecommerce",
+    "dimension": "pii",
+    "tag": "churn-risk",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: Someone uploaded a scan of their national ID to the product listing.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:18.261Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-05",
+    "industry": "ecommerce",
+    "dimension": "pii",
+    "tag": "deadline",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: The order total is off by a rounding error.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:19.409Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-06",
+    "industry": "ecommerce",
+    "dimension": "pii",
+    "tag": "auto-renewal",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: Please add dark mode to the product listing.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:20.563Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-07",
+    "industry": "ecommerce",
+    "dimension": "pii",
+    "tag": "third-party",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: The GMV chart legend is hard to read.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:21.715Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-08",
+    "industry": "ecommerce",
+    "dimension": "pii",
+    "tag": "audit-trail",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: Rename the order column header to \"Amount\".",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:22.853Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-01",
+    "industry": "ecommerce",
+    "dimension": "toxicity",
+    "tag": "churn-risk",
+    "scene": "api-payload",
+    "stage": "triage",
+    "context": "API payload field: The buyer called our staff useless idiots in the order thread.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "flag"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "flag",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:24.157Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-02",
+    "industry": "ecommerce",
+    "dimension": "toxicity",
+    "tag": "deadline",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: Someone is harassing other users in the product listing comments.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "flag"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "flag",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:25.563Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-03",
+    "industry": "ecommerce",
+    "dimension": "toxicity",
+    "tag": "auto-renewal",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: A user posted slurs directed at support over the GMV.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "flag"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "flag",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:26.687Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-04",
+    "industry": "ecommerce",
+    "dimension": "toxicity",
+    "tag": "third-party",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: Threatening messages were left on the order review page.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "flag"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "flag",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:27.810Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-05",
+    "industry": "ecommerce",
+    "dimension": "toxicity",
+    "tag": "audit-trail",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: The product listing instructions were unclear, could you clarify?",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "clean",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:28.903Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-06",
+    "industry": "ecommerce",
+    "dimension": "toxicity",
+    "tag": "sla-breach",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: I disagree with the GMV approach, here is why.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "clean",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:30.111Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-07",
+    "industry": "ecommerce",
+    "dimension": "toxicity",
+    "tag": "refund",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: The order took longer than expected.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "clean",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:31.235Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-08",
+    "industry": "ecommerce",
+    "dimension": "toxicity",
+    "tag": "data-loss",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: Requesting a refund per the product listing policy.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "clean"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "clean",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:32.337Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-01",
+    "industry": "ecommerce",
+    "dimension": "fraud",
+    "tag": "third-party",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: Same card used for 40 order in 3 minutes from 6 countries.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "investigate"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "investigate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:34.152Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-02",
+    "industry": "ecommerce",
+    "dimension": "fraud",
+    "tag": "audit-trail",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: New buyer immediately requested payout of the full product listing balance.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "investigate"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "investigate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:35.313Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-03",
+    "industry": "ecommerce",
+    "dimension": "fraud",
+    "tag": "sla-breach",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: Login attempts for the order from a new device every hour.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "investigate"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "investigate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:36.487Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-04",
+    "industry": "ecommerce",
+    "dimension": "fraud",
+    "tag": "refund",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: Impossible travel detected on the product listing admin account.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "investigate"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "investigate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:37.567Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-05",
+    "industry": "ecommerce",
+    "dimension": "fraud",
+    "tag": "data-loss",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: The order was delayed due to weather.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:38.726Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-06",
+    "industry": "ecommerce",
+    "dimension": "fraud",
+    "tag": "security",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: Requesting a copy of last year product listing statement.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:40.554Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-07",
+    "industry": "ecommerce",
+    "dimension": "fraud",
+    "tag": "privacy",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: The GMV looks lower than usual this month.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "investigate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:41.723Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-08",
+    "industry": "ecommerce",
+    "dimension": "fraud",
+    "tag": "accessibility",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: Please update the shipping address on the order.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "investigate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:42.915Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-01",
+    "industry": "ecommerce",
+    "dimension": "spam",
+    "tag": "refund",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: Buy cheap product listing now! Click here for 90% off order.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "spam"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "spam",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:44.044Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-02",
+    "industry": "ecommerce",
+    "dimension": "spam",
+    "tag": "data-loss",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: Congratulations, you won a free order! Claim at this link.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "spam"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "spam",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:45.189Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-03",
+    "industry": "ecommerce",
+    "dimension": "spam",
+    "tag": "security",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: Mass-sent pitch about GMV growth to hundreds of buyer.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "spam"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "spam",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:46.247Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-04",
+    "industry": "ecommerce",
+    "dimension": "spam",
+    "tag": "privacy",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: Repeated promo for the product listing to unrelated recipients.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "spam"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "spam",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:47.860Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-05",
+    "industry": "ecommerce",
+    "dimension": "spam",
+    "tag": "accessibility",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: Your order renewal is due next month.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:48.962Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-06",
+    "industry": "ecommerce",
+    "dimension": "spam",
+    "tag": "localization",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: Monthly GMV summary for your account.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:50.129Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-07",
+    "industry": "ecommerce",
+    "dimension": "spam",
+    "tag": "performance",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: Support follow-up on your open product listing ticket.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:51.217Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-08",
+    "industry": "ecommerce",
+    "dimension": "spam",
+    "tag": "regression",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: Password reset confirmation for your order.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:52.562Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-01",
+    "industry": "ecommerce",
+    "dimension": "escalation",
+    "tag": "privacy",
+    "scene": "support-ticket",
+    "stage": "escalation",
+    "context": "Ticket: GMV breach affecting all buyer in production right now.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "escalate"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:53.628Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-02",
+    "industry": "ecommerce",
+    "dimension": "escalation",
+    "tag": "accessibility",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: Legal counsel requests immediate review of the product listing.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "escalate"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:54.757Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-03",
+    "industry": "ecommerce",
+    "dimension": "escalation",
+    "tag": "localization",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: Third repeat contact about the same unresolved order.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "escalate"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:55.926Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-04",
+    "industry": "ecommerce",
+    "dimension": "escalation",
+    "tag": "performance",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: Regulator deadline for the order is today.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "escalate"
+    ],
+    "published": "2026-10-15",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-15T01:36:57.066Z"
+    }
   }
 ]

@@ -462,5 +462,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-01",
+    "state": "Alert fired: I was charged twice for the same order this morning.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-02",
+    "state": "Log line: The product listing renews today but we already cancelled last month.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-03",
+    "state": "Call transcript: Invoice amount is 200 but the order shows 400.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-04",
+    "state": "Form submission: We were billed for seats we never activated on the product listing.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
   }
 ]
