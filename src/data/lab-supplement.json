@@ -518,5 +518,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-05",
+    "state": "SMS: Where is the invoice for last month order?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-06",
+    "state": "API payload field: Please change the billing name on the product listing.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-07",
+    "state": "Internal note: The charge matches our plan, I just need the receipt.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-08",
+    "state": "Social post: Can you update the VAT number on our order record?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
   }
 ]

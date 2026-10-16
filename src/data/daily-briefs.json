@@ -2454,5 +2454,1268 @@
       "model": "clavue-jev",
       "ts": "2026-10-15T01:36:57.066Z"
     }
+  },
+  {
+    "id": "cov-ecommerce-escalation-05",
+    "industry": "ecommerce",
+    "dimension": "escalation",
+    "tag": "regression",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: General question about product listing pricing tiers.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:34:43.877Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-06",
+    "industry": "ecommerce",
+    "dimension": "escalation",
+    "tag": "outage",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: Feature request for the order roadmap.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:34:56.996Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-07",
+    "industry": "ecommerce",
+    "dimension": "escalation",
+    "tag": "chargeback",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: Documentation typo on the product listing page.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:34:58.667Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-08",
+    "industry": "ecommerce",
+    "dimension": "escalation",
+    "tag": "churn-risk",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: Scheduling a demo of the GMV dashboard.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:34:59.878Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-01",
+    "industry": "ecommerce",
+    "dimension": "routing",
+    "tag": "performance",
+    "scene": "chat",
+    "stage": "qa",
+    "context": "Chat message: The order invoice was charged twice this month.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "billing"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "billing",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:01.035Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-02",
+    "industry": "ecommerce",
+    "dimension": "routing",
+    "tag": "regression",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: The product listing API returns 500 on every request.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "technical"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "technical",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:02.188Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-03",
+    "industry": "ecommerce",
+    "dimension": "routing",
+    "tag": "outage",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: We want to upgrade the order to the enterprise plan.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "sales"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "sales",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:03.366Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-04",
+    "industry": "ecommerce",
+    "dimension": "routing",
+    "tag": "chargeback",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: We need a DPA for the GMV data we send you.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "compliance"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "compliance",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:04.575Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-05",
+    "industry": "ecommerce",
+    "dimension": "routing",
+    "tag": "churn-risk",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: Refund request for the cancelled product listing.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "billing"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "billing",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:05.789Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-06",
+    "industry": "ecommerce",
+    "dimension": "routing",
+    "tag": "deadline",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: order login fails with invalid token errors.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "technical"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "technical",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:07.092Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-07",
+    "industry": "ecommerce",
+    "dimension": "routing",
+    "tag": "auto-renewal",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: Requesting a quote for 500 product listing seats.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "sales"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "sales",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:08.355Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-08",
+    "industry": "ecommerce",
+    "dimension": "routing",
+    "tag": "third-party",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: GDPR deletion request for the order data.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "compliance"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "compliance",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:09.527Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-01",
+    "industry": "ecommerce",
+    "dimension": "category",
+    "tag": "chargeback",
+    "scene": "email",
+    "stage": "audit",
+    "context": "Email received: The order crashes when exporting more than 1000 rows.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "bug"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "incident",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:10.750Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-02",
+    "industry": "ecommerce",
+    "dimension": "category",
+    "tag": "churn-risk",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: Please add bulk edit for the product listing list.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "feature-request"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "feature-request",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:11.968Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-03",
+    "industry": "ecommerce",
+    "dimension": "category",
+    "tag": "deadline",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: How do I change the timezone on the GMV report?",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "question"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "bug",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:13.182Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-04",
+    "industry": "ecommerce",
+    "dimension": "category",
+    "tag": "auto-renewal",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: All order processing is down for the last 15 minutes.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "incident",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:14.437Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-05",
+    "industry": "ecommerce",
+    "dimension": "category",
+    "tag": "third-party",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: The product listing shows wrong totals after refresh.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "bug"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "incident",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:15.599Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-06",
+    "industry": "ecommerce",
+    "dimension": "category",
+    "tag": "audit-trail",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: It would help to schedule order exports nightly.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "feature-request"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "feature-request",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:19.993Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-07",
+    "industry": "ecommerce",
+    "dimension": "category",
+    "tag": "sla-breach",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: What is the rate limit for the product listing API?",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "question"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "question",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:21.670Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-08",
+    "industry": "ecommerce",
+    "dimension": "category",
+    "tag": "refund",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: Production GMV is at zero; page already fired.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "incident"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "incident",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:22.895Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-01",
+    "industry": "ecommerce",
+    "dimension": "risk-level",
+    "tag": "auto-renewal",
+    "scene": "review",
+    "stage": "follow-up",
+    "context": "Review posted: Possible data loss in the order backup job.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "high"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "high",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:24.108Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-02",
+    "industry": "ecommerce",
+    "dimension": "risk-level",
+    "tag": "third-party",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: The product listing may charge the wrong amount to buyer.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "high"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "high",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:26.741Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-03",
+    "industry": "ecommerce",
+    "dimension": "risk-level",
+    "tag": "audit-trail",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: A single tooltip is missing on the GMV chart.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "low"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "low",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:43.515Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-04",
+    "industry": "ecommerce",
+    "dimension": "risk-level",
+    "tag": "sla-breach",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: The order theme color is slightly off.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "low"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "medium",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:45.107Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-05",
+    "industry": "ecommerce",
+    "dimension": "risk-level",
+    "tag": "refund",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: Intermittent timeouts on the product listing for some users.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "medium"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "medium",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:35:49.496Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-06",
+    "industry": "ecommerce",
+    "dimension": "risk-level",
+    "tag": "data-loss",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: The GMV report is stale by an hour.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "medium"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "medium",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:36:06.488Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-07",
+    "industry": "ecommerce",
+    "dimension": "risk-level",
+    "tag": "security",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: Customer data may be exposed via the order endpoint.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "high"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "high",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:36:09.133Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-08",
+    "industry": "ecommerce",
+    "dimension": "risk-level",
+    "tag": "privacy",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: A user sees another user name in the product listing.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "high"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "medium",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:36:13.517Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-next-action-01",
+    "industry": "ecommerce",
+    "dimension": "next-action",
+    "tag": "sla-breach",
+    "scene": "alert",
+    "stage": "intake",
+    "context": "Alert fired: How do I reset the order password?",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "reply-with-answer"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "reply-with-answer",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:36:15.774Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-next-action-02",
+    "industry": "ecommerce",
+    "dimension": "next-action",
+    "tag": "refund",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: The product listing is broken.",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "ask-for-details"
+    ],
+    "published": "2026-10-16",
+    "judgment": null
+  },
+  {
+    "id": "cov-ecommerce-next-action-03",
+    "industry": "ecommerce",
+    "dimension": "next-action",
+    "tag": "data-loss",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: GMV breach affecting all customers in production.",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "escalate"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:17.809Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-next-action-04",
+    "industry": "ecommerce",
+    "dimension": "next-action",
+    "tag": "security",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: Follow-up confirming the order was resolved. Thanks!",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "close"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "close",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:19.136Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-next-action-05",
+    "industry": "ecommerce",
+    "dimension": "next-action",
+    "tag": "privacy",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: Where can I download the product listing SDK?",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "reply-with-answer"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "reply-with-answer",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:20.223Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-next-action-06",
+    "industry": "ecommerce",
+    "dimension": "next-action",
+    "tag": "accessibility",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: Something is wrong with my order.",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "ask-for-details"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "ask-for-details",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:21.366Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-next-action-07",
+    "industry": "ecommerce",
+    "dimension": "next-action",
+    "tag": "localization",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: Legal deadline for the product listing is today.",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "escalate"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:22.561Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-next-action-08",
+    "industry": "ecommerce",
+    "dimension": "next-action",
+    "tag": "performance",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: Acknowledging the GMV fix worked.",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "close"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "close",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:23.654Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-quality-01",
+    "industry": "ecommerce",
+    "dimension": "quality",
+    "tag": "security",
+    "scene": "log",
+    "stage": "triage",
+    "context": "Log line: Thanks for reporting the order. We reproduced it and a fix ships tonight; here is the workaround.",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "good"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "good",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:24.796Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-quality-02",
+    "industry": "ecommerce",
+    "dimension": "quality",
+    "tag": "privacy",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: Your product listing question is answered in this doc link plus the exact steps.",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "good"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "good",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:25.925Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-quality-03",
+    "industry": "ecommerce",
+    "dimension": "quality",
+    "tag": "accessibility",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: idk, try restarting the order",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "poor"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "poor",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:27.059Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-quality-04",
+    "industry": "ecommerce",
+    "dimension": "quality",
+    "tag": "localization",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: That is not our problem, the GMV is your config.",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "poor"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "poor",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:28.187Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-quality-05",
+    "industry": "ecommerce",
+    "dimension": "quality",
+    "tag": "performance",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: We have escalated the order and will update you within 2 hours.",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "good"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "good",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:29.354Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-quality-06",
+    "industry": "ecommerce",
+    "dimension": "quality",
+    "tag": "regression",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: See attached product listing screenshot showing the corrected setting.",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "good"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "good",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:30.422Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-quality-07",
+    "industry": "ecommerce",
+    "dimension": "quality",
+    "tag": "outage",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: Read the manual for the order.",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "poor"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "poor",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:32.621Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-quality-08",
+    "industry": "ecommerce",
+    "dimension": "quality",
+    "tag": "chargeback",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: No idea about the GMV, ask someone else.",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "poor"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "poor",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:33.740Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-medical-triage-01",
+    "industry": "ecommerce",
+    "dimension": "medical-triage",
+    "tag": "localization",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: Chest pain and shortness of breath now, order history.",
+    "question": "What triage level does this health-related message indicate?",
+    "choices": [
+      "emergency",
+      "urgent",
+      "routine",
+      "self-care"
+    ],
+    "accept": [
+      "emergency"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "emergency",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:34.872Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-medical-triage-02",
+    "industry": "ecommerce",
+    "dimension": "medical-triage",
+    "tag": "performance",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: High fever for 3 days, not improving with the product listing.",
+    "question": "What triage level does this health-related message indicate?",
+    "choices": [
+      "emergency",
+      "urgent",
+      "routine",
+      "self-care"
+    ],
+    "accept": [
+      "urgent"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "emergency",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:36.007Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-medical-triage-03",
+    "industry": "ecommerce",
+    "dimension": "medical-triage",
+    "tag": "regression",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: Routine follow-up to review the GMV results.",
+    "question": "What triage level does this health-related message indicate?",
+    "choices": [
+      "emergency",
+      "urgent",
+      "routine",
+      "self-care"
+    ],
+    "accept": [
+      "routine"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "routine",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:37.140Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-medical-triage-04",
+    "industry": "ecommerce",
+    "dimension": "medical-triage",
+    "tag": "outage",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: Mild rash, asking how to care for the order at home.",
+    "question": "What triage level does this health-related message indicate?",
+    "choices": [
+      "emergency",
+      "urgent",
+      "routine",
+      "self-care"
+    ],
+    "accept": [
+      "self-care"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "self-care",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:38.223Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-medical-triage-05",
+    "industry": "ecommerce",
+    "dimension": "medical-triage",
+    "tag": "chargeback",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: Severe bleeding that will not stop.",
+    "question": "What triage level does this health-related message indicate?",
+    "choices": [
+      "emergency",
+      "urgent",
+      "routine",
+      "self-care"
+    ],
+    "accept": [
+      "emergency"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "emergency",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:39.388Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-medical-triage-06",
+    "industry": "ecommerce",
+    "dimension": "medical-triage",
+    "tag": "churn-risk",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: Persistent vomiting and dehydration for a buyer.",
+    "question": "What triage level does this health-related message indicate?",
+    "choices": [
+      "emergency",
+      "urgent",
+      "routine",
+      "self-care"
+    ],
+    "accept": [
+      "urgent"
+    ],
+    "published": "2026-10-16",
+    "judgment": {
+      "ok": true,
+      "choice": "emergency",
+      "model": "clavue-jev",
+      "ts": "2026-10-16T01:37:40.538Z"
+    }
   }
 ]

@@ -250,5 +250,33 @@
     "ok": true,
     "choice": "yes",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-05",
+    "ts": "2026-10-16T01:34:37.829Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-06",
+    "ts": "2026-10-16T01:34:39.534Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-07",
+    "ts": "2026-10-16T01:34:40.838Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-08",
+    "ts": "2026-10-16T01:34:42.038Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
   }
 ]
