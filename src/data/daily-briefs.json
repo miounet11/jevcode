@@ -3717,5 +3717,1233 @@
       "model": "clavue-jev",
       "ts": "2026-10-16T01:37:40.538Z"
     }
+  },
+  {
+    "id": "cov-ecommerce-medical-triage-07",
+    "industry": "ecommerce",
+    "dimension": "medical-triage",
+    "tag": "deadline",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: Scheduling an annual order check.",
+    "question": "What triage level does this health-related message indicate?",
+    "choices": [
+      "emergency",
+      "urgent",
+      "routine",
+      "self-care"
+    ],
+    "accept": [
+      "routine"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "routine",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:30.924Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-medical-triage-08",
+    "industry": "ecommerce",
+    "dimension": "medical-triage",
+    "tag": "auto-renewal",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: Small bruise, no pain, product listing not needed.",
+    "question": "What triage level does this health-related message indicate?",
+    "choices": [
+      "emergency",
+      "urgent",
+      "routine",
+      "self-care"
+    ],
+    "accept": [
+      "self-care"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "self-care",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:32.814Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-financial-advice-01",
+    "industry": "ecommerce",
+    "dimension": "financial-advice",
+    "tag": "outage",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: Should I move my order into this product listing given my age?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:34.313Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-financial-advice-02",
+    "industry": "ecommerce",
+    "dimension": "financial-advice",
+    "tag": "chargeback",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: Given my GMV, what should I invest in for retirement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:36.048Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-financial-advice-03",
+    "industry": "ecommerce",
+    "dimension": "financial-advice",
+    "tag": "churn-risk",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: Is now a good time to refinance my order?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:37.544Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-financial-advice-04",
+    "industry": "ecommerce",
+    "dimension": "financial-advice",
+    "tag": "deadline",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: How much of my product listing should I put into stocks?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:39.043Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-financial-advice-05",
+    "industry": "ecommerce",
+    "dimension": "financial-advice",
+    "tag": "auto-renewal",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: Where can I read the fee schedule for the order?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:40.692Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-financial-advice-06",
+    "industry": "ecommerce",
+    "dimension": "financial-advice",
+    "tag": "third-party",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: What are the product listing trading hours?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:42.179Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-financial-advice-07",
+    "industry": "ecommerce",
+    "dimension": "financial-advice",
+    "tag": "audit-trail",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: How do I download my GMV statement?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:43.809Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-financial-advice-08",
+    "industry": "ecommerce",
+    "dimension": "financial-advice",
+    "tag": "sla-breach",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: Is the order available in my country?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:46.053Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-data-access-01",
+    "industry": "ecommerce",
+    "dimension": "data-access",
+    "tag": "deadline",
+    "scene": "sms",
+    "stage": "escalation",
+    "context": "SMS: Verified buyer requests export of their own order data.",
+    "question": "Should this data access request be granted?",
+    "choices": [
+      "grant",
+      "deny"
+    ],
+    "accept": [
+      "grant"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "grant",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:47.558Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-data-access-02",
+    "industry": "ecommerce",
+    "dimension": "data-access",
+    "tag": "auto-renewal",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: A user asks to delete their product listing account and data.",
+    "question": "Should this data access request be granted?",
+    "choices": [
+      "grant",
+      "deny"
+    ],
+    "accept": [
+      "grant"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "grant",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:49.058Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-data-access-03",
+    "industry": "ecommerce",
+    "dimension": "data-access",
+    "tag": "third-party",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: Anonymous caller requests another buyer order details.",
+    "question": "Should this data access request be granted?",
+    "choices": [
+      "grant",
+      "deny"
+    ],
+    "accept": [
+      "deny"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "deny",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:50.538Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-data-access-04",
+    "industry": "ecommerce",
+    "dimension": "data-access",
+    "tag": "audit-trail",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: Request for GMV of all customers without authorization.",
+    "question": "Should this data access request be granted?",
+    "choices": [
+      "grant",
+      "deny"
+    ],
+    "accept": [
+      "deny"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "deny",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:51.979Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-data-access-05",
+    "industry": "ecommerce",
+    "dimension": "data-access",
+    "tag": "sla-breach",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: The order owner confirms the product listing export by email.",
+    "question": "Should this data access request be granted?",
+    "choices": [
+      "grant",
+      "deny"
+    ],
+    "accept": [
+      "grant"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "grant",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:53.574Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-data-access-06",
+    "industry": "ecommerce",
+    "dimension": "data-access",
+    "tag": "refund",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: Internal request to view GMV of a specific named customer.",
+    "question": "Should this data access request be granted?",
+    "choices": [
+      "grant",
+      "deny"
+    ],
+    "accept": [
+      "deny"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "grant",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:55.201Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-data-access-07",
+    "industry": "ecommerce",
+    "dimension": "data-access",
+    "tag": "data-loss",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: The buyer passed identity checks for the order record.",
+    "question": "Should this data access request be granted?",
+    "choices": [
+      "grant",
+      "deny"
+    ],
+    "accept": [
+      "grant"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "grant",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:56.666Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-data-access-08",
+    "industry": "ecommerce",
+    "dimension": "data-access",
+    "tag": "security",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: Support wants full product listing dumps of unrelated tenants.",
+    "question": "Should this data access request be granted?",
+    "choices": [
+      "grant",
+      "deny"
+    ],
+    "accept": [
+      "deny"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "deny",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:58.180Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-content-moderation-01",
+    "industry": "ecommerce",
+    "dimension": "content-moderation",
+    "tag": "audit-trail",
+    "scene": "api-payload",
+    "stage": "qa",
+    "context": "API payload field: The order listing is accurate and follows policy.",
+    "question": "What moderation action is appropriate?",
+    "choices": [
+      "approve",
+      "remove",
+      "warn"
+    ],
+    "accept": [
+      "approve"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "approve",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:32:59.903Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-content-moderation-02",
+    "industry": "ecommerce",
+    "dimension": "content-moderation",
+    "tag": "sla-breach",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: The product listing post contains a scam link to steal credentials.",
+    "question": "What moderation action is appropriate?",
+    "choices": [
+      "approve",
+      "remove",
+      "warn"
+    ],
+    "accept": [
+      "remove"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "remove",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:01.392Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-content-moderation-03",
+    "industry": "ecommerce",
+    "dimension": "content-moderation",
+    "tag": "refund",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: The GMV review uses mild profanity but no threat.",
+    "question": "What moderation action is appropriate?",
+    "choices": [
+      "approve",
+      "remove",
+      "warn"
+    ],
+    "accept": [
+      "warn"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "approve",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:03.044Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-content-moderation-04",
+    "industry": "ecommerce",
+    "dimension": "content-moderation",
+    "tag": "data-loss",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: The order image depicts prohibited goods.",
+    "question": "What moderation action is appropriate?",
+    "choices": [
+      "approve",
+      "remove",
+      "warn"
+    ],
+    "accept": [
+      "remove"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "remove",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:05.422Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-content-moderation-05",
+    "industry": "ecommerce",
+    "dimension": "content-moderation",
+    "tag": "security",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: The product listing comment is critical but civil.",
+    "question": "What moderation action is appropriate?",
+    "choices": [
+      "approve",
+      "remove",
+      "warn"
+    ],
+    "accept": [
+      "approve"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "approve",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:06.970Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-content-moderation-06",
+    "industry": "ecommerce",
+    "dimension": "content-moderation",
+    "tag": "privacy",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: A user repeatedly posts borderline insults on the order.",
+    "question": "What moderation action is appropriate?",
+    "choices": [
+      "approve",
+      "remove",
+      "warn"
+    ],
+    "accept": [
+      "warn"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "warn",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:08.874Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-content-moderation-07",
+    "industry": "ecommerce",
+    "dimension": "content-moderation",
+    "tag": "accessibility",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: The GMV listing has a minor formatting issue.",
+    "question": "What moderation action is appropriate?",
+    "choices": [
+      "approve",
+      "remove",
+      "warn"
+    ],
+    "accept": [
+      "approve"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "approve",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:10.419Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-content-moderation-08",
+    "industry": "ecommerce",
+    "dimension": "content-moderation",
+    "tag": "localization",
+    "scene": "alert",
+    "stage": "escalation",
+    "context": "Alert fired: The product listing contains doxxing of a private individual.",
+    "question": "What moderation action is appropriate?",
+    "choices": [
+      "approve",
+      "remove",
+      "warn"
+    ],
+    "accept": [
+      "remove"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "remove",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:11.986Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-topic-01",
+    "industry": "ecommerce",
+    "dimension": "topic",
+    "tag": "data-loss",
+    "scene": "note",
+    "stage": "audit",
+    "context": "Internal note: I cannot log into my order after the password change.",
+    "question": "What is the topic of this message?",
+    "choices": [
+      "account",
+      "technical",
+      "billing",
+      "product"
+    ],
+    "accept": [
+      "account"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "technical",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:13.485Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-topic-02",
+    "industry": "ecommerce",
+    "dimension": "topic",
+    "tag": "security",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: The product listing throws an error on every save.",
+    "question": "What is the topic of this message?",
+    "choices": [
+      "account",
+      "technical",
+      "billing",
+      "product"
+    ],
+    "accept": [
+      "technical"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "technical",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:15.729Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-topic-03",
+    "industry": "ecommerce",
+    "dimension": "topic",
+    "tag": "privacy",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: Our GMV invoice is higher than agreed.",
+    "question": "What is the topic of this message?",
+    "choices": [
+      "account",
+      "technical",
+      "billing",
+      "product"
+    ],
+    "accept": [
+      "billing"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "billing",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:17.506Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-topic-04",
+    "industry": "ecommerce",
+    "dimension": "topic",
+    "tag": "accessibility",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: Does the order support SSO on the team plan?",
+    "question": "What is the topic of this message?",
+    "choices": [
+      "account",
+      "technical",
+      "billing",
+      "product"
+    ],
+    "accept": [
+      "product"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "technical",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:19.030Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-topic-05",
+    "industry": "ecommerce",
+    "dimension": "topic",
+    "tag": "localization",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: How do I merge two product listing accounts?",
+    "question": "What is the topic of this message?",
+    "choices": [
+      "account",
+      "technical",
+      "billing",
+      "product"
+    ],
+    "accept": [
+      "account"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "account",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:20.492Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-topic-06",
+    "industry": "ecommerce",
+    "dimension": "topic",
+    "tag": "performance",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: The order webhook signature check fails.",
+    "question": "What is the topic of this message?",
+    "choices": [
+      "account",
+      "technical",
+      "billing",
+      "product"
+    ],
+    "accept": [
+      "technical"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "technical",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:21.987Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-topic-07",
+    "industry": "ecommerce",
+    "dimension": "topic",
+    "tag": "regression",
+    "scene": "alert",
+    "stage": "escalation",
+    "context": "Alert fired: Please update the payment method for the product listing.",
+    "question": "What is the topic of this message?",
+    "choices": [
+      "account",
+      "technical",
+      "billing",
+      "product"
+    ],
+    "accept": [
+      "billing"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "billing",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:23.586Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-topic-08",
+    "industry": "ecommerce",
+    "dimension": "topic",
+    "tag": "outage",
+    "scene": "log",
+    "stage": "qa",
+    "context": "Log line: Can the GMV dashboard export to PDF?",
+    "question": "What is the topic of this message?",
+    "choices": [
+      "account",
+      "technical",
+      "billing",
+      "product"
+    ],
+    "accept": [
+      "product"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "product",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:25.241Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-actionability-01",
+    "industry": "ecommerce",
+    "dimension": "actionability",
+    "tag": "accessibility",
+    "scene": "social",
+    "stage": "follow-up",
+    "context": "Social post: Export of the order fails with error 500 for tenant acme.",
+    "question": "Is this message actionable as written?",
+    "choices": [
+      "actionable",
+      "needs-info"
+    ],
+    "accept": [
+      "actionable"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "actionable",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:26.797Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-actionability-02",
+    "industry": "ecommerce",
+    "dimension": "actionability",
+    "tag": "localization",
+    "scene": "support-ticket",
+    "stage": "intake",
+    "context": "Ticket: The product listing is not working, fix it.",
+    "question": "Is this message actionable as written?",
+    "choices": [
+      "actionable",
+      "needs-info"
+    ],
+    "accept": [
+      "needs-info"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "actionable",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:29.324Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-actionability-03",
+    "industry": "ecommerce",
+    "dimension": "actionability",
+    "tag": "performance",
+    "scene": "chat",
+    "stage": "triage",
+    "context": "Chat message: The GMV shows 0 since 09:00 UTC on the eu-west cluster.",
+    "question": "Is this message actionable as written?",
+    "choices": [
+      "actionable",
+      "needs-info"
+    ],
+    "accept": [
+      "actionable"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "actionable",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:30.932Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-actionability-04",
+    "industry": "ecommerce",
+    "dimension": "actionability",
+    "tag": "regression",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: Something is wrong with my account.",
+    "question": "Is this message actionable as written?",
+    "choices": [
+      "actionable",
+      "needs-info"
+    ],
+    "accept": [
+      "needs-info"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "needs-info",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:32.513Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-actionability-05",
+    "industry": "ecommerce",
+    "dimension": "actionability",
+    "tag": "outage",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: After upgrading, the order drops the timezone field; steps attached.",
+    "question": "Is this message actionable as written?",
+    "choices": [
+      "actionable",
+      "needs-info"
+    ],
+    "accept": [
+      "actionable"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "actionable",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:34.115Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-actionability-06",
+    "industry": "ecommerce",
+    "dimension": "actionability",
+    "tag": "chargeback",
+    "scene": "alert",
+    "stage": "escalation",
+    "context": "Alert fired: It broke again.",
+    "question": "Is this message actionable as written?",
+    "choices": [
+      "actionable",
+      "needs-info"
+    ],
+    "accept": [
+      "needs-info"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "needs-info",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:35.719Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-actionability-07",
+    "industry": "ecommerce",
+    "dimension": "actionability",
+    "tag": "churn-risk",
+    "scene": "log",
+    "stage": "qa",
+    "context": "Log line: The product listing rejects files over 10MB with a clear error.",
+    "question": "Is this message actionable as written?",
+    "choices": [
+      "actionable",
+      "needs-info"
+    ],
+    "accept": [
+      "actionable"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "actionable",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:37.204Z"
+    }
+  },
+  {
+    "id": "cov-ecommerce-actionability-08",
+    "industry": "ecommerce",
+    "dimension": "actionability",
+    "tag": "deadline",
+    "scene": "transcript",
+    "stage": "audit",
+    "context": "Call transcript: Please help with the GMV.",
+    "question": "Is this message actionable as written?",
+    "choices": [
+      "actionable",
+      "needs-info"
+    ],
+    "accept": [
+      "needs-info"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "needs-info",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:38.672Z"
+    }
+  },
+  {
+    "id": "cov-fintech-urgency-01",
+    "industry": "fintech",
+    "dimension": "urgency",
+    "tag": "performance",
+    "scene": "chat",
+    "stage": "response",
+    "context": "Chat message: account holder reports the transaction is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:40.274Z"
+    }
+  },
+  {
+    "id": "cov-fintech-urgency-02",
+    "industry": "fintech",
+    "dimension": "urgency",
+    "tag": "regression",
+    "scene": "email",
+    "stage": "escalation",
+    "context": "Email received: Production payout has been down 20 minutes; customers are blocked.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:41.929Z"
+    }
+  },
+  {
+    "id": "cov-fintech-urgency-03",
+    "industry": "fintech",
+    "dimension": "urgency",
+    "tag": "outage",
+    "scene": "review",
+    "stage": "qa",
+    "context": "Review posted: A page just fired: primary database refusing connections for the transaction.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:43.434Z"
+    }
+  },
+  {
+    "id": "cov-fintech-urgency-04",
+    "industry": "fintech",
+    "dimension": "urgency",
+    "tag": "chargeback",
+    "scene": "alert",
+    "stage": "audit",
+    "context": "Alert fired: failed transfer detected in production, settlement rate degrading by the minute.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:45.023Z"
+    }
+  },
+  {
+    "id": "cov-fintech-urgency-05",
+    "industry": "fintech",
+    "dimension": "urgency",
+    "tag": "churn-risk",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: Please send last month summary sometime next week. No rush.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:46.495Z"
+    }
+  },
+  {
+    "id": "cov-fintech-urgency-06",
+    "industry": "fintech",
+    "dimension": "urgency",
+    "tag": "deadline",
+    "scene": "transcript",
+    "stage": "intake",
+    "context": "Call transcript: The payout label is two pixels off; fix before next quarter planning.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:48.015Z"
+    }
+  },
+  {
+    "id": "cov-fintech-urgency-07",
+    "industry": "fintech",
+    "dimension": "urgency",
+    "tag": "auto-renewal",
+    "scene": "form",
+    "stage": "triage",
+    "context": "Form submission: When convenient, add me to the newsletter about transaction.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:50.038Z"
+    }
+  },
+  {
+    "id": "cov-fintech-urgency-08",
+    "industry": "fintech",
+    "dimension": "urgency",
+    "tag": "third-party",
+    "scene": "sms",
+    "stage": "routing",
+    "context": "SMS: Planning next quarter offsite; would like a payout quote eventually.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "no"
+    ],
+    "published": "2026-10-17",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-17T01:33:51.588Z"
+    }
   }
 ]
