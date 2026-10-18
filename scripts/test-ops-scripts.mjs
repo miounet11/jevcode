@@ -385,3 +385,34 @@ test('巡检：健康时不投递告警（避免告警疲劳）', async () => {
     h.close(); hook.close();
   }
 });
+
+test('门 1 HOLD 时不丢弃生态 pending 批次', () => {
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  // 此前发布收尾无条件 p.pending = {}，门 1 HOLD 的批次被丢掉，pending 只涨不落。
+  assert.match(pipeline, /const cleared = publishEco \? Object\.keys\(p\.pending\)\.length : 0/);
+  assert.match(pipeline, /if \(publishEco\) p\.pending = \{\};/);
+  assert.match(pipeline, /pending batch kept/);
+  assert.doesNotMatch(pipeline, /\nconst cleared = Object\.keys\(p\.pending\)\.length;\np\.pending = \{\};/);
+});
+
+test('门 1 计数跨天持久，HOLD 分支不再按当天文件行数计数', () => {
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  assert.match(pipeline, /bumpGate1Streak\(GATE1_STREAK_FILE\)/);
+  assert.doesNotMatch(pipeline, /prevHold\.split\('\\n'\)\.filter/);
+});
+
+test('门 1 陈旧超限时跳过 judge，直接发布', () => {
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  assert.match(pipeline, /isEcoStale\(lastEcoRelease\(pending\), ECO_STALE_DAYS\)/);
+  assert.match(pipeline, /gate1-stale-override/);
+  // 护栏分支必须绕过 gate1 调用，否则分数仍会抖动
+  assert.match(pipeline, /if \(stale\) \{[\s\S]{0,400}?g1 = \{ worth_publishing: \{ noul: 1 \}/);
+  // 陈旧天数是确定事实，要进 judge 的输入
+  assert.match(pipeline, /async function gate1\(fetchReport, pending, trigger, staleDays\)/);
+  assert.match(pipeline, /already \$\{staleDays\} day\(s\) old/);
+});
+
+test('eco_last_release 只在生态真正发布时更新', () => {
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  assert.match(pipeline, /if \(publishEco\) \{\s*p\.eco_last_release = new Date\(\)\.toISOString\(\);/);
+});

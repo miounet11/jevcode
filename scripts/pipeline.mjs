@@ -25,10 +25,16 @@
 
 import { execSync } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { bumpGate1Streak, resetGate1Streak } from './lib/gate-streak.mjs';
+import { isEcoStale } from './lib/eco-staleness.mjs';
 
 const DRY = process.argv.includes('--dry-run');
 const SKIP_FETCH = process.argv.includes('--skip-fetch');
 const PENDING_FILE = '.research/pipeline-state/pending.json';
+// 门 1 的连续 HOLD 轮数。以前靠数当天 HOLD 文件里的行数，文件按 UTC 日期新建，
+// 于是每天都是「第 1 轮」，连续失败看起来像偶发。改为跨天的持久计数。
+const GATE1_STREAK_FILE = '.research/pipeline-state/gate1-streak.json';
+const GATE1_ALERT_STREAK = Number(process.env.GATE1_ALERT_STREAK ?? 3);
 
 // 门控后端：默认本地 clavue-jev（Jev 余额 402 时无缝切换）。
 //   JUDGE_BACKEND=jev    用 TypeSafe Jev（需 TYPESAFE_API_KEY）
@@ -255,6 +261,27 @@ async function judgeViaClavue(state, questions) {
 // 批量策略（Jev 轮 10：batch_by_magnitude，阈值 +10%/仓库）：
 // 单日小增量累积到 pending 状态，任一仓库相对变化 ≥10% 或新增仓库才触发发布评估。
 const MAGNITUDE_THRESHOLD = 0.1; // +10%
+/**
+ * 保鲜护栏：生态数据距上次真实发布超过这么多天，直接发布，不再问 judge。
+ *
+ * 实测 10-13~10-17 的 worth 依次为 0.473 / 0.078 / 0.089 / 0.432 / 0.415，
+ * 同一批数据在 0.001~0.473 间抖动，而阈值是 0.5——判定几乎不可能越过，站点
+ * 的 "data as of" 会无限期停在旧日期。陈旧天数是可以确定的事实，交给模型只会
+ * 得到噪声，所以用确定性护栏兜底。
+ */
+const ECO_STALE_DAYS = Number(process.env.ECO_STALE_DAYS ?? 3);
+
+/** 上次「生态」发布时间。非生态发布（社区/实验室）不算数。 */
+function lastEcoRelease(pending) {
+  if (pending.eco_last_release) return pending.eco_last_release;
+  // 状态文件还没有该字段时，用 ecosystem.ts 的最后一次提交当基准：
+  // 这个文件只在生态批次真正发布时才被提交，日期即上次生态发布日。
+  try {
+    return run('git log -1 --format=%cI -- src/data/ecosystem.ts').trim() || null;
+  } catch {
+    return null;
+  }
+}
 
 function loadPending() {
   try {
@@ -293,12 +320,16 @@ function accumulate(fetchReport, pending) {
   return trigger;
 }
 
-async function gate1(fetchReport, pending, trigger) {
+async function gate1(fetchReport, pending, trigger, staleDays) {
   const pendingSummary = Object.entries(pending.pending)
     .map(([repo, v]) => `${repo}: ${(v.rel * 100).toFixed(1)}%${v.kind ? ` (${v.kind})` : ''}`)
     .join('; ');
+  // 陈旧天数是确定事实，必须给到判定方：页面上的 "data as of" 每多一天就多一分误导。
+  const staleness = staleDays === null
+    ? 'No previous ecosystem release on record.'
+    : `The published ecosystem data is already ${staleDays} day(s) old.`;
   return judge(
-    `Site JevCode ecosystem refresh, daily cycle. Today's fetch saw ${fetchReport.changes.length} changed repos. Accumulated pending batch since last release: ${pendingSummary}. The site shows these numbers on the /{lang}/ecosystem/ page with a 'data as of <date>' stamp. Code-level trigger (any repo >= +10% change or a repo gone/archived) is currently ${trigger ? 'REACHED' : 'NOT reached'}. Decide whether to publish the accumulated batch now.`,
+    `Site JevCode ecosystem refresh, daily cycle. Today's fetch saw ${fetchReport.changes.length} changed repos. Accumulated pending batch since last release: ${pendingSummary}. The site shows these numbers on the /{lang}/ecosystem/ page with a 'data as of <date>' stamp. ${staleness} Code-level trigger (any repo >= +10% change or a repo gone/archived) is currently ${trigger ? 'REACHED' : 'NOT reached'}. Decide whether to publish the accumulated batch now.`,
     {
       worth_publishing: {
         type: 'noul',
@@ -375,9 +406,18 @@ if (skipGate1) {
     say('gate1: below magnitude; publishing community/lab/builds only');
     writeLog('accumulating-side', { pending, buildsAdded });
   } else {
+    const { stale, days: staleDays } = isEcoStale(lastEcoRelease(pending), ECO_STALE_DAYS);
+    say(`gate1: 生态数据已陈旧 ${staleDays === null ? '未知' : `${staleDays} 天`}`);
     let g1;
     try {
-      g1 = await gate1(fetchReport, pending, trigger);
+      // 陈旧超限时跳过判定：陈旧是确定事实，继续问只会拿到一样抖动的分数。
+      if (stale) {
+        say(`gate1: OVERRIDE 陈旧 ${staleDays} 天 ≥ ${ECO_STALE_DAYS}，直接发布`);
+        writeLog('gate1-stale-override', { staleDays, pending: Object.keys(pending.pending).length });
+        g1 = { worth_publishing: { noul: 1 }, overridden: 'stale' };
+      } else {
+        g1 = await gate1(fetchReport, pending, trigger, staleDays);
+      }
     } catch (err) {
       if (!sideReady()) {
         say(`gate1 FAILED (${err.message}) — 还原抓取写入`);
@@ -395,11 +435,18 @@ if (skipGate1) {
         say('gate1: HOLD — ecosystem batch stays pending');
         const holdFile = `.research/pipeline-logs/HOLD-${new Date().toISOString().slice(0, 10)}.txt`;
         const prevHold = existsSync(holdFile) ? readFileSync(holdFile, 'utf8') : '';
-        const streak = prevHold.split('\n').filter((line) => line.startsWith('本轮 HOLD')).length + 1;
+        const streak = bumpGate1Streak(GATE1_STREAK_FILE);
         writeFileSync(holdFile, `${prevHold}本轮 HOLD #${streak} ` +
           `worth=${g1.worth_publishing.noul.toFixed(3)} ` +
           `backend=${JUDGE_BACKEND} pending=${Object.keys(pending.pending).length} trigger=${trigger}\n`);
-        say(`gate1: 连续 HOLD 第 ${streak} 轮，标记写入 ${holdFile}`);
+        say(`gate1: 连续 HOLD 第 ${streak} 轮（跨天累计），标记写入 ${holdFile}`);
+        if (streak >= GATE1_ALERT_STREAK && !DRY) {
+          const alert = `.research/pipeline-logs/ALERT-GATE1-${new Date().toISOString().slice(0, 10)}.txt`;
+          writeFileSync(alert, `门 1 连续 ${streak} 轮 HOLD：生态数据已连续 ${streak} 轮未发布\n` +
+            `最近一轮 worth=${g1.worth_publishing.noul.toFixed(3)} pending=${Object.keys(pending.pending).length}\n` +
+            `时间：${new Date().toISOString()}\n`);
+          say(`gate1: 连续 ${streak} 轮 HOLD，告警写入 ${alert}`);
+        }
         if (!sideReady()) {
           restoreFetched();
           process.exit(0);
@@ -407,6 +454,8 @@ if (skipGate1) {
         say('gate1 HOLD; publishing community/lab/builds only');
       } else {
         publishEco = true;
+        // 门 1 放行即视为本轮生态不再 HOLD；门 2 拦住是另一档，不该继续累加门 1 的连续轮数。
+        resetGate1Streak(GATE1_STREAK_FILE);
       }
     }
   }
@@ -540,14 +589,26 @@ run('git push origin main', { stdio: 'inherit' });
 run('./deploy/deploy.sh', { stdio: 'inherit' });
 say('deployed');
 
-// 发布成功：清空 pending 批次，记录发布时间
+// 发布成功：只有生态批次真的发出去了才清空 pending，记录发布时间。
+// 门 1 HOLD 时本轮的 ecosystem.ts 已被 checkoutFiles 还原，生态数据根本没上线；
+// 若这时也清空 pending，这批仓库就会被永久丢弃——实测 10-13~10-17 每天 HOLD
+// 却每天清空，pending 从 117 一路涨到 148，ecosystem.ts 自 10-12 起再没更新过。
 const p = loadPending();
-const cleared = Object.keys(p.pending).length;
-p.pending = {};
+const cleared = publishEco ? Object.keys(p.pending).length : 0;
+if (publishEco) p.pending = {};
 p.last_release = new Date().toISOString();
 savePending(p);
-say(`pending batch cleared (${cleared} repos)`);
-writeLog('released', { cleared });
+if (publishEco) {
+  p.eco_last_release = new Date().toISOString();
+  savePending(p);
+  say(`pending batch cleared (${cleared} repos)`);
+  resetGate1Streak(GATE1_STREAK_FILE);
+} else {
+  say(`pending batch kept (${Object.keys(p.pending).length} repos) — 生态本轮未发布`);
+}
+// 这一行只会在 deploy 成功之后执行，所以确实是 released；eco 字段标明本轮
+// 生态数据是否随之更新，便于事后区分「整体发布」与「只发了社区/实验室」。
+writeLog('released', { cleared, eco: publishEco });
 try {
   const out = run('node scripts/indexnow-submit.mjs');
   say(`indexnow: ${String(out).trim().split('\n').slice(-3).join(' | ')}`);
