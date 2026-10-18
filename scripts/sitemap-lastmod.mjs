@@ -90,6 +90,8 @@ export function sitemapInclude(page) {
   if (community && community[1] !== 'en' && community[1] !== 'zh') return false;
   const brief = pathname.match(/^\/([a-z]{2})\/briefs\/[^/]+\/$/);
   if (brief && brief[1] !== 'en' && brief[1] !== 'zh') return false;
+  const briefPage = pathname.match(/^\/([a-z]{2})\/briefs\/page\/\d+\/$/);
+  if (briefPage && briefPage[1] !== 'en' && briefPage[1] !== 'zh') return false;
   const doc = pathname.match(DOC_RE);
   if (doc) {
     return existsSync(path.join(repoRoot, 'src/content/docs', doc[1], doc[2], `${doc[3]}.md`));

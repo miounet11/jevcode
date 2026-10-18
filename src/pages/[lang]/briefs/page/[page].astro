@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { languages, useTranslations, pick, type Lang } from '../../../../i18n/ui';
+import * as copySrc from '../../../../i18n/pages/briefs';
+import briefs from '../../../../data/daily-briefs.json';
+import { briefHeading } from '../../../../../scripts/lib/daily-briefs.mjs';
+
+// 与 [lang]/briefs.astro 保持一致，两处共同构成列表的完整分页。
+// getStaticPaths 会被提取到独立 chunk，模块顶层常量在那里不可见，故在函数内定义。
+const PAGE_SIZE = 100;
+
+export function getStaticPaths() {
+  const PAGE_SIZE = 100;
+  const pages = Math.max(1, Math.ceil(briefs.length / PAGE_SIZE));
+  const paths: Array<{ params: { lang: string; page: string } }> = [];
+  for (const lang of Object.keys(languages)) {
+    // 第 1 页由 [lang]/briefs.astro 负责，这里从第 2 页开始。
+    for (let page = 2; page <= pages; page += 1) {
+      paths.push({ params: { lang, page: String(page) } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+const pages = Math.max(1, Math.ceil(briefs.length / PAGE_SIZE));
+const pageNo = Number(Astro.params.page);
+const path = `/${lang}/briefs/page/${pageNo}/`;
+const copy = {
+  title: pick(lang, copySrc.title),
+  lead: pick(lang, copySrc.lead),
+  total: pick(lang, copySrc.totalLabel),
+  latest: pick(lang, copySrc.latestLabel),
+};
+const rows = [...briefs].reverse().slice((pageNo - 1) * PAGE_SIZE, pageNo * PAGE_SIZE);
+const hrefOf = (n: number) => (n === 1 ? `/${lang}/briefs/` : `/${lang}/briefs/page/${n}/`);
+---
+
+<BaseLayout lang={lang} title={`${copy.title} · ${pageNo}/${pages}`} description={copy.lead} path={path}>
+  <section class="section">
+    <div class="wrap">
+      <main class="doc">
+        <p class="doc__breadcrumb">
+          <a href={`/${lang}/`}>{t('site.name')}</a> /
+          <a href={`/${lang}/briefs/`}>{copy.title}</a>
+        </p>
+        <h1 class="doc__title">{copy.title}</h1>
+        <p class="doc__desc">{copy.lead}</p>
+        <p>{copy.total} {briefs.length}. {copy.latest}</p>
+        <ul class="blist">
+          {rows.map((row) => (
+            <li>
+              <a href={`/${lang}/briefs/${row.id}/`}>{briefHeading(row)}</a>
+              <span class="blist__meta">{row.published} · {row.dimension} · {row.question}</span>
+            </li>
+          ))}
+        </ul>
+        {pages > 1 && (
+          <nav class="bpager" aria-label="Pagination">
+            <span class="bpager__info">{pageNo} / {pages}</span>
+            {pageNo > 1 && <a href={hrefOf(pageNo - 1)}>←</a>}
+            {pageNo < pages && <a href={hrefOf(pageNo + 1)}>→</a>}
+          </nav>
+        )}
+      </main>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blist { list-style: none; padding: 0; margin: 22px 0 0; }
+  .blist li { padding: 12px 0; border-bottom: 1px solid var(--line, rgba(255,255,255,0.08)); }
+  .blist a { display: block; }
+  .blist__meta { display: block; margin-top: 4px; font-size: 13px; opacity: 0.62; }
+  .bpager { display: flex; gap: 16px; align-items: center; margin-top: 24px; }
+  .bpager__info { font-size: 13px; opacity: 0.62; }
+</style>

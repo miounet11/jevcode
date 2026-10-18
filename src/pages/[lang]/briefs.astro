@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { languages, useTranslations, pick, type Lang } from '../../i18n/ui';
 import * as copySrc from '../../i18n/pages/briefs';
 import briefs from '../../data/daily-briefs.json';
+import { briefHeading } from '../../../scripts/lib/daily-briefs.mjs';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -17,8 +18,12 @@ const copy = {
   total: pick(lang, copySrc.totalLabel),
   latest: pick(lang, copySrc.latestLabel),
 };
-const rows = [...briefs].reverse();
-const shown = rows.slice(0, 100);
+// 每页 100 篇，按发布日倒序。以前只渲染前 100 篇，更早的只能靠 sitemap 到达。
+// 本文件是第 1 页，后续页在 [lang]/briefs/page/[page].astro。
+const PAGE_SIZE = 100;
+const pages = Math.max(1, Math.ceil(briefs.length / PAGE_SIZE));
+const pageNo = 1;
+const rows = [...briefs].reverse().slice(0, PAGE_SIZE);
 ---
 
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
@@ -32,13 +37,20 @@ const shown = rows.slice(0, 100);
         <p class="doc__desc">{copy.lead}</p>
         <p>{copy.total} {briefs.length}. {copy.latest}</p>
         <ul class="blist">
-          {shown.map((row) => (
+          {rows.map((row) => (
             <li>
-              <a href={`/${lang}/briefs/${row.id}/`}>{row.question}</a>
-              <span class="blist__meta">{row.published} · {row.industry} · {row.dimension}</span>
+              <a href={`/${lang}/briefs/${row.id}/`}>{briefHeading(row)}</a>
+              <span class="blist__meta">{row.published} · {row.dimension} · {row.question}</span>
             </li>
           ))}
         </ul>
+        {pages > 1 && (
+          <nav class="bpager" aria-label="Pagination">
+            <span class="bpager__info">{pageNo} / {pages}</span>
+            {pageNo > 1 && <a href={pageNo === 2 ? `/${lang}/briefs/` : `/${lang}/briefs/page/${pageNo - 1}/`}>←</a>}
+            {pageNo < pages && <a href={`/${lang}/briefs/page/${pageNo + 1}/`}>→</a>}
+          </nav>
+        )}
       </main>
     </div>
   </section>
@@ -49,4 +61,6 @@ const shown = rows.slice(0, 100);
   .blist li { padding: 12px 0; border-bottom: 1px solid var(--line, rgba(255,255,255,0.08)); }
   .blist a { display: block; }
   .blist__meta { display: block; margin-top: 4px; font-size: 13px; opacity: 0.62; }
+  .bpager { display: flex; gap: 16px; align-items: center; margin-top: 24px; }
+  .bpager__info { font-size: 13px; opacity: 0.62; }
 </style>
