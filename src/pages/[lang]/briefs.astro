@@ -24,9 +24,12 @@ const PAGE_SIZE = 100;
 const pages = Math.max(1, Math.ceil(briefs.length / PAGE_SIZE));
 const pageNo = 1;
 const rows = [...briefs].reverse().slice(0, PAGE_SIZE);
+// 详情页正文是英文原文，非 en/zh 已 noindex；列表页若仍可索引，会出现
+// 「可收录的目录页只链向 noindex 页面」的不一致，这里与详情页保持一致。
+const listIndex = lang === 'en' || lang === 'zh';
 ---
 
-<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
+<BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path} index={listIndex}>
   <section class="section">
     <div class="wrap">
       <main class="doc">

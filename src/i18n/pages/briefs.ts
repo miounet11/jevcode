@@ -59,5 +59,5 @@ export const totalLabel: Localized<string> = {
 };
 
 export const latestLabel: Localized<string> = {
-  zh: '最近 100 篇在下面。更早的仍在各自的地址上。', en: 'The latest 100 are below. Earlier cases stay at their own addresses.', ja: '直近 100 件を下に示します。それ以前は各自のアドレスに残ります。', ko: '최근 100편은 아래에 있습니다. 더 이전 것은 각자 주소에 남아 있습니다.', de: 'Die letzten 100 stehen unten. Ältere Fälle bleiben unter ihrer eigenen Adresse.', fr: 'Les 100 derniers sont ci-dessous. Les plus anciens restent à leur adresse.', es: 'Los últimos 100 están abajo. Los anteriores siguen en su propia dirección.', pt: 'Os 100 mais recentes estão abaixo. Os anteriores continuam no próprio endereço.',
+  zh: '按发布日倒序分页显示，每页 100 篇。', en: 'Newest first, 100 per page.', ja: '公開日の新しい順に 1 ページ 100 件ずつ表示します。', ko: '발행일 최신순으로 페이지당 100편씩 표시합니다.', de: 'Neueste zuerst, 100 pro Seite.', fr: 'Les plus récents d’abord, 100 par page.', es: 'Los más recientes primero, 100 por página.', pt: 'Os mais recentes primeiro, 100 por página.',
 };

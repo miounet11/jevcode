@@ -35,9 +35,11 @@ const copy = {
 };
 const rows = [...briefs].reverse().slice((pageNo - 1) * PAGE_SIZE, pageNo * PAGE_SIZE);
 const hrefOf = (n: number) => (n === 1 ? `/${lang}/briefs/` : `/${lang}/briefs/page/${n}/`);
+// 与 [lang]/briefs.astro 同一规则：非 en/zh 的正文是英文原文，不参与收录。
+const listIndex = lang === 'en' || lang === 'zh';
 ---
 
-<BaseLayout lang={lang} title={`${copy.title} · ${pageNo}/${pages}`} description={copy.lead} path={path}>
+<BaseLayout lang={lang} title={`${copy.title} · ${pageNo}/${pages}`} description={copy.lead} path={path} index={listIndex}>
   <section class="section">
     <div class="wrap">
       <main class="doc">
