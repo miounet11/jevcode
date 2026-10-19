@@ -416,3 +416,13 @@ test('eco_last_release 只在生态真正发布时更新', () => {
   const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
   assert.match(pipeline, /if \(publishEco\) \{\s*p\.eco_last_release = new Date\(\)\.toISOString\(\);/);
 });
+
+test('成功发布后清理旧 ALERT，避免告警堆积', () => {
+  const cron = readFileSync(new URL('./pipeline-cron.sh', import.meta.url), 'utf8');
+  // ALERT 只在连续失败时写入；成功后不清理会一路累积，无法判断哪条仍有效
+  assert.match(cron, /if published_today; then\s*\n\s*streak_reset/);
+  assert.match(cron, /rm -f \.research\/pipeline-logs\/ALERT-\*\.txt/);
+  // 清理必须在成功分支内，失败时不得删除当前告警
+  const failBranch = cron.slice(cron.indexOf('else', cron.indexOf('if published_today')));
+  assert.doesNotMatch(failBranch.slice(0, 200), /rm -f \.research\/pipeline-logs\/ALERT/);
+});

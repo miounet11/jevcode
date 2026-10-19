@@ -50,8 +50,7 @@ const listIndex = lang === 'en' || lang === 'zh';
         {pages > 1 && (
           <nav class="bpager" aria-label="Pagination">
             <span class="bpager__info">{pageNo} / {pages}</span>
-            {pageNo > 1 && <a href={pageNo === 2 ? `/${lang}/briefs/` : `/${lang}/briefs/page/${pageNo - 1}/`}>←</a>}
-            {pageNo < pages && <a href={`/${lang}/briefs/page/${pageNo + 1}/`}>→</a>}
+            <a href={`/${lang}/briefs/page/2/`}>→</a>
           </nav>
         )}
       </main>

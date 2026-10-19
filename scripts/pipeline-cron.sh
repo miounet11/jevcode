@@ -265,7 +265,10 @@ fi
 # 棘轮：只有真的发出去了才归零（退出码 0 也可能是 HOLD/累积，不算发布）
 if published_today; then
   streak_reset
-  echo "[cron] 本轮已发布，棘轮归零"
+  # ALERT 只在连续失败时写入，成功发布后不再成立；不清理会一路堆到 15 个，
+  # 让人分不清哪条是当前仍然有效的告警。
+  rm -f .research/pipeline-logs/ALERT-*.txt
+  echo "[cron] 本轮已发布，棘轮归零，旧告警已清理"
 else
   streak_check
 fi
