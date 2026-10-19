@@ -88,10 +88,11 @@ export function sitemapInclude(page) {
   }
   const community = pathname.match(/^\/([a-z]{2})\/community\/\d+\/$/);
   if (community && community[1] !== 'en' && community[1] !== 'zh') return false;
-  const brief = pathname.match(/^\/([a-z]{2})\/briefs\/[^/]+\/$/);
+  // 简报页正文是英文语料原文，非 en/zh 一律 noindex；sitemap 必须同步排除，
+  // 否则会出现「sitemap 要求的 URL 带 noindex」的自相矛盾。
+  // 列表页 /{lang}/briefs/ 也要算进去——它同样不参与收录。
+  const brief = pathname.match(/^\/([a-z]{2})\/briefs\//);
   if (brief && brief[1] !== 'en' && brief[1] !== 'zh') return false;
-  const briefPage = pathname.match(/^\/([a-z]{2})\/briefs\/page\/\d+\/$/);
-  if (briefPage && briefPage[1] !== 'en' && briefPage[1] !== 'zh') return false;
   const doc = pathname.match(DOC_RE);
   if (doc) {
     return existsSync(path.join(repoRoot, 'src/content/docs', doc[1], doc[2], `${doc[3]}.md`));
