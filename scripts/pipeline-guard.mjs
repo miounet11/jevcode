@@ -24,11 +24,19 @@ export function blockingDirty(porcelain) {
     const line = raw.replace(/\r$/, '');
     if (!line.trim()) continue;
     const status = line.slice(0, 2);
-    let file = line.slice(3);
-    if (file.includes(' -> ')) file = file.slice(file.lastIndexOf(' -> ') + 4);
-    if (file.startsWith('"') && file.endsWith('"')) file = file.slice(1, -1);
-    if (file.startsWith('.data/')) continue;
-    if (status === '??' && file.startsWith('docs/coverage-full/')) continue;
+    const rest = line.slice(3);
+    // 重命名要同时看两端：只取目标侧会让 `src/x.ts -> .data/x.ts` 逃过检查，
+    // 而源文件的删除是会跟着发布走的。
+    const paths = rest.includes(' -> ')
+      ? [rest.slice(0, rest.lastIndexOf(' -> ')), rest.slice(rest.lastIndexOf(' -> ') + 4)]
+      : [rest];
+    const unquote = (p) => (p.startsWith('"') && p.endsWith('"') ? p.slice(1, -1) : p);
+    const exempt = paths.map(unquote).every((file) => {
+      if (file.startsWith('.data/')) return true;
+      if (status === '??' && file.startsWith('docs/coverage-full/')) return true;
+      return false;
+    });
+    if (exempt) continue;
     blocking.push(line);
   }
   return blocking;
