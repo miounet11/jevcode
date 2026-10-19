@@ -636,7 +636,9 @@ async function linkCheck() {
         else if (f.name.endsWith('.html')) {
           const html = fs.readFileSync(p, 'utf8');
           for (const m of html.matchAll(/href=\\"(\\/[^\\"]*)\\"/g)) {
-            const href = m[1].split('#')[0];
+            // 查询串和片段都不是路径的一部分：/login/?mode=register 对应的
+            // 文件是 dist/en/login/index.html，不剥离会误报成断链。
+            const href = m[1].split('#')[0].split('?')[0];
             if (/\\.(svg|png|webp|webmanifest|ico|css|js|txt|xml|woff2)$/.test(href)) continue;
             total++;
             const t = 'dist' + (href.endsWith('/') ? href : href + '/');

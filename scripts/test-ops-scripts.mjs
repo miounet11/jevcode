@@ -426,3 +426,10 @@ test('成功发布后清理旧 ALERT，避免告警堆积', () => {
   const failBranch = cron.slice(cron.indexOf('else', cron.indexOf('if published_today')));
   assert.doesNotMatch(failBranch.slice(0, 200), /rm -f \.research\/pipeline-logs\/ALERT/);
 });
+
+test('链接检查剥离查询串，不把 ?mode=register 误报成断链', () => {
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  // /en/login/?mode=register 的真实文件是 dist/en/login/index.html，
+  // 只剥 # 会让 8 个语言各报一条假断链，进而拖低门 2 的 ready 分。
+  assert.match(pipeline, /m\[1\]\.split\('#'\)\[0\]\.split\('\?'\)\[0\]/);
+});
