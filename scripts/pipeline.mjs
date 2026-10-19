@@ -28,6 +28,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { bumpGate1Streak, resetGate1Streak } from './lib/gate-streak.mjs';
 import { isEcoStale } from './lib/eco-staleness.mjs';
 import { dropLastCommit } from './lib/cycle-commit.mjs';
+import { describeReleaseFiles } from './lib/release-description.mjs';
 
 const DRY = process.argv.includes('--dry-run');
 const SKIP_FETCH = process.argv.includes('--skip-fetch');
@@ -662,31 +663,7 @@ function describeRelease() {
   } catch {
     files = run('git show --name-only --format= HEAD').trim().split('\n').filter(Boolean);
   }
-  const dataFiles = files.filter((f) => f.startsWith('src/data/'));
-  const pageFiles = files.filter((f) => f.startsWith('src/pages/') || f.startsWith('src/i18n/'));
-  const scriptFiles = files.filter((f) => f.startsWith('scripts/'));
-  const rest = files.filter((f) => !dataFiles.includes(f) && !pageFiles.includes(f) && !scriptFiles.includes(f));
-  const counts = { 'daily-briefs.json': 'briefs', 'lab-records.json': 'labRecords', 'lab-supplement.json': 'labSupplement' };
-  const stats = [];
-  for (const [file, label] of Object.entries(counts)) {
-    try {
-      const value = JSON.parse(readFileSync(`src/data/${file}`, 'utf8'));
-      const n = Array.isArray(value) ? value.length : Object.keys(value).length;
-      stats.push(`${label}=${n}`);
-    } catch {
-      /* 文件不存在或不是 JSON，跳过该项即可，描述里不编造数字 */
-    }
-  }
-  // 如实分类，不写无法验证的断言（例如「没有逻辑变更」在带脚本修复时不成立）。
-  const parts = [`Scheduled release covering ${files.length} file(s).`];
-  if (dataFiles.length) {
-    parts.push(`Data refresh (${dataFiles.length}): ${dataFiles.map((f) => f.replace('src/data/', '')).join(', ')}.`);
-  }
-  if (stats.length) parts.push(`Current data volume: ${stats.join(', ')}.`);
-  if (scriptFiles.length) parts.push(`Pipeline/script updates (${scriptFiles.length}): ${scriptFiles.map((f) => f.replace('scripts/', '')).join(', ')}.`);
-  if (pageFiles.length) parts.push(`Page/i18n updates (${pageFiles.length}): ${pageFiles.map((f) => f.replace('src/', '')).join(', ')}.`);
-  if (rest.length) parts.push(`Other (${rest.length}): ${rest.join(', ')}.`);
-  return parts.join(' ');
+  return describeReleaseFiles(files, { readFile: (path) => readFileSync(path, 'utf8') });
 }
 
 function dry_has_changes(d) {

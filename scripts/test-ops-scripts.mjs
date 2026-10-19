@@ -441,10 +441,10 @@ test('门 2 收到的是真实分类描述，而不是原始 git log --stat', ()
   assert.match(pipeline, /: describeRelease\(\)/);
   // 描述基于整轮待发布范围（origin/main..HEAD），不是最后一笔提交
   assert.match(pipeline, /git diff --name-only origin\/main\.\.HEAD/);
-  // 必须如实分类，不得写「没有逻辑变更」这类在带脚本修复时不成立的断言
-  assert.doesNotMatch(pipeline, /No application logic, layout, routing, or dependency changes/);
-  assert.match(pipeline, /Pipeline\/script updates/);
-  assert.match(pipeline, /Data refresh/);
+  // 分类文案已抽到 lib/release-description.mjs，由 test-release-description.mjs
+  // 直接验证输出内容；这里只确认管线确实调用它，而不是自己拼字符串。
+  assert.match(pipeline, /describeReleaseFiles\(files,/);
+  assert.doesNotMatch(pipeline, /Pipeline\/script updates/);
 });
 
 test('门 2 HOLD / 构建失败时撤销本轮提交', () => {
