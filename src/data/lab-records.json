@@ -390,5 +390,33 @@
     "ok": true,
     "choice": "negative",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-language-01",
+    "ts": "2026-10-19T03:58:32.629Z",
+    "ok": true,
+    "choice": "en",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-language-02",
+    "ts": "2026-10-19T03:58:34.931Z",
+    "ok": true,
+    "choice": "zh",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-language-03",
+    "ts": "2026-10-19T03:58:36.514Z",
+    "ok": true,
+    "choice": "ja",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-language-04",
+    "ts": "2026-10-19T03:58:38.316Z",
+    "ok": true,
+    "choice": "other",
+    "model": "clavue-jev"
   }
 ]

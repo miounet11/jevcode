@@ -822,5 +822,69 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-language-01",
+    "state": "Form submission: The order keeps failing every morning.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-02",
+    "state": "SMS: 请问 order 的发票在哪里下载？",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-03",
+    "state": "API payload field: product listing の設定方法を教えてください。",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-04",
+    "state": "Internal note: Il order non si carica più da ieri.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
   }
 ]
