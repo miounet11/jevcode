@@ -29,6 +29,7 @@ import { bumpGate1Streak, resetGate1Streak } from './lib/gate-streak.mjs';
 import { isEcoStale } from './lib/eco-staleness.mjs';
 import { dropLastCommit } from './lib/cycle-commit.mjs';
 import { describeReleaseFiles } from './lib/release-description.mjs';
+import { loadPendingState } from './lib/pending-state.mjs';
 
 const DRY = process.argv.includes('--dry-run');
 const SKIP_FETCH = process.argv.includes('--skip-fetch');
@@ -286,10 +287,13 @@ function lastEcoRelease(pending) {
 }
 
 function loadPending() {
+  // 首次运行可以从空批次开始；文件存在但损坏时必须失败，否则发布成功后
+  // savePending 会用空对象覆盖它，累积的批次永久丢失。
   try {
-    return JSON.parse(readFileSync(PENDING_FILE, 'utf8'));
-  } catch {
-    return { last_release: null, pending: {} };
+    return loadPendingState(PENDING_FILE);
+  } catch (err) {
+    say(`FATAL ${err.message}`);
+    process.exit(1);
   }
 }
 
