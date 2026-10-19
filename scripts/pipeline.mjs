@@ -27,6 +27,7 @@ import { execSync } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { bumpGate1Streak, resetGate1Streak } from './lib/gate-streak.mjs';
 import { isEcoStale } from './lib/eco-staleness.mjs';
+import { dropLastCommit } from './lib/cycle-commit.mjs';
 
 const DRY = process.argv.includes('--dry-run');
 const SKIP_FETCH = process.argv.includes('--skip-fetch');
@@ -490,14 +491,13 @@ if (!DRY) {
  */
 function dropThisCycleCommit() {
   if (!committed || DRY) return;
-  try {
-    run('git reset --soft HEAD~1');
-    run('git reset HEAD -- .');
-    committed = false;
-    say('已撤销本轮提交（未发布的内容不留在历史里）');
-  } catch (err) {
-    say(`WARN 撤销本轮提交失败: ${err.message}`);
+  const { dropped, reason } = dropLastCommit();
+  if (!dropped) {
+    say(`WARN 撤销本轮提交失败: ${reason}`);
+    return;
   }
+  committed = false;
+  say('已撤销本轮提交（未发布的内容不留在历史里）');
 }
 
 // 4. 构建 + 检查

@@ -452,7 +452,9 @@ test('门 2 HOLD / 构建失败时撤销本轮提交', () => {
   // 提交发生在门 2 之前，restoreFetched 只能还原未提交的写入；
   // 不撤销会让 HOLD 的数据留在历史里，下次再追加一批（2026-10-19 累积 200 篇）。
   assert.match(pipeline, /function dropThisCycleCommit\(\)/);
-  assert.match(pipeline, /git reset --soft HEAD~1/);
+  // 实际的 git 撤销动作在 lib 里（由 test-cycle-commit.mjs 用临时仓库真实验证），
+  // 这里只确认管线调用的是它。
+  assert.match(pipeline, /dropLastCommit\(\)/);
   const hold = pipeline.slice(pipeline.indexOf("say('gate2: HOLD"));
   assert.match(hold.slice(0, 200), /dropThisCycleCommit\(\)/);
   const mech = pipeline.slice(pipeline.indexOf('gate2 skipped: mechanical gates failed'));
