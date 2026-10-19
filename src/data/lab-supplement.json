@@ -762,5 +762,65 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-05",
+    "state": "Internal note: Attached is last month usage for the product listing.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-06",
+    "state": "Social post: We will send the signed order form tomorrow.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-07",
+    "state": "Ticket: Greatly appreciate the product listing walkthrough.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-08",
+    "state": "Chat message: The GMV discrepancy remains unresolved.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
   }
 ]

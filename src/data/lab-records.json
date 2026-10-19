@@ -362,5 +362,33 @@
     "ok": true,
     "choice": "negative",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-sentiment-05",
+    "ts": "2026-10-19T03:43:47.509Z",
+    "ok": true,
+    "choice": "neutral",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-sentiment-06",
+    "ts": "2026-10-19T03:43:48.956Z",
+    "ok": true,
+    "choice": "neutral",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-sentiment-07",
+    "ts": "2026-10-19T03:43:50.289Z",
+    "ok": true,
+    "choice": "positive",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-sentiment-08",
+    "ts": "2026-10-19T03:43:51.930Z",
+    "ok": true,
+    "choice": "negative",
+    "model": "clavue-jev"
   }
 ]
