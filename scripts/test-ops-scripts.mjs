@@ -462,3 +462,17 @@ test('门 2 HOLD / 构建失败时撤销本轮提交', () => {
   const fail = pipeline.slice(pipeline.indexOf('gate2 FAILED'));
   assert.match(fail.slice(0, 200), /dropThisCycleCommit\(\)/);
 });
+
+test('push 失败撤销本轮提交；deploy 失败保留已推送的提交', () => {
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  const push = pipeline.slice(pipeline.indexOf("run('git push origin main'"));
+  // push 失败：提交还在本地，不撤销会被下一轮叠加
+  assert.match(push.slice(0, 400), /dropThisCycleCommit\(\)/);
+  assert.match(push.slice(0, 400), /push-failed/);
+  // deploy 失败：提交已推送到远端，撤销只会让本地落后，因此不得撤销
+  const deployIdx = push.indexOf("run('./deploy/deploy.sh'");
+  const deploy = push.slice(deployIdx, deployIdx + 500);
+  assert.doesNotMatch(deploy, /dropThisCycleCommit\(\)/);
+  assert.match(deploy, /deploy-failed/);
+  assert.doesNotMatch(pipeline, /__placeholder__/);
+});

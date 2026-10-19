@@ -613,8 +613,28 @@ if (DRY) {
   writeLog('dry-run-end');
   process.exit(0);
 }
-run('git push origin main', { stdio: 'inherit' });
-run('./deploy/deploy.sh', { stdio: 'inherit' });
+// 推送与部署没有回滚手段：一旦 push 成功而 deploy 失败，重新跑一轮会把同一批
+// 数据再提交一次；而 push 本身失败时，本轮提交会留在本地历史里，下一轮在其上
+// 叠加。两种都按故障处理并撤销提交，让「没上线」在仓库里也真的没发生。
+try {
+  run('git push origin main', { stdio: 'inherit' });
+} catch (err) {
+  say(`git push FAILED (${err.message})`);
+  dropThisCycleCommit();
+  restoreFetched();
+  writeLog('push-failed', { message: String(err.message).slice(0, 500) });
+  process.exit(1);
+}
+try {
+  run('./deploy/deploy.sh', { stdio: 'inherit' });
+} catch (err) {
+  // 已经 push 成功，撤销本地提交只会让本地落后于远端，不解决问题；
+  // 保持提交不动，交给 cron 的棘轮告警，由人决定是否重跑。
+  say(`deploy FAILED (${err.message}) — 提交已推送，需人工确认`);
+  restoreFetched();
+  writeLog('deploy-failed', { message: String(err.message).slice(0, 500) });
+  process.exit(1);
+}
 say('deployed');
 
 // 发布成功：只有生态批次真的发出去了才清空 pending，记录发布时间。
