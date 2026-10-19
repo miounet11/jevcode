@@ -702,5 +702,65 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-01",
+    "state": "Call transcript: Thanks for the fast fix on the order.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-02",
+    "state": "Form submission: The new product listing flow is delightful.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-03",
+    "state": "SMS: Your agent hung up while I explained the GMV outage.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-04",
+    "state": "API payload field: Third order failure this week and still no reply.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
   }
 ]
