@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { nextBriefSources, checkJudgedBatch, backfillJudgments, briefHeading } from './lib/daily-briefs.mjs';
 
 const row = (id, extra = {}) => ({
@@ -197,4 +198,14 @@ test('标题补上 dimension 后，全语料 7680 条不重复', () => {
 test('标题缺字段时不留空段', () => {
   assert.equal(briefHeading({ industry: 'saas', scene: '', tag: 'outage', dimension: 'priority' }), 'saas · outage · priority');
   assert.equal(briefHeading({ industry: 'saas' }), 'saas');
+});
+
+test('同一天已发够时不再追加（按天幂等）', () => {
+  const script = readFileSync(new URL('./daily-briefs.mjs', import.meta.url), 'utf8');
+  // 2026-10-19 三次 HOLD 后成功一轮，同日累积 200 篇；这里从源头禁止重复写入。
+  assert.match(script, /const alreadyToday = existing\.filter\(\(row\) => row\.published === published\)\.length/);
+  assert.match(script, /if \(alreadyToday >= LIMIT\)/);
+  assert.match(script, /reason: 'already-published-today'/);
+  // 剩余额度要扣掉今天已发的部分，否则同日补跑会超额
+  assert.match(script, /LIMIT - alreadyToday/);
 });

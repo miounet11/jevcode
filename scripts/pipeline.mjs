@@ -381,6 +381,8 @@ if (!SKIP_FETCH) {
 // 星标没有跨过阈值时，社区指标、新推文和实验室补充仍要发布。
 // 星标文件和「只改了 updated 时间戳」的卡片不跟着这路出去。
 let publishEco = false;
+/** 本轮是否已经产生提交，供 HOLD 时撤销。 */
+let committed = false;
 const sideReady = () => buildsAdded > 0 || hasSideContent();
 if (fetchReport.changes.length === 0 && !SKIP_FETCH && !sideReady()) {
   say('gate1: no changes, nothing to do');
@@ -474,7 +476,28 @@ if (!DRY) {
   for (const file of stage) run(`git add -- ${file}`);
   const stamp = new Date().toISOString().slice(0, 10);
   run(`git commit -m ${JSON.stringify(`chore(eco): 生态数据自动刷新 (${stamp}): ${stage.join(', ')}`)} --quiet`);
+  committed = true;
   say(`committed ${stage.join(', ')}`);
+}
+
+/**
+ * 放弃本轮提交。
+ *
+ * 提交发生在门 2 之前，而 restoreFetched() 只能还原「未提交」的写入。门 2 HOLD
+ * 时这批数据其实已经进了历史，明天再跑就会在它之上又追加一批：2026-10-19 三
+ * 轮 HOLD 加一轮成功，同一天累积了 200 篇（应为 50）。这里显式撤销本轮提交，
+ * 让「没发布」在仓库里也真的没发生。
+ */
+function dropThisCycleCommit() {
+  if (!committed || DRY) return;
+  try {
+    run('git reset --soft HEAD~1');
+    run('git reset HEAD -- .');
+    committed = false;
+    say('已撤销本轮提交（未发布的内容不留在历史里）');
+  } catch (err) {
+    say(`WARN 撤销本轮提交失败: ${err.message}`);
+  }
 }
 
 // 4. 构建 + 检查
@@ -525,6 +548,7 @@ if (i18nReport === 'gaps') {
 // 5. 门 2
 if (!buildOk || !checkOk) {
   say('gate2 skipped: mechanical gates failed');
+  dropThisCycleCommit();
   restoreFetched();
   writeLog('gate2-skipped-mech-fail', { buildOk, checkOk, i18nReport });
   process.exit(1);
@@ -560,6 +584,7 @@ try {
   g2 = await gate2(buildOk, checkOk, linkReport, changes);
 } catch (err) {
   say(`gate2 FAILED (${err.message}) — 还原抓取写入`);
+  dropThisCycleCommit();
   restoreFetched();
   process.exit(1);
 }
@@ -569,6 +594,7 @@ writeLog('gate2', { gate2: g2, i18nReport });
 
 if (!ready) {
   say('gate2: HOLD — release blocked by Jev');
+  dropThisCycleCommit();
   restoreFetched();
   // 退出码 2 =「按设计不发布」，与 1（机制/API 故障）区分开：cron 侧据此不再
   // 写成「管线失败」ALERT。此前二者混用 exit 1，告警分不清是内容不值得发还是
@@ -581,6 +607,7 @@ if (DRY) {
   say('dry-run: would deploy now');
   // 干跑是非发布路径，必须和 HOLD 路径一样还原抓取写入。
   // 否则每次干跑都在工作区留下脏改动，把下一轮 cron 的脏区保护永久触发（自锁）。
+  dropThisCycleCommit();
   restoreFetched();
   writeLog('dry-run-end');
   process.exit(0);

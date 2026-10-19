@@ -47,9 +47,19 @@ async function judgeOne(brief) {
 
 const coverage = JSON.parse(readFileSync(COVERAGE, 'utf8'));
 const existing = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : [];
-const sources = nextBriefSources(coverage, existing.map((row) => row.id), LIMIT);
 
 const published = new Date().toISOString().slice(0, 10);
+
+// 按天幂等：同一天已经发够就是重复执行（cron 重跑、手动补跑），不再追加。
+// 2026-10-19 因门 2 三次 HOLD 后又成功一轮，同日累积了 200 篇（应为 50）。
+// 门 2 HOLD 的轮次现在会撤销提交，但这里再加一道，防止任何路径重复写入。
+const alreadyToday = existing.filter((row) => row.published === published).length;
+if (alreadyToday >= LIMIT) {
+  console.log(JSON.stringify({ added: 0, backfilled: 0, total: existing.length, judged: 0, reason: 'already-published-today', published, count: alreadyToday }));
+  process.exit(0);
+}
+
+const sources = nextBriefSources(coverage, existing.map((row) => row.id), LIMIT - alreadyToday);
 let missingKey = false;
 
 /** 判定单条，返回要写进数据的 judgment；失败返回 null，不编造选项。 */

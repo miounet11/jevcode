@@ -446,3 +446,17 @@ test('门 2 收到的是真实分类描述，而不是原始 git log --stat', ()
   assert.match(pipeline, /Pipeline\/script updates/);
   assert.match(pipeline, /Data refresh/);
 });
+
+test('门 2 HOLD / 构建失败时撤销本轮提交', () => {
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  // 提交发生在门 2 之前，restoreFetched 只能还原未提交的写入；
+  // 不撤销会让 HOLD 的数据留在历史里，下次再追加一批（2026-10-19 累积 200 篇）。
+  assert.match(pipeline, /function dropThisCycleCommit\(\)/);
+  assert.match(pipeline, /git reset --soft HEAD~1/);
+  const hold = pipeline.slice(pipeline.indexOf("say('gate2: HOLD"));
+  assert.match(hold.slice(0, 200), /dropThisCycleCommit\(\)/);
+  const mech = pipeline.slice(pipeline.indexOf('gate2 skipped: mechanical gates failed'));
+  assert.match(mech.slice(0, 200), /dropThisCycleCommit\(\)/);
+  const fail = pipeline.slice(pipeline.indexOf('gate2 FAILED'));
+  assert.match(fail.slice(0, 200), /dropThisCycleCommit\(\)/);
+});
