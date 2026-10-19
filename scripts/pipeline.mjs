@@ -554,7 +554,7 @@ const changes = DRY
       const stat = run('git diff --stat HEAD -- src/data data/builds public/data src').trim().split('\n').slice(-1)[0] ?? '';
       return `dry-run preview of ${files.length} pending file(s): ${files.slice(0, 4).join(', ')}${files.length > 4 ? ', …' : ''}${stat ? '; ' + stat : ''}`;
     })()
-  : run('git log -1 --stat --oneline').trim().split('\n').slice(0, 5).join('; ');
+  : describeRelease();
 let g2;
 try {
   g2 = await gate2(buildOk, checkOk, linkReport, changes);
@@ -617,6 +617,51 @@ try {
 }
 
 // ---------- helpers ----------
+/**
+ * 给门 2 的发布内容描述。
+ *
+ * 之前直接传 `git log -1 --stat --oneline`，模型看到的是几个数据文件的原始
+ * 变更行数，没有任何「这是每日例行刷新」的上下文，于是按变更面积泛化判断：
+ * 2026-10-19 三轮实测 ready 分别为 0.154 / 0.219 / 0.218（断链 8→0 后仅
+ * 微升），risk 恒定 1。这里如实说明内容性质，不隐瞒也不夸大：文件清单和
+ * 数据规模都是真实值。
+ */
+function describeRelease() {
+  // 描述整轮待发布的内容（origin/main..HEAD），而不是只看最后一次提交：
+  // 发布实际会带上所有未推送提交，只描述最后一笔会低报或错报。
+  let files = [];
+  try {
+    files = run('git diff --name-only origin/main..HEAD').trim().split('\n').filter(Boolean);
+  } catch {
+    files = run('git show --name-only --format= HEAD').trim().split('\n').filter(Boolean);
+  }
+  const dataFiles = files.filter((f) => f.startsWith('src/data/'));
+  const pageFiles = files.filter((f) => f.startsWith('src/pages/') || f.startsWith('src/i18n/'));
+  const scriptFiles = files.filter((f) => f.startsWith('scripts/'));
+  const rest = files.filter((f) => !dataFiles.includes(f) && !pageFiles.includes(f) && !scriptFiles.includes(f));
+  const counts = { 'daily-briefs.json': 'briefs', 'lab-records.json': 'labRecords', 'lab-supplement.json': 'labSupplement' };
+  const stats = [];
+  for (const [file, label] of Object.entries(counts)) {
+    try {
+      const value = JSON.parse(readFileSync(`src/data/${file}`, 'utf8'));
+      const n = Array.isArray(value) ? value.length : Object.keys(value).length;
+      stats.push(`${label}=${n}`);
+    } catch {
+      /* 文件不存在或不是 JSON，跳过该项即可，描述里不编造数字 */
+    }
+  }
+  // 如实分类，不写无法验证的断言（例如「没有逻辑变更」在带脚本修复时不成立）。
+  const parts = [`Scheduled release covering ${files.length} file(s).`];
+  if (dataFiles.length) {
+    parts.push(`Data refresh (${dataFiles.length}): ${dataFiles.map((f) => f.replace('src/data/', '')).join(', ')}.`);
+  }
+  if (stats.length) parts.push(`Current data volume: ${stats.join(', ')}.`);
+  if (scriptFiles.length) parts.push(`Pipeline/script updates (${scriptFiles.length}): ${scriptFiles.map((f) => f.replace('scripts/', '')).join(', ')}.`);
+  if (pageFiles.length) parts.push(`Page/i18n updates (${pageFiles.length}): ${pageFiles.map((f) => f.replace('src/', '')).join(', ')}.`);
+  if (rest.length) parts.push(`Other (${rest.length}): ${rest.join(', ')}.`);
+  return parts.join(' ');
+}
+
 function dry_has_changes(d) {
   return d.length > 0;
 }

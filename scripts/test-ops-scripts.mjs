@@ -433,3 +433,16 @@ test('链接检查剥离查询串，不把 ?mode=register 误报成断链', () =
   // 只剥 # 会让 8 个语言各报一条假断链，进而拖低门 2 的 ready 分。
   assert.match(pipeline, /m\[1\]\.split\('#'\)\[0\]\.split\('\?'\)\[0\]/);
 });
+
+test('门 2 收到的是真实分类描述，而不是原始 git log --stat', () => {
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  // 直接传 `git log -1 --stat` 时模型只看到变更面积，实测 ready 长期 0.15~0.22
+  assert.doesNotMatch(pipeline, /: run\('git log -1 --stat --oneline'\)/);
+  assert.match(pipeline, /: describeRelease\(\)/);
+  // 描述基于整轮待发布范围（origin/main..HEAD），不是最后一笔提交
+  assert.match(pipeline, /git diff --name-only origin\/main\.\.HEAD/);
+  // 必须如实分类，不得写「没有逻辑变更」这类在带脚本修复时不成立的断言
+  assert.doesNotMatch(pipeline, /No application logic, layout, routing, or dependency changes/);
+  assert.match(pipeline, /Pipeline\/script updates/);
+  assert.match(pipeline, /Data refresh/);
+});
