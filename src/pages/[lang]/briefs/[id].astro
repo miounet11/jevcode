@@ -3,7 +3,9 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { languages, pick, useTranslations, type Lang } from '../../../i18n/ui';
 import * as copySrc from '../../../i18n/pages/briefs';
 import briefs from '../../../data/daily-briefs.json';
-import { briefHeading } from '../../../../scripts/lib/daily-briefs.mjs';
+import { briefHeading, localizedBrief, localizeTerm } from '../../../../scripts/lib/daily-briefs.mjs';
+import briefI18n from '../../../data/briefs-i18n.json';
+import { briefTerms } from '../../../data/brief-terms';
 
 type Judgment = { ok: boolean; choice: string | null; model: string | null; ts: string };
 type Brief = {
@@ -48,13 +50,16 @@ const copy = {
   judgment: pick(lang, copySrc.judgmentLabel),
   noJudgment: pick(lang, copySrc.noJudgment),
 };
-const flat = entry.context.replace(/\s+/g, ' ').trim();
+const text = localizedBrief(entry, lang, briefI18n as Record<string, Record<string, { context: string; question: string; choices: string[] }>>);
+const flat = text.context.replace(/\s+/g, ' ').trim();
 const desc = Array.from(flat).slice(0, 160).join('') + (Array.from(flat).length > 160 ? '…' : '');
 // 标题用可区分的结构化字段：question 在语料里按维度模板重复，直接当 h1 会
-// 产出一批同标题页面。
-const heading = briefHeading(entry);
-const pageTitle = `${heading} — ${Array.from(entry.question).slice(0, 60).join('')}`;
-const detailIndex = lang === 'en' || lang === 'zh';
+// 产出一批同标题页面。语言站点按术语表产出各自的标题与描述。
+const heading = briefHeading(entry, lang, briefTerms);
+const pageTitle = `${heading} — ${Array.from(text.question).slice(0, 60).join('')}`;
+// 有译文的语言才进索引；未本地化的页面留在英文原文上，不重复收录。
+const detailIndex = lang === 'en' || lang === 'zh' || text.localized;
+const bodyLang = text.localized ? lang : 'en';
 const idx = rows.findIndex((row) => row.id === entry.id);
 const prev = idx > 0 ? rows[idx - 1] : undefined;
 const next = idx >= 0 && idx < rows.length - 1 ? rows[idx + 1] : undefined;
@@ -72,19 +77,19 @@ const hrefOf = (row: Brief) => `/${lang}/briefs/${row.id}/`;
           / {entry.id}
         </p>
         <h1 class="doc__title">{heading}</h1>
-        <p class="doc__desc">{entry.dimension} · {entry.stage}</p>
+        <p class="doc__desc">{localizeTerm('dimension', entry.dimension, lang, briefTerms)} · {localizeTerm('stage', entry.stage, lang, briefTerms)}</p>
         <div class="pmeta">
           <span class="pmeta__item"><span class="pmeta__k">{copy.published}</span><span class="pmeta__v">{entry.published}</span></span>
-          <span class="pmeta__item"><span class="pmeta__k">tag</span><span class="pmeta__v">{entry.tag}</span></span>
-          <span class="pmeta__item"><span class="pmeta__k">stage</span><span class="pmeta__v">{entry.stage}</span></span>
+          <span class="pmeta__item"><span class="pmeta__k">tag</span><span class="pmeta__v">{localizeTerm('tag', entry.tag, lang, briefTerms)}</span></span>
+          <span class="pmeta__item"><span class="pmeta__k">stage</span><span class="pmeta__v">{localizeTerm('stage', entry.stage, lang, briefTerms)}</span></span>
         </div>
         <h2>{copy.context}</h2>
-        <blockquote class="pquote"><p class="pquote__text" lang="en">{entry.context}</p></blockquote>
+        <blockquote class="pquote"><p class="pquote__text" lang={bodyLang}>{text.context}</p></blockquote>
         <h2>{copy.question}</h2>
-        <p lang="en">{entry.question}</p>
+        <p lang={bodyLang}>{text.question}</p>
         <h2>{copy.choices}</h2>
         <ul>
-          {entry.choices.map((choice) => <li><code>{choice}</code></li>)}
+          {text.choices.map((choice: string) => <li><code>{choice}</code></li>)}
         </ul>
         <h2>{copy.accept}</h2>
         {entry.accept.length

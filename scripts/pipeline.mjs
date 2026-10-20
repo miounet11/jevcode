@@ -83,12 +83,19 @@ const STAGE_FILES = [
   'src/data/lab-supplement.json',
   'src/data/lab-records.json',
   'src/data/daily-briefs.json',
+  // 案例的多语言正文与术语表跟随案例一起发布，否则语言站点拿不到增量。
+  'src/data/briefs-i18n.json',
+  'src/data/brief-terms.json',
+  'src/data/brief-terms.ts',
 ];
 const SIDE_FILES = [
   'src/data/community.ts',
   'src/data/lab-supplement.json',
   'src/data/lab-records.json',
   'src/data/daily-briefs.json',
+  'src/data/briefs-i18n.json',
+  'src/data/brief-terms.json',
+  'src/data/brief-terms.ts',
 ];
 function restoreFetched() {
   if (SKIP_FETCH) return;
@@ -153,6 +160,15 @@ function refreshBriefs() {
   try {
     const out = run('node scripts/daily-briefs.mjs');
     say(`briefs: ${String(out).trim().split('\n').pop()}`);
+    // 新案例要跟着翻译，否则各语言站点只涨英文原文页，等于没有 SEO 增量。
+    // 翻译失败不影响案例本身已发布，只告警。
+    try {
+      const tr = run('python3 scripts/translate-briefs.py --lang=all');
+      say(`briefs-i18n: ${String(tr).trim().split('\n').slice(-1)[0]}`);
+    } catch (err) {
+      const tail = `${err.stdout ?? ''}\n${err.stderr ?? ''}`.trim().split('\n').slice(-3).join(' | ');
+      say(`WARN 案例翻译失败（案例与英文站已发布）: ${tail.slice(0, 300)}`);
+    }
   } catch (err) {
     const tail = `${err.stdout ?? ''}\n${err.stderr ?? ''}`.trim().split('\n').slice(-4).join(' | ');
     say(`WARN 每日案例失败（不阻塞生态发布）: ${tail.slice(0, 400)}`);

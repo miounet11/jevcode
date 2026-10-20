@@ -2,7 +2,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { nextBriefSources, checkJudgedBatch, backfillJudgments, briefHeading } from './lib/daily-briefs.mjs';
+import { nextBriefSources, checkJudgedBatch, backfillJudgments, briefHeading, localizeTerm, localizedBrief } from './lib/daily-briefs.mjs';
+
+const TERMS = {
+  industry: { saas: { ja: 'SaaS' } },
+  scene: { chat: { ja: 'チャット' } },
+  tag: { outage: {} },
+  dimension: { urgency: { ja: '緊急度' } },
+};
 
 const row = (id, extra = {}) => ({
   id,
@@ -208,4 +215,61 @@ test('同一天已发够时不再追加（按天幂等）', () => {
   assert.match(script, /reason: 'already-published-today'/);
   // 剩余额度要扣掉今天已发的部分，否则同日补跑会超额
   assert.match(script, /LIMIT - alreadyToday/);
+});
+
+test('英文标题不受语言参数影响（en 是语料原文）', () => {
+  const r = row('a', { industry: 'saas', scene: 'chat', tag: 'outage', dimension: 'urgency' });
+  assert.equal(briefHeading(r), briefHeading(r, 'en', TERMS));
+});
+
+test('各语言站点标题按术语表产出不同文本', () => {
+  const r = row('a', { industry: 'saas', scene: 'chat', tag: 'outage', dimension: 'urgency' });
+  assert.equal(briefHeading(r, 'ja', TERMS), 'SaaS · チャット · outage · 緊急度');
+  // 术语表里没有的语言仍回退英文原 slug，不产出空段
+  assert.equal(briefHeading(r, 'ko', TERMS), 'saas · chat · outage · urgency');
+});
+
+test('localizeTerm 保留未登记的 slug', () => {
+  assert.equal(localizeTerm('tag', 'brand-new-slug', 'ja', TERMS), 'brand-new-slug');
+  assert.equal(localizeTerm('tag', 'outage', 'ja', TERMS), 'outage');
+  assert.equal(localizeTerm('tag', undefined, 'ja', TERMS), '');
+});
+
+test('localizedBrief 取该语言译文，缺失时回退英文原文并标记未本地化', () => {
+  const r = row('b', { context: 'Ticket: order broken.', question: 'Urgent?', choices: ['yes', 'no'] });
+  const map = { b: { ja: { context: 'チケット：注文が壊れています。', question: '緊急ですか？', choices: ['yes', 'no'] } } };
+  const ja = localizedBrief(r, 'ja', map);
+  assert.equal(ja.context, 'チケット：注文が壊れています。');
+  assert.equal(ja.localized, true);
+
+  const ko = localizedBrief(r, 'ko', map);
+  assert.equal(ko.context, 'Ticket: order broken.');
+  assert.equal(ko.localized, false);
+});
+
+test('术语表不含照抄 slug / CJK 站点写英文的坏值', () => {
+  const terms = JSON.parse(readFileSync(new URL('../src/data/brief-terms.json', import.meta.url), 'utf8'));
+  const cjk = new Set(['zh', 'ja', 'ko']);
+  const bad = [];
+  for (const [field, slugs] of Object.entries(terms)) {
+    for (const [slug, langs] of Object.entries(slugs)) {
+      const words = new Set(slug.toLowerCase().split(/[\s-]+/));
+      for (const [lang, value] of Object.entries(langs)) {
+        const flat = value.toLowerCase().split(/[\s-]+/);
+        if (value.toLowerCase() === slug.toLowerCase()) bad.push([field, slug, lang, value]);
+        else if (cjk.has(lang) && /^[\x00-\x7F]+$/.test(value)) bad.push([field, slug, lang, value]);
+        else if (lang === 'ko' && !/[\uAC00-\uD7A3]/.test(value)) bad.push([field, slug, lang, value]);
+        else if (flat.every((w) => words.has(w))) bad.push([field, slug, lang, value]);
+      }
+    }
+  }
+  assert.deepEqual(bad, []);
+});
+
+test('管线发布白名单含案例译文，且日更后紧跟翻译步骤', () => {
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  // 译文不进白名单，语言站点就永远拿不到日更增量。
+  assert.match(pipeline, /'src\/data\/briefs-i18n\.json'/);
+  assert.match(pipeline, /'src\/data\/brief-terms\.ts'/);
+  assert.match(pipeline, /python3 scripts\/translate-briefs\.py --lang=all/);
 });

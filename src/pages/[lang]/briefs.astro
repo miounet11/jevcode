@@ -4,6 +4,7 @@ import { languages, useTranslations, pick, type Lang } from '../../i18n/ui';
 import * as copySrc from '../../i18n/pages/briefs';
 import briefs from '../../data/daily-briefs.json';
 import { briefHeading } from '../../../scripts/lib/daily-briefs.mjs';
+import { briefTerms } from '../../data/brief-terms';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -26,7 +27,8 @@ const pageNo = 1;
 const rows = [...briefs].reverse().slice(0, PAGE_SIZE);
 // 详情页正文是英文原文，非 en/zh 已 noindex；列表页若仍可索引，会出现
 // 「可收录的目录页只链向 noindex 页面」的不一致，这里与详情页保持一致。
-const listIndex = lang === 'en' || lang === 'zh';
+const localizedLangs = new Set<string>(Object.values(briefTerms.industry ?? {}).flatMap((v) => Object.keys(v)));
+const listIndex = lang === 'en' || lang === 'zh' || localizedLangs.has(lang);
 ---
 
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path} index={listIndex}>
@@ -42,7 +44,7 @@ const listIndex = lang === 'en' || lang === 'zh';
         <ul class="blist">
           {rows.map((row) => (
             <li>
-              <a href={`/${lang}/briefs/${row.id}/`}>{briefHeading(row)}</a>
+              <a href={`/${lang}/briefs/${row.id}/`}>{briefHeading(row, lang, briefTerms)}</a>
               <span class="blist__meta">{row.published} · {row.dimension} · {row.question}</span>
             </li>
           ))}

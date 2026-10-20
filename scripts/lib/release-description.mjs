@@ -13,6 +13,7 @@
 /** 数据量统计项：文件名 → 描述里用的标签。 */
 const VOLUME_LABELS = {
   'daily-briefs.json': 'briefs',
+  'briefs-i18n.json': 'briefsI18n',
   'lab-records.json': 'labRecords',
   'lab-supplement.json': 'labSupplement',
 };

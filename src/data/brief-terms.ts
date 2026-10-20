@@ -1,0 +1,872 @@
+/** 由 scripts/translate-briefs.py 生成，数据源 src/data/brief-terms.json。改词请改脚本后重跑。 */
+
+export const briefTerms: Record<string, Record<string, Record<string, string>>> = {
+  "dimension": {
+    "actionability": {
+      "de": "handlungsfähigkeit",
+      "es": "aplicabilidad",
+      "fr": "actionabilité",
+      "ja": "実行可能性",
+      "ko": "실행 가능성",
+      "pt": "acessibilidade",
+      "zh": "可操作性"
+    },
+    "billing-dispute": {
+      "de": "rechnungsstreit",
+      "es": "disputa de facturación",
+      "fr": "litige de facturation",
+      "ja": "請求異議",
+      "ko": "청구 이의",
+      "pt": "disputa de faturamento",
+      "zh": "账单争议"
+    },
+    "category": {
+      "de": "kategorie",
+      "es": "categoría",
+      "fr": "catégorie",
+      "ja": "カテゴリ",
+      "ko": "카테고리",
+      "pt": "categoria",
+      "zh": "类别"
+    },
+    "compliance": {
+      "es": "cumplimiento",
+      "fr": "conformité",
+      "ja": "コンプライアンス",
+      "ko": "준수",
+      "pt": "conformidade",
+      "zh": "合规"
+    },
+    "content-moderation": {
+      "de": "inhaltliche moderation",
+      "es": "moderación de contenido",
+      "fr": "moderation de contenu",
+      "ja": "コンテンツモデレーション",
+      "ko": "콘텐츠 검토",
+      "pt": "moderação de conteúdo",
+      "zh": "内容审核"
+    },
+    "data-access": {
+      "de": "datenzugriff",
+      "es": "acceso a datos",
+      "fr": "acces aux donnees",
+      "ja": "データアクセス",
+      "ko": "데이터 접근",
+      "pt": "acesso aos dados",
+      "zh": "数据访问"
+    },
+    "escalation": {
+      "de": "Eskalation",
+      "es": "escalación",
+      "fr": "escalade",
+      "ja": "エスカレーション",
+      "ko": "에스컬레이션",
+      "pt": "escalonamento",
+      "zh": "升级"
+    },
+    "financial-advice": {
+      "de": "finanzberatung",
+      "es": "consejo financiero",
+      "fr": "conseil financier",
+      "ja": "金融アドバイス",
+      "ko": "재정 조언",
+      "pt": "conselho financeiro",
+      "zh": "财务建议"
+    },
+    "fraud": {
+      "de": "betrug",
+      "es": "fraude",
+      "fr": "fraude",
+      "ja": "ぎぎ",
+      "ko": "사기",
+      "pt": "fraude",
+      "zh": "欺诈"
+    },
+    "intent": {
+      "de": "absicht",
+      "es": "intención",
+      "fr": "intention",
+      "ja": "意図",
+      "ko": "의도",
+      "pt": "intenção",
+      "zh": "意图"
+    },
+    "language": {
+      "de": "sprache",
+      "es": "idioma",
+      "fr": "langue",
+      "ja": "げんご",
+      "ko": "언어",
+      "pt": "idioma",
+      "zh": "语言"
+    },
+    "medical-triage": {
+      "de": "medizinische triage",
+      "es": "triage médico",
+      "fr": "triage médical",
+      "ja": "医療トリアージ",
+      "ko": "의무 분류",
+      "pt": "triagem medica",
+      "zh": "医疗分诊"
+    },
+    "next-action": {
+      "de": "nächster schritt",
+      "es": "próximo paso",
+      "fr": "action suivante",
+      "ja": "次の行動",
+      "ko": "다음 행동",
+      "pt": "proxima acao",
+      "zh": "下一步"
+    },
+    "pii": {
+      "de": "personenbezogene daten",
+      "es": "datos personales",
+      "fr": "données personnelles",
+      "ja": "個人情報",
+      "ko": "개인식별정보",
+      "pt": "dados pessoais",
+      "zh": "个人身份信息"
+    },
+    "priority": {
+      "de": "priorität",
+      "es": "prioridad",
+      "fr": "priorité",
+      "ja": "優先度",
+      "ko": "우선순위",
+      "pt": "prioridade",
+      "zh": "优先级"
+    },
+    "quality": {
+      "de": "qualität",
+      "es": "calidad",
+      "fr": "qualité",
+      "ja": "ひんしつ",
+      "ko": "품질",
+      "pt": "qualidade",
+      "zh": "质量"
+    },
+    "risk-level": {
+      "de": "risikostufe",
+      "es": "nivel de riesgo",
+      "fr": "niveau de risque",
+      "ja": "リスク レベル",
+      "ko": "리스크 레벨",
+      "pt": "nivel-de-risco",
+      "zh": "风险等级"
+    },
+    "routing": {
+      "de": "routung",
+      "es": "enrutamiento",
+      "fr": "routage",
+      "ja": "ルーティング",
+      "ko": "라우팅",
+      "pt": "roteamento",
+      "zh": "路由"
+    },
+    "safety": {
+      "de": "sicherheit",
+      "es": "seguridad",
+      "fr": "sécurité",
+      "ja": "あんぜん",
+      "ko": "안전",
+      "pt": "segurança",
+      "zh": "安全"
+    },
+    "sentiment": {
+      "de": "stimmung",
+      "es": "sentimiento",
+      "ja": "感情",
+      "ko": "감정",
+      "pt": "sentimento",
+      "zh": "情感"
+    },
+    "spam": {
+      "es": "correo no deseado",
+      "fr": "pourriel",
+      "ja": "スパム",
+      "ko": "스팸",
+      "zh": "垃圾"
+    },
+    "topic": {
+      "de": "thema",
+      "es": "tema",
+      "fr": "sujet",
+      "ja": "トピック",
+      "ko": "주제",
+      "pt": "tema",
+      "zh": "主题"
+    },
+    "toxicity": {
+      "de": "giftigkeit",
+      "es": "toxicidad",
+      "fr": "toxicité",
+      "ja": "毒性",
+      "ko": "독성",
+      "pt": "toxicidade",
+      "zh": "毒性"
+    },
+    "urgency": {
+      "de": "dringlichkeit",
+      "es": "urgencia",
+      "fr": "urgence",
+      "ja": "緊急性",
+      "ko": "긴급성",
+      "pt": "urgência",
+      "zh": "紧迫感"
+    }
+  },
+  "industry": {
+    "adtech": {
+      "de": "ad tech",
+      "es": "tecnología publicitaria",
+      "fr": "technologie publicitaire",
+      "pt": "tecnologia de publicidade",
+      "zh": "广告技术"
+    },
+    "aerospace": {
+      "de": "luftfahrt",
+      "es": "aeroespacial",
+      "fr": "aérospatial",
+      "ja": "航空宇宙",
+      "ko": "항공우주",
+      "pt": "aeroespacial",
+      "zh": "航空航天"
+    },
+    "automotive": {
+      "de": "automobil",
+      "es": "automotriz",
+      "fr": "automobile",
+      "ja": "じどうしゃ",
+      "ko": "자동차",
+      "pt": "automotivo",
+      "zh": "汽车"
+    },
+    "banking": {
+      "de": "Bankwesen",
+      "es": "banca",
+      "fr": "banque",
+      "ja": "銀行",
+      "ko": "은행",
+      "pt": "banco",
+      "zh": "银行业"
+    },
+    "construction": {
+      "de": "bau",
+      "es": "construcción",
+      "ja": "こうぞう",
+      "ko": "건설",
+      "pt": "construção",
+      "zh": "建筑"
+    },
+    "crm": {
+      "de": "kundenbeziehungsmanagement",
+      "es": "gestión de relaciones con los clientes",
+      "fr": "gestion de la relation client",
+      "ja": "けいぎ",
+      "ko": "고객 관계 관리",
+      "pt": "gestão de relacionamento com o cliente",
+      "zh": "客户关系管理"
+    },
+    "cybersecurity": {
+      "de": "cybersicherheit",
+      "es": "ciberseguridad",
+      "fr": "cybersécurité",
+      "ja": "サイバーセキュリティ",
+      "ko": "사이버 보안",
+      "pt": "segurança cibernética",
+      "zh": "网络安全"
+    },
+    "devtools": {
+      "de": "entwicklungswerkzeuge",
+      "es": "herramientas de desarrollo",
+      "fr": "outils de développement",
+      "ko": "개발 도구",
+      "pt": "ferramentas de desenvolvimento",
+      "zh": "开发工具"
+    },
+    "ecommerce": {
+      "de": "elektronischer handel",
+      "es": "comercio electrónico",
+      "fr": "commerce en ligne",
+      "ja": "電子商取引",
+      "ko": "이커머스",
+      "pt": "comercio eletronico",
+      "zh": "电子商务"
+    },
+    "edtech": {
+      "de": "bildungstechnologie",
+      "es": "tecnología educativa",
+      "fr": "technologie éducative",
+      "ja": "e テック",
+      "ko": "교육 기술",
+      "pt": "tecnologia educacional",
+      "zh": "教育技术"
+    },
+    "education": {
+      "de": "bildung",
+      "es": "educación",
+      "fr": "éducation",
+      "ja": "教育",
+      "ko": "교육",
+      "pt": "educacao",
+      "zh": "教育"
+    },
+    "energy": {
+      "de": "energie",
+      "es": "energía",
+      "fr": "énergie",
+      "ja": "エネルギー",
+      "ko": "에너지",
+      "pt": "energia",
+      "zh": "能源"
+    },
+    "fintech": {
+      "fr": "technologie financière",
+      "ja": "フィンテック",
+      "ko": "핀테크",
+      "zh": "金融科技"
+    },
+    "gaming": {
+      "es": "juego",
+      "fr": "jeux vidéo",
+      "ja": "ゲーム",
+      "ko": "게임",
+      "pt": "jogos",
+      "zh": "游戏"
+    },
+    "government": {
+      "de": "regierung",
+      "es": "gobierno",
+      "fr": "gouvernement",
+      "ja": "せいふ",
+      "ko": "정부",
+      "pt": "governo",
+      "zh": "政府"
+    },
+    "healthcare": {
+      "de": "gesundheit",
+      "es": "salud",
+      "fr": "soins de santé",
+      "ja": "ヘルスケア",
+      "ko": "의료",
+      "pt": "saúde",
+      "zh": "医疗保健"
+    },
+    "hospitality": {
+      "de": "gastgewerbe",
+      "es": "hospitalidad",
+      "fr": "hospitalité",
+      "ja": "おもてなし",
+      "ko": "환대",
+      "pt": "hospitalidade",
+      "zh": "好客"
+    },
+    "hr": {
+      "de": "herr",
+      "es": "hora",
+      "fr": "heure",
+      "ja": "じかん",
+      "ko": "시간",
+      "pt": "recuo",
+      "zh": "人力资源"
+    },
+    "insurance": {
+      "de": "versicherung",
+      "es": "seguros",
+      "fr": "assurance",
+      "ja": "保険",
+      "ko": "보험",
+      "pt": "seguro",
+      "zh": "保险"
+    },
+    "legal": {
+      "de": "recht",
+      "fr": "juridique",
+      "ja": "ほうりつ",
+      "ko": "법률",
+      "pt": "jurídico",
+      "zh": "合法"
+    },
+    "logistics": {
+      "de": "logistik",
+      "es": "logística",
+      "fr": "logistique",
+      "ja": "物流",
+      "ko": "물류",
+      "pt": "logística",
+      "zh": "物流"
+    },
+    "manufacturing": {
+      "de": "fertigung",
+      "es": "manufactura",
+      "fr": "manufacture",
+      "ja": "せいぞう",
+      "ko": "제조",
+      "pt": "manufatura",
+      "zh": "制造"
+    },
+    "marketing": {
+      "ja": "マーケティング",
+      "ko": "마케팅",
+      "zh": "营销"
+    },
+    "marketplace": {
+      "de": "markt",
+      "es": "mercado",
+      "fr": "marché",
+      "ja": "マーケットプレイス",
+      "ko": "시장",
+      "pt": "mercado",
+      "zh": "市场"
+    },
+    "media": {
+      "de": "medien",
+      "es": "medios",
+      "fr": "médias",
+      "ja": "メディア",
+      "ko": "미디어",
+      "pt": "midia",
+      "zh": "媒体"
+    },
+    "nonprofit": {
+      "de": "gemeinnuetzig",
+      "es": "sin fines de lucro",
+      "fr": "organisation a but non lucratif",
+      "ja": "非営利",
+      "ko": "비영리",
+      "pt": "organização sem fins lucrativos",
+      "zh": "非营利组织"
+    },
+    "paas": {
+      "es": "plataforma como servicio",
+      "fr": "plateforme en tant que service",
+      "pt": "plataforma como serviço",
+      "zh": "平台即服务"
+    },
+    "pharma": {
+      "es": "farmacia",
+      "fr": "pharmacie",
+      "ja": "製薬",
+      "ko": "제약",
+      "pt": "farmacêutica",
+      "zh": "制药"
+    },
+    "realestate": {
+      "de": "immobilien",
+      "es": "inmuebles",
+      "fr": "immobilier",
+      "ja": "不動産",
+      "ko": "부동산",
+      "pt": "imobiliario",
+      "zh": "房地产"
+    },
+    "recruiting": {
+      "de": "rekrutierung",
+      "es": "reclutamiento",
+      "fr": "recrutement",
+      "ja": "採用",
+      "ko": "채용",
+      "pt": "recrutamento",
+      "zh": "招聘"
+    },
+    "restaurant": {
+      "es": "restaurante",
+      "ja": "レストラン",
+      "ko": "레스토랑",
+      "pt": "restaurante",
+      "zh": "餐厅"
+    },
+    "retail": {
+      "de": "einzelhandel",
+      "es": "minorista",
+      "fr": "commerce de détail",
+      "ja": "小売",
+      "ko": "소매",
+      "pt": "varejo",
+      "zh": "零售"
+    },
+    "saas": {
+      "de": "software as a service",
+      "es": "servicio en la nube",
+      "fr": "logiciel en tant que service",
+      "ko": "서비스형 소프트웨어",
+      "pt": "serviço de software como serviço",
+      "zh": "软件即服务"
+    },
+    "streaming": {
+      "es": "transmisión en línea",
+      "ja": "ストリーミング",
+      "ko": "스트리밍",
+      "zh": "流媒体"
+    },
+    "supplychain": {
+      "de": "lieferkette",
+      "es": "cadena de suministro",
+      "fr": "chaîne d'approvisionnement",
+      "ja": "サプライ チェーン",
+      "ko": "공급망",
+      "pt": "cadeia de suprimentos",
+      "zh": "供应链"
+    },
+    "telecom": {
+      "de": "telekommunikation",
+      "es": "telecomunicaciones",
+      "fr": "télécommunication",
+      "ja": "てれコム",
+      "ko": "통신",
+      "pt": "telecomunicações",
+      "zh": "电信"
+    },
+    "telehealth": {
+      "de": "Telemedizin",
+      "es": "telemedicina",
+      "fr": "télé santé",
+      "ja": "テレヘルス",
+      "ko": "원격 의료",
+      "pt": "telemedicina",
+      "zh": "远程医疗"
+    },
+    "travel": {
+      "de": "reise",
+      "es": "viajes",
+      "fr": "voyage",
+      "ja": "りょこう",
+      "ko": "여행",
+      "pt": "viagem",
+      "zh": "旅行"
+    },
+    "university": {
+      "de": "universität",
+      "es": "universidad",
+      "fr": "universite",
+      "ja": "大学",
+      "ko": "대학교",
+      "pt": "universidade",
+      "zh": "大学"
+    },
+    "utilities": {
+      "de": "hilfsmittel",
+      "es": "utilidades",
+      "fr": "utilitaires",
+      "ja": "ユーティリティ",
+      "ko": "유틸리티",
+      "pt": "utilidades",
+      "zh": "公用事业"
+    }
+  },
+  "scene": {
+    "alert": {
+      "de": "warnung",
+      "es": "alerta",
+      "fr": "alerte",
+      "ja": "アラート",
+      "ko": "경보",
+      "pt": "alerta",
+      "zh": "警报"
+    },
+    "api-payload": {
+      "de": "api last",
+      "es": "carga de la api",
+      "fr": "charge utile de l'api",
+      "ja": "api ペイロード",
+      "zh": "api 载荷"
+    },
+    "chat": {
+      "ja": "チャット",
+      "ko": "채팅",
+      "zh": "聊天"
+    },
+    "email": {
+      "de": "e mail",
+      "es": "correo electrónico",
+      "fr": "courriel",
+      "ja": "メール",
+      "ko": "이메일",
+      "pt": "e-mail",
+      "zh": "电子邮件"
+    },
+    "form": {
+      "de": "Formular",
+      "es": "forma",
+      "fr": "forme",
+      "ja": "かたち",
+      "ko": "형식",
+      "pt": "formulário",
+      "zh": "形式"
+    },
+    "log": {
+      "de": "protokoll",
+      "es": "logaritmo",
+      "fr": "journal",
+      "ja": "ログ",
+      "ko": "로그",
+      "pt": "registro",
+      "zh": "日志"
+    },
+    "note": {
+      "de": "hinweis",
+      "es": "nota",
+      "ja": "ふ",
+      "ko": "노트",
+      "pt": "nota",
+      "zh": "注意"
+    },
+    "review": {
+      "de": "bewertung",
+      "es": "reseña",
+      "fr": "examen",
+      "ja": "レビュー",
+      "ko": "리뷰",
+      "pt": "revisão",
+      "zh": "评论"
+    },
+    "sms": {
+      "de": "kurzmitteilung",
+      "es": "mensaje de texto corto",
+      "fr": "message court",
+      "ja": "すます",
+      "ko": "문자 메시지",
+      "pt": "mensagem curta",
+      "zh": "短信"
+    },
+    "social": {
+      "de": "sozial",
+      "es": "redes sociales",
+      "ja": "しゃかい",
+      "ko": "사회",
+      "pt": "redes sociais",
+      "zh": "社会"
+    },
+    "support-ticket": {
+      "es": "ticket de soporte",
+      "fr": "ticket de support",
+      "ja": "サポートチケット",
+      "ko": "지원 티켓",
+      "pt": "ticket de suporte",
+      "zh": "支持工单"
+    },
+    "transcript": {
+      "de": "transkript",
+      "es": "transcripción",
+      "fr": "transcription",
+      "ja": "トランスクリプト",
+      "ko": "대화 기록",
+      "pt": "transcrição",
+      "zh": "转录"
+    }
+  },
+  "stage": {
+    "audit": {
+      "de": "prüfung",
+      "es": "auditoría",
+      "ja": "監査",
+      "ko": "감사",
+      "pt": "auditoria",
+      "zh": "审计"
+    },
+    "escalation": {
+      "de": "Eskalation",
+      "es": "escalación",
+      "fr": "escalade",
+      "ja": "エスカレーション",
+      "ko": "에스컬레이션",
+      "pt": "escalonamento",
+      "zh": "升级"
+    },
+    "follow-up": {
+      "de": "nachfolge",
+      "es": "seguimiento",
+      "fr": "suivi",
+      "ja": "フォローアップ",
+      "ko": "후속",
+      "pt": "acompanhamento",
+      "zh": "跟进"
+    },
+    "intake": {
+      "de": "aufnahme",
+      "es": "ingestión",
+      "fr": "admission",
+      "ja": "かいにゅう",
+      "ko": "흡기",
+      "pt": "recebimento",
+      "zh": "摄入"
+    },
+    "qa": {
+      "de": "qualitäts sicherheit",
+      "es": "prueba de calidad",
+      "fr": "question réponse",
+      "ja": "質問",
+      "ko": "질문과 답변",
+      "pt": "qualidade",
+      "zh": "问答"
+    },
+    "response": {
+      "de": "antwort",
+      "es": "respuesta",
+      "fr": "réponse",
+      "ja": "レスポンス",
+      "ko": "반응",
+      "pt": "resposta",
+      "zh": "回应"
+    },
+    "routing": {
+      "de": "routung",
+      "es": "enrutamiento",
+      "fr": "routage",
+      "ja": "ルーティング",
+      "ko": "라우팅",
+      "pt": "roteamento",
+      "zh": "路由"
+    },
+    "triage": {
+      "es": "triaje",
+      "ja": "トリアージ",
+      "ko": "분류",
+      "pt": "triagem",
+      "zh": "分诊"
+    }
+  },
+  "tag": {
+    "accessibility": {
+      "de": "barrierefreiheit",
+      "es": "accesibilidad",
+      "fr": "accessibilité",
+      "ja": "アクセシビリティ",
+      "ko": "접근성",
+      "pt": "acessibilidade",
+      "zh": "无障碍"
+    },
+    "audit-trail": {
+      "es": "registro de auditoría",
+      "fr": "piste d'audit",
+      "ja": "監査証跡",
+      "ko": "감사 추적",
+      "pt": "registro de auditoria",
+      "zh": "审计追踪"
+    },
+    "auto-renewal": {
+      "de": "autoverlängerung",
+      "es": "renovación automática",
+      "fr": "renouvellement automatique",
+      "ja": "自動更新",
+      "ko": "자동 갱신",
+      "pt": "renovação automática",
+      "zh": "自动续订"
+    },
+    "chargeback": {
+      "de": "lastschrift",
+      "es": "reembolso",
+      "fr": "remboursement",
+      "ja": "チャージバック",
+      "ko": "지급 거절",
+      "pt": "estorno",
+      "zh": "拒付"
+    },
+    "churn-risk": {
+      "de": "abwanderungsrisiko",
+      "es": "riesgo de abandono",
+      "fr": "risque de désabonnement",
+      "ja": "解約リスク",
+      "ko": "이탈 위험",
+      "pt": "risco de cancelamento",
+      "zh": "流失风险"
+    },
+    "data-loss": {
+      "de": "datenverlust",
+      "es": "pérdida de datos",
+      "fr": "perte de données",
+      "ja": "データ損失",
+      "ko": "데이터 손실",
+      "pt": "perda de dados",
+      "zh": "数据丢失"
+    },
+    "deadline": {
+      "de": "abgabetermin",
+      "es": "plazo",
+      "fr": "date limite",
+      "ja": "締切",
+      "ko": "마감",
+      "pt": "prazo",
+      "zh": "截止日期"
+    },
+    "localization": {
+      "de": "lokalisation",
+      "es": "localización",
+      "fr": "localisation",
+      "ja": "ローカライズ",
+      "ko": "로컬라이제이션",
+      "pt": "localização",
+      "zh": "本地化"
+    },
+    "outage": {
+      "de": "ausfall",
+      "es": "interrupción",
+      "fr": "panne",
+      "ja": "とまり",
+      "ko": "정지",
+      "pt": "interrupção",
+      "zh": "停电"
+    },
+    "performance": {
+      "de": "leistung",
+      "es": "rendimiento",
+      "ja": "パフォーマンス",
+      "ko": "성능",
+      "pt": "desempenho",
+      "zh": "性能"
+    },
+    "privacy": {
+      "de": "datenschutz",
+      "es": "privacidad",
+      "fr": "vie privée",
+      "ja": "プライバシー",
+      "ko": "개인정보",
+      "pt": "privacidade",
+      "zh": "隐私"
+    },
+    "refund": {
+      "de": "rückerstattung",
+      "es": "reembolso",
+      "fr": "remboursement",
+      "ja": "返金",
+      "ko": "환불",
+      "pt": "reembolso",
+      "zh": "退款"
+    },
+    "regression": {
+      "es": "regresión",
+      "fr": "régression",
+      "ja": "かいき",
+      "ko": "회귀",
+      "pt": "regressão",
+      "zh": "回归"
+    },
+    "security": {
+      "de": "sicherheit",
+      "es": "seguridad",
+      "fr": "securité",
+      "ja": "セキュリティ",
+      "ko": "보안",
+      "pt": "segurança",
+      "zh": "安全"
+    },
+    "sla-breach": {
+      "de": "sla-verletzung",
+      "es": "incumplimiento de sla",
+      "fr": "manquement aux obligations",
+      "ja": "サービスレベル違反",
+      "ko": "sla 위반",
+      "pt": "violação de sla",
+      "zh": "sla违约"
+    },
+    "third-party": {
+      "de": "drittanbieter",
+      "es": "terceros",
+      "fr": "tiers",
+      "ja": "サードパーティ",
+      "ko": "서드 파티",
+      "pt": "terceiros",
+      "zh": "第三方"
+    }
+  }
+};

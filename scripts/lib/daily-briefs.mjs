@@ -126,16 +126,51 @@ export async function backfillJudgments(rows, { limit = 5, judge } = {}) {
   return filled;
 }
 
+/** 站点语言里可直接译的语种；en 是语料原文。 */
+const LOCALIZED_LANGS = new Set(['zh', 'ja', 'ko', 'de', 'fr', 'es', 'pt']);
+
 /**
- * 简报标题。
- *
- * industry · scene · tag 在同一批次内唯一，但全语料只有 3840 种组合对应 7680
- * 条案例，跨批次重复出现时会出现同名页面。补上 dimension 后 7680 条全唯一，
- * 且仍然可读。
+ * 取某字段的本地化 slug：术语表里有就用译名，否则回退英文原 slug。
+ * table 形如 briefTerms（field -> slug -> lang -> word）。
  */
-export function briefHeading(row) {
-  return [row.industry, row.scene, row.tag, row.dimension]
-    .map((value) => String(value ?? '').trim())
+export function localizeTerm(field, slug, lang, table) {
+  const raw = slug == null ? '' : String(slug).trim();
+  if (!raw || !LOCALIZED_LANGS.has(lang)) return raw;
+  const t = table?.[field]?.[raw]?.[lang];
+  return typeof t === 'string' && t.trim() ? t.trim() : raw;
+}
+
+/**
+ * 按语言拼简报标题。
+ *
+ * 译名只替换 slug，不改分隔符与字段顺序，各语言站点因此产出可区分的
+ * <title>/h1，同时仍保留 slug 形态便于人工比对。
+ */
+export function briefHeading(row, lang = 'en', table) {
+  // 字段顺序固定：industry · scene · tag · dimension，与英文标题一致。
+  return ['industry', 'scene', 'tag', 'dimension']
+    .map((field) => localizeTerm(field, row?.[field], lang, table))
     .filter(Boolean)
     .join(' · ');
+}
+
+/** 该 id 在该语言下是否已有译文；没有的正文保持英文原文。 */
+export function hasLocalizedBrief(briefId, lang, map) {
+  if (!LOCALIZED_LANGS.has(lang)) return false;
+  const entry = map?.[briefId]?.[lang];
+  return Boolean(entry?.context && entry?.question);
+}
+
+/**
+ * 取某语言下应渲染的正文：context / question / choices。
+ * 缺译文时返回英文原文，由调用方决定是否 noindex。
+ */
+export function localizedBrief(row, lang, map) {
+  const entry = hasLocalizedBrief(row?.id, lang, map) ? map[row.id][lang] : null;
+  return {
+    context: entry?.context ?? row?.context ?? '',
+    question: entry?.question ?? row?.question ?? '',
+    choices: entry?.choices ?? row?.choices ?? [],
+    localized: Boolean(entry),
+  };
 }

@@ -4,6 +4,7 @@ import { languages, useTranslations, pick, type Lang } from '../../../../i18n/ui
 import * as copySrc from '../../../../i18n/pages/briefs';
 import briefs from '../../../../data/daily-briefs.json';
 import { briefHeading } from '../../../../../scripts/lib/daily-briefs.mjs';
+import { briefTerms } from '../../../../data/brief-terms';
 
 // 与 [lang]/briefs.astro 保持一致，两处共同构成列表的完整分页。
 // getStaticPaths 会被提取到独立 chunk，模块顶层常量在那里不可见，故在函数内定义。
@@ -35,8 +36,9 @@ const copy = {
 };
 const rows = [...briefs].reverse().slice((pageNo - 1) * PAGE_SIZE, pageNo * PAGE_SIZE);
 const hrefOf = (n: number) => (n === 1 ? `/${lang}/briefs/` : `/${lang}/briefs/page/${n}/`);
-// 与 [lang]/briefs.astro 同一规则：非 en/zh 的正文是英文原文，不参与收录。
-const listIndex = lang === 'en' || lang === 'zh';
+// 与 [lang]/briefs.astro 同一规则：语言站点已本地化到哪些语言，就收录哪些。
+const localizedLangs = new Set<string>(Object.values(briefTerms.industry ?? {}).flatMap((v) => Object.keys(v)));
+const listIndex = lang === 'en' || lang === 'zh' || localizedLangs.has(lang);
 ---
 
 <BaseLayout lang={lang} title={`${copy.title} · ${pageNo}/${pages}`} description={copy.lead} path={path} index={listIndex}>
@@ -53,7 +55,7 @@ const listIndex = lang === 'en' || lang === 'zh';
         <ul class="blist">
           {rows.map((row) => (
             <li>
-              <a href={`/${lang}/briefs/${row.id}/`}>{briefHeading(row)}</a>
+              <a href={`/${lang}/briefs/${row.id}/`}>{briefHeading(row, lang, briefTerms)}</a>
               <span class="blist__meta">{row.published} · {row.dimension} · {row.question}</span>
             </li>
           ))}
