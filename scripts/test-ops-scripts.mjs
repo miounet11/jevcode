@@ -503,7 +503,36 @@ test('cron 只有 ALERT 推飞书，SKIPPED/HOLD 不推', () => {
   assert.match(markFn, /\[\[ "\$prefix" == "ALERT" \]\]/);
   assert.match(markFn, /notify-feishu\.mjs/);
   // 推送失败不得中断本轮
-  assert.match(markFn, /\|\| echo "\[cron\] 飞书告警投递失败/);
+  assert.match(markFn, /飞书告警投递失败（不影响本轮判定/);
+});
+
+test('管线失败分支走 mark ALERT，不自己写 ALERT 文件绕过告警', () => {
+  const sh = readFileSync(new URL('./pipeline-cron.sh', import.meta.url), 'utf8');
+  // 自己 `> "$ALERT"` 写文件只留下痕迹、没人收到：10-19/10-21 各写过一份
+  // ALERT，群里一条消息都没有，要等棘轮满 3 轮才推，前两轮完全静默。
+  assert.doesNotMatch(sh, /ALERT="\$LOG_DIR\/ALERT-/, '不得保留直接改写 ALERT 文件的路径');
+  const failBranch = sh.slice(sh.indexOf('if [[ "$code" -ne 0 ]]'), sh.indexOf('# 棘轮：只有真的发出去'));
+  assert.match(failBranch, /mark ALERT "\$ALERT_MSG"/, '失败分支必须调用 mark ALERT 才能推飞书');
+});
+
+test('同一次故障只推一条，且只有投递成功才算推过', () => {
+  const sh = readFileSync(new URL('./pipeline-cron.sh', import.meta.url), 'utf8');
+  const markFn = sh.slice(sh.indexOf('mark() {'), sh.indexOf('# 棘轮'));
+  // 管线失败 + 棘轮升级会先后各调一次 mark ALERT，不去重就把一条故障说两遍
+  assert.match(markFn, /ALERTED_THIS_RUN/);
+  assert.match(markFn, /本轮已推送过告警/);
+  // 去重只跳过「推送」，告警文件仍要写：成功发布的清理逻辑依赖它的存在
+  assert.ok(
+    markFn.indexOf('} > "$f"') < markFn.indexOf('ALERTED_THIS_RUN" == "1"'),
+    '告警文件必须先写，再判断是否推送',
+  );
+  // 关键：置位必须在投递成功之后。先置位的话，第一次因断网失败后同轮后续告警
+  // 全被吞掉，整轮一条都发不出去，正好是最该被看见的那种静默。
+  const push = markFn.indexOf('notify-feishu.mjs');
+  const setFlag = markFn.indexOf('ALERTED_THIS_RUN=1');
+  assert.ok(push !== -1 && setFlag !== -1, '必须同时存在推送调用与置位');
+  assert.ok(setFlag > push, '置位必须在推送之后（成功才置位），不能抢先置位');
+  assert.match(markFn, /if node scripts\/notify-feishu\.mjs/, '推送要放在 if 里才能按结果置位');
 });
 
 test('连续未发布的告警必须带原因，脏区跳过要列出具体文件', () => {

@@ -41,6 +41,10 @@ fi
 cd "$REPO"
 mkdir -p "$LOG_DIR"
 
+# 本轮是否已经推过 ALERT。同一次故障可能同时命中「本轮失败」与「连续 N 轮」，
+# 两处各推一条就是把一条故障说两遍；有了这个标记，谁先推谁负责，后来者不再推。
+ALERTED_THIS_RUN=0
+
 # 告警：cron 日志默认没人看，失败必须留下显眼痕迹
 # 区分「真失败」（ALERT-*）与「按设计跳过」（SKIPPED-*），避免告警疲劳
 mark() {
@@ -57,15 +61,28 @@ mark() {
   # 变成噪音，真故障反而被淹没（9-21~9-24 连跳 4 天无人察觉就是这么来的）。
   # 推送失败不改变本轮结果：告警通道不能反过来弄挂产物发布。
   if [[ "$prefix" == "ALERT" ]]; then
+    # 本轮已经推过就不再推：管线失败 + 棘轮升级会先后各调一次 mark ALERT，
+    # 不去重会把同一次故障说两遍，告警一吵就没人看。
+    if [[ "$ALERTED_THIS_RUN" == "1" ]]; then
+      echo "[cron] 本轮已推送过告警，本条只写文件不再推飞书"
+      return 0
+    fi
     local tail_log=""
     if [[ -f "$LOG_DIR/cron.log" ]]; then
       tail_log="$(tail -n 25 "$LOG_DIR/cron.log" 2>/dev/null || true)"
     fi
-    node scripts/notify-feishu.mjs "管线告警：$msg" \
+    # 只有投递成功才记「本轮已告警」。先置位再推送的话，第一次因断网/飞书异常
+    # 失败后，同轮后续告警会被去重吞掉——整轮一条都发不出去，而日志里只留一
+    # 行「投递失败」，正好是最该被看见的那次静默。
+    if node scripts/notify-feishu.mjs "管线告警：$msg" \
       "主机：$(hostname)
 工作目录：$REPO
 日志尾部：
-$tail_log" || echo "[cron] 飞书告警投递失败（不影响本轮判定）"
+$tail_log"; then
+      ALERTED_THIS_RUN=1
+    else
+      echo "[cron] 飞书告警投递失败（不影响本轮判定，后续告警仍会重试）"
+    fi
   fi
 }
 
@@ -275,18 +292,20 @@ if [[ "$code" -eq 2 ]]; then
 fi
 
 # 失败可见：非零退出时写醒目告警文件（cron 日志默认没人看）
+#
+# 这里必须走 mark ALERT，不能自己 `> "$ALERT"` 写文件：mark 才会调
+# notify-feishu，自己写文件等于「留下了痕迹但没人收到」——而管线崩溃
+# （build 挂、判定后端不可用）是日常最常发生的失败，它此前要等棘轮累积到
+# 3 轮才推飞书，前两轮完全静默（10-19/10-21 各写了一份 ALERT，群里一条
+# 消息都没有）。
 if [[ "$code" -ne 0 ]]; then
-  ALERT="$LOG_DIR/ALERT-$(date -u +%F).txt"
-  {
-    if [[ "$TIMED_OUT" == "1" ]]; then
-      echo "管线运行超时（>${PIPELINE_TIMEOUT}s）被终止"
-      echo "时间：$(date -u +%FT%TZ)"
-    else
-      echo "管线失败 $(date -u +%FT%TZ) 退出码 $code"
-    fi
-    echo "查看：tail -50 $LOG_DIR/cron.log"
-  } > "$ALERT"
-  echo "[cron] 管线失败（退出码 ${code}），告警写入 $ALERT"
+  if [[ "$TIMED_OUT" == "1" ]]; then
+    ALERT_MSG="管线运行超时（>${PIPELINE_TIMEOUT}s）被终止，退出码 ${code}"
+  else
+    ALERT_MSG="管线失败，退出码 ${code}"
+  fi
+  echo "[cron] 管线失败（退出码 ${code}）"
+  mark ALERT "$ALERT_MSG"
   if [[ "$TIMED_OUT" == "1" ]]; then
     STREAK_REASON="管线运行超时（>${PIPELINE_TIMEOUT}s）被终止，退出码 ${code}"
   else
