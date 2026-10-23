@@ -41,10 +41,6 @@ fi
 cd "$REPO"
 mkdir -p "$LOG_DIR"
 
-# 本轮是否已经推过 ALERT。同一次故障可能同时命中「本轮失败」与「连续 N 轮」，
-# 两处各推一条就是把一条故障说两遍；有了这个标记，谁先推谁负责，后来者不再推。
-ALERTED_THIS_RUN=0
-
 # 告警：cron 日志默认没人看，失败必须留下显眼痕迹
 # 区分「真失败」（ALERT-*）与「按设计跳过」（SKIPPED-*），避免告警疲劳
 mark() {
@@ -60,29 +56,20 @@ mark() {
   # 只有 ALERT 推飞书。SKIPPED/HOLD 是「按设计不发」，天天推送会把告警
   # 变成噪音，真故障反而被淹没（9-21~9-24 连跳 4 天无人察觉就是这么来的）。
   # 推送失败不改变本轮结果：告警通道不能反过来弄挂产物发布。
+  #
+  # 这里不做「本轮已推过就跳过」的去重：那会让同一轮里后出现的故障被静默
+  # 丢弃，而告警的全部意义就是「出错时把原因发出去」。重复推送的根源在于
+  # 调用方对同一件事调了两次，应该合并消息，而不是在投递层吞掉后来的。
   if [[ "$prefix" == "ALERT" ]]; then
-    # 本轮已经推过就不再推：管线失败 + 棘轮升级会先后各调一次 mark ALERT，
-    # 不去重会把同一次故障说两遍，告警一吵就没人看。
-    if [[ "$ALERTED_THIS_RUN" == "1" ]]; then
-      echo "[cron] 本轮已推送过告警，本条只写文件不再推飞书"
-      return 0
-    fi
     local tail_log=""
     if [[ -f "$LOG_DIR/cron.log" ]]; then
       tail_log="$(tail -n 25 "$LOG_DIR/cron.log" 2>/dev/null || true)"
     fi
-    # 只有投递成功才记「本轮已告警」。先置位再推送的话，第一次因断网/飞书异常
-    # 失败后，同轮后续告警会被去重吞掉——整轮一条都发不出去，而日志里只留一
-    # 行「投递失败」，正好是最该被看见的那次静默。
-    if node scripts/notify-feishu.mjs "管线告警：$msg" \
+    node scripts/notify-feishu.mjs "管线告警：$msg" \
       "主机：$(hostname)
 工作目录：$REPO
 日志尾部：
-$tail_log"; then
-      ALERTED_THIS_RUN=1
-    else
-      echo "[cron] 飞书告警投递失败（不影响本轮判定，后续告警仍会重试）"
-    fi
+$tail_log" || echo "[cron] 飞书告警投递失败（不影响本轮判定）"
   fi
 }
 
@@ -305,13 +292,19 @@ if [[ "$code" -ne 0 ]]; then
     ALERT_MSG="管线失败，退出码 ${code}"
   fi
   echo "[cron] 管线失败（退出码 ${code}）"
-  mark ALERT "$ALERT_MSG"
-  if [[ "$TIMED_OUT" == "1" ]]; then
-    STREAK_REASON="管线运行超时（>${PIPELINE_TIMEOUT}s）被终止，退出码 ${code}"
+  # 只推一条，把退出码、连续第几轮、该看哪里都放进去。
+  # 不拆成「失败」+「升级」两条：那样同一次故障要么推两遍（吵），要么得靠
+  # 投递层去重吞掉后一条，而「已连续 N 轮」恰恰是最该知道的信息。
+  # 也不再走 streak_check：它是给「按设计没发」那几档用的，失败分支要的是
+  # 无论第几轮都立刻发一条，包含原因，不能等到阈值。
+  if [[ "$IS_DRY" == "1" ]]; then
+    echo "[cron] 干跑：棘轮不计，不推送告警"
   else
-    STREAK_REASON="管线运行失败，退出码 ${code}；日志尾部见 cron.log"
+    STREAK_N="$(streak_bump)"
+    echo "[cron] 连续未发布第 ${STREAK_N} 轮"
+    mark ALERT "${ALERT_MSG}
+已连续 ${STREAK_N} 轮未成功发布（告警阈值 ${STREAK_ALERT_AT} 轮）"
   fi
-  streak_check
   echo "===== cycle failed ====="
   exit "$code"
 fi

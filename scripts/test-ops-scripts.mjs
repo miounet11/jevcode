@@ -512,27 +512,24 @@ test('管线失败分支走 mark ALERT，不自己写 ALERT 文件绕过告警',
   // ALERT，群里一条消息都没有，要等棘轮满 3 轮才推，前两轮完全静默。
   assert.doesNotMatch(sh, /ALERT="\$LOG_DIR\/ALERT-/, '不得保留直接改写 ALERT 文件的路径');
   const failBranch = sh.slice(sh.indexOf('if [[ "$code" -ne 0 ]]'), sh.indexOf('# 棘轮：只有真的发出去'));
-  assert.match(failBranch, /mark ALERT "\$ALERT_MSG"/, '失败分支必须调用 mark ALERT 才能推飞书');
+  assert.match(failBranch, /mark ALERT "\$\{ALERT_MSG\}/, '失败分支必须调用 mark ALERT 才能推飞书');
+  // 每轮失败都要立刻推，不能等到棘轮阈值：单轮崩溃就是要人当天知道的故障。
+  assert.match(failBranch, /STREAK_N="\$\(streak_bump\)"/, '失败分支要带连续轮数');
+  // 只比对「真的调用了」，注释里提到 streak_check 是解释为什么不用它
+  assert.doesNotMatch(failBranch, /^\s*streak_check\s*$/m, '失败分支不该走 streak_check（要等阈值才推）');
+  // 干跑是人工验证，不该把「故障」推到群里
+  assert.match(failBranch, /IS_DRY" == "1"/);
 });
 
-test('同一次故障只推一条，且只有投递成功才算推过', () => {
+test('告警投递层不做本轮去重：后出现的故障不能被吞掉', () => {
   const sh = readFileSync(new URL('./pipeline-cron.sh', import.meta.url), 'utf8');
   const markFn = sh.slice(sh.indexOf('mark() {'), sh.indexOf('# 棘轮'));
-  // 管线失败 + 棘轮升级会先后各调一次 mark ALERT，不去重就把一条故障说两遍
-  assert.match(markFn, /ALERTED_THIS_RUN/);
-  assert.match(markFn, /本轮已推送过告警/);
-  // 去重只跳过「推送」，告警文件仍要写：成功发布的清理逻辑依赖它的存在
-  assert.ok(
-    markFn.indexOf('} > "$f"') < markFn.indexOf('ALERTED_THIS_RUN" == "1"'),
-    '告警文件必须先写，再判断是否推送',
-  );
-  // 关键：置位必须在投递成功之后。先置位的话，第一次因断网失败后同轮后续告警
-  // 全被吞掉，整轮一条都发不出去，正好是最该被看见的那种静默。
-  const push = markFn.indexOf('notify-feishu.mjs');
-  const setFlag = markFn.indexOf('ALERTED_THIS_RUN=1');
-  assert.ok(push !== -1 && setFlag !== -1, '必须同时存在推送调用与置位');
-  assert.ok(setFlag > push, '置位必须在推送之后（成功才置位），不能抢先置位');
-  assert.match(markFn, /if node scripts\/notify-feishu\.mjs/, '推送要放在 if 里才能按结果置位');
+  // 在投递层「本轮已推过就跳过」会让同轮后来的故障静默丢弃，而告警的全部
+  // 意义就是出错时把原因发出去。重复推送要靠调用方合并消息来解决。
+  assert.doesNotMatch(markFn, /ALERTED_THIS_RUN/, '投递层不得保留去重标记');
+  assert.doesNotMatch(sh, /ALERTED_THIS_RUN/, '脚本里不该再有该标记');
+  assert.match(markFn, /notify-feishu\.mjs/);
+  assert.match(markFn, /飞书告警投递失败（不影响本轮判定/);
 });
 
 test('连续未发布的告警必须带原因，脏区跳过要列出具体文件', () => {
@@ -544,9 +541,10 @@ test('连续未发布的告警必须带原因，脏区跳过要列出具体文�
   const guardBlock = sh.slice(sh.indexOf('if [[ "$guard_code" -eq 2 ]]'), sh.indexOf('if [[ "$guard_code" -ne 0 ]]'));
   assert.match(guardBlock, /STREAK_REASON=/);
   assert.match(guardBlock, /printf '%s\\n' "\$blocking" \| head -20/);
-  // 每个 streak_check 调用点都要能带上原因（至少失败/HOLD/脏区三处）
+  // 每个 streak_check 调用点都要能带上原因（HOLD / 脏区 / 门 1 陈旧跳过等）。
+  // 失败分支不再走 streak_check——它自己就发一条带轮数的告警，不需要 STREAK_REASON。
   const reasonSetters = sh.split('STREAK_REASON=').length - 1;
-  assert.ok(reasonSetters >= 4, `只找到 ${reasonSetters} 处 STREAK_REASON 设置`);
+  assert.ok(reasonSetters >= 3, `只找到 ${reasonSetters} 处 STREAK_REASON 设置`);
 });
 
 test('巡检：macOS 上不把 systemctl ENOENT 当成服务故障', async () => {
