@@ -15,13 +15,14 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildLlmsTxt, loadDocs, LANGS } from './generate-llms-txt.mjs';
 
 const LLMS_LANGS = LANGS.map((l) => l.code);
-import { diffSitemap, checkLlmsLinks } from './check-seo.mjs';
+import { diffSitemap, checkLlmsLinks, checkBriefIndexability } from './check-seo.mjs';
 
 const read = (rel) => JSON.parse(readFileSync(new URL(`../src/data/${rel}`, import.meta.url), 'utf8'));
 
@@ -144,4 +145,75 @@ test('缺少 dist/ 时 check-seo 必须失败而不是静默跳过', () => {
   );
   assert.equal(r.status, 1, `缺 dist 时应退出 1，实际 ${r.status}`);
   assert.match(r.stderr, /FAIL/);
+});
+
+test('案例页可索引性：没译文却 index 会被抓（sitemap 双向检查抓不到）', () => {
+  const site = 'https://www.jevcode.ai/';
+  const briefs = [{ id: 'b1' }];
+  // de 没有译文，但页面标成可索引 → 等于把英文原文在 /de/ 下再收录一次。
+  const pages = [
+    { url: new URL('/de/briefs/b1/', site).href, indexable: true },
+    { url: new URL('/zh/briefs/b1/', site).href, indexable: true },
+  ];
+  const { wronglyIndexable, wronglyNoindex } = checkBriefIndexability(pages, {
+    briefs,
+    briefI18n: {},
+    site,
+  });
+  assert.deepEqual(wronglyIndexable, ['https://www.jevcode.ai/de/briefs/b1/']);
+  assert.deepEqual(wronglyNoindex, []);
+});
+
+test('案例页可索引性：有译文却 noindex 会被抓（翻译白做）', () => {
+  const site = 'https://www.jevcode.ai/';
+  const pages = [{ url: new URL('/de/briefs/b1/', site).href, indexable: false }];
+  const { wronglyIndexable, wronglyNoindex } = checkBriefIndexability(pages, {
+    briefs: [{ id: 'b1' }],
+    briefI18n: { b1: { de: { context: 'Kontext', question: 'Frage?' } } },
+    site,
+  });
+  assert.deepEqual(wronglyNoindex, ['https://www.jevcode.ai/de/briefs/b1/']);
+  assert.deepEqual(wronglyIndexable, []);
+});
+
+test('案例页可索引性：en/zh 恒可索引，不需要译文', () => {
+  const site = 'https://www.jevcode.ai/';
+  const pages = ['en', 'zh'].map((lang) => ({
+    url: new URL(`/${lang}/briefs/b1/`, site).href,
+    indexable: true,
+  }));
+  const { wronglyIndexable, wronglyNoindex } = checkBriefIndexability(pages, {
+    briefs: [{ id: 'b1' }],
+    briefI18n: {},
+    site,
+  });
+  assert.deepEqual(wronglyIndexable, []);
+  assert.deepEqual(wronglyNoindex, []);
+});
+
+test('案例页可索引性：真实数据与构建产物零不一致', () => {
+  // 纯函数在构造数据上通过还不够——这里用仓库里的真实 src/data 复核一遍。
+  // dist 缺席时跳过（单独跑测试不该强制先 build）。
+  const dist = fileURLToPath(new URL('../dist', import.meta.url));
+  if (!existsSync(dist)) return;
+  const pages = [];
+  for (const lang of ['en', 'zh', 'ja', 'ko', 'de', 'fr', 'es', 'pt']) {
+    for (const row of briefs) {
+      const file = join(dist, lang, 'briefs', row.id, 'index.html');
+      if (!existsSync(file)) continue;
+      const robots = readFileSync(file, 'utf8').match(/<meta\s+name="robots"\s+content="([^"]*)"/i)?.[1] ?? '';
+      pages.push({
+        url: new URL(`/${lang}/briefs/${row.id}/`, 'https://www.jevcode.ai/').href,
+        indexable: !/noindex/i.test(robots),
+      });
+    }
+  }
+  assert.ok(pages.length > 0, 'dist 存在却一条案例页也没扫到');
+  const { wronglyIndexable, wronglyNoindex } = checkBriefIndexability(pages, {
+    briefs,
+    briefI18n,
+    site: 'https://www.jevcode.ai/',
+  });
+  assert.deepEqual(wronglyIndexable, []);
+  assert.deepEqual(wronglyNoindex, []);
 });

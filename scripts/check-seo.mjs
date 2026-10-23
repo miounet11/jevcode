@@ -6,13 +6,18 @@
  *  1) 页面改成可索引，sitemap 还停在旧规则 → 页面永远不会被抓（本轮实测 1518 条）
  *  2) sitemap 收录了 noindex 页 → 事后矛盾，抓取预算被浪费
  *
+ * 另查案例页「可索引 ↔ 译文覆盖」：没有译文却可索引，等于把同一份英文原文
+ * 在 8 个语言路径各收录一次（scaled content）。这类错 sitemap 双向检查抓不到，
+ * 因为页面和 sitemap 会一起错。
+ *
  * 用法：node scripts/check-seo.mjs [--dist=dist]
  * 退出码：0 一致；1 有差异（打印前 20 条，按方向分组）。
  */
 
 import { readdir, readFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { hasLocalizedBrief } from './lib/daily-briefs.mjs';
 
 const repoRoot = path.resolve(import.meta.dirname, '..');
 
@@ -85,6 +90,33 @@ export function diffSitemap(pages, sitemapUrls) {
   return { missing, extra };
 }
 
+/**
+ * 纯函数：案例页的可索引状态必须与「这篇在该语言下是否真的有译文」一致。
+ *
+ * sitemap 双向一致抓不到这类错：页面把自己标成 index、sitemap 也照抄，
+ * 两边当然一致——但正文其实是英文原文，等于把同一份英文内容在 8 个
+ * 语言路径下各收录一次（scaled content），是真实的降权风险。
+ *
+ * @returns {{wronglyIndexable: string[], wronglyNoindex: string[]}}
+ */
+export function checkBriefIndexability(pages, { briefs, briefI18n, site }) {
+  const indexable = new Map(pages.map((p) => [p.url, p.indexable]));
+  const wronglyIndexable = [];
+  const wronglyNoindex = [];
+  for (const row of briefs) {
+    for (const lang of ['en', 'zh', 'ja', 'ko', 'de', 'fr', 'es', 'pt']) {
+      const url = new URL(`/${lang}/briefs/${row.id}/`, site).href;
+      const actual = indexable.get(url);
+      if (actual === undefined) continue; // 页面不存在由 sitemap 差异与 llms 检查兜
+      // 与 [id].astro 的 detailIndex 同口径：en/zh 恒可索引，其余看正文是否本地化。
+      const expected = lang === 'en' || lang === 'zh' || hasLocalizedBrief(row.id, lang, briefI18n);
+      if (actual && !expected) wronglyIndexable.push(url);
+      else if (!actual && expected) wronglyNoindex.push(url);
+    }
+  }
+  return { wronglyIndexable, wronglyNoindex };
+}
+
 async function main() {
   const arg = process.argv.find((a) => a.startsWith('--dist='));
   const distDir = path.resolve(repoRoot, arg ? arg.slice('--dist='.length) : 'dist');
@@ -114,6 +146,30 @@ async function main() {
   }
   let failed = missing.length + extra.length > 0;
   if (failed) console.error(`\ncheck-seo: FAIL — sitemap 差异 ${missing.length + extra.length} 条`);
+
+  // 案例页可索引性 ↔ 译文实际覆盖情况。
+  const readJson = (rel) => JSON.parse(readFileSync(path.join(repoRoot, 'src/data', rel), 'utf8'));
+  const { wronglyIndexable, wronglyNoindex } = checkBriefIndexability(pages, {
+    briefs: readJson('daily-briefs.json'),
+    briefI18n: readJson('briefs-i18n.json'),
+    site,
+  });
+  if (wronglyIndexable.length) {
+    console.error(`\n案例页没有译文却可索引（${wronglyIndexable.length}，会重复收录英文原文）:`);
+    for (const u of wronglyIndexable.slice(0, 20)) console.error(`  ${u}`);
+  }
+  if (wronglyNoindex.length) {
+    console.error(`\n案例页有译文却被 noindex（${wronglyNoindex.length}，内容白翻译）:`);
+    for (const u of wronglyNoindex.slice(0, 20)) console.error(`  ${u}`);
+  }
+  if (wronglyIndexable.length || wronglyNoindex.length) {
+    console.error(
+      `\ncheck-seo: FAIL — 案例页可索引性与译文不一致 ${wronglyIndexable.length + wronglyNoindex.length} 条`,
+    );
+    failed = true;
+  } else {
+    console.log('check-seo: 案例页可索引性与译文覆盖一致');
+  }
 
   // llms.txt 推荐的链接同样要能走通。
   const llmsPath = path.join(distDir, 'llms.txt');
