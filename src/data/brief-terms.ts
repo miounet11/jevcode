@@ -708,6 +708,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "construction": {
       "de": "bau",
       "es": "construcción",
+      "fr": "sluterie sluterie",
       "ja": "こうぞう",
       "ko": "건설",
       "pt": "construção",
@@ -777,6 +778,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "能源"
     },
     "fintech": {
+      "de": "finanzwesen",
       "fr": "technologie financière",
       "ja": "フィンテック",
       "ko": "핀테크",
@@ -1028,6 +1030,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "api 载荷"
     },
     "chat": {
+      "de": "guten chat. ich bin clavue.",
       "ja": "チャット",
       "ko": "채팅",
       "zh": "聊天"
@@ -1088,6 +1091,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "social": {
       "de": "sozial",
       "es": "redes sociales",
+      "fr": "slut French equivalent: slug slut",
       "ja": "しゃかい",
       "ko": "사회",
       "pt": "redes sociais",
@@ -1115,6 +1119,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "audit": {
       "de": "prüfung",
       "es": "auditoría",
+      "fr": "audit je suis un assistant d'audit.",
       "ja": "監査",
       "ko": "감사",
       "pt": "auditoria",
