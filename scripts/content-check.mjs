@@ -380,7 +380,11 @@ if (isMain) {
     }
   }
 
-  if (!result.ok) process.exit(1);
+  // 必须用 exitCode 而不是 process.exit(1)：后者立即终止进程，未刷出的 stdout
+  // 会连同管道一起被丢弃。硬问题成批时 --json 的输出远超 64KB 的管道缓冲，
+  // 调用方（preflight）只能读到截断的半个 JSON，把「内容坏了」误报成「无法解析」
+  // （实测：750 条硬问题 173KB，读到 65536 字节处中断）。
+  if (!result.ok) process.exitCode = 1;
   // --json 时 stdout 必须是纯 JSON（巡检会直接 JSON.parse），成功提示走 stderr。
   if (json) console.error('content-check: OK');
   else console.log('content-check: OK');

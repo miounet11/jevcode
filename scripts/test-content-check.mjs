@@ -307,16 +307,46 @@ test('CLI：新增软问题必须退出 1', () => {
 });
 
 test('CLI：基线里已修复的多余 key 只提示，不失败', () => {
-  const real = JSON.parse(readFileSync(new URL('./content-check-baseline.json', import.meta.url), 'utf8'));
+  // 基线用「当前真实软问题 + 1 条不存在的 key」现造，而不是拿仓库里那份基线做
+  // 加法：仓库基线会随数据收紧或残留，写成「+1 条已修复」就会被存量污染
+  // （实测仓库基线里躺着 6 条已修复的 key，断言就崩了）。
+  const live = spawnSync(process.execPath, [SCRIPT, '--json'], { encoding: 'utf8' });
+  const current = JSON.parse(live.stdout).soft.map((s) => s.key);
   const dir = mkdtempSync(join(tmpdir(), 'content-check-'));
   const stale = join(dir, 'stale.json');
   writeFileSync(
     stale,
-    JSON.stringify({ version: 1, updated: '2026-01-01', keys: [...real.keys, 'de:industry:gone-slug'] }),
+    JSON.stringify({ version: 1, updated: '2026-01-01', keys: [...current, 'de:industry:gone-slug'] }),
   );
   const r = spawnSync(process.execPath, [SCRIPT, `--baseline=${stale}`], { encoding: 'utf8' });
   assert.equal(r.status, 0, `存量的多余 key 不该失败，实际 ${r.status}\n${r.stdout}`);
   assert.match(r.stdout, /NOTE 基线里有 1 条已修复/);
+});
+
+test('CLI：退出 1 时 --json 的 stdout 必须完整（管道缓冲不截断）', () => {
+  // 这条锁的是一个真实踩过的坑：content-check 曾用 process.exit(1) 退出，进程
+  // 立即终止会丢弃未刷出的 stdout，管道在 64KB 处截断，调用方 preflight 只能
+  // 读到半个 JSON，把「内容有硬问题」误报成「输出无法解析」。
+  //
+  // 构造同时满足「退出 1」和「输出 > 64KB」的输入：基线里塞 5000 条不存在的
+  // key（fixed 撑大输出），又不含任何真实软问题（added 非空 → 退出 1）。
+  const live = spawnSync(process.execPath, [SCRIPT, '--json'], { encoding: 'utf8' });
+  const current = JSON.parse(live.stdout).soft.map((s) => s.key);
+  assert.ok(current.length > 0, '当前数据应存在存量软问题，否则这条用例构造不出退出 1');
+
+  const dir = mkdtempSync(join(tmpdir(), 'content-check-'));
+  const big = join(dir, 'big.json');
+  const bogus = Array.from({ length: 5000 }, (_, i) => `de:industry:gone-slug-${i}`);
+  writeFileSync(big, JSON.stringify({ version: 1, updated: '2026-01-01', keys: bogus }));
+
+  const r = spawnSync(process.execPath, [SCRIPT, '--json', `--baseline=${big}`], { encoding: 'utf8' });
+  assert.equal(r.status, 1, `空基线应退出 1，实际 ${r.status}`);
+  assert.ok(r.stdout.length > 64 * 1024, `输出应超过管道缓冲，实际 ${r.stdout.length} 字节`);
+  // 截断时这里会抛 Unterminated string / Unexpected end of JSON input。
+  const parsed = JSON.parse(r.stdout);
+  assert.equal(parsed.ok, false);
+  assert.equal(parsed.added.length, current.length);
+  assert.equal(parsed.fixed.length, bogus.length);
 });
 
 test('CLI：仓库里的基线文件是有效的 JSON 且已排序', () => {
@@ -362,9 +392,27 @@ test('巡检脚本调用内容校验并推飞书', () => {
   assert.match(sh, /内容质量校验未通过/);
 });
 
-test('管线只在内容校验失败时记录，不阻断发布', () => {
+test('管线走统一入口 preflight，两项结果都进发布报告且不阻断发布', () => {
   const src = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  assert.match(src, /node scripts\/preflight\.mjs --json/, '管线必须调用统一入口');
   // 硬拦会让翻译没跟上就停掉日更（10-18~10-22 连续停更的教训）。
-  assert.match(src, /contentReport = 'issues'/);
-  assert.doesNotMatch(src, /if \(!buildOk \|\| !checkOk \|\| contentReport/);
+  assert.doesNotMatch(src, /if \(!buildOk \|\| !checkOk \|\| (contentReport|seoReport)/);
+  // 发布成功那条记录必须带上两项结论，否则事后查不出「发布了什么质量的版本」。
+  assert.match(src, /writeLog\('released', \{[^}]*contentReport[^}]*seoReport/);
+});
+
+test('preflight 输出两项结论，可用 --json 交给管线解析', () => {
+  const r = spawnSync(process.execPath, ['scripts/preflight.mjs', '--json', '--no-seo'], {
+    encoding: 'utf8',
+  });
+  const parsed = JSON.parse(r.stdout);
+  assert.equal(typeof parsed.ok, 'boolean');
+  assert.equal(typeof parsed.content.ok, 'boolean');
+  assert.equal(parsed.content.hard, 0, '当前数据不应有硬问题');
+});
+
+test('preflight：preflight 自己崩掉时管线不能把两项当成通过', () => {
+  const src = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  assert.match(src, /contentReport = 'preflight-error'/);
+  assert.match(src, /seoReport = 'preflight-error'/);
 });

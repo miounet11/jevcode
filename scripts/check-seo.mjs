@@ -125,7 +125,10 @@ async function main() {
     // 跳过会让这道门在 CI 或单独运行时「假成功」，等于没有门禁。
     // `npm run check` 里不会走到这里——check 先构建再校验。
     console.error(`check-seo: FAIL — 找不到 ${path.relative(repoRoot, distDir)}，先跑 npm run build`);
-    process.exit(1);
+    // 用 exitCode 而非 process.exit：FAIL 清单可能很长，立即退出会截断 stdout，
+    // 调用方（preflight 统计 FAIL 行）就看不到真正的原因。
+    process.exitCode = 1;
+    return;
   }
   const site = siteOf(await readFile(path.join(repoRoot, 'astro.config.mjs'), 'utf8'));
   const pages = await scanPages(distDir, site);
@@ -198,7 +201,10 @@ async function main() {
     failed = true;
   }
 
-  if (failed) process.exit(1);
+  if (failed) {
+    process.exitCode = 1;
+    return;
+  }
   console.log('check-seo: OK — sitemap 与可索引页面双向一致');
 }
 

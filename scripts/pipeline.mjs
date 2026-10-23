@@ -173,7 +173,14 @@ function checkoutFiles(files) {
 }
 
 function run(cmd, opts = {}) {
-  return execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...opts });
+  // maxBuffer 显式放宽：preflight 在内容大批出问题时 JSON 会到 MB 级，astro check
+  // 的输出也可能很长。默认 1MB 会以 ENOBUFS 截断，把「内容不合格」变成「无法解析」。
+  return execSync(cmd, {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+    maxBuffer: 64 * 1024 * 1024,
+    ...opts,
+  });
 }
 
 /** 门控后端抽象：对外统一返回 Jev 风格的 answers（每问 noul/choice/score）。
@@ -496,6 +503,7 @@ let checkOk = false;
 let linkReport = 'not run';
 let i18nReport = 'not run';
 let contentReport = 'not run';
+let seoReport = 'not run';
 try {
   run('npm run build', { stdio: 'inherit' });
   buildOk = true;
@@ -529,23 +537,35 @@ if (buildOk) {
   } catch {
     i18nReport = 'gaps';
   }
-  // 内容质量：与 i18n 同档——只记录、不阻断。标题重复、译文缺失、术语缺译名
-  // 这类问题由 healthcheck 每日巡检推送，若在这里硬拦，翻译没跟上就会停掉
-  // 整个日更（10-18~10-22 连续 5 天静默停更的教训）。
+  // 内容质量 + 可索引性：走统一入口 preflight，一次拿两项结论。
+  //
+  // 只记录、不阻断。build 里的 check-seo 已经卡过 sitemap/llms，这里再卡一次
+  // 内容硬问题只会让翻译没跟上就停掉整个日更（10-18~10-22 连续 5 天静默停更
+  // 的教训）。失败照实写进报告与 cron 日志，由 healthcheck 推送。
+  const pre = run('node scripts/preflight.mjs --json 2>/dev/null || true');
   try {
-    run('node scripts/content-check.mjs > /dev/null');
-    contentReport = 'ok';
+    const parsed = JSON.parse(pre);
+    contentReport = parsed.content?.ok ? 'ok' : (parsed.content?.detail ?? 'issues');
+    seoReport = parsed.seo?.ok ? 'ok' : (parsed.seo?.detail ?? 'issues');
   } catch {
-    contentReport = 'issues';
+    // preflight 自己崩了：两项都不能当成通过，否则报告会撒谎。
+    contentReport = 'preflight-error';
+    seoReport = 'preflight-error';
   }
 }
 
-say(`build=${buildOk} check=${checkOk} links=${linkReport} i18n=${i18nReport} content=${contentReport}`);
+say(
+  `build=${buildOk} check=${checkOk} links=${linkReport} i18n=${i18nReport} ` +
+    `content=${contentReport} seo=${seoReport}`,
+);
 if (i18nReport === 'gaps') {
   say('i18n: 存在翻译缺口（en 为回退源，页面不破损）；运行 node scripts/i18n-gaps.mjs 看清单');
 }
-if (contentReport === 'issues') {
-  say('content: 内容质量校验未通过（不阻断本轮发布）；运行 node scripts/content-check.mjs 看清单');
+if (contentReport !== 'ok') {
+  say(`content: 内容质量校验未通过（${contentReport}，不阻断本轮发布）；运行 npm run preflight 看清单`);
+}
+if (seoReport !== 'ok') {
+  say(`seo: 可索引性校验未通过（${seoReport}）；运行 node scripts/check-seo.mjs 看清单`);
 }
 
 // 5. 门 2
@@ -553,7 +573,7 @@ if (!buildOk || !checkOk) {
   say('gate2 skipped: mechanical gates failed');
   dropThisCycleCommit();
   restoreFetched();
-  writeLog('gate2-skipped-mech-fail', { buildOk, checkOk, i18nReport, contentReport });
+  writeLog('gate2-skipped-mech-fail', { buildOk, checkOk, i18nReport, contentReport, seoReport });
   process.exit(1);
 }
 // 发布内容描述。必须区分干跑与真实模式：
@@ -593,7 +613,7 @@ try {
 }
 const ready = g2.release_ready.noul >= 0.5;
 say(`gate2: ready=${g2.release_ready.noul} risk=${g2.risk.score}/3 (conf ${g2.risk.confidence})`);
-writeLog('gate2', { gate2: g2, i18nReport, contentReport });
+writeLog('gate2', { gate2: g2, i18nReport, contentReport, seoReport });
 
 if (!ready) {
   say('gate2: HOLD — release blocked by Jev');
@@ -658,7 +678,7 @@ if (publishEco) {
 }
 // 这一行只会在 deploy 成功之后执行，所以确实是 released；eco 字段标明本轮
 // 生态数据是否随之更新，便于事后区分「整体发布」与「只发了社区/实验室」。
-writeLog('released', { cleared, eco: publishEco });
+writeLog('released', { cleared, eco: publishEco, i18nReport, contentReport, seoReport });
 try {
   const out = run('node scripts/indexnow-submit.mjs');
   say(`indexnow: ${String(out).trim().split('\n').slice(-3).join(' | ')}`);
