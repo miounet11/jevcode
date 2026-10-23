@@ -16,6 +16,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { buildLlmsTxt, loadDocs, LANGS } from './generate-llms-txt.mjs';
 
 const LLMS_LANGS = LANGS.map((l) => l.code);
@@ -133,8 +135,13 @@ test('llms.txt 收录文档条目，且只收该语言自己有的', () => {
 
 test('缺少 dist/ 时 check-seo 必须失败而不是静默跳过', () => {
   // 静默跳过会让这道门在 CI 或单独运行时「假成功」，等于没有门禁。
-  const src = readFileSync(new URL('./check-seo.mjs', import.meta.url), 'utf8');
-  const missingDistBlock = src.slice(src.indexOf('!existsSync(distDir)'), src.indexOf('const site ='));
-  assert.match(missingDistBlock, /process\.exit\(1\)/);
-  assert.doesNotMatch(missingDistBlock, /^\s*return;\s*$/m);
+  // 这里真跑一次子进程：搜源码只能证明「写了 process.exit(1)」，不能证明
+  // 那条分支真的被执行到——分支被挪进 never 的分支里同样会通过正则断言。
+  const r = spawnSync(
+    process.execPath,
+    [fileURLToPath(new URL('./check-seo.mjs', import.meta.url)), '--dist=.no-such-dist-for-test'],
+    { encoding: 'utf8' },
+  );
+  assert.equal(r.status, 1, `缺 dist 时应退出 1，实际 ${r.status}`);
+  assert.match(r.stderr, /FAIL/);
 });
