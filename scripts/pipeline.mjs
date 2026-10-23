@@ -495,6 +495,7 @@ let buildOk = false;
 let checkOk = false;
 let linkReport = 'not run';
 let i18nReport = 'not run';
+let contentReport = 'not run';
 try {
   run('npm run build', { stdio: 'inherit' });
   buildOk = true;
@@ -528,11 +529,23 @@ if (buildOk) {
   } catch {
     i18nReport = 'gaps';
   }
+  // 内容质量：与 i18n 同档——只记录、不阻断。标题重复、译文缺失、术语缺译名
+  // 这类问题由 healthcheck 每日巡检推送，若在这里硬拦，翻译没跟上就会停掉
+  // 整个日更（10-18~10-22 连续 5 天静默停更的教训）。
+  try {
+    run('node scripts/content-check.mjs > /dev/null');
+    contentReport = 'ok';
+  } catch {
+    contentReport = 'issues';
+  }
 }
 
-say(`build=${buildOk} check=${checkOk} links=${linkReport} i18n=${i18nReport}`);
+say(`build=${buildOk} check=${checkOk} links=${linkReport} i18n=${i18nReport} content=${contentReport}`);
 if (i18nReport === 'gaps') {
   say('i18n: 存在翻译缺口（en 为回退源，页面不破损）；运行 node scripts/i18n-gaps.mjs 看清单');
+}
+if (contentReport === 'issues') {
+  say('content: 内容质量校验未通过（不阻断本轮发布）；运行 node scripts/content-check.mjs 看清单');
 }
 
 // 5. 门 2
@@ -540,7 +553,7 @@ if (!buildOk || !checkOk) {
   say('gate2 skipped: mechanical gates failed');
   dropThisCycleCommit();
   restoreFetched();
-  writeLog('gate2-skipped-mech-fail', { buildOk, checkOk, i18nReport });
+  writeLog('gate2-skipped-mech-fail', { buildOk, checkOk, i18nReport, contentReport });
   process.exit(1);
 }
 // 发布内容描述。必须区分干跑与真实模式：
@@ -580,7 +593,7 @@ try {
 }
 const ready = g2.release_ready.noul >= 0.5;
 say(`gate2: ready=${g2.release_ready.noul} risk=${g2.risk.score}/3 (conf ${g2.risk.confidence})`);
-writeLog('gate2', { gate2: g2, i18nReport });
+writeLog('gate2', { gate2: g2, i18nReport, contentReport });
 
 if (!ready) {
   say('gate2: HOLD — release blocked by Jev');

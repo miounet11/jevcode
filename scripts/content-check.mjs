@@ -1,0 +1,331 @@
+#!/usr/bin/env node
+/**
+ * 日更内容质量校验：巡检只报「几天没更新」是不够的，还要能报
+ * 「更新了但内容不合格」——空标题、标题重复、译文缺失/静默回退成英文、
+ * 术语缺译名、发布时间异常。
+ *
+ * 用法：
+ *   node scripts/content-check.mjs                 读基线，新增问题即 exit 1
+ *   node scripts/content-check.mjs --json          JSON 输出（供巡检/调试）
+ *   node scripts/content-check.mjs --update-baseline  收紧基线（人工确认后跑）
+ *   node scripts/content-check.mjs --baseline=path    指定基线文件
+ *
+ * 两类问题：
+ *   硬问题  数据本身坏了（空字段、重复 id/标题、译文缺失、choices 数量对不上、
+ *           正文超长、日期非法或晚于今天）。任何一条都 exit 1。
+ *   软问题  已知的存量缺口，用基线棘轮（ratchet）管：基线里没有的新 key 才失败，
+ *           消失的 key 只提示可以把基线收紧。这样既能抓住回归，又不会因为
+ *           「38 条历史术语缺译名」这种存量把门永久判红。
+ *
+ * 设计约束：
+ *   - 只读 src/data/*.json，不写内容数据；唯一写盘是 --update-baseline。
+ *   - 阈值取自实测分布（2026-10-23，250 篇 × 8 语言）：question 最长 88 字符、
+ *     context 最长 174 字符，所以 400/1200 的上界只拦「把原文整段灌进来」这类
+ *     事故，不会误伤最长句。下限取 8 字符，只为拦空串和占位符（中文最短 11）。
+ */
+
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { briefHeading, hasLocalizedBrief, localizedBrief } from './lib/daily-briefs.mjs';
+
+/** 术语表的字段维度，与 briefHeading 拼接顺序一致（stage 不参与标题但参与校验）。 */
+export const TERM_FIELDS = ['industry', 'scene', 'tag', 'dimension', 'stage'];
+
+/** 正文长度上界：防「整段原文被当成摘要灌进来」，不是文风检查。 */
+export const MAX_QUESTION_CHARS = 400;
+export const MAX_CONTEXT_CHARS = 1200;
+/** 正文长度下界：只拦空串与占位符。中文 question 实测最短 11 字符。 */
+export const MIN_BODY_CHARS = 8;
+
+const DEFAULT_BASELINE = fileURLToPath(new URL('./content-check-baseline.json', import.meta.url));
+
+/**
+ * 站点上「有本地化正文」的语言集合。与 [lang]/briefs.astro 的判据保持一致：
+ * 该语言在术语表 industry 里有译名，才把案例列表页设为可索引。
+ * zh 在表内，en 是原文，两者都算可索引。
+ */
+export function indexableLangs(terms) {
+  const langs = new Set(Object.values(terms?.industry ?? {}).flatMap((v) => Object.keys(v)));
+  return [...langs].sort();
+}
+
+const len = (s) => [...String(s ?? '')].length;
+
+/**
+ * 收集全部问题。纯函数，便于测试直接喂构造数据。
+ * 返回 { hard, soft }，每项是 { kind, key, detail }。
+ * key 是稳定标识：软问题靠它做棘轮，硬问题靠它去重/阅读。
+ */
+export function collectFindings({ briefs, i18n, terms, today = new Date() }) {
+  const hard = [];
+  const soft = [];
+  const pushHard = (kind, key, detail) => hard.push({ kind, key, detail });
+  const pushSoft = (kind, key, detail) => soft.push({ kind, key, detail });
+
+  const seenIds = new Set();
+  const usedByField = Object.fromEntries(TERM_FIELDS.map((f) => [f, new Set()]));
+
+  for (const [index, row] of briefs.entries()) {
+    const id = typeof row?.id === 'string' ? row.id.trim() : '';
+    if (!id) {
+      pushHard('missing-id', `row:${index}`, '条目的 id 为空');
+    } else if (seenIds.has(id)) {
+      pushHard('duplicate-id', `id:${id}`, `id 重复：${id}`);
+    } else {
+      seenIds.add(id);
+    }
+    const label = id || `<row ${index}>`;
+
+    for (const field of TERM_FIELDS) {
+      const slug = typeof row?.[field] === 'string' ? row[field].trim() : '';
+      if (!slug) {
+        pushHard('empty-field', `${label}:${field}`, `${label} 缺少 ${field}`);
+        continue;
+      }
+      usedByField[field].add(slug);
+    }
+
+    if (!String(row?.context ?? '').trim()) {
+      pushHard('empty-source', `${label}:context`, `${label} 的英文 context 为空`);
+    } else if (len(row.context) > MAX_CONTEXT_CHARS) {
+      pushHard(
+        'source-too-long',
+        `${label}:context`,
+        `${label} 的英文 context 有 ${len(row.context)} 字符，超过 ${MAX_CONTEXT_CHARS}`,
+      );
+    }
+    if (!String(row?.question ?? '').trim()) {
+      pushHard('empty-source', `${label}:question`, `${label} 的英文 question 为空`);
+    } else if (len(row.question) > MAX_QUESTION_CHARS) {
+      pushHard(
+        'source-too-long',
+        `${label}:question`,
+        `${label} 的英文 question 有 ${len(row.question)} 字符，超过 ${MAX_QUESTION_CHARS}`,
+      );
+    }
+
+    if (!Array.isArray(row?.choices) || row.choices.length < 2) {
+      pushHard('bad-choices', `${label}:choices`, `${label} 的选项少于 2 个`);
+    } else if (row.choices.some((c) => !String(c ?? '').trim())) {
+      pushHard('bad-choices', `${label}:choices`, `${label} 的选项里有空值`);
+    }
+
+    const published = typeof row?.published === 'string' ? row.published : '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(published)) {
+      pushHard('bad-published', `${label}:published`, `${label} 的发布日期不是 YYYY-MM-DD：${published || '(空)'}`);
+    } else if (Date.parse(`${published}T00:00:00Z`) > today.getTime()) {
+      pushHard('future-published', `${label}:published`, `${label} 的发布日期 ${published} 晚于今天`);
+    }
+  }
+
+  // ---- 术语表：用到的 slug 必须有条目（缺条目 = 硬，标题会露出裸 slug）----
+  for (const field of TERM_FIELDS) {
+    for (const slug of usedByField[field]) {
+      if (!terms?.[field]?.[slug]) {
+        pushHard('term-missing-entry', `${field}:${slug}`, `术语表 ${field} 缺少条目 ${slug}`);
+      }
+    }
+  }
+
+  // ---- 逐语言：标题 + 译文 ----
+  const langs = ['en', ...indexableLangs(terms)];
+  for (const lang of langs) {
+    const titleOwner = new Map();
+    for (const row of briefs) {
+      const id = String(row?.id ?? '');
+      const title = briefHeading(row, lang, terms).trim();
+      if (!title) {
+        pushHard('empty-title', `${lang}:${id}`, `${lang} 的 ${id} 标题为空`);
+        continue;
+      }
+      if (titleOwner.has(title)) {
+        pushHard(
+          'duplicate-title',
+          `${lang}:${title}`,
+          `${lang} 的标题重复：「${title}」（${titleOwner.get(title)} 与 ${id}）`,
+        );
+      } else {
+        titleOwner.set(title, id);
+      }
+    }
+
+    if (lang === 'en') continue;
+
+    for (const row of briefs) {
+      const id = String(row?.id ?? '');
+      const entry = i18n?.[id]?.[lang];
+      if (!hasLocalizedBrief(id, lang, i18n)) {
+        // 缺 context/question 任一项都算缺译文；页面会静默回退成英文并 noindex。
+        const kind = entry ? 'partial-i18n' : 'missing-i18n';
+        pushHard(kind, `${lang}:${id}`, `${lang} 的 ${id} 缺少${entry ? '完整的' : ''}译文（页面会回退英文并 noindex）`);
+        continue;
+      }
+
+      if (!Array.isArray(entry.choices) || entry.choices.length !== row.choices.length) {
+        pushHard(
+          'choice-count',
+          `${lang}:${id}`,
+          `${lang} 的 ${id} 选项数 ${Array.isArray(entry.choices) ? entry.choices.length : '非数组'}，英文是 ${row.choices.length}`,
+        );
+      } else if (entry.choices.some((c) => !String(c ?? '').trim())) {
+        pushHard('bad-choices', `${lang}:${id}:choices`, `${lang} 的 ${id} 选项里有空值`);
+      }
+
+      const view = localizedBrief(row, lang, i18n);
+      // 译文与英文逐字相同 = 翻译没生效（静默回退），软问题：存量已知，靠基线管。
+      if (entry.question === row.question) {
+        pushSoft('identical-translation', `${lang}:${id}:question`, `${lang} 的 ${id} question 与英文完全相同`);
+      }
+      if (entry.context === row.context) {
+        pushSoft('identical-translation', `${lang}:${id}:context`, `${lang} 的 ${id} context 与英文完全相同`);
+      }
+      if (len(view.question) < MIN_BODY_CHARS) {
+        pushSoft('body-too-short', `${lang}:${id}:question`, `${lang} 的 ${id} question 只有 ${len(view.question)} 字符`);
+      }
+      if (len(view.context) < MIN_BODY_CHARS) {
+        pushSoft('body-too-short', `${lang}:${id}:context`, `${lang} 的 ${id} context 只有 ${len(view.context)} 字符`);
+      }
+    }
+
+    // 术语有条目但缺该语译名：标题/列表会露出英文 slug。软问题，按基线棘轮。
+    for (const field of TERM_FIELDS) {
+      for (const slug of usedByField[field]) {
+        if (!terms?.[field]?.[slug]) continue; // 缺条目已是硬问题
+        const word = terms[field][slug][lang];
+        if (typeof word !== 'string' || !word.trim()) {
+          pushSoft('term-missing-lang', `${lang}:${field}:${slug}`, `术语 ${field}:${slug} 缺 ${lang} 译名`);
+        }
+      }
+    }
+  }
+
+  return { hard, soft };
+}
+
+/** 读基线；不存在时返回 null（首次运行只报告，不失败）。 */
+export function loadBaseline(path) {
+  if (!existsSync(path)) return null;
+  const raw = JSON.parse(readFileSync(path, 'utf8'));
+  const keys = Array.isArray(raw?.keys) ? raw.keys : [];
+  return { keys: new Set(keys.filter((k) => typeof k === 'string')), updated: raw?.updated ?? null };
+}
+
+export function writeBaseline(path, { keys, updated }) {
+  const body = {
+    // 软问题基线：已知的存量缺口。新增 key 即失败；修掉后可重新生成本文件收紧。
+    $comment: '内容质量软问题基线，由 node scripts/content-check.mjs --update-baseline 生成',
+    version: 1,
+    updated,
+    keys: [...new Set(keys)].sort(),
+  };
+  writeFileSync(path, `${JSON.stringify(body, null, 2)}\n`);
+}
+
+/** 对比基线，返回 { added, fixed }（都是 key 数组）。 */
+export function diffBaseline(softKeys, baseline) {
+  if (!baseline) return { added: [], fixed: [], firstRun: true };
+  const now = new Set(softKeys);
+  return {
+    added: [...now].filter((k) => !baseline.keys.has(k)).sort(),
+    fixed: [...baseline.keys].filter((k) => !now.has(k)).sort(),
+    firstRun: false,
+  };
+}
+
+/**
+ * 汇总一次运行，返回 { ok, hard, soft, added, fixed, ... }。
+ * 抽成函数是为了让测试不碰文件系统也能断言判定语义。
+ */
+export function evaluate({ briefs, i18n, terms, baseline, today = new Date() }) {
+  const { hard, soft } = collectFindings({ briefs, i18n, terms, today });
+  const softKeys = soft.map((s) => s.key);
+  const { added, fixed, firstRun } = diffBaseline(softKeys, baseline);
+  return {
+    ok: hard.length === 0 && added.length === 0,
+    hard,
+    soft,
+    softKeys,
+    added,
+    fixed,
+    firstRun,
+  };
+}
+
+// ---------------- CLI ----------------
+
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
+
+if (isMain) {
+  const argv = process.argv.slice(2);
+  const json = argv.includes('--json');
+  const updateBaseline = argv.includes('--update-baseline');
+  const baselinePath = argv.find((a) => a.startsWith('--baseline='))?.slice('--baseline='.length) || DEFAULT_BASELINE;
+
+  const readJson = (rel) => JSON.parse(readFileSync(new URL(`../src/data/${rel}`, import.meta.url), 'utf8'));
+  const briefs = readJson('daily-briefs.json');
+  const i18n = readJson('briefs-i18n.json');
+  const terms = readJson('brief-terms.json');
+
+  const baseline = updateBaseline ? null : loadBaseline(baselinePath);
+  const result = evaluate({ briefs, i18n, terms, baseline });
+
+  if (updateBaseline) {
+    const stamp = new Date().toISOString().slice(0, 10);
+    writeBaseline(baselinePath, { keys: result.softKeys, updated: stamp });
+    console.error(`content-check: 已写入基线 ${baselinePath}（${new Set(result.softKeys).size} 条软问题）`);
+  }
+
+  if (json) {
+    console.log(
+      JSON.stringify(
+        {
+          ok: result.ok,
+          briefs: briefs.length,
+          langs: ['en', ...indexableLangs(terms)],
+          hard: result.hard,
+          soft: result.soft,
+          added: result.added,
+          fixed: result.fixed,
+        },
+        null,
+        2,
+      ),
+    );
+  } else {
+    const langs = ['en', ...indexableLangs(terms)];
+    console.log(
+      `content-check: ${briefs.length} 篇 × ${langs.length} 语言 | 硬问题 ${result.hard.length}，` +
+        `软问题 ${new Set(result.softKeys).size}` +
+        (result.firstRun ? '（未找到基线，仅报告）' : `（基线 ${baseline.keys.size}）`),
+    );
+
+    // 同类问题只展示前若干条，避免一次翻译全挂时刷屏上万个 id。
+    const printGrouped = (items, prefix) => {
+      const byKind = new Map();
+      for (const item of items) {
+        if (!byKind.has(item.kind)) byKind.set(item.kind, []);
+        byKind.get(item.kind).push(item);
+      }
+      for (const [kind, list] of byKind) {
+        console.log(`${prefix} ${kind}: ${list.length} 条`);
+        for (const item of list.slice(0, 5)) console.log(`  - ${item.detail}`);
+        if (list.length > 5) console.log(`  - …另有 ${list.length - 5} 条`);
+      }
+    };
+
+    if (result.hard.length) printGrouped(result.hard, 'FAIL');
+    if (result.added.length) {
+      console.log(`FAIL soft-regression: ${result.added.length} 条新增于基线之外`);
+      for (const key of result.added.slice(0, 10)) console.log(`  - ${key}`);
+      if (result.added.length > 10) console.log(`  - …另有 ${result.added.length - 10} 条`);
+    }
+    if (result.fixed.length) {
+      console.log(`NOTE 基线里有 ${result.fixed.length} 条已修复，可跑 --update-baseline 收紧`);
+    }
+  }
+
+  if (!result.ok) process.exit(1);
+  // --json 时 stdout 必须是纯 JSON（巡检会直接 JSON.parse），成功提示走 stderr。
+  if (json) console.error('content-check: OK');
+  else console.log('content-check: OK');
+}

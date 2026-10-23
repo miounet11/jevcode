@@ -69,6 +69,34 @@ process.stdout.write(String(Math.floor((Date.now()-t)/86400000)));
   fi
 fi
 
+# 3) 内容质量。前面两条只能回答「有没有在发」，回答不了「发出来的东西对不对」：
+#    标题重复会让两个页面抢同一个 title，译文缺失会静默回退英文并 noindex。
+#    这里用 --json 拿结构化结果，失败原因直接进飞书，不用人再登机器翻日志。
+CONTENT_JSON="$(node scripts/content-check.mjs --json 2>/dev/null || true)"
+if [[ -z "$CONTENT_JSON" ]]; then
+  echo "[healthcheck] content-check 没有输出（脚本异常）"
+  node scripts/notify-feishu.mjs "内容校验脚本异常" \
+    "node scripts/content-check.mjs --json 无输出。
+工作目录：$REPO
+排查：node scripts/content-check.mjs 看报错" || true
+  FAILED=1
+else
+  CONTENT_SUMMARY="$(printf '%s' "$CONTENT_JSON" | node scripts/lib/content-summary.mjs 2>/dev/null || true)"
+
+  if [[ "$CONTENT_SUMMARY" == "OK" ]]; then
+    echo "[healthcheck] 内容校验通过"
+  else
+    echo "[healthcheck] 内容校验未通过"
+    node scripts/notify-feishu.mjs "内容质量校验未通过" \
+      "$CONTENT_SUMMARY
+
+工作目录：$REPO
+排查：node scripts/content-check.mjs
+修完存量缺口可跑 --update-baseline 收紧基线" || true
+    FAILED=1
+  fi
+fi
+
 if [[ "$FAILED" == "0" ]]; then
   echo "[healthcheck] 全部正常"
   exit 0
