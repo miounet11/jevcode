@@ -15,11 +15,12 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  BODY_LIMITS,
+  bodyLimits,
   collectFindings,
   diffBaseline,
   evaluate,
   indexableLangs,
-  MIN_BODY_CHARS,
   TERM_FIELDS,
 } from './content-check.mjs';
 
@@ -192,7 +193,64 @@ test('正文过短只在软问题里报，不会因占位符卡住整轮发布',
     soft.map((s) => s.key),
     ['zh:b1:question'],
   );
-  assert.ok(MIN_BODY_CHARS >= 4);
+});
+
+test('长度阈值按语言校准：同长度文本在 zh 合格、在 de 判过短', () => {
+  // 这是「共用阈值」和「按语言校准」能区分开的唯一判据：同一段 11 字符的译文
+  // 放到中文里属于正常短句（实测中文最短 11），放到德文里则是残缺。
+  const eleven = 'Kurz genug.'.slice(0, 11);
+  assert.equal([...eleven].length, 11);
+  assert.ok(bodyLimits('zh', 'question').min < 11, 'zh 的下界应低于 11');
+  assert.ok(bodyLimits('de', 'question').min > 11, 'de 的下界应高于 11');
+
+  const zh = collectFindings({
+    briefs: [row()],
+    i18n: mkI18n('b1', { zh: { question: eleven } }),
+    terms: TERMS,
+  });
+  assert.deepEqual(zh.soft.filter((s) => s.kind === 'body-too-short'), []);
+
+  const de = collectFindings({
+    briefs: [row()],
+    i18n: mkI18n('b1', { de: { question: eleven } }),
+    terms: TERMS,
+  });
+  assert.deepEqual(
+    de.soft.filter((s) => s.kind === 'body-too-short').map((s) => s.key),
+    ['de:b1:question'],
+  );
+});
+
+test('每种站点语言都有长度阈值，缺了要报硬问题', () => {
+  for (const lang of ['en', ...LANGS]) {
+    assert.ok(BODY_LIMITS[lang], `${lang} 缺校准阈值`);
+    for (const field of ['question', 'context']) {
+      const { min, max } = BODY_LIMITS[lang][field];
+      assert.ok(min > 0 && min < max, `${lang}.${field} 阈值不合理：${min}..${max}`);
+    }
+  }
+  // 阈值随字符密度递增：中文下界必须明显低于德文。
+  assert.ok(BODY_LIMITS.zh.question.min < BODY_LIMITS.de.question.min);
+
+  // 语言出现在数据里但没校准 → 必须硬失败，不能静默套用别国阈值。
+  const unknownTerms = buildTerms();
+  for (const entry of Object.values(unknownTerms.industry)) entry.xx = 'X';
+  const { hard } = collectFindings({ briefs: [row()], i18n: mkI18n(), terms: unknownTerms });
+  assert.ok(
+    hard.some((h) => h.kind === 'missing-limits' && h.key === 'lang:xx'),
+    `未校准语言应报 missing-limits，实际：${JSON.stringify(hard)}`,
+  );
+});
+
+test('正文超长按该语言上界报，不会跨语言误判', () => {
+  const long = 'x'.repeat(200);
+  const { soft } = collectFindings({
+    briefs: [row()],
+    i18n: mkI18n('b1', { zh: { question: long } }),
+    terms: TERMS,
+  });
+  const tooLong = soft.filter((s) => s.kind === 'body-too-long').map((s) => s.key);
+  assert.deepEqual(tooLong, ['zh:b1:question'], '200 字符超过 zh 的 120 上界');
 });
 
 test('可索引语言集合与术语表 industry 的语言一致', () => {

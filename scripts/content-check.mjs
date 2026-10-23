@@ -19,9 +19,9 @@
  *
  * 设计约束：
  *   - 只读 src/data/*.json，不写内容数据；唯一写盘是 --update-baseline。
- *   - 阈值取自实测分布（2026-10-23，250 篇 × 8 语言）：question 最长 88 字符、
- *     context 最长 174 字符，所以 400/1200 的上界只拦「把原文整段灌进来」这类
- *     事故，不会误伤最长句。下限取 8 字符，只为拦空串和占位符（中文最短 11）。
+ *   - 正文长度阈值按语言分别校准（见 BODY_LIMITS）：中文 11 字符能说完的句子，
+ *     德文要 33 个字符，共用阈值必然一边误报一边漏报。数值取自 2026-10-23 的
+ *     实测分布，详见常量上的注释。
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -31,11 +31,46 @@ import { briefHeading, hasLocalizedBrief, localizedBrief } from './lib/daily-bri
 /** 术语表的字段维度，与 briefHeading 拼接顺序一致（stage 不参与标题但参与校验）。 */
 export const TERM_FIELDS = ['industry', 'scene', 'tag', 'dimension', 'stage'];
 
-/** 正文长度上界：防「整段原文被当成摘要灌进来」，不是文风检查。 */
-export const MAX_QUESTION_CHARS = 400;
-export const MAX_CONTEXT_CHARS = 1200;
-/** 正文长度下界：只拦空串与占位符。中文 question 实测最短 11 字符。 */
-export const MIN_BODY_CHARS = 8;
+/**
+ * 各语言的正文长度阈值（按 Unicode 字符计）。
+ *
+ * 不能用一个全局阈值：同一句话，中文 11 个字符就说完，德文要 33 个。全局下界
+ * 要么对中文太松（放过「嗯」「TODO」），要么对德文太紧（正常短句被误报）。
+ *
+ * 数值来自 2026-10-23 实测的 250 篇 × 8 语言分布：
+ *
+ *   语言   question 实测 min~max   context 实测 min~max
+ *   en     29~70                   23~115
+ *   zh     11~39                   10~104
+ *   ja     16~39                   13~116
+ *   ko     17~36                   15~134
+ *   de     33~88                   30~174
+ *   fr     27~85                   38~161
+ *   es     33~82                   36~143
+ *   pt     29~74                   34~142
+ *
+ * 上界取实测最大值 ×3 向上取整到十位：只拦「整段原文/整篇文档被灌进摘要」这类
+ * 事故，正常写作到不了这个量级。下界取实测最小值 ×0.6 向下取整：存量一条都不会
+ * 误报，但占位符必被抓住。
+ *
+ * 加新语言时必须同时补一行——没有阈值的语言会作为硬问题报出来，而不是悄悄套用
+ * 别国阈值（那样等于没有校准）。
+ */
+export const BODY_LIMITS = {
+  en: { question: { min: 17, max: 210 }, context: { min: 13, max: 350 } },
+  zh: { question: { min: 6, max: 120 }, context: { min: 6, max: 320 } },
+  ja: { question: { min: 9, max: 120 }, context: { min: 7, max: 350 } },
+  ko: { question: { min: 10, max: 110 }, context: { min: 9, max: 410 } },
+  de: { question: { min: 19, max: 270 }, context: { min: 18, max: 530 } },
+  fr: { question: { min: 16, max: 260 }, context: { min: 22, max: 490 } },
+  es: { question: { min: 19, max: 250 }, context: { min: 21, max: 430 } },
+  pt: { question: { min: 17, max: 230 }, context: { min: 20, max: 430 } },
+};
+
+/** 取某语言某字段的长度阈值；语言未校准返回 null（由调用方报硬问题）。 */
+export function bodyLimits(lang, field) {
+  return BODY_LIMITS?.[lang]?.[field] ?? null;
+}
 
 const DEFAULT_BASELINE = fileURLToPath(new URL('./content-check-baseline.json', import.meta.url));
 
@@ -85,22 +120,24 @@ export function collectFindings({ briefs, i18n, terms, today = new Date() }) {
       usedByField[field].add(slug);
     }
 
+    const enLimits = bodyLimits('en', 'context');
     if (!String(row?.context ?? '').trim()) {
       pushHard('empty-source', `${label}:context`, `${label} 的英文 context 为空`);
-    } else if (len(row.context) > MAX_CONTEXT_CHARS) {
+    } else if (len(row.context) > enLimits.max) {
       pushHard(
         'source-too-long',
         `${label}:context`,
-        `${label} 的英文 context 有 ${len(row.context)} 字符，超过 ${MAX_CONTEXT_CHARS}`,
+        `${label} 的英文 context 有 ${len(row.context)} 字符，超过 en 阈值 ${enLimits.max}`,
       );
     }
+    const enQLimits = bodyLimits('en', 'question');
     if (!String(row?.question ?? '').trim()) {
       pushHard('empty-source', `${label}:question`, `${label} 的英文 question 为空`);
-    } else if (len(row.question) > MAX_QUESTION_CHARS) {
+    } else if (len(row.question) > enQLimits.max) {
       pushHard(
         'source-too-long',
         `${label}:question`,
-        `${label} 的英文 question 有 ${len(row.question)} 字符，超过 ${MAX_QUESTION_CHARS}`,
+        `${label} 的英文 question 有 ${len(row.question)} 字符，超过 en 阈值 ${enQLimits.max}`,
       );
     }
 
@@ -129,6 +166,12 @@ export function collectFindings({ briefs, i18n, terms, today = new Date() }) {
 
   // ---- 逐语言：标题 + 译文 ----
   const langs = ['en', ...indexableLangs(terms)];
+  // 新增语言但没补阈值时必须报出来：静默跳过等于这道门对新语言完全失效。
+  for (const lang of langs) {
+    if (!bodyLimits(lang, 'question') || !bodyLimits(lang, 'context')) {
+      pushHard('missing-limits', `lang:${lang}`, `语言 ${lang} 没有配置正文长度阈值（BODY_LIMITS）`);
+    }
+  }
   for (const lang of langs) {
     const titleOwner = new Map();
     for (const row of briefs) {
@@ -179,11 +222,24 @@ export function collectFindings({ briefs, i18n, terms, today = new Date() }) {
       if (entry.context === row.context) {
         pushSoft('identical-translation', `${lang}:${id}:context`, `${lang} 的 ${id} context 与英文完全相同`);
       }
-      if (len(view.question) < MIN_BODY_CHARS) {
-        pushSoft('body-too-short', `${lang}:${id}:question`, `${lang} 的 ${id} question 只有 ${len(view.question)} 字符`);
-      }
-      if (len(view.context) < MIN_BODY_CHARS) {
-        pushSoft('body-too-short', `${lang}:${id}:context`, `${lang} 的 ${id} context 只有 ${len(view.context)} 字符`);
+
+      // 长度按该语言自己的阈值判：各语言字符密度差一倍以上，共用阈值必然误判。
+      for (const field of ['question', 'context']) {
+        const limits = bodyLimits(lang, field);
+        const chars = len(view[field]);
+        if (chars < limits.min) {
+          pushSoft(
+            'body-too-short',
+            `${lang}:${id}:${field}`,
+            `${lang} 的 ${id} ${field} 只有 ${chars} 字符，低于 ${lang} 阈值 ${limits.min}`,
+          );
+        } else if (chars > limits.max) {
+          pushSoft(
+            'body-too-long',
+            `${lang}:${id}:${field}`,
+            `${lang} 的 ${id} ${field} 有 ${chars} 字符，超过 ${lang} 阈值 ${limits.max}`,
+          );
+        }
       }
     }
 
