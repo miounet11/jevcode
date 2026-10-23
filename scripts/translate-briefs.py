@@ -37,7 +37,7 @@ GEN_MODEL = os.environ.get("CLAVUE_GEN_MODEL", "clavue-3-chat")
 ALL_LANGS = ["zh", "ja", "ko", "de", "fr", "es", "pt"]
 CJK_LANGS = {"zh", "ja", "ko"}
 LANGS = ALL_LANGS
-FIELDS = ["industry", "scene", "dimension", "stage", "tag"]
+FIELDS = ["industry", "scene", "dimension", "stage", "tag", "choice"]
 DRY = "--dry" in sys.argv
 LIMIT = None
 CONCURRENCY = int(os.environ.get("BRIEF_TRANSLATE_CONCURRENCY", "12"))
@@ -142,7 +142,43 @@ MANUAL_TERMS = {
     ("medical-triage", "ja"): "医療トリアージ",
     ("pii", "ja"): "個人情報",
     ("chargeback", "ko"): "지급 거절",
+    # 选择项：模型在这些词上稳定返回英文原形或英文近义词，人工给定。
+    ("bug", "zh"): "缺陷",
+    ("bug", "fr"): "bogue",
+    ("clean", "ja"): "無害",
+    ("compliance", "de"): "Compliance",
+    ("deny", "ja"): "拒否",
+    ("grant", "ja"): "承認",
+    ("grant", "ko"): "승인",
+    ("incident", "fr"): "incident",
+    ("negative", "ja"): "否定的",
+    ("neutral", "de"): "neutral",
+    ("neutral", "es"): "neutral",
+    ("no", "ko"): "아니요",
+    ("no", "es"): "no",
+    ("normal", "de"): "normal",
+    ("normal", "fr"): "normal",
+    ("normal", "es"): "normal",
+    ("normal", "pt"): "normal",
+    ("poor", "ja"): "不良",
+    ("question", "fr"): "question",
+    ("routine", "de"): "routine",
+    ("routine", "fr"): "routine",
+    ("spam", "de"): "Spam",
+    ("spam", "pt"): "spam",
+    ("urgent", "fr"): "urgent",
+    ("warn", "de"): "warnen",
 }
+
+# 语言码选项（语料里「这段话是什么语言」那道题）：显示各语言自己的语言名。
+LANGUAGE_LABELS = {
+    "en": {"zh": "英语", "ja": "英語", "ko": "영어", "de": "Englisch", "fr": "anglais", "es": "inglés", "pt": "inglês"},
+    "zh": {"zh": "中文", "ja": "中国語", "ko": "중국어", "de": "Chinesisch", "fr": "chinois", "es": "chino", "pt": "chinês"},
+    "ja": {"zh": "日语", "ja": "日本語", "ko": "일본어", "de": "Japanisch", "fr": "japonais", "es": "japonés", "pt": "japonês"},
+}
+for _code, _by_lang in LANGUAGE_LABELS.items():
+    for _lang, _label in _by_lang.items():
+        MANUAL_TERMS[(_code, _lang)] = _label
 
 
 def _term_words(text):
@@ -273,6 +309,11 @@ for b in briefs:
 
 # ---- 术语 ----
 terms = {f: sorted({b[f] for b in briefs if b.get(f)}) for f in FIELDS}
+# 选择项是另一套枚举（yes/no、urgent、escalate…），单独收集。
+# 语料里有一道「这段话是什么语言」的题，选项本身就是语言码，翻译它没有意义。
+# 语言码选项也是选项：显示成各语言自己的语言名（见 LANGUAGE_LABELS）。
+choice_values = sorted({c for b in briefs for c in (b.get("choices") or [])})
+terms["choice"] = choice_values
 term_jobs = set()
 for f, values in terms.items():
     for lang in LANGS:
@@ -291,12 +332,13 @@ existing_terms = {}
 if os.path.exists(TERMS_JSON):
     existing_terms = json.load(open(TERMS_JSON, encoding="utf-8"))
 # 只信任校验通过的旧值，坏值当作缺失重新翻。
+# 人工词表例外：与英文同形但确实是该语言正确写法的词（法语 incident）不算坏值。
 term = {
     (lang, v): txt
     for f_, bucket in existing_terms.items()
     for v, langs in bucket.items()
     for lang, txt in langs.items()
-    if valid_term(v, lang, txt)
+    if valid_term(v, lang, txt) or (v, lang) in MANUAL_TERMS
 }
 term_jobs = {(lang, v) for lang, v in term_jobs if (lang, v) not in term}
 
@@ -323,6 +365,8 @@ for b in briefs:
         q = body.get((lang, b["question"]))
         if not ctx or not q:
             continue
+        # choices 原样保留英文 slug：它们是判分用的键，翻译会改掉语义。
+        # 展示层用术语表按语言渲染，键不变。
         entry[lang] = {"context": ctx, "question": q, "choices": list(b.get("choices") or [])}
         applied += 1
 
@@ -345,6 +389,10 @@ for f_ in FIELDS:
                 slot[lang] = t
         # 旧文件里的坏值（拼错、照抄英文）不能在 merge 时被留下。
         for lang in list(slot):
+            # 人工词表是可信来源：像法语 incident 这种与英文同形的词，
+            # valid_term 会判成「没译」而删掉，但它们确实就是该语言的正确写法。
+            if (v, lang) in MANUAL_TERMS:
+                continue
             if not valid_term(v, lang, slot[lang]):
                 del slot[lang]
 with open(TERMS_JSON, "w", encoding="utf-8") as f:

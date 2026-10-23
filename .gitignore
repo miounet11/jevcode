@@ -45,3 +45,7 @@ __pycache__/
 
 # IndexNow 密钥（public/<key>.txt 才是要部署的，密钥本身不留仓库）
 .indexnow-key
+
+# llms.txt 由 scripts/generate-llms-txt.mjs 在每次 build 第一步生成。
+# 不忽略的话每轮构建都会把它变成未跟踪文件，脏区守卫于是永久拦下日更。
+public/llms.txt

@@ -3,8 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { languages, useTranslations, pick, type Lang } from '../../i18n/ui';
 import * as copySrc from '../../i18n/pages/briefs';
 import briefs from '../../data/daily-briefs.json';
-import { briefHeading } from '../../../scripts/lib/daily-briefs.mjs';
+import { briefHeading, localizeTerm, localizedBrief } from '../../../scripts/lib/daily-briefs.mjs';
 import { briefTerms } from '../../data/brief-terms';
+import briefI18n from '../../data/briefs-i18n.json';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -45,7 +46,7 @@ const listIndex = lang === 'en' || lang === 'zh' || localizedLangs.has(lang);
           {rows.map((row) => (
             <li>
               <a href={`/${lang}/briefs/${row.id}/`}>{briefHeading(row, lang, briefTerms)}</a>
-              <span class="blist__meta">{row.published} · {row.dimension} · {row.question}</span>
+              <span class="blist__meta">{row.published} · {localizeTerm('dimension', row.dimension, lang, briefTerms)} · {localizedBrief(row, lang, briefI18n).question}</span>
             </li>
           ))}
         </ul>

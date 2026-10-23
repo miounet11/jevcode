@@ -89,15 +89,18 @@ const hrefOf = (row: Brief) => `/${lang}/briefs/${row.id}/`;
         <p lang={bodyLang}>{text.question}</p>
         <h2>{copy.choices}</h2>
         <ul>
-          {text.choices.map((choice: string) => <li><code>{choice}</code></li>)}
+          {/* 选项显示本地化词，但键仍是英文 slug：判分与 accept 都按英文键走。 */}
+          {text.choices.map((choice: string) => (
+            <li><code>{localizeTerm('choice', choice, lang, briefTerms)}</code></li>
+          ))}
         </ul>
         <h2>{copy.accept}</h2>
         {entry.accept.length
-          ? <ul>{entry.accept.map((choice) => <li><code>{choice}</code></li>)}</ul>
+          ? <ul>{entry.accept.map((choice) => <li><code>{localizeTerm('choice', choice, lang, briefTerms)}</code></li>)}</ul>
           : <p>—</p>}
         <h2>{copy.judgment}</h2>
         {entry.judgment?.ok && entry.judgment.choice
-          ? <p><code>{entry.judgment.choice}</code> · {entry.judgment.model} · {entry.judgment.ts.slice(0, 10)}</p>
+          ? <p><code>{localizeTerm('choice', entry.judgment.choice, lang, briefTerms)}</code> · {entry.judgment.model} · {entry.judgment.ts.slice(0, 10)}</p>
           : <p>{copy.noJudgment}</p>}
         {(prev || next) && (
           <nav class="pager" aria-label="Pagination">

@@ -22,8 +22,10 @@
 // 未设置该变量时用默认清单；显式置空（HEALTHCHECK_UNITS=）表示不检查该类项。
 const splitCsv = (v) => v.split(',').map((s) => s.trim()).filter(Boolean);
 
+// systemd 只在 Linux 上有。在 macOS 上保留默认清单只会得到 3 条 ENOENT，
+// 每天推送假告警——巡检一旦开始说谎，真故障就没人信了。
 const UNIT_NAMES = process.env.HEALTHCHECK_UNITS === undefined
-  ? ['jevcode-playground', 'jevcode-intake', 'nginx']
+  ? (process.platform === 'linux' ? ['jevcode-playground', 'jevcode-intake', 'nginx'] : [])
   : splitCsv(process.env.HEALTHCHECK_UNITS);
 
 const HTTP_TARGETS = process.env.HEALTHCHECK_HTTP === undefined
@@ -42,12 +44,28 @@ const BACKUP_GLOB_RE = /^accounts-(\d{8}T\d{6})Z\.db$/;
 
 const failures = [];
 
+/**
+ * 判断某项真实状态，返回失败描述；正常返回 null。
+ *
+ * macOS 上没有 systemctl，直接跑会得到 ENOENT——那是「检查手段不存在」，
+ * 不是「服务挂了」。把它当失败会让每天巡检固定推 3 条假告警，告警就没人看了。
+ */
+export function unitFailure(state, errMessage) {
+  if (state === 'active') return null;
+  if (/ENOENT/.test(String(errMessage || '')) || state === 'unsupported') return 'unsupported';
+  return state || errMessage || 'unknown';
+}
+
 async function checkUnit(name) {
   const { execFile } = await import('node:child_process');
+  const platformSupported = process.platform === 'linux';
+  if (!platformSupported) return; // 非 systemd 平台不检查这一类，由调用方按平台决定清单
   return await new Promise((resolve) => {
     execFile('systemctl', ['is-active', name], { timeout: TIMEOUT_MS }, (err, stdout) => {
-      const state = String(stdout || '').trim();
-      if (state !== 'active') failures.push({ kind: 'systemd', target: name, detail: state || (err && err.message) || 'unknown' });
+      const detail = unitFailure(String(stdout || '').trim(), err && err.message);
+      if (detail && detail !== 'unsupported') {
+        failures.push({ kind: 'systemd', target: name, detail });
+      }
       resolve();
     });
   });
@@ -103,6 +121,24 @@ async function checkBackup() {
 }
 
 async function sendAlert(payload) {
+  // 飞书机器人要吃 msg_type/content.text，和 Slack 的 {text} 不同形。
+  // 走 notify-feishu.mjs 统一出口，避免两处各写一套格式。
+  const feishu = process.env.FEISHU_WEBHOOK;
+  if (feishu) {
+    const { execFile } = await import('node:child_process');
+    const text = payload.failures.map((f) => `- ${f.kind} ${f.target}：${f.detail}`).join('\n');
+    return await new Promise((resolve) => {
+      execFile(
+        process.execPath,
+        ['scripts/notify-feishu.mjs', `巡检发现 ${payload.failures.length} 项异常`, text],
+        { env: process.env, timeout: TIMEOUT_MS },
+        (err) => resolve(err
+          ? { delivered: false, channel: 'feishu', error: String(err.message ?? err) }
+          : { delivered: true, channel: 'feishu' }),
+      );
+    });
+  }
+
   const url = process.env.ALERT_WEBHOOK_URL;
   const text = `[${HOST}] 巡检发现 ${payload.failures.length} 项异常：\n` +
     payload.failures.map((f) => `- ${f.kind} ${f.target}：${f.detail}`).join('\n');
@@ -149,4 +185,6 @@ async function main() {
   process.exit(1);
 }
 
-main();
+// 被测试 import 时不能自动跑：main() 会真的发起网络请求并以 process.exit(1)
+// 结束，把整个测试进程带走（实测：只因导入 unitFailure 就让整套测试失败）。
+if (import.meta.url === `file://${process.argv[1]}`) main();

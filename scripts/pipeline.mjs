@@ -30,6 +30,7 @@ import { isEcoStale } from './lib/eco-staleness.mjs';
 import { dropLastCommit } from './lib/cycle-commit.mjs';
 import { describeReleaseFiles } from './lib/release-description.mjs';
 import { loadPendingState } from './lib/pending-state.mjs';
+import { FETCHED_FILES, STAGE_FILES, SIDE_FILES } from './lib/pipeline-files.mjs';
 
 const DRY = process.argv.includes('--dry-run');
 const SKIP_FETCH = process.argv.includes('--skip-fetch');
@@ -65,38 +66,6 @@ function say(msg) {
 /** 抓取会写回这些【已跟踪】文件；非发布路径必须全部还原，否则脏工作区
  *  会让 cron 的脏区保护在下一轮永久跳过（自锁死循环，实测复现）。
  *  动态卡片的两个产物同样由抓取阶段写入，必须一起还原。 */
-const FETCHED_FILES = [
-  'src/data/ecosystem.ts',
-  'src/data/community.ts',
-  'data/builds/cards.json',
-  'public/data/jev-cards.json',
-  'src/data/lab-supplement.json',
-  'src/data/lab-records.json',
-  'src/data/daily-briefs.json',
-];
-/** 允许进入自动提交的路径。其余工作区改动留在原地，不进这次发布。 */
-const STAGE_FILES = [
-  'src/data/ecosystem.ts',
-  'src/data/community.ts',
-  'data/builds/cards.json',
-  'public/data/jev-cards.json',
-  'src/data/lab-supplement.json',
-  'src/data/lab-records.json',
-  'src/data/daily-briefs.json',
-  // 案例的多语言正文与术语表跟随案例一起发布，否则语言站点拿不到增量。
-  'src/data/briefs-i18n.json',
-  'src/data/brief-terms.json',
-  'src/data/brief-terms.ts',
-];
-const SIDE_FILES = [
-  'src/data/community.ts',
-  'src/data/lab-supplement.json',
-  'src/data/lab-records.json',
-  'src/data/daily-briefs.json',
-  'src/data/briefs-i18n.json',
-  'src/data/brief-terms.json',
-  'src/data/brief-terms.ts',
-];
 function restoreFetched() {
   if (SKIP_FETCH) return;
   for (const file of FETCHED_FILES) {

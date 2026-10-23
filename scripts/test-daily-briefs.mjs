@@ -256,20 +256,79 @@ test('术语表不含照抄 slug / CJK 站点写英文的坏值', () => {
       const words = new Set(slug.toLowerCase().split(/[\s-]+/));
       for (const [lang, value] of Object.entries(langs)) {
         const flat = value.toLowerCase().split(/[\s-]+/);
-        if (value.toLowerCase() === slug.toLowerCase()) bad.push([field, slug, lang, value]);
-        else if (cjk.has(lang) && /^[\x00-\x7F]+$/.test(value)) bad.push([field, slug, lang, value]);
+        if (cjk.has(lang) && /^[\x00-\x7F]+$/.test(value)) bad.push([field, slug, lang, value]);
         else if (lang === 'ko' && !/[\uAC00-\uD7A3]/.test(value)) bad.push([field, slug, lang, value]);
-        else if (flat.every((w) => words.has(w))) bad.push([field, slug, lang, value]);
+        // 只抓「多词 slug 被拆成空格照抄」（"support ticket" 之类）。
+        // 单词同形不算错：德语 Compliance、法语 incident、西语 no 本来就这么写。
+        else if (words.size > 1 && flat.every((w) => words.has(w))) bad.push([field, slug, lang, value]);
       }
     }
   }
   assert.deepEqual(bad, []);
 });
 
-test('管线发布白名单含案例译文，且日更后紧跟翻译步骤', () => {
+test('管线发布白名单含案例译文，且日更后紧跟翻译步骤', async () => {
+  // 直接断言白名单本身，而不是在 pipeline.mjs 源码里搜字符串：
+  // 字符串写在注释或无关代码里同样会被正则命中。
   const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  const { STAGE_FILES, SIDE_FILES } = await import('./lib/pipeline-files.mjs');
   // 译文不进白名单，语言站点就永远拿不到日更增量。
-  assert.match(pipeline, /'src\/data\/briefs-i18n\.json'/);
-  assert.match(pipeline, /'src\/data\/brief-terms\.ts'/);
-  assert.match(pipeline, /python3 scripts\/translate-briefs\.py --lang=all/);
+  for (const file of ['src/data/briefs-i18n.json', 'src/data/brief-terms.json', 'src/data/brief-terms.ts']) {
+    assert.ok(STAGE_FILES.includes(file), `${file} 不在发布白名单里`);
+    assert.ok(SIDE_FILES.includes(file), `${file} 不在有改动即发布的判断里`);
+  }
+
+  // 抓取阶段写回的文件必须在还原白名单里，否则 HOLD 退出时留下脏文件，
+  // cron 的脏区保护下一轮就永久拦下这一轮。
+  const { FETCHED_FILES } = await import('./lib/pipeline-files.mjs');
+  for (const file of ['src/data/briefs-i18n.json', 'src/data/brief-terms.json', 'src/data/brief-terms.ts']) {
+    assert.ok(FETCHED_FILES.includes(file), `${file} 不在还原白名单里`);
+  }
+
+  // 还原的前提是这些文件真的由抓取阶段的翻译步骤写入，而不是手工维护。
+  const py = readFileSync(new URL('./translate-briefs.py', import.meta.url), 'utf8');
+  for (const file of ['src/data/briefs-i18n.json', 'src/data/brief-terms.json', 'src/data/brief-terms.ts']) {
+    assert.ok(py.includes(file), `翻译脚本没有写出 ${file}`);
+  }
+  // 翻译步骤必须在抓取阶段里（restoreFetched 只在抓取时生效）。
+  const fetchIdx = pipeline.indexOf('if (!SKIP_FETCH) {');
+  assert.ok(fetchIdx > -1);
+  const refreshIdx = pipeline.indexOf('refreshBriefs();');
+  assert.ok(refreshIdx > fetchIdx, 'refreshBriefs 不在抓取阶段里，翻译产物就不会被还原');
+
+  // 翻译必须在案例发布之后跑，否则新案例没有译文。
+  const briefIdx = pipeline.indexOf('node scripts/daily-briefs.mjs');
+  const trIdx = pipeline.indexOf('python3 scripts/translate-briefs.py --lang=all');
+  assert.ok(briefIdx > -1 && trIdx > -1);
+  assert.ok(trIdx > briefIdx, '翻译步骤没有跟在案例发布之后');
+});
+
+test('选择项按语言本地化，键仍是英文 slug', () => {
+  // 选项是判分用的键，翻译不能改键；展示层查术语表拿本地化词。
+  const terms = {
+    choice: { yes: { ja: 'はい', de: 'Ja' }, no: { ja: 'いいえ' } },
+  };
+  assert.equal(localizeTerm('choice', 'yes', 'ja', terms), 'はい');
+  assert.equal(localizeTerm('choice', 'no', 'ja', terms), 'いいえ');
+  // 没登记的选项回退原 slug，不产出空段
+  assert.equal(localizeTerm('choice', 'escalate', 'ja', terms), 'escalate');
+  // 英文站保持原样
+  assert.equal(localizeTerm('choice', 'yes', 'en', terms), 'yes');
+});
+
+test('每个选项在每个目标语言下都有译文', () => {
+  // 只查键存在会把「登记了但没译完」判成通过；这里逐语言核对。
+  const briefs = JSON.parse(readFileSync(new URL('../src/data/daily-briefs.json', import.meta.url), 'utf8'));
+  const terms = JSON.parse(readFileSync(new URL('../src/data/brief-terms.json', import.meta.url), 'utf8'));
+  const LANGS = ['zh', 'ja', 'ko', 'de', 'fr', 'es', 'pt'];
+  const missing = [];
+  for (const row of briefs) {
+    for (const choice of row.choices ?? []) {
+      for (const lang of LANGS) {
+        const value = terms.choice?.[choice]?.[lang];
+        if (typeof value !== 'string' || !value.trim()) missing.push(`${choice}/${lang}`);
+      }
+    }
+  }
+  assert.deepEqual(missing, []);
 });

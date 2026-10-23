@@ -20,11 +20,14 @@ LOG_DIR="$REPO/.research/pipeline-logs"
 # CommandLineTools 自带的 git 不走这条转发、不受许可影响，实测可用，故前置兜底。
 export PATH="/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 CRON_LINE="30 9 * * * cd $REPO && PATH=/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin bash scripts/pipeline-cron.sh >> $LOG_DIR/cron.log 2>&1"
+# 巡检独立成一条 cron，而不是并进管线：管线自己挂掉时，附着在它末尾的巡检
+# 根本不会执行——「发布停了」恰好是最该被巡检发现的情形。
+HEALTH_LINE="0 10,22 * * * cd $REPO && PATH=/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin bash scripts/healthcheck-cron.sh >> $LOG_DIR/healthcheck.log 2>&1"
 
 if [[ "${1:-}" == "--install" ]]; then
   # 幂等安装
-  (crontab -l 2>/dev/null | grep -vF "$REPO" ; echo "$CRON_LINE") | crontab -
-  echo "已安装每日 09:30 管线任务："
+  (crontab -l 2>/dev/null | grep -vF "$REPO" ; echo "$CRON_LINE" ; echo "$HEALTH_LINE") | crontab -
+  echo "已安装每日 09:30 管线任务与 10:00/22:00 巡检："
   crontab -l | grep "$REPO"
   exit 0
 fi
@@ -49,6 +52,21 @@ mark() {
     echo "查看：tail -50 $LOG_DIR/cron.log"
   } > "$f"
   echo "[cron] $prefix 写入 $f"
+
+  # 只有 ALERT 推飞书。SKIPPED/HOLD 是「按设计不发」，天天推送会把告警
+  # 变成噪音，真故障反而被淹没（9-21~9-24 连跳 4 天无人察觉就是这么来的）。
+  # 推送失败不改变本轮结果：告警通道不能反过来弄挂产物发布。
+  if [[ "$prefix" == "ALERT" ]]; then
+    local tail_log=""
+    if [[ -f "$LOG_DIR/cron.log" ]]; then
+      tail_log="$(tail -n 25 "$LOG_DIR/cron.log" 2>/dev/null || true)"
+    fi
+    node scripts/notify-feishu.mjs "管线告警：$msg" \
+      "主机：$(hostname)
+工作目录：$REPO
+日志尾部：
+$tail_log" || echo "[cron] 飞书告警投递失败（不影响本轮判定）"
+  fi
 }
 
 # 棘轮：连续未成功发布的轮数。
@@ -82,6 +100,11 @@ published_today() {
   grep -q '"stage":"released"' "$LOG_DIR/$(date -u +%F).jsonl" 2>/dev/null
 }
 
+# 本轮没发布的直接原因，由各分支在调用 streak_check 前设置。
+# 没有它，「连续 N 轮未发布」只说结果不说原因，收告警的人还得自己翻日志
+# （10-18~10-22 连续 5 天因工作区脏而跳过，就是这么没人发现的）。
+STREAK_REASON=""
+
 streak_check() {
   if [[ "$IS_DRY" == "1" ]]; then
     echo "[cron] 干跑，棘轮不计"
@@ -91,7 +114,9 @@ streak_check() {
   n="$(streak_bump)"
   echo "[cron] 连续未发布第 $n 轮"
   if [[ "$n" -ge "$STREAK_ALERT_AT" ]]; then
-    mark ALERT "连续 $n 轮未成功发布：内容已 $n 天未更新"
+    local why="${STREAK_REASON:-原因未记录}"
+    mark ALERT "连续 $n 轮未成功发布：内容已 $n 天未更新
+原因：$why"
   fi
 }
 
@@ -187,6 +212,10 @@ if [[ "$guard_code" -eq 2 ]]; then
   echo "[cron] 工作区有会进入发布的改动，跳过本轮"
   echo "$blocking"
   mark SKIPPED "管线跳过整轮：工作区有会进入发布的未提交改动"
+  # 这是「需要人动手」的一类跳过：管线自己不会清理工作区，会一直跳过。
+  # 把具体文件带进告警，才能让人一眼知道该提交什么。
+  STREAK_REASON="工作区有会进入发布的未提交改动，管线每轮都会跳过，需人工提交或还原：
+$(printf '%s\n' "$blocking" | head -20)"
   streak_check
   exit 0
 fi
@@ -239,6 +268,7 @@ if [[ "$code" -eq 2 ]]; then
     echo "查看：tail -50 $LOG_DIR/cron.log"
   } > "$HOLD_MARK"
   echo "[cron] 门 2 HOLD，标记写入 $HOLD_MARK"
+  STREAK_REASON="门 2 HOLD：本轮内容经判定不值得发布（按设计，非故障）"
   streak_check
   echo "===== cycle end（门 2 HOLD）====="
   exit 0
@@ -257,6 +287,11 @@ if [[ "$code" -ne 0 ]]; then
     echo "查看：tail -50 $LOG_DIR/cron.log"
   } > "$ALERT"
   echo "[cron] 管线失败（退出码 ${code}），告警写入 $ALERT"
+  if [[ "$TIMED_OUT" == "1" ]]; then
+    STREAK_REASON="管线运行超时（>${PIPELINE_TIMEOUT}s）被终止，退出码 ${code}"
+  else
+    STREAK_REASON="管线运行失败，退出码 ${code}；日志尾部见 cron.log"
+  fi
   streak_check
   echo "===== cycle failed ====="
   exit "$code"

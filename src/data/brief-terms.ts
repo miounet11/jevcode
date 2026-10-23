@@ -1,6 +1,458 @@
 /** 由 scripts/translate-briefs.py 生成，数据源 src/data/brief-terms.json。改词请改脚本后重跑。 */
 
 export const briefTerms: Record<string, Record<string, Record<string, string>>> = {
+  "choice": {
+    "account": {
+      "de": "konto",
+      "es": "cuenta",
+      "fr": "compte",
+      "ja": "アカウント",
+      "ko": "계정",
+      "pt": "conta",
+      "zh": "账户"
+    },
+    "actionable": {
+      "de": "handlungsorientiert",
+      "es": "ejecutable",
+      "fr": "actionnable",
+      "ja": "実行可能",
+      "ko": "실행 가능",
+      "pt": "acessível",
+      "zh": "可操作的"
+    },
+    "approve": {
+      "de": "genehmigen",
+      "es": "aprobar",
+      "fr": "approuver",
+      "ja": "承認",
+      "ko": "승인",
+      "pt": "aprovado",
+      "zh": "批准"
+    },
+    "ask-for-details": {
+      "de": "details anfordern",
+      "es": "pedir detalles",
+      "fr": "demander-des-details",
+      "ja": "詳細を尋ねる",
+      "ko": "상세히 물어보다",
+      "pt": "pedir detalhes",
+      "zh": "询问细节"
+    },
+    "billing": {
+      "de": "rechnung",
+      "es": "facturación",
+      "fr": "facturation",
+      "ja": "請求",
+      "ko": "청구",
+      "pt": "faturamento",
+      "zh": "账单"
+    },
+    "bug": {
+      "de": "fehler",
+      "es": "error",
+      "fr": "bogue",
+      "ja": "バグ",
+      "ko": "버그",
+      "pt": "inseto",
+      "zh": "缺陷"
+    },
+    "clean": {
+      "de": "sauber",
+      "es": "limpio",
+      "fr": "propre",
+      "ja": "無害",
+      "ko": "깨끗한",
+      "pt": "limpo",
+      "zh": "干净"
+    },
+    "close": {
+      "de": "nah",
+      "es": "cerrado",
+      "fr": "fermeture",
+      "ja": "とじる",
+      "ko": "닫기",
+      "pt": "fechada",
+      "zh": "关闭"
+    },
+    "complaint": {
+      "de": "beschwerde",
+      "es": "queja",
+      "fr": "plainte",
+      "ja": "クレーム",
+      "ko": "민원",
+      "pt": "reclamação",
+      "zh": "投诉"
+    },
+    "compliance": {
+      "de": "Compliance",
+      "es": "cumplimiento",
+      "fr": "conformité",
+      "ja": "コンプライアンス",
+      "ko": "준수",
+      "pt": "conformidade",
+      "zh": "合规"
+    },
+    "critical": {
+      "de": "kritisch",
+      "es": "crítico",
+      "fr": "critique",
+      "ja": "ひゃくじ",
+      "ko": "중요한",
+      "pt": "crítico",
+      "zh": "关键的"
+    },
+    "deny": {
+      "de": "verweigern",
+      "es": "denegado",
+      "fr": "refus",
+      "ja": "拒否",
+      "ko": "거부",
+      "pt": "negar",
+      "zh": "拒绝"
+    },
+    "emergency": {
+      "de": "notfall",
+      "es": "emergencia",
+      "fr": "urgence",
+      "ja": "緊急",
+      "ko": "긴급",
+      "pt": "emergencia",
+      "zh": "紧急"
+    },
+    "en": {
+      "de": "Englisch",
+      "es": "inglés",
+      "fr": "anglais",
+      "ja": "英語",
+      "ko": "영어",
+      "pt": "inglês",
+      "zh": "英语"
+    },
+    "escalate": {
+      "de": "steigern",
+      "es": "escalar",
+      "fr": "escalade",
+      "ja": "エスカレート",
+      "ko": "에스컬레이트",
+      "pt": "escalar",
+      "zh": "升级"
+    },
+    "feature-request": {
+      "de": "funktionswunsch",
+      "es": "solicitud de función",
+      "fr": "demande de fonctionnalité",
+      "ja": "機能リクエスト",
+      "ko": "기능 요청",
+      "pt": "solicitação de recurso",
+      "zh": "功能请求"
+    },
+    "flag": {
+      "de": "flagge",
+      "es": "bandera",
+      "fr": "drapeau",
+      "ja": "ふらぐ",
+      "ko": "플래그",
+      "pt": "bandeira",
+      "zh": "旗帜"
+    },
+    "good": {
+      "de": "gut",
+      "es": "bueno",
+      "fr": "bon",
+      "ja": "いい",
+      "ko": "좋음",
+      "pt": "bom",
+      "zh": "好"
+    },
+    "grant": {
+      "de": "gewährung",
+      "es": "concesión",
+      "fr": "subvention",
+      "ja": "承認",
+      "ko": "승인",
+      "pt": "concessão",
+      "zh": "授权"
+    },
+    "high": {
+      "de": "hoch",
+      "es": "alto",
+      "fr": "haut",
+      "ja": "たかい",
+      "ko": "높음",
+      "pt": "alto",
+      "zh": "高"
+    },
+    "incident": {
+      "de": "vorfall",
+      "es": "incidente",
+      "fr": "incident",
+      "ja": "じけん",
+      "ko": "사건",
+      "pt": "incidente",
+      "zh": "事件"
+    },
+    "investigate": {
+      "de": "untersuchung",
+      "es": "investigar",
+      "fr": "investigation",
+      "ja": "しらべる",
+      "ko": "조사",
+      "pt": "investigar",
+      "zh": "调查"
+    },
+    "ja": {
+      "de": "Japanisch",
+      "es": "japonés",
+      "fr": "japonais",
+      "ja": "日本語",
+      "ko": "일본어",
+      "pt": "japonês",
+      "zh": "日语"
+    },
+    "low": {
+      "de": "niedrig",
+      "es": "bajo",
+      "fr": "faible",
+      "ja": "低い",
+      "ko": "낮은",
+      "pt": "baixo",
+      "zh": "低"
+    },
+    "medium": {
+      "de": "mittel",
+      "es": "medio",
+      "fr": "moyen",
+      "ja": "ちゅう",
+      "ko": "중간",
+      "pt": "medio",
+      "zh": "媒介"
+    },
+    "needs-info": {
+      "de": "benötigt information",
+      "es": "necesita información",
+      "fr": "besoin-d-info",
+      "ja": "情報が必要",
+      "ko": "필요한 정보",
+      "pt": "precisa de informacao",
+      "zh": "需要信息"
+    },
+    "negative": {
+      "de": "negativ",
+      "es": "negativo",
+      "fr": "négatif",
+      "ja": "否定的",
+      "ko": "부정",
+      "pt": "negativo",
+      "zh": "负面"
+    },
+    "neutral": {
+      "de": "neutral",
+      "es": "neutral",
+      "fr": "neutre",
+      "ja": "ニュートラル",
+      "ko": "중립",
+      "pt": "neutro",
+      "zh": "中性"
+    },
+    "no": {
+      "de": "nein",
+      "es": "no",
+      "fr": "non",
+      "ja": "いいえ",
+      "ko": "아니요",
+      "pt": "não",
+      "zh": "不"
+    },
+    "normal": {
+      "de": "normal",
+      "es": "normal",
+      "fr": "normal",
+      "ja": "ふつう",
+      "ko": "정상",
+      "pt": "normal",
+      "zh": "正常"
+    },
+    "other": {
+      "de": "sonstige",
+      "es": "otro",
+      "fr": "autre",
+      "ja": "ほか",
+      "ko": "기타",
+      "pt": "outro",
+      "zh": "其他"
+    },
+    "poor": {
+      "de": "schlecht",
+      "es": "pobre",
+      "fr": "mauvaise",
+      "ja": "不良",
+      "ko": "가난한",
+      "pt": "pobre",
+      "zh": "贫穷"
+    },
+    "positive": {
+      "de": "positiv",
+      "es": "positivo",
+      "fr": "positif",
+      "ja": "ポジティブ",
+      "ko": "긍정",
+      "pt": "positivo",
+      "zh": "积极"
+    },
+    "praise": {
+      "de": "lob",
+      "es": "elogio",
+      "fr": "louange",
+      "ja": "ほめ",
+      "ko": "칭찬",
+      "pt": "elogio",
+      "zh": "赞美"
+    },
+    "product": {
+      "de": "produkt",
+      "es": "producto",
+      "fr": "produit",
+      "ja": "製品",
+      "ko": "제품",
+      "pt": "produto",
+      "zh": "产品"
+    },
+    "question": {
+      "de": "frage",
+      "es": "pregunta",
+      "fr": "question",
+      "ja": "質問",
+      "ko": "질문",
+      "pt": "pergunta",
+      "zh": "问题"
+    },
+    "remove": {
+      "de": "entfernen",
+      "es": "quitar",
+      "fr": "suppression",
+      "ja": "削除",
+      "ko": "제거",
+      "pt": "remover",
+      "zh": "移除"
+    },
+    "reply-with-answer": {
+      "de": "antworten",
+      "es": "responder con la respuesta",
+      "fr": "réponse-avec-réponse",
+      "ja": "返答",
+      "ko": "답장",
+      "pt": "resposta com resposta",
+      "zh": "回复答案"
+    },
+    "request": {
+      "de": "anfrage",
+      "es": "solicitud",
+      "fr": "demande",
+      "ja": "リクエスト",
+      "ko": "요청",
+      "pt": "solicitação",
+      "zh": "请求"
+    },
+    "review": {
+      "de": "bewertung",
+      "es": "reseña",
+      "fr": "examen",
+      "ja": "レビュー",
+      "ko": "리뷰",
+      "pt": "revisão",
+      "zh": "评论"
+    },
+    "routine": {
+      "de": "routine",
+      "es": "rutina",
+      "fr": "routine",
+      "ja": "ルーティン",
+      "ko": "일상",
+      "pt": "rotina",
+      "zh": "日常"
+    },
+    "safe": {
+      "de": "sicher",
+      "es": "seguro",
+      "fr": "sûr",
+      "ja": "安全",
+      "ko": "안전",
+      "pt": "seguro",
+      "zh": "安全"
+    },
+    "sales": {
+      "de": "verkauf",
+      "es": "ventas",
+      "fr": "ventes",
+      "ja": "うり",
+      "ko": "판매",
+      "pt": "vendas",
+      "zh": "销售"
+    },
+    "self-care": {
+      "de": "selbstpflege",
+      "es": "autocuidado",
+      "fr": "soins personnels",
+      "ja": "セルフケア",
+      "ko": "자기 관리",
+      "pt": "autocuidado",
+      "zh": "自我照顾"
+    },
+    "spam": {
+      "de": "Spam",
+      "es": "correo no deseado",
+      "fr": "pourriel",
+      "ja": "スパム",
+      "ko": "스팸",
+      "pt": "spam",
+      "zh": "垃圾"
+    },
+    "technical": {
+      "de": "technisch",
+      "es": "técnico",
+      "fr": "technique",
+      "ja": "ぎじゅつてき",
+      "ko": "기술",
+      "pt": "técnico",
+      "zh": "技术"
+    },
+    "urgent": {
+      "de": "dringend",
+      "es": "urgente",
+      "fr": "urgent",
+      "ja": "きゅう",
+      "ko": "긴급",
+      "pt": "urgente",
+      "zh": "紧急"
+    },
+    "warn": {
+      "de": "warnen",
+      "es": "advertencia",
+      "fr": "avertissement",
+      "ja": "警告",
+      "ko": "경고",
+      "pt": "aviso",
+      "zh": "警告"
+    },
+    "yes": {
+      "de": "ja",
+      "es": "si",
+      "fr": "oui",
+      "ja": "はい",
+      "ko": "네",
+      "pt": "sim",
+      "zh": "是"
+    },
+    "zh": {
+      "de": "Chinesisch",
+      "es": "chino",
+      "fr": "chinois",
+      "ja": "中国語",
+      "ko": "중국어",
+      "pt": "chinês",
+      "zh": "中文"
+    }
+  },
   "dimension": {
     "actionability": {
       "de": "handlungsfähigkeit",
@@ -30,6 +482,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "类别"
     },
     "compliance": {
+      "de": "Compliance",
       "es": "cumplimiento",
       "fr": "conformité",
       "ja": "コンプライアンス",
@@ -181,10 +634,12 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "情感"
     },
     "spam": {
+      "de": "Spam",
       "es": "correo no deseado",
       "fr": "pourriel",
       "ja": "スパム",
       "ko": "스팸",
+      "pt": "spam",
       "zh": "垃圾"
     },
     "topic": {
@@ -280,6 +735,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "de": "entwicklungswerkzeuge",
       "es": "herramientas de desarrollo",
       "fr": "outils de développement",
+      "ja": "でばつてえず",
       "ko": "개발 도구",
       "pt": "ferramentas de desenvolvimento",
       "zh": "开发工具"

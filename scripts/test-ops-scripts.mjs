@@ -283,9 +283,12 @@ test('intake 监听 8791，nginx 不再把 intake 反代到 8787', () => {
   assert.doesNotMatch(nginx, /proxy_pass http:\/\/127\.0\.0\.1:8787/);
   assert.match(nginx, /proxy_pass http:\/\/127\.0\.0\.1:8791/);
   assert.doesNotMatch(pipeline, /git add -A/);
-  assert.match(pipeline, /src\/data\/community\.ts/);
-  assert.match(pipeline, /src\/data\/lab-supplement\.json/);
-  assert.match(pipeline, /src\/data\/lab-records\.json/);
+  // 发布白名单已抽到 lib/pipeline-files.mjs，断言目标跟着搬。
+  assert.match(pipeline, /lib\/pipeline-files\.mjs/);
+  const files = readFileSync(new URL('./lib/pipeline-files.mjs', import.meta.url), 'utf8');
+  assert.match(files, /src\/data\/community\.ts/);
+  assert.match(files, /src\/data\/lab-supplement\.json/);
+  assert.match(files, /src\/data\/lab-records\.json/);
 });
 
 test('巡检：备份新鲜 → 通过（退出 0）', async () => {
@@ -475,4 +478,67 @@ test('push 失败撤销本轮提交；deploy 失败保留已推送的提交', ()
   assert.doesNotMatch(deploy, /dropThisCycleCommit\(\)/);
   assert.match(deploy, /deploy-failed/);
   assert.doesNotMatch(pipeline, /__placeholder__/);
+});
+
+test('飞书告警：msg_type/content.text 形态正确，未配置时不算失败', async () => {
+  const { feishuBody } = await import('./notify-feishu.mjs');
+  const body = feishuBody('管线失败', '退出码 1', new Date('2026-10-23T01:30:00Z'));
+  assert.equal(body.msg_type, 'text');
+  assert.match(body.content.text, /管线失败/);
+  assert.match(body.content.text, /退出码 1/);
+  assert.match(body.content.text, /2026-10-23 01:30:00Z/);
+
+  // 没配 FEISHU_WEBHOOK 时必须 exit 0：告警通道缺失不该让管线失败。
+  const { spawnSync } = await import('node:child_process');
+  const r = spawnSync(process.execPath, ['scripts/notify-feishu.mjs', 't', 'body'], {
+    env: { ...process.env, FEISHU_WEBHOOK: '' },
+    encoding: 'utf8',
+  });
+  assert.equal(r.status, 0);
+});
+
+test('cron 只有 ALERT 推飞书，SKIPPED/HOLD 不推', () => {
+  const sh = readFileSync(new URL('./pipeline-cron.sh', import.meta.url), 'utf8');
+  const markFn = sh.slice(sh.indexOf('mark() {'), sh.indexOf('# 棘轮'));
+  assert.match(markFn, /\[\[ "\$prefix" == "ALERT" \]\]/);
+  assert.match(markFn, /notify-feishu\.mjs/);
+  // 推送失败不得中断本轮
+  assert.match(markFn, /\|\| echo "\[cron\] 飞书告警投递失败/);
+});
+
+test('连续未发布的告警必须带原因，脏区跳过要列出具体文件', () => {
+  const sh = readFileSync(new URL('./pipeline-cron.sh', import.meta.url), 'utf8');
+  // 只说「连续 N 轮」不说原因，收告警的人还得自己翻日志
+  assert.match(sh, /STREAK_REASON/);
+  assert.match(sh, /原因：\$why/);
+  // 脏区跳过：必须把阻塞文件带进原因
+  const guardBlock = sh.slice(sh.indexOf('if [[ "$guard_code" -eq 2 ]]'), sh.indexOf('if [[ "$guard_code" -ne 0 ]]'));
+  assert.match(guardBlock, /STREAK_REASON=/);
+  assert.match(guardBlock, /printf '%s\\n' "\$blocking" \| head -20/);
+  // 每个 streak_check 调用点都要能带上原因（至少失败/HOLD/脏区三处）
+  const reasonSetters = sh.split('STREAK_REASON=').length - 1;
+  assert.ok(reasonSetters >= 4, `只找到 ${reasonSetters} 处 STREAK_REASON 设置`);
+});
+
+test('巡检：macOS 上不把 systemctl ENOENT 当成服务故障', async () => {
+  const { unitFailure } = await import('./healthcheck.mjs');
+  // 检查手段不存在 ≠ 服务挂了。当成失败会让巡检每天固定推假告警。
+  assert.equal(unitFailure('active', undefined), null);
+  assert.equal(unitFailure('', 'spawn systemctl ENOENT'), 'unsupported');
+  assert.equal(unitFailure('inactive', undefined), 'inactive');
+});
+
+test('巡检：日更停滞检测能报警，阈值默认 2 天', () => {
+  const sh = readFileSync(new URL('./healthcheck-cron.sh', import.meta.url), 'utf8');
+  // 只检查服务存活是不够的：10-18~10-22 三轮跳过时站点一直是 200。
+  assert.match(sh, /BRIEF_STALE_DAYS:-2/);
+  assert.match(sh, /日更已停/);
+  assert.match(sh, /SKIPPED-\*\.txt/);
+});
+
+test('巡检独立挂在 cron 上，不附着在管线末尾', () => {
+  const sh = readFileSync(new URL('./pipeline-cron.sh', import.meta.url), 'utf8');
+  // 管线自己挂掉时，附着其后的巡检不会执行——而那正是最该被发现的情形。
+  assert.match(sh, /HEALTH_LINE="0 10,22 \* \* \*/);
+  assert.match(sh, /echo "\$HEALTH_LINE"/);
 });

@@ -75,7 +75,8 @@ test('sitemap 丢掉没有源 markdown 的语言 URL', () => {
   assert.equal(sitemapInclude(url('/zh/cases/jev-alternatives/')), true);
   assert.equal(sitemapInclude(url('/ja/community/2101000339948282090/')), false);
   assert.equal(sitemapInclude(url('/en/community/2101000339948282090/')), true);
-  assert.equal(sitemapInclude(url('/ja/briefs/cov-ecommerce-urgency-01/')), false);
+  // ja 已有案例译文：简报 URL 与 noindex 口径一致，进 sitemap
+  assert.equal(sitemapInclude(url('/ja/briefs/cov-ecommerce-urgency-01/')), true);
   assert.equal(sitemapInclude(url('/en/briefs/cov-ecommerce-urgency-01/')), true);
   assert.equal(sitemapInclude(url('/zh/briefs/')), true);
   assert.equal(sitemapInclude(url('/en/login/')), false);
