@@ -886,5 +886,69 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-language-05",
+    "state": "Social post: Please reset the product listing for our workspace.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-06",
+    "state": "Ticket: 我们的 GMV 数据一直不对，请检查。",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-07",
+    "state": "Chat message: order のエラーが再発しています。",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-08",
+    "state": "Email received: Le GMV affiche une valeur incorrecte.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
   }
 ]

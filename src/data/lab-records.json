@@ -418,5 +418,29 @@
     "ok": true,
     "choice": "other",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-language-05",
+    "ts": "2026-10-24T01:32:52.988Z",
+    "ok": false,
+    "choice": null
+  },
+  {
+    "id": "cov-ecommerce-language-06",
+    "ts": "2026-10-24T01:33:03.511Z",
+    "ok": false,
+    "choice": null
+  },
+  {
+    "id": "cov-ecommerce-language-07",
+    "ts": "2026-10-24T01:33:14.015Z",
+    "ok": false,
+    "choice": null
+  },
+  {
+    "id": "cov-ecommerce-language-08",
+    "ts": "2026-10-24T01:33:24.545Z",
+    "ok": false,
+    "choice": null
   }
 ]

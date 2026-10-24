@@ -953,6 +953,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     },
     "streaming": {
       "es": "transmisión en línea",
+      "fr": "sliding_scale",
       "ja": "ストリーミング",
       "ko": "스트리밍",
       "zh": "流媒体"
