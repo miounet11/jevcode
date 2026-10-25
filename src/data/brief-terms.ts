@@ -1066,6 +1066,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "note": {
       "de": "hinweis",
       "es": "nota",
+      "fr": "note French equivalent: notice",
       "ja": "ふ",
       "ko": "노트",
       "pt": "nota",

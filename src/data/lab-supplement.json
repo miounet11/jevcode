@@ -950,5 +950,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-pii-01",
+    "state": "SMS: The order record shows the client full address and ID number.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-02",
+    "state": "API payload field: A buyer pasted their passport number into the product listing ticket.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-03",
+    "state": "Internal note: Card ending 4242 and date of birth were included in the order.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-04",
+    "state": "Social post: Someone uploaded a scan of their national ID to the product listing.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
   }
 ]

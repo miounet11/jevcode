@@ -6206,7 +6206,12 @@
       "billing"
     ],
     "published": "2026-10-24",
-    "judgment": null
+    "judgment": {
+      "ok": true,
+      "choice": "billing",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:24.298Z"
+    }
   },
   {
     "id": "cov-devtools-category-01",
@@ -6227,7 +6232,12 @@
       "bug"
     ],
     "published": "2026-10-24",
-    "judgment": null
+    "judgment": {
+      "ok": true,
+      "choice": "bug",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:25.336Z"
+    }
   },
   {
     "id": "cov-gaming-risk-level-01",
@@ -6247,7 +6257,12 @@
       "high"
     ],
     "published": "2026-10-24",
-    "judgment": null
+    "judgment": {
+      "ok": true,
+      "choice": "high",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:26.375Z"
+    }
   },
   {
     "id": "cov-media-next-action-01",
@@ -6268,7 +6283,12 @@
       "reply-with-answer"
     ],
     "published": "2026-10-24",
-    "judgment": null
+    "judgment": {
+      "ok": true,
+      "choice": "reply-with-answer",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:27.446Z"
+    }
   },
   {
     "id": "cov-streaming-quality-01",
@@ -6287,7 +6307,12 @@
       "good"
     ],
     "published": "2026-10-24",
-    "judgment": null
+    "judgment": {
+      "ok": true,
+      "choice": "good",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:28.496Z"
+    }
   },
   {
     "id": "cov-adtech-medical-triage-01",
@@ -7333,6 +7358,1244 @@
       "choice": "yes",
       "model": "clavue-jev",
       "ts": "2026-10-24T01:38:11.717Z"
+    }
+  },
+  {
+    "id": "cov-automotive-intent-01",
+    "industry": "automotive",
+    "dimension": "intent",
+    "tag": "privacy",
+    "scene": "support-ticket",
+    "stage": "audit",
+    "context": "Ticket: This is the third time the vehicle broke. Unacceptable.",
+    "question": "What is the primary intent of this message?",
+    "choices": [
+      "complaint",
+      "question",
+      "request",
+      "praise"
+    ],
+    "accept": [
+      "complaint"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "complaint",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:20.852Z"
+    }
+  },
+  {
+    "id": "cov-aerospace-safety-01",
+    "industry": "aerospace",
+    "dimension": "safety",
+    "tag": "third-party",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: The component may expose customer data if the dispatch reliability keeps failing.",
+    "question": "Does this content pose a safety risk requiring immediate review?",
+    "choices": [
+      "safe",
+      "review"
+    ],
+    "accept": [
+      "review"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "review",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:22.376Z"
+    }
+  },
+  {
+    "id": "cov-energy-compliance-01",
+    "industry": "energy",
+    "dimension": "compliance",
+    "tag": "regression",
+    "scene": "alert",
+    "stage": "audit",
+    "context": "Alert fired: We need to store meter data for EU customers outside the EU.",
+    "question": "Does this require a compliance or regulatory review before proceeding?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:23.942Z"
+    }
+  },
+  {
+    "id": "cov-utilities-billing-dispute-01",
+    "industry": "utilities",
+    "dimension": "billing-dispute",
+    "tag": "data-loss",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: I was charged twice for the same service account this morning.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:25.006Z"
+    }
+  },
+  {
+    "id": "cov-telecom-priority-01",
+    "industry": "telecom",
+    "dimension": "priority",
+    "tag": "deadline",
+    "scene": "sms",
+    "stage": "audit",
+    "context": "SMS: All line processing is halted; no workaround exists.",
+    "question": "What priority should this ticket receive?",
+    "choices": [
+      "critical",
+      "high",
+      "normal",
+      "low"
+    ],
+    "accept": [
+      "critical"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "critical",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:26.579Z"
+    }
+  },
+  {
+    "id": "cov-realestate-sentiment-01",
+    "industry": "realestate",
+    "dimension": "sentiment",
+    "tag": "localization",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: Thanks for the fast fix on the listing.",
+    "question": "What is the sentiment of this message?",
+    "choices": [
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "accept": [
+      "positive"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "positive",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:27.641Z"
+    }
+  },
+  {
+    "id": "cov-construction-language-01",
+    "industry": "construction",
+    "dimension": "language",
+    "tag": "sla-breach",
+    "scene": "support-ticket",
+    "stage": "audit",
+    "context": "Ticket: The change order keeps failing every morning.",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "en"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "en",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:29.401Z"
+    }
+  },
+  {
+    "id": "cov-legal-pii-01",
+    "industry": "legal",
+    "dimension": "pii",
+    "tag": "chargeback",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: The matter record shows the client full address and ID number.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:30.509Z"
+    }
+  },
+  {
+    "id": "cov-hr-toxicity-01",
+    "industry": "hr",
+    "dimension": "toxicity",
+    "tag": "privacy",
+    "scene": "alert",
+    "stage": "audit",
+    "context": "Alert fired: The candidate called our staff useless idiots in the requisition thread.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "flag"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "flag",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:31.569Z"
+    }
+  },
+  {
+    "id": "cov-recruiting-fraud-01",
+    "industry": "recruiting",
+    "dimension": "fraud",
+    "tag": "third-party",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: Same card used for 40 application in 3 minutes from 6 countries.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "investigate"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "investigate",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:33.321Z"
+    }
+  },
+  {
+    "id": "cov-government-spam-01",
+    "industry": "government",
+    "dimension": "spam",
+    "tag": "regression",
+    "scene": "sms",
+    "stage": "audit",
+    "context": "SMS: Buy cheap form now! Click here for 90% off benefit claim.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "spam"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "spam",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:34.419Z"
+    }
+  },
+  {
+    "id": "cov-nonprofit-escalation-01",
+    "industry": "nonprofit",
+    "dimension": "escalation",
+    "tag": "data-loss",
+    "scene": "note",
+    "stage": "routing",
+    "context": "Internal note: donor retention breach affecting all donor in production right now.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "escalate"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:35.465Z"
+    }
+  },
+  {
+    "id": "cov-travel-routing-01",
+    "industry": "travel",
+    "dimension": "routing",
+    "tag": "deadline",
+    "scene": "support-ticket",
+    "stage": "audit",
+    "context": "Ticket: The booking invoice was charged twice this month.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "billing"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "billing",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:36.519Z"
+    }
+  },
+  {
+    "id": "cov-hospitality-category-01",
+    "industry": "hospitality",
+    "dimension": "category",
+    "tag": "localization",
+    "scene": "email",
+    "stage": "routing",
+    "context": "Email received: The reservation crashes when exporting more than 1000 rows.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "bug"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "incident",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:37.819Z"
+    }
+  },
+  {
+    "id": "cov-restaurant-risk-level-01",
+    "industry": "restaurant",
+    "dimension": "risk-level",
+    "tag": "sla-breach",
+    "scene": "alert",
+    "stage": "audit",
+    "context": "Alert fired: Possible data loss in the delivery order backup job.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "high"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "high",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:38.860Z"
+    }
+  },
+  {
+    "id": "cov-retail-next-action-01",
+    "industry": "retail",
+    "dimension": "next-action",
+    "tag": "chargeback",
+    "scene": "transcript",
+    "stage": "routing",
+    "context": "Call transcript: How do I reset the return password?",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "reply-with-answer"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "reply-with-answer",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:39.927Z"
+    }
+  },
+  {
+    "id": "cov-marketplace-quality-01",
+    "industry": "marketplace",
+    "dimension": "quality",
+    "tag": "privacy",
+    "scene": "sms",
+    "stage": "audit",
+    "context": "SMS: Thanks for reporting the listing. We reproduced it and a fix ships tonight; here is the workaround.",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "good"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "good",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:40.981Z"
+    }
+  },
+  {
+    "id": "cov-fintech-billing-dispute-01",
+    "industry": "fintech",
+    "dimension": "billing-dispute",
+    "tag": "security",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: I was charged twice for the same transaction this morning.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:42.087Z"
+    }
+  },
+  {
+    "id": "cov-banking-priority-01",
+    "industry": "banking",
+    "dimension": "priority",
+    "tag": "auto-renewal",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: All wire transfer processing is halted; no workaround exists.",
+    "question": "What priority should this ticket receive?",
+    "choices": [
+      "critical",
+      "high",
+      "normal",
+      "low"
+    ],
+    "accept": [
+      "critical"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "critical",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:43.137Z"
+    }
+  },
+  {
+    "id": "cov-insurance-sentiment-01",
+    "industry": "insurance",
+    "dimension": "sentiment",
+    "tag": "performance",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: Thanks for the fast fix on the claim.",
+    "question": "What is the sentiment of this message?",
+    "choices": [
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "accept": [
+      "positive"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "positive",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:44.195Z"
+    }
+  },
+  {
+    "id": "cov-healthcare-language-01",
+    "industry": "healthcare",
+    "dimension": "language",
+    "tag": "refund",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: The appointment keeps failing every morning.",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "en"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "en",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:45.242Z"
+    }
+  },
+  {
+    "id": "cov-pharma-pii-01",
+    "industry": "pharma",
+    "dimension": "pii",
+    "tag": "churn-risk",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: The prescription record shows the client full address and ID number.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:46.342Z"
+    }
+  },
+  {
+    "id": "cov-telehealth-toxicity-01",
+    "industry": "telehealth",
+    "dimension": "toxicity",
+    "tag": "accessibility",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: The patient called our staff useless idiots in the session thread.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "flag"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "flag",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:47.398Z"
+    }
+  },
+  {
+    "id": "cov-education-fraud-01",
+    "industry": "education",
+    "dimension": "fraud",
+    "tag": "audit-trail",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: Same card used for 40 enrollment in 3 minutes from 6 countries.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "investigate"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "investigate",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:48.462Z"
+    }
+  },
+  {
+    "id": "cov-edtech-spam-01",
+    "industry": "edtech",
+    "dimension": "spam",
+    "tag": "outage",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: Buy cheap lesson now! Click here for 90% off subscription.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "spam"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "spam",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:49.548Z"
+    }
+  },
+  {
+    "id": "cov-university-escalation-01",
+    "industry": "university",
+    "dimension": "escalation",
+    "tag": "security",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: acceptance rate breach affecting all applicant in production right now.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "escalate"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:50.602Z"
+    }
+  },
+  {
+    "id": "cov-saas-routing-01",
+    "industry": "saas",
+    "dimension": "routing",
+    "tag": "auto-renewal",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: The subscription invoice was charged twice this month.",
+    "question": "Which team should handle this ticket?",
+    "choices": [
+      "billing",
+      "technical",
+      "sales",
+      "compliance"
+    ],
+    "accept": [
+      "billing"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "billing",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:52.322Z"
+    }
+  },
+  {
+    "id": "cov-paas-category-01",
+    "industry": "paas",
+    "dimension": "category",
+    "tag": "performance",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: The instance crashes when exporting more than 1000 rows.",
+    "question": "Which category best fits this ticket?",
+    "choices": [
+      "bug",
+      "feature-request",
+      "question",
+      "incident"
+    ],
+    "accept": [
+      "bug"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "incident",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:53.373Z"
+    }
+  },
+  {
+    "id": "cov-cybersecurity-risk-level-01",
+    "industry": "cybersecurity",
+    "dimension": "risk-level",
+    "tag": "refund",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: Possible data loss in the incident backup job.",
+    "question": "What risk level does this issue carry?",
+    "choices": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "accept": [
+      "high"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "high",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:54.562Z"
+    }
+  },
+  {
+    "id": "cov-devtools-next-action-01",
+    "industry": "devtools",
+    "dimension": "next-action",
+    "tag": "churn-risk",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: How do I reset the build password?",
+    "question": "What is the best next action?",
+    "choices": [
+      "reply-with-answer",
+      "ask-for-details",
+      "escalate",
+      "close"
+    ],
+    "accept": [
+      "reply-with-answer"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "reply-with-answer",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:55.683Z"
+    }
+  },
+  {
+    "id": "cov-gaming-quality-01",
+    "industry": "gaming",
+    "dimension": "quality",
+    "tag": "accessibility",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: Thanks for reporting the match. We reproduced it and a fix ships tonight; here is the workaround.",
+    "question": "Does this support reply meet quality standards?",
+    "choices": [
+      "good",
+      "poor"
+    ],
+    "accept": [
+      "good"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "good",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:56.773Z"
+    }
+  },
+  {
+    "id": "cov-media-medical-triage-01",
+    "industry": "media",
+    "dimension": "medical-triage",
+    "tag": "audit-trail",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: Chest pain and shortness of breath now, article history.",
+    "question": "What triage level does this health-related message indicate?",
+    "choices": [
+      "emergency",
+      "urgent",
+      "routine",
+      "self-care"
+    ],
+    "accept": [
+      "emergency"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "emergency",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:57.853Z"
+    }
+  },
+  {
+    "id": "cov-streaming-financial-advice-01",
+    "industry": "streaming",
+    "dimension": "financial-advice",
+    "tag": "outage",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: Should I move my stream into this playlist given my age?",
+    "question": "Is this a request for personalized financial advice?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "no",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:32:58.925Z"
+    }
+  },
+  {
+    "id": "cov-adtech-data-access-01",
+    "industry": "adtech",
+    "dimension": "data-access",
+    "tag": "security",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: Verified advertiser requests export of their own campaign data.",
+    "question": "Should this data access request be granted?",
+    "choices": [
+      "grant",
+      "deny"
+    ],
+    "accept": [
+      "grant"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "grant",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:00.012Z"
+    }
+  },
+  {
+    "id": "cov-marketing-content-moderation-01",
+    "industry": "marketing",
+    "dimension": "content-moderation",
+    "tag": "auto-renewal",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: The lead listing is accurate and follows policy.",
+    "question": "What moderation action is appropriate?",
+    "choices": [
+      "approve",
+      "remove",
+      "warn"
+    ],
+    "accept": [
+      "approve"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "approve",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:01.166Z"
+    }
+  },
+  {
+    "id": "cov-crm-topic-01",
+    "industry": "crm",
+    "dimension": "topic",
+    "tag": "performance",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: I cannot log into my deal after the password change.",
+    "question": "What is the topic of this message?",
+    "choices": [
+      "account",
+      "technical",
+      "billing",
+      "product"
+    ],
+    "accept": [
+      "account"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "technical",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:02.210Z"
+    }
+  },
+  {
+    "id": "cov-logistics-actionability-01",
+    "industry": "logistics",
+    "dimension": "actionability",
+    "tag": "refund",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: Export of the shipment fails with error 500 for tenant acme.",
+    "question": "Is this message actionable as written?",
+    "choices": [
+      "actionable",
+      "needs-info"
+    ],
+    "accept": [
+      "actionable"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "actionable",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:08.344Z"
+    }
+  },
+  {
+    "id": "cov-supplychain-urgency-01",
+    "industry": "supplychain",
+    "dimension": "urgency",
+    "tag": "security",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: supplier reports the purchase order is failing right now and needs it fixed today.",
+    "question": "Does this message convey urgency that should jump the queue?",
+    "choices": [
+      "yes",
+      "no"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:09.849Z"
+    }
+  },
+  {
+    "id": "cov-manufacturing-intent-01",
+    "industry": "manufacturing",
+    "dimension": "intent",
+    "tag": "auto-renewal",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: This is the third time the work order broke. Unacceptable.",
+    "question": "What is the primary intent of this message?",
+    "choices": [
+      "complaint",
+      "question",
+      "request",
+      "praise"
+    ],
+    "accept": [
+      "complaint"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "complaint",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:10.923Z"
+    }
+  },
+  {
+    "id": "cov-automotive-safety-01",
+    "industry": "automotive",
+    "dimension": "safety",
+    "tag": "performance",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: The part may expose customer data if the recall rate keeps failing.",
+    "question": "Does this content pose a safety risk requiring immediate review?",
+    "choices": [
+      "safe",
+      "review"
+    ],
+    "accept": [
+      "review"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "review",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:11.964Z"
+    }
+  },
+  {
+    "id": "cov-aerospace-compliance-01",
+    "industry": "aerospace",
+    "dimension": "compliance",
+    "tag": "refund",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: We need to store flight data for EU customers outside the EU.",
+    "question": "Does this require a compliance or regulatory review before proceeding?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:13.040Z"
+    }
+  },
+  {
+    "id": "cov-energy-billing-dispute-01",
+    "industry": "energy",
+    "dimension": "billing-dispute",
+    "tag": "churn-risk",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: I was charged twice for the same meter this morning.",
+    "question": "Is this a billing dispute that needs a refund decision?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:14.070Z"
+    }
+  },
+  {
+    "id": "cov-utilities-priority-01",
+    "industry": "utilities",
+    "dimension": "priority",
+    "tag": "accessibility",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: All service account processing is halted; no workaround exists.",
+    "question": "What priority should this ticket receive?",
+    "choices": [
+      "critical",
+      "high",
+      "normal",
+      "low"
+    ],
+    "accept": [
+      "critical"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "critical",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:15.134Z"
+    }
+  },
+  {
+    "id": "cov-telecom-sentiment-01",
+    "industry": "telecom",
+    "dimension": "sentiment",
+    "tag": "audit-trail",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: Thanks for the fast fix on the line.",
+    "question": "What is the sentiment of this message?",
+    "choices": [
+      "positive",
+      "negative",
+      "neutral"
+    ],
+    "accept": [
+      "positive"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "positive",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:16.344Z"
+    }
+  },
+  {
+    "id": "cov-realestate-language-01",
+    "industry": "realestate",
+    "dimension": "language",
+    "tag": "outage",
+    "scene": "social",
+    "stage": "response",
+    "context": "Social post: The listing keeps failing every morning.",
+    "question": "Which language is this message written in?",
+    "choices": [
+      "en",
+      "zh",
+      "ja",
+      "other"
+    ],
+    "accept": [
+      "en"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "en",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:17.435Z"
+    }
+  },
+  {
+    "id": "cov-construction-pii-01",
+    "industry": "construction",
+    "dimension": "pii",
+    "tag": "security",
+    "scene": "chat",
+    "stage": "follow-up",
+    "context": "Chat message: The change order record shows the client full address and ID number.",
+    "question": "Does this message contain personally identifiable information?",
+    "choices": [
+      "no",
+      "yes"
+    ],
+    "accept": [
+      "yes"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "yes",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:18.559Z"
+    }
+  },
+  {
+    "id": "cov-legal-toxicity-01",
+    "industry": "legal",
+    "dimension": "toxicity",
+    "tag": "auto-renewal",
+    "scene": "review",
+    "stage": "response",
+    "context": "Review posted: The client called our staff useless idiots in the matter thread.",
+    "question": "Should this message be flagged for toxic or abusive content?",
+    "choices": [
+      "clean",
+      "flag"
+    ],
+    "accept": [
+      "flag"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "flag",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:19.633Z"
+    }
+  },
+  {
+    "id": "cov-hr-fraud-01",
+    "industry": "hr",
+    "dimension": "fraud",
+    "tag": "performance",
+    "scene": "log",
+    "stage": "follow-up",
+    "context": "Log line: Same card used for 40 requisition in 3 minutes from 6 countries.",
+    "question": "Does this pattern suggest fraud requiring investigation?",
+    "choices": [
+      "no",
+      "investigate"
+    ],
+    "accept": [
+      "investigate"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "investigate",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:20.662Z"
+    }
+  },
+  {
+    "id": "cov-recruiting-spam-01",
+    "industry": "recruiting",
+    "dimension": "spam",
+    "tag": "refund",
+    "scene": "form",
+    "stage": "response",
+    "context": "Form submission: Buy cheap interview now! Click here for 90% off application.",
+    "question": "Is this message spam or unsolicited bulk content?",
+    "choices": [
+      "no",
+      "spam"
+    ],
+    "accept": [
+      "spam"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "spam",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:21.682Z"
+    }
+  },
+  {
+    "id": "cov-government-escalation-01",
+    "industry": "government",
+    "dimension": "escalation",
+    "tag": "churn-risk",
+    "scene": "api-payload",
+    "stage": "follow-up",
+    "context": "API payload field: processing time breach affecting all citizen in production right now.",
+    "question": "Should this be escalated to a senior or on-call team?",
+    "choices": [
+      "no",
+      "escalate"
+    ],
+    "accept": [
+      "escalate"
+    ],
+    "published": "2026-10-25",
+    "judgment": {
+      "ok": true,
+      "choice": "escalate",
+      "model": "clavue-jev",
+      "ts": "2026-10-25T01:33:23.238Z"
     }
   }
 ]

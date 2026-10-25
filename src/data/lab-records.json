@@ -442,5 +442,33 @@
     "ts": "2026-10-24T01:33:24.545Z",
     "ok": false,
     "choice": null
+  },
+  {
+    "id": "cov-ecommerce-pii-01",
+    "ts": "2026-10-25T01:32:14.501Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-pii-02",
+    "ts": "2026-10-25T01:32:16.039Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-pii-03",
+    "ts": "2026-10-25T01:32:17.062Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-pii-04",
+    "ts": "2026-10-25T01:32:18.132Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
   }
 ]
