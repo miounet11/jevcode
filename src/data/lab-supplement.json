@@ -1006,5 +1006,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-pii-05",
+    "state": "Ticket: The order total is off by a rounding error.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-06",
+    "state": "Chat message: Please add dark mode to the product listing.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-07",
+    "state": "Email received: The GMV chart legend is hard to read.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-08",
+    "state": "Review posted: Rename the order column header to \"Amount\".",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
   }
 ]

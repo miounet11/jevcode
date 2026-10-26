@@ -782,6 +782,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "fr": "technologie financière",
       "ja": "フィンテック",
       "ko": "핀테크",
+      "pt": "financeiro",
       "zh": "金融科技"
     },
     "gaming": {
