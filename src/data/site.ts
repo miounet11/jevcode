@@ -276,6 +276,46 @@ export interface Partner {
 
 export const partners: Partner[] = [
   {
+    name: "GPU Unlock",
+    url: "https://gpu-unlock.com",
+    desc: {
+      zh: "NVIDIA SM 频率选择覆盖：构建、启动顺序与自检",
+      en: "NVIDIA SM speed-select override: build, boot order and checks",
+    },
+  },
+  {
+    name: "GPU Unlock Reference",
+    url: "https://gpuunlock.com",
+    desc: {
+      zh: "模块接受的设备 ID 与同卡实测数据",
+      en: "Accepted device IDs and same-card measurements",
+    },
+  },
+  {
+    name: "Android 去广告",
+    url: "https://www.androidadcleaner.com",
+    desc: {
+      zh: "用 adb 关闭国产安卓系统广告，不 root",
+      en: "Ad cleanup for Chinese Android phones over adb, no root",
+    },
+  },
+  {
+    name: "CleanYourTV",
+    url: "https://www.cleanyourtv.cc",
+    desc: {
+      zh: "用 adb 清理 Android TV 盒子",
+      en: "Debloat and de-ad Android TV boxes over adb",
+    },
+  },
+  {
+    name: "Strata",
+    url: "https://www.stratat.com",
+    desc: {
+      zh: "在自有 NVIDIA GPU 上本地运行大模型：成本、显存与吞吐",
+      en: "Run large models locally on your own NVIDIA GPUs: cost, VRAM and throughput",
+    },
+  },
+  {
     name: 'Clavue',
     url: 'https://www.clavue.com/',
     desc: {
