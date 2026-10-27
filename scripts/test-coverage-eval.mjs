@@ -16,7 +16,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync, readFileSync, readdirSyn
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chunk, summarize, renderReport, misses, shouldFail } from './lib/coverage-eval.mjs';
+import { chunk, summarize, renderReport, misses, shouldFail, corpusFingerprint, describeFilters } from './lib/coverage-eval.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -302,6 +302,62 @@ test('聚合：语料进度 + 残值行业逐个点名，不只丢一句通用�
     assert.match(md, /以下 1 个行业已答不足应有 90%/, '应给出残值行业数量');
     assert.match(md, /`travel`/, '应逐个点名残值行业');
     assert.doesNotMatch(md, /`ecommerce`/, '跑齐的行业不该被点名');
+    // 聚合结果跨多个分片日志拼成，必须带指纹才能与分片报表判断是否同一批题
+    assert.match(md, /- 语料指纹：`[0-9a-f]{8}`/, '总表必须记录语料指纹');
+    assert.match(md, new RegExp(`语料指纹：\`${corpusFingerprint(cases).fingerprint}\``), '总表指纹应与语料一致');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('聚合：从未评测的行业必须单独点名，不能混进「未跑齐」', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-agg-never-'));
+  try {
+    mkdirSync(path.join(dir, 'data'), { recursive: true });
+    mkdirSync(path.join(dir, 'docs/coverage-full'), { recursive: true });
+    mkdirSync(path.join(dir, '.data/runs'), { recursive: true });
+    // ecommerce 10 条全答；travel 10 条只答 1 条（残值）；robotics 10 条一条没答（从未评测）
+    const cases = [];
+    for (const ind of ['ecommerce', 'travel', 'robotics']) {
+      for (let i = 0; i < 10; i++) cases.push({ id: `${ind[0]}${i}`, accept: ['yes'], industry: ind, dimension: 'urgency' });
+    }
+    writeFileSync(path.join(dir, 'data/coverage-cases.json'), JSON.stringify(cases));
+    const answered = cases.filter((c) => c.industry === 'ecommerce' || c.id === 't0');
+    const rows = answered.map((c) => JSON.stringify({ ts: '2026-10-05T00:00:00Z', id: c.id, ours: { ok: true, choice: 'yes' }, peer: { ok: true, choice: 'yes' } }));
+    writeFileSync(path.join(dir, '.data/runs/compare-log-a.jsonl'), rows.join('\n') + '\n');
+
+    execFileSync(process.execPath, [path.join(ROOT, 'scripts/aggregate-coverage.mjs')], { cwd: dir, encoding: 'utf8', timeout: 30000 });
+    const md = readFileSync(path.join(dir, 'docs/coverage-full/SUMMARY.md'), 'utf8');
+
+    // 从未评测的 robotics 必须出现在「从未评测」那一类，且带「必须补跑」
+    assert.match(md, /以下 1 个行业\*\*从未评测\*\*/, '应单独统计从未评测的行业');
+    const neverLine = md.split('\n').find((l) => l.includes('从未评测') && l.includes('`robotics`'));
+    assert.ok(neverLine, 'robotics 应出现在从未评测一行');
+    assert.match(neverLine, /必须补跑/);
+    // 残值行只能有 travel，绝不能把 robotics 也算成轮转残值
+    const staleLine = md.split('\n').find((l) => l.includes('未跑齐'));
+    assert.ok(staleLine, '应仍有残值行');
+    assert.match(staleLine, /`travel`/);
+    assert.doesNotMatch(staleLine, /`robotics`/, '从未评测的行业不该被写成轮转残值');
+
+    // 达标数不得把零记录行业算进去：3 行业里只有 ecommerce 达标，
+    // 旧公式 3-1=2 会把 robotics 也算成达标，读起来像「已完成 2/3」。
+    assert.match(md, /1 \/ 3 行业已答≥90%/, '零记录行业不得计入达标数');
+
+    // 表格行里零记录不能渲染成裸 0.0%：那读起来像「全答错了」，实际是没评过。
+    const roboticsRow = md.split('\n').find((l) => l.startsWith('| robotics'));
+    assert.ok(roboticsRow, 'robotics 应有表格行');
+    assert.match(roboticsRow, /未评测/, '零记录行业行必须标注「未评测」');
+    const ecommerceRow = md.split('\n').find((l) => l.startsWith('| ecommerce'));
+    assert.doesNotMatch(ecommerceRow, /未评测/, '跑齐的行业不该被标未评测');
+    // 残值行业（评过但不足 90%）仍只打普通 ⚠，不能也标成未评测
+    const travelRow = md.split('\n').find((l) => l.startsWith('| travel'));
+    assert.match(travelRow, /⚠/, '残值行业应带警示');
+    assert.doesNotMatch(travelRow, /未评测/, '残值行业不等于未评测');
+
+    // 旧格式日志没有 corpus 字段：必须明确提示「无法判断语料版本」，
+    // 否则缺题会被当成日志轮转，掩盖「新增题目从未评测」。
+    assert.match(md, /有 11 条记录\*\*未标语料指纹\*\*/, '旧格式日志必须提示未标语料指纹');
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -397,4 +453,48 @@ test('备份：同分片重跑文件名稳定（排序后 join），不产生重
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('语料指纹与条目顺序无关，只由集合决定', () => {
+  const a = [{ id: 'cov-a' }, { id: 'cov-b' }, { id: 'cov-c' }];
+  const b = [{ id: 'cov-c' }, { id: 'cov-a' }, { id: 'cov-b' }];
+  assert.deepEqual(corpusFingerprint(a), corpusFingerprint(b));
+  assert.equal(corpusFingerprint(a).count, 3);
+});
+
+test('语料指纹能区分不同子集，且拒绝分隔符歧义碰撞', () => {
+  const base = [{ id: 'cov-a' }, { id: 'cov-b' }];
+  const changed = [{ id: 'cov-a' }, { id: 'cov-x' }];
+  assert.notEqual(corpusFingerprint(base).fingerprint, corpusFingerprint(changed).fingerprint);
+  // 不插分隔符时 ["ab","c"] 与 ["a","bc"] 会拼成同一个字符串
+  assert.notEqual(
+    corpusFingerprint([{ id: 'ab' }, { id: 'c' }]).fingerprint,
+    corpusFingerprint([{ id: 'a' }, { id: 'bc' }]).fingerprint,
+  );
+});
+
+test('筛选条件描述稳定，与传入顺序无关', () => {
+  assert.equal(describeFilters({ tag: ['b', 'a'] }), describeFilters({ tag: ['a', 'b'] }));
+  assert.equal(describeFilters({}), '无（全量）');
+  assert.equal(describeFilters({ limit: 200 }), 'limit=200');
+});
+
+test('筛选条件接受字符串形式，不能静默退化成「无（全量）」', () => {
+  // 若静默丢弃，报表会把只评了 40 条的运行写成「无（全量）」，
+  // 读的人会以为覆盖了全部 14400 条。
+  assert.equal(describeFilters({ tag: 'privacy' }), 'tag=privacy');
+  assert.equal(describeFilters({ industry: 'saas' }), 'industry=saas');
+  assert.equal(describeFilters({ tag: ['privacy'], dimension: 'pii' }), 'tag=privacy; dimension=pii');
+  // 空字符串等同于没传，不应产生 `tag=` 这种空描述
+  assert.equal(describeFilters({ tag: '   ' }), '无（全量）');
+});
+
+test('报表带指纹时记录指纹，缺失时显式标注不可比', () => {
+  const summary = { totals: { total: 1, answered: 1, hit: 1, errors: 0, missing: 0, accuracy: 1 }, byAxis: {} };
+  const withFp = renderReport(summary, { fingerprint: 'deadbeef', filters: '无（全量）' });
+  assert.match(withFp, /语料指纹：`deadbeef`/);
+  assert.match(withFp, /筛选条件：无（全量）/);
+
+  const withoutFp = renderReport(summary, {});
+  assert.match(withoutFp, /本报表不可与其他报表横向比较/);
 });

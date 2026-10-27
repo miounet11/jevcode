@@ -23,7 +23,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { chunk, summarize, renderReport, misses, shouldFail } from './lib/coverage-eval.mjs';
+import { chunk, summarize, renderReport, misses, shouldFail, corpusFingerprint, describeFilters } from './lib/coverage-eval.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -81,7 +81,11 @@ async function runBatch(batch) {
     const res = await fetch(`${args.base}/api/compare`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ items: batch.map((c) => ({ id: c.id, context: c.context, question: c.question, choices: c.choices })) }),
+      body: JSON.stringify({
+        items: batch.map((c) => ({ id: c.id, context: c.context, question: c.question, choices: c.choices })),
+        // 带上语料指纹，落进每条日志记录：日后才能判断某条记录属于哪一版语料。
+        corpus: corpusFingerprint(cases).fingerprint,
+      }),
       signal: AbortSignal.timeout(60000),
     });
     if (res.status === 429) {
@@ -118,7 +122,14 @@ const axes = ['industry', 'dimension', 'tag', 'scene', 'stage'];
 const summaryOurs = summarize(allResults, cases, 'ours', axes);
 const summaryPeer = summarize(allResults, cases, 'official', axes);
 
-const meta = { generatedAt: new Date().toISOString(), model: 'clavue-jev', sample: cases.length };
+const fp = corpusFingerprint(cases);
+const meta = {
+  generatedAt: new Date().toISOString(),
+  model: 'clavue-jev',
+  sample: cases.length,
+  fingerprint: fp.fingerprint,
+  filters: describeFilters({ tag: args.tag, dimension: args.dimension, industry: args.industry, limit: args.limit }),
+};
 let report = renderReport(summaryOurs, meta);
 report += '\n\n---\n\n## 对照：jev-1.13.0（如配置）\n\n';
 report += renderReport(summaryPeer, { ...meta, model: 'jev-1.13.0' });
