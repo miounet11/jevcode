@@ -263,9 +263,11 @@ const description = fill(pick(lang, entityCopy.metaDescription), {
     border-radius: 0.5rem;
     padding: 0.6rem 0.8rem;
   }
+  /* dt 是「上线时间」「许可」这类字段名，属于正文，不能用 opacity 压暗：
+     0.65 叠在已有颜色上只剩约 3:1，浅色主题更低。 */
   .entity__facts dt {
     font-size: 0.75rem;
-    opacity: 0.65;
+    color: var(--fg-dim);
     margin-bottom: 0.25rem;
   }
   .entity__facts dd {

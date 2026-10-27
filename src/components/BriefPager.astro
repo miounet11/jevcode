@@ -61,5 +61,6 @@ for (let i = 0; i < ordered.length; i += 1) {
     border-radius: 6px;
   }
   .bpager__num.is-current { font-weight: 600; border-color: currentColor; }
-  .bpager__gap { font-size: 13px; opacity: 0.5; }
+  /* 省略号是符号不是正文，但仍要能看见：用 token 色代替 opacity 0.5。 */
+  .bpager__gap { font-size: 13px; color: var(--fg-dim); }
 </style>

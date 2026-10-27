@@ -204,7 +204,8 @@ const pageSchema: Record<string, unknown>[] = [
 <style>
   .pmeta { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 18px 0 22px; }
   .pmeta__item { display: flex; align-items: baseline; gap: 7px; }
-  .pmeta__k { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.62; }
+  /* opacity 会连字重一起变淡，0.62 时对比度只剩 2.27:1。改用 token 色保留层级。 */
+  .pmeta__k { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--fg-dim); }
   .pquote { margin: 8px 0 22px; padding: 12px 16px; border-left: 3px solid var(--accent); }
   .pquote__text { margin: 0; white-space: pre-wrap; }
   .pback { margin-top: 28px; }

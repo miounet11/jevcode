@@ -297,28 +297,45 @@ test('CLI：正常数据退出 0；--json 的 stdout 必须是纯 JSON', () => {
   assert.deepEqual(parsed.hard, []);
 });
 
+/**
+ * 自造一份最小数据集并写成 --data 目录。
+ * CLI 用例不能读仓库真实数据：数据被修干净时「必有一条软问题」的前提就崩了，
+ * 看起来像代码回归，其实只是存量清零。
+ * de 的 question 与英文逐字相同 → 恒定产出 1 条 identical-translation 软问题。
+ */
+function fixtureDir() {
+  const dir = mkdtempSync(join(tmpdir(), 'content-check-data-'));
+  const english = row();
+  writeFileSync(join(dir, 'daily-briefs.json'), JSON.stringify([english]));
+  writeFileSync(
+    join(dir, 'briefs-i18n.json'),
+    JSON.stringify(mkI18n('b1', { de: { question: english.question } })),
+  );
+  writeFileSync(join(dir, 'brief-terms.json'), JSON.stringify(TERMS));
+  return dir;
+}
+
 test('CLI：新增软问题必须退出 1', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'content-check-'));
-  const empty = join(dir, 'baseline.json');
-  writeFileSync(empty, JSON.stringify({ version: 1, updated: '2026-10-23', keys: [] }));
-  const r = spawnSync(process.execPath, [SCRIPT, `--baseline=${empty}`], { encoding: 'utf8' });
+  const data = fixtureDir();
+  const dead = join(data, 'baseline.json');
+  writeFileSync(dead, JSON.stringify({ version: 1, updated: '2026-10-23', keys: [] }));
+  const r = spawnSync(process.execPath, [SCRIPT, `--data=${data}`, `--baseline=${dead}`], { encoding: 'utf8' });
   assert.equal(r.status, 1, `空基线应退出 1，实际 ${r.status}\n${r.stdout}`);
   assert.match(r.stdout, /FAIL soft-regression/);
 });
 
 test('CLI：基线里已修复的多余 key 只提示，不失败', () => {
-  // 基线用「当前真实软问题 + 1 条不存在的 key」现造，而不是拿仓库里那份基线做
-  // 加法：仓库基线会随数据收紧或残留，写成「+1 条已修复」就会被存量污染
-  // （实测仓库基线里躺着 6 条已修复的 key，断言就崩了）。
-  const live = spawnSync(process.execPath, [SCRIPT, '--json'], { encoding: 'utf8' });
+  const data = fixtureDir();
+  const live = spawnSync(process.execPath, [SCRIPT, '--data=' + data, '--json'], { encoding: 'utf8' });
   const current = JSON.parse(live.stdout).soft.map((s) => s.key);
-  const dir = mkdtempSync(join(tmpdir(), 'content-check-'));
-  const stale = join(dir, 'stale.json');
+  assert.ok(current.length > 0, '构造数据应产出软问题');
+
+  const stale = join(data, 'stale.json');
   writeFileSync(
     stale,
     JSON.stringify({ version: 1, updated: '2026-01-01', keys: [...current, 'de:industry:gone-slug'] }),
   );
-  const r = spawnSync(process.execPath, [SCRIPT, `--baseline=${stale}`], { encoding: 'utf8' });
+  const r = spawnSync(process.execPath, [SCRIPT, `--data=${data}`, `--baseline=${stale}`], { encoding: 'utf8' });
   assert.equal(r.status, 0, `存量的多余 key 不该失败，实际 ${r.status}\n${r.stdout}`);
   assert.match(r.stdout, /NOTE 基线里有 1 条已修复/);
 });
@@ -330,16 +347,16 @@ test('CLI：退出 1 时 --json 的 stdout 必须完整（管道缓冲不截断�
   //
   // 构造同时满足「退出 1」和「输出 > 64KB」的输入：基线里塞 5000 条不存在的
   // key（fixed 撑大输出），又不含任何真实软问题（added 非空 → 退出 1）。
-  const live = spawnSync(process.execPath, [SCRIPT, '--json'], { encoding: 'utf8' });
+  const data = fixtureDir();
+  const live = spawnSync(process.execPath, [SCRIPT, '--data=' + data, '--json'], { encoding: 'utf8' });
   const current = JSON.parse(live.stdout).soft.map((s) => s.key);
-  assert.ok(current.length > 0, '当前数据应存在存量软问题，否则这条用例构造不出退出 1');
+  assert.ok(current.length > 0, '构造数据应产出软问题');
 
-  const dir = mkdtempSync(join(tmpdir(), 'content-check-'));
-  const big = join(dir, 'big.json');
+  const big = join(data, 'big.json');
   const bogus = Array.from({ length: 5000 }, (_, i) => `de:industry:gone-slug-${i}`);
   writeFileSync(big, JSON.stringify({ version: 1, updated: '2026-01-01', keys: bogus }));
 
-  const r = spawnSync(process.execPath, [SCRIPT, '--json', `--baseline=${big}`], { encoding: 'utf8' });
+  const r = spawnSync(process.execPath, [SCRIPT, '--json', `--data=${data}`, `--baseline=${big}`], { encoding: 'utf8' });
   assert.equal(r.status, 1, `空基线应退出 1，实际 ${r.status}`);
   assert.ok(r.stdout.length > 64 * 1024, `输出应超过管道缓冲，实际 ${r.stdout.length} 字节`);
   // 截断时这里会抛 Unterminated string / Unexpected end of JSON input。

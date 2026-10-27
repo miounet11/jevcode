@@ -676,6 +676,8 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "de": "ad tech",
       "es": "tecnología publicitaria",
       "fr": "technologie publicitaire",
+      "ja": "アドテック",
+      "ko": "애드테크",
       "pt": "tecnologia de publicidade",
       "zh": "广告技术"
     },
@@ -709,8 +711,8 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "construction": {
       "de": "bau",
       "es": "construcción",
-      "fr": "sluterie sluterie",
-      "ja": "こうぞう",
+      "fr": "construction",
+      "ja": "建設",
       "ko": "건설",
       "pt": "construção",
       "zh": "建筑"
@@ -869,9 +871,12 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "制造"
     },
     "marketing": {
+      "de": "Marketing",
+      "es": "marketing",
       "fr": "le marketing digital",
       "ja": "マーケティング",
       "ko": "마케팅",
+      "pt": "marketing",
       "zh": "营销"
     },
     "marketplace": {
@@ -902,8 +907,11 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "非营利组织"
     },
     "paas": {
+      "de": "PaaS",
       "es": "plataforma como servicio",
       "fr": "plateforme en tant que service",
+      "ja": "基盤サービス",
+      "ko": "서비스형 플랫폼",
       "pt": "plataforma como serviço",
       "zh": "平台即服务"
     },
@@ -935,8 +943,9 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "招聘"
     },
     "restaurant": {
+      "de": "Restaurant",
       "es": "restaurante",
-      "fr": "restaurant de cuisine française",
+      "fr": "restaurant",
       "ja": "レストラン",
       "ko": "레스토랑",
       "pt": "restaurante",
@@ -955,13 +964,15 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "de": "software as a service",
       "es": "servicio en la nube",
       "fr": "logiciel en tant que service",
+      "ja": "サービス型ソフトウェア",
       "ko": "서비스형 소프트웨어",
       "pt": "serviço de software como serviço",
       "zh": "软件即服务"
     },
     "streaming": {
+      "de": "Streaming",
       "es": "transmisión en línea",
-      "fr": "sliding_scale",
+      "fr": "streaming",
       "ja": "ストリーミング",
       "ko": "스트리밍",
       "pt": "fluxo contínuo",
@@ -1033,19 +1044,21 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "警报"
     },
     "api-payload": {
-      "de": "api last",
+      "de": "API-Nutzlast",
       "es": "carga de la api",
       "fr": "charge utile de l'api",
       "ja": "api ペイロード",
-      "pt": "a payload da api",
+      "ko": "API 페이로드",
+      "pt": "carga útil da API",
       "zh": "api 载荷"
     },
     "chat": {
-      "de": "guten chat. ich bin clavue.",
-      "es": "el chatbot",
+      "de": "Chat",
+      "es": "chat",
+      "fr": "chat",
       "ja": "チャット",
       "ko": "채팅",
-      "pt": "sala de conversa",
+      "pt": "chat",
       "zh": "聊天"
     },
     "email": {
@@ -1068,7 +1081,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     },
     "log": {
       "de": "protokoll",
-      "es": "logaritmo",
+      "es": "registro",
       "fr": "journal",
       "ja": "ログ",
       "ko": "로그",
@@ -1078,11 +1091,11 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "note": {
       "de": "hinweis",
       "es": "nota",
-      "fr": "note French equivalent: notice",
-      "ja": "ふ",
+      "fr": "note",
+      "ja": "メモ",
       "ko": "노트",
       "pt": "nota",
-      "zh": "注意"
+      "zh": "备注"
     },
     "review": {
       "de": "bewertung",
@@ -1105,13 +1118,14 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "social": {
       "de": "sozial",
       "es": "redes sociales",
-      "fr": "slut French equivalent: slug slut",
-      "ja": "しゃかい",
+      "fr": "social",
+      "ja": "ソーシャル",
       "ko": "사회",
       "pt": "redes sociais",
-      "zh": "社会"
+      "zh": "社交"
     },
     "support-ticket": {
+      "de": "Support-Anfrage",
       "es": "ticket de soporte",
       "fr": "ticket de support",
       "ja": "サポートチケット",
@@ -1194,7 +1208,9 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "路由"
     },
     "triage": {
+      "de": "Triage",
       "es": "triaje",
+      "fr": "triage",
       "ja": "トリアージ",
       "ko": "분류",
       "pt": "triagem",
@@ -1212,6 +1228,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "无障碍"
     },
     "audit-trail": {
+      "de": "Audit-Protokoll",
       "es": "registro de auditoría",
       "fr": "piste d'audit",
       "ja": "監査証跡",
@@ -1328,13 +1345,13 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "安全"
     },
     "sla-breach": {
-      "de": "sla-verletzung",
-      "es": "incumplimiento de sla",
-      "fr": "manquement aux obligations",
-      "ja": "サービスレベル違反",
-      "ko": "sla 위반",
-      "pt": "violação de sla",
-      "zh": "sla违约"
+      "de": "SLA-Verletzung",
+      "es": "incumplimiento de SLA",
+      "fr": "manquement au SLA",
+      "ja": "SLA違反",
+      "ko": "SLA 위반",
+      "pt": "violação de SLA",
+      "zh": "SLA 违约"
     },
     "third-party": {
       "de": "drittanbieter",

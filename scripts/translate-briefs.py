@@ -162,6 +162,25 @@ MANUAL_TERMS = {
     ("medical-triage", "ja"): "医療トリアージ",
     ("pii", "ja"): "個人情報",
     ("chargeback", "ko"): "지급 거절",
+    # 术语污染修复：这些值曾被模型写成提示语、复读或英文原形（"sluterie sluterie"、
+    # "note French equivalent: notice"、"guten chat. ich bin clavue."），
+    # 已从 brief-terms.json 清掉。人工给定正确译法，避免重跑时再次被污染。
+    ("streaming", "fr"): "streaming",
+    ("restaurant", "fr"): "restaurant",
+    ("construction", "fr"): "construction",
+    ("construction", "ja"): "建設",
+    ("chat", "de"): "Chat",
+    ("chat", "es"): "chat",
+    ("chat", "pt"): "chat",
+    ("note", "fr"): "note",
+    ("note", "zh"): "备注",
+    ("note", "ja"): "メモ",
+    ("social", "fr"): "social",
+    ("social", "zh"): "社交",
+    ("social", "ja"): "ソーシャル",
+    ("api-payload", "de"): "API-Payload",
+    ("api-payload", "pt"): "carga útil da API",
+    ("log", "es"): "registro",
     # 选择项：模型在这些词上稳定返回英文原形或英文近义词，人工给定。
     ("bug", "zh"): "缺陷",
     ("bug", "fr"): "bogue",
@@ -218,6 +237,14 @@ def valid_term(slug, lang, value):
         return False
     if out.lower() == slug.lower():
         return False
+    # 模型偶尔把提示语本身当译文写回（"note French equivalent: notice"、
+    # "slut French equivalent: slug slut"）。这类值词数够多、也含拉丁字母，
+    # 能骗过下面的形状检查，但对读者是完全无意义的句子，必须先排掉。
+    if re.search(r"equivalen|translat|meaning of|in (?:french|german|spanish|portuguese|japanese|korean|chinese)", out, re.I):
+        return False
+    # 残留的标识符形态（"sliding_scale"）说明模型没在翻译，只是复述。
+    if "_" in out and " " not in out:
+        return False
     # ja/ko/zh 的译文必须真的含本族文字，纯 ASCII 一律是没译。
     if lang in CJK_LANGS and is_ascii(out):
         return False
@@ -225,8 +252,15 @@ def valid_term(slug, lang, value):
         return False
     if lang in ("ja", "zh") and not re.search(r"[\u3400-\u9fff\u3040-\u30ff]", out):
         return False
+    # ja/ko/zh 的译文里夹长串英文单词，多半是模型没译完（"ふ" 这种单假名除外）。
+    if lang in CJK_LANGS and re.search(r"[A-Za-z]{7,}", out):
+        return False
     # de/fr/es/pt 把连字符换成空格、或只改大小写，也算没译。
     if _term_words(out) <= _term_words(slug):
+        return False
+    # 同一个词重复（"sluterie sluterie"）是模型复读，不是译文。
+    words = [w for w in re.split(r"\s+", out.lower()) if w]
+    if len(words) > 1 and len(set(words)) == 1:
         return False
     return True
 

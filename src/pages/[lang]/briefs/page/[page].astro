@@ -71,7 +71,8 @@ const listIndex = lang === 'en' || lang === 'zh' || localizedLangs.has(lang);
   .blist { list-style: none; padding: 0; margin: 22px 0 0; }
   .blist li { padding: 12px 0; border-bottom: 1px solid var(--line, rgba(255,255,255,0.08)); }
   .blist a { display: block; }
-  .blist__meta { display: block; margin-top: 4px; font-size: 13px; opacity: 0.62; }
+  /* 与 /briefs/ 第一页保持一致：用 token 色而非 opacity 压暗正文。 */
+  .blist__meta { display: block; margin-top: 4px; font-size: 13px; color: var(--fg-dim); }
   .bpager { display: flex; gap: 16px; align-items: center; margin-top: 24px; }
-  .bpager__info { font-size: 13px; opacity: 0.62; }
+  .bpager__info { font-size: 13px; color: var(--fg-dim); }
 </style>

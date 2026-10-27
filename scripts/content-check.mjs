@@ -25,6 +25,7 @@
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { briefHeading, hasLocalizedBrief, localizedBrief } from './lib/daily-briefs.mjs';
 
@@ -316,8 +317,12 @@ if (isMain) {
   const json = argv.includes('--json');
   const updateBaseline = argv.includes('--update-baseline');
   const baselinePath = argv.find((a) => a.startsWith('--baseline='))?.slice('--baseline='.length) || DEFAULT_BASELINE;
+  // --data= 指向另一份数据目录，供测试自造输入。
+  // 否则「新增软问题退出 1」这类用例只能依赖仓库当前恰好存在软问题，
+  // 一旦数据被修干净，测试就会以「构造不出场景」为由失败，与代码无关。
+  const dataDir = argv.find((a) => a.startsWith('--data='))?.slice('--data='.length);
 
-  const readJson = (rel) => JSON.parse(readFileSync(new URL(`../src/data/${rel}`, import.meta.url), 'utf8'));
+  const readJson = (rel) => JSON.parse(readFileSync(dataDir ? join(dataDir, rel) : new URL(`../src/data/${rel}`, import.meta.url), 'utf8'));
   const briefs = readJson('daily-briefs.json');
   const i18n = readJson('briefs-i18n.json');
   const terms = readJson('brief-terms.json');
