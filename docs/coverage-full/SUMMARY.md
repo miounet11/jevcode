@@ -1,57 +1,82 @@
 # JEV 全量覆盖评测总表
 
-- 生成时间：2026-10-08T19:55:06.646Z
+- 生成时间：2026-10-27T17:03:36.301Z
 - 数据源：.data/runs/compare-log-hospitality-backup.jsonl, .data/runs/compare-log-insurance-backup.jsonl, .data/runs/compare-log-logistics-backup.jsonl, .data/runs/compare-log-marketing-backup.jsonl, .data/runs/compare-log-media-backup.jsonl, .data/runs/compare-log-paas-backup.jsonl, .data/runs/compare-log-realestate-recruiting-backup.jsonl, .data/runs/compare-log-restaurant-retail-backup.jsonl, .data/runs/compare-log-saas-streaming-backup.jsonl, .data/runs/compare-log-shard1-adtech-backup.jsonl, .data/runs/compare-log-shard12-full.jsonl, .data/runs/compare-log-shard2-automotive-backup.jsonl, .data/runs/compare-log-shard3-construction-backup.jsonl, .data/runs/compare-log-shard4-cybersecurity-devtools-live.jsonl, .data/runs/compare-log-shard5-pre-retry-backup.jsonl, .data/runs/compare-log-shard6-education-backup.jsonl, .data/runs/compare-log-shard7-fintech-backup.jsonl, .data/runs/compare-log-shard8-government-backup.jsonl, .data/runs/compare-log-shard9-hospitality-backup.jsonl, .data/runs/compare-log-shard9-hospitality-rerun-backup.jsonl, .data/runs/compare-log-supplychain-telecom-backup.jsonl, .data/runs/compare-log-telehealth-travel-backup.jsonl, .data/runs/compare-log-university-utilities-backup.jsonl, .data/runs/compare-log-v2.jsonl, .data/runs/compare-log.jsonl
-- 语料：7680 条 / 40 行业
+- 语料：14400 条 / 60 行业
+- 语料指纹：`f449959d`
 - 总命中：**ours 84.1%**（6298/7491，出错 256）| peer 90.7%（6797/7491，出错 179）
-- 语料进度：7491 / 7680 条已答（36 / 40 行业已答≥90%）
+- 语料进度：7491 / 14400 条已答（0 / 60 行业已答≥90%）
 
-- ⚠ 以下 4 个行业已答不足应有 90%，为日志轮转残值，以 docs/coverage-full/<行业>.md 分片报表为准：`cybersecurity` `logistics` `marketing` `media`
+- ⚠ 以下 20 个行业**从未评测**（日志里 0 条记录），必须补跑；它们的命中率在总表里不代表真实水平：`agriculture` `biotech` `crypto` `dental` `fitness` `foodbev` `lending` `maritime` `payments` `payroll` `pharmacy` `procurement` `rideshare` `robotics` `semiconductor` `tax` `transit` `veterinary` `warehouse` `wealth`
+- ⚠ 以下 40 个行业已答不足应有 90%，未跑齐，以 docs/coverage-full/<行业>.md 分片报表为准：`adtech` `aerospace` `automotive` `banking` `construction` `crm` `cybersecurity` `devtools` `ecommerce` `edtech` `education` `energy` `fintech` `gaming` `government` `healthcare` `hospitality` `hr` `insurance` `legal` `logistics` `manufacturing` `marketing` `marketplace` `media` `nonprofit` `paas` `pharma` `realestate` `recruiting` `restaurant` `retail` `saas` `streaming` `supplychain` `telecom` `telehealth` `travel` `university` `utilities`
+
+- ⚠ 有 7491 条记录**未标语料指纹**（旧格式日志），无法判断其对应语料版本；缺题原因只能按「需重跑」处理。
+
 
 ## industry
 
 | 行业 | ours 命中率 | ours 命中 | 已答 | 出错 | peer 命中率 | peer 命中 | peer 出错 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| adtech | 86.5% | 166 | 192 | 0 | 93.8% | 180 | 0 |
-| aerospace | 85.9% | 165 | 192 | 0 | 93.2% | 179 | 0 |
-| automotive | 87.5% | 168 | 192 | 0 | 93.2% | 179 | 0 |
-| banking | 85.4% | 164 | 192 | 0 | 92.2% | 177 | 0 |
-| construction | 85.9% | 165 | 192 | 0 | 94.8% | 182 | 0 |
-| crm | 88.5% | 170 | 192 | 0 | 93.8% | 180 | 0 |
+| adtech ⚠ | 86.5% | 166 | 192 | 0 | 93.8% | 180 | 0 |
+| aerospace ⚠ | 85.9% | 165 | 192 | 0 | 93.2% | 179 | 0 |
+| agriculture ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| automotive ⚠ | 87.5% | 168 | 192 | 0 | 93.2% | 179 | 0 |
+| banking ⚠ | 85.4% | 164 | 192 | 0 | 92.2% | 177 | 0 |
+| biotech ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| construction ⚠ | 85.9% | 165 | 192 | 0 | 94.8% | 182 | 0 |
+| crm ⚠ | 88.5% | 170 | 192 | 0 | 93.8% | 180 | 0 |
+| crypto ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
 | cybersecurity ⚠ | 87.3% | 137 | 157 | 0 | 92.4% | 145 | 0 |
-| devtools | 90.1% | 173 | 192 | 0 | 92.2% | 177 | 0 |
-| ecommerce | 87.0% | 167 | 192 | 0 | 93.8% | 180 | 0 |
-| edtech | 88.5% | 170 | 192 | 0 | 93.2% | 179 | 2 |
-| education | 88.5% | 170 | 192 | 0 | 93.2% | 179 | 0 |
-| energy | 88.0% | 169 | 192 | 0 | 93.2% | 179 | 1 |
-| fintech | 87.0% | 167 | 192 | 0 | 93.8% | 180 | 0 |
-| gaming | 88.5% | 170 | 192 | 0 | 94.3% | 181 | 0 |
-| government | 87.0% | 167 | 192 | 0 | 81.8% | 157 | 24 |
-| healthcare | 88.5% | 170 | 192 | 0 | 94.3% | 181 | 0 |
-| hospitality | 86.5% | 166 | 192 | 0 | 93.2% | 179 | 1 |
-| hr | 88.0% | 169 | 192 | 0 | 88.0% | 169 | 12 |
-| insurance | 86.1% | 149 | 173 | 0 | 92.5% | 160 | 1 |
-| legal | 84.4% | 162 | 192 | 0 | 91.7% | 176 | 2 |
+| dental ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| devtools ⚠ | 90.1% | 173 | 192 | 0 | 92.2% | 177 | 0 |
+| ecommerce ⚠ | 87.0% | 167 | 192 | 0 | 93.8% | 180 | 0 |
+| edtech ⚠ | 88.5% | 170 | 192 | 0 | 93.2% | 179 | 2 |
+| education ⚠ | 88.5% | 170 | 192 | 0 | 93.2% | 179 | 0 |
+| energy ⚠ | 88.0% | 169 | 192 | 0 | 93.2% | 179 | 1 |
+| fintech ⚠ | 87.0% | 167 | 192 | 0 | 93.8% | 180 | 0 |
+| fitness ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| foodbev ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| gaming ⚠ | 88.5% | 170 | 192 | 0 | 94.3% | 181 | 0 |
+| government ⚠ | 87.0% | 167 | 192 | 0 | 81.8% | 157 | 24 |
+| healthcare ⚠ | 88.5% | 170 | 192 | 0 | 94.3% | 181 | 0 |
+| hospitality ⚠ | 86.5% | 166 | 192 | 0 | 93.2% | 179 | 1 |
+| hr ⚠ | 88.0% | 169 | 192 | 0 | 88.0% | 169 | 12 |
+| insurance ⚠ | 86.1% | 149 | 173 | 0 | 92.5% | 160 | 1 |
+| legal ⚠ | 84.4% | 162 | 192 | 0 | 91.7% | 176 | 2 |
+| lending ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
 | logistics ⚠ | 86.0% | 135 | 157 | 0 | 90.4% | 142 | 0 |
-| manufacturing | 85.4% | 164 | 192 | 0 | 90.1% | 173 | 3 |
+| manufacturing ⚠ | 85.4% | 164 | 192 | 0 | 90.1% | 173 | 3 |
+| maritime ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
 | marketing ⚠ | 85.3% | 128 | 150 | 0 | 90.7% | 136 | 1 |
-| marketplace | 85.4% | 164 | 192 | 0 | 92.7% | 178 | 2 |
+| marketplace ⚠ | 85.4% | 164 | 192 | 0 | 92.7% | 178 | 2 |
 | media ⚠ | 87.3% | 117 | 134 | 0 | 89.6% | 120 | 1 |
-| nonprofit | 88.5% | 170 | 192 | 0 | 93.8% | 180 | 0 |
-| paas | 88.5% | 170 | 192 | 0 | 90.1% | 173 | 6 |
-| pharma | 85.4% | 164 | 192 | 0 | 83.3% | 160 | 15 |
-| realestate | 85.9% | 165 | 192 | 0 | 93.2% | 179 | 0 |
-| recruiting | 89.6% | 172 | 192 | 0 | 91.1% | 175 | 6 |
-| restaurant | 85.9% | 165 | 192 | 0 | 92.2% | 177 | 1 |
-| retail | 85.9% | 165 | 192 | 0 | 93.2% | 179 | 0 |
-| saas | 87.5% | 168 | 192 | 0 | 91.1% | 175 | 4 |
-| streaming | 10.9% | 21 | 192 | 168 | 92.7% | 178 | 1 |
-| supplychain | 45.8% | 88 | 192 | 88 | 89.6% | 172 | 2 |
-| telecom | 88.0% | 169 | 192 | 0 | 89.6% | 172 | 6 |
-| telehealth | 86.5% | 166 | 192 | 0 | 91.1% | 175 | 1 |
-| travel | 88.5% | 170 | 192 | 0 | 91.7% | 176 | 4 |
-| university | 88.5% | 170 | 192 | 0 | 61.5% | 118 | 66 |
-| utilities | 84.9% | 163 | 192 | 0 | 83.3% | 160 | 17 |
+| nonprofit ⚠ | 88.5% | 170 | 192 | 0 | 93.8% | 180 | 0 |
+| paas ⚠ | 88.5% | 170 | 192 | 0 | 90.1% | 173 | 6 |
+| payments ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| payroll ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| pharma ⚠ | 85.4% | 164 | 192 | 0 | 83.3% | 160 | 15 |
+| pharmacy ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| procurement ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| realestate ⚠ | 85.9% | 165 | 192 | 0 | 93.2% | 179 | 0 |
+| recruiting ⚠ | 89.6% | 172 | 192 | 0 | 91.1% | 175 | 6 |
+| restaurant ⚠ | 85.9% | 165 | 192 | 0 | 92.2% | 177 | 1 |
+| retail ⚠ | 85.9% | 165 | 192 | 0 | 93.2% | 179 | 0 |
+| rideshare ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| robotics ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| saas ⚠ | 87.5% | 168 | 192 | 0 | 91.1% | 175 | 4 |
+| semiconductor ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| streaming ⚠ | 10.9% | 21 | 192 | 168 | 92.7% | 178 | 1 |
+| supplychain ⚠ | 45.8% | 88 | 192 | 88 | 89.6% | 172 | 2 |
+| tax ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| telecom ⚠ | 88.0% | 169 | 192 | 0 | 89.6% | 172 | 6 |
+| telehealth ⚠ | 86.5% | 166 | 192 | 0 | 91.1% | 175 | 1 |
+| transit ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| travel ⚠ | 88.5% | 170 | 192 | 0 | 91.7% | 176 | 4 |
+| university ⚠ | 88.5% | 170 | 192 | 0 | 61.5% | 118 | 66 |
+| utilities ⚠ | 84.9% | 163 | 192 | 0 | 83.3% | 160 | 17 |
+| veterinary ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| warehouse ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
+| wealth ⚠ 未评测 | 0.0% | 0 | 0 | 0 | 0.0% | 0 | 0 |
 
 ## dimension
 

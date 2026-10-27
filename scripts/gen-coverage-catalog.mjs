@@ -8,13 +8,18 @@
  * 以及它们交叉后的规模与用法，方便人核对覆盖面、按维度筛语料开跑。
  */
 
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { INDUSTRIES, DIMENSIONS, TAGS, SCENES, STAGES } from './lib/coverage-taxonomy.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const total = INDUSTRIES.length * DIMENSIONS.length * 8;
+
+// 总量直接读语料，不再从维度数量推算——推算公式曾经写死 ×8，
+// 模板增到 10 条后清单仍报旧总数，与真实语料不符。
+const corpusPath = path.join(ROOT, 'data/coverage-cases.json');
+const corpus = existsSync(corpusPath) ? JSON.parse(readFileSync(corpusPath, 'utf8')) : [];
+const total = Array.isArray(corpus) ? corpus.length : 0;
 
 const lines = [];
 lines.push('# JEV 覆盖清单');
@@ -24,7 +29,14 @@ lines.push('');
 lines.push('## 规模');
 lines.push('');
 lines.push(`- 语料总量：**${total}** 条（\`data/coverage-cases.json\`）`);
-lines.push(`- 行业 ${INDUSTRIES.length} × 判定类型 ${DIMENSIONS.length} × 模板 8 = ${total}`);
+// 模板数不能写死：不同维度的模板条数可能不同，总数也随增删变化。
+const tplCounts = DIMENSIONS.map((d) => d.templates.length);
+const tplMin = Math.min(...tplCounts);
+const tplMax = Math.max(...tplCounts);
+const tplDesc = tplMin === tplMax ? `模板 ${tplMin}` : `模板 ${tplMin}-${tplMax}`;
+const tplTotal = tplCounts.reduce((a, b) => a + b, 0);
+lines.push(`- 行业 ${INDUSTRIES.length} × 判定类型 ${DIMENSIONS.length} × ${tplDesc} = ${total}`);
+lines.push(`- 模板合计 ${tplTotal} 条（每行业铺一遍），即 ${INDUSTRIES.length} × ${tplTotal}`);
 lines.push(`- 附加轴：tag ${TAGS.length}、载体 ${SCENES.length}、环节 ${STAGES.length}，轮转铺满`);
 lines.push('');
 lines.push('## 用法');
@@ -51,8 +63,8 @@ const table = (title, rows, note) => {
   lines.push('');
 };
 
-table('行业（industry）', INDUSTRIES, '共 40 个行业，横跨电商、金融、医疗、制造、公共部门等。');
-table('判定类型（dimension）', DIMENSIONS.map((d) => [d.id, d.question]), '每种类型有固定问句与候选集，8 条模板。');
+table('行业（industry）', INDUSTRIES, `共 ${INDUSTRIES.length} 个行业，横跨电商、金融、医疗、制造、公共部门等。`);
+table('判定类型（dimension）', DIMENSIONS.map((d) => [d.id, d.question]), `每种类型有固定问句与候选集，模板 ${tplMin === tplMax ? tplMin : `${tplMin}-${tplMax}`} 条。`);
 table('横切关切（tag）', TAGS, '与行业正交，用于筛出「同一类风险在各行业的表现」。');
 table('载体形态（scene）', SCENES, '题面被包进对应形态的壳里，模拟真实入口。');
 table('环节（stage）', STAGES, '模拟 JEV 在一次业务流转中的介入位置。');

@@ -6,7 +6,7 @@
  *   node scripts/gen-coverage-cases.mjs --sample 200   # 只随机抽样 N 条（跑真实评测用）
  *
  * 维度（见 scripts/lib/coverage-taxonomy.mjs）：
- *   industry 40 × dimension 24 × template 8 = 7,680 条
+ *   industry 60 × dimension 24 × template 10 = 14,400 条
  *   tag 16、scene 12、stage 8 作为附加标签轮流铺满，保证每个取值都被覆盖。
  *
  * 产物：

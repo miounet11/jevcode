@@ -4,8 +4,9 @@
 
 ## 规模
 
-- 语料总量：**7680** 条（`data/coverage-cases.json`）
-- 行业 40 × 判定类型 24 × 模板 8 = 7680
+- 语料总量：**14400** 条（`data/coverage-cases.json`）
+- 行业 60 × 判定类型 24 × 模板 10 = 14400
+- 模板合计 240 条（每行业铺一遍），即 60 × 240
 - 附加轴：tag 16、载体 12、环节 8，轮转铺满
 
 ## 用法
@@ -23,7 +24,7 @@ node scripts/gen-coverage-cases.mjs --sample 200   # -> data/coverage-sample.jso
 
 ## 行业（industry）
 
-共 40 个行业，横跨电商、金融、医疗、制造、公共部门等。
+共 60 个行业，横跨电商、金融、医疗、制造、公共部门等。
 
 | # | id | 名称 |
 | --- | --- | --- |
@@ -67,10 +68,30 @@ node scripts/gen-coverage-cases.mjs --sample 200   # -> data/coverage-sample.jso
 | 38 | `restaurant` | Restaurant |
 | 39 | `retail` | Retail |
 | 40 | `marketplace` | Marketplace |
+| 41 | `payments` | Payments |
+| 42 | `lending` | Lending |
+| 43 | `wealth` | Wealth Management |
+| 44 | `crypto` | Crypto Exchange |
+| 45 | `tax` | Tax & Accounting |
+| 46 | `payroll` | Payroll |
+| 47 | `procurement` | Procurement |
+| 48 | `warehouse` | Warehousing |
+| 49 | `rideshare` | Rideshare |
+| 50 | `transit` | Public Transit |
+| 51 | `maritime` | Maritime Shipping |
+| 52 | `agriculture` | Agriculture |
+| 53 | `foodbev` | Food & Beverage |
+| 54 | `fitness` | Fitness |
+| 55 | `veterinary` | Veterinary |
+| 56 | `dental` | Dental |
+| 57 | `pharmacy` | Pharmacy |
+| 58 | `biotech` | Biotech Research |
+| 59 | `semiconductor` | Semiconductor |
+| 60 | `robotics` | Robotics & IoT |
 
 ## 判定类型（dimension）
 
-每种类型有固定问句与候选集，8 条模板。
+每种类型有固定问句与候选集，模板 10 条。
 
 | # | id | 名称 |
 | --- | --- | --- |
