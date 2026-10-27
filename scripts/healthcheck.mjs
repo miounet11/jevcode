@@ -10,6 +10,7 @@
  *   - 本机 HTTP 健康端点（playground :8790/health、intake :8791/api/health）
  *   - 公网端点 https://www.jevcode.ai/api/health
  *   - 账号库备份新鲜度（最新快照是否在 BACKUP_MAX_AGE_MIN 分钟内）
+ *   - 磁盘可用余量（低于 DISK_MIN_MB 报警，默认 2048MB）
  *
  * 告警出口（按序优先）：
  *   ALERT_WEBHOOK_URL  设了就 POST 一份 JSON（适配 Slack/飞书/自建等）
@@ -21,6 +22,8 @@
 
 // 未设置该变量时用默认清单；显式置空（HEALTHCHECK_UNITS=）表示不检查该类项。
 const splitCsv = (v) => v.split(',').map((s) => s.trim()).filter(Boolean);
+
+import { fileURLToPath } from 'node:url';
 
 // systemd 只在 Linux 上有。在 macOS 上保留默认清单只会得到 3 条 ENOENT，
 // 每天推送假告警——巡检一旦开始说谎，真故障就没人信了。
@@ -41,6 +44,22 @@ const BACKUP_DIR = process.env.HEALTHCHECK_BACKUP_DIR === undefined
   : process.env.HEALTHCHECK_BACKUP_DIR;
 const BACKUP_MAX_AGE_MIN = Number(process.env.HEALTHCHECK_BACKUP_MAX_AGE_MIN || 180);
 const BACKUP_GLOB_RE = /^accounts-(\d{8}T\d{6})Z\.db$/;
+
+// 磁盘余量。站点由 nginx 直出静态文件，磁盘写满时服务仍「活着」，只是下一次部署
+// 会以 rsync 半途失败告终，而那一轮的报告只会说 deploy failed。提前预警比事后
+// 从 rsync 日志里倒推便宜得多。显式置空（HEALTHCHECK_DISK_PATH=）表示不检查。
+const DISK_PATH = process.env.HEALTHCHECK_DISK_PATH === undefined
+  ? '/'
+  : process.env.HEALTHCHECK_DISK_PATH;
+const DISK_MIN_MB = Number(process.env.HEALTHCHECK_DISK_MIN_MB || 2048);
+
+// 告警抑制。cron 每 5 分钟跑一次，一个没修的故障会一天推 288 条同样的消息，
+// 群里很快就没人看了。抑制的是「同一条故障的重复推送」，不是「不再告警」：
+// 退出码仍然是 1，日志照写，故障清单变了就立刻再推一次。
+const ALERT_STATE = process.env.HEALTHCHECK_ALERT_STATE === undefined
+  ? '/var/lib/jevcode-healthcheck/last-alert.json'
+  : process.env.HEALTHCHECK_ALERT_STATE;
+const ALERT_COOLDOWN_MIN = Number(process.env.HEALTHCHECK_ALERT_COOLDOWN_MIN || 60);
 
 const failures = [];
 
@@ -120,17 +139,47 @@ async function checkBackup() {
   }
 }
 
+async function checkDisk() {
+  const target = `磁盘 ${DISK_PATH}`;
+  const { execFile } = await import('node:child_process');
+  // df -Pm 的 POSIX 输出固定为 6 列，倒数第 2 列是可用 MB；不用 df -h 是因为
+  // 它的单位后缀随容量变化（G/M/K），比较阈值时还得再解析一遍。
+  await new Promise((resolve) => {
+    execFile('df', ['-Pm', DISK_PATH], { timeout: TIMEOUT_MS }, (err, stdout) => {
+      if (err) {
+        failures.push({ kind: 'disk', target, detail: `无法读取磁盘用量：${err.message}` });
+        return resolve();
+      }
+      const line = String(stdout).trim().split('\n')[1] || '';
+      // 列序：Filesystem 1M-blocks Used Available Capacity Mounted，可用量在索引 3。
+      const freeMb = Number(line.split(/\s+/)[3]);
+      if (!Number.isFinite(freeMb)) {
+        failures.push({ kind: 'disk', target, detail: `df 输出无法解析：${line}` });
+      } else if (freeMb < DISK_MIN_MB) {
+        failures.push({
+          kind: 'disk', target,
+          detail: `可用 ${freeMb}MB，低于阈值 ${DISK_MIN_MB}MB`,
+        });
+      }
+      resolve();
+    });
+  });
+}
+
 async function sendAlert(payload) {
   // 飞书机器人要吃 msg_type/content.text，和 Slack 的 {text} 不同形。
   // 走 notify-feishu.mjs 统一出口，避免两处各写一套格式。
   const feishu = process.env.FEISHU_WEBHOOK;
   if (feishu) {
     const { execFile } = await import('node:child_process');
+    // 按脚本自身位置解析，而不是相对 cwd。cron 从 `/` 起跑，相对路径会找不到
+    // 这个文件，告警就此静默丢失——比没有告警更糟，因为日志里看不到任何异常。
+    const notify = fileURLToPath(new URL('./notify-feishu.mjs', import.meta.url));
     const text = payload.failures.map((f) => `- ${f.kind} ${f.target}：${f.detail}`).join('\n');
     return await new Promise((resolve) => {
       execFile(
         process.execPath,
-        ['scripts/notify-feishu.mjs', `巡检发现 ${payload.failures.length} 项异常`, text],
+        [notify, `巡检发现 ${payload.failures.length} 项异常`, text],
         { env: process.env, timeout: TIMEOUT_MS },
         (err) => resolve(err
           ? { delivered: false, channel: 'feishu', error: String(err.message ?? err) }
@@ -166,22 +215,88 @@ async function sendAlert(payload) {
   }
 }
 
+/** 故障清单的指纹：只按 kind+target 算，detail 里的数字变了不算新故障。 */
+export function alertFingerprint(failures) {
+  return failures.map((f) => `${f.kind} ${f.target}`).sort().join('|');
+}
+
+/**
+ * 判断这一轮该不该推送。
+ *
+ * 返回 { send, reason }。同一指纹在冷却窗口内只推一次；指纹变了立刻推，
+ * 因为那说明故障本身变了（多了新的一项，或换了个故障），值得让人重新看一眼。
+ */
+export function shouldAlert(prev, fingerprint, nowMs, cooldownMin) {
+  if (!prev || prev.fingerprint !== fingerprint) {
+    return { send: true, reason: prev ? 'changed' : 'first' };
+  }
+  const ageMin = (nowMs - Number(prev.atMs || 0)) / 60000;
+  if (!Number.isFinite(ageMin) || ageMin >= cooldownMin) {
+    return { send: true, reason: 'cooldown-expired' };
+  }
+  return { send: false, reason: `suppressed(${Math.round(ageMin)}min<${cooldownMin}min)` };
+}
+
+async function readAlertState() {
+  if (!ALERT_STATE) return null;
+  try {
+    const { readFile } = await import('node:fs/promises');
+    return JSON.parse(await readFile(ALERT_STATE, 'utf8'));
+  } catch {
+    // 读不到就是没有历史，按首次告警处理。
+    return null;
+  }
+}
+
+async function writeAlertState(state) {
+  if (!ALERT_STATE) return;
+  try {
+    const { mkdir, writeFile } = await import('node:fs/promises');
+    const { dirname } = await import('node:path');
+    await mkdir(dirname(ALERT_STATE), { recursive: true });
+    await writeFile(ALERT_STATE, JSON.stringify(state), 'utf8');
+  } catch (err) {
+    // 写不进去只影响抑制，不影响告警本身；说出来但不致命。
+    console.error(`[healthcheck] 告警状态写入失败：${err && err.message ? err.message : err}`);
+  }
+}
+
 async function main() {
   await Promise.all([
     ...UNIT_NAMES.map(checkUnit),
     ...HTTP_TARGETS.map(checkHttp),
     ...(BACKUP_DIR ? [checkBackup()] : []),
+    ...(DISK_PATH ? [checkDisk()] : []),
   ]);
 
   if (failures.length === 0) {
     const backupNote = BACKUP_DIR ? ` backup<=${BACKUP_MAX_AGE_MIN}min` : ' backup=off';
-    console.log(`[healthcheck] OK（units=${UNIT_NAMES.length} http=${HTTP_TARGETS.length}${backupNote}）`);
+    const diskNote = DISK_PATH ? ` disk>=${DISK_MIN_MB}MB` : ' disk=off';
+    console.log(`[healthcheck] OK（units=${UNIT_NAMES.length} http=${HTTP_TARGETS.length}${backupNote}${diskNote}）`);
     process.exit(0);
   }
 
-  const payload = { at: new Date().toISOString(), failures };
+  const nowMs = Date.now();
+  const fingerprint = alertFingerprint(failures);
+  const prev = await readAlertState();
+  const decision = shouldAlert(prev, fingerprint, nowMs, ALERT_COOLDOWN_MIN);
+
+  if (!decision.send) {
+    console.error(
+      `[healthcheck] ${failures.length} 项异常（已知故障 ${decision.reason}，本轮不重复推送）`,
+    );
+    process.exit(1);
+  }
+
+  const payload = { at: new Date(nowMs).toISOString(), failures };
   const r = await sendAlert(payload);
-  console.error(`[healthcheck] ${failures.length} 项异常（告警通道=${r.channel}${r.delivered ? ' 已投递' : ' 未投递'}）`);
+  // 只有真的投递成功才记录，否则通道修好的那一刻还会再推一次，这正是我们要的。
+  if (r.delivered) {
+    await writeAlertState({ fingerprint, atMs: nowMs, reason: decision.reason });
+  }
+  console.error(
+    `[healthcheck] ${failures.length} 项异常（告警通道=${r.channel}${r.delivered ? ' 已投递' : ' 未投递'}，${decision.reason}）`,
+  );
   process.exit(1);
 }
 
