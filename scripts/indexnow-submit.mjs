@@ -17,6 +17,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 import path from 'node:path';
+import { parseSitemapEntries, selectChanged, nextState } from './lib/indexnow.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const KEY_FILE = path.join(ROOT, '.indexnow-key');
@@ -54,14 +55,39 @@ if (process.argv.includes('--init')) {
 // ---- 读 sitemap ----
 const sitemapPath = path.join(ROOT, 'dist', 'sitemap-0.xml');
 if (!existsSync(sitemapPath)) die('dist/sitemap-0.xml 不存在，先 npm run build');
-const locs = [...readFileSync(sitemapPath, 'utf8').matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
-if (!locs.length) die('sitemap 里没有 URL');
 
-console.log(`[indexnow] 待提交 ${locs.length} 个 URL，密钥 ${key}`);
+const entries = parseSitemapEntries(readFileSync(sitemapPath, 'utf8'));
+if (!entries.length) die('sitemap 里没有 URL');
+
+// ---- 增量筛选 ----
+// 全量推送 6000+ 条会挤占配额，也让「这个站天天全量改动」的噪声变强。
+// 状态文件记录上次提交时每条 URL 的 lastmod，只推与上次不同的。
+const STATE_FILE = path.join(ROOT, '.indexnow-state.json');
+const forceAll = process.argv.includes('--all');
+let prev = {};
+if (!forceAll && existsSync(STATE_FILE)) {
+  try {
+    prev = JSON.parse(readFileSync(STATE_FILE, 'utf8'));
+  } catch {
+    prev = {};
+  }
+}
+const changed = selectChanged(entries, prev, { forceAll });
+const locs = changed.map((e) => e.loc);
+
+if (!locs.length) {
+  console.log(`[indexnow] 无变更，跳过（${entries.length} 条均与上次提交一致）`);
+  process.exit(0);
+}
+
+console.log(
+  `[indexnow] ${forceAll ? '全量' : '增量'}提交 ${locs.length} / ${entries.length} 个 URL，密钥 ${key}`,
+);
 
 // ---- 分批提交 ----
 const BATCH = 10_000;
 let okBatches = 0;
+const submitted = [];
 for (let i = 0; i < locs.length; i += BATCH) {
   const chunk = locs.slice(i, i + BATCH);
   const body = JSON.stringify({
@@ -77,6 +103,7 @@ for (let i = 0; i < locs.length; i += BATCH) {
   });
   if (res.status === 200 || res.status === 202) {
     okBatches++;
+    submitted.push(...chunk);
     console.log(`[indexnow] 批次 ${Math.floor(i / BATCH) + 1}: ${chunk.length} 条 → ${res.status} OK`);
   } else {
     console.error(`[indexnow] 批次 ${Math.floor(i / BATCH) + 1}: HTTP ${res.status} ${await res.text().catch(() => '')}`);
@@ -84,4 +111,9 @@ for (let i = 0; i < locs.length; i += BATCH) {
 }
 
 if (okBatches === 0) die('全部批次提交失败');
-console.log(`[indexnow] 完成：${okBatches} 批成功`);
+
+// 只记录提交成功的 URL：失败的批次下次仍会被判定为「有变更」而重推。
+const next = nextState(prev, entries, submitted);
+writeFileSync(STATE_FILE, `${JSON.stringify(next, null, 0)}\n`);
+
+console.log(`[indexnow] 完成：${okBatches} 批成功，已记录 ${submitted.length} 条状态`);
