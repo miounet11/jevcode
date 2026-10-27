@@ -50,8 +50,16 @@ export const judgmentLabel: Localized<string> = {
   zh: '这次调用返回的选项', en: 'Choice returned by this call', ja: 'この呼び出しが返した選択肢', ko: '이번 호출이 반환한 선택지', de: 'Von diesem Aufruf zurückgegebene Option', fr: 'Option renvoyée par cet appel', es: 'Opción devuelta por esta llamada', pt: 'Opção devolvida por esta chamada',
 };
 
+export const probabilitiesLabel: Localized<string> = {
+  zh: '各选项概率', en: 'Probability per option', ja: '選択肢ごとの確率', ko: '선택지별 확률', de: 'Wahrscheinlichkeit je Option', fr: 'Probabilité par option', es: 'Probabilidad por opción', pt: 'Probabilidade por opção',
+};
+
 export const noJudgment: Localized<string> = {
   zh: '这一篇没有记下成功的调用。', en: 'This case has no successful call on record.', ja: 'この事例には成功した呼び出しの記録がありません。', ko: '이 사례에는 성공한 호출 기록이 없습니다.', de: 'Für diesen Fall ist kein erfolgreicher Aufruf verzeichnet.', fr: 'Cet exemple n’a pas d’appel réussi en registre.', es: 'Este caso no tiene una llamada correcta registrada.', pt: 'Este caso não tem uma chamada bem-sucedida registrada.',
+};
+
+export const paginationLabel: Localized<string> = {
+  zh: '分页', en: 'Pagination', ja: 'ページ送り', ko: '페이지 탐색', de: 'Seitennavigation', fr: 'Pagination', es: 'Paginación', pt: 'Paginação',
 };
 
 export const totalLabel: Localized<string> = {

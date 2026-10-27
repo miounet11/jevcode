@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { nextBriefSources, checkJudgedBatch, backfillJudgments, briefHeading, localizeTerm, localizedBrief } from './lib/daily-briefs.mjs';
+import { nextBriefSources, checkJudgedBatch, backfillJudgments, briefHeading, localizeTerm, localizedBrief, pickProbabilities } from './lib/daily-briefs.mjs';
 
 const TERMS = {
   industry: { saas: { ja: 'SaaS' } },
@@ -139,9 +139,9 @@ test('空批次视为语料发完，不误判为判定链路故障', () => {
   assert.equal(checkJudgedBatch(null).pass, true);
 });
 
-test('回填只处理空判定条目，失败的保持原样', async () => {
+test('回填只处理不完整的判定，失败的保持原样', async () => {
   const rows = [
-    { id: 'a', judgment: { choice: 'yes' } },
+    { id: 'a', judgment: { choice: 'yes', probabilities: { yes: 0.9, no: 0.1 } } },
     { id: 'b', judgment: null },
     { id: 'c', judgment: { ok: false } },
     { id: 'd', judgment: null },
@@ -151,15 +151,98 @@ test('回填只处理空判定条目，失败的保持原样', async () => {
     limit: 10,
     judge: async (row) => {
       calls.push(row.id);
-      return row.id === 'c' ? null : { ok: true, choice: 'yes' };
+      return row.id === 'c' ? null : { ok: true, choice: 'yes', probabilities: { yes: 0.8, no: 0.2 } };
     },
   });
   assert.equal(filled, 2);
-  assert.deepEqual(calls, ['b', 'c', 'd'], '已判定的 a 不应被再次调用');
+  assert.deepEqual(calls, ['b', 'c', 'd'], '已完整（有 choice 且有概率）的 a 不应被再次调用');
   assert.equal(rows[0].judgment.choice, 'yes');
   assert.equal(rows[2].judgment.ok, false, '回填失败时不得覆盖原有记录');
   assert.equal(rows[1].judgment.choice, 'yes');
   assert.equal(rows[3].judgment.choice, 'yes');
+});
+
+test('有 choice 缺概率的条目也会被回填，且只补概率不覆盖原结论', async () => {
+  // 早期生产的记录只有一个选项、没有置信度，页面读不到「模型有多确定」。
+  // 这类条目要能补上概率，但 choice / ts 是当年那次调用的真实记录，不得改写。
+  const rows = [
+    { id: 'old', judgment: { ok: true, choice: 'no', model: 'clavue-jev', ts: '2026-10-14T00:00:00.000Z' } },
+  ];
+  const filled = await backfillJudgments(rows, {
+    limit: 5,
+    judge: async () => ({ ok: true, choice: 'no', probabilities: { yes: 0.05, no: 0.95 } }),
+  });
+  assert.equal(filled, 1);
+  assert.equal(rows[0].judgment.choice, 'no', '历史结论不得被新调用改写');
+  assert.equal(rows[0].judgment.ts, '2026-10-14T00:00:00.000Z', '历史时间戳不得被改写');
+  assert.deepEqual(rows[0].judgment.probabilities, { yes: 0.05, no: 0.95 });
+});
+
+test('新调用结论与历史记录不一致时，宁可不补概率也不制造矛盾页面', async () => {
+  // 若照抄概率，页面会出现「结论 否，但概率显示 是 0.95」这种自相矛盾的组合，
+  // 比不给概率更糟：读者会不知道该信哪一行。
+  const rows = [{ id: 'old', judgment: { ok: true, choice: 'no', ts: '2026-10-14T00:00:00.000Z' } }];
+  const filled = await backfillJudgments(rows, {
+    limit: 5,
+    judge: async () => ({ ok: true, choice: 'yes', probabilities: { yes: 0.95, no: 0.05 } }),
+  });
+  assert.equal(filled, 0, '结论不一致不算回填成功');
+  assert.equal(rows[0].judgment.choice, 'no', '历史结论保持不变');
+  assert.equal(rows[0].judgment.probabilities, undefined, '不得写入与结论矛盾的概率');
+  assert.equal(rows[0].judgment.backfillSkipped, true, '应标记为跳过，避免永久占用回填额度');
+});
+
+test('结论不符的条目只试一次，之后退出队列不再消耗额度', async () => {
+  const rows = [
+    { id: 'stuck', judgment: { ok: true, choice: 'no' } },
+    { id: 'ok1', judgment: null },
+  ];
+  const calls = [];
+  const judge = async (row) => {
+    calls.push(row.id);
+    // stuck 每次都给出不同结论；ok1 正常回填
+    return row.id === 'stuck'
+      ? { ok: true, choice: 'yes', probabilities: { yes: 1 } }
+      : { ok: true, choice: 'yes' };
+  };
+  await backfillJudgments(rows, { limit: 5, judge });
+  const firstRound = [...calls];
+  // 空判定优先于缺概率，所以 ok1 排在 stuck 前面
+  assert.deepEqual(firstRound, ['ok1', 'stuck'], '第一轮两条都会被尝试');
+
+  calls.length = 0;
+  rows[1].judgment = null; // 让 ok1 重新变回待回填，验证第二轮只剩它
+  await backfillJudgments(rows, { limit: 5, judge });
+  assert.deepEqual(calls, ['ok1'], '已标记跳过的 stuck 不应再被调用');
+});
+
+test('页面渲染不暴露 backfillSkipped 内部字段', () => {
+  // 该字段只服务于回填队列，属于实现细节；若泄漏到 HTML 会污染结构化数据。
+  const src = readFileSync(new URL('../src/pages/[lang]/briefs/[id].astro', import.meta.url), 'utf8');
+  assert.doesNotMatch(src, /backfillSkipped/, '详情页不应读取该内部字段');
+});
+
+test('回填优先补完全没有判定的条目，缺概率的排在其后', async () => {
+  const rows = [
+    { id: 'needProbs', judgment: { choice: 'yes' } },
+    { id: 'noJudgment', judgment: null },
+  ];
+  const calls = [];
+  await backfillJudgments(rows, {
+    limit: 1,
+    judge: async (row) => { calls.push(row.id); return { ok: true, choice: 'yes', probabilities: { yes: 1 } }; },
+  });
+  assert.deepEqual(calls, ['noJudgment'], '额度只有 1 条时应先补信息量最低的空判定');
+});
+
+test('回填时若新调用没有概率，已有结论的条目保持原样且不计入成功', async () => {
+  const rows = [{ id: 'old', judgment: { ok: true, choice: 'no' } }];
+  const filled = await backfillJudgments(rows, {
+    limit: 5,
+    judge: async () => ({ ok: true, choice: 'no' }),
+  });
+  assert.equal(filled, 0, '没补到概率就不算回填成功');
+  assert.equal(rows[0].judgment.probabilities, undefined);
 });
 
 test('回填受 limit 限制，避免一轮打满额度', async () => {
@@ -366,4 +449,20 @@ test('每个选项在每个目标语言下都有译文', () => {
     }
   }
   assert.deepEqual(missing, []);
+});
+
+test('概率只保留语料登记的选项，且丢弃非数字值', () => {
+  // 接口回多一个未登记选项时不能写进页面：那会让读者看到一个语料里不存在的候选。
+  assert.deepEqual(
+    pickProbabilities(['yes', 'no'], { yes: 0.8734, no: 0.1266, maybe: 0.5 }),
+    { yes: 0.8734, no: 0.1266 },
+  );
+  // 非数字、NaN、null 一律丢弃，而不是写成 0 假装有值
+  assert.deepEqual(pickProbabilities(['yes', 'no'], { yes: 'oops', no: null }), undefined);
+  assert.deepEqual(pickProbabilities(['yes', 'no'], { yes: 0.9 }), { yes: 0.9 });
+  // 全无有效值时返回 undefined，页面走「没有概率」分支，不渲染一排 —
+  assert.equal(pickProbabilities(['yes', 'no'], {}), undefined);
+  assert.equal(pickProbabilities(['yes', 'no'], null), undefined);
+  // 小数位保留到 4 位，供日后重新聚合
+  assert.deepEqual(pickProbabilities(['a'], { a: 0.123456789 }), { a: 0.1235 });
 });

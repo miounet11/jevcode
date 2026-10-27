@@ -7,7 +7,13 @@ import { briefHeading, localizedBrief, localizeTerm } from '../../../../scripts/
 import briefI18n from '../../../data/briefs-i18n.json';
 import { briefTerms } from '../../../data/brief-terms';
 
-type Judgment = { ok: boolean; choice: string | null; model: string | null; ts: string };
+type Judgment = {
+  ok: boolean;
+  choice: string | null;
+  model: string | null;
+  ts: string;
+  probabilities?: Record<string, number>;
+};
 type Brief = {
   id: string;
   published: string;
@@ -48,6 +54,7 @@ const copy = {
   choices: pick(lang, copySrc.choicesLabel),
   accept: pick(lang, copySrc.acceptLabel),
   judgment: pick(lang, copySrc.judgmentLabel),
+  probabilities: pick(lang, copySrc.probabilitiesLabel),
   noJudgment: pick(lang, copySrc.noJudgment),
 };
 const text = localizedBrief(entry, lang, briefI18n as Record<string, Record<string, { context: string; question: string; choices: string[] }>>);
@@ -102,6 +109,29 @@ const hrefOf = (row: Brief) => `/${lang}/briefs/${row.id}/`;
         {entry.judgment?.ok && entry.judgment.choice
           ? <p><code>{localizeTerm('choice', entry.judgment.choice, lang, briefTerms)}</code> · {entry.judgment.model} · {entry.judgment.ts.slice(0, 10)}</p>
           : <p>{copy.noJudgment}</p>}
+        {/* 概率分布：模型对每个选项的置信度。缺它时页面只有一个是/否，
+            无法回答「模型有多确定」，而后者才是读者（和 AI 引擎）真正想知道的。 */}
+        {entry.judgment?.probabilities && Object.keys(entry.judgment.probabilities).length > 0 && (
+          <>
+            <h2>{copy.probabilities}</h2>
+            <table class="ptable">
+              <thead>
+                <tr><th>{copy.choices}</th><th>%</th></tr>
+              </thead>
+              <tbody>
+                {entry.choices.map((choice) => {
+                  const p = entry.judgment?.probabilities?.[choice];
+                  return (
+                    <tr>
+                      <td><code>{localizeTerm('choice', choice, lang, briefTerms)}</code></td>
+                      <td>{typeof p === 'number' ? `${(p * 100).toFixed(1)}%` : '—'}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </>
+        )}
         {(prev || next) && (
           <nav class="pager" aria-label="Pagination">
             {prev ? (

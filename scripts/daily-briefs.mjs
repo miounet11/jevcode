@@ -9,7 +9,8 @@
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { nextBriefSources, checkJudgedBatch, backfillJudgments } from './lib/daily-briefs.mjs';
+import { nextBriefSources, checkJudgedBatch, backfillJudgments, pickProbabilities } from './lib/daily-briefs.mjs';
+import { assessPool } from './lib/brief-pool.mjs';
 
 const COVERAGE = 'data/coverage-cases.json';
 const OUT = 'src/data/daily-briefs.json';
@@ -30,10 +31,14 @@ async function judgeViaClavue(brief, key) {
   });
   if (!res.ok) return { status: res.status };
   const body = await res.json();
+  // 概率分布是简报页最有信息量的部分：它让页面能给出「模型有多确定」，
+  // 而不是只有一个是/否。API 一直有回，之前只取了 choice，白白丢掉。
+  const probabilities = pickProbabilities(brief.choices, body.probabilities);
   return {
     status: 200,
     choice: typeof body.choice === 'string' ? body.choice : null,
     model: 'clavue-jev',
+    probabilities,
   };
 }
 
@@ -49,6 +54,17 @@ const coverage = JSON.parse(readFileSync(COVERAGE, 'utf8'));
 const existing = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : [];
 
 const published = new Date().toISOString().slice(0, 10);
+
+// 选题池见底不会报错，只会每天少发几篇、最后变成 0 篇，而管线仍算成功。
+// 必须放在「按天幂等」之前：否则当天已发满后重跑会提前退出，健康度永远打不出来，
+// 而恰恰是发满的那些天最容易把池子耗到阈值以下。
+{
+  const usedIds = new Set(existing.map((row) => row.id));
+  const remaining = coverage.filter((row) => String(row?.id ?? '').startsWith('cov-') && !usedIds.has(row.id)).length;
+  const pool = assessPool({ remaining, perDay: LIMIT });
+  const prefix = pool.level === 'empty' ? 'ERROR' : pool.level === 'low' ? 'WARN' : 'INFO';
+  console.error(`[daily-briefs] ${prefix} ${pool.message}`);
+}
 
 // 按天幂等：同一天已经发够就是重复执行（cron 重跑、手动补跑），不再追加。
 // 2026-10-19 因门 2 三次 HOLD 后又成功一轮，同日累积了 200 篇（应为 50）。
@@ -73,7 +89,9 @@ async function judgeRow(row) {
       return null;
     }
     if (!result.choice || !row.choices.includes(result.choice)) return null;
-    return { ok: true, choice: result.choice, model: result.model, ts: new Date().toISOString() };
+    const judgment = { ok: true, choice: result.choice, model: result.model, ts: new Date().toISOString() };
+    if (result.probabilities) judgment.probabilities = result.probabilities;
+    return judgment;
   } catch (err) {
     console.error(`[daily-briefs] WARN ${row.id}: ${err.message}`);
     return null;

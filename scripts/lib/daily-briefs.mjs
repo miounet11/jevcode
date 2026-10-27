@@ -105,22 +105,81 @@ export function checkJudgedBatch(rows, { minAccuracy = 0.8, expectJudgment = tru
   return { pass: true, accuracy, reason: null };
 }
 
+/**
+ * 从 /v1/judge 的返回体里取各选项概率。
+ *
+ * 只保留 brief.choices 里登记过的键，且只收有限数字：接口若回多一个选项或
+ * 回 null/字符串，写进页面就成了假数据。全部无效时返回 undefined，
+ * 让页面走「没有概率」分支，而不是渲染一排 —。
+ *
+ * 保留 4 位小数：页面上按百分比只显示 1 位，多留的位数供日后重新聚合。
+ */
+export function pickProbabilities(choices, raw) {
+  if (!raw || typeof raw !== 'object' || !Array.isArray(choices)) return undefined;
+  const out = {};
+  for (const choice of choices) {
+    const rawValue = raw[choice];
+    // Number(null) === 0、Number('') === 0：直接转数字会把「没给」当成「概率为 0」，
+    // 页面上就写成 0.0%，读者会误以为模型明确排除了该选项。
+    if (rawValue === null || rawValue === undefined || rawValue === '') continue;
+    const value = Number(rawValue);
+    if (Number.isFinite(value)) out[choice] = Math.round(value * 10000) / 10000;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
 /** 历史遗留的空判定条目，按原顺序取前 limit 条用于回填。 */
 export function selectBackfillTargets(rows, limit = 5) {
   const cap = Number.isInteger(limit) && limit > 0 ? limit : 5;
-  return (rows ?? []).filter((row) => !row?.judgment?.choice).slice(0, cap);
+  const list = rows ?? [];
+  // 两类都算「不完整」，但优先级不同：
+  //   1. 完全没有判定的，页面显示「没有记下成功的调用」，信息量最低；
+  //   2. 有 choice 但缺概率的，页面能给出结论却给不出把握程度。
+  // 回填额度很小（默认每天 5 条），先补前者。两类都按原顺序稳定选取，
+  // 不随机，否则同一条可能被反复挑中而另一条永远轮不到。
+  //
+  // backfillSkipped 的条目直接排除：那是「重新调用后结论变了」的记录，
+  // 再试多少次结果都一样，留着只会每天吃掉 5 条额度里的一条。
+  const missingJudgment = [];
+  const missingProbabilities = [];
+  for (const row of list) {
+    if (row?.judgment?.backfillSkipped) continue;
+    if (!row?.judgment?.choice) missingJudgment.push(row);
+    else if (!row.judgment.probabilities) missingProbabilities.push(row);
+  }
+  return [...missingJudgment, ...missingProbabilities].slice(0, cap);
 }
 
 /**
  * 回填历史遗留的空判定，原地写回 rows，返回成功条数。
  * judge 由调用方注入，失败（返回 null）的条目保持原样，不写半成品。
+ *
+ * 已有判定的条目只补概率，不覆盖原有 choice/model/ts：那是当年那次调用的
+ * 真实记录，重写 ts 会让页面声称一个错误的评测时间。
  */
 export async function backfillJudgments(rows, { limit = 5, judge } = {}) {
   let filled = 0;
   for (const row of selectBackfillTargets(rows, limit)) {
     const judgment = await judge(row);
     if (!judgment) continue;
-    row.judgment = judgment;
+    if (row.judgment?.choice) {
+      // 只补概率，不覆盖原有 choice/model/ts——那是当年那次调用的真实记录。
+      //
+      // 但必须确认新调用仍然给出同一个 choice：若模型行为变了、结论不同，
+      // 照抄概率会让页面出现「结论 否，但概率显示 是 0.95」这种自相矛盾的
+      // 组合，比不给概率更糟。这种情况下宁可留空，让页面走「无概率」分支。
+      //
+      // 打上 backfillSkipped 让它退出队列：不标记的话它会永远排在最前面，
+      // 每天 5 条额度里被它吃掉，后面真正能补的记录反而轮不到。
+      if (judgment.choice !== row.judgment.choice) {
+        row.judgment.backfillSkipped = true;
+        continue;
+      }
+      if (!judgment.probabilities) continue;
+      row.judgment.probabilities = judgment.probabilities;
+    } else {
+      row.judgment = judgment;
+    }
     filled += 1;
   }
   return filled;
