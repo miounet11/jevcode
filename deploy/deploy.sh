@@ -181,7 +181,9 @@ if ! verify_remote; then
   PREV=$(ssh "${SSH_OPTS[@]}" "$SSH_HOST" "cat ${REMOTE_ROOT}/shared/previous_release 2>/dev/null || true")
   if [ -n "$PREV" ] && [ "$PREV" != "${REMOTE_ROOT}/releases/${RELEASE_ID}" ]; then
     log "校验失败，自动回滚到 ${PREV}"
-    ssh "${SSH_OPTS[@]}" "$SSH_HOST" "ln -sfn ${PREV} ${REMOTE_ROOT}/current.new && mv -Tf ${REMOTE_ROOT}/current.new ${REMOTE_ROOT}/current && nginx -t && systemctl reload nginx"
+    # ln -sfn 对「指向目录的软链」就是原子替换，不需要 mv -T 中转。
+    # 多那一层只有 GNU mv 支持，本地验证脚本在 macOS 上直接报 illegal option。
+    ssh "${SSH_OPTS[@]}" "$SSH_HOST" "ln -sfn ${PREV} ${REMOTE_ROOT}/current && nginx -t && systemctl reload nginx"
     rm -f "$TARBALL"
     die "发布校验失败，已回滚到 ${PREV}（本次版本留在 releases/${RELEASE_ID} 供排查）"
   fi
