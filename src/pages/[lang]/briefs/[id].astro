@@ -71,9 +71,56 @@ const idx = rows.findIndex((row) => row.id === entry.id);
 const prev = idx > 0 ? rows[idx - 1] : undefined;
 const next = idx >= 0 && idx < rows.length - 1 ? rows[idx + 1] : undefined;
 const hrefOf = (row: Brief) => `/${lang}/briefs/${row.id}/`;
+// 每页正文就是一次「情境 + 问题 → 判定」，但之前只挂了全站 Organization/
+// WebSite 这一类节点，搜索引擎只能当普通网页读。补 QAPage + BreadcrumbList：
+// 前者让答案可以被直接取用，后者给出它在站内的层级位置。
+const accepted = entry.accept.map((choice) => localizeTerm('choice', choice, lang, briefTerms));
+const canonical = new URL(path, Astro.site).href;
+// 只有真的记下了判定才声明答案。answerCount 与 acceptedAnswer 必须同时存在或
+// 同时缺席：声明 answerCount: 1 却不给 acceptedAnswer，等于对外声称「有答案」
+// 而正文里没有，QAPage 会被判为元数据不完整。
+const judged = entry.judgment?.ok && entry.judgment.choice ? entry.judgment : undefined;
+const answerNode: Record<string, unknown> | undefined = judged
+  ? {
+      '@type': 'Answer',
+      text: (() => {
+        const chosen = localizeTerm('choice', judged.choice, lang, briefTerms);
+        // accept 常常只有一个选项、且与判定相同，直接拼会得到「是（是）」。
+        // 只在确实存在其它可接受选项时才附注。
+        const others = accepted.filter((a) => a !== chosen);
+        return others.length ? `${chosen}（可接受：${others.join(' / ')}）` : chosen;
+      })(),
+      inLanguage: bodyLang,
+      // ts 理论上总有，但旧数据里出现过缺字段的记录；slice 一个 undefined 会
+      // 在构建时直接抛错，整个站点构建失败，不值得为一行日期冒这个险。
+      ...(typeof judged.ts === 'string' ? { dateCreated: judged.ts.slice(0, 10) } : {}),
+    }
+  : undefined;
+const pageSchema: Record<string, unknown>[] = [
+  {
+    '@type': 'QAPage',
+    '@id': `${canonical}#qa`,
+    mainEntity: {
+      '@type': 'Question',
+      name: text.question,
+      text: flat,
+      inLanguage: bodyLang,
+      answerCount: answerNode ? 1 : 0,
+      ...(answerNode ? { acceptedAnswer: answerNode } : {}),
+    },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t('site.name'), item: new URL(`/${lang}/`, Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: copy.crumb, item: new URL(`/${lang}/briefs/`, Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: heading, item: canonical },
+    ],
+  },
+];
 ---
 
-<BaseLayout lang={lang} title={pageTitle} description={desc} path={path} index={detailIndex}>
+<BaseLayout lang={lang} title={pageTitle} description={desc} path={path} index={detailIndex} schema={pageSchema}>
   <section class="section">
     <div class="wrap">
       <main class="doc">
