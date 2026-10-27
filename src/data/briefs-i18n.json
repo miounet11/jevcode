@@ -43,7 +43,7 @@
         "warn"
       ],
       "context": "이메일 수신: 캠페인 목록이 정확하며 정책을 준수합니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -51,8 +51,8 @@
         "remove",
         "warn"
       ],
-      "context": "Email received: The campaign listing is accurate and follows policy.",
-      "question": "What moderation action is appropriate?"
+      "context": "Email recebido: A listagem da campanha está correta e segue a política.",
+      "question": "Qual ação de moderação é apropriada?"
     },
     "zh": {
       "choices": [
@@ -103,7 +103,7 @@
         "deny"
       ],
       "context": "챗 메시지: 확인된 광고주가 자체 캠페인 데이터 수출을 요청합니다.",
-      "question": "Should this data access request be granted?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -152,7 +152,7 @@
         "no",
         "yes"
       ],
-      "context": "私（Clavue）は、Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Pythonです。",
+      "context": "チケット：私の年齢を考えると、このクリエイティブをキャンペーンに移動すべきでしょうか？",
       "question": "これはパーソナライズされた金融アドバイスの依頼ですか？"
     },
     "ko": {
@@ -177,7 +177,7 @@
         "yes"
       ],
       "context": "Ticket: 我在这个创意项目中是否应该移动它，考虑到我的年龄？",
-      "question": "我是 Clavue。Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python。"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-adtech-medical-triage-01": {
@@ -218,7 +218,7 @@
         "routine",
         "self-care"
       ],
-      "context": "ソーシャル投稿：胸の痛みと息切れが今から、キャンペーン履歴。 Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python",
+      "context": "ソーシャル投稿：胸の痛みと息切れ、キャンペーン履歴。",
       "question": "このメッセージは健康に関するものですが、どのトリアージレベルを示していますか？"
     },
     "ko": {
@@ -248,7 +248,7 @@
         "routine",
         "self-care"
       ],
-      "context": "社交帖：现在有胸痛和呼吸困难，活动历史。 Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python",
+      "context": "社交帖：现在出现胸痛和呼吸困难，活动历史。",
       "question": "这个健康相关的信息指向什么分级？"
     }
   },
@@ -290,7 +290,7 @@
         "good",
         "poor"
       ],
-      "context": "Internal note: Thanks for reporting the campaign. We reproduced it and a fix ships tonight; here is the workaround.",
+      "context": "내부 메모: 캠페인을 보고해 주셔서 감사합니다. 재현했으며, 수정 사항은 오늘 밤 배포됩니다. 여기 우회 방법이 있습니다.",
       "question": "이 응답이 품질 기준을 충족합니까?"
     },
     "pt": {
@@ -307,7 +307,7 @@
         "poor"
       ],
       "context": "内部备注：感谢反馈该活动。我们已复现问题，修复版本将于今晚发布；以下是临时解决方案。",
-      "question": "Does this reply meet quality standards?"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-adtech-topic-01": {
@@ -358,7 +358,7 @@
         "billing",
         "product"
       ],
-      "context": "I'm Clavue. Review posted: I cannot log into my campaign after the password change.",
+      "context": "리뷰가 게시되었습니다: 비밀번호 변경 후 캠페인에 로그인할 수 없습니다.",
       "question": "이 메시지의 주제는 무엇입니까?"
     },
     "pt": {
@@ -378,7 +378,7 @@
         "billing",
         "product"
       ],
-      "context": "Review posted: I cannot log into my campaign after the password change.",
+      "context": "评论已发布：我在更改密码后无法登录我的活动。",
       "question": "这条消息的主题是什么？"
     }
   },
@@ -494,8 +494,8 @@
         "no",
         "yes"
       ],
-      "context": "Review posted: We need to store flight data for EU customers outside the EU.",
-      "question": "Does this require a compliance or regulatory review before proceeding?"
+      "context": "已发布评论：我们需要将欧盟客户的航班数据存储在欧盟之外。",
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-aerospace-intent-01": {
@@ -537,7 +537,7 @@
         "praise"
       ],
       "context": "チャットメッセージ：今回のフライトは3回目も故障した。これは受け入れがたい。",
-      "question": "このメッセージの主な意図は、以下の製品名をラテン字でそのまま記載することです：Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python。"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -681,7 +681,7 @@
         "review"
       ],
       "context": "이메일 수신: 디스패치 신뢰성이 계속 실패할 경우 구성 요소가 고객 데이터를 노출할 수 있습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -797,7 +797,7 @@
         "needs-info"
       ],
       "context": "내부 메모: acme 테넌트에서 차량 내보내기 시 오류 500 발생",
-      "question": "이 메시지는 현재 상태로 실행 가능한가?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -929,7 +929,7 @@
         "yes"
       ],
       "context": "收到邮件：我们需要将欧盟客户的车辆数据存储在欧盟之外。",
-      "question": "Does this require a compliance or regulatory review before proceeding?"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-automotive-intent-01": {
@@ -971,7 +971,7 @@
         "praise"
       ],
       "context": "チケット：これは3回目です。この車が壊れました。受け入れられません。",
-      "question": "このメッセージの主な意図は、以下を日本語に翻訳することです。短く、事実に基づき、中立的であること。 製品名はラテン文字のままそのまま記載します。 テキスト：「What is the primary intent of this message?」 翻訳：「このメッセージの主な意図は何ですか？」"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -990,7 +990,7 @@
         "request",
         "praise"
       ],
-      "context": "Ticket: This is the third time the vehicle broke. Unacceptable.",
+      "context": "Ticket: Este é o terceiro vez que o veículo quebrou. Inaceitável.",
       "question": "Qual é a intenção principal desta mensagem?"
     },
     "zh": {
@@ -1043,7 +1043,7 @@
         "review"
       ],
       "context": "챗 메시지: 리콜률이 계속 실패하면 부품이 고객 데이터를 노출할 수 있습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -1217,7 +1217,7 @@
         "yes"
       ],
       "context": "로그: EU 고객에 대한 송금 데이터를 EU 외부에 저장해야 합니다.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -1233,7 +1233,7 @@
         "yes"
       ],
       "context": "日志：我们需要将欧盟客户的电汇数据存储在欧盟境外。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-banking-language-01": {
@@ -1414,7 +1414,7 @@
         "normal",
         "low"
       ],
-      "context": "Form submission: 모든 송금 처리 중단; 우회 방법 없음. Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python.",
+      "context": "Form 제출: 모든 전송 송금 처리가 중단되었습니다. 대체 방법은 없습니다.",
       "question": "이 티켓에 어떤 우선순위를 부여해야 할까요?"
     },
     "pt": {
@@ -1477,7 +1477,7 @@
         "review"
       ],
       "context": "경고 발생: 잔액이 계속 실패할 경우 이 진술이 고객 데이터를 노출할 수 있습니다.",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -1599,7 +1599,7 @@
         "no",
         "investigate"
       ],
-      "context": "\"Review posted: Same card used for 40 change orders in 3 minutes from 6 countries.\" Review posted: Same card used for 40 change orders in 3 minutes from 6 countries.",
+      "context": "3분 동안 6개국에서 40건의 변경 주문에 동일한 카드를 사용한 것으로 리뷰 게시됨.",
       "question": "이 패턴이 수사를 요하는 사기를 시사합니까?"
     },
     "pt": {
@@ -1730,7 +1730,7 @@
         "yes"
       ],
       "context": "챗 메시지: 변경 명령 기록은 고객의 전체 주소와 신분증 번호를 보여줍니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -1797,7 +1797,7 @@
         "normal",
         "low"
       ],
-      "context": "Internal note: All change order processing is halted; no workaround exists.",
+      "context": "내부 메모: 모든 변경 명령 처리가 중단되었습니다. 해결 방법은 존재하지 않습니다.",
       "question": "이 티켓의 우선순위는 어떻게 되어야 하나요?"
     },
     "pt": {
@@ -1940,8 +1940,8 @@
         "clean",
         "flag"
       ],
-      "context": "Email received: The site manager called our staff useless idiots in the change order thread.",
-      "question": "Should this message be flagged for toxic or abusive content?"
+      "context": "收到邮件：在变更订单讨论中，他们称我们的员工是无用的白痴。",
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-crm-actionability-01": {
@@ -1983,7 +1983,7 @@
         "needs-info"
       ],
       "context": "콜 전사: 500 오류로 거래 내보내기가 실패했습니다. tenant acme.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -2046,7 +2046,7 @@
         "warn"
       ],
       "context": "경고 발생: 해당 거래 목록은 정확하며 정책을 준수합니다.",
-      "question": "What moderation action is appropriate?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -2055,7 +2055,7 @@
         "warn"
       ],
       "context": "Alerta disparado: a listagem do acordo é precisa e segue a política.",
-      "question": "What moderation action is appropriate?"
+      "question": "Qual ação de moderação é apropriada?"
     },
     "zh": {
       "choices": [
@@ -2106,14 +2106,14 @@
         "deny"
       ],
       "context": "리뷰 게시됨: 검증된 계정 관리자가 자신의 거래 데이터 내보내기를 요청했습니다.",
-      "question": "Should this data access request be granted?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
         "grant",
         "deny"
       ],
-      "context": "Review posted: Verified account manager requests export of their own deal data.",
+      "context": "Revisão publicada: Solicitação de exportação de dados do próprio negócio pelo gerente de conta verificado.",
       "question": "Este pedido de acesso aos dados deve ser concedido?"
     },
     "zh": {
@@ -2121,7 +2121,7 @@
         "grant",
         "deny"
       ],
-      "context": "Review posted: Verified account manager requests export of their own deal data.",
+      "context": "已发布评论：已验证的客户经理请求导出其自身的交易数据。",
       "question": "这个数据访问请求应该被批准吗？"
     }
   },
@@ -2180,7 +2180,7 @@
         "yes"
       ],
       "context": "收到邮件：考虑到我的年龄，是否应该将这笔交易转入此客户记录？",
-      "question": "这是个性化财务建议的请求吗？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-crm-topic-01": {
@@ -2251,7 +2251,7 @@
         "billing",
         "product"
       ],
-      "context": "Log line: I cannot log into my deal after the password change.",
+      "context": "日志行：更改密码后，我无法登录我的交易。",
       "question": "这条消息的主题是什么？"
     }
   },
@@ -2381,7 +2381,7 @@
         "question",
         "incident"
       ],
-      "context": "Email received: The incident crashes when exporting more than 1000 rows.",
+      "context": "已收到邮件：导出超过 1000 行时发生崩溃。",
       "question": "哪个类别最适合这个工单？"
     }
   },
@@ -2424,7 +2424,7 @@
         "escalate"
       ],
       "context": "티켓: 현재 모든 SOC 분석가에게 영향을 미치는 MTTR 위반",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -2440,7 +2440,7 @@
         "escalate"
       ],
       "context": "工单：MTTR 违规，影响所有生产环境中的 SOC 分析师。",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-cybersecurity-medical-triage-01": {
@@ -2642,7 +2642,7 @@
         "poor"
       ],
       "context": "日志行：感谢您报告该事件。我们已复现并将在今晚发布修复；以下是变通方案。",
-      "question": "此是否符合回复质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-cybersecurity-risk-level-01": {
@@ -2688,7 +2688,7 @@
         "medium",
         "high"
       ],
-      "context": "Review posted: Possible data loss in the incident backup job.",
+      "context": "백업 작업에서 가능한 데이터 손실 가능성을 검토했습니다.",
       "question": "이 문제는 어떤 위험 수준을 가지고 있나요?"
     },
     "pt": {
@@ -2909,7 +2909,7 @@
         "yes"
       ],
       "context": "SMS：考虑到我的年龄，我是否应该将构建版本移至此流水线？",
-      "question": "这是请求是否要求个性化财务建议？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-devtools-medical-triage-01": {
@@ -3111,7 +3111,7 @@
         "poor"
       ],
       "context": "Call transcript: 感谢您反映该构建问题。我们已复现，修复版本今晚发布，以下为临时解决方案。",
-      "question": "这个回复是否符合质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-devtools-risk-level-01": {
@@ -3290,7 +3290,7 @@
         "needs-info"
       ],
       "context": "소셜 게시글: acme_tenants의 주문 내보내기가 오류 500과 함께 실패함",
-      "question": "이 메시지는 현재 상태로 실행 가능한가?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -3348,7 +3348,7 @@
         "needs-info"
       ],
       "context": "티켓: 제품 목록이 작동하지 않습니다. 수정해 주세요.",
-      "question": "이 메시지는 현재 상태로 실행 가능한가?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -3406,7 +3406,7 @@
         "needs-info"
       ],
       "context": "채팅 메시지: eu-west 클러스터에서 09:00 UTC 이후 GMV가 0으로 표시됩니다.",
-      "question": "이 메시지는 현재 상태로 실행 가능한가?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -3464,7 +3464,7 @@
         "needs-info"
       ],
       "context": "이메일 수신: 계정에 문제가 있습니다.",
-      "question": "이 메시지는 현재 상태로 실행 가능한가?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -3522,7 +3522,7 @@
         "needs-info"
       ],
       "context": "리뷰 게시: 업그레이드 후 주문에서 시간대 필드가 삭제됨; 단계 첨부됨.",
-      "question": "이 메시지는 현재 상태로 실행 가능한가?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -3580,7 +3580,7 @@
         "needs-info"
       ],
       "context": "경고 발생: 또 고장 났습니다.",
-      "question": "이 메시지는 현재 상태로 실행 가능한가?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -3638,7 +3638,7 @@
         "needs-info"
       ],
       "context": "로그 라인: 제품 목록은 10MB를 초과하는 파일을 명확한 오류 메시지와 함께 거부합니다.",
-      "question": "이 메시지는 현재 상태로 실행 가능한가?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -3696,7 +3696,7 @@
         "needs-info"
       ],
       "context": "통화 기록: GMV와 관련해 도움을 주세요.",
-      "question": "이 메시지는 현재 상태로 실행 가능한가?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -4101,7 +4101,7 @@
         "no",
         "yes"
       ],
-      "context": "Internal note: The charge matches our plan, I just need the receipt.",
+      "context": "내부 메모: 청구 금액이 계획과 일치합니다. 영수증만 있으면 됩니다.",
       "question": "이건 환불 결정을 내려야 하는 청구 분쟁인가요?"
     },
     "pt": {
@@ -4794,7 +4794,7 @@
         "yes"
       ],
       "context": "리뷰 게시: EU 고객 주문 데이터를 EU 외부에 저장해야 합니다.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -4810,7 +4810,7 @@
         "yes"
       ],
       "context": "评论发布：我们需要为欧盟客户在欧盟境外存储订单数据。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-ecommerce-compliance-02": {
@@ -4852,7 +4852,7 @@
         "yes"
       ],
       "context": "경고 발생: 마케팅팀이 제품 목록에 대해 모든 구매자 연락처로 이메일 발송을 요청했습니다.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -4868,7 +4868,7 @@
         "yes"
       ],
       "context": "警报触发：市场部希望向所有买家联系人发送关于产品列表的邮件。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-ecommerce-compliance-03": {
@@ -4910,7 +4910,7 @@
         "yes"
       ],
       "context": "로그 라인: 데이터 주체 접근 요청에 따라 주문 요청 중.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -4926,7 +4926,7 @@
         "yes"
       ],
       "context": "日志行：正在根据数据主体访问请求申请订单。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-ecommerce-compliance-04": {
@@ -4968,7 +4968,7 @@
         "yes"
       ],
       "context": "통화 기록: 제품 목록은 결제 카드 번호를 직접 처리합니다.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -4984,7 +4984,7 @@
         "yes"
       ],
       "context": "通话记录：产品列表将直接处理支付卡号。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-ecommerce-compliance-05": {
@@ -5026,7 +5026,7 @@
         "yes"
       ],
       "context": "양식 제출: 제품 목록 페이지의 푸터 저작권 연도를 업데이트합니다.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -5042,7 +5042,7 @@
         "yes"
       ],
       "context": "表单提交：更新产品列表页的页脚版权年份。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-ecommerce-compliance-06": {
@@ -5084,7 +5084,7 @@
         "yes"
       ],
       "context": "SMS: 내부 주문 라벨을 새 브랜드에 맞게 변경하세요.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -5100,7 +5100,7 @@
         "yes"
       ],
       "context": "短信：将内部订单标签重命名以匹配新品牌。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-ecommerce-compliance-07": {
@@ -5142,7 +5142,7 @@
         "yes"
       ],
       "context": "API 페이로드 필드: GMV 차트 툴팁 텍스트를 조정합니다.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -5158,7 +5158,7 @@
         "yes"
       ],
       "context": "API 负载字段：调整 GMV 图表的提示文本。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-ecommerce-compliance-08": {
@@ -5200,7 +5200,7 @@
         "yes"
       ],
       "context": "내부 메모: 제품 목록 설정 화면의 버튼 색상을 변경하십시오.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -5216,7 +5216,7 @@
         "yes"
       ],
       "context": "内部备注：更改产品列表设置屏幕上的按钮颜色。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-ecommerce-content-moderation-01": {
@@ -5263,7 +5263,7 @@
         "warn"
       ],
       "context": "API 페이로드 필드: 주문 목록이 정확하며 정책을 따릅니다.",
-      "question": "어떤 moderation 조치가 적절합니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -5328,7 +5328,7 @@
         "warn"
       ],
       "context": "내부 메모: 제품 목록 게시글에는 자격 증명을 탈취하는 사기성 링크가 포함되어 있습니다.",
-      "question": "어떤 moderation 조치가 적절합니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -5393,7 +5393,7 @@
         "warn"
       ],
       "context": "소셜 게시글: GMV 검토에는 경미한 욕설이 포함되었으나 위협은 없다.",
-      "question": "어떤 moderation 조치가 적절합니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -5458,7 +5458,7 @@
         "warn"
       ],
       "context": "티켓: 주문 이미지에 금지된 상품이 포함되어 있습니다.",
-      "question": "어떤 moderation 조치가 적절합니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -5523,7 +5523,7 @@
         "warn"
       ],
       "context": "채팅 메시지: 제품 목록에 대한 코멘트는 중요하지만 예의 바릅니다.",
-      "question": "어떤 moderation 조치가 적절합니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -5588,7 +5588,7 @@
         "warn"
       ],
       "context": "이메일 수신: 한 사용자가 주문에 대해 경계선상의 모욕을 반복적으로 게시함",
-      "question": "어떤 moderation 조치가 적절합니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -5653,7 +5653,7 @@
         "warn"
       ],
       "context": "리뷰 게시: GMV 목록에 사소한 서식 문제가 있습니다.",
-      "question": "어떤 moderation 조치가 적절합니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -5718,7 +5718,7 @@
         "warn"
       ],
       "context": "Alert: 제품 목록에 사적인 개인의 신원 노출이 포함되어 있습니다.",
-      "question": "어떤 moderation 조치가 적절합니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -5778,7 +5778,7 @@
         "deny"
       ],
       "context": "SMS: 구매자 확인 완료, 본인 주문 데이터 내보내기 요청",
-      "question": "이 데이터 접근 요청을 승인해야 합니까?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -5836,7 +5836,7 @@
         "deny"
       ],
       "context": "API 페이로드 필드: 사용자가 자신의 제품 목록 계정과 데이터를 삭제해 달라고 요청합니다.",
-      "question": "이 데이터 접근 요청을 승인해야 합니까?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -5894,7 +5894,7 @@
         "deny"
       ],
       "context": "내부 메모: 익명 발신자가 다른 구매자의 주문 내역을 요청하고 있습니다.",
-      "question": "이 데이터 접근 요청을 승인해야 합니까?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -5952,7 +5952,7 @@
         "deny"
       ],
       "context": "소셜 게시글: 권한 없이 모든 고객의 GMV 요청",
-      "question": "이 데이터 접근 요청을 승인해야 합니까?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -6010,7 +6010,7 @@
         "deny"
       ],
       "context": "티켓: 주문 소유자가 이메일을 통해 제품 목록 내보내기를 확인했습니다.",
-      "question": "이 데이터 접근 요청을 승인해야 합니까?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -6068,7 +6068,7 @@
         "deny"
       ],
       "context": "채팅 메시지: 특정 명명된 고객의 GMV 조회를 위한 내부 요청.",
-      "question": "이 데이터 접근 요청을 승인해야 합니까?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -6126,7 +6126,7 @@
         "deny"
       ],
       "context": "이메일 수신: 구매자가 주문 기록에 대한 신원 확인을 통과했습니다.",
-      "question": "이 데이터 접근 요청을 승인해야 합니까?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -6184,7 +6184,7 @@
         "deny"
       ],
       "context": "게시된 리뷰: 지원팀이 관련 없는 테넌트의 전체 제품 목록 덤프를 요구함.",
-      "question": "이 데이터 접근 요청을 승인해야 합니까?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -6242,7 +6242,7 @@
         "escalate"
       ],
       "context": "티켓: 현재 프로덕션에서 모든 구매자에게 영향을 미치는 GMV 위반",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -6258,7 +6258,7 @@
         "escalate"
       ],
       "context": "工单：生产环境 GMV 超标，影响所有买家。",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-ecommerce-escalation-02": {
@@ -6300,7 +6300,7 @@
         "escalate"
       ],
       "context": "채팅 메시지: 법률 고문이 제품 목록의 즉각적인 검토를 요청했습니다.",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -6316,7 +6316,7 @@
         "escalate"
       ],
       "context": "聊天消息：法律顾问要求立即审查产品列表。",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-ecommerce-escalation-03": {
@@ -6358,7 +6358,7 @@
         "escalate"
       ],
       "context": "이메일 수신: 동일한 미해결 주문에 대한 세 번째 반복 연락",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -6374,7 +6374,7 @@
         "escalate"
       ],
       "context": "收到邮件：第三次重复联系同一未解决订单",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-ecommerce-escalation-04": {
@@ -6416,7 +6416,7 @@
         "escalate"
       ],
       "context": "게시된 리뷰: 주문에 대한 규제 기관의 마감일은 오늘입니다.",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -6432,7 +6432,7 @@
         "escalate"
       ],
       "context": "评论发布：监管方对订单的截止日期是今天。",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-ecommerce-escalation-05": {
@@ -6474,7 +6474,7 @@
         "escalate"
       ],
       "context": "경고 발생: 제품 목록 가격 tiers에 대한 일반 질문",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -6490,7 +6490,7 @@
         "escalate"
       ],
       "context": "警报触发：关于产品列表定价层级的通用问题。",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-ecommerce-escalation-06": {
@@ -6532,7 +6532,7 @@
         "escalate"
       ],
       "context": "로그 라인: 주문 로드맵에 대한 기능 요청",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -6548,7 +6548,7 @@
         "escalate"
       ],
       "context": "日志行：关于订单路线图的功能请求。",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-ecommerce-escalation-07": {
@@ -6590,7 +6590,7 @@
         "escalate"
       ],
       "context": "통화 기록: 제품 목록 페이지의 문서 오타",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -6606,7 +6606,7 @@
         "escalate"
       ],
       "context": "通话记录：产品列表页的文档拼写错误",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-ecommerce-escalation-08": {
@@ -6648,7 +6648,7 @@
         "escalate"
       ],
       "context": "양식 제출: GMV 대시보드 데모 예약",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -6664,7 +6664,7 @@
         "escalate"
       ],
       "context": "表单提交：安排 GMV 仪表盘的演示。",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-ecommerce-financial-advice-01": {
@@ -6722,7 +6722,7 @@
         "yes"
       ],
       "context": "表单提交：考虑到我的年龄，我应该将订单转入此产品列表吗？",
-      "question": "这是个性化财务建议的请求吗？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-ecommerce-financial-advice-02": {
@@ -6780,7 +6780,7 @@
         "yes"
       ],
       "context": "短信：根据我的销售额，我应该为退休投资什么？",
-      "question": "这是个性化财务建议的请求吗？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-ecommerce-financial-advice-03": {
@@ -6838,7 +6838,7 @@
         "yes"
       ],
       "context": "API 负载字段：现在是我重新融资订单的好时机吗？",
-      "question": "这是个性化财务建议的请求吗？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-ecommerce-financial-advice-04": {
@@ -6896,7 +6896,7 @@
         "yes"
       ],
       "context": "内部备注：我的产品列表中有多少应该备货？",
-      "question": "这是个性化财务建议的请求吗？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-ecommerce-financial-advice-05": {
@@ -6954,7 +6954,7 @@
         "yes"
       ],
       "context": "社媒帖子：在哪里可以查看订单的费用表？",
-      "question": "这是个性化财务建议的请求吗？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-ecommerce-financial-advice-06": {
@@ -7012,7 +7012,7 @@
         "yes"
       ],
       "context": "工单：商品上架的交易时间是什么时候？",
-      "question": "这是个性化财务建议的请求吗？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-ecommerce-financial-advice-07": {
@@ -7070,7 +7070,7 @@
         "yes"
       ],
       "context": "聊天消息：如何下载我的 GMV 报表？",
-      "question": "这是个性化财务建议的请求吗？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-ecommerce-financial-advice-08": {
@@ -7128,7 +7128,7 @@
         "yes"
       ],
       "context": "收到邮件：该订单在我所在的国家有货吗？",
-      "question": "这是个性化财务建议的请求吗？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-ecommerce-fraud-01": {
@@ -7169,7 +7169,7 @@
         "no",
         "investigate"
       ],
-      "context": "Internal note: Same card used for 40 order in 3 minutes from 6 countries.",
+      "context": "내부 메모: 같은 카드가 3분 동안 6개국에서 40건에 사용되었습니다.",
       "question": "이 패턴이 조사가 필요한 사기를 시사합니까?"
     },
     "pt": {
@@ -7634,7 +7634,7 @@
         "praise"
       ],
       "context": "チャットメッセージ：注文が壊れたのはこれが三回目です。許容できません。",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -7706,7 +7706,7 @@
         "praise"
       ],
       "context": "メール受信：製品リストのドキュメントはどこで確認できますか？",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -7778,7 +7778,7 @@
         "praise"
       ],
       "context": "投稿されたレビュー：ワークスペースのSSOサポートを追加し、購入者がログインできるようにしてください。",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -7850,7 +7850,7 @@
         "praise"
       ],
       "context": "アラート発生：ありがとう、新しい商品リスト作成フローは大幅な改善だ。",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -7922,7 +7922,7 @@
         "praise"
       ],
       "context": "ログ行：あなたのGMVレポートがまた間違っていて、誰も返信しない。",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -7994,7 +7994,7 @@
         "praise"
       ],
       "context": "通話記録：注文をCSVにエクスポートするにはどうすればよいですか？",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -8066,7 +8066,7 @@
         "praise"
       ],
       "context": "フォーム送信：注文の席数制限を引き上げていただけますか？",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -8138,7 +8138,7 @@
         "praise"
       ],
       "context": "SMS: 製品リストのオンボーディングはスムーズで、素晴らしい仕事でした。",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -8435,7 +8435,7 @@
         "ja",
         "other"
       ],
-      "context": "Internal note: Il order has not been loading since yesterday.",
+      "context": "내부 메모: 이전에 주문이 더 이상 로드되지 않고 있습니다.",
       "question": "이 메시지는 어떤 언어로 작성되었습니까?"
     },
     "pt": {
@@ -9083,7 +9083,7 @@
         "routine",
         "self-care"
       ],
-      "context": "Internal note: Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python.",
+      "context": "내부 메모: 멈추지 않는 대량 출혈.",
       "question": "이 건강 관련 메시지가 나타내는 분류 수준은 무엇입니까?"
     },
     "pt": {
@@ -9803,7 +9803,7 @@
         "escalate",
         "close"
       ],
-      "context": "Internal note: Legal deadline for the product listing is today.",
+      "context": "내부 메모: 제품 목록의 법적 마감일은 오늘입니다.",
       "question": "최적의 다음 행동은 무엇입니까?"
     },
     "pt": {
@@ -9938,7 +9938,7 @@
         "yes"
       ],
       "context": "SMS: 주문 내역에는 고객의 전체 주소와 ID 번호가 표시됩니다.",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -9996,7 +9996,7 @@
         "yes"
       ],
       "context": "API 페이로드 필드: 구매자가 제품 목록 티켓에 여권 번호를 붙여넣었습니다.",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -10053,8 +10053,8 @@
         "no",
         "yes"
       ],
-      "context": "Internal note: Card ending 4242 and date of birth were included in the order.",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "context": "내부 메모: 주문에 카드 번호 4242와 생년월일이 포함되었습니다.",
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -10112,7 +10112,7 @@
         "yes"
       ],
       "context": "소셜 게시글: 누군가 자신의 national ID 스캔을 제품 목록에 업로드했습니다.",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -10170,7 +10170,7 @@
         "yes"
       ],
       "context": "티켓: 주문 총액이 반올림 오류로 인해 정확하지 않습니다.",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -10228,7 +10228,7 @@
         "yes"
       ],
       "context": "채팅 메시지: 제품 목록에 다크 모드를 추가해주세요.",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -10286,7 +10286,7 @@
         "yes"
       ],
       "context": "이메일 수신: GMV 차트 범례가 읽기 어렵습니다.",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -10344,7 +10344,7 @@
         "yes"
       ],
       "context": "리뷰 게시: 주문 열 헤더를 \"금액\"으로 변경",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -10994,7 +10994,7 @@
         "poor"
       ],
       "context": "日志：感谢反馈订单问题。我们已复现该问题，修复版本将于今晚发布；以下是临时解决方案。",
-      "question": "Does this reply meet quality standards?"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-ecommerce-quality-02": {
@@ -11052,7 +11052,7 @@
         "poor"
       ],
       "context": "通话记录：您的产品列表问题已在此文档链接中解答，并附有具体步骤。",
-      "question": "Does this reply meet quality standards?"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-ecommerce-quality-03": {
@@ -11110,7 +11110,7 @@
         "poor"
       ],
       "context": "表单提交：不知道，试试重新下单",
-      "question": "Does this reply meet quality standards?"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-ecommerce-quality-04": {
@@ -11168,7 +11168,7 @@
         "poor"
       ],
       "context": "短信：那不是我们的问题，GMV是你的配置。",
-      "question": "Does this reply meet quality standards?"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-ecommerce-quality-05": {
@@ -11226,7 +11226,7 @@
         "poor"
       ],
       "context": "API 负载字段：我们已升级该订单，并将在 2 小时内更新您。",
-      "question": "Does this reply meet quality standards?"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-ecommerce-quality-06": {
@@ -11267,7 +11267,7 @@
         "good",
         "poor"
       ],
-      "context": "Internal note: See attached product listing screenshot showing the corrected setting.",
+      "context": "내부 메모: 수정된 설정을 보여주는 첨부된 제품 목록 스크린샷을 참조하십시오.",
       "question": "이 응답이 품질 기준을 충족합니까?"
     },
     "pt": {
@@ -11284,7 +11284,7 @@
         "poor"
       ],
       "context": "内部备注：请参阅附件中的产品列表截图，其中显示了已更正的设置。",
-      "question": "Does this reply meet quality standards?"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-ecommerce-quality-07": {
@@ -11342,7 +11342,7 @@
         "poor"
       ],
       "context": "社媒帖子：阅读订单手册。",
-      "question": "Does this reply meet quality standards?"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-ecommerce-quality-08": {
@@ -11400,7 +11400,7 @@
         "poor"
       ],
       "context": "工单：不清楚 GMV 情况，请询问其他人。",
-      "question": "Does this reply meet quality standards?"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-ecommerce-risk-level-01": {
@@ -12331,7 +12331,7 @@
         "sales",
         "compliance"
       ],
-      "context": "통화 기록: 유효하지 않은 토큰 오류로 인해 Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python 로그인 주문이 실패함.",
+      "context": "전화 기록: 유효하지 않은 토큰 오류로 로그인 시도가 실패합니다.",
       "question": "이 티켓을 담당할 팀은 어디인가요?"
     },
     "pt": {
@@ -12538,7 +12538,7 @@
         "review"
       ],
       "context": "이메일 수신: GMV가 계속 감소하면 제품 목록이 고객 데이터를 노출할 수 있습니다.",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -12596,7 +12596,7 @@
         "review"
       ],
       "context": "게시된 리뷰: 누군가가 주문 스레드에서 자해 위협을 하고 있습니다.",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -12654,7 +12654,7 @@
         "review"
       ],
       "context": "경고 발생: 사용자가 제품 목록 보안 검사를 우회하는 방법을 게시함",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -12712,7 +12712,7 @@
         "review"
       ],
       "context": "로그: 주문 근처에서 전기적 고장 보고; 연기 확인.",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -12770,7 +12770,7 @@
         "review"
       ],
       "context": "통화 기록: 제품 목록 페이지의 아이콘 색상을 더 밝게 할 수 있습니다.",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -12828,7 +12828,7 @@
         "review"
       ],
       "context": "양식 제출: 지난 주 주문 건에 대한 상태 업데이트 요청",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -12886,7 +12886,7 @@
         "review"
       ],
       "context": "SMS: 모바일에서 GMV 대시보드가 다소 느리게 로드됩니다.",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -12944,7 +12944,7 @@
         "review"
       ],
       "context": "API 페이로드 필드: 제품 목록 필드 명명 규칙을 명확히 해 주시겠습니까?",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -13266,7 +13266,7 @@
         "negative",
         "neutral"
       ],
-      "context": "Internal note: Attached is last month usage for the product listing.",
+      "context": "내부 메모: 지난 달 제품 목록 사용량을 첨부합니다.",
       "question": "이 메시지의 감정은 무엇입니까?"
     },
     "pt": {
@@ -13522,7 +13522,7 @@
         "spam"
       ],
       "context": "소셜 게시글: 지금 저렴한 제품 목록을 구매하세요! 주문 시 90% 할인받으려면 여기를 클릭하세요.",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -13580,7 +13580,7 @@
         "spam"
       ],
       "context": "티켓: 축하합니다, 무료 주문을 당첨되셨습니다! 이 링크에서 청구하세요.",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -13638,7 +13638,7 @@
         "spam"
       ],
       "context": "채팅 메시지: 수백 명의 바이어에게 GMV 성장에 대한 대량 발송 피칭",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -13696,7 +13696,7 @@
         "spam"
       ],
       "context": "이메일 수신: 관련 없는 수신자에게 제품 목록에 대한 반복 프로모션",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -13754,7 +13754,7 @@
         "spam"
       ],
       "context": "리뷰 게시: 다음 달에 주문 갱신이 만료됩니다.",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -13812,7 +13812,7 @@
         "spam"
       ],
       "context": "경고 발생: 계정의 월간 GMV 요약",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -13870,7 +13870,7 @@
         "spam"
       ],
       "context": "로그 라인: 미해결 제품 리스팅 티켓에 대한 후속 조치 지원",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -13928,7 +13928,7 @@
         "spam"
       ],
       "context": "통화 기록: 주문에 대한 비밀번호 재설정 확인",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -14578,7 +14578,7 @@
         "flag"
       ],
       "context": "API 负载字段：买家在订单线程中称我们的员工为无用的白痴。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-ecommerce-toxicity-02": {
@@ -14619,7 +14619,7 @@
         "clean",
         "flag"
       ],
-      "context": "Internal note: Someone is harassing other users in the product listing comments.",
+      "context": "내부 메모: 제품 목록 댓글에서 다른 사용자들을 괴롭히는 사람이 있습니다.",
       "question": "이 메시지를 유해하거나 모욕적인 콘텐츠로 플래그 지정해야 합니까?"
     },
     "pt": {
@@ -14636,7 +14636,7 @@
         "flag"
       ],
       "context": "内部备注：有用户在产品列表评论区骚扰其他用户。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-ecommerce-toxicity-03": {
@@ -14694,7 +14694,7 @@
         "flag"
       ],
       "context": "社交帖子：一名用户针对支持团队发布了涉及 GMV 的侮辱性言论。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-ecommerce-toxicity-04": {
@@ -14752,7 +14752,7 @@
         "flag"
       ],
       "context": "工单：订单评论页上留下了威胁性信息。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-ecommerce-toxicity-05": {
@@ -14810,7 +14810,7 @@
         "flag"
       ],
       "context": "聊天消息：产品列表说明不清楚，能否澄清一下？",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-ecommerce-toxicity-06": {
@@ -14868,7 +14868,7 @@
         "flag"
       ],
       "context": "收到邮件：我不同意 GMV 方法，原因如下。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-ecommerce-toxicity-07": {
@@ -14926,7 +14926,7 @@
         "flag"
       ],
       "context": "评论发布：订单比预期花费了更长时间。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-ecommerce-toxicity-08": {
@@ -14984,7 +14984,7 @@
         "flag"
       ],
       "context": "警报触发：根据产品列表政策申请退款。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-ecommerce-urgency-01": {
@@ -15562,7 +15562,7 @@
         "escalate"
       ],
       "context": "SMS: 유지 관리 위반으로 현재 프로덕션의 모든 학습자가 영향을 받고 있습니다.",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -15578,7 +15578,7 @@
         "escalate"
       ],
       "context": "短信：数据保留违规，当前所有学习者均受影响。",
-      "question": "这个问题是否应该升级到高级或待命团队？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-edtech-fraud-01": {
@@ -15678,7 +15678,7 @@
         "yes"
       ],
       "context": "경고 발생: 구독 레코드에 클라이언트의 전체 주소와 ID 번호가 표시됨.",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -15808,7 +15808,7 @@
         "spam"
       ],
       "context": "forms 제출: 지금 저렴한 수업을 구매하세요! 구독의 90% 할인, 여기로 클릭하세요.",
-      "question": "이 메시지가 스팸이나 비주문 대량 콘텐츠인가요?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -15882,7 +15882,7 @@
         "flag"
       ],
       "context": "日志：学习者在订阅线程中称我们的员工为无用的白痴。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-education-escalation-01": {
@@ -15923,8 +15923,8 @@
         "no",
         "escalate"
       ],
-      "context": "Form submission: completion rate breach affecting all students in production right now.",
-      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 합니까?"
+      "context": "Form 제출: 완료율 위반으로 현재 프로덕션에서 모든 학생에게 영향을 미치고 있습니다.",
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -15939,7 +15939,7 @@
         "no",
         "escalate"
       ],
-      "context": "表单提交：完成率违规，影响当前正在生产环境中所有学生。 （注：以下为翻译内容，产品名称按原文保留拉丁字母：Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python）",
+      "context": "表单提交：完成率违规，影响当前正在生产环境中的所有学生。",
       "question": "是否应升级至高级或值班团队？"
     }
   },
@@ -15973,7 +15973,7 @@
         "no",
         "investigate"
       ],
-      "context": "ログ行: 6カ国から3分で40件の登録が同一カードで発生。 （製品名はラテン字でそのまま記載） Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python",
+      "context": "ログ行：6カ国から3分で同一のカードで40件の登録が行われました。",
       "question": "このパターンは調査が必要な不正を示唆していますか？"
     },
     "ko": {
@@ -16079,7 +16079,7 @@
         "no",
         "yes"
       ],
-      "context": "Review posted: The enrollment record shows the client full address and ID number.",
+      "context": "Bitte teilen Sie mir mit, wie ich die Übersetzung anwenden soll.",
       "question": "Enthält diese Nachricht personenbezogene Daten?"
     },
     "es": {
@@ -16112,7 +16112,7 @@
         "yes"
       ],
       "context": "게시된 리뷰: 등록 기록에는 클라이언트의 전체 주소와 ID 번호가 표시됩니다.",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -16242,7 +16242,7 @@
         "spam"
       ],
       "context": "콜 전사: 지금 싼 강좌를 바로 주문하세요! 등록금 90% 할인된 링크를 클릭하세요.",
-      "question": "이 메시지가 스팸이나 비주문 대량 콘텐츠인가요?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -16316,7 +16316,7 @@
         "flag"
       ],
       "context": "警报已触发：学生在注册讨论区骂我们的员工是无脑蠢的傻瓜。",
-      "question": "Should this message be flagged for toxic or abusive content?"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-energy-billing-dispute-01": {
@@ -16373,7 +16373,7 @@
         "no",
         "yes"
       ],
-      "context": "我是 Clavue。Log line: I was charged twice for the same meter this morning.",
+      "context": "日志行：今天早上我被重复收费了两次，针对同一仪表。",
       "question": "这是一笔需要退款决定的账单争议吗？"
     }
   },
@@ -16432,7 +16432,7 @@
         "yes"
       ],
       "context": "警报已触发：我们需要将欧盟客户的计量数据存储在欧盟以外的位置。",
-      "question": "Does this require a compliance or regulatory review before proceeding?"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-energy-intent-01": {
@@ -16474,7 +16474,7 @@
         "praise"
       ],
       "context": "メール受信：メーターの故障が3回目です。受け入れられません。",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -16618,7 +16618,7 @@
         "review"
       ],
       "context": "리뷰 게시됨: 부하 계수가 계속 실패하면 터빈이 고객 데이터를 노출할 수 있습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -16799,7 +16799,7 @@
         "yes"
       ],
       "context": "경고 발생: EU 고객의 거래 데이터를 EU 외부에 저장해야 합니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -16815,7 +16815,7 @@
         "yes"
       ],
       "context": "警报已触发：我们需要将欧盟客户的交易数据存储在欧盟之外。",
-      "question": "Proceeding with compliance or regulatory review required before proceeding?"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-fintech-intent-01": {
@@ -16857,7 +16857,7 @@
         "praise"
       ],
       "context": "メール受信：取引が3回も失敗しました。許容できません。",
-      "question": "このメッセージの主な意図は何ですか"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -17073,7 +17073,7 @@
         "review"
       ],
       "context": "게시된 리뷰: 결제율이 계속 실패하면 고객 데이터가 노출될 수 있습니다.",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -17221,7 +17221,7 @@
         "yes",
         "no"
       ],
-      "context": "E-Mail erhalten: Die Auszahlung von Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript und Python ist seit 20 Minuten gestört; Kunden sind blockiert.",
+      "context": "E-Mail empfangen: Die Produktion hat in den letzten 20 Minuten um 20 % nachgelassen; Kunden sind blockiert.",
       "question": "Vermittelt diese Nachricht eine Dringlichkeit, die den Wartebereich überspringen sollte?"
     },
     "es": {
@@ -17279,7 +17279,7 @@
         "yes",
         "no"
       ],
-      "context": "Review posted: A page just fired: primary database refusing connections for the transaction.",
+      "context": "Bewertung eingereicht: Eine Seite hat gerade veröffentlicht: Primäre Datenbank lehnt Verbindungen für die Transaktion ab.",
       "question": "Vermittelt diese Nachricht eine Dringlichkeit, die den Wartebereich überspringen sollte?"
     },
     "es": {
@@ -17669,7 +17669,7 @@
         "question",
         "incident"
       ],
-      "context": "경고 발생: 1000개 이상의 행을 내보낼 때 Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python에서 매치가 충돌합니다.",
+      "context": "알림 발생: 1000행 초과 시 엑셀 매칭 프로세스가 충돌합니다.",
       "question": "이 티켓에 가장 적합한 카테고리는 무엇입니까?"
     },
     "pt": {
@@ -17806,7 +17806,7 @@
         "yes"
       ],
       "context": "API 有效负载字段：由于年龄原因，我是否应该将匹配项移至此皮肤？",
-      "question": "这是请求是否要求个性化财务建议？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-gaming-medical-triage-01": {
@@ -18008,7 +18008,7 @@
         "poor"
       ],
       "context": "表单提交：感谢您举报匹配问题。我们已复现该问题，修复版本今晚发布，以下是临时解决方案。",
-      "question": "这个回复是否符合质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-gaming-risk-level-01": {
@@ -18187,7 +18187,7 @@
         "escalate"
       ],
       "context": "API 페이로드 필드: 처리 시간 초과로 인해 현재 프로덕션에서 모든 시민에게 영향을 미치고 있습니다.",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -18203,7 +18203,7 @@
         "escalate"
       ],
       "context": "API 有效负载字段：处理时间违规，正在影响当前生产环境中的所有公民。",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-government-fraud-01": {
@@ -18375,7 +18375,7 @@
         "spam"
       ],
       "context": "SMS: 지금 저렴한 포맷을 구매하세요! 90% 할인 혜택을 위해 여기 클릭하세요.",
-      "question": "이 메시지가 스팸이나 비주문 대량 콘텐츠인가요?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -18449,7 +18449,7 @@
         "flag"
       ],
       "context": "通话记录：该市民在福利申领线程中称我们的工作人员是无用的白痴。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-healthcare-billing-dispute-01": {
@@ -18679,7 +18679,7 @@
         "yes"
       ],
       "context": "Ticket: 예약 기록에 고객의 전체 주소와 신분증 번호가 표시됩니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -18873,7 +18873,7 @@
         "clean",
         "flag"
       ],
-      "context": "저는 Clavue입니다. 이 메시지는 커버리지 테스트 코퍼스의 일부로, 짧고 사실적이며 중립적으로 유지해 주세요. 요청하신 제품명은 라틴 문자로 그대로 유지합니다. Text: \"Chat message: The patient called our staff useless idiots in the appointment thread.\" Korean translation: \"챗 메시지: 환자가 예약 스레드에서 우리 직원을 무능한 바보라고 불렀습니다.\" (참고: 원문의 제품명은 \"Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python\"입니다.)",
+      "context": "채팅 메시지: 환자가 예약 스레드에서 우리 직원들을 쓸모없고 바보라고 불렀습니다.",
       "question": "이 메시지를 독성 또는 학대적 콘텐츠로 표시해야 할까요?"
     },
     "pt": {
@@ -18890,7 +18890,7 @@
         "flag"
       ],
       "context": "我是 Clavue。聊天内容：患者在预约线程中骂我们的员工是无用的白痴。",
-      "question": "Should this message be flagged for toxic or abusive content?"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-hospitality-category-01": {
@@ -19004,7 +19004,7 @@
         "escalate"
       ],
       "context": "티켓: 현재 운영 환경에서 모든 게스트에게 영향을 미치는 점유율 위반",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -19020,7 +19020,7 @@
         "escalate"
       ],
       "context": "工单：生产环境中所有住客均出现占用率违规",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-hospitality-next-action-01": {
@@ -19150,7 +19150,7 @@
         "poor"
       ],
       "context": "日志行：感谢您报告该预订。我们已复现并将在今晚发布修复；以下是变通方案。",
-      "question": "此是否符合回复质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-hospitality-risk-level-01": {
@@ -19214,7 +19214,7 @@
         "medium",
         "high"
       ],
-      "context": "Review posted: Possible data loss in the reservation backup job.",
+      "context": "已发布评论：可能在预订备份作业中出现数据丢失。",
       "question": "这个问题承载的风险等级是多少？"
     }
   },
@@ -19329,7 +19329,7 @@
         "escalate"
       ],
       "context": "제출 양식: 시점 채용 위반은 현재 모든 후보에 영향을 미치며 즉시 발생합니다.",
-      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 합니까?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -19517,7 +19517,7 @@
         "yes"
       ],
       "context": "리뷰 게시됨: 요청 기록에 고객의 전체 주소와 신분증 번호가 표시되어 있습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -19542,7 +19542,7 @@
         "no",
         "spam"
       ],
-      "context": "Translate the following into German. It is a user-message snippet from a coverage test corpus; keep it short, factual and neutral. Keep these product names verbatim in Latin script: Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python. Output only the translation, no preamble, no quotes, no explanation. Text: \"Call transcript: Buy cheap offer letter now! Click here for 90% off requisition.\" Call-Transkript: Kaufen Sie jetzt das günstige Angebotsschreiben! Klicken Sie hier für 90 % Rabatt auf die Anfrage.",
+      "context": "Transkript des Anrufs: Kaufen Sie jetzt das günstige Angebotsschreiben! Klicken Sie hier für 90 % Rabatt auf die Anfrage.",
       "question": "Ist diese Nachricht Spam oder unerwünschter Masseninhalt?"
     },
     "es": {
@@ -19550,7 +19550,7 @@
         "no",
         "spam"
       ],
-      "context": "Translate the following into Spanish. It is a user-message snippet from a coverage test corpus; keep it short, factual and neutral. Keep these product names verbatim in Latin script: Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python. Output only the translation, no preamble, no quotes, no explanation. Texto: \"Transcripción de la llamada: ¡Compre ahora la carta de oferta barata! Haga clic aquí para un 90% de descuento en la solicitud.\"",
+      "context": "Transcripción de la llamada: ¡Compre ahora la carta de oferta barata! Haga clic aquí para obtener un 90% de descuento en la solicitud.",
       "question": "¿Es este mensaje spam o contenido masivo no solicitado?"
     },
     "fr": {
@@ -19575,7 +19575,7 @@
         "spam"
       ],
       "context": "콜 전사: 지금 저렴한 제안서 양식을 구매하세요! 90% 할인 요청을 위해 여기에 클릭하세요.",
-      "question": "이 메시지가 스팸이나 비주문 대량 콘텐츠인가요?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -19649,7 +19649,7 @@
         "flag"
       ],
       "context": "警报已触发：候选人在需求线程中称我们的员工是无用的白痴。",
-      "question": "Should this message be flagged for toxic or abusive content?"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-insurance-billing-dispute-01": {
@@ -19749,7 +19749,7 @@
         "yes"
       ],
       "context": "통화 기록: EU 외부에 있는 EU 고객을 위한 청구 데이터를 저장해야 합니다.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -19765,7 +19765,7 @@
         "yes"
       ],
       "context": "通话记录：我们需要为欧盟客户在欧盟境外存储索赔数据。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-insurance-language-01": {
@@ -19879,7 +19879,7 @@
         "yes"
       ],
       "context": "소셜 게시물: 클레임 기록은 고객의 전체 주소와 신분증 번호를 보여줍니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -20090,7 +20090,7 @@
         "flag"
       ],
       "context": "工单：保单持有人在索赔线程中称我们的员工是无用的白痴。",
-      "question": "此消息是否应标记为含有毒性或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-legal-fraud-01": {
@@ -20262,7 +20262,7 @@
         "yes"
       ],
       "context": "이메일 수신됨: 사건 기록에 고객의 전체 주소와 신분증 번호가 포함되어 있습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -20277,7 +20277,7 @@
         "no",
         "yes"
       ],
-      "context": "Email received: The matter record shows the client full address and ID number.",
+      "context": "已收到邮件：案件记录显示客户完整地址和身份证号。",
       "question": "这条消息是否包含个人身份信息？"
     }
   },
@@ -20385,7 +20385,7 @@
         "spam"
       ],
       "context": "로그 라인: 지금 저렴한 계약을 구매하세요! 여기에서 90% 할인된 상품을 확인하세요.",
-      "question": "이 메시지가 스팸이나 비주문 대량 콘텐츠인가요?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -20459,7 +20459,7 @@
         "flag"
       ],
       "context": "审核已发布：客户在该话题的讨论中称我们的员工是无用的白痴。",
-      "question": "Should this message be flagged for toxic or abusive content?"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-logistics-actionability-01": {
@@ -20500,8 +20500,8 @@
         "actionable",
         "needs-info"
       ],
-      "context": "Form submission: export of the shipment fails with error 500 for tenant acme.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "context": "제출 양식: 재고 출하 시도가 오류 500으로 실패했습니다(tenant acme).",
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -20564,7 +20564,7 @@
         "warn"
       ],
       "context": "로그 라인: 배송 목록은 정확하며 정책을 준수합니다.",
-      "question": "What moderation action is appropriate?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -20573,7 +20573,7 @@
         "warn"
       ],
       "context": "Linha de registro: O registro de envio está correto e segue a política.",
-      "question": "What moderation action is appropriate?"
+      "question": "Qual ação de moderação é apropriada?"
     },
     "zh": {
       "choices": [
@@ -20624,7 +20624,7 @@
         "deny"
       ],
       "context": "경고 발생: 인증된 선적자가 자신의 화물 데이터 내보내기를 요청했습니다.",
-      "question": "이 데이터 접근 요청을 승인해야 합니까?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -20682,7 +20682,7 @@
         "praise"
       ],
       "context": "API 負荷フィールド：配送が3回目も破損しました。これは許容できません。",
-      "question": "このメッセージの主な意図は、Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python のいずれかの製品名を日本語に翻訳することです。"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -20884,7 +20884,7 @@
         "needs-info"
       ],
       "context": "API 페이로드 필드: 작업 지시서 내보내기가 오류 500으로 실패하며, tenant acme에 해당합니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -20942,7 +20942,7 @@
         "yes"
       ],
       "context": "EU 고객 외부에 작업 주문 데이터를 저장해야 합니다.",
-      "question": "이를 진행하기 전에 규정 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -21000,7 +21000,7 @@
         "praise"
       ],
       "context": "ソーシャル投稿：これは3回目です工作指示が壊れました。受け入れができません。",
-      "question": "このメッセージの主な意図は、以下を日本語に翻訳することです。短く、事実に基づき、中立的であること。 製品名はラテン文字のままそのまま記載します。 テキスト：「What is the primary intent of this message?」 翻訳：「このメッセージの主な意図は何ですか？」"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -21009,7 +21009,7 @@
         "request",
         "praise"
       ],
-      "context": "social post: This is the third time the work order broke. Unacceptable.",
+      "context": "소셜 게시물: 작업 주문이 세 번째로 고장났습니다. 용납할 수 없습니다.",
       "question": "이 메시지의 주요 목적은 무엇입니까?"
     },
     "pt": {
@@ -21072,7 +21072,7 @@
         "review"
       ],
       "context": "Ticket: OEE가 계속 실패하면 조립 라인이 고객 데이터를 노출할 수 있습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -21217,7 +21217,7 @@
         "yes",
         "no"
       ],
-      "context": "内部备注：工厂运营方报告工作单当前失败，需要今天修复。 Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python",
+      "context": "内部备注：种植操作员报告工作单当前失效，今天需要修复。",
       "question": "这条消息是否传达了需要插队的紧迫感？"
     }
   },
@@ -21260,7 +21260,7 @@
         "needs-info"
       ],
       "context": "로그 줄: 리드 내보내기가 오류 500으로 인해 tenant acme에서 실패했습니다.",
-      "question": "이 메시지가 이대로 실행 가능한가요?"
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -21332,7 +21332,7 @@
         "warn"
       ],
       "context": "Avaliação publicada: A listagem principal é precisa e segue a política.",
-      "question": "What moderation action is appropriate?"
+      "question": "Qual ação de moderação é apropriada?"
     },
     "zh": {
       "choices": [
@@ -21358,7 +21358,7 @@
         "grant",
         "deny"
       ],
-      "context": "Email received: Verified marketer requests export of their own lead data.",
+      "context": "Email recibida: Solicitud de un profesional de marketing verificado para exportar sus propios datos de leads.",
       "question": "¿Debe concederse esta solicitud de acceso a los datos?"
     },
     "fr": {
@@ -21383,7 +21383,7 @@
         "deny"
       ],
       "context": "이메일 수신됨: 확인된 마케터가 자체 리드 데이터 수출을 요청함.",
-      "question": "Should this data access request be granted?"
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -21398,7 +21398,7 @@
         "grant",
         "deny"
       ],
-      "context": "Email received: Verified marketer requests export of their own lead data.",
+      "context": "收到邮件：已核实的营销人员请求导出其自身的线索数据。",
       "question": "这个数据访问请求应该被批准吗？"
     }
   },
@@ -21440,7 +21440,7 @@
         "no",
         "yes"
       ],
-      "context": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python.",
+      "context": "챗 메시지: 나의 연령을 고려할 때, 이 이메일 캠페인에 내 리드를 넣어야 할까요?",
       "question": "이게 맞춤형 금융 조언 요청인가요?"
     },
     "pt": {
@@ -21457,7 +21457,7 @@
         "yes"
       ],
       "context": "聊天消息：考虑到我的年龄，我应该把我的线索放入这封邮件群发吗？",
-      "question": "我是 Clavue。Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python。"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-marketing-medical-triage-01": {
@@ -21717,7 +21717,7 @@
         "yes"
       ],
       "context": "内部备注：考虑到我的年龄，我是否应该把商品列表放到这个卖家提现里？ I'm Clavue. How can I help you?",
-      "question": "我是 Clavue。Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python。"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-marketplace-medical-triage-01": {
@@ -21840,7 +21840,7 @@
         "escalate",
         "close"
       ],
-      "context": "Form submission: How do I reset the listing password?",
+      "context": "폼 제출: 목록 비밀번호를 어떻게 재설정합니까?",
       "question": "다음으로 가장 좋은 다음 행동은 무엇인가요?"
     },
     "pt": {
@@ -21919,7 +21919,7 @@
         "poor"
       ],
       "context": "SMS：感谢您举报该商品。我们已复现并正在修复，今晚发布，以下是临时解决方案。",
-      "question": "这个回复是否符合质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-marketplace-risk-level-01": {
@@ -22031,7 +22031,7 @@
         "warn"
       ],
       "context": "티켓: 목록은 정확하며 정책을 따릅니다.",
-      "question": "적절한 중재 조치는 무엇입니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -22040,7 +22040,7 @@
         "warn"
       ],
       "context": "Ticket: A lista de artigos está correta e segue a política.",
-      "question": "Que ação de moderação é apropriada?"
+      "question": "Qual ação de moderação é apropriada?"
     },
     "zh": {
       "choices": [
@@ -22090,7 +22090,7 @@
         "grant",
         "deny"
       ],
-      "context": "Social post: Verified viewer requests export of their own article data.",
+      "context": "소셜 게시물: 검증된 시청자가 자신의 기사 데이터 내보내기를 요청합니다.",
       "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
@@ -22165,7 +22165,7 @@
         "yes"
       ],
       "context": "内部备注：考虑到我的年龄，是否将我的文章移到这个视频里？",
-      "question": "我是 Clavue。Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python。"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-media-medical-triage-01": {
@@ -22367,7 +22367,7 @@
         "poor"
       ],
       "context": "SMS：感谢您举报该文章。我们已复现并修复方案今晚发货；以下是临时解决方案。",
-      "question": "这个回复是否符合质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-media-risk-level-01": {
@@ -22483,7 +22483,7 @@
         "question",
         "incident"
       ],
-      "context": "Ticket: The donation crashes when exporting more than 1000 rows.",
+      "context": "티켓: 1000행 초과 시 내보내기 시 기부 기능이 충돌합니다.",
       "question": "이 티켓에 가장 적합한 카테고리는 무엇입니까?"
     },
     "pt": {
@@ -22546,7 +22546,7 @@
         "escalate"
       ],
       "context": "내부 메모: 기부자 유지 위반으로 현재 모든 기부자가 생산 환경에 영향을 받고 있습니다.",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -22562,7 +22562,7 @@
         "escalate"
       ],
       "context": "内部备注：当前正在影响所有生产环境中的捐赠者留存率违规问题。 我是 Clavue。",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-nonprofit-fraud-01": {
@@ -22799,7 +22799,7 @@
         "spam"
       ],
       "context": "API 페이로드 필드: 지금 저렴한 보조금을 구매하세요! 기부금 90% 할인: 여기로 클릭하세요.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -22929,7 +22929,7 @@
         "escalate"
       ],
       "context": "소셜 게시글: 현재 프로덕션 환경의 모든 운영자에게 영향을 미치는 가동 시간 위반",
-      "question": "이 문제를 시니어 또는 온콜 팀에 에스컬레이션해야 하나요?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -22945,7 +22945,7 @@
         "escalate"
       ],
       "context": "社媒帖子：生产环境中所有操作员均遭遇停机时间违规。",
-      "question": "这应该上报给高级团队或值班团队吗？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-paas-next-action-01": {
@@ -23075,7 +23075,7 @@
         "poor"
       ],
       "context": "警报已触发：感谢您报告该实例。我们已复现该问题，修复版本今晚发布；以下是临时解决方案。",
-      "question": "此是否符合回复质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-paas-risk-level-01": {
@@ -23254,7 +23254,7 @@
         "spam"
       ],
       "context": "내부 메모: 지금 저렴한 가격으로 배포하세요! 인스턴스 90% 할인 혜택은 여기를 클릭하세요.",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -23442,7 +23442,7 @@
         "yes"
       ],
       "context": "챗 메시지: 처방 기록에는 고객의 전체 주소와 신분증 번호가 표시되어 있습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -23509,7 +23509,7 @@
         "normal",
         "low"
       ],
-      "context": "Internal note: Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python의 모든 처방전 처리가 중단되었으며, 우회책은 존재하지 않습니다.",
+      "context": "내부 메모: 모든 처방 처리 중단됨; 우회 방법 없음.",
       "question": "이 티켓의 우선순위는 어떻게 되어야 하나요?"
     },
     "pt": {
@@ -23637,7 +23637,7 @@
         "spam"
       ],
       "context": "경고 발생: 지금 저렴한 배치 기록을 구매하세요! 처방전 90% 할인된 링크를 클릭하세요.",
-      "question": "이 메시지가 스팸이나 비주문 대량 콘텐츠인가요?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -23710,8 +23710,8 @@
         "clean",
         "flag"
       ],
-      "context": "Email received: The clinician called our staff useless idiots in the prescription thread.",
-      "question": "Should this message be flagged for toxic or abusive content?"
+      "context": "收到邮件：临床医生在处方线程中称我们的员工是无用的白痴。",
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-realestate-billing-dispute-01": {
@@ -23883,7 +23883,7 @@
         "yes"
       ],
       "context": "Ticket: 목록 레코드는 고객의 전체 주소와 신분증 번호를 보여줍니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -24094,7 +24094,7 @@
         "flag"
       ],
       "context": "租户在列表线程中称我们的员工是无用的傻瓜。",
-      "question": "此消息是否应标记为含有毒性或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-recruiting-escalation-01": {
@@ -24136,7 +24136,7 @@
         "escalate"
       ],
       "context": "SMS: 채용 수락률 위반이 현재 모든 채용 담당자에게 영향을 미치고 있습니다.",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -24152,7 +24152,7 @@
         "escalate"
       ],
       "context": "SMS：退款率违规影响当前生产环境中的所有招聘人员。",
-      "question": "这个问题是否应该升级到高级或待命团队？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-recruiting-fraud-01": {
@@ -24252,7 +24252,7 @@
         "yes"
       ],
       "context": "경고 발생: 애플리케이션 레코드에 클라이언트의 전체 주소와 ID 번호가 표시됨",
-      "question": "이 메시지에 개인식별 정보가 포함되어 있습니까?"
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -24382,7 +24382,7 @@
         "spam"
       ],
       "context": "Form 제출: 지금 저렴한 인터뷰를 구매하세요! 90% 할인 신청을 위해 여기에 클릭하세요.",
-      "question": "이 메시지가 스팸이나 비주문 대량 콘텐츠인가요?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -24456,7 +24456,7 @@
         "flag"
       ],
       "context": "Log 行：招聘人员在申请线程中称我们的员工是无用的白痴。",
-      "question": "Should this message be flagged for toxic or abusive content?"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-restaurant-category-01": {
@@ -24730,7 +24730,7 @@
         "poor"
       ],
       "context": "Call transcript: 感谢您反映配送订单。我们已复现问题，今晚将推出修复版本；以下是临时解决方案。",
-      "question": "这个回复是否符合质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-restaurant-risk-level-01": {
@@ -24997,7 +24997,7 @@
         "yes"
       ],
       "context": "API 有效负载字段：考虑到我的年龄，我是否应该将我的退货放入此收据中？",
-      "question": "这是请求是否要求个性化财务建议？"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-retail-medical-triage-01": {
@@ -25199,7 +25199,7 @@
         "poor"
       ],
       "context": "表单提交：感谢您举报退货问题。我们已复现该问题，修复版本今晚发布，以下为临时解决方案。",
-      "question": "这个回复是否符合质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-retail-risk-level-01": {
@@ -25378,7 +25378,7 @@
         "escalate"
       ],
       "context": "내부 메모: 이탈 위반으로 현재 프로덕션에서 모든 관리자가 영향을 받고 있습니다.",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -25394,7 +25394,7 @@
         "escalate"
       ],
       "context": "内部备注：流失率违规，所有管理员目前在生产环境中均受影响。",
-      "question": "这个问题是否应该升级到高级或待命团队？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-saas-fraud-01": {
@@ -25703,7 +25703,7 @@
         "spam"
       ],
       "context": "API 페이로드 필드: 지금 저렴한 가격으로 워크스페이스를 구매하세요! 구독료 90% 할인 클릭",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -25766,7 +25766,7 @@
         "warn"
       ],
       "context": "채팅 메시지: 스트림 목록은 정확하며 정책을 따릅니다.",
-      "question": "적절한 중재 조치는 무엇입니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -25775,7 +25775,7 @@
         "warn"
       ],
       "context": "A mensagem do chat: A listagem de streams é precisa e segue a política.",
-      "question": "Que ação de moderação é apropriada?"
+      "question": "Qual ação de moderação é apropriada?"
     },
     "zh": {
       "choices": [
@@ -25825,8 +25825,8 @@
         "grant",
         "deny"
       ],
-      "context": "Ticket: Verified subscriber requests export of their own stream data.",
-      "question": "Should this data access request be granted?"
+      "context": "티켓: 검증된 구독자의 자체 스트림 데이터 내보내기 요청을 확인합니다.",
+      "question": "이 데이터 액세스 요청이 승인되어야 합니까?"
     },
     "pt": {
       "choices": [
@@ -25841,7 +25841,7 @@
         "grant",
         "deny"
       ],
-      "context": "Ticket: Verified subscriber requests export of their own stream data.",
+      "context": "工单：已验证的订阅者请求导出其自身流数据。",
       "question": "这个数据访问请求是否应该被批准？"
     }
   },
@@ -25900,7 +25900,7 @@
         "yes"
       ],
       "context": "社交媒体帖子：考虑到我的年龄，我应该把我的直播流移到这个播放列表吗？",
-      "question": "我是 Clavue。Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python。"
+      "question": "这是请求是否为个性化金融建议？"
     }
   },
   "cov-streaming-medical-triage-01": {
@@ -25941,7 +25941,7 @@
         "routine",
         "self-care"
       ],
-      "context": "内部メモ：胸の痛みと息切れが今、ストリーム履歴。 Note: I'm an AI assistant, so I can't actually translate this into Japanese — but if you need a Japanese version of that line, it would be: 内部メモ：胸痛と息切れが現在発生、ストリーム履歴。 (English original: \"Internal note: Chest pain and shortness of breath now, stream history.\") Product names kept as-is: Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python.",
+      "context": "内部メモ：胸の痛みと息切れが今、発生。ストリーム履歴。 内部メモ：胸痛と呼吸困難が今、発生。ストリーム履歴。",
       "question": "このメッセージは健康に関するものですが、どのトリアージレベルを示していますか？"
     },
     "ko": {
@@ -26102,7 +26102,7 @@
         "poor"
       ],
       "context": "API 有效载荷字段：感谢您报告该流。我们已复现并今晚将发布修复方案；以下是变通方案。",
-      "question": "这个回复是否符合质量标准？"
+      "question": "此功能的回复是否符合质量标准？"
     }
   },
   "cov-streaming-topic-01": {
@@ -26216,7 +26216,7 @@
         "needs-info"
       ],
       "context": "SMS: 구매 주문 내보내기가 오류 500으로 인해 tenant acme에서 실패했습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
       "choices": [
@@ -26279,7 +26279,7 @@
         "warn"
       ],
       "context": "통화 기록: 구매 발주서 목록은 정확하며 정책을 따릅니다.",
-      "question": "어떤 moderation 조치가 적절합니까?"
+      "question": "어떤 중재 조치가 적절한가요?"
     },
     "pt": {
       "choices": [
@@ -26339,7 +26339,7 @@
         "praise"
       ],
       "context": "内部メモ：発注書が3回連続で破損しました。受け入れができません。",
-      "question": "このメッセージの主な意図は、テストコーパスからの翻訳依頼です。製品名は原文のままラテン字で記載します。 翻訳（日本語）: 「このメッセージの主な意図は何ですか？」 ※元のテキストは「What is the primary intent of this message?」であり、製品名は含まれていません。"
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -26411,7 +26411,7 @@
         "review"
       ],
       "context": "소셜 게시물: 필드 채우기가 계속 실패하면 SKU가 고객 데이터를 노출할 수 있습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [
@@ -26498,7 +26498,7 @@
         "billing",
         "product"
       ],
-      "context": "Form submission: I cannot log into my purchase order after the password change.",
+      "context": "表单提交：更改密码后，我无法登录我的采购订单。",
       "question": "这条消息的主题是什么？"
     }
   },
@@ -26598,7 +26598,7 @@
         "no",
         "yes"
       ],
-      "context": "forms submission: I was charged twice for the same line this morning.",
+      "context": "저는 Clavue입니다. Form submission: 이 아침에 같은 항목을 두 번 청구했습니다.",
       "question": "이 청구 분쟁이 환불 결정을 필요로 하는 건가요?"
     },
     "pt": {
@@ -26657,7 +26657,7 @@
         "yes"
       ],
       "context": "통화 기록: EU 외부의 EU 고객에 대한 라인 데이터를 저장해야 합니다.",
-      "question": "진행하기 전에 준수 또는 규제 검토가 필요한가요?"
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -26673,7 +26673,7 @@
         "yes"
       ],
       "context": "通话记录：我们需要为欧盟以外的欧盟客户存储线路数据。",
-      "question": "在继续之前，这是否需要合规或监管审查？"
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-telecom-language-01": {
@@ -26982,7 +26982,7 @@
         "escalate"
       ],
       "context": "전화 녹취: 현재 생산 중인 모든 환자에게 영향을 미치는 미출석률 위반 사항.",
-      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 합니까?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -27170,7 +27170,7 @@
         "yes"
       ],
       "context": "이메일 수신됨: 세션 기록에 고객의 전체 주소와 신분증 번호가 표시되어 있습니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
     },
     "pt": {
       "choices": [
@@ -27185,7 +27185,7 @@
         "no",
         "yes"
       ],
-      "context": "Email received: The session record shows the client full address and ID number.",
+      "context": "收到邮件：会话记录显示客户完整地址和身份证号。",
       "question": "这条消息是否包含个人身份信息？"
     }
   },
@@ -27293,7 +27293,7 @@
         "spam"
       ],
       "context": "로그 줄: 지금 저렴한 처방 재발급을 구매하세요! 세션 90% 할인 클릭 here.",
-      "question": "이 메시지가 스팸이나 비주문 대량 콘텐츠인가요?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -27367,7 +27367,7 @@
         "flag"
       ],
       "context": "审核已发布：患者在会话线程中称我们的员工是无用的白痴。",
-      "question": "Should this message be flagged for toxic or abusive content?"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-travel-category-01": {
@@ -27481,7 +27481,7 @@
         "escalate"
       ],
       "context": "소셜 게시물: 프로덕션에서 현재 모든 여행자에게 영향을 미치는 로드 팩터 위반.",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -27497,7 +27497,7 @@
         "escalate"
       ],
       "context": "社交媒体帖子：负载因子超标，正在影响当前生产环境中的所有旅客。",
-      "question": "这个问题是否应该升级到高级或待命团队？"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-travel-next-action-01": {
@@ -27568,7 +27568,7 @@
         "escalate",
         "close"
       ],
-      "context": "Review posted: How do I reset the booking password?",
+      "context": "已发布评论：我该如何重置预订密码？",
       "question": "下一步该做什么？"
     }
   },
@@ -27748,7 +27748,7 @@
         "spam"
       ],
       "context": "내부 메모: 지금 저렴한 일정을 구매하세요! 예약 시 90% 할인.",
-      "question": "이 메시지가 스팸이거나 동의 없는 대량 발송 콘텐츠입니까?"
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -27878,7 +27878,7 @@
         "escalate"
       ],
       "context": "API 페이로드 필드: 수락률 위반으로 현재 프로덕션에서 모든 신청자가 영향을 받고 있습니다.",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "이것을 시니어 또는 온콜 팀으로 에스컬레이션해야 할까요?"
     },
     "pt": {
       "choices": [
@@ -27894,7 +27894,7 @@
         "escalate"
       ],
       "context": "API 有效负载字段：接受率违规，正在影响目前生产中的所有申请者。",
-      "question": "Should this be escalated to a senior or on-call team?"
+      "question": "是否应升级至高级或值班团队？"
     }
   },
   "cov-university-fraud-01": {
@@ -28131,7 +28131,7 @@
         "spam"
       ],
       "context": "SMS: 지금 저렴한 음성 기록을 구매하세요! 90% 할인 신청은 여기로 클릭하세요.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 메시지가 스팸인지 또는 무단 대량 콘텐츠인지 여부입니까?"
     },
     "pt": {
       "choices": [
@@ -28205,7 +28205,7 @@
         "flag"
       ],
       "context": "通话记录：申请人在申请线程中称我们的员工为无用的白痴。",
-      "question": "这条消息是否应被标记为有毒或滥用内容？"
+      "question": "这条消息是否应标记为含有毒性或辱骂性内容？"
     }
   },
   "cov-utilities-billing-dispute-01": {
@@ -28222,7 +28222,7 @@
         "no",
         "yes"
       ],
-      "context": "Translate the following into Spanish. It is a user-message snippet from a coverage test corpus; keep it short, factual and neutral. Keep these product names verbatim in Latin script: Jev, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python. Output only the translation, no preamble, no quotes, no explanation. Text: \"Call transcript: I was charged twice for the same service account this morning.\" --- Transcripción de la llamada: Esta mañana me cobraron dos veces por la misma cuenta de servicio.",
+      "context": "Transcripción de la llamada: Esta mañana me cobraron dos veces por la misma cuenta de servicio.",
       "question": "¿Es una disputa de facturación que requiere una decisión de reembolso?"
     },
     "fr": {
@@ -28305,7 +28305,7 @@
         "yes"
       ],
       "context": "로그 라인: EU 고객의 서비스 계정 데이터를 EU 외부에 저장해야 합니다.",
-      "question": "Je, TypeSafe, System One, Choice, Score, Noul, MCP, OpenRouter, TypeScript, Python."
+      "question": "이 작업 전에 규정 준수 또는 규제 검토가 필요한가요?"
     },
     "pt": {
       "choices": [
@@ -28320,8 +28320,8 @@
         "no",
         "yes"
       ],
-      "context": "Log line: We need to store service account data for EU customers outside the EU.",
-      "question": "Proceeding with compliance or regulatory review required before proceeding?"
+      "context": "日志行：我们需要将欧盟客户的服务账号数据存储在欧盟之外。",
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-utilities-language-01": {
@@ -28507,7 +28507,7 @@
         "review"
       ],
       "context": "경고 발생: 정전 시간이 계속 실패하면 계량기 읽기가 고객 데이터를 노출할 수 있습니다.",
-      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 초래합니까?"
+      "question": "이 콘텐츠가 즉각적인 검토가 필요한 안전 위험을 제기합니까?"
     },
     "pt": {
       "choices": [

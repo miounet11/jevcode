@@ -267,6 +267,41 @@ test('术语表不含照抄 slug / CJK 站点写英文的坏值', () => {
   assert.deepEqual(bad, []);
 });
 
+test('案例正文译文不含照抄英文 / 提示词回显的坏值', () => {
+  // 术语有 valid_term 把关，正文此前完全没有——模型把英文原样吐回、或把
+  // PROMPT 里的产品名清单当译文输出，都会被写进 briefs-i18n.json 并且
+  // 因为「字段非空」而在后续 merge 中永久保留。这条测试守的就是那个缺口。
+  const i18n = JSON.parse(readFileSync(new URL('../src/data/briefs-i18n.json', import.meta.url), 'utf8'));
+  const briefs = JSON.parse(readFileSync(new URL('../src/data/daily-briefs.json', import.meta.url), 'utf8'));
+  const byId = new Map(briefs.map((b) => [b.id, b]));
+  const cjk = new Set(['zh', 'ja', 'ko']);
+  const nativeRe = {
+    zh: /[\u3400-\u9fff]/,
+    ja: /[\u3040-\u30ff\u3400-\u9fff]/,
+    ko: /[\uac00-\ud7af]/,
+  };
+  const bad = [];
+  for (const [id, langs] of Object.entries(i18n)) {
+    const source = byId.get(id);
+    if (!source) continue;
+    for (const [lang, body] of Object.entries(langs)) {
+      for (const field of ['context', 'question']) {
+        const value = body?.[field];
+        if (!value) continue;
+        const where = [lang, id, field];
+        if (value.trim().toLowerCase() === String(source[field] ?? '').trim().toLowerCase()) {
+          bad.push([...where, '与英文原文完全相同']);
+        } else if (cjk.has(lang) && !nativeRe[lang]?.test(value)) {
+          bad.push([...where, 'CJK 译文不含本族文字']);
+        } else if (/TypeSafe, System One, Choice, Score, Noul/.test(value)) {
+          bad.push([...where, '提示词里的产品名清单被当成译文']);
+        }
+      }
+    }
+  }
+  assert.deepEqual(bad, []);
+});
+
 test('管线发布白名单含案例译文，且日更后紧跟翻译步骤', async () => {
   // 直接断言白名单本身，而不是在 pipeline.mjs 源码里搜字符串：
   // 字符串写在注释或无关代码里同样会被正则命中。

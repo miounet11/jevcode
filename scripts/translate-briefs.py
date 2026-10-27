@@ -56,9 +56,23 @@ PROMPT = (
     "coverage test corpus; keep it short, factual and neutral. Keep these product "
     "names verbatim in Latin script: Jev, TypeSafe, System One, Choice, Score, Noul, "
     "MCP, OpenRouter, TypeScript, Python. Output only the translation, no preamble, "
-    "no quotes, no explanation.\n\n"
+    "no quotes, no explanation. {native_hint}\n\n"
     'Text: "{text}"'
 )
+
+# 「输出必须是目标语言」这一句不是客套。同一个句子反复请求时，模型会有约三成
+# 概率把英文原样返回（实测串行、间隔 1s 仍有 2/6），加并发无关，也不是内容敏感。
+# 显式点明目标语言后，同类退化从 3/4 降到 0/4。CJK 尤其明显——它们的译文本来
+# 就不该出现整段拉丁字母，模型滑回去的代价最直观。
+NATIVE_HINT = {
+    "zh": "Write the answer in Simplified Chinese characters only.",
+    "ja": "Write the answer in Japanese, using Japanese script.",
+    "ko": "Write the answer in Korean, using Hangul.",
+    "de": "Write the answer in German.",
+    "fr": "Write the answer in French.",
+    "es": "Write the answer in Spanish.",
+    "pt": "Write the answer in Brazilian Portuguese.",
+}
 
 TERM_PROMPT = (
     "This is a short taxonomy slug used as a label in a coverage test corpus: {term}. "
@@ -106,6 +120,12 @@ def clean(text):
     if re.search(r"\bJov\b", out):
         return None
     if out.count('"') % 2 == 1:
+        return None
+    # 提示词回显：模型把 PROMPT 里的示例清单或开场白当成译文吐了出来。
+    # 这不是「译文质量差」，是整条都不可用，必须当失败处理。
+    if re.search(r"TypeSafe, System One, Choice, Score, Noul", out):
+        return None
+    if re.search(r"(?i)^(i'm clavue|i am clavue|je suis clavue|sou clavue)", out):
         return None
     return out
 
@@ -211,6 +231,45 @@ def valid_term(slug, lang, value):
     return True
 
 
+def valid_body(source, lang, value):
+    """判断一条正文译文是否真的翻译了，而不是模型把英文原样吐回。
+
+    术语有 valid_term 把关，正文此前完全没有：模型偶尔直接返回英文原文，
+    clean() 判不出区别，坏值就写进了 briefs-i18n.json。前端照原样渲染，
+    非 en 页面于是出现整段英文——正是这些页面被判低质的原因。
+    content-check 的 identical-translation 就是这个判据，两边必须一致。
+
+    读入已有数据时也要过这一关：只判「字段非空」会让早就写坏的译文
+    被 merge 永久保留（术语表踩过同一个坑，见 valid_term 的注释）。
+    """
+    if not isinstance(value, str):
+        return False
+    out = value.strip()
+    if not out:
+        return False
+    # 与英文原文完全相同 = 没翻译。
+    if " ".join(out.split()).lower() == " ".join((source or "").split()).lower():
+        return False
+    if lang in CJK_LANGS and is_ascii(out):
+        return False
+    if lang == "ko" and not re.search(r"[가-힣]", out):
+        return False
+    if lang in ("ja", "zh") and not re.search(r"[\u3400-\u9fff\u3040-\u30ff]", out):
+        return False
+    # 提示词回显。前面 clean() 只认「整条就是那份清单」，模型更常见的做法是
+    # 把清单粘在译文末尾，或干脆把「原样保留这些产品名」当成要翻译的句子。
+    if "TypeSafe, System One" in out:
+        return False
+    # CJK 译文里整段是英文（提示词回显、模型自言自语）同样是坏值：
+    # 上面只要求「含本族文字」，一条 "I'm Clavue. Review posted: ..." 也能通过。
+    if lang in CJK_LANGS:
+        latin_words = re.findall(r"[A-Za-z]{3,}", out)
+        native = re.findall(r"[\u3400-\u9fff\u3040-\u30ff\uac00-\ud7af]", out)
+        if len(latin_words) > 3 and len(native) * 2 < len(latin_words):
+            return False
+    return True
+
+
 def translate_term_strict(term, lang):
     return _translate_term(term, lang, TERM_PROMPT_STRICT)
 
@@ -243,7 +302,8 @@ def translate(text, lang):
     budget = max(120, int(len(text) * 2.2))
     payload = json.dumps({
         "model": GEN_MODEL,
-        "messages": [{"role": "user", "content": PROMPT.format(lang_name=LANG_NAME[lang], text=text)}],
+        "messages": [{"role": "user", "content": PROMPT.format(
+            lang_name=LANG_NAME[lang], text=text, native_hint=NATIVE_HINT.get(lang, ""))}],
         "max_tokens": min(budget, 1200),
         "temperature": 0,
     }).encode("utf-8")
@@ -256,6 +316,11 @@ def translate(text, lang):
             out = clean(d.get("choices", [{}])[0].get("message", {}).get("content", ""))
             if out is None:
                 raise ValueError("bad translation output")
+            # 校验必须在这里做，不能只留到写回时。写回时才发现就等于没有重试：
+            # 那时的失败只会让这一条回退到旧值（而旧值往往正是那条英文），
+            # 坏值原样留在文件里，下一轮再「成功」一次，永远修不好。
+            if not valid_body(text, lang, out):
+                raise ValueError(f"untranslated or echoed output: {out[:40]!r}")
             return out
         except Exception as e:  # noqa: BLE001 - 重试后仍失败则记为 None
             last = e
@@ -301,11 +366,13 @@ if os.path.exists(OUT):
 body_jobs = set()
 for b in briefs:
     for lang in LANGS:
-        cur = out.get(b["id"], {}).get(lang)
-        if cur and cur.get("context") and cur.get("question"):
-            continue
-        body_jobs.add((lang, b["context"]))
-        body_jobs.add((lang, b["question"]))
+        cur = out.get(b["id"], {}).get(lang) or {}
+        # 逐字段判断，而不是「两个字段都非空就跳过」：某条只有 question 退回英文时，
+        # 整体跳过会让那条坏值永远修不掉。
+        if not valid_body(b["context"], lang, cur.get("context")):
+            body_jobs.add((lang, b["context"]))
+        if not valid_body(b["question"], lang, cur.get("question")):
+            body_jobs.add((lang, b["question"]))
 
 # ---- 术语 ----
 terms = {f: sorted({b[f] for b in briefs if b.get(f)}) for f in FIELDS}
@@ -327,7 +394,6 @@ if DRY:
     print(f"  术语示例 {sorted(term_jobs)[:3]}")
     sys.exit(0)
 
-body = run_jobs(sorted(body_jobs), "正文")
 existing_terms = {}
 if os.path.exists(TERMS_JSON):
     existing_terms = json.load(open(TERMS_JSON, encoding="utf-8"))
@@ -361,9 +427,14 @@ applied = 0
 for b in briefs:
     entry = out.setdefault(b["id"], {})
     for lang in LANGS:
-        ctx = body.get((lang, b["context"]))
-        q = body.get((lang, b["question"]))
-        if not ctx or not q:
+        prev = entry.get(lang) or {}
+        ctx = body.get((lang, b["context"])) or prev.get("context")
+        q = body.get((lang, b["question"])) or prev.get("question")
+        # 两个字段都得是真译文才写。本轮没翻出来就沿用旧值；旧值本身是英文
+        # 或提示词回显时整条删掉，不能让它在 merge 里永生——之前正是「只跳过
+        # 不删除」，16 条提示词回显的坏值才从旧文件里原样活了下来。
+        if not valid_body(b["context"], lang, ctx) or not valid_body(b["question"], lang, q):
+            entry.pop(lang, None)
             continue
         # choices 原样保留英文 slug：它们是判分用的键，翻译会改掉语义。
         # 展示层用术语表按语言渲染，键不变。

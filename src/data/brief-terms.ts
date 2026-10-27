@@ -780,6 +780,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     },
     "fintech": {
       "de": "finanzwesen",
+      "es": "finanzas digitales",
       "fr": "technologie financière",
       "ja": "フィンテック",
       "ko": "핀테크",
@@ -787,6 +788,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "金融科技"
     },
     "gaming": {
+      "de": "gaming slug",
       "es": "juego",
       "fr": "jeux vidéo",
       "ja": "ゲーム",
@@ -1043,6 +1045,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "es": "el chatbot",
       "ja": "チャット",
       "ko": "채팅",
+      "pt": "sala de conversa",
       "zh": "聊天"
     },
     "email": {
@@ -1307,6 +1310,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "退款"
     },
     "regression": {
+      "de": "regressionanalyse",
       "es": "regresión",
       "fr": "régression",
       "ja": "かいき",
