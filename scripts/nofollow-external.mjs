@@ -46,11 +46,25 @@ function withRel(tag) {
   return tag.replace(/<a\b/i, '<a rel="nofollow noopener noreferrer"');
 }
 
+/**
+ * rel 里已经标了 friend 的链接是互换友链，不补 nofollow。
+ *
+ * 友链是双方约定好的互相链接，加 nofollow 等于单方面放弃这次互换：对方不带
+ * nofollow 指过来，我们不指回去，互换就变成单向。正文里的普通外链该防还是要防，
+ * 所以这里只豁免显式标注的那一类，不做「所有页脚链接都放过」这种放宽。
+ */
+function isFriendLink(tag) {
+  const m = tag.match(/\brel\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+  if (!m) return false;
+  return /\bfriend\b/i.test(m[1] ?? m[2] ?? '');
+}
+
 function patch(html) {
   return html.replace(/<a\b[^>]*>/gi, (tag) => {
     const href = hrefOf(tag);
     if (!/^(https?:)?\/\//i.test(href)) return tag;
     if (/jevcode\.ai/i.test(href)) return tag;
+    if (isFriendLink(tag)) return tag;
     return withRel(tag);
   });
 }
