@@ -1,0 +1,314 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, useTranslations, pick, type Lang } from '../../../i18n/ui';
+import { projects, categories, dataAsOf } from '../../../data/ecosystem';
+import { projectSlug } from '../../../lib/slug';
+import * as entityCopy from '../../../i18n/pages/entity';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const project of projects) {
+      paths.push({ params: { lang, slug: projectSlug(project.repo) }, props: { project } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { project } = Astro.props as { project: (typeof projects)[number] };
+const t = useTranslations(lang);
+
+const path = `/${lang}/ecosystem/${projectSlug(project.repo)}/`;
+const category = categories.find((c) => c.key === project.category) ?? categories[0];
+const catTitle = category.title[lang] ?? category.title.en;
+
+const name = project.repo;
+const desc = project.desc[lang] ?? project.desc.en;
+const decision = project.decisionPoint?.[lang] ?? project.decisionPoint?.en;
+
+const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
+
+const related = projects
+  .filter((p) => p.category === project.category && p.repo !== project.repo)
+  .sort((a, b) => b.stars - a.stars)
+  .slice(0, 8);
+
+const copy = {
+  keyFacts: pick(lang, entityCopy.keyFacts),
+  stars: pick(lang, entityCopy.factStars),
+  forks: pick(lang, entityCopy.factForks),
+  language: pick(lang, entityCopy.factLanguage),
+  license: pick(lang, entityCopy.factLicense),
+  category: pick(lang, entityCopy.factCategory),
+  topics: pick(lang, entityCopy.factTopics),
+  updated: pick(lang, entityCopy.factUpdated),
+  archived: pick(lang, entityCopy.factArchived),
+  decisionTitle: pick(lang, entityCopy.decisionTitle),
+  faqTitle: pick(lang, entityCopy.faqTitle),
+  relatedTitle: pick(lang, entityCopy.relatedTitle),
+  allInCategory: pick(lang, entityCopy.allInCategory).replace('{cat}', catTitle),
+  back: pick(lang, entityCopy.backToEcosystem),
+  viewRepo: pick(lang, entityCopy.viewRepo),
+  officialSite: pick(lang, entityCopy.officialSite),
+  summaryLabel: pick(lang, entityCopy.summaryLabel),
+  fromEcosystem: pick(lang, entityCopy.fromEcosystem).replace('{date}', dataAsOf),
+};
+
+const fill = (tpl: string, vars: Record<string, string>) =>
+  Object.entries(vars).reduce((s, [k, v]) => s.replaceAll(`{${k}}`, v), tpl);
+
+const starsText = fmt(project.stars);
+const forksText = fmt(project.forks);
+const langText = project.language ?? '—';
+const licenseText = project.license ?? '—';
+
+/* ---------- FAQ：可见内容与 FAQPage 结构化数据同源 ---------- */
+type QA = { q: string; a: string };
+const faq: QA[] = [];
+
+faq.push({
+  q: fill(pick(lang, entityCopy.qWhatIs), { name }),
+  a: fill(pick(lang, entityCopy.aWhatIs), { name, cat: catTitle, desc }),
+});
+
+faq.push({
+  q: fill(pick(lang, entityCopy.qOpenSource), { name }),
+  a: project.license
+    ? fill(pick(lang, entityCopy.aOpenSourceKnown), { name, license: project.license })
+    : fill(pick(lang, entityCopy.aOpenSourceUnknown), { name }),
+});
+
+faq.push({
+  q: fill(pick(lang, entityCopy.qLanguage), { name }),
+  a: project.language
+    ? fill(pick(lang, entityCopy.aLanguageKnown), { name, language: project.language })
+    : fill(pick(lang, entityCopy.aLanguageUnknown), { name }),
+});
+
+faq.push({
+  q: fill(pick(lang, entityCopy.qStars), { name }),
+  a: fill(pick(lang, entityCopy.aStars), { name, date: dataAsOf, stars: starsText, forks: forksText }),
+});
+
+faq.push({
+  q: fill(pick(lang, entityCopy.qAlternatives), { name }),
+  a: related.length
+    ? fill(pick(lang, entityCopy.aAlternativesKnown), {
+        cat: catTitle,
+        list: related
+          .slice(0, 5)
+          .map((p) => p.repo)
+          .join(lang === 'zh' || lang === 'ja' ? '、' : ', '),
+      })
+    : fill(pick(lang, entityCopy.aAlternativesEmpty), { cat: catTitle }),
+});
+
+if (project.archived) {
+  faq.push({
+    q: fill(pick(lang, entityCopy.qArchived), { name }),
+    a: fill(pick(lang, entityCopy.aArchived), { name }),
+  });
+}
+
+const canonical = new URL(path, Astro.site).href;
+
+const schema = [
+  {
+    '@type': 'SoftwareSourceCode',
+    '@id': `${canonical}#project`,
+    name: project.repo.split('/').pop(),
+    url: canonical,
+    mainEntityOfPage: canonical,
+    codeRepository: project.url,
+    description: desc,
+    inLanguage: lang,
+    dateModified: project.updated ?? dataAsOf,
+    ...(project.language ? { programmingLanguage: project.language } : {}),
+    ...(project.license ? { license: project.license } : {}),
+    ...(project.topics?.length ? { keywords: project.topics.join(', ') } : {}),
+    ...(project.archived ? { isAccessibleForFree: false } : {}),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t('site.name'), item: new URL(`/${lang}/`, Astro.site).href },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: t('nav.ecosystem'),
+        item: new URL(`/${lang}/ecosystem/`, Astro.site).href,
+      },
+      { '@type': 'ListItem', position: 3, name: project.repo, item: canonical },
+    ],
+  },
+  {
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const description = fill(pick(lang, entityCopy.metaDescription), {
+  name,
+  desc,
+  cat: catTitle,
+  stars: starsText,
+});
+---
+
+<BaseLayout lang={lang} title={name} description={description} path={path} schema={schema}>
+  <div class="wrap docs-shell">
+    <main class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> /
+        <a href={`/${lang}/ecosystem/`}>{t('nav.ecosystem')}</a> / {name}
+      </p>
+
+      <h1 class="doc__title">{name}</h1>
+      <p class="doc__desc">{desc}</p>
+
+      <p class="entity__actions">
+        <a class="entity__btn" href={project.url} target="_blank" rel="noopener noreferrer">{copy.viewRepo}</a>
+        {project.url.includes('github.com') ? null : (
+          <a class="entity__btn entity__btn--ghost" href={project.url} target="_blank" rel="noopener noreferrer">{copy.officialSite}</a>
+        )}
+      </p>
+
+      {decision ? (
+        <section>
+          <h2>{copy.decisionTitle}</h2>
+          <p>{decision}</p>
+        </section>
+      ) : null}
+
+      <section>
+        <h2>{copy.keyFacts}</h2>
+        <dl class="entity__facts">
+          <div><dt>{copy.category}</dt><dd><a href={`/${lang}/ecosystem/category/${category.key}/`}>{catTitle}</a></dd></div>
+          <div><dt>{copy.stars}</dt><dd>{starsText}</dd></div>
+          <div><dt>{copy.forks}</dt><dd>{forksText}</dd></div>
+          <div><dt>{copy.language}</dt><dd>{langText}</dd></div>
+          <div><dt>{copy.license}</dt><dd>{licenseText}</dd></div>
+          {project.archived ? <div><dt>{copy.updated}</dt><dd>{copy.archived}</dd></div> : null}
+          {project.topics?.length ? (
+            <div class="entity__facts-wide">
+              <dt>{copy.topics}</dt>
+              <dd>{project.topics.map((topic) => <span class="entity__tag">{topic}</span>)}</dd>
+            </div>
+          ) : null}
+        </dl>
+        <p class="eco__snapshot">{copy.fromEcosystem}</p>
+      </section>
+
+      <section>
+        <h2>{copy.faqTitle}</h2>
+        {faq.map(({ q, a }) => (
+          <details class="entity__qa">
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>
+        ))}
+      </section>
+
+      {related.length ? (
+        <section>
+          <h2>{copy.relatedTitle}</h2>
+          <ul class="entity__related">
+            {related.map((p) => (
+              <li>
+                <a href={`/${lang}/ecosystem/${projectSlug(p.repo)}/`}>{p.repo}</a>
+                <span class="entity__related-desc">{p.desc[lang] ?? p.desc.en}</span>
+              </li>
+            ))}
+          </ul>
+          <p><a href={`/${lang}/ecosystem/category/${category.key}/`}>{copy.allInCategory}</a></p>
+        </section>
+      ) : null}
+
+      <p><a href={`/${lang}/ecosystem/`}>{copy.back}</a></p>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .entity__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  .entity__btn {
+    display: inline-block;
+    padding: 0.55rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border, #333);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .entity__btn--ghost {
+    opacity: 0.85;
+  }
+  .entity__facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+  .entity__facts > div {
+    border: 1px solid var(--border, #333);
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.8rem;
+  }
+  .entity__facts dt {
+    font-size: 0.75rem;
+    opacity: 0.65;
+    margin-bottom: 0.25rem;
+  }
+  .entity__facts dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  .entity__facts-wide {
+    grid-column: 1 / -1;
+  }
+  .entity__tag {
+    display: inline-block;
+    margin: 0.15rem 0.3rem 0.15rem 0;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    border: 1px solid var(--border, #333);
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+  .entity__qa {
+    border-bottom: 1px solid var(--border, #333);
+    padding: 0.6rem 0;
+  }
+  .entity__qa summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .entity__qa p {
+    margin: 0.5rem 0 0;
+    opacity: 0.9;
+  }
+  .entity__related {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+  .entity__related li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border, #333);
+  }
+  .entity__related-desc {
+    display: block;
+    font-size: 0.85rem;
+    opacity: 0.75;
+    margin-top: 0.15rem;
+  }
+</style>

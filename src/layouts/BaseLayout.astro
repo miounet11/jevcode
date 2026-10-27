@@ -17,9 +17,11 @@ export interface Props {
   index?: boolean;
   /** 首页和目录页自己渲染相关链接 */
   cluster?: boolean;
+  /** 详情页追加的结构化数据节点，合并进 @graph */
+  schema?: Record<string, unknown>[];
 }
 
-const { lang, title, description, path, index = true, cluster = true, canonicalPath } = Astro.props;
+const { lang, title, description, path, index = true, cluster = true, canonicalPath, schema: extraSchema } = Astro.props;
 const t = useTranslations(lang);
 const siteName = t('site.name');
 const fullTitle = title === siteName ? `${siteName} — ${t('site.tagline')}` : `${title} | ${siteName}`;
@@ -34,9 +36,47 @@ for (const l of Object.keys(languages) as Lang[]) {
 
 const htmlLang = htmlLangMap[lang] ?? lang;
 const ogImage = new URL('/img/og.png', Astro.site).href;
+const orgId = new URL('/#organization', Astro.site).href;
+const appId = new URL('/#software', Astro.site).href;
+
+// Site-wide entities. Kept in one graph so every page carries the organization
+// and the product definition without duplicating them in page templates.
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': orgId,
+      name: siteName,
+      url: new URL('/', Astro.site).href,
+      logo: new URL('/icon-512.png', Astro.site).href,
+      description: t('site.description'),
+      sameAs: [],
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': appId,
+      name: 'JevCode',
+      applicationCategory: 'DeveloperApplication',
+      applicationSubCategory: 'AI model API and console',
+      operatingSystem: 'Web',
+      url: new URL(`/${lang}/`, Astro.site).href,
+      description: t('site.description'),
+      publisher: { '@id': orgId },
+      offers: {
+        '@type': 'Offer',
+        price: '0.042',
+        priceCurrency: 'USD',
+        description: 'USD per 1 million input tokens; output tokens are free.',
+        category: 'usage-based',
+      },
+      featureList: [
+        'Structured judgment API for the clavue-jev model',
+        'Browser playground with 20 anonymous requests per IP per hour',
+        'Coverage lab and daily case corpus',
+        'SDK and HTTP API references in 8 languages',
+      ],
+    },
     {
       '@type': 'WebSite',
       name: siteName,
@@ -52,6 +92,7 @@ const schema = {
       inLanguage: htmlLang,
       isPartOf: new URL(`/${lang}/`, Astro.site).href,
     },
+    ...(extraSchema ?? []),
   ],
 };
 ---
@@ -97,6 +138,7 @@ const schema = {
       <link rel="alternate" hreflang={htmlLangMap[l as Lang] ?? l} href={href} />
     ))}
     <link rel="alternate" hreflang="x-default" href={altPaths[defaultLang]} />
+    <link rel="alternate" type="application/rss+xml" title={`${siteName} — daily cases`} href={new URL('/rss.xml', Astro.site).href} />
     <meta name="theme-color" content="#08090c" id="theme-color-meta" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />

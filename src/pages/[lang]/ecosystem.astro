@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 import { languages, useTranslations, pick, type Lang } from '../../i18n/ui';
 import { projectsByCategory, projects, dataAsOf } from '../../data/ecosystem';
+import { projectSlug } from '../../lib/slug';
 import * as ecoCopy from '../../i18n/pages/ecosystem';
 
 export function getStaticPaths() {
@@ -53,6 +54,7 @@ const copy = {
   filterAll: pick(lang, ecoCopy.filterAll),
   filterLanguage: pick(lang, ecoCopy.filterLanguage),
   filterTopic: pick(lang, ecoCopy.filterTopic),
+  categoryNav: pick(lang, ecoCopy.categoryNav),
   searchPlaceholder: pick(lang, ecoCopy.searchPlaceholder),
   noResult: pick(lang, ecoCopy.noResult),
   shownTpl: pick(lang, ecoCopy.shownTpl),
@@ -87,6 +89,16 @@ const copy = {
           <div class="stat__label">{copy.statLanguages}</div>
         </div>
       </div>
+
+      {/* 真实的分类链接：上面的筛选按钮是 JS 过滤器，爬虫顺着 <button> 走不进去。
+          没有这一行，40 个分类页只能从实体页反向到达，等于半孤儿页。 */}
+      <nav class="eco-catnav" aria-label={copy.categoryNav}>
+        {groups.map(({ category, items }) => (
+          <a class="eco-catnav__link" href={`/${lang}/ecosystem/category/${category.key}/`}>
+            {category.title[lang]} <b>{items.length}</b>
+          </a>
+        ))}
+      </nav>
 
       <div class="eco-filter">
         <div class="eco-filter__row" role="group">
@@ -131,10 +143,11 @@ const copy = {
                 data-topics={(p.topics ?? []).join(' ')}
                 data-search={`${p.repo} ${p.desc[lang] ?? p.desc.en} ${(p.topics ?? []).join(' ')}`.toLowerCase()}
               >
-                <a class="project-name" href={p.url} target="_blank" rel="nofollow noopener noreferrer">
+                <a class="project-name" href={`/${lang}/ecosystem/${projectSlug(p.repo)}/`}>
                   <span class="project-repo">{p.repo}</span>
                   <span class="project-cat">{category.title[lang]}</span>
                 </a>
+                <a class="project-src" href={p.url} target="_blank" rel="nofollow noopener noreferrer">GitHub ↗</a>
                 <span class="project-stars">★ {fmt(p.stars)}</span>
                 <span class="project-language">{p.language ?? '—'}</span>
                 <span class="project-desc">

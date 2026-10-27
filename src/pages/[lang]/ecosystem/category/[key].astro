@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { languages, useTranslations, pick, type Lang } from '../../../../i18n/ui';
+import { projects, categories, dataAsOf } from '../../../../data/ecosystem';
+import { projectSlug } from '../../../../lib/slug';
+import * as entityCopy from '../../../../i18n/pages/entity';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const category of categories) {
+      const items = projects
+        .filter((p) => p.category === category.key)
+        .sort((a, b) => b.stars - a.stars);
+      paths.push({ params: { lang, key: category.key }, props: { category, items } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { category, items } = Astro.props as {
+  category: (typeof categories)[number];
+  items: (typeof projects)[number][];
+};
+const t = useTranslations(lang);
+
+const path = `/${lang}/ecosystem/category/${category.key}/`;
+const catTitle = category.title[lang] ?? category.title.en;
+const catLead = category.lead[lang] ?? category.lead.en;
+
+const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
+const totalStars = items.reduce((sum, p) => sum + p.stars, 0);
+
+const copy = {
+  count: pick(lang, entityCopy.categoryCount).replace('{n}', String(items.length)),
+  stars: pick(lang, entityCopy.categoryStars).replace('{n}', fmt(totalStars)),
+  snapshot: pick(lang, entityCopy.fromEcosystem).replace('{date}', dataAsOf),
+  faqTitle: pick(lang, entityCopy.faqTitle),
+  allCategories: pick(lang, entityCopy.allCategories),
+  back: pick(lang, entityCopy.backToEcosystem),
+  browse: pick(lang, entityCopy.browseTitle),
+};
+
+const fill = (tpl: string, vars: Record<string, string>) =>
+  Object.entries(vars).reduce((s, [k, v]) => s.replaceAll(`{${k}}`, v), tpl);
+
+const top = items.slice(0, 5);
+const faq = [
+  {
+    q: fill(pick(lang, entityCopy.qWhatIs), { name: catTitle }),
+    a: fill(pick(lang, entityCopy.categoryFaqWhat), {
+      cat: catTitle,
+      n: String(items.length),
+      lead: catLead,
+    }),
+  },
+  {
+    q: fill(pick(lang, entityCopy.categoryFaqWhich), { cat: catTitle }),
+    a: fill(pick(lang, entityCopy.categoryFaqWhichA), {
+      cat: catTitle,
+      list: top
+        .map((p) => p.repo)
+        .join(lang === 'zh' || lang === 'ja' ? '、' : ', '),
+    }),
+  },
+];
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    name: catTitle,
+    url: new URL(path, Astro.site).href,
+    description: catLead,
+    inLanguage: lang,
+    dateModified: dataAsOf,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: items.length,
+      itemListElement: items.slice(0, 25).map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: p.repo,
+        url: new URL(`/${lang}/ecosystem/${projectSlug(p.repo)}/`, Astro.site).href,
+      })),
+    },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t('site.name'), item: new URL(`/${lang}/`, Astro.site).href },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: t('nav.ecosystem'),
+        item: new URL(`/${lang}/ecosystem/`, Astro.site).href,
+      },
+      { '@type': 'ListItem', position: 3, name: catTitle, item: new URL(path, Astro.site).href },
+    ],
+  },
+  {
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const description = fill(pick(lang, entityCopy.categoryMetaDescription), {
+  cat: catTitle,
+  n: String(items.length),
+  stars: fmt(totalStars),
+});
+---
+
+<BaseLayout lang={lang} title={`${catTitle} — ${t('nav.ecosystem')}`} description={description} path={path} schema={schema}>
+  <div class="wrap docs-shell">
+    <main class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> /
+        <a href={`/${lang}/ecosystem/`}>{t('nav.ecosystem')}</a> / {catTitle}
+      </p>
+
+      <h1 class="doc__title">{catTitle}</h1>
+      <p class="doc__desc">{catLead}</p>
+      <p class="entity__meta">{copy.count} · {copy.stars}</p>
+
+      <h2>{copy.browse}</h2>
+      <ul class="eco-list">
+        {items.map((p) => (
+          <li class="project-row">
+            <a class="project-name" href={`/${lang}/ecosystem/${projectSlug(p.repo)}/`}>
+              <span class="project-repo">{p.repo}</span>
+            </a>
+            <a class="project-src" href={p.url} target="_blank" rel="nofollow noopener noreferrer">GitHub ↗</a>
+            <span class="project-stars">★ {fmt(p.stars)}</span>
+            <span class="project-language">{p.language ?? '—'}</span>
+            <span class="project-desc">{p.desc[lang] ?? p.desc.en}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="eco__snapshot">{copy.snapshot}</p>
+
+      <h2>{copy.faqTitle}</h2>
+      {faq.map(({ q, a }) => (
+        <details class="entity__qa">
+          <summary>{q}</summary>
+          <p>{a}</p>
+        </details>
+      ))}
+
+      <h2>{copy.allCategories}</h2>
+      <ul class="entity__related">
+        {categories.filter((c) => c.key !== category.key).map((c) => (
+          <li>
+            <a href={`/${lang}/ecosystem/category/${c.key}/`}>{c.title[lang] ?? c.title.en}</a>
+          </li>
+        ))}
+      </ul>
+
+      <p><a href={`/${lang}/ecosystem/`}>{copy.back}</a></p>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .entity__meta {
+    opacity: 0.7;
+    font-size: 0.9rem;
+  }
+  .entity__qa {
+    border-bottom: 1px solid var(--border, #333);
+    padding: 0.6rem 0;
+  }
+  .entity__qa summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .entity__qa p {
+    margin: 0.5rem 0 0;
+    opacity: 0.9;
+  }
+  .entity__related {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+  .entity__related li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border, #333);
+  }
+</style>

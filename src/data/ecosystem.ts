@@ -25,6 +25,13 @@ export interface Project {
   category: string;
   /** 上游仓库已归档。由 fetch-ecosystem.mjs 维护，用于让「归档」只作为一次事件上报。 */
   archived?: boolean;
+  /**
+   * 该条目自身的最后一次数据变更日期（YYYY-MM-DD）。
+   * 由 fetch-ecosystem.mjs 只在 stars/forks/archived 真正变化时写入。
+   * 没有它，一次刷新会把全部 200+ 条目的 dataAsOf 一起更新，
+   * 1688 个实体页于是同时变成「今天刚改过」——时效信号直接失效。
+   */
+  updated?: string;
 }
 
 export interface Category {
@@ -126,6 +133,7 @@ export const projects: Project[] = [
     license: 'MIT',
     topics: ['agent-workflows', 'classification', 'confidence-aware-ai', 'decision-intelligence'],
     category: 'curated',
+    updated: '2026-10-27',
   },
   {
     repo: 'AbdelStark/awesome-typesafe',
@@ -146,6 +154,7 @@ export const projects: Project[] = [
     license: 'MIT',
     topics: ['ai-agents', 'awesome-list', 'structured-output'],
     category: 'curated',
+    updated: '2026-10-27',
   },
   {
     repo: 'yibie/awesome-jev',
@@ -166,6 +175,7 @@ export const projects: Project[] = [
     license: null,
     topics: ['awesome-list', 'llm'],
     category: 'curated',
+    updated: '2026-10-27',
   },
   {
     repo: 'v-modal/awesome-jev-tools',
@@ -196,6 +206,7 @@ export const projects: Project[] = [
     license: null,
     topics: ['awesome', 'awesome-list', 'jev', 'llm', 'robotics'],
     category: 'curated',
+    updated: '2026-10-27',
   },
   {
     repo: 'fhshaik/typesafe-mario',
@@ -226,6 +237,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: 'agent',
+    updated: '2026-10-27',
   },
   {
     repo: 'thruwire/foreman',
@@ -256,6 +268,7 @@ export const projects: Project[] = [
     license: 'MIT',
     topics: [],
     category: 'agent',
+    updated: '2026-10-27',
   },
   {
     repo: 'devagrawal09/jev-review',
@@ -286,6 +299,7 @@ export const projects: Project[] = [
     license: 'MIT',
     topics: ['code-review', 'typesafe-ai'],
     category: 'agent',
+    updated: '2026-10-27',
   },
   {
     repo: 'realZachi/pg-jev',
@@ -316,6 +330,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: 'integration',
+    updated: '2026-10-27',
   },
   {
     repo: 'pithings/advocaat',
@@ -346,6 +361,7 @@ export const projects: Project[] = [
     license: 'MIT',
     topics: [],
     category: 'integration',
+    updated: '2026-10-27',
   },
   {
     repo: 'gamesonrblx/Jevbridge',
@@ -376,6 +392,7 @@ export const projects: Project[] = [
     license: 'MIT',
     topics: ['acp', 'agent', 'computer-use'],
     category: 'integration',
+    updated: '2026-10-27',
   },
   {
     repo: 'kshetrajna12/reflex',
@@ -396,6 +413,7 @@ export const projects: Project[] = [
     license: 'MIT',
     topics: [],
     category: 'research',
+    updated: '2026-10-27',
   },
   {
     repo: 'miounet11/openjev',
@@ -416,6 +434,7 @@ export const projects: Project[] = [
     license: 'MIT',
     topics: [],
     category: 'research',
+    updated: '2026-10-27',
   },
   {
     repo: 'tamaratran/fast-jev-compaction',
@@ -446,6 +465,7 @@ export const projects: Project[] = [
     license: 'MIT',
     topics: ['claude-code', 'context-management'],
     category: 'tooling',
+    updated: '2026-10-27',
   },
   {
     repo: "langchain-ai/langchain",
@@ -476,6 +496,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","classification-ranking"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "virattt/ai-hedge-fund",
@@ -506,6 +527,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["finance-quant","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "BerriAI/litellm",
@@ -536,6 +558,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","multilanguage-sdk"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "can1357/oh-my-pi",
@@ -566,6 +589,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["coding-agents","multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "davila7/claude-code-templates",
@@ -596,6 +620,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","coding-agents"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "ComposioHQ/composio",
@@ -626,6 +651,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","llm-routing-cost","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "vercel/ai",
@@ -656,6 +682,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "trycua/cua",
@@ -686,6 +713,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["browser-automation","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "pydantic/pydantic-ai",
@@ -716,6 +744,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "elizaOS/eliza",
@@ -746,6 +775,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "langchain-ai/langchainjs",
@@ -776,6 +806,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","classification-ranking"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "vercel-labs/json-render",
@@ -806,6 +837,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["creative-multimedia","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "openchamber/openchamber",
@@ -836,6 +868,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","coding-agents"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "0xPlaygrounds/rig",
@@ -866,6 +899,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "kunchenguid/firstmate",
@@ -896,6 +930,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","coding-agents"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "browser-use/jev-ultrafast",
@@ -926,6 +961,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["browser-automation","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "agentgateway/agentgateway",
@@ -956,6 +992,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["security-guardrails","multilanguage-sdk"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "latitude-dev/latitude-llm",
@@ -986,6 +1023,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["evaluation-benchmarks","voice-conversation"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "ax-llm/ax",
@@ -1016,6 +1054,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "vellum-ai/vellum-assistant",
@@ -1046,6 +1085,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["mcp-integrations","typed-decisions"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "lahfir/agent-desktop",
@@ -1076,6 +1116,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["desktop-os","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "CelestoAI/celesto",
@@ -1106,6 +1147,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["coding-agents","evaluation-benchmarks"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "jarrodwatts/jev-trader",
@@ -1136,6 +1178,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["finance-quant","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "bastani-inc/atomic",
@@ -1166,6 +1209,7 @@ export const projects: Project[] = [
     license: "Custom license",
     topics: ["coding-agents","llm-routing-cost"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "uezo/aiavatarkit",
@@ -1196,6 +1240,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["voice-conversation","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "TianyuCodings/NanoJev",
@@ -1226,6 +1271,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["games-simulation","evaluation-benchmarks","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "kentcdodds/kody",
@@ -1256,6 +1302,7 @@ export const projects: Project[] = [
     license: "FSL-1.1-ALv2",
     topics: ["search-retrieval","mcp-integrations","classification-ranking"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "AgentiLoop/Agent",
@@ -1286,6 +1333,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["desktop-os","security-guardrails"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "agentjido/req_llm",
@@ -1316,6 +1364,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "BennyKok/omg.dev",
@@ -1346,6 +1395,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["desktop-os","evaluation-benchmarks"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "notque/vexjoy-agent",
@@ -1376,6 +1426,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","mcp-integrations"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "WrongStack/WrongStack",
@@ -1406,6 +1457,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["coding-agents","llm-routing-cost"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "cognesy/instructor-php",
@@ -1436,6 +1488,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "jaredpalmer/kev",
@@ -1466,6 +1519,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["evaluation-benchmarks","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "awlevin/typesafe-computer-use",
@@ -1496,6 +1550,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["desktop-os","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "yonatangross/orchestkit",
@@ -1526,6 +1581,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["coding-agents","classification-ranking"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "dabit3/jev-experiments",
@@ -1556,6 +1612,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["cli-git-gates","security-guardrails","coding-agents"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "cequence-io/openai-scala-client",
@@ -1586,6 +1643,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "monotykamary/pi-fabric",
@@ -1616,6 +1674,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["coding-agents","mcp-integrations","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "Knuckles92/OpenWhisper",
@@ -1646,6 +1705,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["voice-conversation","security-guardrails","classification-ranking"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "QuentinCody/interlinked-cli",
@@ -1676,6 +1736,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["coding-agents","security-guardrails","cli-git-gates"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "gargpratyush/jev-router",
@@ -1706,6 +1767,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","coding-agents"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "featherless-ai/simple-jev",
@@ -1736,6 +1798,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "kitze/skillbox",
@@ -1766,6 +1829,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","mcp-integrations"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "droidrun/mobile-jev",
@@ -1796,6 +1860,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["desktop-os","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "Michaelliv/runline",
@@ -1826,6 +1891,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["multilanguage-sdk","mcp-integrations","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "kyotofin/tax-doc-classifier",
@@ -1856,6 +1922,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["domain-workflows","classification-ranking"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "superagents-lab/jev-search",
@@ -1886,6 +1953,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["search-retrieval","classification-ranking"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "typesafe-ai/typesafe-sdk-js",
@@ -1916,6 +1984,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "wy-coliney/jev-browser-use",
@@ -1946,6 +2015,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["browser-automation","coding-agents"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "hackclub/ai",
@@ -1976,6 +2046,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "NiazMorshed2007/jev-review",
@@ -2006,6 +2077,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["coding-agents","mcp-integrations","evaluation-benchmarks"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "danieljvdm/effect-agent",
@@ -2036,6 +2108,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "jkudish/jev-browser",
@@ -2066,6 +2139,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["browser-automation","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "kitze/unclutter",
@@ -2096,6 +2170,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["browser-automation","classification-ranking"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "ldbumble/taskuary",
@@ -2126,6 +2201,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["evaluation-benchmarks","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "typesafe-ai/typesafe-sdk-python",
@@ -2156,6 +2232,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "djev.dev",
@@ -2174,6 +2251,7 @@ export const projects: Project[] = [
     license: null,
     topics: ['judgment-api', 'multimodal'],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "YannQi/R-4B",
@@ -2193,6 +2271,7 @@ export const projects: Project[] = [
     license: "apache-2.0",
     topics: ['decision-model', 'reflex'],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "Mapika/decider-2b",
@@ -2212,6 +2291,7 @@ export const projects: Project[] = [
     license: "apache-2.0",
     topics: ['decision-model', 'decider'],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "typesafe-ai/skills",
@@ -2232,6 +2312,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "wfzyx/von",
@@ -2252,6 +2333,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["decision-model","jev","machine-learning","python","rlcd","system-one","typesafe"],
     category: "research",
+    updated: '2026-10-27',
     archived: true,
   },
   {
@@ -2273,6 +2355,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: [],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "jkudish/jev-mcp",
@@ -2303,6 +2386,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "tamaratran/jev-pruner",
@@ -2333,6 +2417,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "y0usaf/pi-jev",
@@ -2363,6 +2448,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["guardrails","jev","pi-extension","pi-package","typesafe"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "devagrawal09/stanley-code",
@@ -2383,6 +2469,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "RomanSlack/jev-drone",
@@ -2413,6 +2500,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["autonomous-agents","drone","mujoco","robotics","typesafe"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "aowang-ai/jev-trade",
@@ -2443,6 +2531,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["hyperliquid","jev","quantitative-finance","typesafe"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "agent-labs-dev/fastbrowse",
@@ -2463,6 +2552,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["agents","browser-agent","llm","python","web-automation"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "realZachi/typesafe-adblock",
@@ -2493,6 +2583,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "yikangy873-gif/jev-desktop",
@@ -2513,6 +2604,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["codex","computer-use","desktop-automation","jev","macos"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "obie/ruby_decision_model",
@@ -2543,6 +2635,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "yusukebe/hono-jev-router",
@@ -2573,6 +2666,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "ikermoel/open-alternative-jev",
@@ -2593,6 +2687,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["calibration","classification","jev","jev-alternative","llm","logprobs","open-jev","open-source-jev","open-weights","qwen","structured-decisions","structured-output","system-one","system-one-model","transformers","typed-decisions","typesafe","typesafe-jev","vllm"],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "brainstormity/Jev-Moderation-Bot",
@@ -2623,6 +2718,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "AboveColin/HA-Jev",
@@ -2653,6 +2749,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai","assist","conversation","custom-components","decision-model","hacs","home-assistant","home-automation","homeassistant","jev","llm","python","smart-home","typesafe","voice-assistant","voice-control"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "r-ms/mini-jev",
@@ -2673,6 +2770,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "socai-io/jev-social",
@@ -2703,6 +2801,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["agent-skills","ai-agents","browser-agent","browser-automation","computer-use","decision-model","instagram","jev","linkedin","local-first","openrouter","osint","research-agent","socai","social-media","social-media-research","socmint","system-one","tiktok","typesafe-ai"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "tacticocc/Jevbridge",
@@ -2723,6 +2822,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["acp","agent","claude","computer-use","grok","jev","llm","opencode","typesafe"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "zhengxuyu/litjev",
@@ -2753,6 +2853,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: [],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "TheoOliveira/pi-jev",
@@ -2783,6 +2884,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["jev","pi-coding-agent","pi-extension","pi-package","system-one","tool-routing","typesafe"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "DanRWilloughby/snifftest",
@@ -2813,6 +2915,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-writing","claude-code","claude-code-plugin","claude-skills","github-action","jev","linter","markdown","pre-commit","prose","typesafe","writing"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "zhihz/openjev",
@@ -2833,6 +2936,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "AkashPriyadarshii/jev-seo",
@@ -2863,6 +2967,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ahrefs-alternative","claude-code","cli","decision-oracle","duckduckgo","generative-engine-optimization","geo","jev","mcp","mcp-server","rank-tracker","rust","search-engine-optimization","semrush-alternative","seo","seo-audit","seo-tools","serp","typesafe","typesafe-ai"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "dannote/jev",
@@ -2893,6 +2998,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "compozy/yoshi",
@@ -2923,6 +3029,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["bun","claude-code","codex","context-window","jev","llm-proxy","typesafe"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "phyous/tsai-sc",
@@ -2953,6 +3060,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "leepokai/jev-guard",
@@ -2983,6 +3091,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-agents","claude-code","codex","cursor","gemini-cli","hooks","jev","opencode","prompt-injection","security"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "shiftynick/jev-axi",
@@ -3013,6 +3122,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["agent-safety","ai-agents","axi","claude-code","claude-code-hooks","cli","codex","developer-tools","jev","llm-guardrails","prompt-injection","typesafe"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "valentynkit/jev-belay",
@@ -3043,6 +3153,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "blakestone-x/jev-mcp",
@@ -3073,6 +3184,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "OmniJev/PlayJev",
@@ -3093,6 +3205,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["browser-games","game-ai","game-playing-agent","html5-games","imitation-learning","jev","jev-game","multimodal","openjev","playjev","qwen","real-time","small-models","system-one","vision-language-model"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "chy4pro/jev-for-chrome",
@@ -3113,6 +3226,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-agent","browser-agent","browser-automation","browser-use","chrome-extension","jev","manifest-v3","openrouter","typesafe","web-agent"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "unicodeveloper/jevocks",
@@ -3133,6 +3247,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["jev","stocks","valyu"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "AkashPriyadarshii/jev-superpowers",
@@ -3163,6 +3278,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["agentic-skills","ai-agents","antigravity","claude-code","codex","coding-agents","cursor","developer-tools","gemini-cli","git-jev","jev","jev-scout","software-engineering","superpowers","system-one","tdd","typesafe-ai","zero-hallucination"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "GodsBoy/jev-agent-skill-router",
@@ -3183,6 +3299,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["agentic-ai","ai-agents","hermes-agent","jev","python","skill-routing","typesafe"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "anpicasso/hermes-jev-approvals",
@@ -3213,6 +3330,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "kavehmz/typesafe-playground",
@@ -3243,6 +3361,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "kylemclaren/jevql",
@@ -3273,6 +3392,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["jev","postgres"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "nexibeo/jev-cookbook",
@@ -3293,6 +3413,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-agents","browser-automation","browser-use","cookbook","data-labeling","jev","jev-ai","llm","open-router","openrouter","pii-detection","sql","typesafe"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "shitianfang/jev-use",
@@ -3323,6 +3444,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["agent","agent-skills","ai-agents","claude-code","claude-code-hooks","claude-code-plugin","claude-skills","codex","jev","llm","mcp","mcp-server","mcp-tools","model-context-protocol","typesafe-ai"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "sosopop/jev_stock",
@@ -3343,6 +3465,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["financial-data","financial-machine-learning","jev","llm","machine-learning","market-analysis","quantitative-finance","reasoning-models","stock-prediction","time-series-forecasting"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "HyunjunJeon/pi-quiet-ask",
@@ -3363,6 +3486,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "abhixhek/jevcal",
@@ -3393,6 +3517,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["calibration","confidence-thresholds","jev","llm-evals","system-one","typesafe"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "mejiasd3v/pi-jev-router",
@@ -3413,6 +3538,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "bohutang/sift",
@@ -3433,6 +3559,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-detection","chrome-extension","content-filter","jev","twitter","typesafe","x"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "matthewp/flue-jev-demo",
@@ -3453,6 +3580,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "tumf/jev-cli",
@@ -3483,6 +3611,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai","cli","jev","python","typesafe"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "AkashPriyadarshii/jev-curate",
@@ -3513,6 +3642,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["arrow","cli","data-cleaning","data-engineering","dataset-curation","eval-harness","fine-tuning","jev","jsonl","llm","parquet","polars","pretraining","pyo3","reasoning-models","rust","synthetic-data","system-one","type-safe-ai","typesafe-ai"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "Kevthetech143/super-jev",
@@ -3543,6 +3673,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "valentynkit/jev-commit",
@@ -3573,6 +3704,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "frostney/clean-code-review",
@@ -3593,6 +3725,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["agents","ai","ai-gateway","ai-sdk","clean-code","code-quality","code-review","developer-tools","eve","jev","llm","nextjs","pull-request","static-analysis","typescript","vercel"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "joelhooks/pi-fast-jev-compaction",
@@ -3623,6 +3756,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "24601/Augustus",
@@ -3643,6 +3777,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["agent-skills","agent-workflows","agentic-ai","ai-agents","calibrated-confidence","claude-code","claude-code-skills","codex-skills","cursor-skills","decision-systems","decision-theory","formal-methods","jev","reranking","structured-output","system-one","system-one-models","typesafe","typesafe-ai","zero-shot-classification"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "GiesN/typesafe-jev-workflow",
@@ -3673,6 +3808,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "Nyarlathoteppppp/pi-heed",
@@ -3693,6 +3829,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-agents","coding-agent","guardrails","jev","pi-coding-agent","pi-package","typesafe"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "forvela/jev-agent-browser",
@@ -3713,6 +3850,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "hotchpotch/jev-reranker",
@@ -3733,6 +3871,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "prismhq/jev-router",
@@ -3753,6 +3892,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "alterhq/typesafe-sdk-swift",
@@ -3773,6 +3913,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "andrelandgraf/safer-with-jev",
@@ -3803,6 +3944,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "doeixd/jev-pref",
@@ -3833,6 +3975,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["agent-skills","claude-code","code-review","jev","skills-sh","typesafe"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "raihankhan-rk/diffjury",
@@ -3853,6 +3996,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "valentynkit/jev-plays-pokemon-red",
@@ -3883,6 +4027,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "CodeAlive-AI/mastra-jev-moderation",
@@ -3903,6 +4048,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "FFatTiger/new-api-plugin-typesafe",
@@ -3923,6 +4069,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "HyunjunJeon/jev-judgment",
@@ -3953,6 +4100,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "MarissaFamularo/citation-verifier",
@@ -3973,6 +4121,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["citation-verification","claude","peer-review","typesafe"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "Stumble/jev-go",
@@ -4003,6 +4152,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "WiktorB2004/llama-index-jev",
@@ -4033,6 +4183,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["jev","llamaindex","postprocessor","python","rag","reranker","selector","typesafe"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "adarshmishra07/jcm-router",
@@ -4053,6 +4204,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "gtaras7/typesafe-jev",
@@ -4073,6 +4225,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "leonaaardob/fast-dev-compaction",
@@ -4103,6 +4256,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["codex","codex-plugin","compaction","jev","typesafe"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "milanboers/jev-plays-pokemon",
@@ -4123,6 +4277,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["agent","ai-agent","emulation","game-boy","jev","llm","pokemon-red","pyboy","typesafe","typesafe-jev"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "scienthoon/jev-ood-calibration",
@@ -4143,6 +4298,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "us/jev-local",
@@ -4163,6 +4319,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "valentynkit/jev.nvim",
@@ -4193,6 +4350,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "AkashPriyadarshii/jev-git",
@@ -4213,6 +4371,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-safety","cli","developer-tools","git","git-hook","jev","pre-commit","rust","security","typesafe-ai"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "AkashPriyadarshii/jev-scout",
@@ -4243,6 +4402,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-agents","claude-code","cli","code-search","coding-agents","crates-io","developer-tools","github-search","jev","mcp-server","package-manager","repository-search","rust","system-one","typesafe-ai","ureq","zero-hallucination"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "Butochnikov/laravel-typesafe-jev",
@@ -4273,6 +4433,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "ariel-frischer/jevkit",
@@ -4293,6 +4454,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai","api","classification","cli","developer-tools","jev","jevkit","json","linter","linting","llm","llm-tools","rust","token-optimization","typed-decisions","typesafe","typesafe-jev","yaml"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "gaborishka/jev-canvas",
@@ -4313,6 +4475,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["hand-tracking","jev","mediapipe","openrouter","tldraw","typesafe","voice-control","web-speech-api"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "jgridifier/jev-research-eval",
@@ -4333,6 +4496,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "kitze/pagegrade",
@@ -4353,6 +4517,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "legacybridge-tech/pi-typesafe-jev",
@@ -4373,6 +4538,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "mgaitan/sqlite-jev",
@@ -4393,6 +4559,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "Kelbie/hunch",
@@ -4413,6 +4580,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "cephalization/jev-triage",
@@ -4433,6 +4601,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "edgardcham/huncho",
@@ -4453,6 +4622,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "kuhung/understanding-jev",
@@ -4473,6 +4643,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "noplan-inc/limpet",
@@ -4493,6 +4664,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-agents","claude-code","codex","hooks","jev"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "rajivkuriakose/typesafe-jev-examples",
@@ -4513,6 +4685,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "ably-labs/jev-pong",
@@ -4533,6 +4706,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: [],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "bitnovus/jev-spam-eval",
@@ -4553,6 +4727,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "dakdevs/decide-mcp",
@@ -4573,6 +4748,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "komikat/jev-bfs",
@@ -4593,6 +4769,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: [],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "kxzk/typesafe-jev-drone-demo",
@@ -4613,6 +4790,7 @@ export const projects: Project[] = [
     license: null,
     topics: [],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "shitianfang/wakegate",
@@ -4633,6 +4811,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["ai-agents","ai-sdk","cloudflare-durable-objects","cloudflare-workers","jev","long-running-agents","typesafe","typesafe-ai"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "yodablocks/jev-orderby-bench",
@@ -4653,6 +4832,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["benchmark","calibration","duckdb","information-retrieval","jev","llm-evaluation","python","ranking","reproducible-research","typesafe"],
     category: "research",
+    updated: '2026-10-27',
   },
   {
     repo: "vinilana/jev-eval-agent",
@@ -4683,6 +4863,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["evaluation-benchmarks","coding-agents"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "moritzkremb/jev-voice-browser",
@@ -4713,6 +4894,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["browser-automation","voice-conversation"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "rokcso/bluenoise",
@@ -4743,6 +4925,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["browser-automation","classification-ranking"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "itsmostafa/typesafe-mcp",
@@ -4773,6 +4956,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["mcp-integrations","coding-agents","typed-decisions"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "standardagents/jevpilot",
@@ -4803,6 +4987,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["games-simulation","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "giuliosmall/pg_typesafe",
@@ -4833,6 +5018,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["database-vector","classification-ranking"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "CaptainCore/captaincore",
@@ -4863,6 +5049,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["security-guardrails","cli-git-gates","domain-workflows"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "DevMortimer/pi-warden",
@@ -4893,6 +5080,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["security-guardrails","coding-agents"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "trungdq88/youtube-sponsor-detection",
@@ -4923,6 +5111,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["creative-multimedia","domain-workflows"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "ChetasLua/jevmeter",
@@ -4953,6 +5142,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["creative-multimedia","classification-ranking"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "mrnugget/jev-shell-history",
@@ -4983,6 +5173,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["cli-git-gates","classification-ranking"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "0xNatoshi/jev-codex-router",
@@ -5013,6 +5204,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","coding-agents"],
     category: "tooling",
+    updated: '2026-10-27',
     archived: true,
   },
   {
@@ -5044,6 +5236,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["search-retrieval","cli-git-gates","typed-decisions"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "supercorp-ai/supercov",
@@ -5074,6 +5267,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["coding-agents","cli-git-gates","evaluation-benchmarks"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "Sac-Y/Jev-cu",
@@ -5104,6 +5298,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["desktop-os","coding-agents"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "alp82/goodwatch-monorepo",
@@ -5134,6 +5329,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["creative-multimedia","evaluation-benchmarks"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "getsynkora/synkora-ai",
@@ -5164,6 +5360,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["mcp-integrations","classification-ranking","typed-decisions"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "irfndi/prism-liquidity-agent",
@@ -5194,6 +5391,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["finance-quant","typed-decisions","evaluation-benchmarks"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "iammrduncan/typesafe-ai-benchmark",
@@ -5224,6 +5422,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["evaluation-benchmarks","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "RafalWilinski/vibecheck",
@@ -5254,6 +5453,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["browser-automation","creative-multimedia","evaluation-benchmarks"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "BillionsBobby/JevRouter",
@@ -5284,6 +5484,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","mcp-integrations","cli-git-gates"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "joshuaeroman/plasmallm",
@@ -5314,6 +5515,7 @@ export const projects: Project[] = [
     license: "GPL-2.0",
     topics: ["desktop-os","typed-decisions"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "wundercorp/loki",
@@ -5344,6 +5546,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["llm-routing-cost","mcp-integrations","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "devanshbatham/commit-miner",
@@ -5374,6 +5577,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["ast-code-graph","cli-git-gates","classification-ranking"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "hqman/JevScout",
@@ -5404,6 +5608,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["browser-automation","domain-workflows","classification-ranking"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "jexp/neo4jev",
@@ -5434,6 +5639,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["database-vector","ast-code-graph"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "ellipsis-dev/blink",
@@ -5464,6 +5670,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["ast-code-graph","search-retrieval"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "GhalebDweikat/winnow",
@@ -5494,6 +5701,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["context-compaction","coding-agents"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "monteduro/killmyidea",
@@ -5524,6 +5732,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["domain-workflows","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "sorrycc/typesafe-snake",
@@ -5554,6 +5763,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["games-simulation","typed-decisions"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "mizchi/jev-playground",
@@ -5584,6 +5794,7 @@ export const projects: Project[] = [
     license: null,
     topics: ["evaluation-benchmarks","games-simulation","browser-automation"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "AlbionaHoti/refgarden",
@@ -5614,6 +5825,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["creative-multimedia","search-retrieval"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "DevMortimer/pi-typesafe",
@@ -5644,6 +5856,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["mcp-integrations","coding-agents","typed-decisions"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "jomatsu/pi-jev-auto-mode",
@@ -5674,6 +5887,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["security-guardrails","coding-agents"],
     category: "integration",
+    updated: '2026-10-27',
   },
   {
     repo: "Ying-Kai-Liao/jev-browser",
@@ -5704,6 +5918,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["browser-automation","mcp-integrations","cli-git-gates"],
     category: "agent",
+    updated: '2026-10-27',
   },
   {
     repo: "kieranklaassen/ruby_llm-typesafe",
@@ -5734,6 +5949,7 @@ export const projects: Project[] = [
     license: "MIT",
     topics: ["multilanguage-sdk","typed-decisions"],
     category: "tooling",
+    updated: '2026-10-27',
   },
   {
     repo: "zadescoxp/Jev-Trades",
@@ -5764,6 +5980,7 @@ export const projects: Project[] = [
     license: "Apache-2.0",
     topics: ["finance-quant","games-simulation"],
     category: "agent",
+    updated: '2026-10-27',
   },
 ];
 

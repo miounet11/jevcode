@@ -160,5 +160,17 @@ for (const d of data) {
     archivedKnown.add(d.repo);
   }
 }
+
+// 按条目记录最后变更日期：只有 stats/归档真变了的条目才刷新 updated。
+// 用 dataAsOf 代替它会让一次刷新把 200+ 条全部标成「今天更新」，
+// 1688 个实体页的 dateModified 于是失去区分度。
+const changedRepos = new Set(changes.filter((c) => c.kind === 'stats' || c.kind === 'archived').map((c) => c.repo));
+for (const repo of changedRepos) {
+  const re = new RegExp(
+    `(repo: ['"]${esc(repo)}['"],[\\s\\S]*?\\n    category: [^\\n]+\\n)(    updated: '[^']*',\\n)?`,
+  );
+  const next = out.replace(re, `$1    updated: '${today}',\n`);
+  if (next !== out) out = next;
+}
 writeFileSync('src/data/ecosystem.ts', out);
 console.log(JSON.stringify({ repo_count: repos.length, files_updated: 1, stat_entries_updated: updated, archived_marked: archivedMarked, changes }, null, 2));

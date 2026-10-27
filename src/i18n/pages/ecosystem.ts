@@ -47,6 +47,17 @@ export const filterAll: Localized<string> = {
   zh: '全部', en: 'All', ja: 'すべて', ko: '전체', de: 'Alle', fr: 'Tout', es: 'Todo', pt: 'Tudo',
 };
 
+export const categoryNav: Localized<string> = {
+  zh: '按分类浏览',
+  en: 'Browse by category',
+  ja: 'カテゴリから探す',
+  ko: '카테고리별 보기',
+  de: 'Nach Kategorie durchsuchen',
+  fr: 'Parcourir par catégorie',
+  es: 'Explorar por categoría',
+  pt: 'Navegar por categoria',
+};
+
 export const filterLanguage: Localized<string> = {
   zh: '语言', en: 'Language', ja: '言語', ko: '언어', de: 'Sprache', fr: 'Langue', es: 'Idioma', pt: 'Idioma',
 };

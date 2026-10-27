@@ -23,6 +23,8 @@ const ROUTES = [
   { re: /^\/([a-z]{2})?\/?(cases|concepts|patterns|primitives|sdk)\/([a-z0-9-]+)\/?$/, file: (m) => `src/content/docs/${m[1] || 'en'}/${m[2]}/${m[3]}.md` },
   // 各独立页面：/{lang}/<page>/
   { re: /^\/([a-z]{2})?\/?(compare|ecosystem|lab|map|playground|pricing|scenes|try|builds|api|community|introduction|quickstart)\/?$/, file: (m) => `src/pages/${m[1] ? `[lang]/${m[2]}.astro` : `${m[2]}.astro`}` },
+  // 生态分类页：整页是分类下所有项目的聚合，跟着数据文件走。
+  { re: /^\/[a-z]{2}\/ecosystem\/category\/[a-z0-9-]+\/?$/, file: () => 'src/data/ecosystem.ts' },
   // 语言首页：/{lang}/
   { re: /^\/([a-z]{2})\/?$/, file: () => 'src/pages/[lang]/index.astro' },
 ];
@@ -49,9 +51,48 @@ function repoLatestTime() {
   return repoLatest;
 }
 
+/**
+ * 生态实体页：用条目自己的 `updated` 日期当 lastmod。
+ *
+ * 一个仓库的 stars 变了，只有它自己的页面该被判定为「刚更新」。
+ * 若全用 dataAsOf，每次刷新 200+ 条目都会让 1688 个页面同时变新，
+ * 爬虫会把整个语料库当成一个整体反复重爬，长尾页反而排不上。
+ */
+let entityDates = null;
+function entityLastmod(slug) {
+  if (entityDates === null) {
+    entityDates = new Map();
+    try {
+      const src = readFileSync(path.join(repoRoot, 'src/data/ecosystem.ts'), 'utf8');
+      for (const block of src.matchAll(/repo: ['"]([^'"]+)['"][\s\S]*?\n    updated: '([^']+)'/g)) {
+        const slugKey = block[1]
+          .toLowerCase()
+          .replace(/\//g, '--')
+          .replace(/[^a-z0-9._-]+/g, '-')
+          .replace(/-{3,}/g, '--')
+          .replace(/^-+|-+$/g, '');
+        entityDates.set(slugKey, block[2]);
+      }
+    } catch {
+      entityDates = new Map();
+    }
+  }
+  const date = entityDates.get(slug);
+  // 日期只有天精度，补上午时间让同一天的多个条目时间戳不完全相同。
+  return date ? `${date}T00:00:00+00:00` : null;
+}
+
 const cache = new Map();
 function lastmodFor(pathname) {
   if (cache.has(pathname)) return cache.get(pathname);
+  const entity = pathname.match(/^\/[a-z]{2}\/ecosystem\/([^/]+)\/$/);
+  if (entity) {
+    const own = entityLastmod(entity[1]);
+    if (own) {
+      cache.set(pathname, own);
+      return own;
+    }
+  }
   let result = null;
   for (const { re, file } of ROUTES) {
     const m = pathname.match(re);
@@ -117,6 +158,9 @@ export function sitemapInclude(page) {
   // 根路径是跳转兜底页（nginx 直接 302，其他托管由 meta refresh 接手），
   // 页面本身是 noindex，收进 sitemap 就是自相矛盾。
   if (pathname === '/') return false;
+  // Non-HTML endpoints (feeds) are not sitemap candidates; they are advertised
+  // through <link rel="alternate"> and llms.txt instead.
+  if (/\.(xml|txt|json)$/.test(pathname)) return false;
   if (pathname.includes('/login') || pathname.includes('/account') || pathname.includes('/404')) {
     return false;
   }

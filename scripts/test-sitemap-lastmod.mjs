@@ -16,6 +16,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
 const { lastmodSerialize, sitemapInclude } = await import('./sitemap-lastmod.mjs');
 
@@ -47,6 +48,24 @@ test('独立页面映射到页面模板的 git 时间', () => {
 test('语言首页映射到 [lang]/index.astro', () => {
   const item = lastmodSerialize({ url: url('/zh/') });
   assert.equal(item.lastmod, gitTime('src/pages/[lang]/index.astro'));
+});
+
+test('生态实体页用条目自己的 updated，不用整文件时间', () => {
+  const entity = lastmodSerialize({ url: url('/zh/ecosystem/yibie--awesome-jev/') });
+  // 条目级日期：只有这个仓库的数据变了它才算「刚更新」
+  const src = readFileSync(new URL('../src/data/ecosystem.ts', import.meta.url), 'utf8');
+  const own = src
+    .match(/repo: 'yibie\/awesome-jev'[\s\S]*?\n    updated: '([^']+)'/)?.[1];
+  assert.ok(own, 'ecosystem.ts 应带 updated 字段');
+  assert.equal(entity.lastmod, `${own}T00:00:00+00:00`);
+  // 与整文件时间不同，避免一次刷新把 1688 个页面全标成新
+  assert.notEqual(entity.lastmod, gitTime('src/data/ecosystem.ts'));
+});
+
+test('生态分类页跟随 ecosystem.ts 整文件时间', () => {
+  const category = lastmodSerialize({ url: url('/de/ecosystem/category/agent/') });
+  assert.equal(category.lastmod, gitTime('src/data/ecosystem.ts'));
+  assert.notEqual(category.lastmod, gitTime('.'));
 });
 
 test('community 详情页等未映射 URL 回退仓库最新提交时间', () => {
