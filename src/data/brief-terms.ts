@@ -628,6 +628,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "sentiment": {
       "de": "stimmung",
       "es": "sentimiento",
+      "fr": "sentiment dépressif",
       "ja": "感情",
       "ko": "감정",
       "pt": "sentimento",
@@ -840,6 +841,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     },
     "legal": {
       "de": "recht",
+      "es": "derecho legal",
       "fr": "juridique",
       "ja": "ほうりつ",
       "ko": "법률",
@@ -865,6 +867,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "制造"
     },
     "marketing": {
+      "fr": "le marketing digital",
       "ja": "マーケティング",
       "ko": "마케팅",
       "zh": "营销"
@@ -903,6 +906,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "平台即服务"
     },
     "pharma": {
+      "de": "pharmazeutik",
       "es": "farmacia",
       "fr": "pharmacie",
       "ja": "製薬",
@@ -930,6 +934,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     },
     "restaurant": {
       "es": "restaurante",
+      "fr": "restaurant de cuisine française",
       "ja": "レストラン",
       "ko": "레스토랑",
       "pt": "restaurante",
@@ -957,6 +962,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "fr": "sliding_scale",
       "ja": "ストリーミング",
       "ko": "스트리밍",
+      "pt": "fluxo contínuo",
       "zh": "流媒体"
     },
     "supplychain": {
@@ -1029,10 +1035,12 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "es": "carga de la api",
       "fr": "charge utile de l'api",
       "ja": "api ペイロード",
+      "pt": "a payload da api",
       "zh": "api 载荷"
     },
     "chat": {
       "de": "guten chat. ich bin clavue.",
+      "es": "el chatbot",
       "ja": "チャット",
       "ko": "채팅",
       "zh": "聊天"
@@ -1274,6 +1282,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "performance": {
       "de": "leistung",
       "es": "rendimiento",
+      "fr": "rendu de performance",
       "ja": "パフォーマンス",
       "ko": "성능",
       "pt": "desempenho",

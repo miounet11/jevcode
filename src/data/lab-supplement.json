@@ -1062,5 +1062,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-01",
+    "state": "API payload field: The buyer called our staff useless idiots in the order thread.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-02",
+    "state": "Internal note: Someone is harassing other users in the product listing comments.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-03",
+    "state": "Social post: A user posted slurs directed at support over the GMV.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-04",
+    "state": "Ticket: Threatening messages were left on the order review page.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
   }
 ]

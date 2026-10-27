@@ -498,5 +498,33 @@
     "ok": true,
     "choice": "no",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-toxicity-01",
+    "ts": "2026-10-27T01:33:17.644Z",
+    "ok": true,
+    "choice": "flag",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-toxicity-02",
+    "ts": "2026-10-27T01:33:19.715Z",
+    "ok": true,
+    "choice": "flag",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-toxicity-03",
+    "ts": "2026-10-27T01:33:21.095Z",
+    "ok": true,
+    "choice": "flag",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-toxicity-04",
+    "ts": "2026-10-27T01:33:22.679Z",
+    "ok": true,
+    "choice": "flag",
+    "model": "clavue-jev"
   }
 ]
