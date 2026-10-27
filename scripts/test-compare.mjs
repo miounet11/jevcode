@@ -96,6 +96,19 @@ test('buildRecord writes a narration under the public names', () => {
   assert.match(record.narration.en, /disagree/i);
 });
 
+test('buildRecord 记录语料指纹，供日后判断记录属于哪一版语料', () => {
+  const result = {
+    id: sample.id,
+    ours: { ok: true, model: 'clavue-jev', choice: 'yes', probabilities: { yes: 1, no: 0 }, ms: 30 },
+    official: { ok: true, model: 'jev-1.13.0', choice: 'no', probabilities: { yes: 0.2, no: 0.8 }, ms: 90 },
+  };
+  assert.equal(buildRecord(sample, result, 'f449959d').corpus, 'f449959d');
+  // 未传或格式非法时不写字段：宁缺勿造，避免把脏值当成可比性凭证
+  assert.equal(buildRecord(sample, result).corpus, undefined);
+  assert.equal(buildRecord(sample, result, 'not-a-hash').corpus, undefined);
+  assert.equal(buildRecord(sample, result, 12345).corpus, undefined);
+});
+
 test('runCompare does not call TypeSafe when no key is configured', async () => {
   let calls = 0;
   const fetchImpl = async () => {

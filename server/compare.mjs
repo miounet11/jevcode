@@ -197,7 +197,7 @@ export function narrate(entry) {
   };
 }
 
-export function buildRecord(item, result) {
+export function buildRecord(item, result, corpus) {
   const known = caseIndex[item.id];
   const entry = {
     ts: new Date().toISOString(),
@@ -208,6 +208,9 @@ export function buildRecord(item, result) {
     oursHit: null,
     peerHit: null,
   };
+  // 语料指纹：记录这条是在哪一版语料下评的。没有它，聚合时无法区分
+  // 「日志被轮转裁掉」和「这条题目当时还不存在」，两种情况的处置完全相反。
+  if (typeof corpus === 'string' && /^[0-9a-f]{8}$/.test(corpus)) entry.corpus = corpus;
   if (known && entry.ours.ok) entry.oursHit = known.accept.includes(entry.ours.choice);
   if (known && entry.peer.ok) entry.peerHit = known.accept.includes(entry.peer.choice);
   entry.narration = narrate(entry);

@@ -743,7 +743,7 @@ const server = createServer(async (req, res) => {
         officialModel: OFFICIAL_MODEL,
         fetchImpl: fetch,
       });
-      const recorded = results.map((result, index) => buildRecord(items[index], result));
+      const recorded = results.map((result, index) => buildRecord(items[index], result, body.corpus));
       try {
         await appendRecords(COMPARE_LOG, recorded);
       } catch (err) {
