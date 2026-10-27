@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import BriefPager from '../../components/BriefPager.astro';
 import { languages, useTranslations, pick, type Lang } from '../../i18n/ui';
 import * as copySrc from '../../i18n/pages/briefs';
 import briefs from '../../data/daily-briefs.json';
@@ -50,12 +51,7 @@ const listIndex = lang === 'en' || lang === 'zh' || localizedLangs.has(lang);
             </li>
           ))}
         </ul>
-        {pages > 1 && (
-          <nav class="bpager" aria-label="Pagination">
-            <span class="bpager__info">{pageNo} / {pages}</span>
-            <a href={`/${lang}/briefs/page/2/`}>→</a>
-          </nav>
-        )}
+        {pages > 1 && <BriefPager lang={lang} pageNo={pageNo} pages={pages} label={pick(lang, copySrc.paginationLabel)} />}
       </main>
     </div>
   </section>

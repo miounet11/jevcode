@@ -1,0 +1,65 @@
+---
+/**
+ * 案例列表分页导航。
+ *
+ * 原来只有单步「→」：第 1 页不知道最后一页在哪，第 40 页也只能一页页点回去。
+ * 案例每天 +50，一年就是 180 多页，深页实际上无法被爬虫走到，
+ * 越早的案例越会退化成只有 sitemap 能到达的孤儿页。
+ *
+ * 这里改为「首页 + 页码窗口 + 末页」，任何一页到任意页最多两步。
+ */
+
+interface Props {
+  lang: string;
+  pageNo: number;
+  pages: number;
+  label: string;
+}
+
+const { lang, pageNo, pages, label } = Astro.props as Props;
+const hrefOf = (n: number) => (n === 1 ? `/${lang}/briefs/` : `/${lang}/briefs/page/${n}/`);
+
+/** 当前页两侧各留 2 个，再补首页与末页，中间用省略号。 */
+const WINDOW = 2;
+const nums = new Set<number>([1, pages]);
+for (let n = pageNo - WINDOW; n <= pageNo + WINDOW; n += 1) {
+  if (n >= 1 && n <= pages) nums.add(n);
+}
+const ordered = [...nums].sort((a, b) => a - b);
+const items: Array<{ kind: 'page'; n: number } | { kind: 'gap' }> = [];
+for (let i = 0; i < ordered.length; i += 1) {
+  if (i > 0 && ordered[i] - ordered[i - 1] > 1) items.push({ kind: 'gap' });
+  items.push({ kind: 'page', n: ordered[i] });
+}
+---
+
+<nav class="bpager" aria-label={label}>
+  {pageNo > 1 && <a class="bpager__step" href={hrefOf(pageNo - 1)} rel="prev">←</a>}
+  {items.map((item) =>
+    item.kind === 'gap' ? (
+      <span class="bpager__gap">…</span>
+    ) : (
+      <a
+        class:list={['bpager__num', { 'is-current': item.n === pageNo }]}
+        href={hrefOf(item.n)}
+        aria-current={item.n === pageNo ? 'page' : undefined}
+      >
+        {item.n}
+      </a>
+    ),
+  )}
+  {pageNo < pages && <a class="bpager__step" href={hrefOf(pageNo + 1)} rel="next">→</a>}
+</nav>
+
+<style>
+  .bpager { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 24px; }
+  .bpager__num, .bpager__step {
+    font-size: 13px;
+    padding: 4px 10px;
+    text-decoration: none;
+    border: 1px solid var(--line, rgba(255,255,255,0.14));
+    border-radius: 6px;
+  }
+  .bpager__num.is-current { font-weight: 600; border-color: currentColor; }
+  .bpager__gap { font-size: 13px; opacity: 0.5; }
+</style>
