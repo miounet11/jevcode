@@ -135,6 +135,61 @@ REMOTE
 log "校验并重载 nginx..."
 ssh "${SSH_OPTS[@]}" "$SSH_HOST" "nginx -t && systemctl reload nginx"
 
+# ---------- 6. 发布后校验 + 自动回滚 ----------
+# nginx -t 只证明配置语法对，不证明新版本真的能服务：软链指错、权限没跟上、
+# 构建产物缺文件，这些在 nginx -t 里全是绿的，要等用户 404 才发现。
+# 10-26 那轮 deploy-failed 就是这么过去的。这里按 sitemap 实采，任何一条不是
+# 200 就切回上一版本——回滚成本和人工介入成本都不低，自动做掉更划算。
+log "发布后校验..."
+VERIFY_URL="${JEVCODE_VERIFY_URL:-https://www.jevcode.ai}"
+VERIFY_SAMPLE="${JEVCODE_VERIFY_SAMPLE:-12}"
+
+verify_remote() {
+  local urls
+  # 从新版本的 sitemap 里抽样，而不是硬编码几个页面：硬编码的路径在站点
+  # 改版后仍然返回 200，什么也证明不了。
+  urls=$(ssh "${SSH_OPTS[@]}" "$SSH_HOST" \
+    "head -c 2000000 ${REMOTE_ROOT}/releases/${RELEASE_ID}/sitemap-0.xml 2>/dev/null \
+      || find ${REMOTE_ROOT}/releases/${RELEASE_ID} -maxdepth 1 -name 'sitemap*.xml' -exec cat {} +" \
+    | grep -o '<loc>[^<]*</loc>' | sed 's/<[^>]*>//g' \
+    | awk -v n="$VERIFY_SAMPLE" 'NR % 97 == 1' | head -n "$VERIFY_SAMPLE" || true)
+
+  if [ -z "$urls" ]; then
+    log "WARN sitemap 里取不到 URL，跳过发布后校验"
+    return 0
+  fi
+
+  local path bad=0 code
+  # 用 while read 而不是 for url in $urls：后者依赖词分割，URL 里一旦出现
+  # 空格或被 shell 选项改动就会整行当成一个地址。按行读没有这类隐含假设。
+  while IFS= read -r url; do
+    [ -n "$url" ] || continue
+    # 只校验本站路径：sitemap 里可能混着别的域名，拿去打会得到无关结果。
+    path=$(printf '%s' "$url" | sed -E "s#^https?://[^/]+##")
+    [ -n "$path" ] || path="/"
+    code=$(curl -s -o /dev/null -w '%{http_code}' -m 15 "${VERIFY_URL}${path}" || echo 000)
+    if [ "$code" != "200" ]; then
+      log "  FAIL ${path} -> HTTP ${code}"
+      bad=$((bad + 1))
+    fi
+  done <<< "$urls"
+  [ "$bad" -eq 0 ] || { log "  ${bad} 个 URL 未返回 200"; return 1; }
+  return 0
+}
+
+if ! verify_remote; then
+  PREV=$(ssh "${SSH_OPTS[@]}" "$SSH_HOST" "cat ${REMOTE_ROOT}/shared/previous_release 2>/dev/null || true")
+  if [ -n "$PREV" ] && [ "$PREV" != "${REMOTE_ROOT}/releases/${RELEASE_ID}" ]; then
+    log "校验失败，自动回滚到 ${PREV}"
+    ssh "${SSH_OPTS[@]}" "$SSH_HOST" "ln -sfn ${PREV} ${REMOTE_ROOT}/current.new && mv -Tf ${REMOTE_ROOT}/current.new ${REMOTE_ROOT}/current && nginx -t && systemctl reload nginx"
+    rm -f "$TARBALL"
+    die "发布校验失败，已回滚到 ${PREV}（本次版本留在 releases/${RELEASE_ID} 供排查）"
+  fi
+  rm -f "$TARBALL"
+  die "发布校验失败，且没有可回滚的上一版本（当前线上是 ${RELEASE_ID}，需人工处理）"
+fi
+log "发布后校验通过"
+
 rm -f "$TARBALL"
 log "部署完成：${RELEASE_ID}"
 log "回滚命令：ssh ${SSH_HOST} 'ln -sfn \$(cat ${REMOTE_ROOT}/shared/previous_release) ${REMOTE_ROOT}/current && systemctl reload nginx'"
