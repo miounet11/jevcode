@@ -439,7 +439,9 @@ const themeToggleUi = {
     padding: 22px;
     font-size: 13px;
   }
-  .search-result {
+  /* 检索结果 <a> 及其子节点由 JS 用 createElement/innerHTML 生成，不带 scoped
+     属性；不加 :global() 会被编译成 `...[cid]`，结果条目就退回纯文本样式。 */
+  :global(.search-result) {
     display: flex;
     flex-direction: column;
     gap: 3px;
@@ -447,15 +449,15 @@ const themeToggleUi = {
     border-radius: 8px;
     text-decoration: none;
   }
-  .search-result:hover {
+  :global(.search-result:hover) {
     background: var(--bg-code);
   }
-  .search-result__title {
+  :global(.search-result__title) {
     font-size: 14px;
     font-weight: 600;
     color: var(--fg);
   }
-  .search-result__excerpt {
+  :global(.search-result__excerpt) {
     font-size: 12.5px;
     color: var(--fg-muted);
     line-height: 1.5;
@@ -464,7 +466,7 @@ const themeToggleUi = {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-  .search-result__excerpt :is(mark) {
+  :global(.search-result__excerpt mark) {
     background: var(--accent-soft);
     color: var(--accent-strong);
     border-radius: 2px;

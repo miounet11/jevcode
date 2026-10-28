@@ -471,6 +471,10 @@ ${copy.answersComment}`;
     font-family: var(--font-mono); font-size: 12px; line-height: 1.45; white-space: pre-wrap;
   }
   .studio__code p { color: var(--fg-dim); font-size: 13px; }
+  /* 注意：本文件是 <style is:global>，样式不参与 Astro 的 scoped 编译，
+     也就没有 [data-astro-cid] 后缀。所以 #stage 里由 paint*() 动态生成的
+     well/hold/rapid/bins 能直接命中——不要在这里加 :global()，
+     它不会被处理，原样输出后浏览器不认，整条规则失效。 */
   .studio .hold { display: flex; gap: 6px; height: 28px; margin-bottom: 8px; }
   .studio .hold i { display: block; width: 22px; height: 22px; border-radius: 5px; background: var(--accent); }
   .studio .hold i.is-gone { opacity: 0; }
@@ -480,7 +484,7 @@ ${copy.answersComment}`;
   .studio .well i.is-piece { animation: drop 0.35s ease; }
   .studio .well i.is-piece.is-hit { background: var(--accent); }
   .studio .well i.is-piece.is-miss { background: var(--rose); }
-  .studio__meta { margin: 8px 0 0; color: var(--fg-dim); font-family: var(--font-mono); font-size: 12px; }
+  .studio .studio__meta { margin: 8px 0 0; color: var(--fg-dim); font-family: var(--font-mono); font-size: 12px; }
   .studio .rapid, .studio .bins { display: grid; gap: 8px; }
   .studio .bins { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; }
   .studio .bins section { display: grid; gap: 8px; padding: 8px; border-radius: 14px; background: var(--bg); min-height: 120px; }
