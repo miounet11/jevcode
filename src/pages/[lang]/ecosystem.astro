@@ -243,12 +243,13 @@ const copy = {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    min-height: 32px;
-    padding: 0 11px;
+    /* 筛选 chip 是手机上最常点的控件之一，32px 低于 44px 触控基线。 */
+    min-height: 44px;
+    padding: 0 14px;
     background: none;
     border: 1px solid transparent;
     border-bottom: 2px solid transparent;
-    border-radius: 6px;
+    border-radius: 8px;
     color: var(--fg-muted);
     font-size: 13.5px;
     cursor: pointer;
@@ -272,8 +273,8 @@ const copy = {
   }
   .eco-select,
   .eco-search {
-    min-height: 32px;
-    padding: 0 10px;
+    min-height: 44px;
+    padding: 0 12px;
     background: var(--bg);
     border: 1px solid var(--border-strong);
     border-radius: 8px;
