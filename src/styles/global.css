@@ -1350,6 +1350,65 @@ html { transition: background-color var(--dur) var(--ease-out); }
 }
 :where(.btn, .card, .chip, .tab):focus-visible { outline-offset: 3px; }
 
+/* ---------- 徽章与分段控件 ----------
+   精修层一直在 :where(.btn, .card, .chip, .tab):focus-visible 里引用 .chip/.tab，
+   但这两个类此前从未定义过；这里补上最小可用形态，供徽章与分段切换复用。 */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 4px 11px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--bg-elev);
+  font-size: 12.5px;
+  line-height: 1.2;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+.chip:hover { color: var(--fg); border-color: var(--hairline-strong); }
+.chip__count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--fg-dim);
+  font-variant-numeric: tabular-nums;
+}
+.chip--on {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+}
+.chip--on .chip__count { color: var(--accent-strong); }
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.tab:hover { color: var(--fg); background: var(--bg-code); }
+.tab--on {
+  color: var(--fg);
+  background: var(--bg-elev);
+  border-color: var(--hairline-strong);
+}
+
 /* ---------- 卡片：更克制的圆角、悬停高光走指针 ---------- */
 .card {
   border-color: var(--hairline);

@@ -83,6 +83,9 @@ export const hero = {
   stageOurs: { zh: '本站这一边', en: 'This site', ja: '当サイト側', ko: '이 사이트 쪽', de: 'Diese Seite', fr: 'Ce site', es: 'Este sitio', pt: 'Este site' } as Localized<string>,
   stagePeer: { zh: '同一道题', en: 'Same question', ja: '同じ問題', ko: '같은 문제', de: 'Dieselbe Frage', fr: 'Même question', es: 'Misma pregunta', pt: 'Mesma pergunta' } as Localized<string>,
   stageHint: { zh: '点开，看这一题谁命中', en: 'Open a question and see who hits', ja: '開いて、この問題でどちらが当てるか見る', ko: '열어서 이 문제에서 누가 맞히는지 보기', de: 'Öffnen und sehen, wer diese Frage trifft', fr: 'Ouvrir et voir qui réussit cette question', es: 'Abrir y ver quién acierta esta pregunta', pt: 'Abrir e ver quem acerta esta pergunta' } as Localized<string>,
+  factEcosystem: { zh: '生态项目', en: 'ecosystem projects', ja: 'エコシステム項目', ko: '에코시스템 프로젝트', de: 'Ökosystem-Projekte', fr: 'projets de l’écosystème', es: 'proyectos del ecosistema', pt: 'projetos do ecossistema' } as Localized<string>,
+  factPulse: { zh: '条社区动态', en: 'community posts', ja: 'コミュニティ投稿', ko: '커뮤니티 게시물', de: 'Community-Beiträge', fr: 'posts de la communauté', es: 'publicaciones de la comunidad', pt: 'posts da comunidade' } as Localized<string>,
+  factCases: { zh: '道对拍案例', en: 'head-to-head cases', ja: '対戦ケース', ko: '대결 사례', de: 'Vergleichsfälle', fr: 'cas comparés', es: 'casos comparados', pt: 'casos comparados' } as Localized<string>,
 };
 
 export const bench = {
