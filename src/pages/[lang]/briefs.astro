@@ -59,8 +59,10 @@ const listIndex = lang === 'en' || lang === 'zh' || localizedLangs.has(lang);
 
 <style>
   .blist { list-style: none; padding: 0; margin: 22px 0 0; }
-  .blist li { padding: 12px 0; border-bottom: 1px solid var(--line, rgba(255,255,255,0.08)); }
-  .blist a { display: block; }
+  .blist li { padding: 14px 0; border-bottom: 1px solid var(--line, rgba(255,255,255,0.08)); }
+  /* 标题靠字重和字号立层级，不靠压暗副行：两者只差 3px 又都偏淡时，
+     整条读起来是一团灰色文字，扫读时找不到入口。 */
+  .blist a { display: block; font-weight: 600; font-size: 16.5px; line-height: 1.42; }
   /* 不再用 opacity 压暗文字：0.62 会把 --fg-muted 对底色压到 3.56:1，
      浅色主题只有 2.67:1，正文类文字直接不可读。改用 token 色。 */
   .blist__meta { display: block; margin-top: 4px; font-size: 13px; color: var(--fg-dim); }
