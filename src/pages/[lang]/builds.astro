@@ -185,11 +185,16 @@ const usecases = snapshot.usecases.filter((entry) => entry[0]);
     }
   }
 
-  const data = await fetch('/data/jev-cards.json');
-  cards = (await data.json()).cards ?? [];
   for (const el of [catEl, useEl]) el.addEventListener('change', () => { page = 0; render(); });
   searchEl.addEventListener('input', () => { page = 0; render(); });
-  render();
+
+  // 不能在这里用顶层 await：define:vars 会让 Astro 把脚本内联成传统 <script>
+  // （没有 type="module"），顶层 await 直接是语法错误，整段脚本不执行，
+  // 列表就永远空着。改成 promise 链。
+  fetch('/data/jev-cards.json')
+    .then((r) => r.json())
+    .then((d) => { cards = d.cards ?? []; render(); })
+    .catch(() => { emptyEl.hidden = false; });
 </script>
 
 <style>
@@ -200,20 +205,41 @@ const usecases = snapshot.usecases.filter((entry) => entry[0]);
     display: grid;
     gap: 10px;
   }
-  .build-card {
+  /* 卡片、标题、摘要、翻页控件全部由 render() 用 createElement 生成，不带
+     Astro 的 scoped 属性；写成普通后代/类选择器会被编译成 `...[cid]` 而落空。 */
+  .build-list :global(.build-card) {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background: var(--bg-elev);
     padding: 12px 14px;
   }
-  .build-card > a {
+  .build-list :global(.build-card > a) {
     font-weight: 650;
   }
-  .build-card__meta,
-  .build-card p {
+  .build-list :global(.build-card__meta),
+  .build-list :global(.build-card p) {
     margin: 6px 0 0;
     color: var(--fg-muted);
     font-size: 13px;
+  }
+  .build-pager :global(button) {
+    min-width: 44px;
+    height: 44px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--fg);
+    font: inherit;
+    cursor: pointer;
+  }
+  .build-pager :global(button:disabled) {
+    color: var(--fg-dim);
+    cursor: default;
+  }
+  .build-pager :global(span) {
+    color: var(--fg-muted);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
   }
   .build-pager {
     display: flex;

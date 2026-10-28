@@ -340,19 +340,23 @@ const copy = {
   .acct__facts { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin: 18px 0 28px; }
   .acct__facts dt { color: var(--fg-dim); font-size: 13px; }
   .acct__facts dd { margin: 4px 0 0; }
-  .acct__facts span { font-size: 13px; color: var(--fg-dim); }
+  .acct__facts :global(span) { font-size: 13px; color: var(--fg-dim); }
   .acct__keys { border-top: 1px solid var(--border); padding-top: 20px; }
   .acct__keys h2 { font-size: 18px; }
   .acct__table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .acct__table th, .acct__table td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); }
+  /* <tbody> 里的 tr/td 由 renderKeys/renderLedger 动态生成，不带 scoped 属性；
+     写成 `.acct__table td` 会被编译成 `...[cid]` 落空，行就没有内边距和下划线。 */
+  .acct__table th, .acct__table :global(td) { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); }
   .acct__table th { color: var(--fg-dim); font-weight: 500; }
   .acct__none { color: var(--fg-dim); font-size: 14px; }
   .acct__actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
   .acct__newkey { margin-top: 14px; display: grid; gap: 8px; justify-items: start; font-size: 14px; padding: 14px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--bg-elev); }
-  .acct__newkey code { word-break: break-all; padding: 8px 10px; background: var(--bg-code); border-radius: 8px; display: block; }
-  .acct__copy { min-height: 36px; padding: 6px 14px; font-size: 14px; }
-  .acct__revoked { color: var(--fg-dim); font-size: 13px; }
+  .acct__newkey :global(code) { word-break: break-all; padding: 8px 10px; background: var(--bg-code); border-radius: 8px; display: block; }
+  /* acct__revoked / acct__copy / acct__revoke 都挂在 JS 动态生成的节点上，
+     单类选择器同样带 [cid]，用 :global 包住才命中。 */
+  :global(.acct__copy) { min-height: 36px; padding: 6px 14px; font-size: 14px; }
+  :global(.acct__revoked) { color: var(--fg-dim); font-size: 13px; }
   .acct__hint { margin: 8px 0 0; font-size: 12.5px; color: var(--fg-dim); }
-  .acct__revoke--armed { border-color: var(--rose); color: var(--rose); }
-  .acct__revoke--armed:hover { border-color: var(--rose); background: var(--bg-elev-2); box-shadow: none; }
+  :global(.acct__revoke--armed) { border-color: var(--rose); color: var(--rose); }
+  :global(.acct__revoke--armed:hover) { border-color: var(--rose); background: var(--bg-elev-2); box-shadow: none; }
 </style>

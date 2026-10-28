@@ -792,9 +792,12 @@ const faqSchema = {
   .bench__stage.is-flash { animation: bench-win 0.7s ease; }
   .bench__stage-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
   .bench__switch { display: flex; gap: 6px; }
-  .bench__switch button {
-    width: 34px;
-    height: 34px;
+  /* 按钮由 paintSwitch() 用 createElement 动态创建，不带 Astro 的 scoped 属性；
+     写成后代选择器会被编译成 `... button[cid]`，整条规则落空，按钮退回浏览器
+     默认样式（实测 23×21、13.33px）。子元素用 :global() 放行，容器仍受 scoped 保护。 */
+  .bench__switch :global(button) {
+    width: 44px;
+    height: 44px;
     border: 1px solid var(--border);
     border-radius: 999px;
     background: var(--bg);
@@ -803,9 +806,9 @@ const faqSchema = {
     font-variant-numeric: tabular-nums;
     cursor: pointer;
   }
-  .bench__switch button.is-on { color: var(--fg); border-color: var(--accent-border); background: var(--accent-soft); }
-  .bench__switch button.is-hit { color: var(--accent-contrast); background: var(--accent); border-color: transparent; }
-  .bench__switch button.is-miss { color: var(--rose); border-color: color-mix(in srgb, var(--rose) 45%, var(--border)); }
+  .bench__switch :global(button.is-on) { color: var(--fg); border-color: var(--accent-border); background: var(--accent-soft); }
+  .bench__switch :global(button.is-hit) { color: var(--accent-contrast); background: var(--accent); border-color: transparent; }
+  .bench__switch :global(button.is-miss) { color: var(--rose); border-color: color-mix(in srgb, var(--rose) 45%, var(--border)); }
   .bench__kicker { margin: 0; color: var(--accent); font-size: 12px; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; }
   .bench__ask { margin: 0 0 8px; font-size: clamp(26px, 3vw, 36px); line-height: 1.15; letter-spacing: -0.04em; }
   .bench__specimen { margin: 0 0 10px; color: var(--fg-dim); font-size: 13px; }
@@ -907,9 +910,10 @@ const faqSchema = {
   .bench__live h3 { margin: 0 0 10px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-dim); }
   .bench__now { margin: 0 0 14px; color: var(--fg); font-size: 16px; line-height: 1.5; }
   .bench__now.is-fresh { animation: bench-in 0.35s ease; }
-  .bench__live ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
-  .bench__live li { color: var(--fg-muted); font-size: 13px; line-height: 1.45; }
-  .bench__live time { display: block; margin-bottom: 2px; color: var(--fg-dim); font-size: 11px; }
+  /* 同理：ol/li/time 全部由 paintNarration() 动态生成，需 :global() 放行。 */
+  .bench__live :global(ol) { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+  .bench__live :global(li) { color: var(--fg-muted); font-size: 13px; line-height: 1.45; }
+  .bench__live :global(time) { display: block; margin-bottom: 2px; color: var(--fg-dim); font-size: 11px; }
   @keyframes bench-in { from { transform: translateY(8px); opacity: 0.4; } to { transform: none; opacity: 1; } }
   @keyframes bench-tick { 0% { transform: scale(1); } 45% { transform: scale(1.18); } 100% { transform: none; } }
   @keyframes bench-pop { 0% { transform: translateY(8px) scale(0.98); } 55% { transform: translateY(-2px) scale(1.01); } 100% { transform: none; } }
