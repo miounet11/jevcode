@@ -164,8 +164,8 @@ export function sitemapInclude(page) {
   if (pathname.includes('/login') || pathname.includes('/account') || pathname.includes('/404')) {
     return false;
   }
-  const community = pathname.match(/^\/([a-z]{2})\/community\/\d+\/$/);
-  if (community && community[1] !== 'en' && community[1] !== 'zh') return false;
+  // community 详情页 8 语言全部可索引（每页有独立标题、独立 URL 与原文出处），
+  // sitemap 必须跟着放开，否则会出现「可索引页面不在 sitemap」的漏收录。
   // 简报页：有译文的语言已改成可索引，sitemap 必须跟着放开，
   // 否则会出现「可索引页面不在 sitemap」的漏收录。
   const brief = pathname.match(/^\/([a-z]{2})\/briefs\//);

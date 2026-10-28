@@ -92,7 +92,9 @@ test('sitemap 丢掉没有源 markdown 的语言 URL', () => {
   assert.equal(sitemapInclude(url('/zh/cases/content-moderation/')), false);
   assert.equal(sitemapInclude(url('/en/cases/content-moderation/')), true);
   assert.equal(sitemapInclude(url('/zh/cases/jev-alternatives/')), true);
-  assert.equal(sitemapInclude(url('/ja/community/2101000339948282090/')), false);
+  // community 详情页 8 语言全部可索引（每页有独立标题、独立 URL 与原文出处），
+  // 与页面上的 index,follow 口径保持一致，不再按语言剔除。
+  assert.equal(sitemapInclude(url('/ja/community/2101000339948282090/')), true);
   assert.equal(sitemapInclude(url('/en/community/2101000339948282090/')), true);
   // ja 已有案例译文：简报 URL 与 noindex 口径一致，进 sitemap
   assert.equal(sitemapInclude(url('/ja/briefs/cov-ecommerce-urgency-01/')), true);

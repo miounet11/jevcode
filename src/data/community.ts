@@ -61,6 +61,30 @@ export function categorize(text: string): string {
   }
   return 'other';
 }
+
+/**
+ * 从原文派生标题。
+ *
+ * 条目只有 text 一个正文来源，没有 title 字段；这里不代写、不改写语义，
+ * 只做确定性裁剪：去掉链接和 @/# 标记 → 取第一个完整句子 → 超长则按词
+ * 边界截断加省略号。同一份输入永远得到同一个标题，可安全用于 <title>、
+ * 面包屑和列表主行。
+ */
+export function entryTitle(text: string, max = 96): string {
+  const cleaned = text
+    .replace(/https?:\/\/\S+/g, ' ')
+    .replace(/[@#][\w-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!cleaned) return text.slice(0, max);
+  const firstSentence = cleaned.split(/(?<=[.!?。！？])\s/)[0] ?? cleaned;
+  // 首句过短（"JEV is INSANE"）时补上整段，否则标题信息量不足。
+  const base = firstSentence.length >= 12 ? firstSentence : cleaned;
+  if (base.length <= max) return base.replace(/[.\s]+$/, '');
+  const cut = base.slice(0, max);
+  const at = cut.lastIndexOf(' ');
+  return `${(at > max * 0.6 ? cut.slice(0, at) : cut).replace(/[.,;:\s]+$/, '')}…`;
+}
 export const pulseEntries: PulseEntry[] = [
   {
     id: "2101491913866055821",

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { languages, useTranslations, pick, type Lang } from '../../../i18n/ui';
-import { pulseEntries, pulseCategories, categorize } from '../../../data/community';
+import { pulseEntries, pulseCategories, categorize, entryTitle } from '../../../data/community';
 import * as cmCopy from '../../../i18n/pages/community';
 
 /**
@@ -58,6 +58,9 @@ const copy = {
 const fmt = (n: number) => (n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M` : n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
 const dateShort = (iso: string) => iso.slice(0, 10);
 
+// 标题从原文首句派生（见 data/community.ts 的 entryTitle），用于 <title>、H1 和结构化数据。
+const title = entryTitle(entry.text);
+
 // 分类标题走既有 8 语言 title，不新编
 const catKey = categorize(entry.text);
 const cat = pulseCategories.find((c) => c.key === catKey);
@@ -73,14 +76,30 @@ const hrefOf = (e: (typeof pulseEntries)[number]) => `/${lang}/community/${e.id}
 // description 必须是原文摘录（项目既有约定），按码点截断避免切开代理对
 const flat = entry.text.replace(/\s+/g, ' ').trim();
 const desc = Array.from(flat).slice(0, 160).join('') + (Array.from(flat).length > 160 ? '…' : '');
-const pageTitle = `@${entry.screenName} · ${dateShort(entry.date)}`;
-// community 详情页是机翻短页（145 条 × 8 语言），只让 en/zh 进索引：
-// 其余 6 语言 noindex，把爬取预算让给文档页，也避免 scaled-content 质量降权
-// 波及全站。sitemap 同步剔除（见 astro.config.mjs 的 filter）。
-const detailIndex = lang === 'en' || lang === 'zh';
+const pageTitle = `${title} — @${entry.screenName}`;
+// 8 语言全部进索引：条目本身是英文原文 + 站内分类/元信息，不是机翻正文，
+// 每页都有独立标题、独立 URL、指向原帖的出处链接，属于可索引的原创聚合页。
+const detailIndex = true;
+
+// 每条都有独立 URL 与原文出处，标注成 BlogPosting 并声明同址的原帖，
+// 让搜索引擎能同时拿到站内标题和 canonical 出处。
+const articleSchema = {
+  '@type': 'BlogPosting',
+  headline: title,
+  description: desc,
+  url: new URL(path, Astro.site).href,
+  datePublished: entry.date,
+  dateModified: entry.date,
+  inLanguage: 'en',
+  author: { '@type': 'Person', name: entry.author, alternateName: `@${entry.screenName}`, url: entry.url },
+  isBasedOn: entry.url,
+  citation: entry.url,
+  about: catTitle,
+  isPartOf: { '@type': 'CollectionPage', name: pick(lang, cmCopy.title), url: new URL(`/${lang}/community/`, Astro.site).href },
+};
 ---
 
-<BaseLayout lang={lang} title={pageTitle} description={desc} path={path} index={detailIndex}>
+<BaseLayout lang={lang} title={pageTitle} description={desc} path={path} index={detailIndex} schema={[articleSchema]}>
   <section class="section">
     <div class="wrap">
       <main class="doc">
@@ -89,8 +108,8 @@ const detailIndex = lang === 'en' || lang === 'zh';
           <a href={`/${lang}/community/`}>{copy.crumb}</a> / @{entry.screenName}
         </p>
 
-        <h1 class="doc__title">@{entry.screenName}</h1>
-        <p class="doc__desc">{entry.author}</p>
+        <h1 class="doc__title">{title}</h1>
+        <p class="doc__desc">@{entry.screenName} · {entry.author}</p>
 
         <div class="pmeta">
           <span class="pmeta__item">
