@@ -124,6 +124,30 @@ function refreshLab() {
   }
 }
 
+/**
+ * /jev 覆盖语料的增补。
+ *
+ * 两步：先按 GitHub code search 扩充候选池，再逐条回源核对生成登记表。
+ * 生成器本身是质量门（抓 raw、核对行号、确认行文本仍含关键词），核不过的
+ * 不写入，因此这里不需要再过门 1/门 2。
+ *
+ * 失败只告警：/jev 是增量内容，抓不到新仓库不应挡住当天的生态/案例发布。
+ */
+function refreshJev() {
+  try {
+    say(`jev discover: ${String(run('node scripts/discover-jev-candidates.mjs')).trim().split('\n').slice(-1)[0]}`);
+  } catch (err) {
+    say(`WARN jev 候选发现失败（不阻塞发布）: ${String(err.message).slice(0, 200)}`);
+  }
+  try {
+    const out = String(run('node scripts/gen-jev-claims.mjs')).trim();
+    for (const line of out.split('\n')) say(`jev: ${line}`);
+  } catch (err) {
+    const tail = `${err.stdout ?? ''}\n${err.stderr ?? ''}`.trim().split('\n').slice(-4).join(' | ');
+    say(`WARN jev 登记表生成失败（不阻塞发布）: ${tail.slice(0, 300)}`);
+  }
+}
+
 /** 覆盖语料的下一批案例。失败只告警，不挡住其余发布。 */
 function refreshBriefs() {
   try {
@@ -373,6 +397,7 @@ if (!SKIP_FETCH) {
   refreshCommunity();
   refreshLab();
   refreshBriefs();
+  refreshJev();
 }
 
 // 2. 门 1（含批量累积）

@@ -1,0 +1,4242 @@
+[
+  {
+    "repo": "0xArx/jevegis",
+    "name": "jevegis",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "retrieved documents) and Trust & Safety moderation, both powered by TypeSafe's Jev"
+  },
+  {
+    "repo": "0xBakeer/arbiter",
+    "name": "arbiter",
+    "file": "README.md",
+    "branch": "main",
+    "line": 15,
+    "text": "Serve typed-decision models — Laya or your own — on your GPU or your Mac, with a Jev-compatible"
+  },
+  {
+    "repo": "0xNatoshi/jev-codex-router",
+    "name": "jev-codex-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "Jev chooses a model and thinking effort together for each model call, including"
+  },
+  {
+    "repo": "0xtrou/rubikjev",
+    "name": "rubikjev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**You scramble like a menace. Jev — the in-house AI solver — judges the chaos, roasts you, and cooks the solve live.**"
+  },
+  {
+    "repo": "2FastLabs/agent-squad",
+    "name": "agent-squad",
+    "file": "README.md",
+    "branch": "main",
+    "line": 157,
+    "text": "- ⚡ **Fast and cheap** — sub-second decisions billed on input tokens only (output tokens free, see [pricing](https://docs.typesafe.ai/models)), versus a full LLM call per routing decision."
+  },
+  {
+    "repo": "3clyp50/a0-typesafe-ai",
+    "name": "a0-typesafe-ai",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Ask **Jev** focused questions and get typed answers with probability cards in Agent Zero's chat. One `typesafe_query` call can combine Choice, Noul, Score, and Box questions over the same text and images."
+  },
+  {
+    "repo": "6Mikao9/jev-agent-design-with-topk-logits-choices",
+    "name": "jev-agent-design-with-topk-logits-choices",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "Jev is the first backend we use for live experiments; the runtime API is"
+  },
+  {
+    "repo": "Aayan-DEV/aayans-yc-indexor",
+    "name": "aayans-yc-indexor",
+    "file": "README.md",
+    "branch": "main",
+    "line": 30,
+    "text": "Put a TypeSafe key in `.env.local` as `TYPE_SAFE_KEY`. Get one at [typesafe.ai](https://typesafe.ai)."
+  },
+  {
+    "repo": "AbdelStark/bicameral",
+    "name": "bicameral",
+    "file": "README.md",
+    "branch": "main",
+    "line": 279,
+    "text": "**Sent to TypeSafe** (`POST /v1/systemone` via `TypeSafeClient.systemOne`): redacted, truncated JSON state for the current reflex (goal, proposed tool, compact diffs, recent action summaries) and the pack's questions."
+  },
+  {
+    "repo": "abe75ch/tiltmeter",
+    "name": "Tiltmeter",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Notices your Jev decisions tilting before anything visibly breaks."
+  },
+  {
+    "repo": "abhishek085/open-spark-jev",
+    "name": "open-spark-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "<strong>An open-source, local implementation inspired by TypeSafe's Jev and System One models, built for NVIDIA DGX Spark. The model is called <code>spark-s1</code>.</strong>"
+  },
+  {
+    "repo": "AboveColin/HA-Jev",
+    "name": "HA-Jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 12,
+    "text": "back. Jev is a decision model, not a chat model. It answers a typed question with a"
+  },
+  {
+    "repo": "ad-si/cai",
+    "name": "cai",
+    "file": "readme.md",
+    "branch": "main",
+    "line": 50,
+    "text": "[TypeSafe]: https://docs.typesafe.ai/models"
+  },
+  {
+    "repo": "adarshmishra07/jcm-router",
+    "name": "jcm-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "level per message, using TypeSafe's Jev classifier. Trivial questions go to Haiku, everyday work to"
+  },
+  {
+    "repo": "adhyaay-karnwal/jev-chat",
+    "name": "jev-chat",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A research decoder that treats Jev (a System One **decision** model) as if it were a language model."
+  },
+  {
+    "repo": "affirmitv/ghosthands",
+    "name": "ghosthands",
+    "file": "README.md",
+    "branch": "main",
+    "line": 221,
+    "text": "Configuration: `GH_PLANNER=jev`, `GH_JEV_MODEL` (default `typesafe/jev-1.13`; `~typesafe/jev-latest`"
+  },
+  {
+    "repo": "afshinm/laya-mps",
+    "name": "laya-mps",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**Run Jev-style typed decisions locally on your Mac with low RAM usage and fast responses.**"
+  },
+  {
+    "repo": "agent-labs-dev/fastbrowse",
+    "name": "fastbrowse",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "Run browser tasks locally or in a cloud browser. Jev chooses from indexed page controls; fastbrowse returns"
+  },
+  {
+    "repo": "Ai-trainee/awesome-jev",
+    "name": "awesome-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 390,
+    "text": "- **[prism-liquidity-agent](https://github.com/irfndi/prism-liquidity-agent)** — ★69 · TypeScript · Jev 评分 18 · 工具与产品 — Solana 流动性代理：可选的 Jev 影子判定用于存款选择、有毒流与市场状态压力。"
+  },
+  {
+    "repo": "ai4curation/jevotron",
+    "name": "jevotron",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "in tabular, structured, and text files, SQLite, and DuckDB, powered by [Jev](https://docs.typesafe.ai/api)."
+  },
+  {
+    "repo": "AiPersonacademy/jev-resume-disqualifier",
+    "name": "jev-resume-disqualifier",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "> **Automated Candidate Knockout Engine for High-Volume Recruiting — Powered by TypeSafe Jev System One Decision Intelligence.**"
+  },
+  {
+    "repo": "alexj11324/open-jev-approvals",
+    "name": "open-jev-approvals",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "When the agent is about to run a tool, a hook intercepts the call, TypeSafe"
+  },
+  {
+    "repo": "allebee/pytest-jev",
+    "name": "pytest-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 46,
+    "text": "All the claims about one text go to Jev in a single request. When a prompt change breaks the reply,"
+  },
+  {
+    "repo": "allenporter/home-assistant-typesafe",
+    "name": "home-assistant-typesafe",
+    "file": "README.md",
+    "branch": "main",
+    "line": 34,
+    "text": "Queries the TypeSafe System One API (`jev-latest`) in a single network roundtrip, obtaining calibrated probabilities across all questions without hallucination or token streaming latency."
+  },
+  {
+    "repo": "alterhq/typesafe-sdk-swift",
+    "name": "typesafe-sdk-swift (alterhq)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 11,
+    "text": "> authenticated backend. Keep the TypeSafe API key in server-side secret storage. Direct API-key"
+  },
+  {
+    "repo": "altryne/jevify",
+    "name": "jevify",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "Use Jev during everyday agent work, and find what it can improve in your product."
+  },
+  {
+    "repo": "alvarobartt/sys1",
+    "name": "sys1",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "Blazing fast structured decisions for System One open-models self-hosted with a TypeSafe AI compatible API, written in Rust."
+  },
+  {
+    "repo": "anandi1989/awesome-jev-usecases",
+    "name": "awesome-jev-usecases",
+    "file": "README.md",
+    "branch": "main",
+    "line": 234,
+    "text": "7. [ts2.tech: \"TypeSafe AI Raises $40 Million for Jev, but Its 445× Cost Claim Is Still Self-Tested\"](https://ts2.tech/en/typesafe-ai-raises-40-million-for-jev-but-its-445x-cost-claim-is-still-self-tested/): *The skeptical audit of self-tested benchmarks, plus funding verification.*"
+  },
+  {
+    "repo": "andrelandgraf/safer-with-jev",
+    "name": "typesafe-on-neon",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Public showcases of TypeSafe Jev judgments. TypeSafe Jev inspects the body, then optionally forwards the same bytes to a caller-chosen HTTPS URL."
+  },
+  {
+    "repo": "AndrewPrifer/jimothy",
+    "name": "jimothy",
+    "file": "README.md",
+    "branch": "master",
+    "line": 3,
+    "text": "Train small, insanely fast local classifiers from Jev-compatible examples. Run locally in your browser or Node.js."
+  },
+  {
+    "repo": "andududu/jeview",
+    "name": "jeview",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "your code  →  Jeview (127.0.0.1:4777)  →  TypeSafe (api.typesafe.ai)"
+  },
+  {
+    "repo": "Anil-matcha/awesome-jev-by-typesafe",
+    "name": "awesome-jev-by-typesafe",
+    "file": "README.md",
+    "branch": "main",
+    "line": 14,
+    "text": "<p align=\"center\"><a href=\"https://youtu.be/BOn4OMC8O9c\"><b>▶ Watch: Jev: 8 Wild Things People Already Built With TypeSafe's New AI Model </b></a></p>"
+  },
+  {
+    "repo": "aniruddh-krovvidi/switchboard",
+    "name": "switchboard",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A guardrail and model router for LLM gateways, built on **Jev**, TypeSafe AI's"
+  },
+  {
+    "repo": "anishfn/shapeshift",
+    "name": "shapeshift",
+    "file": "README.md",
+    "branch": "main",
+    "line": 20,
+    "text": "<p align=\"center\"><img src=\"docs/diagrams/jev-fanout.svg\" alt=\"One Jev call answers 14 questions in parallel; a deterministic parser reads the same text for values\" width=\"820\"></p>"
+  },
+  {
+    "repo": "AnotiaWang/awesome-jev",
+    "name": "awesome-jev (AnotiaWang)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 178,
+    "text": "Open-source products and demos that put a decision model in a real loop. Most use Jev today."
+  },
+  {
+    "repo": "AntonioCoppe/jev-harness",
+    "name": "jev-harness",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "It is **not** affiliated with TypeSafe. You need a TypeSafe API key to call Jev."
+  },
+  {
+    "repo": "AppitStudio/awesome-jev",
+    "name": "awesome-jev (AppitStudio)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "> Discover Jev-powered apps, developer resources, and runnable decision examples."
+  },
+  {
+    "repo": "AppSprout-dev/Unsga3",
+    "name": "Unsga3",
+    "file": "README.md",
+    "branch": "main",
+    "line": 104,
+    "text": "## TypeSafe / Jev Pareto scoring (optional)"
+  },
+  {
+    "repo": "APUS-AI-Lab/fast-browser-use",
+    "name": "fast-browser-use",
+    "file": "README.md",
+    "branch": "main",
+    "line": 29,
+    "text": "> **Open-Source Reverse Engineering of Jev · Pure Local Browser-Use Agent Skill**"
+  },
+  {
+    "repo": "ARCJ137442/jev-life",
+    "name": "The Chess of Life × Jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 15,
+    "text": "> Alongside it sits a **Jev-compatible broker** that wraps any OpenAI- or Anthropic-compatible LLM into a Jev backend,"
+  },
+  {
+    "repo": "arczhi/jet",
+    "name": "jet",
+    "file": "README.md",
+    "branch": "main",
+    "line": 43,
+    "text": "- **Judgment-first routing** — `Jev` (TypeSafe System One) handles context"
+  },
+  {
+    "repo": "arimanyus/warrenduffer",
+    "name": "warrenduffer",
+    "file": "README.md",
+    "branch": "main",
+    "line": 53,
+    "text": "Dashboard: SSH tunnel or Tailscale to `http://127.0.0.1:8080`. Set the capital Jev can deploy in the header. Kill = cancel all entries and flatten; Resume clears it."
+  },
+  {
+    "repo": "atharvamhaske/typesafe-sdk-go",
+    "name": "typesafe-sdk-go",
+    "file": "README.md",
+    "branch": "main",
+    "line": 115,
+    "text": "| `WithBaseURL` | `TYPESAFE_BASE_URL` | API base URL, defaults to `https://api.typesafe.ai` |"
+  },
+  {
+    "repo": "audreyt/paseo-spacedock",
+    "name": "paseo-spacedock",
+    "file": "README.md",
+    "branch": "main",
+    "line": 56,
+    "text": "## Gate judgment (Jev / TypeSafe-compatible)"
+  },
+  {
+    "repo": "automateyournetwork/netclaw",
+    "name": "netclaw",
+    "file": "mcp-servers/jev-mcp/README.md",
+    "branch": "main",
+    "line": 42,
+    "text": "| `JEV_BASE_URL` | `https://api.typesafe.ai`; `/v1/systemone` appended when no path supplied; full custom paths accepted |"
+  },
+  {
+    "repo": "Avinash-jetwani/jevmem",
+    "name": "jevmem",
+    "file": "plugin/README.md",
+    "branch": "main",
+    "line": 46,
+    "text": "- **To TypeSafe AI, `https://api.typesafe.ai/v1/systemone`**, or the URL in `TYPESAFE_BASE_URL` if you set it:"
+  },
+  {
+    "repo": "awlevin/typesafe-computer-use",
+    "name": "typesafe-computer-use",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"docs/banner.svg\" alt=\"typesafe-computer-use\" width=\"100%\">"
+  },
+  {
+    "repo": "awslabs/agentcore-samples",
+    "name": "agentcore-samples",
+    "file": "01-features/06-observe-evaluate-optimize-your-agent/02-evaluate/custom-code-based-evaluation/README.md",
+    "branch": "main",
+    "line": 600,
+    "text": "### Jev Evaluators (`--with-jev`)"
+  },
+  {
+    "repo": "awun8191/jev-resume-analyzer",
+    "name": "jev-resume-analyzer",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "- **Privacy-first demo**: no accounts, no database, no localStorage for CV text, no client-side keys. One Jev request per analysis; failed requests never produce fabricated reports."
+  },
+  {
+    "repo": "Ayush0054/metis",
+    "name": "metis",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "`metis-workflow` is a small Python framework for workflows powered by TypeSafe AI's"
+  },
+  {
+    "repo": "Baba88611/detroit-ai-player",
+    "name": "detroit-ai-player",
+    "file": "README.md",
+    "branch": "main",
+    "line": 189,
+    "text": "Select the dedicated TypeSafe backend with `--model jev`. Append these variables to your local `03_runner/.env`, preserving existing configuration. Keep the real key local:"
+  },
+  {
+    "repo": "bcharleson/jev-gtm-cookbook",
+    "name": "jev-gtm-cookbook",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "*Open-source go-to-market recipes built on [TypeSafe's Jev](https://docs.typesafe.ai/introduction): code does the work, Jev makes the judgment calls, and each recipe runs locally on data you already own.*"
+  },
+  {
+    "repo": "beamnxw/minelog",
+    "name": "minelog",
+    "file": "README.md",
+    "branch": "main",
+    "line": 33,
+    "text": "4. **Jev** (TypeSafe System One) picks **one** bounded action from a closed catalog, plus a safety noul and an urgency score. Fast. Typed. No prose."
+  },
+  {
+    "repo": "BeatAPI/awesome-jev",
+    "name": "awesome-jev (BeatAPI)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "<p align=\"center\"><img src=\"./assets/readme/cover.webp\" alt=\"Awesome JEV — curated JEV projects by BeatAPI\" width=\"100%\" /></p>"
+  },
+  {
+    "repo": "BeLazy167/typesafe-mod",
+    "name": "typesafe-mod",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A Claude Code function hook that sends two kinds of decision to TypeSafe's Jev"
+  },
+  {
+    "repo": "BenCaunt/jev-box-tracking",
+    "name": "jev-box-tracking",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "# jev-box-tracking"
+  },
+  {
+    "repo": "bestagentkits/jev-skillful",
+    "name": "jev-skillful",
+    "file": "README.md",
+    "branch": "main",
+    "line": 135,
+    "text": "- The prompt is sent to `api.typesafe.ai` as part of the routing request. This is the only kind of"
+  },
+  {
+    "repo": "Bewinxed/jevgpt",
+    "name": "jevgpt",
+    "file": "README.md",
+    "branch": "master",
+    "line": 7,
+    "text": "TypeSafe AI's `jev-latest` is a **decision** model: it does not generate text,"
+  },
+  {
+    "repo": "bhaiG-de/jev-design-test",
+    "name": "jev-design-test",
+    "file": "README.md",
+    "branch": "master",
+    "line": 63,
+    "text": "**Prerequisites:** Node 20+, and a Jev (TypeSafe) API key."
+  },
+  {
+    "repo": "BillionsBobby/JevRouter",
+    "name": "JevRouter",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<img src=\"docs/assets/jev-api-router-comparison.png\" alt=\"JevRouter — Jev supplies the decision model, JevRouter supplies the agent integration\" width=\"720\" />"
+  },
+  {
+    "repo": "bladedevoff/stuntd",
+    "name": "stuntd",
+    "file": "examples/banking/README.md",
+    "branch": "main",
+    "line": 42,
+    "text": "With the paid Jev API in front, the same demo runs with it as the teacher instead: put"
+  },
+  {
+    "repo": "bodepudimuneendra-netizen/laya-jev-GraphRAG",
+    "name": "laya-jev-GraphRAG",
+    "file": "README.md",
+    "branch": "main",
+    "line": 62,
+    "text": "│  LAYER 2 — DECISION  (Laya / Jev)   ← The CPU         │"
+  },
+  {
+    "repo": "Bodila51/grok-bot-jev",
+    "name": "grok-bot-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 17,
+    "text": "- A Python router around the TypeSafe SDK's `system_one` call."
+  },
+  {
+    "repo": "Bodila51/muse-jev-playbook",
+    "name": "muse-jev-playbook",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Use [TypeSafe AI's Jev](https://docs.typesafe.ai) as a cheap, fast decision layer inside an AI agent workflow — triage, classify, score, and gate work **before** expensive steps (browser, deep research, retries, subagents)."
+  },
+  {
+    "repo": "bohutang/sift",
+    "name": "sift",
+    "file": "README.md",
+    "branch": "main",
+    "line": 30,
+    "text": "- Search results stay native: no Jev scoring, local filters, labels, or collapsed posts on `/search`. The normal feed and post pages still use your filtering settings."
+  },
+  {
+    "repo": "boozedog/pi-codemode",
+    "name": "pi-codemode",
+    "file": "README.md",
+    "branch": "master",
+    "line": 100,
+    "text": "When a TypeSafe API key is present, Codemode injects guest `jev.ask` into QuickJS and the type checker. Without a key, Codemode is unchanged: no `jev` global, no HTTP, and no `@typesafe-ai/sdk` dependency."
+  },
+  {
+    "repo": "brainstormity/Jev-X-Sentiment-Analysis",
+    "name": "Jev-X-Sentiment-Analysis",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "An on-demand crypto market intelligence and decision-support terminal powered by TypeSafe AI's System One model (Jev)."
+  },
+  {
+    "repo": "brandonbryant12/transcript-scorecard",
+    "name": "transcript-scorecard",
+    "file": "README.md",
+    "branch": "main",
+    "line": 11,
+    "text": "- Server-side OpenAI Decisions and TypeSafe JEV adapters for incremental transcript scoring"
+  },
+  {
+    "repo": "brnyxx/jev-ra",
+    "name": "jev-ra",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"https://raw.githubusercontent.com/brnyxx/jev-ra/main/assets/logo.svg\" alt=\"jev-ra\" width=\"360\">"
+  },
+  {
+    "repo": "browser-use/jev-ultrafast",
+    "name": "Jev Ultrafast",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "<img src=\"docs/banner.svg\" alt=\"Jev Ultrafast · Browser Use × TypeSafe\" width=\"100%\" />"
+  },
+  {
+    "repo": "buberlo/jev-trader",
+    "name": "jev-trader",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "# jev-trader"
+  },
+  {
+    "repo": "bugkiwi/elons-job",
+    "name": "elons-job",
+    "file": "README.md",
+    "branch": "main",
+    "line": 46,
+    "text": "- TypeSafe 请求使用 `https://api.typesafe.ai/v1/systemone`；API 返回不符合预期、超时、401、429 或 5xx 时 Fail Open。"
+  },
+  {
+    "repo": "BunsDev/typesafe-ai-playground",
+    "name": "typesafe-ai-playground (BunsDev)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**Small experiments. Clear decisions.** This is an independent community project, not an official TypeSafe AI product, production agent harness, or claim that a typed answer is correct."
+  },
+  {
+    "repo": "BunsDev/typesafe-ui",
+    "name": "typesafe-ui",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Reusable React components and interactive interface patterns for TypeSafe AI projects, built with shadcn/ui, Base UI, and Tailwind CSS."
+  },
+  {
+    "repo": "burnigtm/jev-mcp",
+    "name": "jev-mcp (burnigtm)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 73,
+    "text": "codex mcp add jev --env TYPESAFE_API_KEY=ts_... -- node /absolute/path/to/jev-mcp/dist/index.js"
+  },
+  {
+    "repo": "BYK/jev-mcp",
+    "name": "jev-mcp (BYK)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "Most Jev integrations expose \"ask the model a question\". The hard part in practice is not asking —"
+  },
+  {
+    "repo": "bytelabs-oss/clash-jev",
+    "name": "clash-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "play around with it. I built clash-jev, a bot that uses Jev to make near real-time decisions on live"
+  },
+  {
+    "repo": "caiovicentino/eikos",
+    "name": "Eikos",
+    "file": "README.md",
+    "branch": "main",
+    "line": 190,
+    "text": "`evaluation/eval_jev_suite.py` and `evaluation/eval_laya_suite.py` run the same suites through Jev (API, evaluation"
+  },
+  {
+    "repo": "caiovicentino/eikos-arena",
+    "name": "Eikos Arena",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "MIT) against **Jev** (TypeSafe's decision API). Every 5 minutes both get the same market snapshot and the same 28"
+  },
+  {
+    "repo": "can1357/jegrep",
+    "name": "jegrep",
+    "file": "README.md",
+    "branch": "main",
+    "line": 122,
+    "text": "src/jev.rs  0.97 · 458 lines shown"
+  },
+  {
+    "repo": "CaptainCore/captaincore",
+    "name": "captaincore",
+    "file": "readme.md",
+    "branch": "master",
+    "line": 87,
+    "text": "- **Optional integrations** -- `fathom_api_key` (analytics) and `typesafe_api_key` (the TypeSafe decision API behind `captaincore typesafe` and `scan --triage`; `TYPESAFE_API_KEY` in the environment works too)"
+  },
+  {
+    "repo": "carldaws/hunch",
+    "name": "hunch",
+    "file": "README.md",
+    "branch": "main",
+    "line": 27,
+    "text": "Point Hunch at a System One endpoint. Jev is available through"
+  },
+  {
+    "repo": "carlosedm10/agi-jev-containment",
+    "name": "agi-jev-containment",
+    "file": "README.md",
+    "branch": "main",
+    "line": 70,
+    "text": "**What is Jev in this project?** Jev is TypeSafe System One (`jev-1.13.0`): a semantic classifier that answers typed questions (criticality L0–L5, intent, concealment, …) over short-term tape + long-term key nodes. It does not execute containment."
+  },
+  {
+    "repo": "cbruyndoncx/AskJev-MCP",
+    "name": "AskJev-MCP",
+    "file": "README.md",
+    "branch": "main",
+    "line": 35,
+    "text": "Ask everything you want to know about a state in one call rather than several — TypeSafe bills per"
+  },
+  {
+    "repo": "cequence-io/openai-scala-client",
+    "name": "openai-scala-client",
+    "file": "README.md",
+    "branch": "master",
+    "line": 78,
+    "text": "**Decision models** give typed answers with calibrated probabilities. Two APIs serve them - TypeSafe AI's System One"
+  },
+  {
+    "repo": "chaitin/Decis",
+    "name": "Decis",
+    "file": "README.md",
+    "branch": "master",
+    "line": 14,
+    "text": "official `typesafe-sdk` already speaks — so pointing the SDK at your own host is the whole"
+  },
+  {
+    "repo": "Chandler-Sun/chat2jev",
+    "name": "chat2jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Convert OpenAI-compatible Chat Completions requests into TypeSafe System One (Jev) **State / Questions**, compare generated text with structured judgments, and publish reusable question sets as proxy routes."
+  },
+  {
+    "repo": "CharlesFeng0314/JEV_sees",
+    "name": "JEV Sees",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "**JEV is fast, structured, and built to make decisions.**"
+  },
+  {
+    "repo": "Charlyhno-eng/jev-document-classification",
+    "name": "jev-document-classification",
+    "file": "README.md",
+    "branch": "main",
+    "line": 25,
+    "text": "To use JEV, you need a Vercel account and an AI Gateway API key."
+  },
+  {
+    "repo": "cheeaun/jevmoji",
+    "name": "jevmoji",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "> Type up to 40 characters. Get related emojis scored by [TypeSafe](https://typesafe.ai/)’s [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev) — many matches, not just one."
+  },
+  {
+    "repo": "CheshiAI/Cheshi",
+    "name": "Cheshi",
+    "file": "README.md",
+    "branch": "main",
+    "line": 86,
+    "text": "Previous conversation recall is **off by default**, including for existing TypeSafe"
+  },
+  {
+    "repo": "chez-shanpu/typesafeai-go",
+    "name": "typesafeai-go",
+    "file": "README.md",
+    "branch": "main",
+    "line": 84,
+    "text": "// A TypeSafe AI compatible server running locally without authentication."
+  },
+  {
+    "repo": "christos-antono/NPCTalk",
+    "name": "NPCTalk",
+    "file": "README.md",
+    "branch": "main",
+    "line": 57,
+    "text": "| Actions and spoken orders | [TypeSafe](https://docs.typesafe.ai) | `TYPESAFE_API_KEY` |"
+  },
+  {
+    "repo": "cobanov/awesome-jev",
+    "name": "awesome-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "<b>New:</b> <a href=\"https://ollaya.dev\">Ollaya</a> runs open decision models locally behind a Jev-compatible API.<br>"
+  },
+  {
+    "repo": "cobusgreyling/Jev",
+    "name": "Jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "# Jev Showcase — TypeSafe System One, not chat"
+  },
+  {
+    "repo": "cocktailpeanut/jevthoven",
+    "name": "jevthoven",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "**There is no offline composer, audio model, or hidden song library.** Every note traces to a persisted Jev decision (or a labeled fixture/manual edit)."
+  },
+  {
+    "repo": "codaaiteam/jev-mcp",
+    "name": "jev-mcp",
+    "file": "README.md",
+    "branch": "main",
+    "line": 30,
+    "text": "- **Official TypeSafe:** get a key at [console.typesafe.ai](https://console.typesafe.ai). It's used against `api.typesafe.ai` by default."
+  },
+  {
+    "repo": "codeitlikemiley/system-one-adapter-rust",
+    "name": "system-one-adapter-rust",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A drop-in replacement for TypeSafe's `system_one` evaluation API, backed by LLM"
+  },
+  {
+    "repo": "codeitlikemiley/typesafe-sdk-rust",
+    "name": "typesafe-sdk-rust",
+    "file": "README.md",
+    "branch": "main",
+    "line": 27,
+    "text": "typesafe-sdk = { version = \"0.3\", features = [\"blocking\"] }"
+  },
+  {
+    "repo": "Cognipeer/agent-sdk",
+    "name": "agent-sdk",
+    "file": "examples/jev-guardrail/README.md",
+    "branch": "main",
+    "line": 24,
+    "text": "## Against the real Jev API"
+  },
+  {
+    "repo": "colliber/duckdb-jev",
+    "name": "duckdb-jev",
+    "file": "docs/README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "the extension talking to `api.typesafe.ai`."
+  },
+  {
+    "repo": "columnar-tech/jevaro",
+    "name": "jevaro",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A Python batching proxy for [Jev](https://docs.typesafe.ai/) that returns"
+  },
+  {
+    "repo": "compozy/yoshi",
+    "name": "yoshi",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Jev judges new context once, above a configurable size gate. Yoshi applies the"
+  },
+  {
+    "repo": "Contrastive-LM/CLM",
+    "name": "CLM",
+    "file": "README.md",
+    "branch": "main",
+    "line": 28,
+    "text": "- It performs on par with **Jev** across computer-use, gaming and tool-calling"
+  },
+  {
+    "repo": "CorieW/JevTest",
+    "name": "JevTest",
+    "file": "README.md",
+    "branch": "main",
+    "line": 22,
+    "text": "To run the same suite using Jev, copy `.env.example` to `.env.local`, set `TYPESAFE_API_KEY`, then run:"
+  },
+  {
+    "repo": "CTNicholas/jev-workflow-builder",
+    "name": "jev-workflow-builder",
+    "file": "README.md",
+    "branch": "main",
+    "line": 14,
+    "text": "- Create an account on [typesafe.ai](https://typesafe.ai/)"
+  },
+  {
+    "repo": "dabit3/jev-experiments",
+    "name": "jev-experiments",
+    "file": "jev-ax-pilot/README.md",
+    "branch": "main",
+    "line": 153,
+    "text": "sent only to `api.typesafe.ai` from the native process; it is never written to disk by the app"
+  },
+  {
+    "repo": "dakdevs/decide-mcp",
+    "name": "decide-mcp",
+    "file": "readme.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Defaults to **TypeSafe AI Jev through AI Gateway**, using AI SDK 7's `experimental_evaluate`. Supports custom decision policies, multiple bias profiles, automatic profile routing, and individual tools per profile."
+  },
+  {
+    "repo": "danielgshea/jev-as-a-judge",
+    "name": "jev-as-a-judge",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "This project tests a third option: [Jev](https://docs.typesafe.ai/introduction), TypeSafe AI's System One decision model. We compare Jev with GPT-5.6 Luna, GPT-5.6 Terra, and Claude Sonnet 4.6 on the same fixed agent runs, measuring binary accuracy, score reliability, cost, and latency."
+  },
+  {
+    "repo": "DanRWilloughby/snifftest",
+    "name": "snifftest",
+    "file": "README.md",
+    "branch": "main",
+    "line": 32,
+    "text": "judgment rules too, put a TypeSafe key in `TYPESAFE_API_KEY` and drop"
+  },
+  {
+    "repo": "danvega/jev-spring-boot-starter",
+    "name": "jev-spring-boot-starter",
+    "file": "README.md",
+    "branch": "main",
+    "line": 145,
+    "text": "| `jev.api-key` | `TYPESAFE_API_KEY` fallback | TypeSafe API key |"
+  },
+  {
+    "repo": "Das-rebel/a3m-router",
+    "name": "a3m-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 120,
+    "text": "- `model=\"jev-auto\"` — ML decision head, calibrated probabilities, ~2ms warm"
+  },
+  {
+    "repo": "daseinlabs/open-jev",
+    "name": "open-jev (daseinlabs)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 116,
+    "text": "make systemone   # TypeSafe-style request against /v1/systemone"
+  },
+  {
+    "repo": "davila7/jev-explained",
+    "name": "jev-explained",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**Learn how TypeSafe's Jev makes typed, probabilistic decisions — by running it.**"
+  },
+  {
+    "repo": "dbreunig/building-with-jev-skill",
+    "name": "building-with-jev-skill",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "This repo holds an agent skill for writing and improving programs that call Jev, TypeSafe's System One model."
+  },
+  {
+    "repo": "DECRUX9812/openjev",
+    "name": "openjev (DECRUX9812)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "An **open, local, zero-cost reimplementation of the Jev decision layer** for job postings."
+  },
+  {
+    "repo": "DECRUX9812/typesafe-skill-router",
+    "name": "typesafe-skill-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 24,
+    "text": "- A TypeSafe API key (`TYPESAFE_API_KEY`) — create one at <https://console.typesafe.ai/settings/keys>"
+  },
+  {
+    "repo": "deepanwadhwa/OpenDecision",
+    "name": "OpenDecision",
+    "file": "README.md",
+    "branch": "main",
+    "line": 44,
+    "text": "- A Python API, a FastAPI server, and a TypeSafe SDK compatible endpoint."
+  },
+  {
+    "repo": "delexw/claude-code-trace",
+    "name": "claude-code-trace",
+    "file": "README.md",
+    "branch": "main",
+    "line": 83,
+    "text": "- Jev and provider API keys live in the OS credential store (macOS Keychain, Windows Credential"
+  },
+  {
+    "repo": "dengyie/ai-register-machine",
+    "name": "ai-register-machine",
+    "file": "README.md",
+    "branch": "main",
+    "line": 36,
+    "text": "| **typesafe.ai / jev** | `./register.sh typesafe [count] [threads]` | Python + requests + Stytch Magic-Link | `typesafe-*.json` (0600 API Key) |"
+  },
+  {
+    "repo": "devagrawal09/jev-review",
+    "name": "jev-review (devagrawal09)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "The reviewer keeps orchestration in code and uses Jev for bounded judgments:"
+  },
+  {
+    "repo": "devagrawal09/stanley-code",
+    "name": "stanley-code",
+    "file": "README.md",
+    "branch": "main",
+    "line": 94,
+    "text": "4. **For built-ins, Jev answers fixed-choice questions about each piece.** Using your required TypeSafe API key,"
+  },
+  {
+    "repo": "Devin-AXIS/jev-dsh-decision",
+    "name": "jev-dsh-decision",
+    "file": "README.md",
+    "branch": "main",
+    "line": 137,
+    "text": "问题类型是 `choice`（单选）、`score`（等级评分）、`noul`（是的概率）。多个互补 Skill 可使用多个独立 `noul` 问题。传入最小必要上下文，不传密钥或无关私密资料。网络固定发往 `https://api.typesafe.ai/v1/systemone`；默认模型 `jev-latest`。"
+  },
+  {
+    "repo": "DevMortimer/pi-typesafe",
+    "name": "pi-typesafe",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "- **A tool for the agent.** `typesafe_evaluate` hands small structured judgments (classify, triage, compare, score) to Jev and returns calibrated numbers in one batched call."
+  },
+  {
+    "repo": "DevMortimer/pi-warden",
+    "name": "pi-warden",
+    "file": "README.md",
+    "branch": "main",
+    "line": 130,
+    "text": "Jev requests cost money, so each 1.0 change was measured by what it saves. Each figure is the measured change on recorded sessions of one machine, not a promise for yours."
+  },
+  {
+    "repo": "devtooligan/jevscan-evm",
+    "name": "jevscan-evm",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "**Produce a heat map of likely bugs - in seconds, for pennies - built with TypeSafe's [Jev](https://docs.typesafe.ai).**"
+  },
+  {
+    "repo": "dfinke/Jev",
+    "name": "Jev PowerShell",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"assets/jev-icon.png\" alt=\"Decision pipeline icon\" width=\"180\">"
+  },
+  {
+    "repo": "Dicklesworthstone/skillranker",
+    "name": "skillranker",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**The right skill for the next step, powered by Jev-compatible providers.**"
+  },
+  {
+    "repo": "Dimweaker/jev-libero",
+    "name": "jev-libero",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<img src=\"docs/media/banner.svg\" alt=\"Jev × LIBERO — fine-grained decisions, physics-grounded control\" width=\"960\" />"
+  },
+  {
+    "repo": "docxology/daf-jev",
+    "name": "daf-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "Modular, composable Python client and decision toolkit for the **TypeSafe Jev"
+  },
+  {
+    "repo": "doeixd/discern",
+    "name": "discern",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "error. Provider-neutral: runs on TypeSafe's Jev, or any other `DecisionModel`."
+  },
+  {
+    "repo": "dominicrico/jev-router",
+    "name": "jev-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 94,
+    "text": "| `jev` (default) | `https://api.typesafe.ai/v1/systemone` | `jev-latest` | `TYPESAFE_API_KEY` or `/jev key` (required) |"
+  },
+  {
+    "repo": "donvito/ai-backends",
+    "name": "ai-backends",
+    "file": "README.md",
+    "branch": "main",
+    "line": 99,
+    "text": "| [TypeSafe Jev](https://docs.typesafe.ai/)   | System One decision model: `choice`, `score`, and `noul` questions | Available |"
+  },
+  {
+    "repo": "dorkitude/webctl",
+    "name": "webctl",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Smart web search CLI for agents, backed by [Jev](https://typesafe.ai). Saves a lot of tokens."
+  },
+  {
+    "repo": "droidrun/mobile-jev",
+    "name": "mobile-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "**One goal. A real Android phone. Jev makes the decisions.**"
+  },
+  {
+    "repo": "Dujaydis/JevSysUno",
+    "name": "JevSysUno",
+    "file": "README.md",
+    "branch": "master",
+    "line": 3,
+    "text": "A reference integration for **TypeSafe AI's Jev**, the first \"System One\" model: typed"
+  },
+  {
+    "repo": "EliaAlberti/jev-rules",
+    "name": "jev-rules",
+    "file": "README.md",
+    "branch": "main",
+    "line": 62,
+    "text": "claude plugin update jev-rules@jev-rules"
+  },
+  {
+    "repo": "ellistev/typesafe-minecraft-demo",
+    "name": "typesafe-minecraft-demo",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "An experimental Minecraft Java bot controlled through TypeSafe choices, with a live world view and the actual API input and output beside it."
+  },
+  {
+    "repo": "emrickgarrett/OneVOneJev",
+    "name": "OneVOneJev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "- **AI:** `@typesafe-ai/sdk` (`jev-latest`) with heuristic fallback"
+  },
+  {
+    "repo": "equationalapplications/system-one-reviewer",
+    "name": "system-one-reviewer",
+    "file": "README.md",
+    "branch": "main",
+    "line": 236,
+    "text": "| `jev` | `--provider jev` (default; `SOR_PROVIDER` env also works) | hosted TypeSafe System One, `TYPESAFE_API_KEY` | live-tested (all published numbers) |"
+  },
+  {
+    "repo": "erboland/jev-fund",
+    "name": "jev-fund",
+    "file": "README.md",
+    "branch": "main",
+    "line": 32,
+    "text": "# jev-fund: Open-Source Paper Hedge Fund"
+  },
+  {
+    "repo": "eriestra/browser-use-olympics",
+    "name": "browser-use-olympics",
+    "file": "README.md",
+    "branch": "main",
+    "line": 43,
+    "text": "echo 'TYPESAFE_API_KEY=...' > ~/.config/typesafe/env   # chmod 600"
+  },
+  {
+    "repo": "Eriskii/ErisLint",
+    "name": "ErisLint",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "anything useful, then map Jev's answers to warnings or errors."
+  },
+  {
+    "repo": "EthanAlgoX/AIStock",
+    "name": "AIStock",
+    "file": "README.md",
+    "branch": "main",
+    "line": 148,
+    "text": "- **Try JEV decisions (optional):** configure its separate TypeSafe API key in **Settings → Models & runtime**, then select **JEV · Decisions only** for a new trading strategy. JEV returns buy/sell/hold, probabilities, and confidence without a research report; chat and stock-scope selection still need your LLM. Start with the [official access information](https://typesafe.ai/blog/introducing-system-one-models-and-jev), [TypeSafe console](https://console.typesafe.ai/), and [JEV setup guide](docs/jev-trading-decisions.md)."
+  },
+  {
+    "repo": "ethanplusai/jev-chat-for-twitch",
+    "name": "jev-chat-for-twitch",
+    "file": "README.md",
+    "branch": "main",
+    "line": 28,
+    "text": "Sign up at [typesafe.ai](https://typesafe.ai) and create an API key. The key stays in your browser profile. You pay TypeSafe directly for what you use."
+  },
+  {
+    "repo": "etweisberg/jev-ui",
+    "name": "jev-ui",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"https://github.com/user-attachments/assets/ba3b7a4f-b800-49c0-b078-089ca332ff1d\" alt=\"jev-ui — probabilistic UI for React\" width=\"880\">"
+  },
+  {
+    "repo": "EugeneBoondock/jevsql",
+    "name": "jevsql",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"jevsql.png\" alt=\"JevSQL — SQL with natural-language predicates, powered by TypeSafe's Jev\" width=\"100%\">"
+  },
+  {
+    "repo": "evoke-build/evoke",
+    "name": "evoke",
+    "file": "README.md",
+    "branch": "main",
+    "line": 198,
+    "text": "To decide against Jev, export `TYPESAFE_API_KEY` for the `jev` adapter, or `OPENJEV_API_KEY` for `openjev`. To"
+  },
+  {
+    "repo": "f-tiger/jev-decision-gate",
+    "name": "Jev Decision Gate",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**Use Jev for Issue triage without building the whole integration and review workflow.**"
+  },
+  {
+    "repo": "f/jev-leftpad",
+    "name": "jev-leftpad",
+    "file": "README.md",
+    "branch": "main",
+    "line": 21,
+    "text": "Set `TYPESAFE_API_KEY` before using it. `jev-leftpad` uses `jev-latest` through"
+  },
+  {
+    "repo": "fabricioctelles/skills",
+    "name": "skills",
+    "file": "README.md",
+    "branch": "main",
+    "line": 49,
+    "text": "- `references/jev-integration.md` — integration patterns and code examples"
+  },
+  {
+    "repo": "FBddcz/embodied-jev",
+    "name": "embodied-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 42,
+    "text": "- 🧠 **模型入口放在界面里**：可接 TypeSafe Jev、Claude 原生 API、OpenAI 兼容 API，以及本地 MiniCPM5-2B。"
+  },
+  {
+    "repo": "featherless-ai/simple-jev",
+    "name": "Simple Jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 20,
+    "text": "curl https://simple-jev-demo-api.featherless.ai/v1/models"
+  },
+  {
+    "repo": "feder-cr/jev",
+    "name": "jevos",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<source media=\"(max-width: 374px) and (prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/feder-cr/jev/main/assets/banner-small-dark.gif\">"
+  },
+  {
+    "repo": "FeiLiuEM/tetrajev",
+    "name": "TetraJev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**Four readings. One routed decision.** Two frozen open-weight models, four independent readings per task, one fit-free decision layer — Jev-class decision behaviour with **no fine-tuning and no distillation**."
+  },
+  {
+    "repo": "FerryCorleone/crush-monitor",
+    "name": "crush-monitor",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "一个分析你和 Crush 或对象聊天的小工具，支持 Jev、OpenAI Decisions（测试版）和常见文本大模型。帮你读懂一点对方的情绪和想法，也看看自己的回复哪里没表达好、可以怎么调整。"
+  },
+  {
+    "repo": "filedcom/playjev",
+    "name": "playjev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "<p align=\"center\"><strong>Stagehand, but with Jev.</strong><br />Natural-language browser automation for Playwright, powered by Jev.</p>"
+  },
+  {
+    "repo": "flitsinc/go-llms",
+    "name": "go-llms",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "- TypeSafe System One models (Jev): typed judgments with probabilities, driven by a JSON output schema"
+  },
+  {
+    "repo": "FluidInference/FluidUse",
+    "name": "FluidUse",
+    "file": "README.md",
+    "branch": "main",
+    "line": 49,
+    "text": "Jev-style decision model: a 322M mmBERT encoder plus decision head that answers typed"
+  },
+  {
+    "repo": "Foadsf/jev-for-engineers",
+    "name": "jev-for-engineers",
+    "file": "README.md",
+    "branch": "main",
+    "line": 17,
+    "text": "so twelve questions in one call cost about what one call costs. TypeSafe"
+  },
+  {
+    "repo": "forvela/jev-agent-browser",
+    "name": "jev-agent-browser",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Give a parent agent a bounded browser task. Jev chooses the next typed action. `agent-browser` executes it. Ambiguity, repetition, or a stuck state becomes a structured handoff back to the parent."
+  },
+  {
+    "repo": "frankda/jev-poly-crypto-demo",
+    "name": "jev-poly-crypto-demo",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "This version implements a **live market-data adapter, Jev integration, paper trading and a dashboard**. It does not connect a wallet or submit real orders. `TRADING_MODE=live` is rejected at startup."
+  },
+  {
+    "repo": "freepik-company/jev-mcp",
+    "name": "jev-mcp (freepik-company)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "TypeSafe's System One model, through **OpenRouter** or **TypeSafe** directly."
+  },
+  {
+    "repo": "frostney/clean-code-review",
+    "name": "clean-code-review",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Point it at a public GitHub pull request, a diff or a file. Jev, TypeSafe's"
+  },
+  {
+    "repo": "fstandhartinger/jevbench",
+    "name": "jevbench",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Jev is TypeSafe AI's decision model; JevBench also evaluates Jev-compatible systems. The canonical JevBench board is https://benchmarkheaven.com/jev-models."
+  },
+  {
+    "repo": "gamesonrblx/Jevbridge",
+    "name": "Jevbridge",
+    "file": "README.md",
+    "branch": "main",
+    "line": 22,
+    "text": "ACP and MCP adapter that bridges TypeSafe Jev with any LLM."
+  },
+  {
+    "repo": "gbh1234/Adaptive-rag",
+    "name": "Adaptive-rag",
+    "file": "README.md",
+    "branch": "main",
+    "line": 83,
+    "text": "INTENT_BACKEND=jev"
+  },
+  {
+    "repo": "GeekLinkDev/jev-subtitle-translator",
+    "name": "Jev Subtitle Translator",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "An open-source SRT translator and subtitle QC tool for LLM-powered workflows. Use it to translate SRT files, preserve every subtitle cue, and automatically check translations with Jev."
+  },
+  {
+    "repo": "geilt/typesafe-cli",
+    "name": "typesafe-cli",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Small Python CLI + agent skill for [TypeSafe System One](https://docs.typesafe.ai/introduction) (Jev)."
+  },
+  {
+    "repo": "GenieRobot/typesafe-ai-rails",
+    "name": "typesafe-ai-rails",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Community Rails integration for TypeSafe AI's System One API, built on the"
+  },
+  {
+    "repo": "genspark-ai/genoffice",
+    "name": "genoffice",
+    "file": "README.md",
+    "branch": "main",
+    "line": 82,
+    "text": "Six apps, one AI panel, a file search reranked by TypeSafe Jev, an Ask AI"
+  },
+  {
+    "repo": "get-convex/convex-evals",
+    "name": "Convex Decision Evals",
+    "file": "README.md",
+    "branch": "main",
+    "line": 44,
+    "text": "bun run decisions dry-run --provider openrouter --model typesafe/jev-1.13 --limit-evals 2"
+  },
+  {
+    "repo": "getexcited/stepwarden",
+    "name": "stepwarden",
+    "file": "README.md",
+    "branch": "main",
+    "line": 40,
+    "text": "> It is built on two early-access dependencies (Claude Code function hooks and Jev),"
+  },
+  {
+    "repo": "GhalebDweikat/winnow",
+    "name": "winnow",
+    "file": "README.md",
+    "branch": "main",
+    "line": 215,
+    "text": "winnow replay score --judged ~/.winnow/replay/judged-typesafe.jsonl"
+  },
+  {
+    "repo": "GhrezaKh74/JevTicktRouter",
+    "name": "JevTicktRouter",
+    "file": "README.md",
+    "branch": "master",
+    "line": 3,
+    "text": "Structured support-ticket triage built on **.NET 10** and **React 19**, using **TypeSafe Jev** to make"
+  },
+  {
+    "repo": "gi-dellav/hsom",
+    "name": "hsom",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "*hsom* is a strict-allowlist harness. `environment.toml` defines which shell commands Jev (the TypeSafe System One classifier) may select. In one step, Jev picks: command → subcommand → flags (boolean or valued) → path slots; this works by navigating the decision tree as defined by the TOML file."
+  },
+  {
+    "repo": "githubnext/localjev",
+    "name": "LocalJev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A local, Jev-compatible `POST /v1/systemone` API written in TypeScript for"
+  },
+  {
+    "repo": "Godefroy/micdrop",
+    "name": "micdrop",
+    "file": "README.md",
+    "branch": "main",
+    "line": 27,
+    "text": "- [`@micdrop/typesafe`](./packages/typesafe/README.md) - Jev, the System One model of TypeSafe, classifying each turn of the user into typed decisions in a few hundred ms"
+  },
+  {
+    "repo": "GodsBoy/jev-agent-skill-router",
+    "name": "jev-agent-skill-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<img src=\"assets/jev-agent-skill-router-banner.png\" alt=\"A request enters a typed routing layer and branches to specialist skills, no skill or human review\" width=\"896\">"
+  },
+  {
+    "repo": "gopaljigaur/decide",
+    "name": "pydecide",
+    "file": "README.md",
+    "branch": "main",
+    "line": 25,
+    "text": "them through one API: TypeSafe's hosted Jev, OpenRouter, OpenAI's Decisions"
+  },
+  {
+    "repo": "Govcraft/emergent",
+    "name": "emergent",
+    "file": "README.md",
+    "branch": "main",
+    "line": 161,
+    "text": "## Judgment as a Pipeline Step: jev-handler"
+  },
+  {
+    "repo": "grmkris/robo-harness",
+    "name": "robo-harness",
+    "file": "README.md",
+    "branch": "main",
+    "line": 36,
+    "text": "5. Decision runs (`bun run jev`) let an evaluation model or rules baseline pick bounded joint steps; chat and a decision run never move the arm at the same time."
+  },
+  {
+    "repo": "gtaras7/typesafe-jev",
+    "name": "typesafe-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "A local screening workbench for a folder of CVs, built on TypeSafe's Jev model. Point it at one CV or"
+  },
+  {
+    "repo": "GuSheng107/helpme-Jev",
+    "name": "helpme-Jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 55,
+    "text": "> **JEV decides. LLM explains. You decide.**"
+  },
+  {
+    "repo": "hamgua/alpha-trading-bot-okx",
+    "name": "alpha-trading-bot-okx",
+    "file": "README.md",
+    "branch": "main",
+    "line": 361,
+    "text": "#### Jev 快车道（TypeSafe System One）"
+  },
+  {
+    "repo": "harlan-zw/harlan-agent-kit",
+    "name": "harlan-agent-kit",
+    "file": "packages/advocaat/README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "`api.typesafe.ai` or the Vercel AI Gateway."
+  },
+  {
+    "repo": "haseeb-heaven/jev-system-one",
+    "name": "jev-system-one",
+    "file": "README.md",
+    "branch": "master",
+    "line": 12,
+    "text": "A polished terminal interface where OpenAI generates useful answers and TypeSafe Jev independently evaluates their relevance, reliability, and quality."
+  },
+  {
+    "repo": "hatt-io/jevkeep",
+    "name": "jevkeep",
+    "file": "README.md",
+    "branch": "main",
+    "line": 17,
+    "text": "1. **Before compaction**, JevKeep reads the conversation and asks Jev, a relevance-scoring model accessed through the Typesafe API, which excerpts still matter to the current task."
+  },
+  {
+    "repo": "hellogumbo/should-ai-kill-us-all",
+    "name": "Should AI Kill Us All?",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "> We ask Jev, TypeSafe AI's System One model, whether AI should kill us all. Every ten minutes. Using the actual headlines."
+  },
+  {
+    "repo": "hellozenstrategist-lab/eutrya",
+    "name": "eutrya",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "**A standalone terminal agent with Jev in its decision loop.**"
+  },
+  {
+    "repo": "hemanth/is-lesion",
+    "name": "is-lesion",
+    "file": "README.md",
+    "branch": "main",
+    "line": 48,
+    "text": "- `jev` — TypeSafe System One (`jev-1.14.0`) with 1 Hugging Face visual reference exemplar per class (`noul` + `choice` + `score` + `box`)"
+  },
+  {
+    "repo": "hev/reranker",
+    "name": "jev-rerank",
+    "file": "README.md",
+    "branch": "main",
+    "line": 18,
+    "text": "nDCG@10, every system permuting the same BM25 top-30 shortlist per query. Jev uses the"
+  },
+  {
+    "repo": "heyjunpenn/awesome-jev",
+    "name": "awesome-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 80,
+    "text": "| [openai-scala-client](https://github.com/cequence-io/openai-scala-client) | ★ 249 | Scala | 2026-09-23 | Scala client module for TypeSafe System One that submits Jev Noul, Choice, and Score questions and returns typed answers. |"
+  },
+  {
+    "repo": "hraness/algal",
+    "name": "algal",
+    "file": "README.md",
+    "branch": "main",
+    "line": 895,
+    "text": "or reuse a TypeSafe key. `doctor --clef` checks configuration without an API"
+  },
+  {
+    "repo": "hunkim/solar-mini4-jev",
+    "name": "solar-mini4-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A drop-in wrapper that exposes Upstage **Solar Pro4** (default; `solar-mini4` optional) through the TypeSafe Jev System One API shape."
+  },
+  {
+    "repo": "huntedman/JevLint",
+    "name": "JevLint",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "JevLint is powered by Jev, TypeSafe AI’s System One model. It sends selected source"
+  },
+  {
+    "repo": "HyunjunJeon/jev-judgment",
+    "name": "jev-judgment",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "[TypeSafe Jev](https://typesafe.ai) and acts on the probabilities. The"
+  },
+  {
+    "repo": "HyunjunJeon/pi-quiet-ask",
+    "name": "pi-quiet-ask",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**TypeSafe Jev as the pi coding agent's quiet decision layer.**"
+  },
+  {
+    "repo": "iamaamir/system-one",
+    "name": "system-one",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Use **TypeSafe Jev** today, **Reflex** locally, any compatible `/v1/systemone` endpoint, or your own `SystemOneProvider` tomorrow. Your application keeps the same `choice`, `noul`, and `score` code."
+  },
+  {
+    "repo": "iamjonatha/decisionkit-dotnet",
+    "name": "DecisionKit",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**A strongly typed, provider-independent decision engine for .NET, with TypeSafe JEV support.**"
+  },
+  {
+    "repo": "iamjonatha/jev-book-tags",
+    "name": "JEV Book Tags",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "JEV Book Tags is a calibre plugin that uses TypeSafe AI JEV to suggest subject and genre tags for books in a calibre library. It preserves existing tags and lets you review suggestions before applying them."
+  },
+  {
+    "repo": "iammusham/jev-snake",
+    "name": "jev-snake",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "The project includes a browser-based human baseline and a pygame experiment client. Jev mode uses the same Python engine, replacing only the source of each requested direction."
+  },
+  {
+    "repo": "iamtoomas/JevLint",
+    "name": "JevLint",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "JevLint is powered by Jev, TypeSafe AI’s System One model. It sends selected source"
+  },
+  {
+    "repo": "IAmUnbounded/save-token-jev-clean",
+    "name": "save-token-jev-clean",
+    "file": "README.md",
+    "branch": "main",
+    "line": 185,
+    "text": "| `TYPESAFE_API_KEY` | required unless stored in the macOS Keychain (CLI and library only) | TypeSafe/Jev API key |"
+  },
+  {
+    "repo": "iamvatsalpatel/tiershift",
+    "name": "tiershift",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "The judgment comes from <a href=\"https://docs.typesafe.ai\">TypeSafe Jev</a>, a calibrated decision model. About 180 ms. Four cents per thousand routes."
+  },
+  {
+    "repo": "iapp-technology/openthai-systemone",
+    "name": "OpenThai-SystemOne",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "mirrors TypeSafe AI's `POST /v1/systemone` (Jev), so SDK code written for TypeSafe can point at this model."
+  },
+  {
+    "repo": "idovmamane/dejevu",
+    "name": "dejevu",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**Jev? Déjà vu.** Browser agents that run on instinct, no Jev needed. One look at the page. One call to any open model. One action."
+  },
+  {
+    "repo": "iefnaf/pi-jev",
+    "name": "pi-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "<img src=\"media/banner.svg\" alt=\"Pi events trigger typed Jev requests: keep scores select context, and a difficulty score selects a model\" width=\"100%\">"
+  },
+  {
+    "repo": "ielab/llm-rankers",
+    "name": "llm-rankers",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "- **2026-09-19**: New experiments with [Jev](https://typesafe.ai/) (TypeSafe AI's non-generative \"System One\" model) as a pointwise / pairwise / setwise / listwise reranker, including all 100 candidates in a single request. Check out the [jev](jev) folder for results and analysis."
+  },
+  {
+    "repo": "ilyamk/jev-gmail-ai-spam-filter-and-labeling",
+    "name": "jev-gmail-ai-spam-filter-and-labeling",
+    "file": "README.md",
+    "branch": "main",
+    "line": 11,
+    "text": "Semantic email classification powered by **Jev**, with confidence-aware automation,"
+  },
+  {
+    "repo": "InsaneArts/typesafe-sdk-swift",
+    "name": "typesafe-sdk-swift",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": ".package(url: \"https://github.com/InsaneArts/typesafe-sdk-swift\", from: \"0.2.0\")"
+  },
+  {
+    "repo": "InternLM/Intern-Decision",
+    "name": "Intern-Decision",
+    "file": "README.md",
+    "branch": "main",
+    "line": 97,
+    "text": "Intern-Decision-4B reaches **90.02% average accuracy** across seven suites (Jev: 88.74%),"
+  },
+  {
+    "repo": "intikhab49/open-jev-typed-decision-engine",
+    "name": "open-jev-typed-decision-engine",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<img src=\"docs/header.svg\" alt=\"Open Jev - a typed decision engine you can train for free. 0.697 accuracy against TypeSafe Jev's 0.727, 2.5x better calibrated, 4x faster, zero cost.\" width=\"100%\">"
+  },
+  {
+    "repo": "ipenywis/laya-ultrafast",
+    "name": "laya-ultrafast",
+    "file": "README.md",
+    "branch": "main",
+    "line": 23,
+    "text": "- **Hosted mode still works.** Set `DECISION_MODEL=typesafe` to use the original Jev policy unchanged."
+  },
+  {
+    "repo": "irzix/nestjs-agentic",
+    "name": "nestjs-agentic",
+    "file": "README.md",
+    "branch": "main",
+    "line": 70,
+    "text": "| [`@nestjs-agentic/jev`](packages/jev) | Jev (TypeSafe System One) action gates, output rails, and evaluation judges |"
+  },
+  {
+    "repo": "ItIsCuthNotCup/MetaCog",
+    "name": "MetaCog",
+    "file": "README.md",
+    "branch": "main",
+    "line": 48,
+    "text": "judge = SystemOneJudge.jev()  # hosted; reads $TYPESAFE_API_KEY"
+  },
+  {
+    "repo": "itsmostafa/typesafe-mcp",
+    "name": "typesafe-mcp",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "**Give your AI agent direct access to models like TypeSafe Jev, Liquid AI d1, Cloudflare Clef, Respan Span-01, GPT-6 Luna Decisions, and Perplexity Decider Flash: quick decisions with real probabilities.**"
+  },
+  {
+    "repo": "itsoltech/basal-rs",
+    "name": "basal-rs",
+    "file": "contracts/typesafe/README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "<https://api.typesafe.ai/openapi.json>."
+  },
+  {
+    "repo": "j1s4nn/duomind",
+    "name": "duomind",
+    "file": "README.md",
+    "branch": "main",
+    "line": 111,
+    "text": "- **Internet connection** for setup and Jev API calls"
+  },
+  {
+    "repo": "JamesANZ/us-legal-mcp",
+    "name": "us-legal-mcp",
+    "file": "README.md",
+    "branch": "main",
+    "line": 234,
+    "text": "- `JEV_MODEL` – default `jev-latest`"
+  },
+  {
+    "repo": "jamesward/zio-typesafe-ai",
+    "name": "zio-typesafe-ai",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "Jev / System One API — a \"System One model\" that answers typed, atomic"
+  },
+  {
+    "repo": "JanOstrowka/typesafe-assist",
+    "name": "typesafe-assist",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"https://raw.githubusercontent.com/JanOstrowka/typesafe-assist/main/brand/icon@2x.png\" alt=\"TypeSafe AI\" width=\"128\" height=\"128\">"
+  },
+  {
+    "repo": "jaredpalmer/kev",
+    "name": "kev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Small Jev-like decision models you can train and run yourself."
+  },
+  {
+    "repo": "jarrodwatts/jev-trader",
+    "name": "jev-trader",
+    "file": "README.md",
+    "branch": "main",
+    "line": 11,
+    "text": "With no `PRIVATE_KEY` it dry-runs: real book, real decisions, simulated fills. Set `MODEL=jev` and `TYPESAFE_AI_API_KEY` to use Jev; the default `mock` is a momentum heuristic stand-in."
+  },
+  {
+    "repo": "jbt95/jev-toolkit",
+    "name": "jev-toolkit",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A small stdio MCP server for TypeSafe/Jev with three tools: `typesafe_ask` for"
+  },
+  {
+    "repo": "jccrump/openbot",
+    "name": "openbot",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Google, Mistral, or a local model through Ollama or LM Studio. An optional Jev"
+  },
+  {
+    "repo": "jcpsimmons/jev-macos-loop",
+    "name": "Jev macOS Loop",
+    "file": "README.md",
+    "branch": "master",
+    "line": 20,
+    "text": "Read https://raw.githubusercontent.com/jcpsimmons/jev-macos-loop/master/AGENTS.md"
+  },
+  {
+    "repo": "JedimEmO/typesafe-client",
+    "name": "typesafe-client",
+    "file": "README.md",
+    "branch": "main",
+    "line": 12,
+    "text": "> endorsed by, or supported by TypeSafe AI. For the API itself, see the"
+  },
+  {
+    "repo": "jerryfane/omp-jev-compaction",
+    "name": "omp-jev-compaction",
+    "file": "README.md",
+    "branch": "master",
+    "line": 4,
+    "text": "TypeSafe's Jev decision model, over **either** the TypeSafe API **or** OpenRouter."
+  },
+  {
+    "repo": "jev-chat/jev-chat-windows",
+    "name": "jev-chat-windows",
+    "file": "README.md",
+    "branch": "main",
+    "line": 47,
+    "text": "1. **判断 · Jev** —— 判断意图、紧张度，并给三条候选排序。来源选 **OpenRouter**（默认，key 在"
+  },
+  {
+    "repo": "jhd3197/Prompture",
+    "name": "Prompture",
+    "file": "README.md",
+    "branch": "main",
+    "line": 449,
+    "text": "driver = get_decision_driver_for_model(\"typesafe/jev-latest\")"
+  },
+  {
+    "repo": "Jhonnyr97/JevGuard",
+    "name": "JevGuard",
+    "file": "README.md",
+    "branch": "master",
+    "line": 19,
+    "text": "Then run `/plugin configure jevguard@jevguard` to set the Jev API key and"
+  },
+  {
+    "repo": "jkudish/jev-browser",
+    "name": "jev-browser",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "<img src=\".github/jev-browser-banner.png\" alt=\"jev-browser — Fast and cheap browser use using TypeSafe's Jev model\" />"
+  },
+  {
+    "repo": "jkudish/jev-mcp",
+    "name": "jev-mcp",
+    "file": "README.md",
+    "branch": "main",
+    "line": 733,
+    "text": "Jev is TypeSafe's System One model: it returns typed answers with calibrated probability distributions, not generated text. A verify call is a Choice over supports / contradicts / says_nothing, so you see the whole distribution, not one label. A screen call is a set of yes/no probabilities. A find call is a Choice over your candidate ids plus an existence check. A rerank call is one yes/no relevance question per candidate. A compare call is a Choice over three relations, repeated independently per aspect. An extract call is a Choice over the candidates your regex already found, so the model picks a value but never writes one. A review call is four Score rubrics plus one safe-to-apply probability; a gate adds one Choice per completion claim, judged from evidence only. Code maps the answers to verdicts and actions; policy stays with you."
+  },
+  {
+    "repo": "jmanhype/jev-dspy-lab",
+    "name": "jev-dspy-lab",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "and other callers that use TypeSafe decisions inside DSPy-style pipelines."
+  },
+  {
+    "repo": "joelhooks/pi-fast-jev-compaction",
+    "name": "pi-fast-jev-compaction",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "- Sends a compact representation of tool calls and surrounding conversation to TypeSafe's `/v1/systemone` endpoint."
+  },
+  {
+    "repo": "jomatsu/pi-jev-auto-mode",
+    "name": "pi-jev-auto-mode",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "**decision models**, with Jev (TypeSafe System One) as the default. OpenAI Decisions,"
+  },
+  {
+    "repo": "jomatsu/zod-jev",
+    "name": "zod-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "A single `parseAsync` call sends every rule of that schema to Jev in a **single request**, then turns"
+  },
+  {
+    "repo": "jonathanavis96/jev-kit",
+    "name": "jev-kit",
+    "file": "README.md",
+    "branch": "main",
+    "line": 39,
+    "text": "## What is Jev, and why a kit"
+  },
+  {
+    "repo": "jozefRudy/job_search",
+    "name": "job_search",
+    "file": "README.md",
+    "branch": "main",
+    "line": 52,
+    "text": "# Optional; omit either key to use the default (https://api.typesafe.ai, jev-latest)."
+  },
+  {
+    "repo": "juancamiloqhz/roverlab",
+    "name": "roverlab",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A browser-based planetary rover sandbox for experimenting with autonomous decisions using TypeSafe AI."
+  },
+  {
+    "repo": "jucelioalencar/linearmemory",
+    "name": "linearmemory",
+    "file": "README.md",
+    "branch": "main",
+    "line": 175,
+    "text": "Contracts: [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions) and [TypeSafe System One](https://docs.typesafe.ai/api/system-one). Settings are available at `GET/PUT /api/settings/search-filter`; existing search snapshots are returned by `GET /api/search-results/:eventId` without rerunning retrieval."
+  },
+  {
+    "repo": "jujumilk3/jev-calibration-audit",
+    "name": "jev-calibration-audit",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "An independent, API-only audit of the calibration of TypeSafe AI's **Jev**, a"
+  },
+  {
+    "repo": "justinhe16/trade-jev",
+    "name": "trade-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "- **Run:** a backtest that calls Jev and stores its answers and trades in `runs/<id>/`. It's the only step that costs money."
+  },
+  {
+    "repo": "jxucoder/mimicry",
+    "name": "mimicry",
+    "file": "README.md",
+    "branch": "master",
+    "line": 37,
+    "text": "and TypeSafe; requests and responses are saved locally under ignored"
+  },
+  {
+    "repo": "KamilPostrozny/pi-jev-code",
+    "name": "pi-jev-code",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Single-agent Jev coprocessor for Pi coding sessions. Your normal Pi model remains the only coding agent; there are no planners, subagents, reviewers, task graphs, or orchestration."
+  },
+  {
+    "repo": "kavehmz/typesafe-playground",
+    "name": "Jev Driving Lab",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Small, interactive experiments with **TypeSafe Jev**: from understanding a support message to making decisions for a car in a 3D world."
+  },
+  {
+    "repo": "kbhuw/jev-sift",
+    "name": "jev-sift",
+    "file": "README.md",
+    "branch": "main",
+    "line": 11,
+    "text": "Get a key from the [TypeSafe dashboard](https://console.typesafe.ai/settings/keys) and provide it as **`JEV_API_KEY`** in the MCP server's environment. `TYPESAFE_API_KEY` also works."
+  },
+  {
+    "repo": "keltokhy/jgrep",
+    "name": "jgrep",
+    "file": "README.md",
+    "branch": "main",
+    "line": 16,
+    "text": "Each line becomes one yes/no question to [Jev](https://docs.typesafe.ai), TypeSafe's decision"
+  },
+  {
+    "repo": "kesku/jev-freeform",
+    "name": "jev-freeform",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "Can TypeSafe Jev Choice generate text through successive typed decisions? Well I tried it"
+  },
+  {
+    "repo": "kevinbadi/jev-voice",
+    "name": "jev-voice",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Everything runs locally except one ~250 ms call to **Jev** (TypeSafe's System One"
+  },
+  {
+    "repo": "Kevthetech143/super-jev",
+    "name": "super-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "- One judge sits between your agent and your data: the agent asks in its own words, Jev finds the file, checks the claim, permits the action, and remembers what you approved. Your agent stays responsible for the answer."
+  },
+  {
+    "repo": "kieranklaassen/ruby_llm-typesafe",
+    "name": "ruby_llm-typesafe",
+    "file": "README.md",
+    "branch": "main",
+    "line": 11,
+    "text": "> Both register a provider named `:typesafe`, so don't load both. When you upgrade, remove `ruby_llm-typesafe` from your Gemfile and use RubyLLM's built-in provider."
+  },
+  {
+    "repo": "King4s/Jev-AI-Skill",
+    "name": "Jev-AI-Skill",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "Jev-AI-Skill is one skill and one MCP server for **Claude Code, Codex and Hermes**. Jev,"
+  },
+  {
+    "repo": "klauswg/jev-guard",
+    "name": "jev-guard",
+    "file": "README.md",
+    "branch": "master",
+    "line": 3,
+    "text": "**Real-time risk triage gateway for crypto exchange deposits & withdrawals — Jev (TypeSafe System One) as the triage layer, deterministic code as the judge.**"
+  },
+  {
+    "repo": "klauswg/jev-suite",
+    "name": "jev-suite",
+    "file": "README.md",
+    "branch": "master",
+    "line": 3,
+    "text": "**Four decision-quality tools built on Jev (TypeSafe System One), one shared kernel — Jev answers structured questions; deterministic code keeps the final say.**"
+  },
+  {
+    "repo": "knowlet/jevlens",
+    "name": "jevlens",
+    "file": "README.md",
+    "branch": "master",
+    "line": 3,
+    "text": "Manifest V3 Chrome extension for annotating articles, X/Twitter posts, and Threads posts with typed **Jev / System One** decisions."
+  },
+  {
+    "repo": "KorenKrita/cliproxy-embeddings-rerank-forward",
+    "name": "cliproxy-embeddings-rerank-forward",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A native plugin for [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) that forwards OpenAI-compatible `/v1/embeddings`, Cohere-style rerank, and Jev decision requests (OpenRouter Decisions API and TypeSafe System One API) to upstream providers. Supports multiple providers per route with key failover."
+  },
+  {
+    "repo": "kouhxp/gutsy",
+    "name": "gutsy",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "network calls, no per-call cost. The API follows the Jev-style Decisions format, so existing clients"
+  },
+  {
+    "repo": "kraayenjon/awesome-jev",
+    "name": "awesome-jev (kraayenjon)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"https://raw.githubusercontent.com/kraayenjon/awesome-jev/main/assets/cover.jpeg\" alt=\"Awesome Jev — typed decisions for software\" width=\"100%\">"
+  },
+  {
+    "repo": "kraayenjon/jev-linkedin-saved-classifier",
+    "name": "Jev LinkedIn Saved Classifier",
+    "file": "README.md",
+    "branch": "main",
+    "line": 22,
+    "text": "open saved posts  ->  read every card  ->  one Jev call each  ->  live dashboard  ->  board + csv + json"
+  },
+  {
+    "repo": "kshetrajna12/reflex",
+    "name": "reflex",
+    "file": "README.md",
+    "branch": "main",
+    "line": 11,
+    "text": "the \"System One\" model TypeSafe released in September 2026, built on top of a normal"
+  },
+  {
+    "repo": "kunobi-ninja/kunobi-jev",
+    "name": "kunobi-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "Rust client for typed decision models: TypeSafe Jev, Cloudflare Clef, Liquid d1,"
+  },
+  {
+    "repo": "kyegomez/open-jev",
+    "name": "open-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 161,
+    "text": "[System One Models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev)"
+  },
+  {
+    "repo": "kylemclaren/jevpdf",
+    "name": "jevpdf",
+    "file": "README.md",
+    "branch": "main",
+    "line": 43,
+    "text": "- **Cheap enough to ask about every line.** Jev costs $0.042 per million input tokens, and output is free. Checking every line of a 15-page paper costs well under a cent."
+  },
+  {
+    "repo": "kyu1204/jgrep",
+    "name": "jgrep",
+    "file": "README.md",
+    "branch": "main",
+    "line": 41,
+    "text": "jgrep runs on [Jev](https://docs.typesafe.ai), through TypeSafe or"
+  },
+  {
+    "repo": "kyu1204/oh-my-harness",
+    "name": "oh-my-harness",
+    "file": "README.md",
+    "branch": "main",
+    "line": 100,
+    "text": "- `--preset` always wins and never calls Jev. No key and no LLM provider? `omh init \"description\"` falls back to `safe` and says so."
+  },
+  {
+    "repo": "lakeday-org/perch",
+    "name": "perch",
+    "file": "README.md",
+    "branch": "main",
+    "line": 130,
+    "text": "export PERCH_BASE_URL=https://api.typesafe.ai/v1/systemone"
+  },
+  {
+    "repo": "lambertsj/beatjev",
+    "name": "beatjev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "It's a Cloudflare Worker. `public/` is served as static assets (plain HTML/CSS/JS, no build step). `src/worker.js` handles `POST /api/classify` and calls Jev through `@typesafe-ai/sdk`, so the API key stays server-side."
+  },
+  {
+    "repo": "leepokai/jev-guard",
+    "name": "jev-guard",
+    "file": "README.md",
+    "branch": "main",
+    "line": 73,
+    "text": "`jev-guard key` writes `~/.jev-guard/config.json` (mode 0600). Every adapter reads that file, so it works for GUI hosts that never see your shell profile. Environment variables win when present: `JEV_API_KEY`, `AI_GATEWAY_API_KEY`, or `VERCEL_OIDC_TOKEN` (from `vercel env pull`, expires in ~12 h). `OPENROUTER_API_KEY` is used only when no other key is set, env or file, since many other tools export it too. Gemini CLI asks for the key when you install the extension and stores it in its keychain. Each key is sent only to its own provider (`api.typesafe.ai`, `openrouter.ai`, or `ai-gateway.vercel.sh`), never stored anywhere else by jev-guard, and never given to the coding agent."
+  },
+  {
+    "repo": "leonaaardob/fast-dev-compaction",
+    "name": "fast-dev-compaction",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Codex plugin that wraps session compaction with Jev decisions: before Codex"
+  },
+  {
+    "repo": "lhotwll217/jev-cli",
+    "name": "jev-cli (lhotwll217)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "JSON in, typed decisions out. A thin CLI over the TypeSafe **System One** API"
+  },
+  {
+    "repo": "Li-Evan/awesome-jev",
+    "name": "awesome-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 468,
+    "text": "- [http4k TypeSafe connector](https://github.com/http4k/http4k/tree/master/connect/ai/typesafe) - TypeSafe connector for the http4k Kotlin toolkit with a typed System One client and a fake, exposing Jev Noul, Choice and Score questions as http4k actions."
+  },
+  {
+    "repo": "libingzheren/Jev-Mem",
+    "name": "Jev-Mem",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "Jev-Mem separates the frequent decisions of memory management from the deeper"
+  },
+  {
+    "repo": "liu-x27/XavierJev",
+    "name": "XavierJev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 40,
+    "text": "TypeSafe: nothing here calls the Jev API, and nothing was trained on its output."
+  },
+  {
+    "repo": "liuhongrui087-art/jev-routed-agent",
+    "name": "jev-routed-agent",
+    "file": "README.md",
+    "branch": "master",
+    "line": 3,
+    "text": "A multi-step reasoning agent built with **LangChain v1** + **Jev** + **Flask** + **Ollama**."
+  },
+  {
+    "repo": "liuyanghejerry/Clausura",
+    "name": "Clausura",
+    "file": "README.md",
+    "branch": "main",
+    "line": 330,
+    "text": "model: jev-latest                # Default. Decision model id."
+  },
+  {
+    "repo": "Liyucheng1997/332_lab-jev-chat",
+    "name": "332_lab-jev-chat",
+    "file": "README.md",
+    "branch": "main",
+    "line": 50,
+    "text": "- **采集**：一个 App 一个适配器（`app/src/main/java/com/jev/probe/capture/ChatAppAdapter.kt`），服务按前台包名分发；适配器只负责把当前窗口变成「标题 + 消息列表（谁说的、说了什么）」，下游判断 / 悬浮窗 / 填入全部通用。微信适配器读聊天气泡（`com.tencent.mm:id/bkl`），按气泡位置判断谁说的；QQ 适配器读正文节点（`com.tencent.mobileqq:id/mjn`，QQ 不混淆节点），标题取 `id/371`，按气泡哪边贴着头像列判断谁说的。微信 8.0.52+ 对普通无障碍服务混淆节点，所以服务类名伪装成系统的 `com.google.android.accessibility.selecttospeak.SelectToSpeakService` 才能读到（实测微信 8.0.78 有效）。"
+  },
+  {
+    "repo": "logan-markewich/jeff",
+    "name": "jeff",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Use the official `typesafe-sdk` by pointing `TYPESAFE_BASE_URL` at jeff."
+  },
+  {
+    "repo": "luigivis/jev-sdk-java",
+    "name": "jev-sdk-java",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A small, type-safe Java 21 client for the **TypeSafe AI Jev** (System One) decision API."
+  },
+  {
+    "repo": "luisleo526/doc2mark",
+    "name": "doc2mark",
+    "file": "README.md",
+    "branch": "main",
+    "line": 23,
+    "text": "[TypeSafe's Jev](https://docs.typesafe.ai) can be asked about the cases they leave open (is this"
+  },
+  {
+    "repo": "lukaske/jev-doom-agent",
+    "name": "jev-doom-agent",
+    "file": "README.md",
+    "branch": "main",
+    "line": 18,
+    "text": "The vendored GPL Chocolate Doom fork lives in `vendor/chocolate-doom`. `browser_doom_bridge.c` exposes the real engine's health, armor, ammo, damage, coordinates, kills, line-of-sight monsters, and visible pickups to JavaScript. The browser converts that observation to the same bounded tactical schema for both players. **Jev receives structured game state, not raw pixels.** Jev never controls engine internals directly: the local controller executes each macro as movement, turning, firing, weapon, or use inputs."
+  },
+  {
+    "repo": "luobosibing2/dsh-jev-plugin",
+    "name": "deepseek-harness-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**Native DeepSeek Harness (DSH) plugin with Jev or Luna Decisions as its judgment model.**"
+  },
+  {
+    "repo": "lykycy123/RoboJEV",
+    "name": "RoboJEV",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<p align=\"center\"><strong>Two-stage JEV control of a Franka Panda in MuJoCo.</strong><br>Measured simulator state → task intent → Cartesian motion and gripper commands.</p>"
+  },
+  {
+    "repo": "lyramakesmusic/jevbot",
+    "name": "jevbot",
+    "file": "README.md",
+    "branch": "master",
+    "line": 11,
+    "text": "3. **Completeness judge**: A separate `noul` question asks \"is the reply complete?\" — jev stops when it thinks it's done"
+  },
+  {
+    "repo": "maayanlevy/mysql-ailike",
+    "name": "mysql-ailike",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "Requires a TypeSafe API key. Note: evaluated values and prompts are"
+  },
+  {
+    "repo": "madisonrickert/jev-permission-gate",
+    "name": "jev-permission-gate",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "A shell-aware blocklist sits in front of Jev. A call it flags can still be denied by Jev but is never allowed, and a call that carries a secret never leaves your machine."
+  },
+  {
+    "repo": "MahmoudAdelbghany/jev-browser",
+    "name": "jev-browser (MahmoudAdelbghany)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 14,
+    "text": "one Jev call (parallel questions, ~300 ms, no LLM tokens)"
+  },
+  {
+    "repo": "mahynotch/newsscore",
+    "name": "newsscore",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "News sentiment scoring for stocks, powered by TypeSafe **Jev** by default. Mainstream financial news APIs go in, a pluggable"
+  },
+  {
+    "repo": "maker-KK/todo-jev",
+    "name": "todo-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "A task-routing experiment powered by TypeSafe Jev, structured skill profiles, and basic environment checks."
+  },
+  {
+    "repo": "malDuffin/typesafe-3d-chess",
+    "name": "typesafe-3d-chess",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "3D chess powered by TypeSafe AI (Jev). AI vs AI by default, or play either side. Multiple difficulty levels."
+  },
+  {
+    "repo": "mandu5/jevcompat",
+    "name": "jevcompat",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**About a hundred servers say they are \"Jev-compatible\". Nothing said what that means. Now something does.**"
+  },
+  {
+    "repo": "manifoldor/xtags",
+    "name": "xtags",
+    "file": "README.md",
+    "branch": "main",
+    "line": 131,
+    "text": "- **页面文本会发送到所选 API 服务（默认 TypeSafe）** 做判断——这是它工作的必要部分。发送的是帖子正文和作者 handle；折叠长推文会发送 X 页面数据中已有的全文，即使你尚未点击展开。"
+  },
+  {
+    "repo": "marcreichel/laya-php",
+    "name": "laya-php",
+    "file": "README.md",
+    "branch": "main",
+    "line": 824,
+    "text": "curl -fsSL https://api.typesafe.ai/openapi.json -o openapi.json"
+  },
+  {
+    "repo": "MarissaFamularo/citation-verifier",
+    "name": "citation-verifier",
+    "file": "README.md",
+    "branch": "main",
+    "line": 34,
+    "text": "supports the sentence, and Jev's confidence in its own call. A probability"
+  },
+  {
+    "repo": "markjaquith/typesafe-ai-playground",
+    "name": "typesafe-ai-playground (markjaquith)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "The experiments live in a Rust CLI called `typesafe-ai`, built with"
+  },
+  {
+    "repo": "MartinPuli/f1",
+    "name": "f1",
+    "file": "README.md",
+    "branch": "main",
+    "line": 32,
+    "text": "The engine and experiment scripts remain in the repository. The published interface only plays recorded races; it has no creation or admin screen. Replays use saved decisions and frames without calling TypeSafe."
+  },
+  {
+    "repo": "mattn/go-jev",
+    "name": "go-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "text. Comes with `jev-cli`, a command-line tool built on it for UNIX pipelines."
+  },
+  {
+    "repo": "mattneel/typesafe",
+    "name": "typesafe",
+    "file": "README.md",
+    "branch": "master",
+    "line": 7,
+    "text": "and its Jev model. Ask typed Choice, Noul and Score questions about your application's state in"
+  },
+  {
+    "repo": "mattneel/typesafe.zig",
+    "name": "typesafe.zig",
+    "file": "README.md",
+    "branch": "master",
+    "line": 4,
+    "text": "Jev model. Ask typed Noul, Choice and Score questions about your application's state in one"
+  },
+  {
+    "repo": "mejiasd3v/pi-jev-router",
+    "name": "pi-jev-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"https://raw.githubusercontent.com/mejiasd3v/pi-jev-router/main/assets/logo.png\" alt=\"Jev Router logo\" width=\"144\" height=\"144\">"
+  },
+  {
+    "repo": "memos-im/xianyu-slang-helper",
+    "name": "xianyu-slang-helper",
+    "file": "README.md",
+    "branch": "main",
+    "line": 147,
+    "text": "追加 `--ai-review` 可用 **TypeSafe System One 判别模型**（[Jev](https://docs.typesafe.ai)；自托管 DiffusionGemma 同 API）剔除上游的\"模板化噪音\"变体：每个候选变体问一个 `Noul`（是/否）问题，取概率 ≥ 阈值判为噪音，不生成文本、无解析、返回校准概率。未配置 key 时自动降级跳过，不阻断同步。"
+  },
+  {
+    "repo": "Micha0827/snapjudge",
+    "name": "snapjudge",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "The HTTP API follows the [TypeSafe System One](https://docs.typesafe.ai/api) format"
+  },
+  {
+    "repo": "michaelswissa/jevry",
+    "name": "Jevry",
+    "file": "README.md",
+    "branch": "main",
+    "line": 239,
+    "text": "The historical beta.1 study ran three five-turn sessions per implementation, with the same fixture tasks and resolved Claude model. Jevry also used Jev for browser decisions."
+  },
+  {
+    "repo": "micytao/vllm-playground",
+    "name": "vllm-playground",
+    "file": "README.md",
+    "branch": "main",
+    "line": 37,
+    "text": "- **Decision Models (Experimental)** — A brand-new sandbox tab for structured-read decisions powered by DiffusionGemma and Jev / System One. Gallery of 12 use cases across 4 tabbed categories (Noul, Choice, Score, Combination), mock-by-default evaluation, and two interactive demos (Race Lane Decider, Rubric Grading Puzzle). Fully isolated from the main Server Config flow — see **[Decision Models Guide](docs/DECISION_MODELS_GUIDE.md)**."
+  },
+  {
+    "repo": "misbahsy/doc-router",
+    "name": "doc-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 36,
+    "text": "- **[Jev](https://docs.typesafe.ai)** (TypeSafe System One) — the page judge. Given the"
+  },
+  {
+    "repo": "mithalouni/system-one-open",
+    "name": "system-one-open",
+    "file": "README.md",
+    "branch": "main",
+    "line": 31,
+    "text": "Base URL: https://mithalouni--jev-serve-e2b-full-server-web.modal.run  (scales to zero; first request after idle takes ~60 s)."
+  },
+  {
+    "repo": "mizchi/jev-lint",
+    "name": "jev-lint",
+    "file": "README.md",
+    "branch": "main",
+    "line": 31,
+    "text": "export TYPESAFE_API_KEY=...            # https://typesafe.ai"
+  },
+  {
+    "repo": "mizchi/jev-test-filter",
+    "name": "jev-test-filter",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "`jev-test-filter` reads a `git diff`, asks a model how much that change can"
+  },
+  {
+    "repo": "mkotlikov/jev-grug",
+    "name": "jev-grug",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "The demo now connects to the real Jev API when `TYPESAFE_API_KEY` is configured. Without a key it falls back to a deterministic mock, so contributors can still run the interface immediately."
+  },
+  {
+    "repo": "mmastrac/djev",
+    "name": "djev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 57,
+    "text": "`POST /v1/systemone` implements the Jev decision API. The body holds"
+  },
+  {
+    "repo": "mmastrac/djev-spark",
+    "name": "djev-spark",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "it implements Jev's `POST /v1/systemone` API and passes ordinary chat through"
+  },
+  {
+    "repo": "mohsen1/llm-debugger-vscode-extension",
+    "name": "llm-debugger-vscode-extension",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Each step's \"what next?\" is answered by [Jev](https://docs.typesafe.ai/api), a"
+  },
+  {
+    "repo": "MoLeMo-Lab/mojev",
+    "name": "MoJev",
+    "file": "README.md",
+    "branch": "master",
+    "line": 19,
+    "text": "wire-compatible with the TypeSafe Python SDK's `system_one` API."
+  },
+  {
+    "repo": "morganlinton/Albatross",
+    "name": "Albatross",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1160,
+    "text": "Jev Mode puts TypeSafe AI's decision model before the main LLM. Supported questions"
+  },
+  {
+    "repo": "moritzkremb/jev-voice-browser",
+    "name": "jev-voice-browser",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "the server asks **Jev** (TypeSafe's System One model, `jev-1.13.0`) one request with a dozen typed"
+  },
+  {
+    "repo": "mossyfield/ST-jeved",
+    "name": "ST-jeved",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Jeved is a SillyTavern extension. It sends chat messages to Jev, a small decision model, with"
+  },
+  {
+    "repo": "mrbanana55/Decision_Blackjack",
+    "name": "Decision_Blackjack",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "2. **Jev** (Remote Cloud AI via TypeSafe System One)"
+  },
+  {
+    "repo": "mrmps/classifier-dev",
+    "name": "classifier-dev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 128,
+    "text": "Both tiers answer from [TypeSafe's Jev](https://docs.typesafe.ai), a decision"
+  },
+  {
+    "repo": "mrnugget/jev-shell-history",
+    "name": "jev-shell-history",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "(TypeSafe). As you type, the plugin looks at your last 100 distinct history"
+  },
+  {
+    "repo": "n42blockchain/N42-rs",
+    "name": "N42-rs",
+    "file": "ddn/docs/decision/README.md",
+    "branch": "main",
+    "line": 44,
+    "text": "3. 用户在页面确认费用并提交，页面展示 `requestId`。运营方建立 `job.json`，包含下方字段，运行 `TYPESAFE_API_KEY=... N42_DECISION_SIGNING_KEY=... cargo run -p n42-decision-relay -- evaluate job.json ./archive > result.json`。`TYPESAFE_API_URL` 默认官方 `https://api.typesafe.ai/v1/systemone`；仅测试时可设为本机 loopback mock 服务。"
+  },
+  {
+    "repo": "Nainish-Rai/jev-frontend-qa",
+    "name": "jev-frontend-qa",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "- **Bounded Jev decisions:** typed operation/target choices over observed controls; exact fixture values and correctness checks remain in code."
+  },
+  {
+    "repo": "Nancy-Chauhan/hearth-jev-rental-search",
+    "name": "hearth-jev-rental-search",
+    "file": "README.md",
+    "branch": "main",
+    "line": 18,
+    "text": "- **A [TypeSafe](https://typesafe.ai) API key**. A search costs a fraction of a cent"
+  },
+  {
+    "repo": "NandhaKishorM/laya",
+    "name": "laya",
+    "file": "README.md",
+    "branch": "main",
+    "line": 735,
+    "text": "wire protocol as TypeSafe's hosted Jev API. Laya's answer payload is already"
+  },
+  {
+    "repo": "Nasrallah-AL/jev-cli",
+    "name": "jev-cli",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "Fast, typed AI judgments from the command line, powered by TypeSafe's [Jev](https://docs.typesafe.ai) model."
+  },
+  {
+    "repo": "nassim-arifette/jevgrep",
+    "name": "jevgrep",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "authorized repository, asks Jev to score all eligible fragments, then returns the"
+  },
+  {
+    "repo": "ndolinschi/harnessjudge",
+    "name": "harnessjudge",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "After an agent step (paste a trace) → **ok / retry / escalate / stop** — for agent builders, powered by TypeSafe Jev."
+  },
+  {
+    "repo": "ndolinschi/mcpmatch",
+    "name": "mcpmatch",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "User goal → match the best MCP server/capability from a catalog (two-stage when large) via TypeSafe Jev."
+  },
+  {
+    "repo": "ndolinschi/pulselane",
+    "name": "pulselane",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Clinic triage decisions powered by TypeSafe **Jev** (System One)."
+  },
+  {
+    "repo": "ndolinschi/spendbrake",
+    "name": "spendbrake",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Budget + plan → **continue / downgrade_model / stop** — cost×value dashboard powered by TypeSafe Jev."
+  },
+  {
+    "repo": "ndolinschi/swarmrouter",
+    "name": "swarmrouter",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Pick which agent/skill handles a task (research / code / browser / support / writer) + confidence — visual swarm map powered by TypeSafe Jev."
+  },
+  {
+    "repo": "ndolinschi/toolgate",
+    "name": "toolgate",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Agent tool/MCP call gate — paste a planned tool call + context → **allow / ask_human / deny** with risk scores via TypeSafe Jev."
+  },
+  {
+    "repo": "nekuda-ai/WindTunnel",
+    "name": "WindTunnel",
+    "file": "README.md",
+    "branch": "main",
+    "line": 138,
+    "text": "tasks are scored by inspecting the application, and published final answers are redacted. The Jev release includes"
+  },
+  {
+    "repo": "newfull5/malkuth",
+    "name": "Malkuth",
+    "file": "README.md",
+    "branch": "main",
+    "line": 68,
+    "text": "29 suites and about 129,000 questions. Every model answered the same items. Jev was measured through its API."
+  },
+  {
+    "repo": "nexibeo/jev-cookbook",
+    "name": "jev-cookbook",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**Practical, tested recipes for [TypeSafe's Jev](https://docs.typesafe.ai/introduction), the fast decision model on [OpenRouter](https://openrouter.ai/typesafe/jev-1.13).** Fifteen real-world jobs, each with a runnable script, a small labelled dataset and measured results: support triage, database indexing, a file organizer, tagging, category trees, duplicate detection, PII scanning, bank transactions, invoice extraction, search, log triage, moderation, lead scoring, a browser agent and a Gmail labeler that connects to your own inbox."
+  },
+  {
+    "repo": "NiazMorshed2007/jev-review",
+    "name": "jev-review (NiazMorshed2007)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 19,
+    "text": "> **Your API key stays on your machine.** Jev Review has no hosted backend, database, telemetry service, or author-operated proxy. The only remote request is sent directly to the configured Jev API."
+  },
+  {
+    "repo": "nican2018/shade-arena-jev-monitor",
+    "name": "shade-arena-jev-monitor",
+    "file": "README.md",
+    "branch": "main",
+    "line": 19,
+    "text": "2. **Strong per-action gate.** Scoring each tool call before it runs, Jev ranked sabotage above almost all benign actions. Gemini Flash's scores piled up at 0 and 100."
+  },
+  {
+    "repo": "nickthompson480/typesafe-ai-playground",
+    "name": "typesafe-ai-playground",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "You need **Python 3.10 or newer**, a modern browser, and a TypeSafe API key to run evaluations. There are no packages to install and no frontend build step."
+  },
+  {
+    "repo": "nicobailon/pi-powerline-footer",
+    "name": "pi-powerline-footer",
+    "file": "README.md",
+    "branch": "main",
+    "line": 323,
+    "text": "When the agent is working, `Enter` sends your message as steering and `Alt+Enter` queues it as a follow-up. Set `autoFollowUp` under `powerline` to let [TypeSafe's Jev](https://docs.typesafe.ai/introduction) make that call for plain `Enter`:"
+  },
+  {
+    "repo": "nicobailon/surf-cli",
+    "name": "surf-cli",
+    "file": "README.md",
+    "branch": "main",
+    "line": 755,
+    "text": "- `--allow-semantic` - Opt in to bounded model decisions for a semantic workflow (model from `SURF_SEMANTIC_MODEL`, default `jev-1.13.0`; `extract` steps always use `clairic` with Cloudflare credentials)"
+  },
+  {
+    "repo": "nidhi-singh02/agent-router",
+    "name": "agent-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "shared accounts), asks TypeSafe to rank what is left and choose an effort, starts the chosen"
+  },
+  {
+    "repo": "Nisaka520/JevIntent",
+    "name": "JevIntent",
+    "file": "README.md",
+    "branch": "main",
+    "line": 232,
+    "text": "`POST https://api.typesafe.ai/v1/systemone`："
+  },
+  {
+    "repo": "NobleSpartan6/otto",
+    "name": "otto",
+    "file": "README.md",
+    "branch": "main",
+    "line": 24,
+    "text": "3. In Hybrid mode, GPT-6 Astra provides a plan and generated text when needed. Jev chooses concrete actions between planning calls."
+  },
+  {
+    "repo": "noetion/dsh-jev",
+    "name": "dsh-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "dsh-jev is a DeepSeek Harness bundle that registers the `jev_ask` tool. A DSH agent on a profile that loads it can send typed noul, choice, and score questions to TypeSafe Jev."
+  },
+  {
+    "repo": "NorbertBodziony/guard-jev",
+    "name": "guard-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Text moderation demo: one TypeSafe `systemOne` call screens 7 Noul hazards + 1 severity Score in parallel. Verdict computed in code via policy thresholds."
+  },
+  {
+    "repo": "notque/vexjoy-agent",
+    "name": "vexjoy-agent",
+    "file": "README.md",
+    "branch": "main",
+    "line": 44,
+    "text": "## /d — Jev-Powered Router"
+  },
+  {
+    "repo": "nshkrdotcom/typesafe_sdk",
+    "name": "typesafe_sdk",
+    "file": "README.md",
+    "branch": "main",
+    "line": 36,
+    "text": "The TypeSafe-specific provider/API SDK. It owns TypeSafe authentication,"
+  },
+  {
+    "repo": "ntedvs/commentcop",
+    "name": "commentcop",
+    "file": "README.md",
+    "branch": "main",
+    "line": 27,
+    "text": "Use `--dry-run` to preview what it finds without calling Jev. Add exclusions with `--ignore` or a `.commentcopignore` file. `--help` has the rest."
+  },
+  {
+    "repo": "Nyarlathoteppppp/pi-heed",
+    "name": "pi-heed",
+    "file": "README.md",
+    "branch": "main",
+    "line": 75,
+    "text": "messages, 9,090 real tool calls) through pi-heed in enforce mode with Jev, without executing anything"
+  },
+  {
+    "repo": "obie/ruby_decision_model",
+    "name": "ruby_decision_model",
+    "file": "README.md",
+    "branch": "main",
+    "line": 85,
+    "text": "Requests go to `https://api.typesafe.ai/v1/systemone`. The default model is"
+  },
+  {
+    "repo": "oficcejo/aiagents-stock",
+    "name": "aiagents-stock",
+    "file": "README.md",
+    "branch": "main",
+    "line": 170,
+    "text": "Key 申请：https://console.typesafe.ai ｜ 完整说明：[TypeSafe Jev决策引擎接入说明](docs/TypeSafe%20Jev决策引擎接入说明.md)"
+  },
+  {
+    "repo": "ojusave/beat-jev",
+    "name": "beat-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A penalty shootout against TypeSafe Jev. Take turns shooting and keeping goal. One **Render Workflows** task owns the match, with scores saved in **Render Postgres**."
+  },
+  {
+    "repo": "Olli0103/openclaw-typesafe-ai",
+    "name": "openclaw-typesafe-ai",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Jev returns decisions over predefined answer spaces. It does not generate conversation, prose or code. This package therefore registers a tool and no model provider, model picker entry, hook or background service."
+  },
+  {
+    "repo": "olsenbrands/fable-foreman",
+    "name": "fable-foreman",
+    "file": "README.md",
+    "branch": "main",
+    "line": 11,
+    "text": "[Jev](https://docs.typesafe.ai), from TypeSafe AI, is a decision model rather than a chatbot. It answers narrow yes/no, pick-one and score questions in under a second, for about 0.02 cents a call. Fable Foreman uses it to point the lead's attention at the right things:"
+  },
+  {
+    "repo": "Olti1947/jev-java",
+    "name": "jev-java",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Idiomatic Java 17+ client library for TypeSafe AI's **Jev** System One decision engine."
+  },
+  {
+    "repo": "OmniJev/OneJev",
+    "name": "OneJev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 56,
+    "text": "<img alt=\"Block bar charts: the four OneJev1.6 sizes against Jev 1.13, Jev-Omni 12B and Qwen3.8-27B thinking on the OneJev test set, DecisionBench hard, TypeSafe and MMStar\" src=\"assets/results.svg\" width=\"100%\">"
+  },
+  {
+    "repo": "ondata/vd-jev",
+    "name": "vd-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 55,
+    "text": "Ask three questions about the `message` column, one `jev-column` each:"
+  },
+  {
+    "repo": "onlyoneaman/jev-eval",
+    "name": "jev-eval",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Jev is a model that does not write text. You give it some text and a question with fixed answers, and it gives back a probability for each answer. One call looks like this:"
+  },
+  {
+    "repo": "opencx-labs/zevals",
+    "name": "zevals",
+    "file": "README.md",
+    "branch": "main",
+    "line": 273,
+    "text": "Jev is reachable through several gateways, and each names the same yes/no question differently. Three clients are bundled, all of them plain `fetch` with no extra dependencies:"
+  },
+  {
+    "repo": "openlayer-ai/jevals",
+    "name": "jevals",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "export AI_GATEWAY_API_KEY=...      # Jev through Vercel AI Gateway. TYPESAFE_API_KEY and OPENROUTER_API_KEY also work."
+  },
+  {
+    "repo": "OskarLebuda/precog",
+    "name": "precog",
+    "file": "README.md",
+    "branch": "main",
+    "line": 19,
+    "text": "Asks [TypeSafe](https://typesafe.ai/) Jev which link a visitor is about to click, then warms"
+  },
+  {
+    "repo": "oso95/x-scanner",
+    "name": "x-scanner",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Behavioral labels on every post you scroll past on X, judged by [Jev](https://docs.typesafe.ai),"
+  },
+  {
+    "repo": "PanAchy/jevvy",
+    "name": "jevvy",
+    "file": "README.md",
+    "branch": "main",
+    "line": 133,
+    "text": "Custom endpoints use Jevvy's default approval policy unless you replace it. Its calibration evidence applies only when the route is verified to serve the calibrated Jev model."
+  },
+  {
+    "repo": "Para-FR/casse-brique-typesafe",
+    "name": "casse-brique-typesafe",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A brick breaker you can play in the browser, built with Next.js 16, React 19, TypeScript and Tailwind CSS 4. The paddle can be handed over to an AI pilot powered by TypeSafe AI's Jev model."
+  },
+  {
+    "repo": "pavy23/web-doom",
+    "name": "web-doom",
+    "file": "README.md",
+    "branch": "main",
+    "line": 288,
+    "text": "2. **Tactical policy (TypeSafe System One, Jev).** At each step with an enemy"
+  },
+  {
+    "repo": "pedronauck/skills",
+    "name": "skills",
+    "file": "README.md",
+    "branch": "main",
+    "line": 80,
+    "text": "- **[jev-engineering](./skills/mine/jev-engineering)** — Design and build use cases, POCs and production systems with TypeSafe's Jev decision model (System One): design modes and use-case archetypes, decision state, typed questions, Jev combined with generative models, workflows, retrieval and perception, aggregation and gates in code, evaluation and rollout; covers the jev-1.14 danger-zone features (images, Box, long context); ships dependency-free Python/TypeScript clients (TypeSafe API, OpenRouter Decisions, Vercel AI Gateway) and a POC skeleton"
+  },
+  {
+    "repo": "pengchujin/ad-radar",
+    "name": "ad-radar",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "- **智能识别**：用你自己的 [Jev](https://typesafe.ai) API key，识别广告（硬广 / 软广 / 引流）和你选择的话题（AI、科技、军事、政治、性别对立、色情低俗、明星八卦、炒股理财、体育、游戏，也可以自己添加），标在内容旁边或折叠起来；还能估计内容由 AI 生成的比例。"
+  },
+  {
+    "repo": "PerryLink/jevcore",
+    "name": "jevcore",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "TypeSafe [Jev](https://typesafe.ai) for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)"
+  },
+  {
+    "repo": "peterfriese/system-one-foundation-models",
+    "name": "system-one-foundation-models",
+    "file": "README.md",
+    "branch": "main",
+    "line": 364,
+    "text": "6. **Jev Cloud**: TypeSafe AI hosted service on `https://api.typesafe.ai`."
+  },
+  {
+    "repo": "philippdubach/pi-jev-router",
+    "name": "pi-jev-router (philippdubach)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "pi-jev-router is a pi extension. It classifies each task with Jev (TypeSafe"
+  },
+  {
+    "repo": "phyous/tsai-civ2",
+    "name": "tsai-civ2",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "An original Civilization II browser harness for TypeSafe Jev, with live decision"
+  },
+  {
+    "repo": "picaye/jev-compaction",
+    "name": "jev-compaction (picaye)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 19,
+    "text": "Jev judges to be stale, and it shows Jev the whole conversation while deciding."
+  },
+  {
+    "repo": "PistachioAIHQ/jev-synergy-screening",
+    "name": "jev-synergy-screening",
+    "file": "README.md",
+    "branch": "main",
+    "line": 86,
+    "text": "export TYPESAFE_API_KEY=\"$(tr -d '\\n' < ~/.config/typesafe/api_key)\""
+  },
+  {
+    "repo": "pithings/advocaat",
+    "name": "advocaat",
+    "file": "README.md",
+    "branch": "main",
+    "line": 315,
+    "text": "- Requests use `https://ai-gateway.vercel.sh/v4/ai` and model `typesafe-ai/jev`."
+  },
+  {
+    "repo": "PixelML/av",
+    "name": "av",
+    "file": "README.md",
+    "branch": "main",
+    "line": 35,
+    "text": "Configure a TypeSafe System One key to make Jev refinement automatic for `av ask`:"
+  },
+  {
+    "repo": "pnthn-ai/polar_llama",
+    "name": "polar_llama",
+    "file": "README.md",
+    "branch": "main",
+    "line": 22,
+    "text": "- **TypeSafe System One**: A native Rust inference layer for the [TypeSafe API](https://docs.typesafe.ai/api) — typed, calibrated yes/no, choice and score questions answered per row, or one Pydantic **contract** applied to every line of a document in a single request, landing as ordinary typed columns with confidence you can threshold on. See [docs/TYPESAFE.md](docs/TYPESAFE.md)."
+  },
+  {
+    "repo": "Premo-Cloud/typesafe-sdk-java",
+    "name": "typesafe-sdk-java",
+    "file": "README.md",
+    "branch": "main",
+    "line": 24,
+    "text": "implementation(\"io.github.premo-cloud:typesafe-sdk:0.6.0\")"
+  },
+  {
+    "repo": "PromptEngineer48/laya-vs-jev-arena",
+    "name": "laya-vs-jev-arena",
+    "file": "README.md",
+    "branch": "main",
+    "line": 17,
+    "text": "docker run -d --name arena --restart unless-stopped -p 80:8732 --cpus 1 --memory 512m -e TYPESAFE_API_KEY=your_key_here ghcr.io/promptengineer48/laya-vs-jev-arena:latest"
+  },
+  {
+    "repo": "pst2154/Nemotron_Jev",
+    "name": "Nemotron_Jev",
+    "file": "README.md",
+    "branch": "master",
+    "line": 3,
+    "text": "Ask typed questions about text or JSON and inspect model-derived probability distributions in a browser. One container runs the model, the original Decision Lab explorer, and a TypeSafe-shaped API."
+  },
+  {
+    "repo": "psyb0t/aigate",
+    "name": "aigate",
+    "file": "README.md",
+    "branch": "main",
+    "line": 179,
+    "text": "| **[decidealot](https://github.com/psyb0t/decidealot)** _(optional, `DECIDEALOT=1` and/or `DECIDEALOT_CUDA=1`)_ | Typed decisions with local Laya, Von, CLM, and hosted TypeSafe Jev over the TypeSafe System One API. `POST /v1/systemone` takes a `model` selector, a `state`, and named `choice` / `score` / `noul` questions, then returns typed answers with probabilities. REST + batch (`POST /v1/systemone/batch`) + MCP (`system_one`, `system_one_batch`, `list_models`, `unload_models`). Direct decision route, not LiteLLM-routed. All local providers download their bundles on first start and are enabled by default. CLM calls `http://litellm:4000/v1/embeddings` internally with `local-llamacpp-cuda-qwen3-8b`; `make run-bg` starts its CUDA encoder. Set `DECIDEALOT_CLM_ENABLED=false` to remove that GPU dependency. Hosted Jev enables with its TypeSafe key. One local provider stays resident by default and unloads after 10 idle minutes. CPU and CUDA variants run side-by-side on `/decidealot/` and `/decidealot-cuda/`, sharing `.data/decidealot/models/`. CUDA needs `nvidia-container-toolkit`. See [the service page](docs/services/decidealot.md). |"
+  },
+  {
+    "repo": "psygreg/agent-reflex",
+    "name": "agent-reflex",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "Plugin for coding agent workflow optimization and safeguarding using any system one decision model, from Jev to self-hosted LM Studio, Ollama or llama.cpp."
+  },
+  {
+    "repo": "PyModel/jev-judge-mcp",
+    "name": "jev-judge-mcp",
+    "file": "README.md",
+    "branch": "main",
+    "line": 26,
+    "text": "uvx --from 'jev-judge-mcp[typesafe]' jev-judge-mcp setup"
+  },
+  {
+    "repo": "qddegtya/qualm",
+    "name": "qualm",
+    "file": "README.md",
+    "branch": "main",
+    "line": 25,
+    "text": "Jev is the model. This is what `qualm` adds on top of calling its HTTP API yourself."
+  },
+  {
+    "repo": "qkal/Canny",
+    "name": "Canny",
+    "file": "README.md",
+    "branch": "main",
+    "line": 155,
+    "text": "## Jev"
+  },
+  {
+    "repo": "QuentinDanblon/pi-fast-jev-compaction",
+    "name": "pi-fast-jev-compaction (QuentinDanblon)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "anything. It asks Jev, over the whole conversation, whether each old **tool call** and each"
+  },
+  {
+    "repo": "Query-farm/vgi-typesafe",
+    "name": "vgi-typesafe",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<img src=\"https://raw.githubusercontent.com/Query-farm/vgi-typesafe/main/docs/vgi-logo.png\" alt=\"Vector Gateway Interface logo\" width=\"320\">"
+  },
+  {
+    "repo": "r-ms/mini-jev",
+    "name": "mini-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**What a Jev-style interface looks like on a frozen model: classify against a schema that arrives with the request by reading next-token logits, not by generating JSON. Measured on Qwen3-4B.**"
+  },
+  {
+    "repo": "RafalWilinski/vibecheck",
+    "name": "vibecheck",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A Chrome and Firefox extension that runs your draft post through [TypeSafe's Jev](https://docs.typesafe.ai) before you hit **Post**. It renders a scorecard under the composer with virality, funniness, informativeness, clarity, insult level, ragebait, cringe, \"sounds AI-written\", regret risk, typo detection, and the most likely crowd reaction, plus an overall \"Send it / Fine, mid / Probably don't / Sleep on it\" verdict."
+  },
+  {
+    "repo": "rajivkuriakose/typesafe-jev-examples",
+    "name": "typesafe-jev-examples",
+    "file": "README.md",
+    "branch": "main",
+    "line": 20,
+    "text": "TypeSafe's direct API is behind an early-access waitlist. OpenRouter serves the"
+  },
+  {
+    "repo": "ranjan2829/AskJev",
+    "name": "AskJev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**Talk to Claude in plain English. AskJev drives Brave/Chrome. TypeSafe Jev decides on-page. Guard freezes irreversible clicks.**"
+  },
+  {
+    "repo": "ratel-ai/ratel",
+    "name": "ratel",
+    "file": "src/rankers/python/README.md",
+    "branch": "main",
+    "line": 27,
+    "text": "- `ratel_jev_plugin(url=None, api_key_env=None, model=None)`: Jev (TypeSafe AI). Defaults: `https://api.typesafe.ai`, `TYPESAFE_API_KEY`, `jev-latest`."
+  },
+  {
+    "repo": "Ravinder82/jev-flash-router",
+    "name": "jev-flash-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "Zero-token-output decision router MCP server powered by TypeSafe Jev."
+  },
+  {
+    "repo": "RayenMlayeh/jevcrawl",
+    "name": "jevcrawl",
+    "file": "README.md",
+    "branch": "main",
+    "line": 202,
+    "text": "| `TYPESAFE_API_KEY` | Jev API key (required) | none |"
+  },
+  {
+    "repo": "rbalch/typesafeai-review",
+    "name": "typesafeai-review",
+    "file": "README.md",
+    "branch": "master",
+    "line": 4,
+    "text": "slices the diff, asks Jev (TypeSafe's System One model) narrow typed questions per hunk,"
+  },
+  {
+    "repo": "rchovatiya88/cyber-breach-jev",
+    "name": "cyber-breach-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "An infinite 3D arcade cyberpunk arena shooter built with **Three.js** and powered by **Jev**—the sub-100ms \"System One\" decision model developed by **TypeSafe AI** (released September 2026)."
+  },
+  {
+    "repo": "reachjalil/jevlogs",
+    "name": "jevlogs",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"https://raw.githubusercontent.com/reachjalil/jevlogs/main/docs/assets/readme-banner.png\" alt=\"Jev Logs. Keep your logs. Spend on the signal.\" width=\"100%\" />"
+  },
+  {
+    "repo": "ReallyArtificial/jev-by-example",
+    "name": "Jev by Example",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "**Ten runnable experiments in building agents that know what to do next—and when to ask.** Each combines a small Jev judgment with application logic you can read, change, and test."
+  },
+  {
+    "repo": "ReallyArtificial/stuntdouble",
+    "name": "stuntdouble",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "**Find out whether a local decision model can replace Jev on your traffic before you switch.**"
+  },
+  {
+    "repo": "realZachi/pg-jev",
+    "name": "pg-jev",
+    "file": "README.md",
+    "branch": "master",
+    "line": 2,
+    "text": "<img src=\"docs/assets/header.svg\" alt=\"pg-jev — ask your Postgres tables questions in plain language\" width=\"100%\">"
+  },
+  {
+    "repo": "realZachi/typesafe-adblock",
+    "name": "typesafe-adblock",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "**BYOK: bring your own key.** There is no backend. You paste your own TypeSafe API key"
+  },
+  {
+    "repo": "receptron/laya",
+    "name": "laya",
+    "file": "README.md",
+    "branch": "main",
+    "line": 15,
+    "text": "implementation (`RLAgent.system_one`) and as TypeSafe Jev's `system_one` API, and the output"
+  },
+  {
+    "repo": "reinhard-z/vision-jev",
+    "name": "Jev Driver",
+    "file": "README.md",
+    "branch": "main",
+    "line": 24,
+    "text": "- Move an object to ask Jev again. Drag it off the road or click its × to remove it."
+  },
+  {
+    "repo": "RenaGao/jev-dataops",
+    "name": "jev-dataops",
+    "file": "README.md",
+    "branch": "main",
+    "line": 26,
+    "text": "Screenshots show the repository's public demo running locally with its bundled synthetic example. The measurements demonstrate the workflow, not JEV screening quality or LLM performance."
+  },
+  {
+    "repo": "rohanarun/computer-use-cache",
+    "name": "computer-use-cache",
+    "file": "README.md",
+    "branch": "main",
+    "line": 146,
+    "text": "Set your own TypeSafe API key to enable JEV in either server:"
+  },
+  {
+    "repo": "rokbenko/quackd",
+    "name": "quackd",
+    "file": "README.md",
+    "branch": "main",
+    "line": 196,
+    "text": "quackd run arm-grip-check --robot arm-01 --by-hand --decision-llm jev --decision-mode shadow"
+  },
+  {
+    "repo": "rokcso/bluenoise",
+    "name": "bluenoise",
+    "file": "README.md",
+    "branch": "main",
+    "line": 34,
+    "text": "BlueNoise collects no telemetry or analytics. It does not read cookies, access account credentials, call X APIs, or take account actions such as blocking, muting, following, or posting. Settings and rules are stored through the browser; network access is used only to update enabled public rule lists, plus the optional experimental Jev second pass described below."
+  },
+  {
+    "repo": "RomanSlack/jev-drone",
+    "name": "jev-drone",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "# jev-drone"
+  },
+  {
+    "repo": "romeromarcelo/jev-retrieval",
+    "name": "jev-retrieval",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/romeromarcelo/jev-retrieval/main/docs/assets/wordmark-dark.svg\">"
+  },
+  {
+    "repo": "ronadin2002/jev-cua",
+    "name": "jev-cua",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "A small floating bar for voice and text commands. Jev picks the next action from your Mac’s live controls, the app executes it, and the loop continues toward your request."
+  },
+  {
+    "repo": "rorshopping/jev-on-a-laptop",
+    "name": "jev-on-a-laptop",
+    "file": "README.md",
+    "branch": "main",
+    "line": 103,
+    "text": "TypeSafe's own workflow evals (https://evals.typesafe.ai/) put Jev at **67.8% mean accuracy** (61.7–76.0% per workflow) against a **frontier consensus** (average of GPT-6 Astra and Fable 5.1 answering every question), at $0.0004 and 0.4 s per case. Our 8B's 84.7%/91.7% is **not comparable** (rule-constructed labels, synthetic cases, n=24) — it would imply beating Opus 5 (73.1%) and Sol (74.1%) on their eval, which is implausible. Comparable findings: same-order latency (0.4 s vs 0.65 s) and a ~100–1000x local cost advantage, both type-safe by construction. Full analysis in `docs/10-jev-published-accuracy-vs-our-8b.md`."
+  },
+  {
+    "repo": "runta-dev/jot",
+    "name": "jot",
+    "file": "README.md",
+    "branch": "main",
+    "line": 19,
+    "text": "[![Powered by Jev](https://img.shields.io/badge/powered_by-Jev-c66a2b?style=flat-square)](https://typesafe.ai/)"
+  },
+  {
+    "repo": "rupeshpoojary9/poorjev",
+    "name": "poorjev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<p align=\"center\"><b>The poor man's Jev.</b> An open source, local-first \"System One\" decision layer for LLM apps: typed decisions with <b>provably calibrated confidence</b>. No API key. No waitlist.</p>"
+  },
+  {
+    "repo": "ryana/jevify",
+    "name": "jevify",
+    "file": "README.md",
+    "branch": "main",
+    "line": 15,
+    "text": "- [TypeSafe introduction](https://docs.typesafe.ai/introduction)"
+  },
+  {
+    "repo": "Sac-Y/Jev-cu",
+    "name": "Jev-cu",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "把 Computer Use 的「下一步点哪里」交给 Jev（TypeSafe System One）：Jev 从界面文字候选中选元素、动作、完成度与风险，Codex Computer Use 负责读取界面与执行，本地策略门槛拦截敏感操作。只传文字，不传截图。"
+  },
+  {
+    "repo": "safzanpirani/pi-jev-skill-picker",
+    "name": "pi-jev-skill-picker",
+    "file": "README.md",
+    "branch": "master",
+    "line": 20,
+    "text": "One `skill_search` call costs about 38,600 Jev input tokens, or $0.0016 at $42 per billion. Jev bills input only. Against `gpt-6-astra` that is under 1% of what a single un-stripped request wastes."
+  },
+  {
+    "repo": "saibimajdi/typesafeai-dotnet-sdk",
+    "name": "typesafe-dotnet-sdk",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "This is a community SDK. It is an independent client for the TypeSafe AI System One HTTP API,"
+  },
+  {
+    "repo": "samdotmak/jev-recall",
+    "name": "jev-recall",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Jev Recall gives you LLM re-ranker quality retreival at semantic search prices and speed"
+  },
+  {
+    "repo": "samtay32/jev-system-architect",
+    "name": "jev-system-architect",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**A system-architecture skill for TypeSafe AI's Jev / System One.** Continuously asks: *Where does this system contain fuzzy semantic judgment that should become a small Jev decision primitive?*"
+  },
+  {
+    "repo": "santos-sanz/jev-audio-beeper",
+    "name": "jev-audio-beeper",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Private TypeScript proof of concept: identify Spanish profanity with Jev's typed probabilistic decisions and replace the matching word intervals with a beep without changing the audio duration."
+  },
+  {
+    "repo": "savka777/jev-use",
+    "name": "jev-use",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "<p align=\"center\"><img src=\"docs/banner.png\" alt=\"jev-use\" width=\"100%\"></p>"
+  },
+  {
+    "repo": "schwarzschlyle/immune",
+    "name": "Immune",
+    "file": "README.md",
+    "branch": "main",
+    "line": 73,
+    "text": "export TYPESAFE_API_KEY=...        # TypeSafe Jev, which Immune asks about each call"
+  },
+  {
+    "repo": "scienthoon/jev-ood-calibration",
+    "name": "jev-ood-calibration",
+    "file": "README.md",
+    "branch": "main",
+    "line": 39,
+    "text": "> Jev's probabilities are quantised to 0.01 and Choice/Score use the endpoints freely, so a correct answer sometimes receives exactly 0. A temperature cannot"
+  },
+  {
+    "repo": "sdras/jev-webmcp-extension",
+    "name": "jev-webmcp-extension",
+    "file": "README.md",
+    "branch": "main",
+    "line": 51,
+    "text": "8. **Inspecting requests in the playground.** Select “Open in playground” to load the request's state and questions into the TypeSafe playground."
+  },
+  {
+    "repo": "sdras/system-one-explainer",
+    "name": "system-one-explainer",
+    "file": "README.md",
+    "branch": "main",
+    "line": 31,
+    "text": "- [TypeSafe’s System One terminology](https://docs.typesafe.ai/concepts/system-one) and [Jev quickstart](https://docs.typesafe.ai/introduction/quickstart) are discussed in the final case study. Choice, Score, Noul, and distribution-derived confidence are specific API details."
+  },
+  {
+    "repo": "SeeAPI/awesome-jev-use-cases",
+    "name": "awesome-jev-use-cases (SeeAPI)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "<img src=\"assets/banner.png\" alt=\"Awesome Jev Use Cases — curated by SeeAPI\" width=\"720\" />"
+  },
+  {
+    "repo": "sgzmd/rss-morning",
+    "name": "rss-morning",
+    "file": "README.md",
+    "branch": "main",
+    "line": 16,
+    "text": "Jev classification on cheap RSS metadata (TypeSafe System One)"
+  },
+  {
+    "repo": "shaharia-lab/jev-cli",
+    "name": "jev-cli",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<img src=\"assets/banner.png\" alt=\"jev - ask typed questions about any text and get calibrated probabilities back, from your terminal, your CI job or your AI agent\" width=\"1000\">"
+  },
+  {
+    "repo": "shamazharikh/qwen-rlcd",
+    "name": "qwen-rlcd",
+    "file": "README.md",
+    "branch": "main",
+    "line": 160,
+    "text": "- Training uses **RLCD** (Reinforcement Learning for Calibrated Decisions). The objective is decisions plus calibrated probabilities. TypeSafe argues that RLHF hurts calibration through sycophancy and mode dropping."
+  },
+  {
+    "repo": "shantanugoel/ask-jev-skill",
+    "name": "ask-jev-skill",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Hermes skill: call TypeSafe **Jev** (`jev-latest`) as a typed tiebreaker. Jev is not a chat model. It returns Choice / Score / Noul answers with probabilities so an agent can act or escalate."
+  },
+  {
+    "repo": "shantanugoel/mario-jev",
+    "name": "mario-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "Jev receives structured RAM observations and answers focused questions about movement, starting a jump, and sustaining"
+  },
+  {
+    "repo": "sharziki/semdecide",
+    "name": "semdecide",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**Typed semantic decisions for Unix pipelines and CI, powered by TypeSafe AI Jev.**"
+  },
+  {
+    "repo": "shhivv/arc-cua",
+    "name": "arc-cua",
+    "file": "README.md",
+    "branch": "master",
+    "line": 14,
+    "text": "not use decision models, JEV or TypeSafe; it is a standalone driver."
+  },
+  {
+    "repo": "shimo4228/jev-skill-router",
+    "name": "jev-skill-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 15,
+    "text": "jev-skill-router is a reference implementation for people building with [TypeSafe](https://typesafe.ai)'s Jev, a model that writes no text and answers typed questions with probabilities. It is a Claude Code hook: on every prompt it asks Jev which installed skill fits and logs the answer. In shadow mode, the default, that is all it does; in inject mode it also gives Claude a one-line hint. Either way, Claude still sees every skill and makes the final pick. A bundled script checks that log against what Claude Code did next. It is Python 3.10+, standard library only, MIT licensed, version 0.2.0, and needs a paid TypeSafe API key."
+  },
+  {
+    "repo": "shitianfang/jev-use",
+    "name": "jev-use",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "hand the tasks that need no text output to Jev — faster steps, fewer"
+  },
+  {
+    "repo": "shivendrasoni/vector-cache",
+    "name": "vector-cache",
+    "file": "README.md",
+    "branch": "main",
+    "line": 98,
+    "text": "The default judge is [TypeSafe Jev](https://docs.typesafe.ai/introduction) (vendor-quoted ~100 ms per call)."
+  },
+  {
+    "repo": "ShuhanSun/jev-oas-sentinel",
+    "name": "jev-oas-sentinel",
+    "file": "README.md",
+    "branch": "main",
+    "line": 13,
+    "text": "`jev-oas-sentinel` compares two OpenAPI documents in two layers:"
+  },
+  {
+    "repo": "sileod/tasksource",
+    "name": "tasksource",
+    "file": "README.md",
+    "branch": "main",
+    "line": 76,
+    "text": "(pick one option), `score` (an ordered scale) and `noul` (yes/no or a probability). This is the Jev / System One request format."
+  },
+  {
+    "repo": "socai-io/jev-social",
+    "name": "jev-social",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "<img src=\"https://raw.githubusercontent.com/socai-io/jev-social/main/docs/banner.png\" alt=\"Jev Social — Jev × socai\" width=\"100%\" />"
+  },
+  {
+    "repo": "sonnylazuardi/superterminal",
+    "name": "superterminal",
+    "file": "README.md",
+    "branch": "main",
+    "line": 58,
+    "text": "The ranking comes from [Jev](https://docs.typesafe.ai/introduction),"
+  },
+  {
+    "repo": "sorrycc/typesafe-snake",
+    "name": "typesafe-snake",
+    "file": "README.md",
+    "branch": "master",
+    "line": 3,
+    "text": "TypeSafe's Jev (a System One decision model, not an LLM) plays Snake in real time."
+  },
+  {
+    "repo": "sosopop/jev_stock",
+    "name": "jev_stock",
+    "file": "README.md",
+    "branch": "main",
+    "line": 17,
+    "text": "My current view is that JEV is more useful here as a disciplined reasoning layer than as a proven quantitative trading model."
+  },
+  {
+    "repo": "SoundBlaster/Jev4Mellea",
+    "name": "Jev4Mellea",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "A small Python adapter that brings TypeSafe Jev's semantic checks into"
+  },
+  {
+    "repo": "spring-ai-community/spring-ai-typesafe",
+    "name": "spring-ai-typesafe",
+    "file": "README.md",
+    "branch": "main",
+    "line": 9,
+    "text": "API (`jev`), built on Spring `RestClient` and Jackson 3, plus Spring AI integrations that"
+  },
+  {
+    "repo": "SREGym/SREGym",
+    "name": "SREGym",
+    "file": "README.md",
+    "branch": "main",
+    "line": 196,
+    "text": "Jev is disabled by default. To enable it for Codex, set `TYPESAFE_API_KEY` and run:"
+  },
+  {
+    "repo": "sriganesh/jevibe-check",
+    "name": "jevibe-check",
+    "file": "README.md",
+    "branch": "main",
+    "line": 54,
+    "text": "**Usage** shows request counts and estimated cost. Set token prices under **Cost estimate**, or use **Clear stats** to reset the counters. Your key and settings are kept. Check TypeSafe for actual charges."
+  },
+  {
+    "repo": "steven-shoemaker/hunch",
+    "name": "hunch",
+    "file": "README.md",
+    "branch": "main",
+    "line": 65,
+    "text": "To reach Jev through a gateway your company already uses, pass `gateway=\"openrouter\"` (reads `OPENROUTER_API_KEY`) or `gateway=\"vercel\"` (reads `AI_GATEWAY_API_KEY`) to `configure`. Everything else works the same."
+  },
+  {
+    "repo": "steven-shoemaker/hunch-js",
+    "name": "hunch-js",
+    "file": "README.md",
+    "branch": "main",
+    "line": 65,
+    "text": "To reach Jev through a gateway your company already uses, pass `gateway: \"openrouter\"` (reads `OPENROUTER_API_KEY`) or `gateway: \"vercel\"` (reads `AI_GATEWAY_API_KEY`) to `configure`. Everything else works the same."
+  },
+  {
+    "repo": "STRML/omp-jevens-classifier",
+    "name": "omp-jevens-classifier",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Jev-judged permission checks for OMP's bash tool, and for `eval` payloads that spawn"
+  },
+  {
+    "repo": "sufianetaouil/every",
+    "name": "every",
+    "file": "README.md",
+    "branch": "main",
+    "line": 38,
+    "text": "`every` needs a Jev API key. If you don't have one, **join the hosted-tier waitlist:**"
+  },
+  {
+    "repo": "sumleo/prompt2jev",
+    "name": "prompt2jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**Natural language, an LLM prompt, or the code that runs one in. A Jev decision out: typed questions and a runnable script.**"
+  },
+  {
+    "repo": "superagents-lab/jev-search",
+    "name": "jev-search",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Search the web in plain language. A decision model such as [TypeSafe's Jev](https://typesafe.ai), [Cloudflare's Clef](https://developers.cloudflare.com/workers-ai/models/clef/) or [OpenAI's GPT-6 Luna](https://developers.openai.com/api/docs/guides/decisions) chooses sources, time ranges and search terms, then ranks the results returned through [Search1API](https://www.search1api.com). You get links and snippets, with visible relevance scores and editable filters. No generated answers."
+  },
+  {
+    "repo": "supercorp-ai/supercov",
+    "name": "supercov",
+    "file": "README.md",
+    "branch": "main",
+    "line": 29,
+    "text": "export TYPESAFE_API_KEY=...   # get one at https://typesafe.ai"
+  },
+  {
+    "repo": "szczyglis-dev/py-gpt",
+    "name": "PyGPT",
+    "file": "README.md",
+    "branch": "master",
+    "line": 1325,
+    "text": "- `Jev / System One (inline)` - integrates TypeSafe AI Jev for fast, typed semantic decisions over structured state, including classification, routing, selection, verification, and scoring."
+  },
+  {
+    "repo": "tacticocc/Jevbridge",
+    "name": "Jevbridge",
+    "file": "README.md",
+    "branch": "main",
+    "line": 22,
+    "text": "ACP and MCP adapter that bridges TypeSafe Jev with any LLM."
+  },
+  {
+    "repo": "tamaratran/fast-jev-compaction",
+    "name": "fast-jev-compaction",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Claude Code plugin that replaces the compaction summary with Jev decisions:"
+  },
+  {
+    "repo": "tamaratran/jev-pruner",
+    "name": "jev-pruner",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "A Claude Code plugin that uses TypeSafe's Jev to trim noisy Bash output **after"
+  },
+  {
+    "repo": "tamnd/kime",
+    "name": "kime",
+    "file": "ts/README.md",
+    "branch": "main",
+    "line": 22,
+    "text": "- The base URL defaults to `http://127.0.0.1:8000` in place of `https://api.typesafe.ai`."
+  },
+  {
+    "repo": "tanxarx/awesome-jev",
+    "name": "awesome-jev (tanxarx)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "> A curated list of resources, open-source clones, integrations, and engineering playbooks for **Jev** — TypeSafe AI's non-generative \"System 1\" decision model."
+  },
+  {
+    "repo": "TauricResearch/TradingAgents",
+    "name": "TradingAgents",
+    "file": "README.md",
+    "branch": "main",
+    "line": 183,
+    "text": "export TYPESAFE_API_KEY=...        # Jev social-post screening (optional)"
+  },
+  {
+    "repo": "tbdavid2019/ai-hedge-fund-API",
+    "name": "ai-hedge-fund-API",
+    "file": "README.md",
+    "branch": "main",
+    "line": 57,
+    "text": "- **Fallback Tier-3**: TypeSafe Official Service (`https://api.typesafe.ai/v1/systemone`)"
+  },
+  {
+    "repo": "The-Vibe-Company/quivr",
+    "name": "quivr",
+    "file": "plugins/alerts/README.md",
+    "branch": "main",
+    "line": 292,
+    "text": "That is far under Jev's budget of 32k tokens for the state plus the longest"
+  },
+  {
+    "repo": "theSekyi/jevusecases",
+    "name": "jevusecases",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "A directory of real projects, filtered by what they replace, whether they've been benchmarked, and whether there's code to copy — not a marketing site for Jev itself."
+  },
+  {
+    "repo": "TholeG/typesafe-chess",
+    "name": "typesafe-chess",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Two virtual chess players, both powered by **[TypeSafe](https://typesafe.ai)**'s System One model **Jev**."
+  },
+  {
+    "repo": "thruwire/foreman",
+    "name": "foreman",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "above slower coding agents. It supports TypeSafe AI's Jev and OpenAI's Decisions API."
+  },
+  {
+    "repo": "TianyuCodings/JevHarness",
+    "name": "JevHarness",
+    "file": "README.md",
+    "branch": "main",
+    "line": 212,
+    "text": "| [`docs/`](docs/) | Task authoring, a recorded Jev call, comparison video, and website screenshots |"
+  },
+  {
+    "repo": "ticofab/scala-jev-sdk",
+    "name": "scala-jev-sdk",
+    "file": "README.md",
+    "branch": "master",
+    "line": 14,
+    "text": "libraryDependencies += \"io.github.ticofab\" %% \"scala-jev-sdk\" % \"<version>\""
+  },
+  {
+    "repo": "timpratim/macbrow",
+    "name": "macbrow",
+    "file": "README.md",
+    "branch": "main",
+    "line": 26,
+    "text": "[LiveKit Agents](https://docs.livekit.io/agents/) for the voice loop, [TypeSafe's Jev](https://docs.typesafe.ai)"
+  },
+  {
+    "repo": "tinyhumansai/opencompany",
+    "name": "opencompany",
+    "file": "README.md",
+    "branch": "main",
+    "line": 114,
+    "text": "asked of Jev — TypeSafe's System One routing model — through the TinyHumans"
+  },
+  {
+    "repo": "tinyhumansai/tinyjevclient",
+    "name": "tinyjevclient",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "`tinyjevclient` is a typed Rust client for TypeSafe AI's System One API and"
+  },
+  {
+    "repo": "TKY-27/JevSlop",
+    "name": "JevSlop",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "- Eight atomic detail `Score` questions plus a Jev overall `Score` and `choice` in one `systemOne` request."
+  },
+  {
+    "repo": "togethercomputer/tev1",
+    "name": "tev1",
+    "file": "README.md",
+    "branch": "main",
+    "line": 102,
+    "text": "Jev-inspired implementation and does not use Jev's answers as training labels."
+  },
+  {
+    "repo": "TokenTrim/jev-routing-experiment",
+    "name": "jev-routing-experiment",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "Jev is not a text model. It returns typed decisions (Choice / Score / Noul) with calibrated"
+  },
+  {
+    "repo": "tonone-ai/tonone",
+    "name": "tonone",
+    "file": "lib/jev/README.md",
+    "branch": "main",
+    "line": 220,
+    "text": "| `JEV_API_KEY` or `TYPESAFE_API_KEY` | `https://api.typesafe.ai/v1/systemone`      | `jev-latest`        | `jev`    |"
+  },
+  {
+    "repo": "tonsky/tgadmin",
+    "name": "tgadmin",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "2. With [Jev](https://docs.typesafe.ai)"
+  },
+  {
+    "repo": "tpaulshippy/shady-town",
+    "name": "shady-town",
+    "file": "README.md",
+    "branch": "main",
+    "line": 88,
+    "text": "Decisions and thresholds stay in code. Built on TypeSafe's Jev via"
+  },
+  {
+    "repo": "trancong12102/agentskills",
+    "name": "agentskills",
+    "file": "README.md",
+    "branch": "main",
+    "line": 38,
+    "text": "| answer audit (optional) | `JEV_API_KEY`      | Create a key at [console.typesafe.ai/keys](https://console.typesafe.ai/keys), then `export JEV_API_KEY=…` (`TYPESAFE_API_KEY` also works). Turns on Jev's two extra checks in `scripts/audit-answers.py`. |"
+  },
+  {
+    "repo": "trpc-group/trpc-agent-go",
+    "name": "trpc-agent-go",
+    "file": "internal/systemone/README.md",
+    "branch": "main",
+    "line": 63,
+    "text": "For Jev, set `JEV_BASE_URL=https://api.typesafe.ai`, configure `JEV_API_KEY`"
+  },
+  {
+    "repo": "truespar/sentio",
+    "name": "sentio",
+    "file": "README.md",
+    "branch": "main",
+    "line": 998,
+    "text": "provider = \"jev\""
+  },
+  {
+    "repo": "turenlabs/turenos",
+    "name": "turenos",
+    "file": "command-guard/README.md",
+    "branch": "main",
+    "line": 41,
+    "text": "The detector uses one request with `Noul` questions for danger and confirmation, a `Score` for risk, and a `Choice` for category. Set `TYPESAFE_ENDPOINT` only if using a compatible HTTPS endpoint; plain HTTP is accepted only for localhost testing. The CLI otherwise uses `https://api.typesafe.ai/v1/systemone`."
+  },
+  {
+    "repo": "tyler-dot-earth/patdown",
+    "name": "patdown",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "The judge is swappable. The default backend uses Effect `Decision` / `DecisionModel` with TypeSafe; rules and CLI commands use a provider-neutral interface."
+  },
+  {
+    "repo": "tylergibbs1/sift",
+    "name": "sift",
+    "file": "README.md",
+    "branch": "main",
+    "line": 14,
+    "text": "Load `dist/` as an unpacked extension in `chrome://extensions`, then enter your TypeSafe API key on"
+  },
+  {
+    "repo": "tylerjharden/ailerix",
+    "name": "ailerix",
+    "file": "README.md",
+    "branch": "main",
+    "line": 38,
+    "text": "- `POST /api/v1/systemone` — Jev-compatible Choice / Score / Noul API"
+  },
+  {
+    "repo": "typakon4/jev-layer",
+    "name": "jev-layer",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"docs/jev-layer-banner.svg\" alt=\"jev-layer — portable System-1 decisions for agent harnesses\" width=\"960\">"
+  },
+  {
+    "repo": "TypeLLM/TypeLLM",
+    "name": "TypeLLM",
+    "file": "README.md",
+    "branch": "main",
+    "line": 48,
+    "text": "TypeLLM brings type-safe generation to existing autoregressive LLMs without changing their architecture or weights. Inspired by [TypeSafe AI's Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), it lets models retain their native thinking and free-form generation while producing schema-guaranteed outputs through JSON Schema. Built on [SGLang](https://github.com/sgl-project/sglang), TypeLLM also supports richer interaction patterns beyond independent typed decisions."
+  },
+  {
+    "repo": "TypeSafeAI/typesafe-playground",
+    "name": "typesafe-playground",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "**Small experiments. Clear decisions.** This is an independent community project, not an official TypeSafe AI product, production agent harness, or claim that a typed answer is correct."
+  },
+  {
+    "repo": "UditAkhourii/quicksilver",
+    "name": "quicksilver",
+    "file": "README.md",
+    "branch": "main",
+    "line": 21,
+    "text": "[Jev](https://docs.typesafe.ai), TypeSafe's System One model. Jev returns typed"
+  },
+  {
+    "repo": "uehaj/sys1grep",
+    "name": "sys1grep",
+    "file": "README.md",
+    "branch": "main",
+    "line": 229,
+    "text": "sys1grep: endpoint api.typesafe.ai/v1/systemone (default), model jev-latest (default)"
+  },
+  {
+    "repo": "uezo/aiavatarkit",
+    "name": "aiavatarkit",
+    "file": "README.md",
+    "branch": "main",
+    "line": 406,
+    "text": "- Gates — Smart Turn, Namo Turn, Jev, OpenAI Decisions, LLM turn gate, filler-only, session hold, custom gates"
+  },
+  {
+    "repo": "unicodeveloper/jevocks",
+    "name": "jevocks",
+    "file": "README.md",
+    "branch": "main",
+    "line": 11,
+    "text": "Jevinik uses **Jev**, TypeSafe AI's System One evaluation model, to make typed, probabilistic decisions without calling a general-purpose generative LLM."
+  },
+  {
+    "repo": "unownone/jevsume",
+    "name": "jevsume",
+    "file": "readme.md",
+    "branch": "main",
+    "line": 3,
+    "text": "ATS-friendly resume review powered by **Jev** (TypeSafe System One). The frontend extracts resume text the way a parser would, then a Cloudflare Worker runs typed JEV questions and composes a **JevScore**."
+  },
+  {
+    "repo": "ussyverse/hermes-jev-router",
+    "name": "hermes-jev-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "An opt-in Hermes plugin that uses TypeSafe Jev to assess task complexity and deterministic policy to select an allowed model within configured cost, token, context, latency-estimate and capability constraints."
+  },
+  {
+    "repo": "uu889/laya-opencv",
+    "name": "laya-opencv",
+    "file": "README.md",
+    "branch": "main",
+    "line": 386,
+    "text": "| TypeSafe 官方 | `https://api.typesafe.ai` | TypeSafe 控制台的密钥 |"
+  },
+  {
+    "repo": "v-modal/awesome-jev-tools",
+    "name": "awesome-jev-tools",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "A curated list of public projects and developer patterns built on Jev, TypeSafe AI's System One model for typed decisions."
+  },
+  {
+    "repo": "valentynkit/awesome-jev-typesafe",
+    "name": "awesome-jev-typesafe",
+    "file": "readme.md",
+    "branch": "main",
+    "line": 3,
+    "text": "<img src=\"media/banner-light.svg\" alt=\"Awesome Jev: typed decisions, System One\" width=\"100%\">"
+  },
+  {
+    "repo": "valentynkit/jev-commit",
+    "name": "jev-commit",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "that the two agree. This does, in one call to Jev, before the commit lands."
+  },
+  {
+    "repo": "valentynkit/jev-plays-pokemon-red",
+    "name": "jev-plays-pokemon-red",
+    "file": "README.md",
+    "branch": "main",
+    "line": 40,
+    "text": "ticks and only calls Jev where the game actually branches. Between the bedroom and Oak's"
+  },
+  {
+    "repo": "valentynkit/jev-skip",
+    "name": "jev-skip",
+    "file": "README.md",
+    "branch": "main",
+    "line": 19,
+    "text": "Gateway shim rather than the direct API. Re-measure on `api.typesafe.ai` before pinning"
+  },
+  {
+    "repo": "vicfei/awesome-jev-prompts",
+    "name": "awesome-jev-prompts",
+    "file": "README.md",
+    "branch": "main",
+    "line": 85,
+    "text": "import { choice, noul, score, TypeSafeClient } from \"@typesafe-ai/sdk\";"
+  },
+  {
+    "repo": "vinilana/live-jev",
+    "name": "live-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "[TypeSafe's Jev](https://docs.typesafe.ai/introduction) (a \"System One\" decision model)"
+  },
+  {
+    "repo": "vnmoorthy/siege",
+    "name": "siege",
+    "file": "README.md",
+    "branch": "main",
+    "line": 248,
+    "text": "Built at CoreWeave Hacks: Agent Loops (Weights & Biases, AGI House, TypeSafe AI), San Francisco, September 13 to 14, 2026."
+  },
+  {
+    "repo": "w3cj/jev-chat",
+    "name": "jev-chat",
+    "file": "README.md",
+    "branch": "main",
+    "line": 38,
+    "text": "Jev does not produce text. Every text argument, such as a search query, a task title or a city, is"
+  },
+  {
+    "repo": "walidboulanouar/awesome-jev-use-cases",
+    "name": "awesome-jev-use-cases",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "<img src=\"assets/banner-v3.png\" alt=\"Awesome Jev use cases\" width=\"100%\">"
+  },
+  {
+    "repo": "waynesutton/ask-jev-ai",
+    "name": "ask-jev-ai",
+    "file": "README.md",
+    "branch": "main",
+    "line": 40,
+    "text": "| Judge                | Jev, TypeSafe System One, through the Convex AI Gateway Decisions endpoint (`typesafe/jev-1.13`) on a deployment token. No key. TypeSafe direct is the fallback when a key is set. | [Decisions](https://docs.convex.dev/ai-gateway/api#post-alphadecisions), [docs.typesafe.ai](https://docs.typesafe.ai) |"
+  },
+  {
+    "repo": "WeSecureYou/Jev-test",
+    "name": "Job Risk Analyzer",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "The project works immediately without credentials. When `JEV_API_KEY` is absent, it logs a warning and uses deterministic, occupation-aware mock data with the same validated shape as a live Jev response."
+  },
+  {
+    "repo": "wfzyx/von",
+    "name": "von",
+    "file": "README.md",
+    "branch": "master",
+    "line": 77,
+    "text": "`von serve` exposes `/v1/systemone`, byte-compatible with the TypeSafe specification. Anything that talks to Jev talks to Von by changing the base URL; the SDKs do the same via `VON_BASE_URL`."
+  },
+  {
+    "repo": "whyashthakker/awesome-jev-use-cases",
+    "name": "Awesome Jev Use Cases (whyashthakker)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 16,
+    "text": "git clone https://github.com/whyashthakker/awesome-jev-use-cases.git"
+  },
+  {
+    "repo": "willkelly/jev-evaluation",
+    "name": "jev-evaluation",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "An adversarial evaluation of **jev**, the decision model sold by TypeSafe. It"
+  },
+  {
+    "repo": "Wizhill05/typesafe-image-diffusion",
+    "name": "typesafe-image-diffusion",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Jev (via TypeSafe System One) is a judgment model. You give it state, ask multiple choice questions, and it picks answers with confidence scores. It classifies things. It does not draw things."
+  },
+  {
+    "repo": "wobsoriano/is-jeven",
+    "name": "is-jeven",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "Uses TypeSafe AI's Jev model under the hood to determine if a number is even."
+  },
+  {
+    "repo": "wobsoriano/oxlint-plugin-jev",
+    "name": "oxlint-plugin-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 8,
+    "text": "A rule is a yes/no question about a function, a call, a JSX element, or a whole file. Each match is sent to Jev with the question, and the plugin reports an error when the yes-probability clears your cutoff."
+  },
+  {
+    "repo": "wondertwins/jev-benchmark",
+    "name": "jev-benchmark",
+    "file": "README.md",
+    "branch": "main",
+    "line": 10,
+    "text": "Everything is here: the code, the labeled data, every raw request and response (`runs/raw/`), the metrics, and an interactive playground. Model served as `jev-1.13.0` on 2026-09-16."
+  },
+  {
+    "repo": "wustep/jev-playground",
+    "name": "jev-playground (wustep)",
+    "file": "README.md",
+    "branch": "main",
+    "line": 32,
+    "text": "npm test           # vitest: renderer invariants, Jev request shapes, proxy, MIDI round-trip, inbox/match stubs"
+  },
+  {
+    "repo": "wuyoscar/jev-skill",
+    "name": "jev-skill",
+    "file": "README.md",
+    "branch": "main",
+    "line": 143,
+    "text": "| Demo | [Doom & Wikiracing](https://typesafe.ai/blog/introducing-system-one-models-and-jev) | Watch the official game demos; no standalone repo linked on this page. | Author demo |"
+  },
+  {
+    "repo": "Xiaooolong/vev",
+    "name": "vev",
+    "file": "conformance/README.md",
+    "branch": "main",
+    "line": 17,
+    "text": "# the official Jev API (shape reference, costs a few cents)"
+  },
+  {
+    "repo": "xienda/dsh-jev-verify",
+    "name": "dsh-jev-verify",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Jev — TypeSafe AI's **System One** decision model — as a first-class plugin for"
+  },
+  {
+    "repo": "xinyao27/jevonian",
+    "name": "jevonian",
+    "file": "README.md",
+    "branch": "main",
+    "line": 69,
+    "text": "2. **Jev picks the route** for `jevonian/auto` — model and thinking depth in a single call."
+  },
+  {
+    "repo": "xiwan/acp-bridge",
+    "name": "acp-bridge",
+    "file": "README.md",
+    "branch": "main",
+    "line": 48,
+    "text": "| **Auto agent routing** | Send a task to the virtual agent `auto` and let [Jev](docs/jev-router.md) (TypeSafe System One) pick the best-fit agent with a calibrated confidence score; falls back safely |"
+  },
+  {
+    "repo": "y0usaf/pi-jev",
+    "name": "pi-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 145,
+    "text": "The gate sends the working directory, the tool name, the last user message (first 1200 characters), and the tool's arguments to `api.typesafe.ai`. For `write` and `edit` those arguments contain file content. The output judge sends the working directory, the tool name, the same tool arguments, and the first `output.outputChars` characters of a `bash` or `codemode` result. For `codemode` the arguments are the script source."
+  },
+  {
+    "repo": "yairshy/decido",
+    "name": "decido",
+    "file": "README.md",
+    "branch": "main",
+    "line": 4,
+    "text": "ordinary Python. Start with Jev or supply your own decision provider."
+  },
+  {
+    "repo": "Yifan-Lan/awesome-jev-robustness",
+    "name": "Awesome Jev Robustness",
+    "file": "README.md",
+    "branch": "main",
+    "line": 5,
+    "text": "189 entries · `jev-1.13.0` in 111, `jev-1.14.0` in 1, other decision models (Laya, Kev, Clef, Decision-1, OpenAI Decisions, open Jev-style checkpoints) in 31 · snapshot 2026-10-25 · numbers are the authors' own"
+  },
+  {
+    "repo": "yikangy873-gif/jev-desktop",
+    "name": "jev-desktop",
+    "file": "README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Jev Desktop adds a bounded decision loop to Codex Computer Use for browser tabs and native macOS apps."
+  },
+  {
+    "repo": "Ying-Kai-Liao/jev-browser",
+    "name": "jev-browser",
+    "file": "README.md",
+    "branch": "main",
+    "line": 356,
+    "text": "jev-browser runs locally. It has no server of its own and collects no telemetry. To decide"
+  },
+  {
+    "repo": "Yinsongxu/LLM2Jev",
+    "name": "LLM2Jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 17,
+    "text": "**Turn your LLM / MLLM into a Jev-style decision model. Zero training required.**"
+  },
+  {
+    "repo": "yusukebe/hono-jev-router",
+    "name": "hono-jev-router",
+    "file": "README.md",
+    "branch": "main",
+    "line": 51,
+    "text": "- `app.on('jev', '<description>', handler)` registers a semantic route."
+  },
+  {
+    "repo": "Zefan-Cai/Open-Jev",
+    "name": "Open-Jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**Open-Jev-27B-v1.1 is here. Give your app a decision, with probabilities.**"
+  },
+  {
+    "repo": "ZeroGold/call-coach-ai",
+    "name": "call-coach-ai",
+    "file": "README.md",
+    "branch": "main",
+    "line": 35,
+    "text": "You need a TypeSafe API key. There are three ways to run Call Coach:"
+  },
+  {
+    "repo": "ZeroTang05/VideoAdGuard",
+    "name": "VideoAdGuard",
+    "file": "README.md",
+    "branch": "main",
+    "line": 138,
+    "text": "| TypeSafe | `https://api.typesafe.ai/v1` | `jev-latest` | [官方接口](https://docs.typesafe.ai/api/system-one) |"
+  },
+  {
+    "repo": "zhengxuyu/litjev",
+    "name": "LitJev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**A reproduction of Jev: turn any Qwen model into a fast decision model.**"
+  },
+  {
+    "repo": "zhuyansen/jev-search-rerank-eval",
+    "name": "jev-search-rerank-eval",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "**Does a TypeSafe Jev rerank beat embedding search? Measured, with the judge-bias removed.**"
+  },
+  {
+    "repo": "zsavage8/padflow-jev-evals",
+    "name": "padflow-jev-evals",
+    "file": "README.md",
+    "branch": "main",
+    "line": 12,
+    "text": "them. It exists so a decision model (TypeSafe Jev, or anything else) can be"
+  }
+]

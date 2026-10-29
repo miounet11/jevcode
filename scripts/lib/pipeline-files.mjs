@@ -21,6 +21,10 @@ export const FETCHED_FILES = [
   'src/data/briefs-i18n.json',
   'src/data/brief-terms.json',
   'src/data/brief-terms.ts',
+  // /jev 覆盖语料：候选池与生成的登记表。两者都由抓取阶段写入，
+  // 未发布时必须一起还原，否则脏区保护会在下一轮永久拦下。
+  'data/jev/shortlist.json',
+  'src/lib/content/registry-claims.ts',
 ];
 
 /** 允许进入自动提交的路径。其余工作区改动留在原地，不进这次发布。 */
@@ -36,6 +40,9 @@ export const STAGE_FILES = [
   'src/data/briefs-i18n.json',
   'src/data/brief-terms.json',
   'src/data/brief-terms.ts',
+  // /jev 覆盖语料的增量。没有新候选时这两个文件不变，不影响提交范围。
+  'data/jev/shortlist.json',
+  'src/lib/content/registry-claims.ts',
 ];
 
 /** 有改动就说明本轮有内容可发（用于判断「这一轮不是空跑」）。 */
@@ -47,4 +54,7 @@ export const SIDE_FILES = [
   'src/data/briefs-i18n.json',
   'src/data/brief-terms.json',
   'src/data/brief-terms.ts',
+  // /jev 新增条目本身就是一份可发布增量：生成器已逐条回源核对，
+  // 不再过门 1。没有它，只有新收录仓库的那天会被判成「没内容」而空跑。
+  'src/lib/content/registry-claims.ts',
 ];

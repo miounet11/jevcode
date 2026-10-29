@@ -11,9 +11,8 @@
  * 用法：node scripts/gen-jev-claims.mjs
  */
 
-import { writeFileSync } from 'node:fs';
-
-const SHORTLIST = '/tmp/jev-shortlist.json';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+const SHORTLIST = 'data/jev/shortlist.json';
 const OUT = 'src/lib/content/registry-claims.ts';
 
 const KEY = /\b(typesafe|jev)\b/i;
@@ -88,7 +87,6 @@ async function verify(item) {
   return null;
 }
 
-const { readFileSync } = await import('node:fs');
 const shortlist = JSON.parse(readFileSync(SHORTLIST, 'utf8'));
 
 const verified = [];
@@ -107,6 +105,18 @@ await Promise.all(
 
 verified.sort((a, b) => a.repo.localeCompare(b.repo));
 
+/**
+ * 已发布条目的 addedAt 必须保留：重跑生成器（shortlist 变长）不应把老条目的
+ * 收录日期改写成今天，否则「何时收录」这条信息就没了。
+ */
+const existingAddedAt = new Map();
+if (existsSync(OUT)) {
+  for (const m of readFileSync(OUT, 'utf8').matchAll(/slug: '([^']+)'[\s\S]*?addedAt: '([^']+)'/g)) {
+    existingAddedAt.set(m[1], m[2]);
+  }
+}
+
+const TODAY = new Date().toISOString().slice(0, 10);
 const seen = new Set();
 const rows = [];
 for (const item of verified) {
@@ -122,6 +132,7 @@ for (const item of verified) {
     quote,
     evidenceUrl: `https://github.com/${item.repo}/blob/${item.branch}/${item.file}#L${item.line}`,
     category: categoryOf(item.text),
+    addedAt: existingAddedAt.get(slug) ?? TODAY,
   });
 }
 
@@ -138,7 +149,7 @@ const body = rows
     evidenceUrl: '${r.evidenceUrl}',
     verification: ['readme-claim'],
     category: '${r.category}',
-    addedAt: '2026-10-29',
+    addedAt: '${r.addedAt}',
     reviewedAt: REVIEWED_AT,
   },`,
   )
@@ -164,3 +175,13 @@ ${body}
 
 writeFileSync(OUT, output);
 console.log(`gen-jev-claims: 输入 ${shortlist.length} 条，核对通过 ${verified.length} 条，写入 ${rows.length} 条`);
+
+// 已收录但这一轮核不过的条目会被移除（上游 README 改写后，断言里的引文
+// 不再存在于证据行，留着就是假的）。静默删除会让「今天少了几条」无从追查，
+// 所以逐条打出来。
+const writtenSlugs = new Set(rows.map((r) => r.slug));
+const dropped = [...existingAddedAt.keys()].filter((slug) => !writtenSlugs.has(slug));
+if (dropped.length) {
+  console.log(`gen-jev-claims: 本轮移除 ${dropped.length} 条（证据行已不含关键词或仓库不可达）`);
+  for (const slug of dropped) console.log(`  - ${slug}`);
+}
