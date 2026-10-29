@@ -26,6 +26,12 @@ const gitTime = (p) =>
 const iso = (s) => !Number.isNaN(new Date(s).getTime());
 const url = (p) => `https://www.jevcode.ai${p}`;
 
+// 浅克隆下 `git log -1 -- <任意路径>` 都解析到 HEAD，任何「不同文件时间不同」
+// 的断言都失去意义。CI 用 checkout 的 fetch-depth: 0 保证非浅克隆；本地
+// 若在浅克隆里跑，这类断言整段跳过而不是假装通过。
+const isShallow =
+  execFileSync('git', ['rev-parse', '--is-shallow-repository']).toString().trim() === 'true';
+
 test('文档内容页映射到对应 md 的 git 时间', () => {
   const item = lastmodSerialize({ url: url('/en/sdk/javascript/') });
   assert.equal(item.lastmod, gitTime('src/content/docs/en/sdk/javascript.md'));
@@ -62,9 +68,11 @@ test('生态实体页用条目自己的 updated，不用整文件时间', () => 
   assert.notEqual(entity.lastmod, gitTime('src/data/ecosystem.ts'));
 });
 
-test('生态分类页跟随 ecosystem.ts 整文件时间', () => {
+test('生态分类页跟随 ecosystem.ts 整文件时间', { skip: isShallow && '浅克隆：路径级 git 时间不可用' }, () => {
   const category = lastmodSerialize({ url: url('/de/ecosystem/category/agent/') });
   assert.equal(category.lastmod, gitTime('src/data/ecosystem.ts'));
+  // 这一条是「分类页跟随数据文件、而非整仓库最新提交」的核心断言；
+  // 浅克隆下两者恒等，断言无意义。
   assert.notEqual(category.lastmod, gitTime('.'));
 });
 

@@ -99,8 +99,12 @@ scp_small() {
   done
   return 1
 }
-scp_small "$LOCAL_DIR/deploy/nginx/jevcode.conf" "$SSH_HOST:/tmp/jevcode.conf" \
-  || log "WARN nginx 配置上传失败（不影响本次发布，bootstrap 时才需要）"
+NGINX_CONF_UPLOADED=0
+if scp_small "$LOCAL_DIR/deploy/nginx/jevcode.conf" "$SSH_HOST:/tmp/jevcode.conf"; then
+  NGINX_CONF_UPLOADED=1
+else
+  log "WARN nginx 配置上传失败，本次不更新站点配置"
+fi
 
 # ---------- 4. 解包并原子切换 ----------
 log "解包并切换软链..."
@@ -131,9 +135,33 @@ ls -1dt */ 2>/dev/null | tail -n +$(( ${KEEP_RELEASES} + 1 )) | xargs -r rm -rf
 echo "当前版本: \$(readlink ${REMOTE_ROOT}/current)"
 REMOTE
 
-# ---------- 5. 重载 nginx ----------
-log "校验并重载 nginx..."
-ssh "${SSH_OPTS[@]}" "$SSH_HOST" "nginx -t && systemctl reload nginx"
+# ---------- 5. 应用并重载 nginx ----------
+# 只上传到 /tmp 是不够的：sites-available 里的配置只在 bootstrap.sh 时被复制过一次，
+# 之后仓库里的 nginx 改动永远不会生效，而 /tmp 里的旧副本还会在下次 bootstrap 时
+# 把线上配置覆盖回去。这里每次都装一遍再重载，保证仓库是唯一事实来源。
+if [ "$NGINX_CONF_UPLOADED" = "1" ]; then
+  log "安装并重载 nginx 配置..."
+  ssh "${SSH_OPTS[@]}" "$SSH_HOST" bash -s <<'REMOTE'
+set -euo pipefail
+CONF=/etc/nginx/sites-available/jevcode.conf
+cp "$CONF" "${CONF}.prev"
+cp /tmp/jevcode.conf "$CONF"
+ln -sfn "$CONF" /etc/nginx/sites-enabled/jevcode.conf
+# 语法不过就退回上一版，避免把站点留在起不来的配置上
+if ! nginx -t; then
+  cp "${CONF}.prev" "$CONF"
+  nginx -t
+  echo "NGINX_CONF_REJECTED"
+  exit 1
+fi
+rm -f "${CONF}.prev"
+systemctl reload nginx
+echo "NGINX_CONF_APPLIED"
+REMOTE
+else
+  log "校验并重载 nginx（沿用线上已有配置）..."
+  ssh "${SSH_OPTS[@]}" "$SSH_HOST" "nginx -t && systemctl reload nginx"
+fi
 
 # ---------- 6. 发布后校验 + 自动回滚 ----------
 # nginx -t 只证明配置语法对，不证明新版本真的能服务：软链指错、权限没跟上、
