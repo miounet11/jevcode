@@ -526,5 +526,33 @@
     "ok": true,
     "choice": "flag",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-urgency-09",
+    "ts": "2026-10-29T01:32:20.926Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-urgency-10",
+    "ts": "2026-10-29T01:32:23.101Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-intent-09",
+    "ts": "2026-10-29T01:32:25.317Z",
+    "ok": true,
+    "choice": "complaint",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-intent-10",
+    "ts": "2026-10-29T01:32:26.967Z",
+    "ok": true,
+    "choice": "question",
+    "model": "clavue-jev"
   }
 ]

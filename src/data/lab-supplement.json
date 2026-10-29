@@ -1118,5 +1118,65 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-urgency-09",
+    "state": "SMS: The order is down and the GMV has been flat for 40 minutes; no workaround.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-urgency-10",
+    "state": "API payload field: Whenever you get a chance, could someone look at the product listing wording?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message convey urgency that should jump the queue?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-intent-09",
+    "state": "API payload field: Nobody told us the order policy changed and now our flow breaks.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-intent-10",
+    "state": "Internal note: Could you confirm whether the GMV export includes archived rows?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the primary intent of this message?",
+        "options": [
+          "complaint",
+          "question",
+          "request",
+          "praise"
+        ]
+      }
+    }
   }
 ]
