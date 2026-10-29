@@ -10,7 +10,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      # 必须拉全历史：sitemap 的 lastmod 由 `git log -1 -- <path>` 派生，
+      # 浅克隆下任何路径都返回 HEAD，lastmod 相关断言会全部退化成同一个值。
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       # 与生产一致：服务器跑 Node 22（node:sqlite 需要 >= 22.5）
       - uses: actions/setup-node@v5
