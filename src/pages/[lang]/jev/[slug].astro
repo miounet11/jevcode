@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, useTranslations, type Lang } from '../../../i18n/ui';
+import {
+  categoryLabel,
+  COVERAGE_ENTRIES,
+  type CoverageEntry,
+} from '../../../lib/content/registry';
+import { assertionFor, jevCopy, verificationMeaning } from '../../../lib/content/jev-copy';
+import { entryDescription, entryTitle } from '../../../lib/seo/metadata';
+import { entrySchema } from '../../../lib/seo/schema';
+import { entryPath } from '../../../lib/routing/domains';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const entry of COVERAGE_ENTRIES) {
+      paths.push({ params: { lang, slug: entry.slug }, props: { entry } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { entry } = Astro.props as { entry: CoverageEntry };
+const t = useTranslations(lang);
+const path = entryPath(lang, entry.slug);
+// 断言只有 zh / en 两版：同时拿到文字与实际语言，供 lang 属性标注。
+const shown = assertionFor(entry, lang);
+const category = categoryLabel(entry.category, lang);
+
+const c = jevCopy(lang).entry;
+const schema = entrySchema(lang, entry);
+---
+
+<BaseLayout
+  lang={lang}
+  title={entryTitle(lang, entry)}
+  description={entryDescription(lang, entry)}
+  path={path}
+  schema={schema}
+>
+  <div class="wrap docs-shell">
+    <main class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> /
+        <a href={`/${lang}/jev/`}>{c.back}</a> / {entry.name}
+      </p>
+
+      <h1 class="doc__title">{entry.name}</h1>
+
+      <h2>{c.decision}</h2>
+      <p class="jev__assertion" lang={shown.sourceLang}>{shown.text}</p>
+
+      <h2>{c.evidence}</h2>
+      <p><a href={entry.evidenceUrl} rel="noopener">{entry.evidenceUrl}</a></p>
+
+      <h2>{c.labels}</h2>
+      <ul class="jev__labels">
+        {entry.verification.map((label) => (
+          <li>
+            <code>{label}</code>
+            <span>{verificationMeaning(label, lang)}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="jev__note">{c.labelsNote}</p>
+
+      <h2>{c.category}</h2>
+      <dl class="jev__facts">
+        <dt>{c.category}</dt>
+        <dd>{category}</dd>
+        <dt>{c.repo}</dt>
+        <dd><a href={entry.repoUrl} rel="noopener">{entry.repoUrl}</a></dd>
+        {entry.lang && (<>
+          <dt>{c.language}</dt>
+          <dd>{entry.lang}</dd>
+        </>)}
+        <dt>{c.added}</dt>
+        <dd>{entry.addedAt}</dd>
+        <dt>{c.reviewed}</dt>
+        <dd>{entry.reviewedAt}</dd>
+      </dl>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .jev__assertion {
+    font-size: 1.05rem;
+  }
+  .jev__labels {
+    padding-left: 1.1rem;
+  }
+  .jev__labels li {
+    margin-bottom: 0.4rem;
+  }
+  .jev__labels code {
+    margin-right: 0.5rem;
+  }
+  .jev__note {
+    font-size: 0.85rem;
+    color: var(--muted, #8a8a8a);
+  }
+  .jev__facts {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.35rem 1rem;
+    font-size: 0.9rem;
+  }
+  .jev__facts dt {
+    color: var(--muted, #8a8a8a);
+  }
+  .jev__facts dd {
+    margin: 0;
+    word-break: break-word;
+  }
+</style>

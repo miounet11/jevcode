@@ -37,6 +37,7 @@ const SECTIONS = {
   lab: { en: 'Coverage lab', zh: '覆盖实验', ja: 'カバレッジ実験', ko: '커버리지 실험', de: 'Abdeckungslabor', fr: 'Laboratoire de couverture', es: 'Laboratorio de cobertura', pt: 'Laboratório de cobertura' },
   compare: { en: 'Compare with jev-1.13.0', zh: '与 jev-1.13.0 对照', ja: 'jev-1.13.0 との比較', ko: 'jev-1.13.0과 비교', de: 'Vergleich mit jev-1.13.0', fr: 'Comparer avec jev-1.13.0', es: 'Comparar con jev-1.13.0', pt: 'Comparar com jev-1.13.0' },
   ecosystem: { en: 'Ecosystem projects', zh: '生态项目', ja: 'エコシステムのプロジェクト', ko: '생태계 프로젝트', de: 'Ökosystem-Projekte', fr: 'Projets de l\u2019écosystème', es: 'Proyectos del ecosistema', pt: 'Projetos do ecossistema' },
+  coverage: { en: 'Jev coverage', zh: 'Jev 覆盖', ja: 'Jev カバレッジ', ko: 'Jev 커버리지', de: 'Jev-Coverage', fr: 'Couverture Jev', es: 'Cobertura Jev', pt: 'Cobertura Jev' },
   categories: { en: 'Ecosystem categories', zh: '生态分类', ja: 'エコシステムのカテゴリ', ko: '생태계 카테고리', de: 'Ökosystem-Kategorien', fr: 'Catégories de l\u2019écosystème', es: 'Categorías del ecosistema', pt: 'Categorias do ecossistema' },
 };
 
@@ -58,7 +59,7 @@ function readJson(rel, fallback) {
  * @param {Record<string, Record<string, Record<string,string>>>} input.terms
  * @param {number} [input.perLang] 每语言列出的代表性案例数
  */
-export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosystem = null, perLang = 6, docsPerLang = 12, ecosystemPerLang = 12 }) {
+export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosystem = null, coverage = null, perLang = 6, docsPerLang = 12, ecosystemPerLang = 12, coveragePerLang = 10 }) {
   const localizedLangs = new Set(
     Object.values(terms.industry ?? {}).flatMap((slugs) => Object.keys(slugs)),
   );
@@ -85,6 +86,7 @@ export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosyst
     `- Daily cases: ${briefs.length} published case pages, each a single structured-judgment task.`,
     `- Documentation: ${docsByLang.en?.length ?? 0} English docs across concepts, patterns, primitives, SDK and cases.`,
     ecosystem ? `- Ecosystem: ${ecosystem.projects.length} tracked open-source projects in ${ecosystem.categories.length} categories.` : null,
+    coverage ? `- Jev coverage: ${coverage.entries.length} reviewed entries, each stating the specific decision Jev makes, with a public evidence URL. Reviewed ${coverage.reviewedAt}.` : null,
     `- Languages: ${LANGS.length} locales (${LANGS.map((l) => l.code).join(', ')}), each under /{locale}/.`,
     '- Content policy: a translated page is indexable only when its body is actually translated; the sitemap follows the same rule.',
     '',
@@ -162,6 +164,17 @@ export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosyst
       lines.push(`- All ${ecosystem.projects.length} projects: ${SITE}/${code}/ecosystem/`);
       lines.push('');
     }
+
+    // 覆盖条目：8 语言的枢纽与条目页都齐全，同样无需按语言门控。
+    if (coverage) {
+      lines.push(`### ${pick('coverage', code)} (${coverage.entries.length})`, '');
+      for (const e of coverage.entries.slice(0, coveragePerLang)) {
+        const assertion = e.assertion[code] ?? e.assertion.en;
+        lines.push(`- [${e.name}](${SITE}/${code}/jev/${e.slug}/): ${assertion} Evidence: ${e.evidenceUrl}`);
+      }
+      lines.push(`- All ${coverage.entries.length} entries: ${SITE}/${code}/jev/`);
+      lines.push('');
+    }
   }
 
   return `${lines.join('\n').trimEnd()}\n`;
@@ -227,13 +240,20 @@ export async function loadEcosystem() {
   };
 }
 
+/** 覆盖条目。src/lib/content/registry.ts 是唯一真源，避免 llms.txt 与页面不一致。 */
+export async function loadCoverage() {
+  const { sortedEntries, REGISTRY_REVIEWED_AT } = await import('../src/lib/content/registry.ts');
+  return { entries: sortedEntries(), reviewedAt: REGISTRY_REVIEWED_AT };
+}
+
 export async function loadInputs() {
   const briefs = readJson('src/data/daily-briefs.json', []);
   const briefMap = readJson('src/data/briefs-i18n.json', {});
   const terms = readJson('src/data/brief-terms.json', {});
   const docsByLang = loadDocs();
   const ecosystem = await loadEcosystem();
-  return { briefs, briefMap, terms, docsByLang, ecosystem };
+  const coverage = await loadCoverage();
+  return { briefs, briefMap, terms, docsByLang, ecosystem, coverage };
 }
 
 /**
@@ -244,7 +264,7 @@ export async function loadInputs() {
  * 内容全部取自与页面同一份数据源，所以不会与站点漂移。
  */
 export function buildLlmsFullTxt(inputs, { maxBriefs = 500, maxDocs = 60, maxCodeLines = 12 } = {}) {
-  const { briefs, briefMap, docsByLang = {}, ecosystem = null } = inputs;
+  const { briefs, briefMap, docsByLang = {}, ecosystem = null, coverage = null } = inputs;
   const out = [];
   const push = (...lines) => out.push(...lines);
 
@@ -306,6 +326,24 @@ export function buildLlmsFullTxt(inputs, { maxBriefs = 500, maxDocs = 60, maxCod
     push('# Ecosystem categories', '');
     for (const c of ecosystem.categories) {
       push(`## ${c.title.en}`, `URL: ${SITE}/en/ecosystem/category/${c.key}/`, `${c.count} projects.`, '', c.lead?.en ?? '', '');
+    }
+  }
+
+  // ---- Jev 覆盖条目 ----
+  // 每条都带断言与证据 URL，便于生成式引擎直接引用可核对来源。
+  if (coverage) {
+    push('# Jev coverage entries', '');
+    for (const e of coverage.entries) {
+      push(
+        `## ${e.name}`,
+        `URL: ${SITE}/en/jev/${e.slug}/`,
+        `Category: ${e.category}${e.lang ? ` | Language: ${e.lang}` : ''} | Listed: ${e.addedAt} | Reviewed: ${e.reviewedAt}`,
+        `Evidence: ${e.evidenceUrl}`,
+        `Verification: ${e.verification.join(', ')}`,
+        '',
+        e.assertion.en,
+        '',
+      );
     }
   }
 

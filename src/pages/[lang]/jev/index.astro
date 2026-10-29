@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, useTranslations, type Lang } from '../../../i18n/ui';
+import { entriesByCategory, REGISTRY_REVIEWED_AT, categoryLabel } from '../../../lib/content/registry';
+import { assertionFor, jevCopy, verificationMeaning } from '../../../lib/content/jev-copy';
+import { hubDescription, hubTitle } from '../../../lib/seo/metadata';
+import { hubSchema } from '../../../lib/seo/schema';
+import { categoryPath, entryPath } from '../../../lib/routing/domains';
+
+export function getStaticPaths() {
+  return (Object.keys(languages) as Lang[]).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const path = `/${lang}/jev/`;
+const t = useTranslations(lang);
+
+const groups = entriesByCategory();
+const total = groups.reduce((n, g) => n + g.entries.length, 0);
+// 断言只有 zh / en 两版；预先算好文字与实际语言，模板只负责渲染。
+const shown = new Map(
+  groups.flatMap((g) =>
+    g.entries.map((e) => [e.slug, assertionFor(e, lang)] as const),
+  ),
+);
+
+const c = jevCopy(lang).hub;
+const lead = c.lead(total);
+const schema = hubSchema(lang);
+const words = (label: Parameters<typeof verificationMeaning>[0]) => verificationMeaning(label, lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={hubTitle(lang)}
+  description={hubDescription(lang)}
+  path={path}
+  schema={schema}
+>
+  <div class="wrap docs-shell">
+    <main class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> / {t('nav.ecosystem')}
+      </p>
+
+      <h1 class="doc__title">{c.title}</h1>
+      <p class="doc__desc">{lead}</p>
+      <p class="jev__meta">{c.reviewed}: {REGISTRY_REVIEWED_AT}</p>
+
+      {groups.length === 0 && <p class="doc__desc">{c.empty}</p>}
+
+      {groups.length > 0 && (
+        <nav class="jev__cats" aria-label={c.categories}>
+          <span class="jev__key">{c.categories}</span>
+          {groups.map((group) => (
+            <a class="jev__cat" href={categoryPath(lang, group.category)}>
+              {categoryLabel(group.category, lang)} ({group.entries.length})
+            </a>
+          ))}
+        </nav>
+      )}
+
+      {groups.map((group) => (
+        <section class="jev__group">
+          <h2>{categoryLabel(group.category, lang)}</h2>
+          <ul class="jev__list">
+            {group.entries.map((entry) => (
+              <li class="jev__item">
+                <h3 class="jev__name">
+                  <a href={entryPath(lang, entry.slug)}>{entry.name}</a>
+                </h3>
+                <p class="jev__assertion" lang={shown.get(entry.slug)?.sourceLang}>
+                  {shown.get(entry.slug)?.text}
+                </p>
+                <p class="jev__evidence">
+                  <span class="jev__key">{c.evidence}</span>
+                  <a href={entry.evidenceUrl} rel="noopener">{entry.evidenceUrl}</a>
+                </p>
+                <p class="jev__labels">
+                  <span class="jev__key">{c.labels}</span>
+                  {entry.verification.map((label) => (
+                    <span class="jev__label" title={words(label)}>{label}</span>
+                  ))}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .jev__meta {
+    font-size: 0.85rem;
+    color: var(--muted, #8a8a8a);
+  }
+  /* 分类页需要可见入口，否则 88 个页面在站内是无入链的孤儿页。 */
+  .jev__cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: baseline;
+    margin: 1.25rem 0 0;
+  }
+  .jev__cat {
+    border: 1px solid var(--border, #2a2a2a);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.82rem;
+    text-decoration: none;
+    min-height: 24px;
+  }
+  .jev__cat:hover,
+  .jev__cat:focus-visible {
+    border-color: currentColor;
+  }
+  .jev__group {
+    margin-top: 2.5rem;
+  }
+  .jev__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .jev__item {
+    border-left: 2px solid var(--border, #2a2a2a);
+    padding-left: 1rem;
+  }
+  .jev__name {
+    font-size: 1.05rem;
+    margin: 0 0 0.35rem;
+  }
+  .jev__assertion {
+    margin: 0 0 0.5rem;
+  }
+  .jev__evidence,
+  .jev__labels {
+    font-size: 0.85rem;
+    margin: 0.2rem 0;
+    word-break: break-word;
+  }
+  .jev__key {
+    color: var(--muted, #8a8a8a);
+    margin-right: 0.5rem;
+  }
+  .jev__label {
+    display: inline-block;
+    border: 1px solid var(--border, #2a2a2a);
+    border-radius: 999px;
+    padding: 0 0.5rem;
+    margin-right: 0.35rem;
+    font-size: 0.78rem;
+  }
+</style>
