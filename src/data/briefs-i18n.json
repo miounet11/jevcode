@@ -1736,6 +1736,14 @@
     }
   },
   "cov-biotech-toxicity-01": {
+    "de": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "Anrufprotokoll: Der Forscher nannte unser Personal im Experiment-Thread nutzlose Idioten.",
+      "question": "Sollte diese Nachricht wegen toxischen oder missbräuchlichen Inhalts markiert werden?"
+    },
     "es": {
       "choices": [
         "clean",

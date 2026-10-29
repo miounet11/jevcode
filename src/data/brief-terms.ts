@@ -693,6 +693,8 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "agriculture": {
       "de": "landwirtschaft",
       "es": "agricultura",
+      "fr": "agriculture",
+      "ja": "農業",
       "ko": "농업",
       "pt": "agricultura",
       "zh": "农业"
@@ -717,8 +719,11 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     },
     "biotech": {
       "de": "biotechnologie",
+      "es": "biotecnología",
       "fr": "biotechnologie",
       "ja": "バイオテクノロジー",
+      "ko": "바이오테크",
+      "pt": "biotecnologia",
       "zh": "生物技术"
     },
     "construction": {
@@ -742,6 +747,8 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "crypto": {
       "de": "kryptowährung",
       "es": "criptomonedas",
+      "fr": "cryptomonnaie",
+      "ja": "仮想通貨",
       "ko": "crypto 크립토",
       "pt": "cripto",
       "zh": "加密货币"
@@ -819,16 +826,22 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "金融科技"
     },
     "fitness": {
-      "es": "fitness.",
+      "de": "Fitness",
+      "es": "fitness",
+      "fr": "remise en forme",
       "ja": "フィットネス",
       "ko": "피트니스",
       "pt": "condicionamento físico",
       "zh": "健身"
     },
     "foodbev": {
-      "es": "food beverage",
+      "de": "Lebensmittel und Getränke",
+      "es": "alimentos y bebidas",
       "fr": "boissons et aliments",
-      "pt": "alimentaçãobebida"
+      "ja": "食品飲料",
+      "ko": "식음료",
+      "pt": "alimentos e bebidas",
+      "zh": "食品饮料"
     },
     "gaming": {
       "de": "gaming slug",
@@ -895,7 +908,8 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     },
     "lending": {
       "de": "kreditvergabe",
-      "es": "préstamo",
+      "es": "préstamos",
+      "fr": "octroi de crédit",
       "ja": "融資",
       "ko": "대출",
       "pt": "empréstimo",
@@ -920,15 +934,21 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "制造"
     },
     "maritime": {
-      "de": "maritime seetransport",
-      "fr": "maritime navigation",
+      "de": "Seetransport",
+      "es": "navegación marítima",
+      "fr": "navigation maritime",
+      "ja": "海運",
+      "ko": "해운",
       "pt": "marítimo",
       "zh": "海事"
     },
     "marketing": {
-      "fr": "le marketing digital",
+      "de": "Marketing",
+      "es": "marketing digital",
+      "fr": "marketing digital",
       "ja": "マーケティング",
       "ko": "마케팅",
+      "pt": "marketing digital",
       "zh": "营销"
     },
     "marketplace": {
@@ -1007,6 +1027,8 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "de": "beschaffung",
       "es": "adquisición",
       "fr": "approvisionnement",
+      "ja": "調達",
+      "ko": "조달",
       "pt": "aquisição",
       "zh": "采购"
     },
@@ -1029,6 +1051,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "招聘"
     },
     "restaurant": {
+      "de": "Restaurant",
       "es": "restaurante",
       "fr": "restaurant",
       "ja": "レストラン",
@@ -1046,14 +1069,18 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "零售"
     },
     "rideshare": {
+      "de": "Fahrdienstvermittlung",
       "es": "vehículos de transporte compartido",
       "fr": "covoiturage",
       "ja": "ライドシェア",
-      "pt": "veículo compartilhado"
+      "ko": "차량 공유",
+      "pt": "veículo compartilhado",
+      "zh": "网约车"
     },
     "robotics": {
+      "de": "Robotik",
       "es": "robótica",
-      "fr": "la robotique",
+      "fr": "robotique",
       "ja": "ロボティクス",
       "ko": "로보틱스",
       "pt": "robótica",
@@ -1070,6 +1097,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     },
     "semiconductor": {
       "de": "halbleiter",
+      "es": "semiconductores",
       "fr": "semi-conducteur",
       "ja": "半導体",
       "ko": "반도체",
@@ -1077,6 +1105,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "半导体"
     },
     "streaming": {
+      "de": "Streaming",
       "es": "transmisión en línea",
       "fr": "streaming",
       "ja": "ストリーミング",
@@ -1094,12 +1123,13 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "供应链"
     },
     "tax": {
-      "de": "taxonomy",
-      "es": "taxonomía",
-      "fr": "taxonomie",
+      "de": "Steuerwesen",
+      "es": "fiscalidad",
+      "fr": "fiscalité",
+      "ja": "税務",
       "ko": "세무",
-      "pt": "taxologia",
-      "zh": "税 我是 Clavue，随时准备为你服务。有什么我能帮你的吗？"
+      "pt": "fiscal",
+      "zh": "税务"
     },
     "telecom": {
       "de": "telekommunikation",
@@ -1123,6 +1153,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "de": "verkehr",
       "es": "tránsito",
       "fr": "transports en commun",
+      "ja": "交通",
       "ko": "교통",
       "pt": "transito",
       "zh": "公交"
@@ -1159,6 +1190,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "es": "veterinaria",
       "fr": "vétérinaire",
       "ja": "獣医学",
+      "ko": "수의",
       "pt": "veterinária",
       "zh": "兽医"
     },
@@ -1174,7 +1206,9 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "wealth": {
       "de": "vermögen",
       "es": "riqueza",
+      "fr": "gestion de patrimoine",
       "ja": "富",
+      "ko": "자산 관리",
       "pt": "riqueza",
       "zh": "财富"
     }
@@ -1190,7 +1224,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "警报"
     },
     "api-payload": {
-      "de": "API-Payload",
+      "de": "API-Nutzlast",
       "es": "carga de la api",
       "fr": "charge utile de l'api",
       "ja": "api ペイロード",
@@ -1201,6 +1235,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "chat": {
       "de": "Chat",
       "es": "chat",
+      "fr": "messagerie instantanée",
       "ja": "チャット",
       "ko": "채팅",
       "pt": "chat",
@@ -1353,7 +1388,9 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "路由"
     },
     "triage": {
+      "de": "Triage",
       "es": "triaje",
+      "fr": "triage",
       "ja": "トリアージ",
       "ko": "분류",
       "pt": "triagem",
