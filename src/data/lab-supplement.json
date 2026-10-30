@@ -1178,5 +1178,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-safety-09",
+    "state": "Internal note: The order includes an unredacted home address in the exported file.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-safety-10",
+    "state": "Social post: Minor wording tweak suggested for the GMV help text.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this content pose a safety risk requiring immediate review?",
+        "options": [
+          "safe",
+          "review"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-compliance-09",
+    "state": "Social post: We must retain order records for seven years under local law.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-compliance-10",
+    "state": "Ticket: Please adjust the GMV threshold shown in the demo tenant.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this require a compliance or regulatory review before proceeding?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
   }
 ]

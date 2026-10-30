@@ -554,5 +554,29 @@
     "ok": true,
     "choice": "question",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-safety-09",
+    "ts": "2026-10-30T01:34:45.749Z",
+    "ok": false,
+    "choice": null
+  },
+  {
+    "id": "cov-ecommerce-safety-10",
+    "ts": "2026-10-30T01:35:46.719Z",
+    "ok": false,
+    "choice": null
+  },
+  {
+    "id": "cov-ecommerce-compliance-09",
+    "ts": "2026-10-30T01:36:47.514Z",
+    "ok": false,
+    "choice": null
+  },
+  {
+    "id": "cov-ecommerce-compliance-10",
+    "ts": "2026-10-30T01:37:48.293Z",
+    "ok": false,
+    "choice": null
   }
 ]

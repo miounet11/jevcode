@@ -693,7 +693,6 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
     "agriculture": {
       "de": "landwirtschaft",
       "es": "agricultura",
-      "fr": "agriculture",
       "ja": "農業",
       "ko": "농업",
       "pt": "agricultura",
@@ -826,8 +825,6 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "金融科技"
     },
     "fitness": {
-      "de": "Fitness",
-      "es": "fitness",
       "fr": "remise en forme",
       "ja": "フィットネス",
       "ko": "피트니스",
@@ -943,7 +940,6 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "海事"
     },
     "marketing": {
-      "de": "Marketing",
       "es": "marketing digital",
       "fr": "marketing digital",
       "ja": "マーケティング",
@@ -1051,7 +1047,6 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "招聘"
     },
     "restaurant": {
-      "de": "Restaurant",
       "es": "restaurante",
       "fr": "restaurant",
       "ja": "レストラン",
@@ -1105,7 +1100,6 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "半导体"
     },
     "streaming": {
-      "de": "Streaming",
       "es": "transmisión en línea",
       "fr": "streaming",
       "ja": "ストリーミング",
@@ -1224,7 +1218,7 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "警报"
     },
     "api-payload": {
-      "de": "API-Nutzlast",
+      "de": "API-Payload",
       "es": "carga de la api",
       "fr": "charge utile de l'api",
       "ja": "api ペイロード",
@@ -1388,9 +1382,8 @@ export const briefTerms: Record<string, Record<string, Record<string, string>>> 
       "zh": "路由"
     },
     "triage": {
-      "de": "Triage",
       "es": "triaje",
-      "fr": "triage",
+      "fr": "triage ```json {\"answer\": \"triage\"} ```",
       "ja": "トリアージ",
       "ko": "분류",
       "pt": "triagem",

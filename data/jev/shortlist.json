@@ -1288,6 +1288,14 @@
     "text": "Give a parent agent a bounded browser task. Jev chooses the next typed action. `agent-browser` executes it. Ambiguity, repetition, or a stuck state becomes a structured handoff back to the parent."
   },
   {
+    "repo": "FrancoisChastel/jev-code",
+    "name": "jev-code",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "<h1 align=\"center\">jev-code</h1>"
+  },
+  {
     "repo": "frankda/jev-poly-crypto-demo",
     "name": "jev-poly-crypto-demo",
     "file": "README.md",
@@ -1542,6 +1550,14 @@
     "branch": "main",
     "line": 80,
     "text": "| [openai-scala-client](https://github.com/cequence-io/openai-scala-client) | ★ 249 | Scala | 2026-09-23 | Scala client module for TypeSafe System One that submits Jev Noul, Choice, and Score questions and returns typed answers. |"
+  },
+  {
+    "repo": "HorusJiang/dsh-jev-tools",
+    "name": "dsh-jev-tools",
+    "file": "README.md",
+    "branch": "main",
+    "line": 18,
+    "text": "一个 [DeepSeek Harness](https://github.com/deepseek-ai) 插件：把 **[Jev](https://typesafe.ai)** 接进长会话，在工具结果进入上下文之前做判定。"
   },
   {
     "repo": "hraness/algal",

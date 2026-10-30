@@ -691,7 +691,6 @@
     "agriculture": {
       "de": "landwirtschaft",
       "es": "agricultura",
-      "fr": "agriculture",
       "ja": "農業",
       "ko": "농업",
       "pt": "agricultura",
@@ -824,8 +823,6 @@
       "zh": "金融科技"
     },
     "fitness": {
-      "de": "Fitness",
-      "es": "fitness",
       "fr": "remise en forme",
       "ja": "フィットネス",
       "ko": "피트니스",
@@ -941,7 +938,6 @@
       "zh": "海事"
     },
     "marketing": {
-      "de": "Marketing",
       "es": "marketing digital",
       "fr": "marketing digital",
       "ja": "マーケティング",
@@ -1049,7 +1045,6 @@
       "zh": "招聘"
     },
     "restaurant": {
-      "de": "Restaurant",
       "es": "restaurante",
       "fr": "restaurant",
       "ja": "レストラン",
@@ -1103,7 +1098,6 @@
       "zh": "半导体"
     },
     "streaming": {
-      "de": "Streaming",
       "es": "transmisión en línea",
       "fr": "streaming",
       "ja": "ストリーミング",
@@ -1222,7 +1216,7 @@
       "zh": "警报"
     },
     "api-payload": {
-      "de": "API-Nutzlast",
+      "de": "API-Payload",
       "es": "carga de la api",
       "fr": "charge utile de l'api",
       "ja": "api ペイロード",
@@ -1386,9 +1380,8 @@
       "zh": "路由"
     },
     "triage": {
-      "de": "Triage",
       "es": "triaje",
-      "fr": "triage",
+      "fr": "triage ```json {\"answer\": \"triage\"} ```",
       "ja": "トリアージ",
       "ko": "분류",
       "pt": "triagem",
