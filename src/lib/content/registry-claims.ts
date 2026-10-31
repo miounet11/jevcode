@@ -13,6 +13,20 @@ const REVIEWED_AT = '2026-10-29';
 
 export const CLAIM_ENTRIES: CoverageEntry[] = [
   {
+    slug: '0x7067-claude-jev',
+    name: '0x7067/claude-jev',
+    repoUrl: 'https://github.com/0x7067/claude-jev',
+    assertion: {
+      zh: 'README 自述：The run sends your past prompts to api.typesafe.ai. Start with --sample 250',
+      en: 'README states: The run sends your past prompts to api.typesafe.ai. Start with --sample 250',
+    },
+    evidenceUrl: 'https://github.com/0x7067/claude-jev/blob/main/eval/README.md#L130',
+    verification: ['readme-claim'],
+    category: 'other-list',
+    addedAt: '2026-10-31',
+    reviewedAt: REVIEWED_AT,
+  },
+  {
     slug: '0xarx-jevegis',
     name: '0xArx/jevegis',
     repoUrl: 'https://github.com/0xArx/jevegis',
@@ -671,20 +685,6 @@ export const CLAIM_ENTRIES: CoverageEntry[] = [
     reviewedAt: REVIEWED_AT,
   },
   {
-    slug: 'awun8191-jev-resume-analyzer',
-    name: 'awun8191/jev-resume-analyzer',
-    repoUrl: 'https://github.com/awun8191/jev-resume-analyzer',
-    assertion: {
-      zh: 'README 自述：Privacy-first demo: no accounts, no database, no localStorage for CV text, no client-side keys. One Jev request per analysis; failed requests never produce fabricated reports.',
-      en: 'README states: Privacy-first demo: no accounts, no database, no localStorage for CV text, no client-side keys. One Jev request per analysis; failed requests never produce fabricated reports.',
-    },
-    evidenceUrl: 'https://github.com/awun8191/jev-resume-analyzer/blob/main/README.md#L13',
-    verification: ['readme-claim'],
-    category: 'other-list',
-    addedAt: '2026-10-29',
-    reviewedAt: REVIEWED_AT,
-  },
-  {
     slug: 'ayush0054-metis',
     name: 'Ayush0054/metis',
     repoUrl: 'https://github.com/Ayush0054/metis',
@@ -1298,6 +1298,20 @@ export const CLAIM_ENTRIES: CoverageEntry[] = [
     verification: ['readme-claim'],
     category: 'other-list',
     addedAt: '2026-10-29',
+    reviewedAt: REVIEWED_AT,
+  },
+  {
+    slug: 'chy4pro-jev-for-chrome',
+    name: 'chy4pro/jev-for-chrome',
+    repoUrl: 'https://github.com/chy4pro/jev-for-chrome',
+    assertion: {
+      zh: 'README 自述：| OpenRouter | https://openrouter.ai/api/alpha/decisions | typesafe/jev-1.13 |',
+      en: 'README states: | OpenRouter | https://openrouter.ai/api/alpha/decisions | typesafe/jev-1.13 |',
+    },
+    evidenceUrl: 'https://github.com/chy4pro/jev-for-chrome/blob/main/README.md#L112',
+    verification: ['readme-claim'],
+    category: 'other-list',
+    addedAt: '2026-10-31',
     reviewedAt: REVIEWED_AT,
   },
   {
@@ -2729,6 +2743,20 @@ export const CLAIM_ENTRIES: CoverageEntry[] = [
     reviewedAt: REVIEWED_AT,
   },
   {
+    slug: 'hotchpotch-jev-reranker',
+    name: 'hotchpotch/jev-reranker',
+    repoUrl: 'https://github.com/hotchpotch/jev-reranker',
+    assertion: {
+      zh: 'README 自述：| model | Explicit value → JEV_MODEL (environment/.env) → jev-latest |',
+      en: 'README states: | model | Explicit value → JEV_MODEL (environment/.env) → jev-latest |',
+    },
+    evidenceUrl: 'https://github.com/hotchpotch/jev-reranker/blob/main/README.md#L434',
+    verification: ['readme-claim'],
+    category: 'other-list',
+    addedAt: '2026-10-31',
+    reviewedAt: REVIEWED_AT,
+  },
+  {
     slug: 'hraness-algal',
     name: 'hraness/algal',
     repoUrl: 'https://github.com/hraness/algal',
@@ -3370,6 +3398,20 @@ export const CLAIM_ENTRIES: CoverageEntry[] = [
     verification: ['readme-claim'],
     category: 'other-list',
     addedAt: '2026-10-29',
+    reviewedAt: REVIEWED_AT,
+  },
+  {
+    slug: 'jongwony-epistemic-protocols',
+    name: 'jongwony/epistemic-protocols',
+    repoUrl: 'https://github.com/jongwony/epistemic-protocols',
+    assertion: {
+      zh: 'README 自述：Who the evaluator is. The configured endpoint is https://api.typesafe.ai/v1/systemone — System One, and this hook is its application surface inside Claude Code. A System One key is what it needs; which variable holds tha',
+      en: 'README states: Who the evaluator is. The configured endpoint is https://api.typesafe.ai/v1/systemone — System One, and this hook is its application surface inside Claude Code. A System One key is what it needs; which variable holds tha',
+    },
+    evidenceUrl: 'https://github.com/jongwony/epistemic-protocols/blob/main/route/README.md#L112',
+    verification: ['readme-claim'],
+    category: 'agent-tooling',
+    addedAt: '2026-10-31',
     reviewedAt: REVIEWED_AT,
   },
   {
@@ -5102,7 +5144,7 @@ export const CLAIM_ENTRIES: CoverageEntry[] = [
       zh: 'README 自述：Custom endpoints use Jevvy\'s default approval policy unless you replace it. Its calibration evidence applies only when the route is verified to serve the calibrated Jev model.',
       en: 'README states: Custom endpoints use Jevvy\'s default approval policy unless you replace it. Its calibration evidence applies only when the route is verified to serve the calibrated Jev model.',
     },
-    evidenceUrl: 'https://github.com/PanAchy/jevvy/blob/main/README.md#L133',
+    evidenceUrl: 'https://github.com/PanAchy/jevvy/blob/main/README.md#L140',
     verification: ['readme-claim'],
     category: 'other-list',
     addedAt: '2026-10-29',
@@ -6089,6 +6131,20 @@ export const CLAIM_ENTRIES: CoverageEntry[] = [
     reviewedAt: REVIEWED_AT,
   },
   {
+    slug: 'shinshin86-aituber-onair',
+    name: 'shinshin86/aituber-onair',
+    repoUrl: 'https://github.com/shinshin86/aituber-onair',
+    assertion: {
+      zh: 'README 自述：| typesafe | TypeSafe AI | jev-latest | https://api.typesafe.ai/v1/systemone |',
+      en: 'README states: | typesafe | TypeSafe AI | jev-latest | https://api.typesafe.ai/v1/systemone |',
+    },
+    evidenceUrl: 'https://github.com/shinshin86/aituber-onair/blob/main/packages/comment-intelligence/README.md#L291',
+    verification: ['readme-claim'],
+    category: 'other-list',
+    addedAt: '2026-10-31',
+    reviewedAt: REVIEWED_AT,
+  },
+  {
     slug: 'shitianfang-jev-use',
     name: 'shitianfang/jev-use',
     repoUrl: 'https://github.com/shitianfang/jev-use',
@@ -6425,6 +6481,20 @@ export const CLAIM_ENTRIES: CoverageEntry[] = [
     reviewedAt: REVIEWED_AT,
   },
   {
+    slug: 'tanghaojin-x-smart-tags',
+    name: 'tanghaojin/x-smart-tags',
+    repoUrl: 'https://github.com/tanghaojin/x-smart-tags',
+    assertion: {
+      zh: 'README 自述：扩展通过 Background Service Worker 直接调用 https://api.typesafe.ai/v1/systemone。',
+      en: 'README states: 扩展通过 Background Service Worker 直接调用 https://api.typesafe.ai/v1/systemone。',
+    },
+    evidenceUrl: 'https://github.com/tanghaojin/x-smart-tags/blob/main/README.md#L42',
+    verification: ['readme-claim'],
+    category: 'other-list',
+    addedAt: '2026-10-31',
+    reviewedAt: REVIEWED_AT,
+  },
+  {
     slug: 'tanxarx-awesome-jev',
     name: 'tanxarx/awesome-jev',
     repoUrl: 'https://github.com/tanxarx/awesome-jev',
@@ -6660,6 +6730,20 @@ export const CLAIM_ENTRIES: CoverageEntry[] = [
     verification: ['readme-claim'],
     category: 'other-list',
     addedAt: '2026-10-29',
+    reviewedAt: REVIEWED_AT,
+  },
+  {
+    slug: 'tostechbr-partway',
+    name: 'tostechbr/partway',
+    repoUrl: 'https://github.com/tostechbr/partway',
+    assertion: {
+      zh: 'README 自述：It asks Jev, TypeSafe\'s System One model, about every word you say. Jev answers with typed decisions and probabilities, not text, in about 200 ms, so the app can act mid-sentence and wait only when it has to.',
+      en: 'README states: It asks Jev, TypeSafe\'s System One model, about every word you say. Jev answers with typed decisions and probabilities, not text, in about 200 ms, so the app can act mid-sentence and wait only when it has to.',
+    },
+    evidenceUrl: 'https://github.com/tostechbr/partway/blob/main/README.md#L22',
+    verification: ['readme-claim'],
+    category: 'application',
+    addedAt: '2026-10-31',
     reviewedAt: REVIEWED_AT,
   },
   {

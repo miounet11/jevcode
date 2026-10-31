@@ -1234,5 +1234,65 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-09",
+    "state": "Ticket: We were charged twice for the order this cycle.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-billing-dispute-10",
+    "state": "Chat message: Please add dark mode to the product listing dashboard.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this a billing dispute that needs a refund decision?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-priority-09",
+    "state": "Chat message: The GMV is at zero for all tenants and revenue impact is growing every minute.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What priority should this ticket receive?",
+        "options": [
+          "critical",
+          "high",
+          "normal",
+          "low"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-priority-10",
+    "state": "Email received: The order shows a stale count for tenants on the legacy plan.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What priority should this ticket receive?",
+        "options": [
+          "critical",
+          "high",
+          "normal",
+          "low"
+        ]
+      }
+    }
   }
 ]

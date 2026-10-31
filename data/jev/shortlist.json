@@ -1,5 +1,13 @@
 [
   {
+    "repo": "0x7067/claude-jev",
+    "name": "claude-jev",
+    "file": "eval/README.md",
+    "branch": "main",
+    "line": 130,
+    "text": "The run sends your past prompts to `api.typesafe.ai`. Start with `--sample 250`"
+  },
+  {
     "repo": "0xArx/jevegis",
     "name": "jevegis",
     "file": "README.md",
@@ -742,6 +750,14 @@
     "branch": "main",
     "line": 57,
     "text": "| Actions and spoken orders | [TypeSafe](https://docs.typesafe.ai) | `TYPESAFE_API_KEY` |"
+  },
+  {
+    "repo": "chy4pro/jev-for-chrome",
+    "name": "jev-for-chrome",
+    "file": "README.md",
+    "branch": "main",
+    "line": 112,
+    "text": "| OpenRouter | `https://openrouter.ai/api/alpha/decisions` | `typesafe/jev-1.13` |"
   },
   {
     "repo": "cobanov/awesome-jev",
@@ -1560,6 +1576,14 @@
     "text": "一个 [DeepSeek Harness](https://github.com/deepseek-ai) 插件：把 **[Jev](https://typesafe.ai)** 接进长会话，在工具结果进入上下文之前做判定。"
   },
   {
+    "repo": "hotchpotch/jev-reranker",
+    "name": "jev-reranker",
+    "file": "README.md",
+    "branch": "main",
+    "line": 434,
+    "text": "| `model` | Explicit value → `JEV_MODEL` (environment/`.env`) → `jev-latest` |"
+  },
+  {
     "repo": "hraness/algal",
     "name": "algal",
     "file": "README.md",
@@ -1926,6 +1950,14 @@
     "branch": "main",
     "line": 39,
     "text": "## What is Jev, and why a kit"
+  },
+  {
+    "repo": "jongwony/epistemic-protocols",
+    "name": "epistemic-protocols",
+    "file": "route/README.md",
+    "branch": "main",
+    "line": 112,
+    "text": "**Who the evaluator is.** The configured endpoint is `https://api.typesafe.ai/v1/systemone` — System One, and this hook is its application surface inside Claude Code. A System One key is what it needs; which variable holds that key is what decides whether it runs."
   },
   {
     "repo": "jozefRudy/job_search",
@@ -3480,6 +3512,14 @@
     "text": "jev-skill-router is a reference implementation for people building with [TypeSafe](https://typesafe.ai)'s Jev, a model that writes no text and answers typed questions with probabilities. It is a Claude Code hook: on every prompt it asks Jev which installed skill fits and logs the answer. In shadow mode, the default, that is all it does; in inject mode it also gives Claude a one-line hint. Either way, Claude still sees every skill and makes the final pick. A bundled script checks that log against what Claude Code did next. It is Python 3.10+, standard library only, MIT licensed, version 0.2.0, and needs a paid TypeSafe API key."
   },
   {
+    "repo": "shinshin86/aituber-onair",
+    "name": "aituber-onair",
+    "file": "packages/comment-intelligence/README.md",
+    "branch": "main",
+    "line": 291,
+    "text": "| `typesafe` | TypeSafe AI | `jev-latest` | `https://api.typesafe.ai/v1/systemone` |"
+  },
+  {
     "repo": "shitianfang/jev-use",
     "name": "jev-use",
     "file": "README.md",
@@ -3672,6 +3712,14 @@
     "text": "- The base URL defaults to `http://127.0.0.1:8000` in place of `https://api.typesafe.ai`."
   },
   {
+    "repo": "tanghaojin/x-smart-tags",
+    "name": "x-smart-tags",
+    "file": "README.md",
+    "branch": "main",
+    "line": 42,
+    "text": "- 扩展通过 Background Service Worker 直接调用 `https://api.typesafe.ai/v1/systemone`。"
+  },
+  {
     "repo": "tanxarx/awesome-jev",
     "name": "awesome-jev (tanxarx)",
     "file": "README.md",
@@ -3806,6 +3854,14 @@
     "branch": "main",
     "line": 8,
     "text": "2. With [Jev](https://docs.typesafe.ai)"
+  },
+  {
+    "repo": "tostechbr/partway",
+    "name": "partway",
+    "file": "README.md",
+    "branch": "main",
+    "line": 22,
+    "text": "It asks [Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev), TypeSafe's System One model, about every word you say. Jev answers with typed decisions and probabilities, not text, in about 200 ms, so the app can act mid-sentence and wait only when it has to."
   },
   {
     "repo": "tpaulshippy/shady-town",
