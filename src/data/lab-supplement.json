@@ -1294,5 +1294,67 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-09",
+    "state": "Email received: Support resolved the order in ten minutes, genuinely impressed.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-sentiment-10",
+    "state": "Review posted: The product listing works as documented now; no complaints.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What is the sentiment of this message?",
+        "options": [
+          "positive",
+          "negative",
+          "neutral"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-09",
+    "state": "Review posted: GMV的数据从昨天开始一直是 0，麻烦看一下。",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-language-10",
+    "state": "Alert fired: product listingの設定画面でエラーが出ます。",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which language is this message written in?",
+        "options": [
+          "en",
+          "zh",
+          "ja",
+          "other"
+        ]
+      }
+    }
   }
 ]

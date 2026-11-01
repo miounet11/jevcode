@@ -4224,6 +4224,14 @@
     "text": "ordinary Python. Start with Jev or supply your own decision provider."
   },
   {
+    "repo": "yan-labs/yan-skills",
+    "name": "yan-skills",
+    "file": "agent-fleet/README.md",
+    "branch": "main",
+    "line": 123,
+    "text": "| `jev` | Typesafe(JEV / System One) | `https://api.typesafe.ai/v1/systemone`,`Authorization: Bearer` 鉴权(`protocol: \"typesafe-systemone\"`,**不是** Anthropic Messages/OpenAI 协议) | ⚠️ **不支持 `run`/`run-many`**——它是结构化决策 API,不生成文本、不支持多轮工具调用,只能用下面「JEV / `judge` 子命令」一节的方式调用 |"
+  },
+  {
     "repo": "Yifan-Lan/awesome-jev-robustness",
     "name": "Awesome Jev Robustness",
     "file": "README.md",
