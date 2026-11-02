@@ -1356,5 +1356,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-pii-09",
+    "state": "Alert fired: The product listing log prints the customer IBAN in plain text.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-pii-10",
+    "state": "Log line: Add a column for the order reference code.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this message contain personally identifiable information?",
+        "options": [
+          "no",
+          "yes"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-05",
+    "state": "Chat message: The product listing instructions were unclear, could you clarify?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-06",
+    "state": "Email received: I disagree with the GMV approach, here is why.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
   }
 ]

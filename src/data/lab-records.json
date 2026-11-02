@@ -634,5 +634,33 @@
     "ok": true,
     "choice": "en",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-pii-09",
+    "ts": "2026-11-02T01:32:15.123Z",
+    "ok": true,
+    "choice": "yes",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-pii-10",
+    "ts": "2026-11-02T01:32:17.159Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-toxicity-05",
+    "ts": "2026-11-02T01:32:18.838Z",
+    "ok": true,
+    "choice": "clean",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-toxicity-06",
+    "ts": "2026-11-02T01:32:20.645Z",
+    "ok": true,
+    "choice": "clean",
+    "model": "clavue-jev"
   }
 ]

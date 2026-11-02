@@ -2080,6 +2080,14 @@
     "text": "Jev-AI-Skill is one skill and one MCP server for **Claude Code, Codex and Hermes**. Jev,"
   },
   {
+    "repo": "KiritoKing/midscene-jev-runner",
+    "name": "midscene-jev-runner",
+    "file": "README.md",
+    "branch": "main",
+    "line": 66,
+    "text": "The default is TypeSafe System One: `POST https://api.typesafe.ai/v1/systemone`"
+  },
+  {
     "repo": "klauswg/jev-guard",
     "name": "jev-guard",
     "file": "README.md",
