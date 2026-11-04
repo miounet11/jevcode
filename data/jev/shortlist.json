@@ -760,6 +760,14 @@
     "text": "| OpenRouter | `https://openrouter.ai/api/alpha/decisions` | `typesafe/jev-1.13` |"
   },
   {
+    "repo": "cnsunyour/tg-guard-bot",
+    "name": "tg-guard-bot",
+    "file": "README.md",
+    "branch": "main",
+    "line": 95,
+    "text": "- **多协议 AI API** - 支持 OpenAI Chat/Responses、Anthropic Messages 与 TypeSafe System One（Jev 决策模型）协议（GPT-4o-mini、DeepSeek、Moonshot、Claude、Jev 等），主备可异构"
+  },
+  {
     "repo": "cobanov/awesome-jev",
     "name": "awesome-jev",
     "file": "README.md",
@@ -846,6 +854,14 @@
     "branch": "main",
     "line": 28,
     "text": "- It performs on par with **Jev** across computer-use, gaming and tool-calling"
+  },
+  {
+    "repo": "convex/convex-chess",
+    "name": "convex-chess",
+    "file": "README.md",
+    "branch": "main",
+    "line": 29,
+    "text": "separate Jev API key is needed. Jev's"
   },
   {
     "repo": "CorieW/JevTest",
@@ -2552,6 +2568,14 @@
     "text": "it implements Jev's `POST /v1/systemone` API and passes ordinary chat through"
   },
   {
+    "repo": "MoeclubM/PlayJev",
+    "name": "PlayJev",
+    "file": "docs/jev/README.md",
+    "branch": "main",
+    "line": 33,
+    "text": "- API 端点: `POST https://api.typesafe.ai/v1/systemone`,模型 `jev-latest`(当前为 `jev-1.13.0`)。"
+  },
+  {
     "repo": "mohsen1/llm-debugger-vscode-extension",
     "name": "llm-debugger-vscode-extension",
     "file": "README.md",
@@ -2934,6 +2958,14 @@
     "branch": "main",
     "line": 9,
     "text": "export AI_GATEWAY_API_KEY=...      # Jev through Vercel AI Gateway. TYPESAFE_API_KEY and OPENROUTER_API_KEY also work."
+  },
+  {
+    "repo": "openqa-cn/codexqa",
+    "name": "codexqa",
+    "file": "skills/codexqa-jev-browser/README.md",
+    "branch": "main",
+    "line": 68,
+    "text": "TYPESAFE_MODEL=jev-latest"
   },
   {
     "repo": "OskarLebuda/precog",
@@ -3560,6 +3592,22 @@
     "text": "(pick one option), `score` (an ordered scale) and `noul` (yes/no or a probability). This is the Jev / System One request format."
   },
   {
+    "repo": "SimpleJev/JevAny",
+    "name": "JevAny",
+    "file": "README.md",
+    "branch": "main",
+    "line": 294,
+    "text": "| [<img src=\"docs/model-logos/typesafe.png\" width=\"24\" height=\"24\" align=\"middle\" alt=\"\">&nbsp;Jev 1.13.0](https://docs.typesafe.ai/models) | 85.37% | 86.58% | 0.644 | 0.212 | 0.033 |"
+  },
+  {
+    "repo": "SkillsCat/skillscat",
+    "name": "skillscat",
+    "file": "README.md",
+    "branch": "main",
+    "line": 179,
+    "text": "### TypeSafe Jev tagging"
+  },
+  {
     "repo": "socai-io/jev-social",
     "name": "jev-social",
     "file": "README.md",
@@ -4080,6 +4128,14 @@
     "text": "Built at CoreWeave Hacks: Agent Loops (Weights & Biases, AGI House, TypeSafe AI), San Francisco, September 13 to 14, 2026."
   },
   {
+    "repo": "VoltAgent/typesafe-jev-ecosystem",
+    "name": "typesafe-jev-ecosystem",
+    "file": "README.md",
+    "branch": "main",
+    "line": 123,
+    "text": "Client libraries for calling Jev from other languages and runtimes."
+  },
+  {
     "repo": "w3cj/jev-chat",
     "name": "jev-chat",
     "file": "README.md",
@@ -4158,6 +4214,14 @@
     "branch": "main",
     "line": 8,
     "text": "A rule is a yes/no question about a function, a call, a JSX element, or a whole file. Each match is sent to Jev with the question, and the plugin reports an error when the yes-probability clears your cutoff."
+  },
+  {
+    "repo": "wochap/nix-config",
+    "name": "nix-config",
+    "file": "modules/nixos/services/ai/wosarcher/README.md",
+    "branch": "main",
+    "line": 90,
+    "text": "| `embeddings-rerank` | Ollama embeddings | shared llama-server reranker ([../reranker](../reranker/README.md)) | Default without `jev.enable`; offline, no key. Scores with BM25 when `_custom.services.ai.reranker.enable` is off. |"
   },
   {
     "repo": "wondertwins/jev-benchmark",

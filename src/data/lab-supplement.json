@@ -1412,5 +1412,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-07",
+    "state": "Review posted: The order took longer than expected.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-08",
+    "state": "Alert fired: Requesting a refund per the product listing policy.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-09",
+    "state": "Log line: Whoever built the product listing is an idiot and should be fired.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-toxicity-10",
+    "state": "Call transcript: Thanks for the quick fix on the order.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this message be flagged for toxic or abusive content?",
+        "options": [
+          "clean",
+          "flag"
+        ]
+      }
+    }
   }
 ]
