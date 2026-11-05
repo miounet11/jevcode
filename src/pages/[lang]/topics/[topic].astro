@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, useTranslations, type Lang } from '../../../i18n/ui';
+import briefs from '../../../data/daily-briefs.json';
+import briefI18n from '../../../data/briefs-i18n.json';
+import { projects } from '../../../data/ecosystem';
+import { COVERAGE_ENTRIES } from '../../../lib/content/registry';
+import {
+  buildTrafficEntries,
+  coverageItems,
+  projectItems,
+  briefItems,
+  listDownloadSoftware,
+  DOWNLOAD_CATEGORY,
+  type TrafficEntry,
+  type ContentItem,
+} from '../../../lib/content';
+import { LOCALES, type Locale } from '../../../lib/routing/domains';
+
+// 三套内容源统一成 ContentItem，再按语言生成主题入口。
+// 全部是构建期纯数据，不读运行时文件、不依赖请求参数。
+export function getStaticPaths() {
+  const items: ContentItem[] = [];
+  for (const locale of LOCALES) {
+    items.push(
+      ...coverageItems(COVERAGE_ENTRIES, locale),
+      ...projectItems(projects, locale),
+      ...briefItems(
+        briefs as Parameters<typeof briefItems>[0],
+        locale,
+        briefI18n as Parameters<typeof briefItems>[2],
+      ),
+    );
+  }
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const entry of buildTrafficEntries(items, { locale: lang as Locale, minItems: 3 })) {
+      paths.push({ params: { lang, topic: entry.slug }, props: { entry } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { entry } = Astro.props as { entry: TrafficEntry };
+const t = useTranslations(lang);
+
+const isDownload = entry.topic === DOWNLOAD_CATEGORY.id;
+const software = isDownload ? listDownloadSoftware({ locale: lang }) : [];
+
+const dlCopy: Record<Lang, { heading: string; official: string; pending: string; note: string }> = {
+  en: { heading: 'Download channels', official: 'Official download', pending: 'Pending verification', note: 'Only the official address is verified. Other channels are reserved placeholders and are not clickable yet.' },
+  zh: { heading: '下载渠道', official: '官方下载', pending: '待核实', note: '仅官方地址已核实，其余渠道为预留占位地址，暂不作为可点击链接。' },
+  ja: { heading: 'ダウンロード手段', official: '公式ダウンロード', pending: '未確認', note: '公式アドレスのみ確認済み。他の手段は予約済みのプレースホルダーで、リンクは無効です。' },
+  ko: { heading: '다운로드 경로', official: '공식 다운로드', pending: '확인 대기', note: '공식 주소만 확인되었습니다. 나머지 경로는 예약된 자리표시자이며 링크로 제공되지 않습니다.' },
+  de: { heading: 'Download-Kanäle', official: 'Offizieller Download', pending: 'Noch nicht geprüft', note: 'Nur die offizielle Adresse ist geprüft. Die übrigen Kanäle sind reservierte Platzhalter und noch keine Links.' },
+  fr: { heading: 'Canaux de téléchargement', official: 'Téléchargement officiel', pending: 'En attente de vérification', note: 'Seule l’adresse officielle est vérifiée. Les autres canaux sont des emplacements réservés, sans lien actif.' },
+  es: { heading: 'Canales de descarga', official: 'Descarga oficial', pending: 'Pendiente de verificación', note: 'Solo la dirección oficial está verificada. Los demás canales son marcadores reservados sin enlace activo.' },
+  pt: { heading: 'Canais de download', official: 'Download oficial', pending: 'Aguardando verificação', note: 'Apenas o endereço oficial foi verificado. Os demais canais são marcadores reservados, sem link ativo.' },
+};
+const dc = dlCopy[lang];
+
+const relatedUrl = (r: ContentItem) =>
+  r.href ?? (r.path ? new URL(r.path, Astro.site).href : entry.canonical);
+
+const schema = [
+  {
+    '@type': 'ItemList',
+    name: entry.title,
+    numberOfItems: entry.relatedCount,
+    itemListElement: entry.related.map((r, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: r.title,
+      url: relatedUrl(r),
+    })),
+  },
+];
+---
+
+<BaseLayout lang={lang} title={entry.title} description={entry.description} path={entry.path} schema={schema}>
+  <div class="wrap docs-shell">
+    <main class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> /
+        <a href={`/${lang}/topics/`}>{entry.label.startsWith('AI') ? 'Topics' : entry.label}</a> / {entry.label}
+      </p>
+
+      <h1 class="doc__title">{entry.title}</h1>
+      <p class="doc__desc">{entry.description}</p>
+      <p class="topic__count">{entry.relatedCount} entries · {entry.keywords.slice(0, 6).join(' · ')}</p>
+
+      {isDownload && (
+        <section class="download">
+          <h2>{dc.heading}</h2>
+          <p class="download__note">{dc.note}</p>
+          {software.map((item) => (
+            <article class="download__item">
+              <h3>{item.name}</h3>
+              <p class="download__official">
+                <span class="download__key">{dc.official}</span>
+                <a href={item.downloads.official.url} rel="noopener noreferrer">{item.downloads.official.url}</a>
+              </p>
+              <ul class="download__channels">
+                {(['desktop', 'cli', 'mirror', 'fallback'] as const).map((channel) => (
+                  <li>
+                    <span class="download__key">{channel}</span>
+                    <code>{item.downloads[channel].url}</code>
+                    <span class="download__badge">{dc.pending}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </section>
+      )}
+
+      <ul class="topic__list">
+        {entry.related.map((r) => (
+          <li class="topic__item">
+            <a href={relatedUrl(r)} rel={r.href ? 'noopener noreferrer' : undefined}>{r.title}</a>
+          </li>
+        ))}
+      </ul>
+
+      <p class="topic__back"><a href={`/${lang}/topics/`}>{entry.label}</a></p>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .topic__count { color: var(--muted, #8a8a8a); font-size: 0.86rem; }
+  .topic__list { list-style: none; padding: 0; display: grid; gap: 0.6rem; margin-top: 1.5rem; }
+  .topic__item { border-left: 2px solid var(--border, #2a2a2a); padding-left: 0.8rem; }
+  .download { margin-top: 1.8rem; }
+  .download__note { font-size: 0.86rem; color: var(--muted, #8a8a8a); }
+  .download__item { border: 1px solid var(--border, #2a2a2a); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+  .download__item h3 { margin: 0 0 0.6rem; font-size: 1.05rem; }
+  .download__official, .download__channels li { font-size: 0.86rem; margin: 0.25rem 0; word-break: break-all; }
+  .download__channels { list-style: none; padding: 0; }
+  .download__key { color: var(--muted, #8a8a8a); margin-right: 0.5rem; }
+  .download__badge { border: 1px solid var(--border, #2a2a2a); border-radius: 999px; padding: 0 0.4rem; margin-left: 0.5rem; font-size: 0.75rem; }
+  .topic__back { margin-top: 2rem; font-size: 0.86rem; }
+</style>

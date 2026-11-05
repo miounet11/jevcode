@@ -39,6 +39,8 @@ const SECTIONS = {
   ecosystem: { en: 'Ecosystem projects', zh: '生态项目', ja: 'エコシステムのプロジェクト', ko: '생태계 프로젝트', de: 'Ökosystem-Projekte', fr: 'Projets de l\u2019écosystème', es: 'Proyectos del ecosistema', pt: 'Projetos do ecossistema' },
   coverage: { en: 'Jev coverage', zh: 'Jev 覆盖', ja: 'Jev カバレッジ', ko: 'Jev 커버리지', de: 'Jev-Coverage', fr: 'Couverture Jev', es: 'Cobertura Jev', pt: 'Cobertura Jev' },
   categories: { en: 'Ecosystem categories', zh: '生态分类', ja: 'エコシステムのカテゴリ', ko: '생태계 카테고리', de: 'Ökosystem-Kategorien', fr: 'Catégories de l\u2019écosystème', es: 'Categorías del ecosistema', pt: 'Categorias do ecossistema' },
+  topics: { en: 'Topic index', zh: '主题索引', ja: 'トピック索引', ko: '주제 색인', de: 'Themenindex', fr: 'Index des sujets', es: 'Índice de temas', pt: 'Índice de tópicos' },
+  downloads: { en: 'AI software downloads', zh: 'AI 软件下载', ja: 'AI ソフトウェア ダウンロード', ko: 'AI 소프트웨어 다운로드', de: 'AI-Software-Downloads', fr: 'Téléchargements de logiciels IA', es: 'Descargas de software de IA', pt: 'Downloads de software de IA' },
 };
 
 const pick = (field, lang) => SECTIONS[field][lang] ?? SECTIONS[field].en;
@@ -117,6 +119,13 @@ export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosyst
 
     lines.push(`## ${label} (/${code}/)`, '', intro, '');
     lines.push(`- Cases in this language: ${translated} of ${briefs.length}`);
+    lines.push('');
+
+    // 全站共用流量入口：8 语言都真实存在且可索引，直接推荐给 agent，
+    // 其中「头部 AI 软件下载」是主推分类，不必先爬 HTML 再猜结构。
+    lines.push(`### ${pick('topics', code)}`, '');
+    lines.push(`- [${pick('topics', code)}](${SITE}/${code}/topics/)`);
+    lines.push(`- [${pick('downloads', code)}](${SITE}/${code}/topics/ai-software-downloads/)`);
     lines.push('');
 
     lines.push(`### ${pick('docs', code)}`, '');

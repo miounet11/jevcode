@@ -123,6 +123,14 @@ test('llms.txt 不推荐没有列表页的章节（concepts/cases 是纯目录�
   }
 });
 
+test('llms.txt 收录 8 语言主题索引与 AI 软件下载分类', () => {
+  for (const lang of LLMS_LANGS) {
+    const site = 'https://www.jevcode.ai';
+    assert.ok(txt.includes(`${site}/${lang}/topics/`), `${lang} 缺少主题索引入口`);
+    assert.ok(txt.includes(`${site}/${lang}/topics/ai-software-downloads/`), `${lang} 缺少下载分类入口`);
+  }
+});
+
 test('llms.txt 收录文档条目，且只收该语言自己有的', () => {
   const docs = loadDocs();
   assert.ok((docs.en?.length ?? 0) > 0);

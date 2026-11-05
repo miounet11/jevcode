@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, useTranslations, type Lang } from '../../../i18n/ui';
+import briefs from '../../../data/daily-briefs.json';
+import briefI18n from '../../../data/briefs-i18n.json';
+import { projects } from '../../../data/ecosystem';
+import { COVERAGE_ENTRIES } from '../../../lib/content/registry';
+import {
+  buildTrafficEntries,
+  coverageItems,
+  projectItems,
+  briefItems,
+  type TrafficEntry,
+  type ContentItem,
+} from '../../../lib/content';
+import { LOCALES, type Locale } from '../../../lib/routing/domains';
+
+export function getStaticPaths() {
+  const items: ContentItem[] = [];
+  for (const locale of LOCALES) {
+    items.push(
+      ...coverageItems(COVERAGE_ENTRIES, locale),
+      ...projectItems(projects, locale),
+      ...briefItems(
+        briefs as Parameters<typeof briefItems>[0],
+        locale,
+        briefI18n as Parameters<typeof briefItems>[2],
+      ),
+    );
+  }
+  return (Object.keys(languages) as Lang[]).map((lang) => ({
+    params: { lang },
+    props: { entries: buildTrafficEntries(items, { locale: lang as Locale, minItems: 3 }) },
+  }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { entries } = Astro.props as { entries: TrafficEntry[] };
+const t = useTranslations(lang);
+const title = `${entries.length} topics | ${t('site.name')}`;
+---
+
+<BaseLayout lang={lang} title={title} description={`${entries.length} aggregated content topics`} path={`/${lang}/topics/`}>
+  <div class="wrap docs-shell">
+    <main class="doc">
+      <p class="doc__breadcrumb"><a href={`/${lang}/`}>{t('site.name')}</a> / Topics</p>
+      <h1 class="doc__title">Topics</h1>
+      <p class="doc__desc">{entries.length} aggregated content topics</p>
+      <ul class="hub__list">
+        {entries.map((entry) => (
+          <li class="hub__item">
+            <a href={entry.path}>{entry.label}</a>
+            <span class="hub__count">{entry.relatedCount}</span>
+          </li>
+        ))}
+      </ul>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .hub__list { list-style: none; padding: 0; display: grid; gap: 0.5rem; margin-top: 1.5rem; }
+  .hub__item { border-left: 2px solid var(--border, #2a2a2a); padding-left: 0.8rem; }
+  .hub__count { color: var(--muted, #8a8a8a); font-size: 0.8rem; margin-left: 0.5rem; }
+</style>
