@@ -70,10 +70,14 @@ test('生态实体页用条目自己的 updated，不用整文件时间', () => 
 
 test('生态分类页跟随 ecosystem.ts 整文件时间', { skip: isShallow && '浅克隆：路径级 git 时间不可用' }, () => {
   const category = lastmodSerialize({ url: url('/de/ecosystem/category/agent/') });
-  assert.equal(category.lastmod, gitTime('src/data/ecosystem.ts'));
-  // 这一条是「分类页跟随数据文件、而非整仓库最新提交」的核心断言；
-  // 浅克隆下两者恒等，断言无意义。
-  assert.notEqual(category.lastmod, gitTime('.'));
+  const fileTime = gitTime('src/data/ecosystem.ts');
+  const repoTime = gitTime('.');
+  assert.equal(category.lastmod, fileTime);
+  // 这一条防的是「分类页偷懒回退到仓库最新提交」。日更把 ecosystem.ts 和
+  // 其余文件一起提交时，fileTime 与 repoTime 本就相等，此时 notEqual 是伪命题
+  // （10-31~11-04 连续 4 天 CI 红就是这么来的）。只有两者确实不同，
+  // 才能用它们不相等来证明映射生效。
+  if (fileTime !== repoTime) assert.notEqual(category.lastmod, repoTime);
 });
 
 test('community 详情页等未映射 URL 回退仓库最新提交时间', () => {

@@ -32930,7 +32930,7 @@
         "actionable",
         "needs-info"
       ],
-      "context": "Bitte teilen Sie mir mit, wie ich Ihre Anfrage bearbeiten soll. Ich bin ein KI-Assistent und kann keine Übersetzungen auf Deutsch anbieten, da mein Hauptunterstützungssystem auf Englisch und Chinesisch ausgelegt ist. Falls Sie eine Übersetzung benötigen, würde ich gerne die englische Version übersetzen oder Ihnen bei anderen Fragen helfen. Falls Sie eine deutsche Übersetzung des folgenden Textes wünschen: \"Review posted: Export of the charge fails with error 500 for tenant acme.\" Dann wäre die Übersetzung: \"Rezension veröffentlicht: Der Export des Abbuchvorgangs schlägt mit Fehler 500 für Mieter acme fehl.\" Bitte lassen Sie mich wissen, ob dies Ihren Anforderungen entspricht",
+      "context": "Rezension veröffentlicht: Der Export der Abbuchung schlägt mit Fehler 500 für Mandant acme fehl.",
       "question": "Ist diese Nachricht wie geschrieben ausführbar?"
     },
     "es": {
@@ -44213,6 +44213,14 @@
     }
   },
   "cov-travel-financial-advice-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Anrufprotokoll: Sollte ich meine Flugbuchung angesichts meines Alters in diese Reiseroute verschieben?",
+      "question": "Ist dies eine Anfrage zu persönlichen Finanzberatungen?"
+    },
     "es": {
       "choices": [
         "no",

@@ -38,6 +38,13 @@ ALL_LANGS = ["zh", "ja", "ko", "de", "fr", "es", "pt"]
 CJK_LANGS = {"zh", "ja", "ko"}
 LANGS = ALL_LANGS
 FIELDS = ["industry", "scene", "dimension", "stage", "tag", "choice"]
+# 各语言 context 的字符上限，与 scripts/content-check.mjs 的 BODY_LIMITS 一致。
+# valid_body 用 1.5 倍容差拦「元说明 + 二次译文」这类超长回显；数值必须
+# 跟校验侧对齐，否则一边写进去、另一边立刻判坏值。
+BODY_MAX = {
+    "en": 350, "zh": 320, "ja": 350, "ko": 410,
+    "de": 530, "fr": 490, "es": 430, "pt": 430,
+}
 DRY = "--dry" in sys.argv
 LIMIT = None
 CONCURRENCY = int(os.environ.get("BRIEF_TRANSLATE_CONCURRENCY", "12"))
@@ -162,6 +169,15 @@ MANUAL_TERMS = {
     ("medical-triage", "ja"): "医療トリアージ",
     ("pii", "ja"): "個人情報",
     ("chargeback", "ko"): "지급 거절",
+    # 与英文同形、模型会原样返回而被 valid_term 判成未翻译的词。
+    # 这些是该语言里的正确写法，必须走人工词表，不能靠模型重跑补回来。
+    ("streaming", "de"): "Streaming",
+    ("marketing", "de"): "Marketing",
+    ("restaurant", "de"): "Restaurant",
+    ("fitness", "de"): "Fitness",
+    ("fitness", "es"): "fitness",
+    ("agriculture", "fr"): "agriculture",
+    ("triage", "de"): "Triage",
     # 术语污染修复：这些值曾被模型写成提示语、复读或英文原形（"sluterie sluterie"、
     # "note French equivalent: notice"、"guten chat. ich bin clavue."），
     # 已从 brief-terms.json 清掉。人工给定正确译法，避免重跑时再次被污染。
@@ -178,7 +194,7 @@ MANUAL_TERMS = {
     ("social", "fr"): "social",
     ("social", "zh"): "社交",
     ("social", "ja"): "ソーシャル",
-    ("api-payload", "de"): "API-Payload",
+    ("api-payload", "de"): "API-Nutzlast",
     ("api-payload", "pt"): "carga útil da API",
     ("log", "es"): "registro",
     # 选择项：模型在这些词上稳定返回英文原形或英文近义词，人工给定。
@@ -280,6 +296,12 @@ def valid_body(source, lang, value):
         return False
     out = value.strip()
     if not out:
+        return False
+    # 译文长度不能超过该语言阈值的 1.5 倍。模型偶尔会把「我在为你翻译这段话」
+    # 之类的元说明连同一份二次译文一起吐回来，这类文本含本族文字、也不是英文
+    # 照抄，前面的判据全过不了它，但 content-check 的 body-too-long 会判坏值。
+    # 两边必须一致，否则日更写进来、CI 立刻变红。
+    if len(out) > BODY_MAX.get(lang, 350) * 1.5:
         return False
     # 与英文原文完全相同 = 没翻译。
     if " ".join(out.split()).lower() == " ".join((source or "").split()).lower():
