@@ -178,10 +178,11 @@ test('getDownloadCategory 每种语言给出标题、描述、canonical 与关�
     const meta = getDownloadCategory({ locale });
     assert.equal(meta.id, 'ai-software-downloads');
     assert.equal(meta.locale, locale);
-    assert.ok(meta.title.trim() && meta.description.trim());
+    assert.ok(meta.title.trim() && meta.description.trim() && meta.label.trim());
     assert.equal(meta.path, `/${locale}/topics/ai-software-downloads/`);
     assert.equal(meta.canonical, `https://www.jevcode.ai/${locale}/topics/ai-software-downloads/`);
     assert.deepEqual(meta.primaryIds, ['imux', 'clavue', 'clavuebot']);
+    assert.equal(meta.updatedAt, '2026-11-05');
     for (const word of ['AI 软件下载', '头部 AI 工具', 'imux', 'Clavue', 'ClavueBot']) {
       assert.ok(meta.keywords.includes(word));
     }
@@ -198,6 +199,14 @@ test('buildTrafficEntries 追加下载分类且不覆盖既有主题入口', () 
   assert.equal(download.canonical, 'https://www.jevcode.ai/en/topics/ai-software-downloads/');
   assert.equal(download.relatedCount, 3);
   assert.deepEqual(download.related.map((r) => r.slug), ['imux', 'clavue', 'clavuebot']);
+  assert.deepEqual(download.related.map((r) => r.href), [
+    'https://imux.app/download',
+    'https://clavue.com/download',
+    'https://clavue.com/clavuebot/download',
+  ]);
+  assert.ok(download.related.every((r) => !r.path));
+  assert.equal(download.label, getDownloadCategory({ locale: 'en' }).label);
+  assert.equal(download.updatedAt, getDownloadCategory({ locale: 'en' }).updatedAt);
   assert.ok(download.keywords.includes('AI 软件下载'));
   assert.ok(download.keywords.includes('头部 AI 工具'));
   assert.ok(withDownload.some((e) => e.topic === 'ecommerce'));

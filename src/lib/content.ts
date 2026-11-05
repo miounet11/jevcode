@@ -75,6 +75,8 @@ export interface DownloadSoftwareOptions {
 export const DOWNLOAD_CATEGORY = {
   id: 'ai-software-downloads',
   path: '/topics/ai-software-downloads',
+  /** 分类收录日期；固定分类没有 git 路径可推导，用显式 ISO 日期供 sitemap/lastmod 使用。 */
+  updatedAt: '2026-11-05',
   /** 主推荐顺序，getPrimaryDownloadRecommendations() 必须保持这个次序。 */
   primaryIds: ['imux', 'clavue', 'clavuebot'],
   keywords: [
@@ -87,6 +89,18 @@ export const DOWNLOAD_CATEGORY = {
     'ClavueBot',
   ],
 } as const;
+
+/** 分类短标签；title 用于 <title>，label 用于面包屑/导航，按 locale 区分。 */
+const DOWNLOAD_LABELS: Record<Locale, string> = {
+  en: 'AI Software Downloads',
+  zh: 'AI 软件下载',
+  ja: 'AI ソフトウェア ダウンロード',
+  ko: 'AI 소프트웨어 다운로드',
+  de: 'AI-Software-Downloads',
+  fr: 'Téléchargements de logiciels IA',
+  es: 'Descargas de software de IA',
+  pt: 'Downloads de software de IA',
+};
 
 /** 生成 5 个渠道地址。official 为需求方指定值，其余为同域占位路径。 */
 function downloadLinks(base: string): Record<DownloadChannel, DownloadLink> {
@@ -155,6 +169,7 @@ const DOWNLOAD_DESCRIPTIONS: Record<Locale, string> = {
 export interface DownloadCategoryMeta {
   id: 'ai-software-downloads';
   locale: Locale;
+  label: string;
   title: string;
   description: string;
   /** 站内相对路径，含语言段。 */
@@ -162,21 +177,25 @@ export interface DownloadCategoryMeta {
   canonical: string;
   keywords: string[];
   primaryIds: string[];
+  /** ISO 日期；固定分类供 sitemap / lastmod 消费。 */
+  updatedAt: string;
 }
 
-/** 分类元数据，供页面生成标题、描述与 canonical。 */
+/** 分类元数据，供页面生成标题、描述、canonical 与下载内链。 */
 export function getDownloadCategory(options: { locale?: unknown } = {}): DownloadCategoryMeta {
   const locale = normalizeLocale(options.locale);
   const path = `${localePath(locale, DOWNLOAD_CATEGORY.path)}/`;
   return {
     id: DOWNLOAD_CATEGORY.id,
     locale,
+    label: DOWNLOAD_LABELS[locale] ?? DOWNLOAD_LABELS[DEFAULT_LOCALE],
     title: DOWNLOAD_TITLES[locale] ?? DOWNLOAD_TITLES[DEFAULT_LOCALE],
     description: DOWNLOAD_DESCRIPTIONS[locale] ?? DOWNLOAD_DESCRIPTIONS[DEFAULT_LOCALE],
     path,
     canonical: absoluteUrl(path),
     keywords: [...DOWNLOAD_CATEGORY.keywords],
     primaryIds: [...DOWNLOAD_CATEGORY.primaryIds],
+    updatedAt: DOWNLOAD_CATEGORY.updatedAt,
   };
 }
 
@@ -232,6 +251,11 @@ export interface ContentItem {
   published?: boolean;
   /** 站内相对路径（含语言段）。缺省时只影响透传，不参与入口生成。 */
   path?: string;
+  /**
+   * 外链地址（下载地址等）。有值时下游应优先用它作 href，而不是把 path
+   * 当成站内内链。下载分类的主推荐没有站内落地页，靠这个字段直接导向官方入口。
+   */
+  href?: string;
 }
 
 export interface CollectOptions {
@@ -511,13 +535,15 @@ export function buildTrafficEntries(
       kind: 'doc',
       topic: downloadTopic,
       keywords: [software.name, software.id],
-      // 没有站内落地页：省略 path，避免下游生成 href="" 的空内链。
-      // 具体下载地址由消费方从 listDownloadSoftware() 取。
+      // 没有站内落地页，直接给已核实的官方下载地址。下游渲染内链时
+      // 优先取 href，避免出现 href="" 的死链；其余渠道由
+      // listDownloadSoftware() 提供。
+      href: software.downloads.official.url,
     }));
     out.push({
       slug: downloadSlug,
       topic: downloadTopic,
-      label: 'AI Software Downloads',
+      label: meta.label,
       locale,
       title: meta.title,
       description: meta.description,
@@ -526,7 +552,7 @@ export function buildTrafficEntries(
       keywords: [downloadTopic, ...meta.keywords],
       related,
       relatedCount: related.length,
-      updatedAt: '',
+      updatedAt: meta.updatedAt,
     });
   }
 
