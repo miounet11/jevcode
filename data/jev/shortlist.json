@@ -176,6 +176,14 @@
     "text": "> **Automated Candidate Knockout Engine for High-Volume Recruiting — Powered by TypeSafe Jev System One Decision Intelligence.**"
   },
   {
+    "repo": "AkashPriyadarshii/jev-curate",
+    "name": "jev-curate",
+    "file": "README.md",
+    "branch": "main",
+    "line": 2,
+    "text": "Title: jev-curate: High-Throughput Synthetic & Pretraining Dataset Sifter Powered by TypeSafe AI (Jev System One)"
+  },
+  {
     "repo": "alexj11324/open-jev-approvals",
     "name": "open-jev-approvals",
     "file": "README.md",
@@ -1128,6 +1136,14 @@
     "text": "claude plugin update jev-rules@jev-rules"
   },
   {
+    "repo": "ellipsis-dev/blink",
+    "name": "blink",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Search a codebase with [Jev](https://docs.typesafe.ai/concepts/system-one) using an ensemble of walkers that walk the file system to find a file."
+  },
+  {
     "repo": "ellistev/typesafe-minecraft-demo",
     "name": "typesafe-minecraft-demo",
     "file": "README.md",
@@ -1326,6 +1342,14 @@
     "branch": "main",
     "line": 1,
     "text": "<h1 align=\"center\">jev-code</h1>"
+  },
+  {
+    "repo": "Frank-ZY-Dou/awesome-jev",
+    "name": "awesome-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 138,
+    "text": "- [TarunTomar122/jev-askable-arm](https://github.com/TarunTomar122/jev-askable-arm): simulated Franka in ManiSkill; \"Jev never outputs torques or a trajectory. It picks one primitive per step.\" Linked from the LinkedIn post above."
   },
   {
     "repo": "frankda/jev-poly-crypto-demo",
@@ -2952,6 +2976,14 @@
     "text": "Jev is reachable through several gateways, and each names the same yes/no question differently. Three clients are bundled, all of them plain `fetch` with no extra dependencies:"
   },
   {
+    "repo": "Opendray/opendray",
+    "name": "opendray",
+    "file": "README.md",
+    "branch": "main",
+    "line": 82,
+    "text": "| **Session env (host tools)** | A generic `[session.env]` / `[session.env_files]` config injects env vars — including host-CLI credentials — into every session, so any provider's agent inherits them with no per-provider setup and nothing tool-specific in the core. Example: point `TYPESAFE_API_KEY` at a key file and every agent can call [Jev](https://docs.typesafe.ai) (TypeSafe \"System One\") for calibrated, hallucination-free decisions (classify, verify, route, screen) returning JSON probabilities in ~half a second. |"
+  },
+  {
     "repo": "openlayer-ai/jevals",
     "name": "jevals",
     "file": "README.md",
@@ -4246,6 +4278,14 @@
     "branch": "main",
     "line": 143,
     "text": "| Demo | [Doom & Wikiracing](https://typesafe.ai/blog/introducing-system-one-models-and-jev) | Watch the official game demos; no standalone repo linked on this page. | Author demo |"
+  },
+  {
+    "repo": "WYRE-AI/msp-claude-plugins",
+    "name": "msp-claude-plugins",
+    "file": "packages/mcp-jev-guardrails/README.md",
+    "branch": "main",
+    "line": 7,
+    "text": "Pattern: atomic Nouls + code owns routing ([TypeSafe LLM guardrails cookbook](https://docs.typesafe.ai/cookbooks/llm_guardrails.md)). Model: `jev-latest` via `POST https://api.typesafe.ai/v1/systemone`."
   },
   {
     "repo": "Xiaooolong/vev",

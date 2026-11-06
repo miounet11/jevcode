@@ -1468,5 +1468,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-fraud-01",
+    "state": "Internal note: Same card used for 40 order in 3 minutes from 6 countries.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-02",
+    "state": "Social post: New buyer immediately requested payout of the full product listing balance.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-03",
+    "state": "Ticket: Login attempts for the order from a new device every hour.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-04",
+    "state": "Chat message: Impossible travel detected on the product listing admin account.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
   }
 ]
