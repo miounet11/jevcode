@@ -171,6 +171,11 @@ fi
 log "发布后校验..."
 VERIFY_URL="${JEVCODE_VERIFY_URL:-https://www.jevcode.ai}"
 VERIFY_SAMPLE="${JEVCODE_VERIFY_SAMPLE:-12}"
+# 每条 URL 的探测重试次数：nginx reload 会有一瞬间没有 worker 接连接，
+# 单次探测会拿到连接错误（000），把「已部署成功、只是撞上 reload 窗口」
+# 记成失败并触发回滚。只重试连接错误与 5xx，4xx 仍立即失败。
+PROBE_ATTEMPTS="${JEVCODE_PROBE_ATTEMPTS:-3}"
+PROBE_DELAY="${JEVCODE_PROBE_DELAY:-1}"
 
 verify_remote() {
   local urls
@@ -195,8 +200,12 @@ verify_remote() {
     # 只校验本站路径：sitemap 里可能混着别的域名，拿去打会得到无关结果。
     path=$(printf '%s' "$url" | sed -E "s#^https?://[^/]+##")
     [ -n "$path" ] || path="/"
-    code=$(curl -s -o /dev/null -w '%{http_code}' -m 15 "${VERIFY_URL}${path}" || echo 000)
-    if [ "$code" != "200" ]; then
+    # 用独立脚本探测而不是内联 curl：重试策略与「哪些状态码可重试」需要单独回归，
+    # 内联写法只能靠读 shell 断言，抓不住 `000000` 这类拼接缺陷。
+    # 只调用一次：退出码判成败，stdout 是最终状态码。stderr 原样透出重试过程。
+    if code=$(bash "$LOCAL_DIR/deploy/health-probe.sh" "${VERIFY_URL}${path}" "$PROBE_ATTEMPTS" "$PROBE_DELAY"); then
+      :
+    else
       log "  FAIL ${path} -> HTTP ${code}"
       bad=$((bad + 1))
     fi
