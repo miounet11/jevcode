@@ -1524,5 +1524,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-fraud-05",
+    "state": "Email received: The order was delayed due to weather.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-06",
+    "state": "Review posted: Requesting a copy of last year product listing statement.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-07",
+    "state": "Alert fired: The GMV looks lower than usual this month.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-08",
+    "state": "Log line: Please update the shipping address on the order.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
   }
 ]

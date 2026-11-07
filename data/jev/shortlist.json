@@ -2184,6 +2184,14 @@
     "text": "open saved posts  ->  read every card  ->  one Jev call each  ->  live dashboard  ->  board + csv + json"
   },
   {
+    "repo": "krzyzanowskim/says-who",
+    "name": "says-who",
+    "file": "README.md",
+    "branch": "main",
+    "line": 27,
+    "text": "3. Get an API key at [console.typesafe.ai](https://console.typesafe.ai). On the settings page that opens (or right-click the icon, **Options**), paste it and click **Save and test**."
+  },
+  {
     "repo": "kshetrajna12/reflex",
     "name": "reflex",
     "file": "README.md",
