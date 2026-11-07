@@ -232,33 +232,19 @@ fi
 # 运行超时护栏：成功一轮实测约 3.7 分钟（released elapsed_ms=223074），但抓取
 # 退到未认证限额时会死等（见上方 token 注释「实测卡 10 分钟以上」，9-25 正是靠
 # 人肉终止才停下）。macOS 无 timeout 命令、系统 bash 为 3.2（无 wait -n），
-# 故用后台 + 轮询实现；超时按 timeout(1) 约定记退出码 124。
+# 故用 run-with-timeout.sh 的后台 + 进程组实现；超时按 timeout(1) 约定记 124。
+#
+# 必须按「进程组」终止：管线会 fork ./deploy/deploy.sh。旧实现只 SIGTERM 主进程，
+# 已 fork 出去的 deploy 仍会跑完并切换线上软链，cron 却记「管线失败」——2026-11-06
+# 与 11-07 连续两轮即此形态（无 released 事件、线上却已是新版本）。
 PIPELINE_TIMEOUT="${PIPELINE_TIMEOUT:-900}"
 set +e
-node scripts/pipeline.mjs "$@" &
-PIPE_PID=$!
-WAITED=0
-TIMED_OUT=0
-while kill -0 "$PIPE_PID" 2>/dev/null; do
-  if [[ "$WAITED" -ge "$PIPELINE_TIMEOUT" ]]; then
-    echo "[cron] 运行超过 ${PIPELINE_TIMEOUT}s，向管线（pid ${PIPE_PID}）发送 SIGTERM"
-    kill -TERM "$PIPE_PID" 2>/dev/null
-    sleep 10
-    if kill -0 "$PIPE_PID" 2>/dev/null; then
-      echo "[cron] 仍未退出，发送 SIGKILL"
-      kill -KILL "$PIPE_PID" 2>/dev/null
-    fi
-    TIMED_OUT=1
-    break
-  fi
-  sleep 5
-  WAITED=$((WAITED + 5))
-done
-wait "$PIPE_PID"
+bash scripts/run-with-timeout.sh "$PIPELINE_TIMEOUT" node scripts/pipeline.mjs "$@"
 code=$?
 set -e
-if [[ "$TIMED_OUT" == "1" ]]; then
-  code=124
+TIMED_OUT=0
+if [[ "$code" -eq 124 ]]; then
+  TIMED_OUT=1
 fi
 
 # 门 2 HOLD（退出码 2）是「按设计不发布」，不是故障：与故障分开处理，不写

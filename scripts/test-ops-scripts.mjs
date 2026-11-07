@@ -569,3 +569,74 @@ test('巡检独立挂在 cron 上，不附着在管线末尾', () => {
   assert.match(sh, /HEALTH_LINE="0 10,22 \* \* \*/);
   assert.match(sh, /echo "\$HEALTH_LINE"/);
 });
+
+// ---------------- 超时护栏：必须回收整个进程组 ----------------
+
+const GUARD = new URL('./run-with-timeout.sh', import.meta.url).pathname;
+
+/** 跑护栏脚本（bash 版），返回 { code, out, pidPath } */
+function runGuard(argv, { cwd = ROOT, env = {} } = {}) {
+  return new Promise((resolve) => {
+    execFile('bash', [GUARD, ...argv], {
+      cwd,
+      env: { ...process.env, ...env },
+      timeout: 60000,
+    }, (err, stdout, stderr) => {
+      resolve({ code: err ? (err.code ?? 1) : 0, out: `${stdout}${stderr}` });
+    });
+  });
+}
+
+function pidAlive(pid) {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+test('超时护栏：超时后同组孙进程被回收，退出码按 timeout(1) 记 124', async () => {
+  const pidFile = path.join(mkdtempSync(path.join(tmpdir(), 'jev-tg-')), 'grand.pid');
+  // 模拟 pipeline.mjs fork deploy.sh：主进程再 fork 一个长睡孙进程。
+  const r = await runGuard(['3', 'bash', '-c',
+    `sleep 120 & echo $! > ${pidFile}; sleep 120`]);
+  assert.equal(r.code, 124, `超时应记 124，实际 ${r.code}：${r.out}`);
+  assert.match(r.out, /运行超过 3s/);
+
+  const grand = Number(readFileSync(pidFile, 'utf8').trim());
+  assert.ok(Number.isInteger(grand) && grand > 0, '未记录到孙进程 pid');
+  // 只杀主进程时孙进程会存活，继续跑完并改了线上软链——这正是 11-06/11-07 的形态。
+  assert.equal(pidAlive(grand), false, `孙进程 ${grand} 仍存活，进程组未被回收`);
+  rmSync(path.dirname(pidFile), { recursive: true, force: true });
+});
+
+test('超时护栏：未超时时透传命令自身退出码', async () => {
+  const ok = await runGuard(['30', 'bash', '-c', 'exit 0']);
+  assert.equal(ok.code, 0, `正常退出应透传 0，实际 ${ok.code}：${ok.out}`);
+  const bad = await runGuard(['30', 'bash', '-c', 'exit 7']);
+  assert.equal(bad.code, 7, `应透传 7，实际 ${bad.code}：${bad.out}`);
+});
+
+test('超时护栏：缺参数时退出 2 并给出用法', async () => {
+  const r = await runGuard(['5']);
+  assert.equal(r.code, 2);
+  assert.match(r.out, /用法/);
+});
+
+test('cron 的超时护栏按进程组终止，且 124 仍走「管线失败」分支', async () => {
+  const sh = readFileSync(new URL('./pipeline-cron.sh', import.meta.url), 'utf8');
+  // 旧实现是 node ... & 后只 kill 单 pid，deploy 会在被打断后继续发布。
+  assert.doesNotMatch(sh, /node scripts\/pipeline\.mjs "\$@" &/);
+  assert.match(sh, /run-with-timeout\.sh "\$PIPELINE_TIMEOUT" node scripts\/pipeline\.mjs/);
+  assert.match(sh, /if \[\[ "\$TIMED_OUT" == "1" \]\]/);
+  assert.match(sh, /ALERT_MSG="管线运行超时/);
+});
+
+test('护栏脚本对无法确认独立进程组的情形退回单 pid，不误杀自身组', () => {
+  const guard = readFileSync(GUARD, 'utf8');
+  // 没有这道保护，kill -TERM -PGID 有可能打到 cron 自己所在的组。
+  assert.match(guard, /"\$CHILD_PGID" == "\$CHILD_PID"/);
+  assert.match(guard, /"\$CHILD_PGID" != "\$OWN_PGID"/);
+  assert.match(guard, /SIGKILL 后仍有进程存活/);
+});
