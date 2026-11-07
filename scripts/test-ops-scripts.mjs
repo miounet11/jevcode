@@ -480,6 +480,40 @@ test('push 失败撤销本轮提交；deploy 失败保留已推送的提交', ()
   assert.doesNotMatch(pipeline, /__placeholder__/);
 });
 
+// ---------------- deploy 发布后探测：接入与持续失败分支 ----------------
+
+test('deploy 的发布后校验走健康探测脚本，且持续失败仍进失败分支', () => {
+  const sh = readFileSync(new URL('../deploy/deploy.sh', import.meta.url), 'utf8');
+  // 旧写法 `curl ... || echo 000` 在连接失败时会拼出 000000，且没有重试：
+  // reload 瞬断会把已成功的部署判成失败并触发回滚。
+  assert.doesNotMatch(sh, /code=\$\(curl[^)]*\|\| echo 000\)/);
+  assert.match(sh, /health-probe\.sh/);
+  // 调用必须只发生一次，并且以退出码判成败。
+  const callSites = sh.match(/health-probe\.sh" "\$\{VERIFY_URL\}/g) ?? [];
+  assert.equal(callSites.length, 1, `探测应只调用一次，实际 ${callSites.length} 处`);
+  assert.match(sh, /if code=\$\(bash "\$LOCAL_DIR\/deploy\/health-probe\.sh"/);
+  // 失败仍要计入 bad，从而由 verify_remote 返回 1 触发回滚。
+  assert.match(sh, /log "  FAIL \$\{path\} -> HTTP \$\{code\}"/);
+  assert.match(sh, /bad=\$\(\(bad \+ 1\)\)/);
+  assert.match(sh, /\[ "\$bad" -eq 0 \] \|\| \{ log "  \$\{bad\} 个 URL 未返回 200"; return 1; \}/);
+});
+
+test('健康探测脚本：只对连接错误与 5xx 重试，且重试次数有界', () => {
+  const src = readFileSync(new URL('../deploy/health-probe.sh', import.meta.url), 'utf8');
+  // 注释里会引用这段旧缺陷写法做说明，断言必须只针对可执行行，否则会误报。
+  const probe = src.split('\n').filter((l) => !/^\s*#/.test(l)).join('\n');
+  // 可重试集合必须是 000 + 5xx；4xx/3xx 属于真实故障或配置不符，重试只会推迟失败。
+  assert.match(probe, /000\) return 0/);
+  assert.match(probe, /5\?\?\) return 0/);
+  // 连接失败时先取 curl 退出码，不能再拼出 000000。
+  assert.doesNotMatch(probe, /\|\| echo 000/);
+  assert.match(probe, /if raw=\$\(curl/);
+  assert.match(probe, /\^\[0-9\]\{3\}\$/);
+  // 有界：达到 ATTEMPTS 必须失败退出，不能退化成无限等待拖垮 900s 预算。
+  assert.match(probe, /attempt.*-ge.*ATTEMPTS/);
+  assert.match(probe, /delay.*-le 8/);
+});
+
 test('飞书告警：msg_type/content.text 形态正确，未配置时不算失败', async () => {
   const { feishuBody } = await import('./notify-feishu.mjs');
   const body = feishuBody('管线失败', '退出码 1', new Date('2026-10-23T01:30:00Z'));
