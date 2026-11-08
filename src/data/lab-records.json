@@ -744,5 +744,33 @@
     "ok": true,
     "choice": "investigate",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-fraud-09",
+    "ts": "2026-11-08T01:32:01.474Z",
+    "ok": true,
+    "choice": "investigate",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-fraud-10",
+    "ts": "2026-11-08T01:32:03.141Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-01",
+    "ts": "2026-11-08T01:32:04.273Z",
+    "ok": true,
+    "choice": "spam",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-02",
+    "ts": "2026-11-08T01:32:05.665Z",
+    "ok": true,
+    "choice": "spam",
+    "model": "clavue-jev"
   }
 ]

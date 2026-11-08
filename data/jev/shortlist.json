@@ -152,6 +152,14 @@
     "text": "Run browser tasks locally or in a cloud browser. Jev chooses from indexed page controls; fastbrowse returns"
   },
   {
+    "repo": "agentcontrol/agent-control",
+    "name": "agent-control",
+    "file": "examples/typesafe_jev/README.md",
+    "branch": "main",
+    "line": 19,
+    "text": "The evaluator here calls `POST /v1/systemone` at `https://api.typesafe.ai`, with the model id `jev-latest`."
+  },
+  {
     "repo": "Ai-trainee/awesome-jev",
     "name": "awesome-jev",
     "file": "README.md",
@@ -1128,6 +1136,14 @@
     "text": "A reference integration for **TypeSafe AI's Jev**, the first \"System One\" model: typed"
   },
   {
+    "repo": "duriantaco/skylos",
+    "name": "skylos",
+    "file": "benchmarks/dead_code/README.md",
+    "branch": "main",
+    "line": 355,
+    "text": "`https://api.typesafe.ai/v1/systemone` and incurs API usage. The runner pins"
+  },
+  {
     "repo": "EliaAlberti/jev-rules",
     "name": "jev-rules",
     "file": "README.md",
@@ -1206,6 +1222,14 @@
     "branch": "main",
     "line": 28,
     "text": "Sign up at [typesafe.ai](https://typesafe.ai) and create an API key. The key stays in your browser profile. You pay TypeSafe directly for what you use."
+  },
+  {
+    "repo": "ethany14/Eregion-Job-Finding-Agent",
+    "name": "Eregion-Job-Finding-Agent",
+    "file": "README.md",
+    "branch": "main",
+    "line": 205,
+    "text": "TYPESAFE_BASE_URL=https://api.typesafe.ai"
   },
   {
     "repo": "etweisberg/jev-ui",
@@ -2400,6 +2424,14 @@
     "text": "A shell-aware blocklist sits in front of Jev. A call it flags can still be denied by Jev but is never allowed, and a call that carries a secret never leaves your machine."
   },
   {
+    "repo": "magiksoft/aider-desk",
+    "name": "aider-desk",
+    "file": "packages/extensions/extensions/jev/README.md",
+    "branch": "main",
+    "line": 24,
+    "text": "| TypeSafe | `https://api.typesafe.ai/v1/systemone` | native contract, model `jev-latest` |"
+  },
+  {
     "repo": "MahmoudAdelbghany/jev-browser",
     "name": "jev-browser (MahmoudAdelbghany)",
     "file": "README.md",
@@ -2446,6 +2478,14 @@
     "branch": "main",
     "line": 131,
     "text": "- **页面文本会发送到所选 API 服务（默认 TypeSafe）** 做判断——这是它工作的必要部分。发送的是帖子正文和作者 handle；折叠长推文会发送 X 页面数据中已有的全文，即使你尚未点击展开。"
+  },
+  {
+    "repo": "MANISH007700/tab-bouncer",
+    "name": "tab-bouncer",
+    "file": "README.md",
+    "branch": "main",
+    "line": 6,
+    "text": "The ratings come from [Jev](https://typesafe.ai), TypeSafe AI's decision model: one call, every tab judged at once, back in about a second, for a hundredth of a cent."
   },
   {
     "repo": "marcreichel/laya-php",
@@ -2646,6 +2686,14 @@
     "branch": "main",
     "line": 3,
     "text": "Jeved is a SillyTavern extension. It sends chat messages to Jev, a small decision model, with"
+  },
+  {
+    "repo": "mountainMath/JevR",
+    "name": "JevR",
+    "file": "README.md",
+    "branch": "main",
+    "line": 94,
+    "text": "The [TypeSafe docs](https://docs.typesafe.ai/) cover this in depth. In"
   },
   {
     "repo": "mrbanana55/Decision_Blackjack",
@@ -3030,6 +3078,14 @@
     "branch": "main",
     "line": 133,
     "text": "Custom endpoints use Jevvy's default approval policy unless you replace it. Its calibration evidence applies only when the route is verified to serve the calibrated Jev model."
+  },
+  {
+    "repo": "PaoPao1021/mahjong-jev-advisor",
+    "name": "mahjong-jev-advisor",
+    "file": "README.md",
+    "branch": "main",
+    "line": 277,
+    "text": "| Vercel Jev 评估 | `https://ai-gateway.vercel.sh/v4/ai/evaluation-model` | `typesafe-ai/jev-latest` |"
   },
   {
     "repo": "Para-FR/casse-brique-typesafe",
@@ -4070,6 +4126,14 @@
     "branch": "main",
     "line": 406,
     "text": "- Gates — Smart Turn, Namo Turn, Jev, OpenAI Decisions, LLM turn gate, filler-only, session hold, custom gates"
+  },
+  {
+    "repo": "UiPath/uipath-langchain-python",
+    "name": "uipath-langchain-python",
+    "file": "samples/aml-alert-triage-agent/README.md",
+    "branch": "main",
+    "line": 388,
+    "text": "- Egress from a UiPath serverless run to `api.typesafe.ai` — **permitted** (200 OK). Nothing"
   },
   {
     "repo": "unicodeveloper/jevocks",

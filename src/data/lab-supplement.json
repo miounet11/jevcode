@@ -1580,5 +1580,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-fraud-09",
+    "state": "Call transcript: Three order charges from three countries within two minutes.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-fraud-10",
+    "state": "Form submission: How do I change the product listing display language?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Does this pattern suggest fraud requiring investigation?",
+        "options": [
+          "no",
+          "investigate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-01",
+    "state": "Social post: Buy cheap product listing now! Click here for 90% off order.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-02",
+    "state": "Ticket: Congratulations, you won a free order! Claim at this link.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
   }
 ]
