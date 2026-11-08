@@ -38,3 +38,14 @@
 - 下一轮 cron 应重新出现 `released` 事件，`eco_last_release` 前移，说明发布链路恢复闭环。
 - `pending` 不再持续增长并随发布回落；若仍上涨，说明存在护栏之外的第二处中断。
 - IndexNow 差集应在下一次成功发布后收敛。
+
+### 复跑结果（2026-11-08 09:30 cron）
+
+当日 09:30 那轮 cron 自然跑通，四个观察项中前三项已由实测数据确认：
+
+- `gate1-stale-override` / `gate1` 255s → `gate2` 389s → **`released` 719s**，全程在 900s 预算内，未触发超时护栏。
+- `pending` 由 115 回落至 **0**，`last_release` 与 `eco_last_release` 同步前移到 `2026-11-08T01:42:01.413Z`——发布会话真正走完了闭环，不再出现「cron 记失败、线上已换版」的错位。
+- 提交 `63b4e63 chore(eco): 生态数据自动刷新 (2026-11-08)` 正常入库。
+- 主机上无残留 `deploy.sh` / `rsync` / `ssh` 子进程（`ps` 复核）。
+- 线上抽测 `/en/`、`/en/briefs/`、`/en/topics/ai-software-downloads/`、`/zh/topics/ai-software-downloads/` 均返回 `code=200 rc=0`，健康探测脚本在真实 nginx 上按预期工作。
+- IndexNow 差集同步收敛：`sitemap` 17141 条 URL 全部在 `.indexnow-state.json` 中留有记录，待提交 **0**。
