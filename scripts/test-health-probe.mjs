@@ -49,6 +49,43 @@ test('健康探测：首次 503、下次 200 时判定成功，且真的重试�
   }
 });
 
+test('健康探测：首次连接错误（000）、随后 200 时恢复，不误判失败', async () => {
+  // 先占一个端口拿到空闲端口号，然后立刻释放——第一次探测必然是连接错误，
+  // 正是 nginx reload 窗口里 curl 拿到 000 的形态。
+  const placeholder = createServer();
+  await new Promise((r) => placeholder.listen(0, '127.0.0.1', r));
+  const { port } = placeholder.address();
+  await new Promise((r) => placeholder.close(r));
+
+  const srv = createServer((req, res) => { res.writeHead(200); res.end('ok'); });
+  const listenOn = () => new Promise((resolve, reject) => {
+    const onErr = (e) => { srv.removeListener('listening', onOk); reject(e); };
+    const onOk = () => { srv.removeListener('error', onErr); resolve(); };
+    srv.once('error', onErr);
+    srv.once('listening', onOk);
+    srv.listen(port, '127.0.0.1');
+  });
+  // 300ms 后才挂上服务：首次探测已失败，1s 后的第二次探测就能拿到 200。
+  const started = (async () => {
+    await new Promise((r) => setTimeout(r, 300));
+    for (let i = 0; i < 10; i += 1) {
+      try { await listenOn(); return; } catch { await new Promise((r) => setTimeout(r, 50)); }
+    }
+    throw new Error('无法重新绑定端口');
+  })();
+
+  try {
+    const r = await probe(`http://127.0.0.1:${port}/en/`, 3, 1);
+    await started;
+    assert.equal(r.code, 0, `首次 000 后应恢复成功，实际退出 ${r.code}：${r.stderr}`);
+    assert.equal(r.stdout, '200');
+    assert.match(r.stderr, /000/, '首次探测应记录连接错误');
+    assert.match(r.stderr, /第 2 次探测恢复 200/);
+  } finally {
+    await new Promise((r) => srv.close(r));
+  }
+});
+
 test('健康探测：持续 500 时重试次数有界并最终失败', async () => {
   const srv = await startServer(() => 500);
   try {
