@@ -304,6 +304,14 @@
     "text": "Open-source products and demos that put a decision model in a real loop. Most use Jev today."
   },
   {
+    "repo": "antlobach/clojev",
+    "name": "clojev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 14,
+    "text": "> **Unofficial project:** TypeSafe does not develop, sponsor, endorse, or support CloJev. This project uses the names TypeSafe, Jev, and System One only to identify the compatible API."
+  },
+  {
     "repo": "AntonioCoppe/jev-harness",
     "name": "jev-harness",
     "file": "README.md",
@@ -952,6 +960,14 @@
     "text": "make systemone   # TypeSafe-style request against /v1/systemone"
   },
   {
+    "repo": "datawhalechina/jev-cookbook",
+    "name": "jev-cookbook",
+    "file": "apps/dsh-jev-decision/README.md",
+    "branch": "main",
+    "line": 172,
+    "text": "| `TYPESAFE_DEFAULT_MODEL` | `jev-1.13.0`，记录请求模型与实际响应模型 |"
+  },
+  {
     "repo": "davila7/jev-explained",
     "name": "jev-explained",
     "file": "README.md",
@@ -998,6 +1014,14 @@
     "branch": "main",
     "line": 83,
     "text": "- Jev and provider API keys live in the OS credential store (macOS Keychain, Windows Credential"
+  },
+  {
+    "repo": "dengyie/ai-register",
+    "name": "ai-register",
+    "file": "README.md",
+    "branch": "main",
+    "line": 36,
+    "text": "| **typesafe.ai / jev** | `./register.sh typesafe [count] [threads]` | Python + requests + Stytch Magic-Link | `typesafe-*.json` (0600 API Key) |"
   },
   {
     "repo": "dengyie/ai-register-machine",
@@ -1854,6 +1878,14 @@
     "branch": "main",
     "line": 111,
     "text": "- **Internet connection** for setup and Jev API calls"
+  },
+  {
+    "repo": "Jaeder42/state-trak-local",
+    "name": "state-trak-local",
+    "file": "readme.md",
+    "branch": "main",
+    "line": 319,
+    "text": "- **JEV analysis** — TypeSafe System One judging every team's buy against the"
   },
   {
     "repo": "JamesANZ/us-legal-mcp",
@@ -3136,6 +3168,14 @@
     "text": "6. **Jev Cloud**: TypeSafe AI hosted service on `https://api.typesafe.ai`."
   },
   {
+    "repo": "Peu77/JevFind",
+    "name": "JevFind",
+    "file": "README.md",
+    "branch": "main",
+    "line": 3,
+    "text": "Fast semantic code search powered by [TypeSafe Jev](https://typesafe.ai/). Describe a concept in plain English and get the relevant files, line ranges, confidence scores, and source snippets."
+  },
+  {
     "repo": "philippdubach/pi-jev-router",
     "name": "pi-jev-router (philippdubach)",
     "file": "README.md",
@@ -3272,6 +3312,14 @@
     "text": "<img src=\"https://raw.githubusercontent.com/Query-farm/vgi-typesafe/main/docs/vgi-logo.png\" alt=\"Vector Gateway Interface logo\" width=\"320\">"
   },
   {
+    "repo": "quietpublish/mardi-gras",
+    "name": "mardi-gras",
+    "file": "README.md",
+    "branch": "main",
+    "line": 137,
+    "text": "### Judge with Jev (optional)"
+  },
+  {
     "repo": "r-ms/mini-jev",
     "name": "mini-jev",
     "file": "README.md",
@@ -3398,6 +3446,14 @@
     "branch": "main",
     "line": 24,
     "text": "- Move an object to ask Jev again. Drag it off the road or click its × to remove it."
+  },
+  {
+    "repo": "Reisenbug/TerraBlind",
+    "name": "TerraBlind",
+    "file": "README.md",
+    "branch": "main",
+    "line": 224,
+    "text": "### Jev fights the bosses"
   },
   {
     "repo": "RenaGao/jev-dataops",

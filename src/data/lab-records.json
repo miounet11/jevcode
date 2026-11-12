@@ -772,5 +772,33 @@
     "ok": true,
     "choice": "spam",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-03",
+    "ts": "2026-11-12T01:33:32.159Z",
+    "ok": true,
+    "choice": "spam",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-04",
+    "ts": "2026-11-12T01:33:35.488Z",
+    "ok": true,
+    "choice": "spam",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-05",
+    "ts": "2026-11-12T01:33:36.945Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-06",
+    "ts": "2026-11-12T01:33:38.293Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
   }
 ]

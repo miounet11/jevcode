@@ -1636,5 +1636,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-spam-03",
+    "state": "Chat message: Mass-sent pitch about GMV growth to hundreds of buyer.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-04",
+    "state": "Email received: Repeated promo for the product listing to unrelated recipients.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-05",
+    "state": "Review posted: Your order renewal is due next month.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-06",
+    "state": "Alert fired: Monthly GMV summary for your account.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
   }
 ]
