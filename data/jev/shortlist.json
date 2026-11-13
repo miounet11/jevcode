@@ -368,6 +368,14 @@
     "text": "Dashboard: SSH tunnel or Tailscale to `http://127.0.0.1:8080`. Set the capital Jev can deploy in the header. Kill = cancel all entries and flatten; Resume clears it."
   },
   {
+    "repo": "Arpit-Khandelwal/jev-linkedin-slop-filter",
+    "name": "jev-linkedin-slop-filter",
+    "file": "README.md",
+    "branch": "main",
+    "line": 16,
+    "text": "[typesafe.ai](https://typesafe.ai)."
+  },
+  {
     "repo": "atharvamhaske/typesafe-sdk-go",
     "name": "typesafe-sdk-go",
     "file": "README.md",
@@ -2152,6 +2160,14 @@
     "text": "Everything runs locally except one ~250 ms call to **Jev** (TypeSafe's System One"
   },
   {
+    "repo": "kevnk/jev-claude-statusline",
+    "name": "jev-claude-statusline",
+    "file": "README.md",
+    "branch": "main",
+    "line": 1,
+    "text": "# jev-claude-statusline"
+  },
+  {
     "repo": "Kevthetech143/super-jev",
     "name": "super-jev",
     "file": "README.md",
@@ -2640,6 +2656,14 @@
     "text": "export TYPESAFE_API_KEY=...            # https://typesafe.ai"
   },
   {
+    "repo": "mizchi/jev-playground",
+    "name": "jev-playground",
+    "file": "README.md",
+    "branch": "main",
+    "line": 14,
+    "text": "| `cmd/patterns` | 公式ドキュメントの[意思決定パターン](https://docs.typesafe.ai/patterns)を実 API に対して走らせ、効果を実測する CLI |"
+  },
+  {
     "repo": "mizchi/jev-test-filter",
     "name": "jev-test-filter",
     "file": "README.md",
@@ -2678,6 +2702,14 @@
     "branch": "main",
     "line": 33,
     "text": "- API 端点: `POST https://api.typesafe.ai/v1/systemone`,模型 `jev-latest`(当前为 `jev-1.13.0`)。"
+  },
+  {
+    "repo": "mohamedikbel/semval4j",
+    "name": "semval4j",
+    "file": "README.md",
+    "branch": "main",
+    "line": 49,
+    "text": "model: jev-latest"
   },
   {
     "repo": "mohsen1/llm-debugger-vscode-extension",
@@ -4510,6 +4542,14 @@
     "branch": "main",
     "line": 51,
     "text": "- `app.on('jev', '<description>', handler)` registers a semantic route."
+  },
+  {
+    "repo": "yzfly/awesome-jev-zh",
+    "name": "awesome-jev-zh",
+    "file": "README.md",
+    "branch": "main",
+    "line": 44,
+    "text": "| [API Keys 控制台](https://console.typesafe.ai/settings/keys) | 拿 `TYPESAFE_API_KEY` |"
   },
   {
     "repo": "Zefan-Cai/Open-Jev",

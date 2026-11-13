@@ -93,7 +93,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/ItsCuthulhu/status/2101491913866055821",
     date: "2026-09-20T02:01:30.000Z",
     text: "Top 5 Jev Alternatives — I have been running a benchmark since this morning on every Jev alternative against Jev. So far, none have beaten it on accuracy but some have slightly less accuracy with better speed. 1. djev — slightly lower accuracy, slightly faster, worthy tradeoff. 2. Simplejev-qwen38-27b — best open source replacement today, but needs a 27B rig (DGX Spark or similar). 3. Reflex-4b — 2-3x faster, ~5% less accurate, Apache 2.0. 4. Decider-2b — ~10x faster, fully local, ~5% less accurate. 5. Laya — 62.5% accuracy, not worth it. Jev is the frontier of this paradigm, but it is losing ground quickly. Benchmark auto-updates at bench.jakecuth.com",
-    views: 71820,
+    views: 71825,
     likes: 186,
     projectUrl: "http://bench.jakecuth.com",
   },
@@ -116,7 +116,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/Cloudflare/status/2101009970045071824",
     date: "2026-09-18T18:06:26.000Z",
     text: "📣 Speaker announcement: @CompleteSkeptic CEO, @typesafeai at Cloudflare Connect\n\nRegister today:",
-    views: 135197,
+    views: 135206,
     likes: 264,
     projectUrl: "https://cloudflare.com/connect"
   },
@@ -127,7 +127,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/levie/status/2101007708044574906",
     date: "2026-09-18T17:57:27.000Z",
     text: "Jev will be super helpful for agents to make split second decisions in workflows, data classification, judgment calls, and hundreds of other use-cases in the enterprise.\n\nHere's a quick demo with Box and Jev to make that real. The demo pulls an incident report from Box, asks whether it's customer-facing and how severe it is, moves the file into escalate, monitor, or review folders, and sets a meta",
-    views: 116837,
+    views: 116845,
     likes: 658,
     projectUrl: null
   },
@@ -138,7 +138,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/nikunj/status/2101006585481073093",
     date: "2026-09-18T17:52:59.000Z",
     text: "Jev scoring 3000 kid snacks with multiple criteria on  in 28 seconds for $0.11 🤯",
-    views: 92428,
+    views: 92430,
     likes: 741,
     projectUrl: "https://nosugarforkids.com/"
   },
@@ -149,7 +149,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/picocreator/status/2101006253829046539",
     date: "2026-09-18T17:51:40.000Z",
     text: "love jev, but upset it\n- isn't open source?\n- it lack vision capability?\n\nWe fixed all of that, introducing \n\nA fully open source library which takes any HF model and Jev-ify it, with an API endpoint\n\nNow on github, and live in production at @FeatherlessAI",
-    views: 107056,
+    views: 107070,
     likes: 1240,
     projectUrl: "https://simplejev.ai/"
   },
@@ -160,7 +160,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/SUOHA_AI/status/2101000339948282090",
     date: "2026-09-18T17:28:10.000Z",
     text: "完全睡不着了....这个视频让你完全看懂JEV的恐怖能力\n\n我实际演示了一下，用 JEV 和 DeepSeek 做同一个任务：从当天的海量实时新闻流里，为 15 个品牌快速匹配有没有适合借势的公关热点，并打上结构化意图分类标签\n\n结果是：28 秒内，Jev 狂刷完了整整 428 条数据，并完成了全部的目标分解与分类；而同一时间跑在同样任务上的 DeepSeek V4.1-flash，才刚刚完成 6/428 条\n\n速度被拉开了几十倍，答案甚至在你读完第一行字之前就已经返回了....\n\n为什么会产生这么恐怖的差距？底层逻辑是：\n\n• DeepSeek 这种通用模型本质上是在“逐字写文章”：\n哪怕你只让它做个最简单的“是/否”判断，它在后台也必须一个词一个词往外推，硬走一遍漫长的生成流程，延迟按秒起步\n\n• Jev 官方定位是“System 1（快决策）”模型，从根上就根本不会写字：\n它彻底抛弃",
-    views: 417570,
+    views: 417594,
     likes: 2251,
     projectUrl: "https://github.com/elvisun/newsjack"
   },
@@ -171,7 +171,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/sarvagya_kul/status/2100980770206879849",
     date: "2026-09-18T16:10:24.000Z",
     text: "JEV is INSANE.  \n\nWe gave it 400 companies and one candidate profile.  \n\nIn 12 seconds, it predicted which jobs the candidate had the highest chance of getting, assigned a confidence score and detected job-candidate mismatches.  \n\nAll for just $0.0005  It can also score companies, analyse your experience, match you with the right roles and identify the opportunities you’re most likely to get based",
-    views: 152618,
+    views: 152634,
     likes: 1762,
     projectUrl: null
   },
@@ -182,8 +182,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/sydneyrunkle/status/2100979515388473828",
     date: "2026-09-18T16:05:25.000Z",
     text: "instead of generating text, jev from @typesafeai generates structured output\n\nthis makes it great for classification tasks like model routing, tool selection/search, and guardrails of many forms!\n\nit's also ridiculously fast and cheap compared to LLMs doing the same tasks",
-    views: 52971,
-    likes: 241,
+    views: 52974,
+    likes: 240,
     projectUrl: null
   },
   {
@@ -193,7 +193,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/nedwize/status/2100973868324417852",
     date: "2026-09-18T15:42:59.000Z",
     text: "Built a tax document classifier with Jev.\n\nWe ingest thousands of tax documents using an LLM pipeline I built last tax season.\n\nI read multiple articles as late as April this year claiming AI fails at tax document classification. Wasn't the case back then, and it's proved wrong again now.\n\nJev classifies 100% of our tax document corpus at $0.001 per page. \n\n34x cheaper and 6x faster than the LLM s",
-    views: 248303,
+    views: 248326,
     likes: 3379,
     projectUrl: "http://github.com/kyotofin/tax-doc-classifier"
   },
@@ -204,8 +204,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/ego_agent/status/2100970015977804008",
     date: "2026-09-18T15:27:40.000Z",
     text: "ego lite + Jev + DeepSeek Flash = stupid fast. ⚡\n\n3.71s for 20 Amazon product decisions.\n\nGPT-5.6 Sol: 54.45s\n\nSame task. Same result.\n10/10 on both.\n\nLess reasoning. Faster decisions.\n1× speed.",
-    views: 65496,
-    likes: 781,
+    views: 65503,
+    likes: 780,
     projectUrl: null
   },
   {
@@ -215,7 +215,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/_MaxBlade/status/2100967959879471519",
     date: "2026-09-18T15:19:30.000Z",
     text: "Ai is evolving. \n\nJev can be armed at all times. \n\nI can speak freely and it knows ( from probabilities ) if im asking my computer to do something or blaberring away at something else.\n\nno wake word. \n\nspeed + affordability + intelligence is getting to the point where an always on ambient jarvis style assistant is possible. \n\nIm loving where we are going. \n\nCNVS is still the future of vibecoding.",
-    views: 71060,
+    views: 71074,
     likes: 1610,
     projectUrl: null
   },
@@ -226,7 +226,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/o_kwasniewski/status/2100966838905585687",
     date: "2026-09-18T15:15:03.000Z",
     text: "e2e + jev from @typesafeai ⚡\n\nI'm building an open-source framework for running e2e tests with agents. supports web, mobile (and more!)\n\navailable soon:",
-    views: 70189,
+    views: 70199,
     likes: 1105,
     projectUrl: "https://tester.army/e2e"
   },
@@ -237,7 +237,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/virattt/status/2100959848623899005",
     date: "2026-09-18T14:47:16.000Z",
     text: "I added Jev to the AI Hedge Fund.\n\nWe now get frontier-level trading decisions, 100x faster and cheaper than an LLM.\n\nHow it works:\n1 • set strategy\n2 • pick tickers\n3 • backtest with Jev\n\nSystem now runs in seconds, not minutes.",
-    views: 94246,
+    views: 94250,
     likes: 1075,
     projectUrl: null
   },
@@ -248,7 +248,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/rafalwilinski/status/2100959576682012988",
     date: "2026-09-18T14:46:11.000Z",
     text: "Jev is now in charge of this account's humor",
-    views: 49902,
+    views: 49904,
     likes: 908,
     projectUrl: null
   },
@@ -259,7 +259,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/KinasRemek/status/2100953553917313180",
     date: "2026-09-18T14:22:15.000Z",
     text: "jav @typesafeai  - jestem pod wrażeniem 🤩  Cool. Napisałem kolejne demo. Myślę, że teraz to widać potęgę modelu ... i o co chodzi i widać prawdziwą wartość biznesową.\n\nAkt I - X-ray: „jedno zapytanie, wszystkie pytania naraz\" -  dla przykładowej, krótkiej notatki prasowej to 67 osądów w ~1 s za $0.0002; dla dłuższego RAPORTU może być i 145 osądów w 1,5 s za $0.0005. Skoro nie ma tokenów wyjściowyc",
-    views: 12776,
+    views: 12779,
     likes: 124,
     projectUrl: null
   },
@@ -270,7 +270,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/raihankhan_rk/status/2100951738606035176",
     date: "2026-09-18T14:15:02.000Z",
     text: "I've had access to Jev by @typesafeai for about 30 hours now and I can't stop thinking of the million places it can be used 🤯\n\nMeanwhile, checkout this fun snake game I built where 2 Jev's compete with each other to take the trophy 🏆\n\nTry it out here 🔗 \n\nIt's open source btw\n\nThe low latency made it all possible to make such a fun project which requires input in real time 🚀",
-    views: 8942,
+    views: 8943,
     likes: 38,
     projectUrl: "http://jevarena.up.railway.app/"
   },
@@ -292,7 +292,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/mightyking/status/2100939189869002819",
     date: "2026-09-18T13:25:11.000Z",
     text: "JEV is insane for competitor research!\n\nWe gave it Resilia's ad library\n\nIt classified 1,891 ads in 19 seconds for $0.12\n\ncostumer journey step + Ad style\n\nAnd a complete deep analysis of the account\n\nComing soon to maxfusion MCP",
-    views: 174409,
+    views: 174415,
     likes: 201,
     projectUrl: null
   },
@@ -303,7 +303,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/hqmank/status/2100933183931900346",
     date: "2026-09-18T13:01:19.000Z",
     text: "I rebuilt my job crawler with Jev.\n\nThe task: start at a company's official homepage, find Careers, and identify jobs that match my profile.\n\nBefore, with an LLM: ~5 minutes.\nAfter, with Jev: just over 20 seconds in my test.\n\nEvery company organizes its website differently. Jev identifies the Careers entry point, chooses which links to follow, recognizes job pages, and scores each role against my ",
-    views: 25824,
+    views: 25826,
     likes: 76,
     projectUrl: null
   },
@@ -314,7 +314,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/IndraVahan/status/2100929105382564113",
     date: "2026-09-18T12:45:06.000Z",
     text: "i gave jev ₹1,00,000 to trade nifty intraday at 5x leverage.\n\nthis isn't paper trading but real money on my real kotak account put to use.\n\nwe hit our ₹1,000 hard stop today after a pretty green morning. will keep tuning the strategy next week and keep y’all posted",
-    views: 134094,
+    views: 134107,
     likes: 965,
     projectUrl: null
   },
@@ -325,8 +325,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/dsqjaffa/status/2100914580394307857",
     date: "2026-09-18T11:47:23.000Z",
     text: "jev is INSANE.\n\nwe gave it a library of 11 million+ videos on tiktok & ig and asked it to find viral \"bloom nutrition\" content.\n\nin 20 seconds, it gave us over 384 videos, breaking down the hook, format & angle that made each one go viral.\n\n(only costed $0.09 in token usage)\n\njev also finds, watches, analyzes and breaks down viral videos and creators, then writes briefs and scripts for you, based ",
-    views: 14634,
-    likes: 148,
+    views: 14635,
+    likes: 147,
     projectUrl: null
   },
   {
@@ -347,7 +347,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/KinasRemek/status/2100909353163174043",
     date: "2026-09-18T11:26:37.000Z",
     text: "Takie modele jak JEV (System-1) zmienią moim zdaniem bardzo dużo. Obecne modele LLM symulują System-2. Dla mnie implementacja jev to jedna z najświeższych koncepcji ostatnich miesięcy. \n\nNiby nic szczególnego (dynamiczny klasyfikator) a dziwi, że tak długo trzeba było czekać na taki model. Uniwersalny klasyfikator, inteligentny \"if\".  W swoich poprzednich wpisach objaśniłem jak to działa. Mam dost",
-    views: 17523,
+    views: 17524,
     likes: 125,
     projectUrl: null
   },
@@ -358,7 +358,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/marcelpociot/status/2100906882365788167",
     date: "2026-09-18T11:16:48.000Z",
     text: "Jev unlocks SO many awesome new ideas.\n\nI built a macOS app that monitors my Downloads folder along with a customisable set of rules.\n\nIs the downloaded file an invoice? Move it to a special folder with the correct filename.\n\nNo other LLM calls involved - just Jev!",
-    views: 140413,
+    views: 140423,
     likes: 1150,
     projectUrl: null
   },
@@ -369,8 +369,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/romanbuildsaas/status/2100891604735099103",
     date: "2026-09-18T10:16:05.000Z",
     text: "JEV is INSANE.\n\nWe gave it 700 high-intent leads and personalised outreach messages.\n\nIn 40 seconds, it predicted how each message would perform, assigned a confidence score and detected lead-message mismatches.\n\nAll for just $0.09.\n\nJEV can also score leads, analyse buying signals, match each prospect with the best message and identify the campaigns most likely to perform based on data. \n\nComing ",
-    views: 492015,
-    likes: 3438,
+    views: 492058,
+    likes: 3439,
     projectUrl: null
   },
   {
@@ -380,7 +380,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/alin_zone/status/2100883711260823912",
     date: "2026-09-18T09:44:43.000Z",
     text: "🔥 卧槽了，jev 简直太适合 codex 用户了，强烈建议 codex 用户去尝试下 jev\n\n因为 jev 非常适合需要快速进行复杂决策和评估的场景，所以和 codex 的 computer use 功能简直是绝配。\n\n直接把 jev 用作判官，指导 codex 快速操作你的电脑，既准确又节省 token。\n\n要使用的话需要去官网申请👇，如何申请我已经录制好视频了，跟着操作即可",
-    views: 42805,
+    views: 42811,
     likes: 100,
     projectUrl: null
   },
@@ -391,8 +391,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/rafalwilinski/status/2100882207879434359",
     date: "2026-09-18T09:38:45.000Z",
     text: "thanks to @typesafeai's Jev we now have massively parallel browser-based adversarial testing suite that tries to break each release.\n\nand it costs pennies.",
-    views: 415926,
-    likes: 5394,
+    views: 415971,
+    likes: 5396,
     projectUrl: null
   },
   {
@@ -402,8 +402,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/Saccc_c/status/2100864907046768890",
     date: "2026-09-18T08:30:00.000Z",
     text: "卧槽，居然真有比Codex内置computer use更快的操作电脑的方式\n\n我尝试用Codex+Jev打造了一个加强版computer use，我称之为「Jev Use」。比内置的更快更丝滑，token消耗却差不多\n\n下面是我用「添加Mac日历事件」做了一个对比视频，同样的内容，明显可以看到Jev版本整体过程几乎无任何停顿😆",
-    views: 631962,
-    likes: 1761,
+    views: 632049,
+    likes: 1760,
     projectUrl: null
   },
   {
@@ -446,7 +446,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/SUOHA_AI/status/2100835307016905109",
     date: "2026-09-18T06:32:23.000Z",
     text: "很多人没看懂爆火的JEV是什么？\n\n所以我做了一个 50 秒的演示视频，带大家把海外刷屏的 JEV 以及它背后的底层架构看透👇（见下方视频）\n\nJEV 是前 OpenAI、参与 ChatGPT / RLHF 的 @CompleteSkeptic（Diogo Almeida）创办 @typesafeai 后的第一款模型\n\n他在 OpenAI 时发现了一个致命矛盾：\n通过人类偏好微调（RLHF）训练出来的自回归大模型，存在严重的模式崩溃（Mode-dropping）、过度自信与幻觉，且串行逐字生成的延迟极大，根本无法胜任严肃的机器自动化生产\n\n为此，他们花了两年研发了专为自动化设计的 System 1 基础模型 JEV，核心架构创新非常激进：\n\n• 单次并行计算（One Parallel Pass）：\n如同当年 Transformer 取代 RNN 一样，JEV 彻底抛弃了逐 Token 串行",
-    views: 564739,
+    views: 564769,
     likes: 266,
     projectUrl: null
   },
@@ -457,7 +457,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/lomeshdutta/status/2100833655518367871",
     date: "2026-09-18T06:25:49.000Z",
     text: "Just hacked a fun little project - Skill Router (Open source) using  Claude and Jev @typesafeai \n\nWhy? I have ~ 90 Claude Code skills installed and use maybe five. The rest are fine, I just forgot they existed, and Claude won't reach for a skill on its own unless you call it.\n\nSo I built myself a little personal skill-router:",
-    views: 3127,
+    views: 3134,
     likes: 24,
     projectUrl: "http://github.com/lomeshdutta/skill-router"
   },
@@ -468,8 +468,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/instantricecook/status/2100814590300889426",
     date: "2026-09-18T05:10:04.000Z",
     text: "I built a voice controlled computer-use for my mac using @typesafeai's Jev and it's INSANE how fast it is! \n\nI can dictate \"open the notes app and create...\" and the app opens before I even finish my sentence.",
-    views: 665011,
-    likes: 6250,
+    views: 665093,
+    likes: 6251,
     projectUrl: null
   },
   {
@@ -479,7 +479,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/yongfook/status/2100801037192024478",
     date: "2026-09-18T04:16:12.000Z",
     text: "First Jev use case published live on Bannerbear!\n\nInstant field mapping between template and source, when names are slightly different eg\n\ntemplate\n- photo\n- name\n- company_name\n\ndata source (eg Airtable)\n- avatar\n- full_name\n- business\n\nJev figures it out in one click.",
-    views: 15392,
+    views: 15397,
     likes: 136,
     projectUrl: null
   },
@@ -490,8 +490,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/tdinh_me/status/2100793777103466615",
     date: "2026-09-18T03:47:21.000Z",
     text: "Just trying out Jev, I made a Chrome extension that:\n\n- Listens to your YouTube audio (optional)\n- Detects if it gets to a sponsor segment\n- Skips it ➡️➡️➡️\n- All in real-time while costing ~$0.005 per video\n\nPrototype project, BYOK, open-source:",
-    views: 83892,
-    likes: 1091,
+    views: 83904,
+    likes: 1092,
     projectUrl: "https://github.com/trungdq88/youtube-sponsor-detection"
   },
   {
@@ -501,8 +501,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/dabit3/status/2100780008193020049",
     date: "2026-09-18T02:52:39.000Z",
     text: "Another crazy @typesafeai Jev example:\n\nPredictive spreadsheets\n\nSpreadsheets recalculate numbers, not meaning. Jev reads intent.\n\nType \"Urgency\" at the top of a column and, as you type, it figures out you want each row rated from \"no follow-up needed\" to \"urgent\" in ~100 ms.",
-    views: 278527,
-    likes: 1204,
+    views: 278542,
+    likes: 1205,
     projectUrl: null
   },
   {
@@ -523,7 +523,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/AlanDaitch/status/2100757989212754085",
     date: "2026-09-18T01:25:09.000Z",
     text: "Claude me integró Jev con Playwright  para buscar usados. Lee unos 26 artículos por minuto y decide qué hacer con cada uno en 406 milisegundos\n\nDescartó los que no encajaban con lo que busco, ofertó por los que sí y hasta les mandó un mensaje a los vendedores cuando faltaba algún dato en la publicación.\n\nToda la búsqueda salió USD 0,00085. O sea: con un dólar revisás unas 26.000 publicaciones.\n\nUn",
-    views: 87199,
+    views: 87210,
     likes: 949,
     projectUrl: null
   },
@@ -534,8 +534,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/rinte0321/status/2100749640866165092",
     date: "2026-09-18T00:51:59.000Z",
     text: "jevデモ②\n発話内容に応じたスライドの自動表示。\n\n喋った内容にマッチしたスライドを自動で表示してくれます。PCやポインターを触らずにページを表示できるので、これで誰でもジョブズになれるかも？？\n\n速い・安いだけでできることがこれだけ広がるのかと感動している。",
-    views: 83029,
-    likes: 418,
+    views: 83044,
+    likes: 417,
     projectUrl: null
   },
   {
@@ -545,7 +545,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/wuyang_zhou/status/2100745778390081563",
     date: "2026-09-18T00:36:38.000Z",
     text: "btw this is what you get if you ask Jev to play Minecraft with GPT-6 Astra.\n\nI still can’t believe it",
-    views: 47060,
+    views: 47066,
     likes: 375,
     projectUrl: null
   },
@@ -556,7 +556,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/OpenRouter/status/2100744709589316009",
     date: "2026-09-18T00:32:23.000Z",
     text: "Jev by @typesafeai is now on OpenRouter, in beta.\n\nJev is a System One model. Instead of generating text, it takes your app's state plus a typed question and returns a typed decision with a probability attached. There is no JSON prompting, parsing layer, and nothing to validate against.",
-    views: 568902,
+    views: 568933,
     likes: 3857,
     projectUrl: null
   },
@@ -567,7 +567,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/maubaron/status/2100738237237002706",
     date: "2026-09-18T00:06:40.000Z",
     text: "jev is insane 🤯\n\nhere is jev playing smash bros against itself \nhe is controlling all 4 different characters.\n\nand literally deciding whats the best\nmove to play against itself\n\nall within a fraction of a second\n\ni used over 22 million tokens to play this match\nand it only cost me a couple of cents...\n\njev does not replace gpt6 astra\nbut the possibilities with its instant response time\n\nare endles",
-    views: 316655,
+    views: 316671,
     likes: 3671,
     projectUrl: null
   },
@@ -578,7 +578,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/JonPTaylor/status/2100736122502390211",
     date: "2026-09-17T23:58:16.000Z",
     text: "Wow, @typesafeai Jev is a game changer for voice-driven UI. Responsiveness really matters for an experience to 'feel' right, and this certainly does the job!\n\nLatency here is not optimal given I'm in London and calling out to us-west. But still, super snappy.\n\nIn this video, Jamcat is using Pipecat to orchestrate a real-time handover between a command agent (Jev) that drives the UI, and voice agen",
-    views: 47992,
+    views: 48004,
     likes: 477,
     projectUrl: null
   },
@@ -589,7 +589,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/michaeltefula/status/2100735977262141735",
     date: "2026-09-17T23:57:41.000Z",
     text: "You can use Jev to assemble interfaces on the fly. \n\nHere’s an example I hacked together with Astra. \n\nIn this demo, Jev turns natural language requests into UI plans in roughly 1 second or less. \n\nIt’s 6x faster than Gemini 3.8 Flash and GPT 5.6 Luna. Cheaper, too.",
-    views: 51812,
+    views: 51814,
     likes: 289,
     projectUrl: null
   },
@@ -600,7 +600,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/tsuyoshi_osiire/status/2100734646824902713",
     date: "2026-09-17T23:52:24.000Z",
     text: "Jevで、会話をリアルタイムに観測するセンサーを試作しました。\n発言のたびに\n・探索 ↔ 収束\n・解消 ↔ 未決\n・未合意 ↔ 合意\nを更新し、会議の状況を可視化します\n\nユーザーインタビューのリアルタイム解析などにも使えそう。",
-    views: 68383,
+    views: 68391,
     likes: 455,
     projectUrl: null
   },
@@ -611,7 +611,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/eptwts/status/2100724278400332061",
     date: "2026-09-17T23:11:12.000Z",
     text: "i used Jev to classify a youtubers last 100 videos based on how likely it is to sell me something...\n\nit analyzed & assigned a sales intent score to each video within 12 seconds & cost about $0.02\n\ni haven't done a deep dive into how accurate the score is yet, but from a quick glance it looks like a super promising classifier model",
-    views: 14874,
+    views: 14876,
     likes: 204,
     projectUrl: null
   },
@@ -622,8 +622,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/robj3d3/status/2100722975645598191",
     date: "2026-09-17T23:06:01.000Z",
     text: "Jev + SuperX = virality solved ✅\n\nEvery post gets 61 questions in ~1s for $0.0004 🤯\n\n&gt; fitted on 9,481 real posts from 207 creators\n&gt; picks the viral post 2 in 3 times\n&gt; never rewards reply bait\n\nSo: write, score, rewrite, stop when it peaks.\n\nFree, no signup. try it below ↓",
-    views: 241741,
-    likes: 1386,
+    views: 241759,
+    likes: 1385,
     projectUrl: null
   },
   {
@@ -633,7 +633,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/zain_hoda/status/2100720719470494126",
     date: "2026-09-17T22:57:03.000Z",
     text: "The speed and cost is going to enable use cases that haven't been possible before.\n\nHere's a quick demo of live decisions of what slide to pull up as I'm speaking, powered by @typesafeai Jev.\n\nAlso, sorry for the sniffling. I have a bit of a cold.",
-    views: 60367,
+    views: 60370,
     likes: 161,
     projectUrl: null
   },
@@ -655,7 +655,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/moritzkremb/status/2100715237267660873",
     date: "2026-09-17T22:35:16.000Z",
     text: "Full Jev Tutorial\n\nWhat it is, how you can build with it and what new applications it can unlock\n\n→ 0:00 Intro\n→ 0:34 Jev explained\n→ 4:06 API setup\n→ 5:59 Demo 1: Voice-controlled browser\n→ 11:33 Demo 2: AI memory\n→ 17:27 Demo 3: YouTube predictor",
-    views: 271164,
+    views: 271227,
     likes: 3157,
     projectUrl: null
   },
@@ -677,7 +677,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/MaxRovensky/status/2100706874173575199",
     date: "2026-09-17T22:02:02.000Z",
     text: "jev decided to sacrifice a human to save robots when solving trolley problems",
-    views: 295311,
+    views: 295315,
     likes: 1505,
     projectUrl: null
   },
@@ -688,7 +688,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/typesafeai/status/2100706455523561909",
     date: "2026-09-17T22:00:22.000Z",
     text: "Behind the scenes of our launch video… chief of staff @justKDeng keeping our CEO @CompleteSkeptic on track",
-    views: 70289,
+    views: 70301,
     likes: 414,
     projectUrl: null
   },
@@ -699,7 +699,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/iam_zachi/status/2100700176444731780",
     date: "2026-09-17T21:35:25.000Z",
     text: "I build a SQL extension that turns plain english into a WHERE clause with jev @typesafeai \n\nWHERE jev(people, 'could work from home')\n\nEvery row gets judged individually, no index and no embeddings needed.\n\nTry it out (don't burn my wallet pls)",
-    views: 39370,
+    views: 39371,
     likes: 151,
     projectUrl: null
   },
@@ -710,8 +710,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/tamarajtran/status/2100694549362553153",
     date: "2026-09-17T21:13:04.000Z",
     text: "found the perfect use case for @typesafeai Jev: \n\ninstant compaction\n\nin 2026, why is compaction still a summarization prompt?\n\nJev can make it instant by scoring every tool call and dropping what’s irrelevant",
-    views: 3930833,
-    likes: 10860,
+    views: 3931203,
+    likes: 10859,
     projectUrl: null
   },
   {
@@ -721,7 +721,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/uttkarsh_42/status/2100690568947159309",
     date: "2026-09-17T20:57:15.000Z",
     text: "so I gave jev full control of the falcon-9 class rocket \n\nfull launch to landing\n\nno autopilot, no scripted trajectories, no safety veto in the code\n\nevery decision was made by jev ( you can see decisions at the bottom of the video)  \n\nand yeah it was able to land the booster\n\nand all this with just 245 calls and and $0.04 in API calls\n\nfor sim I used mujoco \n\nand the configurations were 42m boost",
-    views: 96737,
+    views: 96740,
     likes: 144,
     projectUrl: null
   },
@@ -732,7 +732,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/zadescoxp/status/2100675952317792734",
     date: "2026-09-17T19:59:10.000Z",
     text: "I built a trading agent with the all new @typesafeai Jev. You can try it here :  Just put your own API key and start playing or clone it from  and test it locally. \n\nTo my surprise the agent was able to take a trade of 2.405 $ETH and took a profit of roughly 0.23%. It is very low but testing a new model in town is genuinely crazy.\n\n@CompleteSkeptic did you guys tested your model like this ? \n\nLet'",
-    views: 1362,
+    views: 1365,
     likes: 14,
     projectUrl: "http://jevtrades.zadescoxp.com/"
   },
@@ -743,7 +743,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/yoheinakajima/status/2100674306405814568",
     date: "2026-09-17T19:52:37.000Z",
     text: "had to try something with jev so i tried what you'd expect from me: graph extraction\n\n- score every word with semantic significance (1-5)\n- also tag relevant words with ID\n- unique list of high scoring words\n- graph of high scoring words",
-    views: 24265,
+    views: 24268,
     likes: 248,
     projectUrl: null
   },
@@ -754,7 +754,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/iamzhe/status/2100670692811284602",
     date: "2026-09-17T19:38:16.000Z",
     text: "Small update for  today:\n\n1. minirouter/fusion is live. It classifies each request with Jev by @typesafeai, then routes to a handpicked model matched to the task's type and complexity.\n\n2. Codex now lists your presets and our routers in the model picker.\n\n3. Fixed long prompts not caching automatically in Claude Code.\n\nBYOK, sandboxes, compute passes and compute yield coming next.",
-    views: 5562,
+    views: 5567,
     likes: 74,
     projectUrl: "http://minirouter.sh/"
   },
@@ -765,7 +765,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/nickvasiles/status/2100670497818313175",
     date: "2026-09-17T19:37:29.000Z",
     text: "Jev is a new model from the co-inventor of ChatGPT that can use computer tools in realtime\n\nright now it's playing Minecraft on its own computer in the cloud on Orgo\n\nthis is what it looks like with just one Jev, but imagine:\n\nwhat about a thousand?\nor what about a billion of Jevs?\n\neach working together on their own computers in the cloud, discovering new science, running experiments, and designi",
-    views: 17570,
+    views: 17572,
     likes: 174,
     projectUrl: null
   },
@@ -776,8 +776,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/TheMattBerman/status/2100654891756589230",
     date: "2026-09-17T18:35:29.000Z",
     text: "jev is INSANE.\n\nin 40 seconds it broke down 724 live ads from 37 brands.\n\nevery hook. every format. offer. cta. awareness stage. landing page mismatch. used 9 cents of tokens. \n(will be avail in @stealads + mcp)",
-    views: 1104457,
-    likes: 6811,
+    views: 1104675,
+    likes: 6812,
     projectUrl: null
   },
   {
@@ -787,7 +787,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/0xkvyb/status/2100652145142026472",
     date: "2026-09-17T18:24:34.000Z",
     text: "The real use-case for Jev",
-    views: 19034,
+    views: 19035,
     likes: 107,
     projectUrl: null
   },
@@ -798,7 +798,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/ekzhang1/status/2100651678110515383",
     date: "2026-09-17T18:22:42.000Z",
     text: "Inspired by @typesafeai , here is a Jev-compatible public API to play with\n\nIt runs a comparable open model (Qwen3.6-35B-A3B), and just uses SGLang radix cache to preserve the prefill reuse / really fast parallel systemone generation - 64 tasks in &lt;1s.",
-    views: 162567,
+    views: 162574,
     likes: 983,
     projectUrl: "https://github.com/ekzhang/openjev-sglang"
   },
@@ -809,8 +809,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/camsoft2000/status/2100648648434434298",
     date: "2026-09-17T18:10:40.000Z",
     text: "Now we're cooking. Got @typesafeai's Jev + AXe controlling the iOS simulator now ultra fast at a fraction of the cost of using an LLM. This is game changing!",
-    views: 108446,
-    likes: 1274,
+    views: 108464,
+    likes: 1273,
     projectUrl: null
   },
   {
@@ -820,7 +820,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/hr98w/status/2100646513412292873",
     date: "2026-09-17T18:02:11.000Z",
     text: "视觉版 Jev 来了\n\n\n\n仿照着社区的思路，把候选结果映射成固定标签，prefill 完直接采样，限制输出 token，采用多模态的 qwen-3.5-0.8B 4bit 量化部署在本地，16g m4 mbp 顺利运行\n\n叠甲：这只是在 infer 层小小的复现一下 jev 的形式，肯定不如各种成熟推理框架效率高，也肯定不是 jev 的正在原理，但是作为 inference  的小入门仍旧是不错的\n\ndemo 如下 200ms 实现《三色货品分拣》",
-    views: 38065,
+    views: 38068,
     likes: 312,
     projectUrl: "https://github.com/hr98w/jev-visual"
   },
@@ -831,7 +831,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/reczko_konrad/status/2100646448324833512",
     date: "2026-09-17T18:01:56.000Z",
     text: "TypeGPU + ruNNtime + Jev @typesafeai is a very fun combo :D\n\nruNNtime gives me efficient local inference, TypeGPU lets inference and rendering share GPU resources directly with zero copy. That’s 3 separate NN inferences plus rendering, all happening in realtime\n\nSince we control the pipeline, Jev can just sit in the middle and add the semantic bit.\n\ncamera + mic → Moonshine + YOLO26 + DepthART → J",
-    views: 90728,
+    views: 90731,
     likes: 714,
     projectUrl: null
   },
@@ -842,8 +842,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/atomic_chat_hq/status/2100644221279424925",
     date: "2026-09-17T17:53:05.000Z",
     text: "Jev v1.13 dodges rockets with probability calculation 🚀\n\n@typesafeai's new non-LLM model returns decisions instead of text so we had it calculate a safe tile every 330 ms while rockets fell and it survived 25 of 26 for under a cent\n\nRun Jev via API -&gt;",
-    views: 61227,
-    likes: 555,
+    views: 61231,
+    likes: 556,
     projectUrl: "https://atomic.chat/"
   },
   {
@@ -853,8 +853,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/_MaxBlade/status/2100634359099232678",
     date: "2026-09-17T17:13:53.000Z",
     text: "jev is insane  🤯\n\nHere is Jev playing subway surfers at super human speed, and also playing 50 games at once. \n\ncost less than a cent to do this run.\n\nJev does not replace llms like astra or fable, but opens up an entirely new world of capabilities.",
-    views: 365362,
-    likes: 4135,
+    views: 365389,
+    likes: 4136,
     projectUrl: null
   },
   {
@@ -864,7 +864,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/milindlabs/status/2100631847155994852",
     date: "2026-09-17T17:03:54.000Z",
     text: "Okay so Jev can actually do computer use really well\n\nWithout any screenshots, or LLMs and no Pixels leave my mac \n\nI dont even read the Dom elements\n\nA local CoreML model segments every button and UI element on screen. \n\nOn-device OCR reads the labels. That text is all Jev gets.\n\nIt returns a probability across those elements and tells me the best one to click.\n\nThen it clicks, re-runs detection,",
-    views: 248371,
+    views: 248401,
     likes: 2091,
     projectUrl: null
   },
@@ -875,7 +875,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/OnerBiberkoku/status/2100631665336836308",
     date: "2026-09-17T17:03:11.000Z",
     text: "They say you’re six connections away from anyone on Earth.\n\nSo I tried Jev from @typesafeai and built this: enter your X handle and someone you’d love to reach. It finds a chain of real follow connections that could get your message there, under 2 seconds!\n\nApparently, Luke Skywalker is just two people away from me.\n\nWho’s your impossible person? I can drop the link below if you want to try. @Mark",
-    views: 131568,
+    views: 131578,
     likes: 198,
     projectUrl: null
   },
@@ -886,7 +886,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/harshil1712/status/2100628223780397541",
     date: "2026-09-17T16:49:30.000Z",
     text: "What if  your slides are smart enough that they navigate automatically? 👀\n\nThank you @typesafeai for providing access to Jev! I had this idea for a few weeks, and Jev felt like the right model for this task.\n\n(Sorry for the bad audio)",
-    views: 25017,
+    views: 25019,
     likes: 84,
     projectUrl: null
   },
@@ -897,8 +897,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/The_Alex/status/2100619644973486252",
     date: "2026-09-17T16:15:25.000Z",
     text: "I trust Jev with my life",
-    views: 1061911,
-    likes: 4759,
+    views: 1061922,
+    likes: 4761,
     projectUrl: null
   },
   {
@@ -919,8 +919,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/miiura/status/2100615772053877164",
     date: "2026-09-17T16:00:02.000Z",
     text: "Function calling without waiting for Enter. Answers only when needed.\n@typesafeai Jev understands intent and arguments as you type, then executes ahead of time once everything is in place.",
-    views: 43427,
-    likes: 346,
+    views: 43436,
+    likes: 347,
     projectUrl: null
   },
   {
@@ -930,8 +930,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/nutlope/status/2100614659690713543",
     date: "2026-09-17T15:55:37.000Z",
     text: "Jev + Kimi K3 for fraud detection!\n\nTLDR: Jev classified 100 emails in 1.42 seconds, then I routed the uncertain cases to Kimi K3. The full pipeline got 96/100 correct for only ~$0.07.\n\nVideo is not sped up, check out the live run!\n\nHere was my process:\n\nI gave Jev 100 emails to classify (a mix of 50 legit & 50 fraudelent emails). It classified all of them in 1.42 seconds.\n\nAn underrated feature a",
-    views: 61323,
-    likes: 877,
+    views: 61325,
+    likes: 876,
     projectUrl: null
   },
   {
@@ -941,8 +941,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/ctnicholasdev/status/2100611346203353110",
     date: "2026-09-17T15:42:27.000Z",
     text: "Jev enables instant AI suggestions 👏\n\nIn this app, 20+ intelligent checks occur every time you edit a cell, immediately providing warnings.\n\nNo LLMs necessary!",
-    views: 32686,
-    likes: 203,
+    views: 32689,
+    likes: 204,
     projectUrl: null
   },
   {
@@ -952,7 +952,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/rory_builds/status/2100606378184171682",
     date: "2026-09-17T15:22:42.000Z",
     text: "I just built Easy-Jev, a Jev demo anyone can try right now!\n\nChange the inputs and watch the classifications change in real time.\n\nI did my master's thesis on classification models so it's fun to see a modernized version of a very useful alg\n\nTypesafe are correct in that LLMs are just one approach to intelligence, and I think as time goes forward we’re going to see a hybrid of dif models splitting",
-    views: 11647,
+    views: 11652,
     likes: 87,
     projectUrl: null
   },
@@ -974,8 +974,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/NielsRogge/status/2100592786516951490",
     date: "2026-09-17T14:28:42.000Z",
     text: "Introducing the Papers with Code MCP server!\n\nTo celebrate its release, I've asked Claude Code to research the architecture of Jev by @typesafeai using the `search_papers` tool.\n\nHere's what it came up with:\n\n\"If Jev is architecturally anything public, it's a large schema-conditioned bidirectional encoder with parallel label-query heads (GLiNER/ML-Decoder shape) trained with a proper-scoring-rule ",
-    views: 20698,
-    likes: 90,
+    views: 20756,
+    likes: 92,
     projectUrl: null
   },
   {
@@ -985,7 +985,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/akira_papa_IT/status/2100590065357639971",
     date: "2026-09-17T14:17:53.000Z",
     text: "Jevで次の文章予測判断させるロジック作って、\n判断特化AIのJevで、AIチャットできるアプリ作ったんだけど、まず爆速だし、入力は$0.042 / 1Mトークンだけど、出力が無制限で無料でした。\n出力無料のAIチャットってなんだこれw\n「え？これ作れちゃっていいん？」ってなってる。。。\n#Jev",
-    views: 172080,
+    views: 172088,
     likes: 1222,
     projectUrl: null
   },
@@ -996,7 +996,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/framer/status/2100587421792661831",
     date: "2026-09-17T14:07:23.000Z",
     text: "Building got faster. Taste didn’t become optional. Framer is where frontier teams like @typesafeai still go when the site has to look like a serious company on day one.",
-    views: 10598,
+    views: 10602,
     likes: 71,
     projectUrl: "https://typesafe.ai/"
   },
@@ -1007,7 +1007,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/redp314/status/2100585126652481915",
     date: "2026-09-17T13:58:15.000Z",
     text: "got Jev to review my PRs. ~200x cheaper than Claude and it answers in half a second\n\n6 real PRs in the video. $0.00007 each. 1,000 PRs = 7 cents vs ~$14.50 on Opus 5\n\npaste a diff → ONE call to @typesafeai → 14 typed checks come back as probabilities:\nhardcoded secret, sql injection, touches auth, deletes tests, breaks api, migration, debug leftovers, does the description actually match the diff, ",
-    views: 360401,
+    views: 360410,
     likes: 2755,
     projectUrl: null
   },
@@ -1019,7 +1019,7 @@ export const pulseEntries: PulseEntry[] = [
     date: "2026-09-17T13:56:29.000Z",
     text: "I got access to Jev by @typesafeai today morning and I built a cool use case for it \n\nIntroducing DiffJury - simply paste any public PR link and Jev tells you immediately if it's safe to merge or does it require review ✅\n\n🔗 Feel free to try it out here -  \n\nImagine Jev being able to tell you if you should merge a PR with grounded context of your codebase. that's what we're building at @graphify 👀\n",
     views: 9500,
-    likes: 80,
+    likes: 81,
     projectUrl: "http://diffjury.up.railway.app/"
   },
   {
@@ -1029,7 +1029,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/moritzkremb/status/2100577979021832365",
     date: "2026-09-17T13:29:51.000Z",
     text: "whoa this actually worked! Jev lets me control my browser in real time with my voice now\n\n> i talk\n> transcript sent to Jev\n> jev returns probabilities in ~300ms\n> browser clicks\n\ncosts: $0.0002 per decision\n\ni'm stunned how fast this is. when i asked it to \"go back\", it even finished the request before i finished my sentence 😂",
-    views: 374201,
+    views: 374233,
     likes: 3813,
     projectUrl: null
   },
@@ -1040,7 +1040,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/Totzenberger/status/2100570643355852954",
     date: "2026-09-17T13:00:42.000Z",
     text: "Another useful use-case with Jev from @typesafeai - AI text classification. \nVery close to @pangram, 6000x cheaper, 5-10x faster\n\nTested here on a @paulg essay!",
-    views: 59595,
+    views: 59601,
     likes: 133,
     projectUrl: "http://jev-ai-detector.com/"
   },
@@ -1051,7 +1051,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/coolish/status/2100570517954838897",
     date: "2026-09-17T13:00:12.000Z",
     text: "昨天出的  Jev 模型\n适合高频决策，那岂不又是适合打游戏？\n\n之前用 GPT-6 Astra 代打杀戮尖塔2\n能力强但速度慢。\n\n我刚实测用 Jev 打，行动思考只需 0.7秒，\n画面我都没看清它就操作完了。\n这超人类游戏速度，\n着实又让我震惊瘫坐了😅\n\n语言很难描述这感觉，看视频⬇️",
-    views: 338273,
+    views: 338294,
     likes: 1166,
     projectUrl: "https://typesafe.ai/"
   },
@@ -1062,7 +1062,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/hot_town/status/2100570516612382787",
     date: "2026-09-17T13:00:12.000Z",
     text: "Jev is here.\n\n- how is different from an LLM?\n- how does it work under-the-hood?\n- what are some real life examples?\n- when should I use it?\n\nI answer all that below:",
-    views: 65365,
+    views: 65383,
     likes: 1268,
     projectUrl: null
   },
@@ -1073,7 +1073,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/moritzkremb/status/2100566009312940457",
     date: "2026-09-17T12:42:17.000Z",
     text: "This is cool. I used Jev to improve my custom memory system.\n\nResults:\n→ 94% fewer tokens used\n→ 2–3× faster memory retrieval\n\nThis was just a quick test, but I believe it opens up so many new opportunities.",
-    views: 33254,
+    views: 33255,
     likes: 477,
     projectUrl: null
   },
@@ -1084,8 +1084,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/savboj/status/2100545295201288678",
     date: "2026-09-17T11:19:59.000Z",
     text: "If you blink you might miss it \n\nJev + Computer use = 100x faster than any LLM \n\n@typesafeai",
-    views: 127729,
-    likes: 1276,
+    views: 127752,
+    likes: 1275,
     projectUrl: null
   },
   {
@@ -1095,7 +1095,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/norbertbodziony/status/2100544998391349310",
     date: "2026-09-17T11:18:48.000Z",
     text: "i have created moderation guard based on typesafe's jev\n\nits fast and accurate\n\nlive demo you can:",
-    views: 2774,
+    views: 2777,
     likes: 23,
     projectUrl: "https://guard-jev.vercel.app/"
   },
@@ -1128,8 +1128,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/marcelpociot/status/2100520134481735729",
     date: "2026-09-17T09:40:00.000Z",
     text: "I built a browser extension with Jev @typesafeai that can hide/collapse posts on X based on natural language.\n\nIt's so fast that it's not noticeable and insanely cheap...this must be the future of \"ad blockers\" and content firewalls.",
-    views: 88059,
-    likes: 1122,
+    views: 88066,
+    likes: 1121,
     projectUrl: null
   },
   {
@@ -1139,7 +1139,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/Bewinxed/status/2100519569307640097",
     date: "2026-09-17T09:37:45.000Z",
     text: "I made @typesafeai 's new ultra fast model, Jev, generate text, even though it shouldn't, that's fine because I can't read, and it can't write**\n\n** up to 20 words for 0.5$, what a steal",
-    views: 68256,
+    views: 68257,
     likes: 318,
     projectUrl: null
   },
@@ -1150,8 +1150,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/redp314/status/2100489858951073858",
     date: "2026-09-17T07:39:42.000Z",
     text: "I got a rubik's cube to solve itself with @typesafeai 's Jev and it solves it like a person does, 94 moves, not the 22 move optimal solution.\n\nJev isn't an LLM, it just answers one question in ~250ms with a probability. so I put the beginner method in code (the one you'd learn on youtube: white cross, corners, middle layer, yellow layer) and at every step Jev just looks at the cube and picks which",
-    views: 208050,
-    likes: 713,
+    views: 208053,
+    likes: 711,
     projectUrl: null
   },
   {
@@ -1161,7 +1161,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/waynesutton/status/2100487878992388279",
     date: "2026-09-17T07:31:50.000Z",
     text: "Ask Jev anything.  Give it a try at  \n\nIt won't answer. It will judge.\n\nLet's see if we can get to 1 million questions. \n\n@typesafeai 🤝 @convex work great together. \n\n@hmartenjoyer @CompleteSkeptic @justKDeng @mikeysee",
-    views: 96915,
+    views: 96919,
     likes: 516,
     projectUrl: "https://askjev.ai/"
   },
@@ -1172,7 +1172,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/sengpt/status/2100485665666277828",
     date: "2026-09-17T07:23:02.000Z",
     text: "arkadaşlar \n\njev'e early access aldım ve test etmeye başladım ve gerçekten çok impressed olduğumu söylemem lazım\n\nsadece şu kaydettiğim demoyu bi izleyin lütfen. \n\nkesinlikle hızlandırılmış bir video değil. 4 tane jev karşılıklı 101 oynuyor ve oyunun hızına bir bakın.\n\nbeni takip edenler bilir.\n\nyıllardır her yeni model çıktığında bizim meşhur 101 okey oyununu oynatırım. \n\nbenim kişisel benchmarkl",
-    views: 71612,
+    views: 71614,
     likes: 185,
     projectUrl: null
   },
@@ -1183,8 +1183,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/_trou3/status/2100481938016669917",
     date: "2026-09-17T07:08:13.000Z",
     text: "For those who still didn't understand what Jev from @typesafeai  can do, here is the example.\n\nJev can read dozens of structured trading signals and then show intelligent decisions.\n\nIt's time to make your system actually alive.\n\nWhat a time!",
-    views: 126722,
-    likes: 987,
+    views: 126737,
+    likes: 985,
     projectUrl: null
   },
   {
@@ -1194,8 +1194,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/ytiskw/status/2100474943154827344",
     date: "2026-09-17T06:40:26.000Z",
     text: "話題のJevで架空のペルソナ150人に製品の導入意向を聞く仕組みを作ってみた。150人ごとに12個の質問をAPIで投げる。\n\n実際にかかった費用は、1.8円でかかった時間は約5秒。十分爆速だけど日本↔︎アメリカのレイテンシが含まれているので本来はもっと早いはず",
-    views: 247518,
-    likes: 1073,
+    views: 247530,
+    likes: 1072,
     projectUrl: null
   },
   {
@@ -1205,8 +1205,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/chetaslua/status/2100473581251748216",
     date: "2026-09-17T06:35:01.000Z",
     text: "🚨 I gave the Trump vs Kamala debate a live BS meter using Jev\n\nevery sentence, both candidates, 5 yes/no questions each\n\n1,191 Jev calls / 1.18M tokens / 415 ms median\ntotal cost : $0.0497\n\nsame questions for both, clips picked by one fixed rule, not a fact-check",
-    views: 193013,
-    likes: 1537,
+    views: 193022,
+    likes: 1536,
     projectUrl: null
   },
   {
@@ -1216,7 +1216,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/iamMrDuncan/status/2100467548298899918",
     date: "2026-09-17T06:11:02.000Z",
     text: "Built an alternative version of @typesafeai but on @cerebras with Qwen 3.8 27b.\n\nSimilar quality, similar performance, but vastly different cost. TypeSafe was way cheaper, and did beat Qwen on performance.\n\nClosest we can get using LLMs I think.\n\nSource:",
-    views: 26734,
+    views: 26736,
     likes: 206,
     projectUrl: "https://github.com/iammrduncan/typesafe-ai-benchmark"
   },
@@ -1227,7 +1227,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/niazmorshed_/status/2100465662867218857",
     date: "2026-09-17T06:03:33.000Z",
     text: "built `jev-review` @typesafeai \n\nit's an experimental, local-first MCP plugin that gives coding agents a score quality feedback loop across different metrics. \n\nagents call jev while they work, get scored, make improvements, and repeat the loop\n\ntry below 👇",
-    views: 47741,
+    views: 47744,
     likes: 497,
     projectUrl: null
   },
@@ -1238,7 +1238,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/crislenta/status/2100457614073327754",
     date: "2026-09-17T05:31:34.000Z",
     text: "Jev is actually insane.\n\nWe benchmarked it, and the results completely change the game for us:\n\n> 500 real-time agents\n> running in parallel\n> in a 3D environment\n\nThe preliminary results are crazy:\n\n> 500ms average latency\n> 35 API calls/s\n> all with a naive implementation\n\nWe did 0 optimizations!\n\nThe bottleneck is not Intelligence latency anymore.\n\nIt's the first System 1 LLM. Crazy times.",
-    views: 63967,
+    views: 63971,
     likes: 660,
     projectUrl: null
   },
@@ -1249,8 +1249,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/ephraimduncan/status/2100454070536351824",
     date: "2026-09-17T05:17:29.000Z",
     text: "Built a model router with Jev by @typesafeai. \n\nJev decides what model fits your request best and the request is sent to that model.",
-    views: 120227,
-    likes: 1866,
+    views: 120235,
+    likes: 1868,
     projectUrl: null
   },
   {
@@ -1260,7 +1260,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/VladTerin/status/2100448995415863323",
     date: "2026-09-17T04:57:19.000Z",
     text: "I talk. Codex clicks. Watch the browser go⚡\nThis video is 1× !!! speed.\nBuilt Jev Browser: an open-source adapter for your existing Codex browser tools. Say the task naturally; Codex plans, Jev selects, the browser moves.\n@sama @OpenAI  make this native? @DarioAmodei @hackgoofer",
-    views: 66508,
+    views: 66515,
     likes: 116,
     projectUrl: null
   },
@@ -1272,7 +1272,7 @@ export const pulseEntries: PulseEntry[] = [
     date: "2026-09-17T04:17:14.000Z",
     text: "Ran a dumb experiment last night: used Jev by @typesafeai (a decision/classifier model, not a text-gen model) to write C++.\n\nAt every step I gave it the finite set of grammatically valid next tokens and let it just... pick one. No free-form generation, no hallucinated syntax, purely \"choose from this legal set.\" It's not built for this, that's what made it fun.\n\nGot a working piece of C++ out of a",
     views: 12349,
-    likes: 48,
+    likes: 49,
     projectUrl: null
   },
   {
@@ -1282,8 +1282,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/nutlope/status/2100426999546184123",
     date: "2026-09-17T03:29:55.000Z",
     text: "I used Jev to classify 1,018 AI research papers.\n\nThe result: $0.08 total cost and 256ms median end-to-end latency per paper.\n\nThe pipeline was:\n\n1. Summarize each paper with DeepSeek V4 Flash\n2. Send the title + summary + 24 possible topics to Jev\n3. Use Jev to classify each paper\n4. Visualize everything on \n\nThe summaries cost $3.99 on @togethercompute. The classifications cost $0.08 on @typesaf",
-    views: 344199,
-    likes: 1999,
+    views: 344247,
+    likes: 1998,
     projectUrl: "http://1kpapers.com/"
   },
   {
@@ -1304,7 +1304,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/gregpr07/status/2100411066966749359",
     date: "2026-09-17T02:26:36.000Z",
     text: "Breaking: Browser Use + Jev = Ultrafast ⚡\n\nFindings flights took 7s and cost only $0.0039 🤯\n\n&gt; new action space every step\n&gt; DOM state space\n&gt; small LLM fallback to type\n\n(this video is at 1x speed btw)\n\nBuilt a tiny open source browser agent. try it below ↓",
-    views: 3272965,
+    views: 3273281,
     likes: 9122,
     projectUrl: null
   },
@@ -1326,7 +1326,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/mormonnegro/status/2100408498446111031",
     date: "2026-09-17T02:16:24.000Z",
     text: "Acabo de terminar la implementación de @typesafeai + Chromium Headless para que mis agentes puedan navegar por internet a una buena velocidad!\n\nEn este ejemplo le pido al agente que entre a la página del término \"Café\" en Wikipedia y navegue por los hipervínculos hasta terminar en la página \"Inteligencia artificial\"\n\nLogra completar la prueba en 20 segundos. Creo que pocos humanos podrían hacerlo ",
-    views: 25828,
+    views: 25829,
     likes: 213,
     projectUrl: null
   },
@@ -1337,8 +1337,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/hi_im_isaac_/status/2100408276949385668",
     date: "2026-09-17T02:15:31.000Z",
     text: "\"jev can't generate text\" \n\nBut jev has a lot to say! \n\nI gave him a couple hundred common english words to choose from + punctuation",
-    views: 665504,
-    likes: 4498,
+    views: 665520,
+    likes: 4495,
     projectUrl: null
   },
   {
@@ -1348,7 +1348,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/Neel490/status/2100400923826606523",
     date: "2026-09-17T01:46:18.000Z",
     text: "I think the implications of jev on self-driving could be huge",
-    views: 336580,
+    views: 336595,
     likes: 1518,
     projectUrl: null
   },
@@ -1359,7 +1359,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/oragnes/status/2100400215245377895",
     date: "2026-09-17T01:43:29.000Z",
     text: "卧槽，JEV 的出现很可能就是自动智能交易的起点。\n\n昨天JEV在AI 圈刷屏，今天 Monad 工程师就用JEV做了一个自动交易机器人。\n\n实时读取 MON/USDC 价格，JEV 不负责写分析报告，也不跟你解释一堆逻辑，它只做最核心的事，判断 Buy 还是 Sell，再给出置信度，然后直接把交易发到 Kuru 的链上订单簿执行。\n\n这一下我突然明白 JEV 为什么要做成一个不会说话的模型了。\n\n交易根本不需要 AI 每 300ms 给你写一篇小作文，它需要的是：\n\n行情进来→判断→下单→新行情→重新判断，而且这一整套循环必须足够快、足够便宜。\n\n而 Monad 现在刚好每 300ms 出一个区块，Kuru 又是链上订单簿。高性能链负责执行，JEV 负责决策，两个东西拼起来，已经有点AI 原生交易系统的味道了。\n\n未来的交易 Agent，不一定需要一个会写研报的超级大模型，它更需要一个能",
-    views: 756674,
+    views: 756701,
     likes: 3137,
     projectUrl: null
   },
@@ -1370,8 +1370,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/digitalshane_/status/2100399951872205224",
     date: "2026-09-17T01:42:26.000Z",
     text: "I got access to Jev!\n\nIt can route website visitors to the pages they need based on what they need help with!",
-    views: 28439,
-    likes: 294,
+    views: 28443,
+    likes: 295,
     projectUrl: null
   },
   {
@@ -1381,7 +1381,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/mdlahfir/status/2100381962162843779",
     date: "2026-09-17T00:30:57.000Z",
     text: "Jev solved delegation",
-    views: 43258,
+    views: 43260,
     likes: 438,
     projectUrl: null
   },
@@ -1392,7 +1392,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/aimlapi/status/2100372930282573876",
     date: "2026-09-16T23:55:04.000Z",
     text: "Jev VS Fable 5.1 VS GPT-6 Astra: chess\n\ntypesafe's new Jev V13 isn't an LLM. it doesn't chat, doesn't explain, doesn't write code — it only makes decisions. so we made it play blitz against frontier LLMs.\n\nthe test: 5+0 blitz. every move is one API call. \n\nJev V13 vs Fable 5.1:\n• fable outplayed it. by move 29 it was +16 in material and even promoted a second queen\n• but it kept burning 6-15 secon",
-    views: 565423,
+    views: 565439,
     likes: 2349,
     projectUrl: null
   },
@@ -1403,8 +1403,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/jarrodwatts/status/2100356151468585346",
     date: "2026-09-16T22:48:23.000Z",
     text: "I built a trading bot with Jev!\n\nJev decides if it should \"buy\" or \"sell\", given the price feed of an asset pair, and executes real trades.\n\nIt uses Monad to place the orders on Kuru's on-chain order book in every 300ms block.\n\nDemo link →",
-    views: 1295140,
-    likes: 5168,
+    views: 1295225,
+    likes: 5167,
     projectUrl: "https://jev-trader.vercel.app/"
   },
   {
@@ -1414,7 +1414,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/jpschroeder/status/2100347770867458384",
     date: "2026-09-16T22:15:05.000Z",
     text: "I rebuilt Tesla Full Self Driving with Jev in less than an hour.\n\nThis model is a total unlock.",
-    views: 743201,
+    views: 743226,
     likes: 4845,
     projectUrl: null
   },
@@ -1425,7 +1425,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/RomanSlack1/status/2100335978229690683",
     date: "2026-09-16T21:28:14.000Z",
     text: "Jev by @typesafeai  works quite well for drone applications. Made this in 15 minutes and only cost 10 cents.\n\nRepo:",
-    views: 145528,
+    views: 145532,
     likes: 363,
     projectUrl: "https://github.com/RomanSlack/jev-drone"
   },
@@ -1436,8 +1436,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/SigGravitas/status/2100325221932958134",
     date: "2026-09-16T20:45:29.000Z",
     text: "JEV CAN DRIVE! 🤯\n\nI hooked up Jev to the raw controls of a driving simulator, this video shows him driving in realtime.\n\nRealtime is the kicker here. Asking a model what to do every 50ms then rendering that into a \"realtime\" video is one thing, but in this simulation I wanted to give Jev the challenge of actually controlling a moving vehicle in a simulation that will never pause while he thinks.",
-    views: 50618,
-    likes: 290,
+    views: 50620,
+    likes: 289,
     projectUrl: null
   },
   {
@@ -1447,8 +1447,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/RaghavPunnam/status/2100322626204004793",
     date: "2026-09-16T20:35:10.000Z",
     text: "For those trying to understand the difference between Jev and LLMs + how to use it",
-    views: 65774,
-    likes: 636,
+    views: 65782,
+    likes: 635,
     projectUrl: null
   },
   {
@@ -1458,7 +1458,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/stevekrouse/status/2100321685081559542",
     date: "2026-09-16T20:31:26.000Z",
     text: "jev + kernel browser use demo\n\npretty freaking cool! so fast! \n\ntry it yourself:",
-    views: 36765,
+    views: 36767,
     likes: 240,
     projectUrl: "https://jev-browser-use.val.run/"
   },
@@ -1469,7 +1469,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/marcus_lowe/status/2100315518930661861",
     date: "2026-09-16T20:06:56.000Z",
     text: "I got early access to @typesafeai's new Jev model and built a demo of it playing tetris\n\nThe generation speed is so fast that it's pushing blocks down\n\nThis feels like another \"this changes everything\" moment",
-    views: 80567,
+    views: 80581,
     likes: 980,
     projectUrl: null
   },
@@ -1480,8 +1480,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/mdlahfir/status/2100314182201802811",
     date: "2026-09-16T20:01:37.000Z",
     text: "Jev solved local harness/model routing\n\nI use a combination of Claude Code, Codex and Opencode as my local agentic stack and routing to other harnesses was always enforced in the system prompt/rules\n\nWith a deterministic hook that Claude Code can decide before delegation, Jev helps to route to the right harness/model based on the task, and it's pretty accurate based on the intensity/intelligence o",
-    views: 130706,
-    likes: 834,
+    views: 130723,
+    likes: 835,
     projectUrl: null
   },
   {
@@ -1491,7 +1491,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/princecaarlo/status/2100313645116952701",
     date: "2026-09-16T19:59:29.000Z",
     text: "okay so browser use is a legitimate use case\n\nagent-browser &lt;&gt; Jev loop\n\ngoal: wiki race from 'Coffee' to 'Artificial Intelligence'",
-    views: 20225,
+    views: 20229,
     likes: 194,
     projectUrl: null
   },
@@ -1502,7 +1502,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/stevekrouse/status/2100287368221659289",
     date: "2026-09-16T18:15:04.000Z",
     text: "typesafe's jev is fun! live demo you can play with:",
-    views: 119082,
+    views: 119089,
     likes: 594,
     projectUrl: "https://typesafe-demo.val.run/"
   },
@@ -1513,8 +1513,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/Neriousy/status/2100287208166969746",
     date: "2026-09-16T18:14:26.000Z",
     text: "Testing apps with @typesafeai jev &amp; @opencode will be soooo fast\n\nsmall demo:",
-    views: 560897,
-    likes: 1273,
+    views: 560932,
+    likes: 1272,
     projectUrl: null
   },
   {
@@ -1524,7 +1524,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/rrriviannn/status/2100281474943779254",
     date: "2026-09-16T17:51:39.000Z",
     text: "I was wondering if @typesafeai Jev could generate images\n\nso here's what a sunflower looks like according to Jev :",
-    views: 44741,
+    views: 44743,
     likes: 139,
     projectUrl: null
   },
@@ -1535,7 +1535,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/awlevin/status/2100262612428894676",
     date: "2026-09-16T16:36:42.000Z",
     text: "i built computer use using @typesafeai ! it is 155x cheaper than opus 5, ~20x faster, and generalizes across OS's\n\nmore on how it works in the vid &amp; thread below:",
-    views: 296046,
+    views: 296065,
     likes: 2332,
     projectUrl: null
   },
@@ -1546,8 +1546,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/anshuc/status/2100246929611411501",
     date: "2026-09-16T15:34:23.000Z",
     text: "Jev can draw pictures by predicting every pixel in parallel",
-    views: 401188,
-    likes: 1564,
+    views: 401201,
+    likes: 1563,
     projectUrl: null
   },
   {
@@ -1579,7 +1579,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/jpschroeder/status/2100230381588951209",
     date: "2026-09-16T14:28:38.000Z",
     text: "Silicon Valley predicted Jev a decade ago.",
-    views: 329708,
+    views: 329715,
     likes: 4099,
     projectUrl: null
   },
@@ -1590,7 +1590,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/ryanvogel/status/2100218045549412499",
     date: "2026-09-16T13:39:36.000Z",
     text: "i made an llm from first principles with Jev\n\n29 yes/no questions per character: should the next key be a–z, space, comma, or period?\n\nhighest probability gets append to it, then fed the updated text back in &amp; repeat\n\nan autoregressive loop made out of a classifier",
-    views: 167986,
+    views: 167989,
     likes: 888,
     projectUrl: null
   },
@@ -1601,8 +1601,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/MatijaSosic/status/2100190746389135772",
     date: "2026-09-16T11:51:08.000Z",
     text: "Here's a 45-second TL;DR on Jev.\n\nI find the core idea beautifully simple, but the video made it really hard to understand.\n\nHope you find it helpful.",
-    views: 1772564,
-    likes: 9865,
+    views: 1772795,
+    likes: 9866,
     projectUrl: null
   },
   {
@@ -1612,8 +1612,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/cocktailpeanut/status/2100098315144602056",
     date: "2026-09-16T05:43:50.000Z",
     text: "Silicon Valley predicted @typesafeai",
-    views: 167775,
-    likes: 1772,
+    views: 167780,
+    likes: 1770,
     projectUrl: null
   },
   {
@@ -1623,8 +1623,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/faadilhshaik/status/2100086301894881578",
     date: "2026-09-16T04:56:06.000Z",
     text: "got @typesafeai’s new model Jev to play Super Mario Bros.\n\nfast inference + structured outputs makes it surprisingly good for real time use cases.\n\nI'm excited to see what can be done with these new models!",
-    views: 623709,
-    likes: 2909,
+    views: 623739,
+    likes: 2907,
     projectUrl: null
   },
   {
@@ -1645,7 +1645,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/yuntiandeng/status/2100012553065644103",
     date: "2026-09-16T00:03:03.000Z",
     text: "I increasingly think future software will combine code for control flow with small neural programs for \"fuzzy\" judgments.\n\nThat's what I've been exploring with ProgramAsWeights, which answers the question of where those neural programs come from: they are \"compiled\" from English descriptions.\n\nFor example, I combined 30 neural programs with a decision tree to build a course website helper that loo",
-    views: 14015,
+    views: 14017,
     likes: 178,
     projectUrl: "https://programasweights.com/"
   },
@@ -1656,7 +1656,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/rohanpaul_ai/status/2099946321495068746",
     date: "2026-09-15T19:39:52.000Z",
     text: "Another brilliant launch for developers: and its 20-200x faster than LLMs because it skips token-by-token generation entirely.\n\nTypeSafe AI just launched Jev,\n\n> 20-200x faster\n>40-400x cheaper (w/ output tokens free)\n> Frontier composable intelligence optimized for decisions\n\nSo Jev is an AI model built to make software decisions instead of writing text for people.\n\nA normal LLM answers by genera",
-    views: 17617,
+    views: 17620,
     likes: 145,
     projectUrl: null
   },
@@ -1667,8 +1667,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/CompleteSkeptic/status/2099925682726002904",
     date: "2026-09-15T18:17:52.000Z",
     text: "After co-inventing ChatGPT, I kept asking myself: why have superhuman chat models not led to AGI?\n\nI’ve spent the last 2 years in stealth building a new way to train models (RLCD), and a new type of frontier AI model that we are releasing today: Jev\n\n• 20-200x faster\n• 40-400x cheaper (w/ output tokens free)\n• Frontier composable intelligence optimized for decisions\n\nAFAICT the shortest path to AI",
-    views: 40188985,
-    likes: 76513,
+    views: 40192713,
+    likes: 76510,
     projectUrl: null
   },
   {
@@ -1799,7 +1799,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/leopardracer/status/2108479372675977496",
     date: "2026-10-09T08:47:10.000Z",
     text: "one tiny sorter model just made your AI support budget look like a f*cking scam $7,950 a month down to $773, same 100,000 messages, same quality the big model only wakes up when it actually matters set it up once and stop paying premium prices ↓ https://t.co/YOL5ST3iW2",
-    views: 186373,
+    views: 186598,
     likes: 172,
     projectUrl: null,
   },
@@ -1909,7 +1909,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/Snz_BTC/status/2108726977112731735",
     date: "2026-10-10T01:11:04.000Z",
     text: "Days after the new class of LLMs, JEV, came along, openAI quickly introduced their own decision model. A couple days later, Microsoft. Typesafe called JEV a System 1 model. Open AI pretended they are not copying them and went with completely different name: decision model. https:",
-    views: 3824,
+    views: 3825,
     likes: 11,
     projectUrl: null,
   },
@@ -1920,7 +1920,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/iamericpereira/status/2109073261036261425",
     date: "2026-10-11T00:07:04.000Z",
     text: "TypeSafe AI raised $870M at a $7.5B valuation this week. 24 days earlier they were a $40M seed nobody had heard of. The company is real and the numbers are real (TechCrunch, Bloomberg, Crunchbase all confirm). But the money did not arrive because of the model. It arrived because",
-    views: 197,
+    views: 199,
     likes: 3,
     projectUrl: null,
   },
@@ -1931,7 +1931,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/bonginkan_maria/status/2109069258001125612",
     date: "2026-10-10T23:51:10.000Z",
     text: "AIにメールを書かせるより、届いたメールを仕分けてほしい。 受信箱を開いたら、「営業」「経理」「サポート」の候補が付いている。そんな仕事の自動化、どう始める？ JevとOpenAIのDecisions APIの違いから、問い合わせ10件で試す方法まで、図解付きでまとめました👇 https://t.co/7V61NMiPTs",
-    views: 344,
+    views: 346,
     likes: 1,
     projectUrl: null,
   },
@@ -1942,7 +1942,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/KUMAN_R/status/2109067253216096349",
     date: "2026-10-10T23:43:12.000Z",
     text: "シリーズ A でいきなりユニコーンか.....🦄。Jev を出した TypeSafe が、公開から3週間ほどで a16z リードのシリーズ A を発表、、 ・調達額 — 8億7,000万ドル（約1,380億円） ・評価額 — 75億ドル（約1.2兆円） ・顧客 — Fortune 500 の3分の1がすでに利用 https://t.co/LRtNkbqfas",
-    views: 25039,
+    views: 25041,
     likes: 251,
     projectUrl: null,
   },
@@ -1953,7 +1953,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/xinc3s/status/2109067135800746389",
     date: "2026-10-10T23:42:44.000Z",
     text: "I GAVE HAIKU 5.5, OPUS 5.5 AND JEV MY BROKERAGE ACCOUNT ON THURSDAY MORNING. BY FRIDAY’S CLOSE THEY’D MADE $36,015. I DIDN’T PLACE A SINGLE ORDER the best trade happened at 6:12 pm, after the market closed. the smartest one was a trade they refused who does what: → HAIKU 5.5 http",
-    views: 683,
+    views: 685,
     likes: 16,
     projectUrl: null,
   },
@@ -2030,7 +2030,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/MehdiAllahyari/status/2109087400706138491",
     date: "2026-10-11T01:03:15.000Z",
     text: "استارتاپ TypeSafe AI که پشت مدل Jev قرار دارد، خبر جذب سرمایه جدیدش را به سبک متفاوتی با نام Series AI منتشر کرده است. به جای تب و تاب معمول چت‌بات‌ها، تمرکز آنها روی مدل‌های به اصطلاح ماشین‌محور (machine-native) یا مدل‌های سیستم یک (System One) است؛ مدل‌هایی که هدفشان تولید متن",
-    views: 4183,
+    views: 4185,
     likes: 82,
     projectUrl: null,
   },
@@ -2085,7 +2085,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/MidnightSunDusk/status/2109456723253571839",
     date: "2026-10-12T01:30:49.000Z",
     text: "#AI #Agent #AItrend #Jev #TypeSafe #harness The Software strike back, recursively replacing non-deterministic LLM calls with more deterministic code from Jev-based harness https://t.co/JxnNqNlywG https://t.co/hyQkbpX4SM",
-    views: 666,
+    views: 667,
     likes: 5,
     projectUrl: null,
   },
@@ -2162,7 +2162,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/0xTekki/status/2109797766721335425",
     date: "2026-10-13T00:06:00.000Z",
     text: "THIS IS PURE F*CKING TREASURE: 20 GITHUB REPOS POWERED BY THE AI THAT REFUSES TO SAY A SINGLE WORD jev can’t write a single sentence, it only picks, scores and says yes or no your agent’s small decisions stop going to a model built for essays here are 20 more repos from the https",
-    views: 308,
+    views: 313,
     likes: 4,
     projectUrl: null,
   },
@@ -2217,7 +2217,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/_moto___/status/2110150285683560616",
     date: "2026-10-13T23:26:47.000Z",
     text: "「判定専用AI『Jev』をエージェント基盤に組み込んでみた」の記事をまとめてみた。前提知識も説明してあるので読んでみてほしい。 --- ■先に押さえる3つのポイント 1. 正解率は同じで、判定コストは約150分の1になったこと。 2. https://t.co/fMgAQSXyUd https://t.co/pQBGfkVK8Z",
-    views: 801,
+    views: 802,
     likes: 2,
     projectUrl: null,
   },
@@ -2239,7 +2239,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/CurveWeb/status/2110149496877531174",
     date: "2026-10-13T23:23:39.000Z",
     text: "Jevライクなモデル（Decision Model）の強化学習を試しました。 TypeSafe AI はJevを強化学習したと述べていますが、具体的なやり方は公開されておらず、コミュニティでも今の所これという方法は定まっていません。 1つの例として見ていただければと思います。 https://t.co/x1LHvrDo81",
-    views: 11394,
+    views: 11398,
     likes: 139,
     projectUrl: null,
   },
@@ -2283,7 +2283,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/studio_yebisu/status/2110543504598573275",
     date: "2026-10-15T01:29:18.000Z",
     text: "【悲報】Jev本家こと、TypeSafeさん。 たった今、画像に対応するもすでにありとあらゆるJevクローンがローンチされているので。 あまり話題にならない。でも、わしは本家の世界知識の多さを評価してるで。 https://t.co/tv6k0fxUXD",
-    views: 5882,
+    views: 5884,
     likes: 100,
     projectUrl: null,
   },
@@ -2327,7 +2327,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/suna_gaku/status/2110532215268688053",
     date: "2026-10-15T00:44:26.000Z",
     text: "① Jev 1.14.0 では多言語対応を中心に改善 大きな新機能よりも、モデル全体の細かな品質向上を重視。特に多言語対応での改善が期待されている。まず jev-preview で公開され、約 1 週間後に jev-latest へ反映する予定。 ② 画像を使った判断が可能になった Jev",
-    views: 266,
+    views: 267,
     likes: 2,
     projectUrl: null,
   },
@@ -2393,7 +2393,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/flinters_inc/status/2110882543549698060",
     date: "2026-10-15T23:56:31.000Z",
     text: "📣お役立ち記事公開📖 FLINTERS LABで、AIモデル「Jev」の解説記事を公開しました。 「判断が速い」と話題のJevの正体とLLMとの違い、試し方を、FLINTERSでの検証事例とあわせてまとめています。 業務効率化のヒントとして、ぜひご覧ください👇 https://t.co/5lZUmYxyrB #Jev #TypeSafe #生成AI",
-    views: 202,
+    views: 206,
     likes: 5,
     projectUrl: null,
   },
@@ -2580,7 +2580,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/HowDevelop/status/2111988896095506534",
     date: "2026-10-19T01:12:46.000Z",
     text: "How to cut coding-agent costs by ~78.5% using Jev to route between open models All 32 selected coding tasks passed hidden tests. Plus: Beam vs Muse Spark across 20 coding tasks - comparing cost, speed, and results 👇 https://t.co/E2rhYKNbdS",
-    views: 3829,
+    views: 3831,
     likes: 44,
     projectUrl: null,
   },
@@ -2734,7 +2734,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/brochchain/status/2114477155782402093",
     date: "2026-10-25T22:00:13.000Z",
     text: "Jev 1.14 from TypeSafe AI can now take pictures, point to where things are in them, and read about 400 pages in one question. https://t.co/Y1xbkcw1Qa",
-    views: 85,
+    views: 88,
     likes: 2,
     projectUrl: null,
   },
@@ -2789,7 +2789,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/grok/status/2114826803562881195",
     date: "2026-10-26T21:09:36.000Z",
     text: "@Guts0033 @0x_rody No. Grok Bot is the real xAI product with shared cloud computers. TypeSafe Jev is a real cheap decision model. The post is a technical router setup to log and skip wasteful retries. Author hypes results hard in follow-ups, but the wiring itself is public, uses ",
-    views: 33,
+    views: 35,
     likes: 0,
     projectUrl: null,
   },
@@ -2822,7 +2822,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/ArchimedesLore/status/2115570005379269082",
     date: "2026-10-28T22:22:49.000Z",
     text: "WHOEVER LEAKED THIS JEV CASCADE SHOULD BE REPLACING FINE-TUNING I thought teaching a model which bucket to pick meant 10,000 labeled examples and a two-day training run on H100s. Apparently not. This cascade's setup is much more interesting: → CHOICE accepts a criteria dict https",
-    views: 1736,
+    views: 1737,
     likes: 54,
     projectUrl: null,
   },
@@ -2833,7 +2833,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/soupsranjan/status/2115528413985341681",
     date: "2026-10-28T19:37:33.000Z",
     text: "Next week we’re co-hosting an event with @a16z and @typesafeai called ‘Jev and the Future of Fraud Fighting.’ When Jev came out a month ago, I tested it on an actual fraud incident at a Sardine customer. What I found shocked me: - Jev outperformed LLMs in fraud applications and h",
-    views: 1246,
+    views: 1247,
     likes: 22,
     projectUrl: null,
   },
@@ -2899,7 +2899,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/Bic_Revelation/status/2116327291488006647",
     date: "2026-10-31T00:32:00.000Z",
     text: "There's a smarter way to cut AI costs than switching to a cheaper LLM. Stop sending every decision to an LLM in the first place. I'd build a three-layer intelligence system using: Jev + DuckDB + Claude + jev-calibrate. The idea is simple. Let software handle facts, Jev https://t.",
-    views: 462,
+    views: 463,
     likes: 10,
     projectUrl: null,
   },
@@ -2921,7 +2921,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/wangxiaoxin88/status/2116324019289063519",
     date: "2026-10-31T00:19:00.000Z",
     text: "Google 搜不到自家站点，这事儿我太懂了——上线几个月连个影儿都没有，先别掏钱请人诊断，也别抱着官方文档硬啃、不知道从哪下刀。 后来我盯上了 jev-seo：给个首页网址，大约一分钟就能把整站爬完，再按 Google 官方搜索文档那 52 https://t.co/IDzmyhZ8JR",
-    views: 665,
+    views: 666,
     likes: 4,
     projectUrl: null,
   },
@@ -2954,7 +2954,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/Flandermaxx/status/2116267521171185722",
     date: "2026-10-30T20:34:30.000Z",
     text: "WHOEVER LEAKED THIS JEV LANDSCAPE OF SIGNALS DESERVES THE CTO SEAT I thought handling six input feeds in one agent meant six parsers, six prompts, and six code paths that disagree in production. Apparently not. This landscape's setup is much more interesting: → SOURCES: 6 https:/",
-    views: 2380,
+    views: 2383,
     likes: 57,
     projectUrl: null,
   },
@@ -2965,7 +2965,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/dave8172/status/2116256881299861840",
     date: "2026-10-30T19:52:13.000Z",
     text: "@allietheicon i have standing rule for my main orchestration agent- always check if jev can be used for whatever we do, like new tool, improvements and feature release, bug fixing, etc. and it passes a noul question to Jev - \"Will Jev be useful here?\"",
-    views: 714,
+    views: 717,
     likes: 3,
     projectUrl: null,
   },
@@ -3020,7 +3020,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/0x_rody/status/2116635478464278919",
     date: "2026-10-31T20:56:37.000Z",
     text: "this is wild... jev + grok bot is the most powerful ai setup right now if you already have access to the Jev API but aren’t sure how to start experimenting with it, just copy this checklist: 1. agent-desktop Desktop automation. Read the system's accessibility tree, judge https://",
-    views: 6187,
+    views: 6196,
     likes: 73,
     projectUrl: null,
   },
@@ -3042,7 +3042,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/japan19840824/status/2117052130809032978",
     date: "2026-11-02T00:32:15.000Z",
     text: "文章を書かず判定だけ返すAI「Jev」で、国会の質問2,424件を仕分けたら約45円でした。規制緩和を事業者が早く知る方法を探し、先読みは外れ、見送りの判定は正解率が約5割。国の法律と福井県の予算を業種で探せるサイトになるまでの約40日の記録です。 #生成AI #規制緩和 https://t.co/j9HIpQIKrU",
-    views: 1425,
+    views: 1431,
     likes: 5,
     projectUrl: null,
   },
@@ -3086,7 +3086,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/grok/status/2117002622456459690",
     date: "2026-11-01T21:15:31.000Z",
     text: "@AndresUribeRen1 @xsmryze The core pattern holds up. Anthropic's advisor flag (Sonnet main + Opus on call) is real and documented. Haiku subagents for parallel search/grep/audit is a solid custom config many people run. Jev itself is a legitimate third-party decision model from T",
-    views: 31,
+    views: 32,
     likes: 1,
     projectUrl: null,
   },
@@ -3097,7 +3097,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/grok/status/2117001449255157803",
     date: "2026-11-01T21:10:52.000Z",
     text: "@AndresUribeRen1 @xsmryze Jev is a separate TypeSafe AI decision model, not built into Claude Code. It does not come out of the box. You need to set it up: get a TypeSafe API key, then install their skill with claude plugin marketplace add typesafe-ai/skills claude plugin install",
-    views: 48,
+    views: 49,
     likes: 0,
     projectUrl: null,
   },
@@ -3108,7 +3108,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/grok/status/2117000772214780128",
     date: "2026-11-01T21:08:10.000Z",
     text: "@AndresUribeRen1 @xsmryze Jev (from TypeSafe AI) is a specialized “System One” decision model. It doesn’t write code or prose—it answers typed questions (which file, which tool, retry/stop, etc.) with calibrated probabilities in a few hundred ms for a fraction of a cent. In the p",
-    views: 113,
+    views: 114,
     likes: 1,
     projectUrl: null,
   },
@@ -3119,7 +3119,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/frankwong0205/status/2117791841076834779",
     date: "2026-11-04T01:31:36.000Z",
     text: "找人这事，也被 Agent 接管了。 Jev 母公司 TypeSafe AI 联手 Treg 开源了找人工具：一句话说要找谁，Agent 拆条件、筛人、补邮箱，最低约 6 分钱一条。 官方拿 292 人对比 Clay：找对的只差 2 个，花费 1.49 vs 10.34 美元。 不过有人实测搜自己都搜不到，准头还得练。 https://t.co/wD1giAMLUq",
-    views: 59,
+    views: 60,
     likes: 0,
     projectUrl: null,
   },
@@ -3152,7 +3152,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/sardine/status/2117722757584568805",
     date: "2026-11-03T20:57:05.000Z",
     text: "We ran Jev, TypeSafe AI's new System One model, on a fraud ring that hit one of our customers in September. Jev caught 27 of the ring's 29 fraudulent transactions, the most of any approach we tested. Our co-founder and CEO @soupsranjan will walk through these results tomorrow, ht",
-    views: 551,
+    views: 554,
     likes: 7,
     projectUrl: null,
   },
@@ -3185,7 +3185,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/milhouscc/status/2118507550962507947",
     date: "2026-11-06T00:55:34.000Z",
     text: "Jev can return a category even when none of your categories fits. It can return a bounding box even when the target is absent. That's an important API contract to understand before wiring its output into an action. TypeSafe's Jev exposes questions as typed primitives. Three of ht",
-    views: 81,
+    views: 83,
     likes: 0,
     projectUrl: null,
   },
@@ -3196,7 +3196,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/grok/status/2118453280720257263",
     date: "2026-11-05T21:19:55.000Z",
     text: "@shinkanko @AdamHoltererer Jev is a System One decision model from TypeSafe (typesafe/jev-1.14 on OpenRouter). It doesn't generate text. You send it app state plus typed questions (yes/no, choice from options, or score) and it returns a structured answer with probabilities. Built",
-    views: 26,
+    views: 27,
     likes: 1,
     projectUrl: null,
   },
@@ -3207,7 +3207,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/khawar_dev/status/2118452694298079456",
     date: "2026-11-05T21:17:35.000Z",
     text: "I want to try out jev (typesafe AI) is there any open source GitHub project which i can checkout?",
-    views: 37,
+    views: 38,
     likes: 0,
     projectUrl: null,
   },
@@ -3218,7 +3218,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/caiodallaqua/status/2118440522574647493",
     date: "2026-11-05T20:29:13.000Z",
     text: "Eventually, all classic machine learning problems will have their equivalent of a \"universal solution\". For classification, Jev came along. Even though it was already possible to build a \"universal\" classifier using LMs, it was TypeSafe AI that turned it into a product.",
-    views: 91,
+    views: 92,
     likes: 1,
     projectUrl: null,
   },
@@ -3229,7 +3229,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/grok/status/2118420268196475298",
     date: "2026-11-05T19:08:44.000Z",
     text: "@yarotheslav @callumhyman24 S-tier links: fish audio: https://t.co/EbuUx3E2ZZ typesafe jev: https://t.co/Wi8qIMi1h9 tavus: https://t.co/yhi2xcrJOA brilliant koji: https://t.co/l43TXPYhr9 tesla roadster: https://t.co/Uqx709rgar pine: https://t.co/YpEUEnfaUJ wispr flow: https://t.c",
-    views: 42,
+    views: 47,
     likes: 0,
     projectUrl: null,
   },
@@ -3240,7 +3240,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/guilleflorvs/status/2118380835124441561",
     date: "2026-11-05T16:32:03.000Z",
     text: "Sequoia backed a model that's 100x faster and 100x cheaper than an LLM. It's called Jev, by Typesafe, and Sonya Huang led the round. Pat Grady, co-steward of Sequoia, explains: 1. Jev is a classifier: it makes multiple-choice decisions 2. Companies do this with LLMs today, in htt",
-    views: 1958,
+    views: 1959,
     likes: 6,
     projectUrl: null,
   },
@@ -3251,7 +3251,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/jacobeffron/status/2118375950161150145",
     date: "2026-11-05T16:12:38.000Z",
     text: "Why hasn't AI automated more work? What's holding coding agents back? And are the labs' valuations built on the right expectations? @CompleteSkeptic, co-founder and CEO of @typesafeai, was the perfect person to discuss this and more. Diogo coauthored OpenAI's InstructGPT paper, h",
-    views: 13293,
+    views: 13357,
     likes: 21,
     projectUrl: null,
   },
@@ -3273,7 +3273,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/NewsTongueX/status/2119215269079875734",
     date: "2026-11-07T23:47:47.000Z",
     text: "🔴 Decision models skip reasoning to cut latency; shift explanation burden to developers Decision models from TypeSafe AI (Jev), Cloudflare (Clef), and OpenAI (Decisions API) return structured JSON outputs with confidence probabilities instead of verbose text, cutting latency htt",
-    views: 80,
+    views: 81,
     likes: 0,
     projectUrl: null,
   },
@@ -3284,7 +3284,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/birmeya/status/2119147770011418935",
     date: "2026-11-07T19:19:34.000Z",
     text: "TypeSafe AI just stripped agent stacks down to one frontier call A 26-year-old in Berlin clears $3,200 a month wiring Jev and Claude into one harness. Jev is a judgment model from TypeSafe AI that takes program state and returns typed decisions. No free-form text, no reasoning. h",
-    views: 4218,
+    views: 4246,
     likes: 70,
     projectUrl: null,
   },
@@ -3295,7 +3295,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/dfinke/status/2119136410863091713",
     date: "2026-11-07T18:34:26.000Z",
     text: "Excellent post from TypeSafe on Jev. Dials in on how and why. What caught my attention was the traceability. So, I made the trace visual. https://t.co/zKgMlaKYNi https://t.co/63ke55L8UQ",
-    views: 454,
+    views: 457,
     likes: 2,
     projectUrl: null,
   },
@@ -3306,7 +3306,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/xulijian1994/status/2120685075218174293",
     date: "2026-11-12T01:08:17.000Z",
     text: "Google 发布 Gemini Decision 1，直接对标 TypeSafe 的 Jev！ 两者本质上是同一类决策模型，不需要生成一大段文字，而是直接对预设选项进行判断，输出结果和概率，特别适合 Agent 路由、工具选择、内容审核等场景。 相比 Jev，Gemini 有几个明显优势： 1.",
-    views: 45,
+    views: 114,
     likes: 0,
     projectUrl: null,
   },
@@ -3317,7 +3317,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/enelsonhere/status/2120682619318796688",
     date: "2026-11-12T00:58:31.000Z",
     text: "@bekaqendrim It'd be great if we can use Jev from Typesafe directly instead of OpenRouter",
-    views: 10,
+    views: 36,
     likes: 0,
     projectUrl: null,
   },
@@ -3328,8 +3328,8 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/JaceYao10/status/2120681680474403052",
     date: "2026-11-12T00:54:47.000Z",
     text: "卧槽，刚刷到 Google 官博： Gemini Decisions API 放了——新模型叫 Decision 1，不写长文，就做封闭选择题。一次最多塞 1000 道判断，图、音频、视频、PDF 都能直接两。 硬数字摊在官方评测图上：JevBench 公开集 92.2%，压过 GPT-6 Luna 的 90.9% 和 TypeSafe Jev 的 90.0%。端到端 150–250",
-    views: 20,
-    likes: 0,
+    views: 55,
+    likes: 4,
     projectUrl: null,
   },
   {
@@ -3339,7 +3339,7 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/tonychuhai/status/2120677638130069948",
     date: "2026-11-12T00:38:43.000Z",
     text: "Gemini Decision 1 来了，决策模型赛道正式进入大厂时代。 前两周还在火的，是 TypeSafe 的 Jev。它几乎重新定义了一类模型：不写字、不推理、不生成文本，只做一件事——在你预先给定的选项里，快速、便宜、带置信度地做出选择。 决策模型突然成了 Agent 工作流里最香的基础设施。 昨天，Google https://t.co/800JsYc0ad",
-    views: 297,
+    views: 570,
     likes: 0,
     projectUrl: null,
   },
@@ -3350,8 +3350,74 @@ export const pulseEntries: PulseEntry[] = [
     url: "https://x.com/BoomAIGC/status/2120677524266975386",
     date: "2026-11-12T00:38:16.000Z",
     text: "谷歌说比自家 Flash-Lite 便宜5倍。可惜对手不是 Flash-Lite。 谷歌凌晨发了 Gemini Decision 1：不写字，只做是非题、最多255个选项的选择题和打分，一次过1000个问题；输入每百万 token 0.10 美元，输出不收钱。 把账摆出来： 1. 谷歌自家对比表，7项共同评测总价它 0.88 美元，TypeSafe 的 Jev https://t.co/xKhODsOQhx",
-    views: 5,
+    views: 8,
     likes: 0,
+    projectUrl: null,
+  },
+  {
+    id: "2121042288315134246",
+    author: "Mael Caldas",
+    screenName: "maelcaldas",
+    url: "https://x.com/maelcaldas/status/2121042288315134246",
+    date: "2026-11-13T00:47:43.000Z",
+    text: "We played the whole agent playbook for 18 months. Great for building software, still not for running operations. Then @typesafeai released Jev, and the light at the end of the tunnel started to appear. https://t.co/v7yOeg9n5d",
+    views: 67,
+    likes: 1,
+    projectUrl: null,
+  },
+  {
+    id: "2121031731386228914",
+    author: "Unifory",
+    screenName: "Unity_ForYou",
+    url: "https://x.com/Unity_ForYou/status/2121031731386228914",
+    date: "2026-11-13T00:05:46.000Z",
+    text: "【11月13日 朝のAIニュースまとめ】 ・NVIDIA、黄仁勲氏がCEOを辞任 ・Google、Gemini 4 Hydrogenを公開 ・Claude、製造業向けプラグインを提供 ・続報：OpenAI、調達額150億ドルと報道 ・続報：Jev開発元にFlat Capitalが出資 ・Google、Gemini搭載眼鏡の予約開始 ・AWS、業務AIの実行基盤を刷新",
+    views: 307,
+    likes: 3,
+    projectUrl: null,
+  },
+  {
+    id: "2121021341553877272",
+    author: "David Bressler",
+    screenName: "davidwbressler",
+    url: "https://x.com/davidwbressler/status/2121021341553877272",
+    date: "2026-11-12T23:24:29.000Z",
+    text: "Rishi Diwan has joined @EventumAI as Principal, Enterprise AI. His line on banks: “the bottleneck for AI is approval, not building.” I think he’s right, and I think it’s an evals problem. A product or lending leader at a bank has an AI idea. It goes to risk, compliance and",
+    views: 36,
+    likes: 1,
+    projectUrl: null,
+  },
+  {
+    id: "2121000088655069367",
+    author: "【公式】Codexアカデミア",
+    screenName: "codex_aca",
+    url: "https://x.com/codex_aca/status/2121000088655069367",
+    date: "2026-11-12T22:00:02.000Z",
+    text: "問い合わせのメールの振り分けは、 「判定だけのAI」に任せられます。 候補は2つです。 ・Decisions API（OpenAI） ・Jev（TypeSafe社） どっちが自分の仕事に合うかは、 コードなしで比べられます↓↓ ① もう振り分けたメールを10通用意する ② 2つのPlaygroundに、同じ文と同じ質問を入れる ③ https://t.co/FX1s6S2OQQ https://t.co/yRfwy17lfn",
+    views: 134,
+    likes: 1,
+    projectUrl: null,
+  },
+  {
+    id: "2120988719109079335",
+    author: "John Hartquist",
+    screenName: "johnhartquist",
+    url: "https://x.com/johnhartquist/status/2120988719109079335",
+    date: "2026-11-12T21:14:51.000Z",
+    text: "@kunalabcdani @typesafeai @DeepgramAI The watch streams audio to a Rust server that proxies Deepgram Flux (speech to text) and the TypeSafe API. Jev answers multiple-choice questions, and the server acts only when confident. Built on system2, my idiomatic Rust SDK for Jev: https:",
+    views: 57,
+    likes: 1,
+    projectUrl: null,
+  },
+  {
+    id: "2120971059541250322",
+    author: "Grok",
+    screenName: "grok",
+    url: "https://x.com/grok/status/2120971059541250322",
+    date: "2026-11-12T20:04:40.000Z",
+    text: "@LesanLesan1 @ric_guia @_avichawla Jev itself is closed-source (hosted API only, no public weights or model repo). Official TypeSafe org: https://t.co/kxjMZIr62C Key repos: skills (agent skill), typesafe-sdk-python, typesafe-sdk-js. Popular community project using it: browser-use",
+    views: 3,
+    likes: 1,
     projectUrl: null,
   }
 ];

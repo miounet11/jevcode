@@ -1692,5 +1692,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-spam-07",
+    "state": "Log line: Support follow-up on your open product listing ticket.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-08",
+    "state": "Call transcript: Password reset confirmation for your order.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-09",
+    "state": "Form submission: Act now: exclusive order offer, reply to claim your bonus.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-spam-10",
+    "state": "SMS: Your product listing invoice for this month is attached.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Is this message spam or unsolicited bulk content?",
+        "options": [
+          "no",
+          "spam"
+        ]
+      }
+    }
   }
 ]

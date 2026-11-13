@@ -800,5 +800,33 @@
     "ok": true,
     "choice": "no",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-07",
+    "ts": "2026-11-13T01:32:45.540Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-08",
+    "ts": "2026-11-13T01:32:47.274Z",
+    "ok": true,
+    "choice": "no",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-09",
+    "ts": "2026-11-13T01:32:48.896Z",
+    "ok": true,
+    "choice": "spam",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-spam-10",
+    "ts": "2026-11-13T01:32:50.422Z",
+    "ok": true,
+    "choice": "spam",
+    "model": "clavue-jev"
   }
 ]
