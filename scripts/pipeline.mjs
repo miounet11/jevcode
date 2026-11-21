@@ -88,8 +88,9 @@ function refreshBuilds() {
   const countOf = () => (existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')).cards ?? []).length : 0);
   const before = countOf();
   try {
-    run('node scripts/fetch-jev-builds.mjs');
-    run(`node scripts/build-jev-cards.mjs --limit=${process.env.BUILDS_LIMIT ?? '200'}`);
+    // 非阻塞支线均设单步超时：2026-11-14 曾因支线 fetch 无超时挂死，耗尽整轮 900s 预算。
+    run('node scripts/fetch-jev-builds.mjs', { timeout: 60_000 });
+    run(`node scripts/build-jev-cards.mjs --limit=${process.env.BUILDS_LIMIT ?? '200'}`, { timeout: 180_000 });
   } catch (err) {
     say(`WARN 动态卡片刷新失败（不阻塞生态发布）: ${String(err.message).slice(0, 200)}`);
     return 0;
@@ -102,7 +103,7 @@ function refreshBuilds() {
 /** X 指标与新推文。失败只告警，不让生态抓取一起中止。 */
 function refreshCommunity() {
   try {
-    const out = run('node scripts/fetch-community-x.mjs');
+    const out = run('node scripts/fetch-community-x.mjs', { timeout: 90_000 });
     say(`community: ${String(out).trim().split('\n').pop()}`);
   } catch (err) {
     const tail = `${err.stdout ?? ''}\n${err.stderr ?? ''}`.trim().split('\n').slice(-6).join(' | ');
@@ -113,12 +114,12 @@ function refreshCommunity() {
 /** 实验室补充场景并记录 clavue-jev 的选项。失败只告警。 */
 function refreshLab() {
   try {
-    say(`lab supplement: ${String(run('node scripts/supplement-lab.mjs')).trim()}`);
+    say(`lab supplement: ${String(run('node scripts/supplement-lab.mjs', { timeout: 60_000 })).trim()}`);
   } catch (err) {
     say(`WARN 实验室补充失败（不阻塞生态发布）: ${String(err.stdout || err.message).slice(0, 240)}`);
   }
   try {
-    say(`lab record: ${String(run('node scripts/record-lab.mjs')).trim()}`);
+    say(`lab record: ${String(run('node scripts/record-lab.mjs', { timeout: 90_000 })).trim()}`);
   } catch (err) {
     say(`WARN 实验室记录失败（不阻塞生态发布）: ${String(err.stdout || err.message).slice(0, 240)}`);
   }
@@ -135,12 +136,12 @@ function refreshLab() {
  */
 function refreshJev() {
   try {
-    say(`jev discover: ${String(run('node scripts/discover-jev-candidates.mjs')).trim().split('\n').slice(-1)[0]}`);
+    say(`jev discover: ${String(run('node scripts/discover-jev-candidates.mjs', { timeout: 90_000 })).trim().split('\n').slice(-1)[0]}`);
   } catch (err) {
     say(`WARN jev 候选发现失败（不阻塞发布）: ${String(err.message).slice(0, 200)}`);
   }
   try {
-    const out = String(run('node scripts/gen-jev-claims.mjs')).trim();
+    const out = String(run('node scripts/gen-jev-claims.mjs', { timeout: 120_000 })).trim();
     for (const line of out.split('\n')) say(`jev: ${line}`);
   } catch (err) {
     const tail = `${err.stdout ?? ''}\n${err.stderr ?? ''}`.trim().split('\n').slice(-4).join(' | ');
@@ -151,12 +152,12 @@ function refreshJev() {
 /** 覆盖语料的下一批案例。失败只告警，不挡住其余发布。 */
 function refreshBriefs() {
   try {
-    const out = run('node scripts/daily-briefs.mjs');
+    const out = run('node scripts/daily-briefs.mjs', { timeout: 180_000 });
     say(`briefs: ${String(out).trim().split('\n').pop()}`);
     // 新案例要跟着翻译，否则各语言站点只涨英文原文页，等于没有 SEO 增量。
     // 翻译失败不影响案例本身已发布，只告警。
     try {
-      const tr = run('python3 scripts/translate-briefs.py --lang=all');
+      const tr = run('python3 scripts/translate-briefs.py --lang=all', { timeout: 240_000 });
       say(`briefs-i18n: ${String(tr).trim().split('\n').slice(-1)[0]}`);
     } catch (err) {
       const tail = `${err.stdout ?? ''}\n${err.stderr ?? ''}`.trim().split('\n').slice(-3).join(' | ');
@@ -673,7 +674,9 @@ try {
   process.exit(1);
 }
 try {
-  run('./deploy/deploy.sh', { stdio: 'inherit' });
+  // 阶段 4 刚完成全量 npm run build 并通过 check-seo/linkCheck；复用已校验的 dist/，
+  // 避免 deploy.sh 再构建一遍 18,000+ 页面（省约 3 分钟，防止再次击穿 900s 超时）。
+  run('./deploy/deploy.sh', { stdio: 'inherit', env: { ...process.env, SKIP_BUILD: '1' } });
 } catch (err) {
   // 已经 push 成功，撤销本地提交只会让本地落后于远端，不解决问题；
   // 保持提交不动，交给 cron 的棘轮告警，由人决定是否重跑。

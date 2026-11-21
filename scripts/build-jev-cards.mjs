@@ -100,7 +100,8 @@ async function fetchWithRetry(url, init, label) {
   for (let attempt = 1; ; attempt += 1) {
     let response;
     try {
-      response = await fetch(url, init);
+      const reqInit = init?.signal ? init : { ...init, signal: AbortSignal.timeout(45_000) };
+      response = await fetch(url, reqInit);
     } catch (error) {
       if (attempt >= attempts) throw error;
       const wait = Math.min(2 ** attempt * 500, 20000) + Math.random() * 500;

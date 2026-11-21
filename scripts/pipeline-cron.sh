@@ -23,11 +23,13 @@ CRON_LINE="30 9 * * * cd $REPO && PATH=/Library/Developer/CommandLineTools/usr/b
 # 巡检独立成一条 cron，而不是并进管线：管线自己挂掉时，附着在它末尾的巡检
 # 根本不会执行——「发布停了」恰好是最该被巡检发现的情形。
 HEALTH_LINE="0 10,22 * * * cd $REPO && PATH=/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin bash scripts/healthcheck-cron.sh >> $LOG_DIR/healthcheck.log 2>&1"
+# 日报同样走独立包装脚本（先 source .env 再跑 daily-report.mjs），确保 FEISHU_WEBHOOK 生效。
+REPORT_LINE="0 11 * * * cd $REPO && PATH=/Library/Developer/CommandLineTools/usr/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin bash scripts/daily-report-cron.sh >> $LOG_DIR/daily-report.log 2>&1"
 
 if [[ "${1:-}" == "--install" ]]; then
   # 幂等安装
-  (crontab -l 2>/dev/null | grep -vF "$REPO" ; echo "$CRON_LINE" ; echo "$HEALTH_LINE") | crontab -
-  echo "已安装每日 09:30 管线任务与 10:00/22:00 巡检："
+  (crontab -l 2>/dev/null | grep -vF "$REPO" ; echo "$CRON_LINE" ; echo "$HEALTH_LINE" ; echo "$REPORT_LINE") | crontab -
+  echo "已安装每日 09:30 管线、10:00/22:00 巡检与 11:00 日报："
   crontab -l | grep "$REPO"
   exit 0
 fi
@@ -40,6 +42,26 @@ fi
 
 cd "$REPO"
 mkdir -p "$LOG_DIR"
+
+# 日志轮转（copytruncate）：crontab 以 >> 打开文件，原地截断不会断掉当前 fd。
+# 避免 cron.log 无限膨胀（曾因 Astro 告警堆积到 529MB）。
+LOG_MAX_BYTES="${LOG_MAX_BYTES:-5242880}"
+rotate_log() {
+  local file="$1"
+  [[ -f "$file" ]] || return 0
+  local size
+  size="$(wc -c < "$file" 2>/dev/null | tr -d '[:space:]')" || return 0
+  [[ "${size:-0}" -gt "$LOG_MAX_BYTES" ]] || return 0
+  rm -f "${file}.3.gz"
+  [[ -f "${file}.2.gz" ]] && mv -f "${file}.2.gz" "${file}.3.gz"
+  [[ -f "${file}.1.gz" ]] && mv -f "${file}.1.gz" "${file}.2.gz"
+  gzip -c "$file" > "${file}.1.gz" 2>/dev/null || cp -f "$file" "${file}.1" 2>/dev/null || true
+  : > "$file"
+  echo "[cron] 已轮转日志：$(basename "$file")（原大小 ${size} 字节）"
+}
+rotate_log "$LOG_DIR/cron.log"
+rotate_log "$LOG_DIR/healthcheck.log"
+rotate_log "$LOG_DIR/daily-report.log"
 
 # 告警：cron 日志默认没人看，失败必须留下显眼痕迹
 # 区分「真失败」（ALERT-*）与「按设计跳过」（SKIPPED-*），避免告警疲劳
@@ -238,6 +260,7 @@ fi
 # 已 fork 出去的 deploy 仍会跑完并切换线上软链，cron 却记「管线失败」——2026-11-06
 # 与 11-07 连续两轮即此形态（无 released 事件、线上却已是新版本）。
 PIPELINE_TIMEOUT="${PIPELINE_TIMEOUT:-900}"
+PRE_RUN_HEAD="$(git rev-parse HEAD 2>/dev/null || true)"
 set +e
 bash scripts/run-with-timeout.sh "$PIPELINE_TIMEOUT" node scripts/pipeline.mjs "$@"
 code=$?
@@ -278,6 +301,13 @@ if [[ "$code" -ne 0 ]]; then
     ALERT_MSG="管线失败，退出码 ${code}"
   fi
   echo "[cron] 管线失败（退出码 ${code}）"
+  # 异常退出（尤其是超时被 SIGTERM/SIGKILL 强杀）时，pipeline.mjs 来不及执行
+  # restoreFetched()，会把抓取写回的 src/data/ecosystem.ts 等留在工作区，触发
+  # 下轮脏区保护永久跳过（2026-11-14 超时导致 11-15~11-21 连跳 7 天）。
+  # 本轮启动前已确认工作区干净，此处仅还原白名单 FETCHED_FILES（并按需撤销未推送的
+  # 本轮自动提交），不碰白名单外任何文件。
+  node scripts/lib/restore-fetched.mjs ${PRE_RUN_HEAD:+--pre-head="$PRE_RUN_HEAD"} \
+    || echo "[cron] WARN 工作区自愈失败，请检查 git status"
   # 只推一条，把退出码、连续第几轮、该看哪里都放进去。
   # 不拆成「失败」+「升级」两条：那样同一次故障要么推两遍（吵），要么得靠
   # 投递层去重吞掉后一条，而「已连续 N 轮」恰恰是最该知道的信息。

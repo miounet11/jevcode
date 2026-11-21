@@ -674,3 +674,93 @@ test('护栏脚本对无法确认独立进程组的情形退回单 pid，不误�
   assert.match(guard, /"\$CHILD_PGID" != "\$OWN_PGID"/);
   assert.match(guard, /SIGKILL 后仍有进程存活/);
 });
+
+// ---------------- P0：防重复构建、超时自愈、日志轮转、日报 .env ----------------
+
+test('deploy.sh 支持 --skip-build / SKIP_BUILD=1，且 pipeline 复用已构建 dist', () => {
+  const deploySh = readFileSync(new URL('../deploy/deploy.sh', import.meta.url), 'utf8');
+  assert.match(deploySh, /--skip-build\)\s*SKIP_BUILD=1/);
+  assert.match(deploySh, /if \[ "\$SKIP_BUILD" = "1" \]; then/);
+  const pipeline = readFileSync(new URL('./pipeline.mjs', import.meta.url), 'utf8');
+  assert.match(pipeline, /run\('\.\/deploy\/deploy\.sh',\s*\{[^}]*SKIP_BUILD:\s*'1'/);
+});
+
+test('超时自愈：还原白名单抓取文件、撤销未推送自动提交，不动手工文件与已推送提交', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { mkdirSync } = await import('node:fs');
+  const { recoverAbortedCycle } = await import('./lib/restore-fetched.mjs');
+
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-recover-'));
+  const remote = path.join(dir, 'remote.git');
+  const work = path.join(dir, 'work');
+  const git = (args, cwd = work) => execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+
+  try {
+    execFileSync('git', ['init', '--bare', remote], { stdio: 'ignore' });
+    mkdirSync(work, { recursive: true });
+    git(['init', '-b', 'main']);
+    git(['config', 'user.name', 'Test']);
+    git(['config', 'user.email', 'test@example.com']);
+    git(['remote', 'add', 'origin', remote]);
+
+    mkdirSync(path.join(work, 'src/data'), { recursive: true });
+    writeFileSync(path.join(work, 'src/data/ecosystem.ts'), 'export const dataAsOf = "2026-11-13";\n');
+    writeFileSync(path.join(work, 'README.md'), 'manual\n');
+    git(['add', '.']);
+    git(['commit', '-m', 'init']);
+    git(['push', '-u', 'origin', 'main']);
+    const baseHead = git(['rev-parse', 'HEAD']);
+
+    // 场景 1：fetch 改脏白名单文件 + 存在白名单外手工改动 → 只还原白名单文件
+    writeFileSync(path.join(work, 'src/data/ecosystem.ts'), 'export const dataAsOf = "2026-11-14";\n');
+    writeFileSync(path.join(work, 'README.md'), 'manual-edit\n');
+    const r1 = recoverAbortedCycle({ cwd: work, preRunHead: baseHead });
+    assert.equal(r1.droppedCommit, false);
+    assert.deepEqual(r1.restored, ['src/data/ecosystem.ts']);
+    assert.match(readFileSync(path.join(work, 'src/data/ecosystem.ts'), 'utf8'), /2026-11-13/);
+    assert.equal(readFileSync(path.join(work, 'README.md'), 'utf8'), 'manual-edit\n');
+    git(['checkout', '--', 'README.md']);
+
+    // 场景 2：已产生未推送的 chore(eco) 自动提交后超时 → 撤销该提交并还原文件
+    writeFileSync(path.join(work, 'src/data/ecosystem.ts'), 'export const dataAsOf = "2026-11-15";\n');
+    git(['add', 'src/data/ecosystem.ts']);
+    git(['commit', '-m', 'chore(eco): 生态数据自动刷新 (2026-11-15): src/data/ecosystem.ts']);
+    const r2 = recoverAbortedCycle({ cwd: work, preRunHead: baseHead });
+    assert.equal(r2.droppedCommit, true);
+    assert.deepEqual(r2.restored, ['src/data/ecosystem.ts']);
+    assert.equal(git(['rev-parse', 'HEAD']), baseHead);
+    assert.equal(git(['status', '--porcelain']), '');
+
+    // 场景 3：已经推送到 origin/main 的提交 → 绝不撤销
+    writeFileSync(path.join(work, 'src/data/ecosystem.ts'), 'export const dataAsOf = "2026-11-16";\n');
+    git(['add', 'src/data/ecosystem.ts']);
+    git(['commit', '-m', 'chore(eco): 生态数据自动刷新 (2026-11-16): src/data/ecosystem.ts']);
+    git(['push', 'origin', 'main']);
+    const pushedHead = git(['rev-parse', 'HEAD']);
+    const r3 = recoverAbortedCycle({ cwd: work, preRunHead: baseHead });
+    assert.equal(r3.droppedCommit, false);
+    assert.equal(git(['rev-parse', 'HEAD']), pushedHead);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('cron 失败分支接入工作区自愈、包含日志轮转，并安装带 .env 的日报任务', () => {
+  const sh = readFileSync(new URL('./pipeline-cron.sh', import.meta.url), 'utf8');
+  const failBranch = sh.slice(sh.indexOf('if [[ "$code" -ne 0 ]]'), sh.indexOf('# 棘轮：只有真的发出去'));
+  assert.match(failBranch, /node scripts\/lib\/restore-fetched\.mjs/);
+  assert.match(sh, /rotate_log "\$LOG_DIR\/cron\.log"/);
+  assert.match(sh, /REPORT_LINE="0 11 \* \* \*.*daily-report-cron\.sh/);
+  assert.match(sh, /echo "\$REPORT_LINE"/);
+
+  const reportSh = readFileSync(new URL('./daily-report-cron.sh', import.meta.url), 'utf8');
+  assert.match(reportSh, /source \.env/);
+  assert.match(reportSh, /exec node scripts\/daily-report\.mjs/);
+});
+
+test('支线抓取脚本具备网络超时保护，避免单点挂死耗尽 900s 预算', () => {
+  const fetchBuilds = readFileSync(new URL('./fetch-jev-builds.mjs', import.meta.url), 'utf8');
+  const buildCards = readFileSync(new URL('./build-jev-cards.mjs', import.meta.url), 'utf8');
+  assert.match(fetchBuilds, /AbortSignal\.timeout/);
+  assert.match(buildCards, /AbortSignal\.timeout/);
+});

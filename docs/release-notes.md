@@ -2,6 +2,43 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-21 — 解除连续 9 天停更自锁：去重复构建、超时自愈、消告警刷屏与内容坏值清理
+
+### 现象
+
+- 2026-11-13 09:30 cron 在 `[deploy] 解包并切换软链...` 阶段击穿 900s 超时护栏（退出码 124），跳过发布后探针、未清 `pending`、未提交 IndexNow（但远端软链实际已切至 `20261113-014009`）。
+- 2026-11-14 09:30 cron 跑完 `fetch-ecosystem.mjs` 后在支线抓取阶段再次击穿 900s 超时（退出码 124），被 `SIGTERM` 按组强杀，未执行 `restoreFetched()`，在工作区留下 `M src/data/ecosystem.ts`。
+- 2026-11-15 ~ 11-21 连续 7 天因工作区脏文件触发 `pipeline-guard.mjs` 退出 2，整轮跳过并连写 `ALERT`（棘轮累积至第 9 轮）。
+- 伴随问题：
+  - `.research/pipeline-logs/cron.log` 无轮转，且 `astro.config.mjs` 的冗余 `i18n.fallback` 每次构建产生约 12.7 万条 `Could not render` 路由冲突告警，日志膨胀至 **529 MB**（338 万行）。
+  - 本机 `daily-report.mjs` crontab 未加载 `.env`，`FEISHU_WEBHOOK` 始终为空，日报每日静默落盘不发飞书。
+  - 11-13 提交带入 `briefs-i18n.json` 坏值（`zh` 缺 `cov-devtools-safety-01`、43 条 `ja` `question` 189 字符提示词回显、36 条 `zh` `question` 提示词回显及 19 条多语种回显/拒答），导致 `content-check` 与 `npm test` 持续标红。
+
+### 根因
+
+1. **双重构建**：`scripts/pipeline.mjs` 阶段 4 已运行完整 `npm run build`（18,122 页约 2.5–3 分钟），阶段 6 调 `./deploy/deploy.sh` 时后者无条件再跑一遍 `npm run build`，直接吃掉近 6 分钟预算。
+2. **超时无自愈**：`run-with-timeout.sh` 强杀进程组后，`pipeline-cron.sh` 失败分支没有清理本轮写入的白名单抓取文件，导致单次超时永久自锁。
+3. **支线抓取无超时**：`fetch-jev-builds.mjs` / `build-jev-cards.mjs` 的 `fetch()` 与 `pipeline.mjs` 中可选支线 `execSync` 均无超时限制，单点挂死会拖垮整轮 900s 预算。
+4. **译文校验松于内容门禁**：`scripts/translate-briefs.py` 此前只按 `BODY_MAX * 1.5` 校验长度（未按 `question` 单独限制），且只匹配英文逗号分隔的 `"TypeSafe, System One"`，漏掉中文顿号、破折号列表回显及 `KI-Assistent` 拒答。
+
+### 改动
+
+- `deploy/deploy.sh` & `scripts/pipeline.mjs`：支持 `--skip-build` / `SKIP_BUILD=1`，管线部署复用阶段 4 已校验的 `dist/`；并为 `refreshBuilds/Community/Lab/Briefs/Jev` 增加单步超时。
+- `scripts/fetch-jev-builds.mjs` & `scripts/build-jev-cards.mjs`：为 `fetch()` 补充 `AbortSignal.timeout`。
+- `scripts/lib/restore-fetched.mjs` & `scripts/pipeline-cron.sh`：失败/超时分支自动还原 `FETCHED_FILES` 白名单脏文件（若存在未推送的本轮自动提交一并撤销，绝不碰白名单外手工改动或已推送提交）；增加 `rotate_log`（>5MB 自动 `copytruncate + gzip` 保留 3 份）。
+- `scripts/daily-report-cron.sh` & `scripts/pipeline-cron.sh --install`：日报改走包装脚本加载 `.env`，并纳入 `--install` 统一管理。
+- `astro.config.mjs`：移除冗余的 `i18n.fallback`（全站多语言及文档回退已在 `[lang]/[...slug].astro` 显式生成），消除每次构建 ~12.7 万条 `Could not render` 告警。
+- `scripts/translate-briefs.py` & `src/data/briefs-i18n.json`：按字段对齐 `QUESTION_MAX` / `BODY_MAX`、拦截多格式提示词回显与模型拒答，并修复存量 1 条缺译 + 98 条回显/拒答坏值。
+- `scripts/test-ops-scripts.mjs`：补 4 条回归用例覆盖跳过构建、超时自愈三场景、日志轮转/日报 `.env` 接入与网络超时保护。
+
+### 验证
+
+- `node scripts/lib/restore-fetched.mjs` 实测还原 `src/data/ecosystem.ts`。
+- 压缩截断 529 MB `cron.log`（保留末 2,000 行于 `cron.log.1.gz`）并重装本机 3 条 crontab 任务。
+- `npm run build`：退出 0，总耗时 **115s**，`Could not render` 告警 **0** 条，`18121 pages (18101 indexable, 20 noindex), sitemap 18101`，`check-seo: OK`。
+- `node scripts/content-check.mjs`：`硬问题 0，软问题 0`；`npm test`：**303 / 303 通过（fail 0）**；`npm run check`：0 errors。
+
+
 ## 2026-11-07 — 超时护栏按进程组终止（`a2ffbeb`）
 
 ### 现象

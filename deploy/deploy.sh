@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
 # JevCode 部署脚本
-# 用法：./deploy/deploy.sh
+# 用法：./deploy/deploy.sh [--skip-build]
+#   --skip-build / SKIP_BUILD=1  跳过本地 npm run build，复用已有 dist/（供管线调用，避免重复构建）
 #
 # 做的事：
-#   1. 本地构建
-#   2. 打包 dist 并通过 scp 上传到服务器
+#   1. 本地构建（可通过 --skip-build 跳过）
+#   2. 打包 dist 并通过 rsync/scp 上传到服务器
 #   3. 在服务器上原子切换到新版本（软链切换，失败可秒回滚）
 #   4. 重载 nginx
-#
-# 前置条件：
-#   - 本地能 SSH 到服务器（密钥已配置）
-#   - 服务器已装 nginx，且有 /var/www/jevcode 目录
-#   - nginx 站点配置已按 deploy/nginx/jevcode.conf 部署
 
 set -euo pipefail
+
+SKIP_BUILD="${SKIP_BUILD:-0}"
+for arg in "$@"; do
+  case "$arg" in
+    --skip-build) SKIP_BUILD=1 ;;
+    *) printf '\033[31m[error]\033[0m 未知参数：%s（仅支持 --skip-build）\n' "$arg" >&2; exit 2 ;;
+  esac
+done
 
 # ---------- 配置 ----------
 SSH_HOST="${JEVCODE_SSH_HOST:-root@23.95.243.52}"
@@ -37,10 +41,15 @@ log() { printf '\033[36m[deploy]\033[0m %s\n' "$*"; }
 die() { printf '\033[31m[error]\033[0m %s\n' "$*" >&2; exit 1; }
 
 # ---------- 1. 构建 ----------
-log "构建站点..."
 cd "$LOCAL_DIR"
-npm run build
-[ -f dist/index.html ] || die "构建产物缺失：dist/index.html"
+if [ "$SKIP_BUILD" = "1" ]; then
+  log "跳过本地构建（复用已有 dist/）..."
+  [ -f dist/index.html ] || die "构建产物缺失：dist/index.html（请先运行 npm run build 或去掉 --skip-build）"
+else
+  log "构建站点..."
+  npm run build
+  [ -f dist/index.html ] || die "构建产物缺失：dist/index.html"
+fi
 
 # ---------- 2. 打包 ----------
 log "打包 ${RELEASE_ID}..."

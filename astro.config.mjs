@@ -19,15 +19,10 @@ export default defineConfig({
       prefixDefaultLocale: true,
       redirectToDefaultLocale: false,
     },
-    fallback: {
-      zh: 'en',
-      ja: 'en',
-      ko: 'en',
-      de: 'en',
-      fr: 'en',
-      es: 'en',
-      pt: 'en',
-    },
+    // 不启用 Astro 内置 i18n.fallback：本站全部页面均在 src/pages/[lang]/ 下
+    // 显式生成（文档缺译在 [lang]/[...slug].astro 手动回退到 en 并标 noindex）。
+    // 开启内置 fallback 会在 Astro 7 额外合成 ~12.7 万条冲突路由，每次构建打印
+    // 十余万行 Could not render 告警（把 cron.log 撑到 500MB+）且不产生任何实际页面。
   },
 
   markdown: {

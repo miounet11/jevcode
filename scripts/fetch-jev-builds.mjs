@@ -16,7 +16,10 @@ const SOURCE = 'https://jev.openchamber.dev/data/cards.json';
 // 它只用来给 build-jev-cards.mjs 提供候选 id。
 const OUT = new URL('../data/builds/candidates.json', import.meta.url);
 
-const response = await fetch(SOURCE, { headers: { 'user-agent': 'jevcode-builds-mirror' } });
+const response = await fetch(SOURCE, {
+  headers: { 'user-agent': 'jevcode-builds-mirror' },
+  signal: AbortSignal.timeout(30_000),
+});
 if (!response.ok) {
   throw new Error(`fetch ${SOURCE} failed: ${response.status}`);
 }
