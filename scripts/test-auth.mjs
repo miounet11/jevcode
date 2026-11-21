@@ -8,7 +8,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { openAccounts } from '../server/accounts.mjs';
 import {
-  withSessions, hashPassword, verifyPassword, passwordProblem, emailProblem,
+  withSessions, hashPassword, verifyPassword, hashPasswordAsync, verifyPasswordAsync,
+  passwordProblem, emailProblem,
 } from '../server/auth.mjs';
 
 const fresh = () => {
@@ -155,4 +156,27 @@ test('会话与账号余额打通：注册送 $5，消费可查', () => {
   a.chargeInputTokens(user.id, 1000);
   assert.equal(a.balance(user.id).microUsd, 5_000_000 - 42, '1000 个输入 token 扣 42 微美元');
   assert.equal(a.balance(user.id).usd, '4.999958');
+});
+
+test('异步 scrypt 与同步格式互通，支持异步注册/登录/改密', async () => {
+  const h = await hashPasswordAsync('async-horse-battery');
+  assert.equal(verifyPassword('async-horse-battery', h), true);
+  assert.equal(await verifyPasswordAsync('async-horse-battery', h), true);
+  assert.equal(await verifyPasswordAsync('wrong-password', h), false);
+  assert.equal(await verifyPasswordAsync('any', 'scrypt$32768$8$1$$'), false);
+
+  const { auth } = fresh();
+  const reg = await auth.registerAsync('AsyncUser@Example.com', 'first-pass-123');
+  assert.equal(reg.ok, true);
+  assert.equal(reg.user.email, 'asyncuser@example.com');
+
+  const login = await auth.loginAsync('asyncuser@example.com', 'first-pass-123');
+  assert.equal(login.ok, true);
+  assert.equal(auth.resolveSession(login.token).user.id, reg.user.id);
+
+  const chg = await auth.changePasswordAsync(reg.user.id, 'first-pass-123', 'second-pass-456');
+  assert.equal(chg.ok, true);
+  assert.equal(chg.revokedSessions, 1);
+  assert.equal(auth.resolveSession(login.token), null);
+  assert.equal((await auth.loginAsync('asyncuser@example.com', 'second-pass-456')).ok, true);
 });

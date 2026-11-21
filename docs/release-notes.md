@@ -2,6 +2,22 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-21 — P1 安全、计费准确性与 Nginx 真实 IP 加固
+
+### 改动
+
+- **消除 `/v1/judge` 与 `/api/try` 并发超扣竞态（TOCTOU）**：`server/accounts.mjs` 新增 `BEGIN IMMEDIATE` 原子预扣 `reserveInputTokens()` 与按精确行 id 退款 `refundEntry(entryId)`；`server/playground.mjs` 改为先预扣再调上游、失败精确回退。
+- **审计字段幂等迁移**：为 `ledger` 补 `key_id` 列及索引 `idx_ledger_key`，为 `api_keys` 补 `last_used_at` 列并在 `resolveKey()` 自动刷新；兼容存量老库自动迁移。
+- **修复 `/v1/judge` 默认落盘隐私风险**：程序化 `/v1/judge` 默认不再写入公开可读的 `/var/www/jevcode/shared/runs/`（仅显式 `share: true` 才落盘），且 `GET /api/runs/:id` 剥离内部 `userId`。
+- **认证与限频加固**：`server/auth.mjs` 补充基于 libuv 线程池的异步 `scrypt` 方法（`registerAsync` / `loginAsync` / `changePasswordAsync`），避免高并发登录阻塞事件循环；注册后直接签发会话避免重复计算两次 scrypt；接入 `POST /api/auth/password` 改密接口；会话 Cookie 在生产/HTTPS 反代下强制带 `Secure`；新增有界自动清理滑动窗口限频器（单 Key `/v1/judge` RPM 默认 120、认证写接口 IP RPM 默认 30，并替换无界内存 Map）。
+- **Nginx 还原 Cloudflare 真实 IP + `/topics` 裸路径跳转**：`deploy/nginx/jevcode.conf` 在 `www` 与 `api` 两个 `server` 块中配置全部 Cloudflare IPv4/IPv6 `set_real_ip_from` 与 `real_ip_header CF-Connecting-IP`，并补齐 `/topics` 裸路径 302；`playground.mjs` 优先读取 nginx 覆写的 `X-Real-IP`。
+- **后端同步脚本与测试**：新增 `deploy/sync-playground.sh` 与 `scripts/test-playground-security.mjs`，更新 `deploy/ACCOUNTS-DEPLOY.md`。
+
+### 验证
+
+- `npm test`：**309 / 309 通过**（`fail 0`）；`npm run test:e2e`：**64 通过 / 0 失败**；`npm run check`：`0 errors`。
+- 同步至生产 `23.95.243.52` 并重载 nginx 后，验证 `/health`、`/api/auth/me`、`/topics/` 302、数据库迁移与 `jevcode-timing.log` 真实客户端 IP。
+
 ## 2026-11-21 — 解除连续 9 天停更自锁：去重复构建、超时自愈、消告警刷屏与内容坏值清理
 
 ### 现象

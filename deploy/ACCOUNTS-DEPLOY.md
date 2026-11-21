@@ -6,11 +6,12 @@
 
 | 端点 | 方法 | 说明 |
 |---|---|---|
-| `/api/auth/register` | POST | 注册，成功后自动登录并下发会话 |
-| `/api/auth/login` | POST | 登录 |
+| `/api/auth/register` | POST | 注册，成功后自动登录并下发会话（HTTPS/生产带 `Secure`） |
+| `/api/auth/login` | POST | 登录（异步 scrypt，IP 限频） |
+| `/api/auth/password` | POST | 修改密码（旧会话全部吊销，当前设备签发新会话） |
 | `/api/auth/logout` | POST | 登出 |
-| `/api/auth/me` | GET | 当前用户 + 额度 + Key 列表 |
-| `/api/auth/ledger` | GET | 余额、累计消费与消费流水 |
+| `/api/auth/me` | GET | 当前用户 + 额度 + Key 列表（含 `lastUsedAt`；未登录返回 `200 {"user":null}`） |
+| `/api/auth/ledger` | GET | 余额、累计消费与消费流水（含 `keyId`） |
 | `/api/keys` | POST | 签发 API Key（明文只返回一次） |
 | `/api/keys/revoke` | POST | 吊销自己的 Key |
 
@@ -18,7 +19,7 @@
 
 | 端点 | 方法 | 说明 |
 |---|---|---|
-| `/v1/judge` | POST | 跑一次判定，按输入 token 计费 |
+| `/v1/judge` | POST | 跑一次判定，事务原子预扣输入 token、失败精确回退；默认不落盘公开分享（显式 `share: true` 才落盘），支持单 Key RPM 限频 |
 | `/v1/me` | GET | 当前用户、余额、累计消费 |
 | `/v1/usage` | GET | 余额、累计消费与最近流水 |
 
@@ -80,8 +81,8 @@ nginx -t && systemctl reload nginx
 从公网打（不要在服务器本地打，本地是另一条链路）：
 
 ```bash
-# 未登录应为 401，而不是 404 或 503
-curl -sS -o /dev/null -w '%{http_code}\n' https://www.jevcode.ai/api/auth/me
+# 未登录返回 200 {"user":null}，而不是 404 或 503
+curl -sS https://www.jevcode.ai/api/auth/me
 
 # 注册一个测试账号
 curl -sS -X POST https://www.jevcode.ai/api/auth/register \
@@ -89,7 +90,7 @@ curl -sS -X POST https://www.jevcode.ai/api/auth/register \
   -d '{"email":"test@example.com","password":"a-good-password"}'
 ```
 
-预期：第一条 `401`，第二条 `201` 且返回 `credit.cents = 500`。
+预期：第一条 `200 {"user":null}`，第二条（带合法 captcha）`201` 且返回 `credit.cents = 500`。
 
 若第一条是 `404` → nginx 没 reload。
 若第一条是 `503` → env 里没配 `PLAYGROUND_ACCOUNTS_DB`。
@@ -136,12 +137,9 @@ systemctl start jevcode-playground
 ## 监控与告警
 
 `/etc/cron.d/jevcode-healthcheck` 每 5 分钟巡检关键服务与端点（`jevcode-playground`、
-`jevcode-intake`、`nginx` 的 active 状态，以及本机与公网健康端点）。结果写
-`/var/log/jevcode-healthcheck.log`；正常静默，失败非零退出。
-
-要真正把告警发出去，在 env 里配 `ALERT_WEBHOOK_URL`（POST JSON，适配 Slack/
-飞书/自建）。**当前未配**，所以告警只落日志——这是仍欠的一环。日志由
-`/etc/logrotate.d/jevcode` 每周轮转、保留 8 份。
+`jevcode-intake`、`nginx` 的 active 状态，以及本机与公网健康端点、备份新鲜度与磁盘余量）。
+告警通道通过 `/etc/jevcode-healthcheck.env` 配置 `FEISHU_WEBHOOK`（已启用，走 `notify-feishu.mjs`）；
+亦可改用 `ALERT_WEBHOOK_URL`。日志由 `/etc/logrotate.d/jevcode` 每周轮转、保留 8 份。
 
 手动巡检：
 

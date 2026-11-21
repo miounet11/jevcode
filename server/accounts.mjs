@@ -33,13 +33,14 @@ CREATE TABLE IF NOT EXISTS users (
   created_at  INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS api_keys (
-  id          TEXT PRIMARY KEY,
-  user_id     TEXT NOT NULL REFERENCES users(id),
-  hash        TEXT NOT NULL UNIQUE,
-  prefix      TEXT NOT NULL,
-  label       TEXT,
-  created_at  INTEGER NOT NULL,
-  revoked_at  INTEGER
+  id           TEXT PRIMARY KEY,
+  user_id      TEXT NOT NULL REFERENCES users(id),
+  hash         TEXT NOT NULL UNIQUE,
+  prefix       TEXT NOT NULL,
+  label        TEXT,
+  created_at   INTEGER NOT NULL,
+  revoked_at   INTEGER,
+  last_used_at INTEGER
 );
 -- 账目流水：正数为入账，负数为消费。cents 列的单位是微美元。
 CREATE TABLE IF NOT EXISTS ledger (
@@ -48,7 +49,8 @@ CREATE TABLE IF NOT EXISTS ledger (
   ts          INTEGER NOT NULL,
   cents       INTEGER NOT NULL,
   kind        TEXT NOT NULL,
-  ref         TEXT
+  ref         TEXT,
+  key_id      TEXT
 );
 CREATE TABLE IF NOT EXISTS schema_meta (
   k TEXT PRIMARY KEY,
@@ -59,6 +61,19 @@ CREATE INDEX IF NOT EXISTS idx_keys_hash ON api_keys(hash);
 `;
 
 const sha256 = (s) => createHash('sha256').update(s).digest('hex');
+
+/** 为存量老库补齐审计列（ledger.key_id 与 api_keys.last_used_at），幂等执行。 */
+function migrateAuditColumns(db) {
+  const hasCol = (table, col) =>
+    db.prepare(`PRAGMA table_info(${table})`).all().some((row) => row.name === col);
+  if (!hasCol('ledger', 'key_id')) {
+    db.exec('ALTER TABLE ledger ADD COLUMN key_id TEXT');
+  }
+  if (!hasCol('api_keys', 'last_used_at')) {
+    db.exec('ALTER TABLE api_keys ADD COLUMN last_used_at INTEGER');
+  }
+  db.exec('CREATE INDEX IF NOT EXISTS idx_ledger_key ON ledger(key_id, ts)');
+}
 
 /** 旧账本的整数是美分。乘 10000 变成微美元，只做一次。 */
 function migrateLedgerUnit(db) {
@@ -89,11 +104,13 @@ export function openAccounts(dbPath) {
   db.exec('PRAGMA journal_mode = WAL');
   db.exec('PRAGMA foreign_keys = ON');
   db.exec(SCHEMA);
+  migrateAuditColumns(db);
   migrateLedgerUnit(db);
 
   const qUserByEmail = db.prepare('SELECT * FROM users WHERE email = ?');
   const qUserById = db.prepare('SELECT * FROM users WHERE id = ?');
   const qKeyByHash = db.prepare('SELECT * FROM api_keys WHERE hash = ?');
+  const qTouchKey = db.prepare('UPDATE api_keys SET last_used_at = ? WHERE id = ?');
   const qBalance = db.prepare(
     'SELECT COALESCE(SUM(cents), 0) AS c FROM ledger WHERE user_id = ?'
   );
@@ -114,10 +131,12 @@ export function openAccounts(dbPath) {
     };
   }
 
-  /** 记一笔账。金额是微美元。正数入账、负数消费。 */
-  function record(userId, microUsd, kind, ref = null, at = Date.now()) {
-    db.prepare('INSERT INTO ledger (user_id, ts, cents, kind, ref) VALUES (?, ?, ?, ?, ?)')
-      .run(userId, at, microUsd, kind, ref);
+  /** 记一笔账。金额是微美元。正数入账、负数消费。返回行 id。 */
+  function record(userId, microUsd, kind, ref = null, at = Date.now(), keyId = null) {
+    const info = db.prepare(
+      'INSERT INTO ledger (user_id, ts, cents, kind, ref, key_id) VALUES (?, ?, ?, ?, ?, ?)'
+    ).run(userId, at, microUsd, kind, ref, keyId);
+    return Number(info.lastInsertRowid);
   }
 
   return {
@@ -150,19 +169,49 @@ export function openAccounts(dbPath) {
     },
 
     /**
-     * 按输入 token 扣费。余额不够则整笔拒绝，不写账。
-     * 调用方应在上游成功后再扣，失败不必走 refund。
+     * 原子预扣输入 token 费用（BEGIN IMMEDIATE），消除并发请求下的 TOCTOU 超扣竞态。
+     * 上游调用失败时调用方应按返回的 entryId 调 refundEntry() 精确回退。
      */
-    chargeInputTokens(userId, tokens, at = Date.now()) {
-      if (!qUserById.get(userId)) return { ok: false, reason: 'no-such-user' };
-      const n = Math.floor(Number(tokens));
-      const cost = inputCostMicroUsd(n);
-      const microUsd = balanceMicro(userId);
-      if (microUsd < cost) {
-        return { ok: false, reason: 'insufficient_credit', balance: presentBalance(microUsd) };
+    reserveInputTokens(userId, tokens, { keyId = null, at = Date.now() } = {}) {
+      db.exec('BEGIN IMMEDIATE');
+      try {
+        if (!qUserById.get(userId)) {
+          db.exec('ROLLBACK');
+          return { ok: false, reason: 'no-such-user' };
+        }
+        const n = Math.floor(Number(tokens));
+        const cost = inputCostMicroUsd(n);
+        const microUsd = balanceMicro(userId);
+        if (microUsd < cost) {
+          db.exec('ROLLBACK');
+          return { ok: false, reason: 'insufficient_credit', balance: presentBalance(microUsd) };
+        }
+        const entryId = cost > 0 ? record(userId, -cost, 'judge', String(n), at, keyId) : null;
+        db.exec('COMMIT');
+        return { ok: true, entryId, cost, balance: presentBalance(microUsd - cost) };
+      } catch (err) {
+        try { db.exec('ROLLBACK'); } catch { /* ignore */ }
+        throw err;
       }
-      if (cost > 0) record(userId, -cost, 'judge', String(n), at);
-      return { ok: true, balance: this.balance(userId), cost };
+    },
+
+    /**
+     * 按精确账目行 id 撤销一笔判定扣费（并发安全，不会误删其他请求的扣费）。
+     * @returns {boolean}
+     */
+    refundEntry(entryId) {
+      if (entryId == null) return false;
+      const info = db.prepare(
+        "DELETE FROM ledger WHERE id = ? AND kind = 'judge' AND cents < 0"
+      ).run(entryId);
+      return info.changes > 0;
+    },
+
+    /**
+     * 按输入 token 扣费（原子事务）。余额不够则整笔拒绝，不写账。
+     */
+    chargeInputTokens(userId, tokens, at = Date.now(), keyId = null) {
+      return this.reserveInputTokens(userId, tokens, { keyId, at });
     },
 
     /**
@@ -191,7 +240,7 @@ export function openAccounts(dbPath) {
     /** 某用户的流水，新的在前。cents 列是微美元，展示前要换算。 */
     entries: (userId, limit = 100) =>
       db.prepare(
-        'SELECT ts, cents, kind, ref FROM ledger WHERE user_id = ? ORDER BY ts DESC, id DESC LIMIT ?'
+        'SELECT ts, cents, kind, ref, key_id FROM ledger WHERE user_id = ? ORDER BY ts DESC, id DESC LIMIT ?'
       ).all(userId, limit),
 
     /** 累计消费，微美元 */
@@ -219,13 +268,19 @@ export function openAccounts(dbPath) {
       return { key, record: { id, userId, prefix: key.slice(0, 12), label, createdAt: at } };
     },
 
-    /** 用明文 key 换用户；未注册或已吊销返回 null */
-    resolveKey(key) {
+    /** 用明文 key 换用户并刷新 last_used_at；未注册或已吊销返回 null */
+    resolveKey(key, at = Date.now()) {
       if (typeof key !== 'string' || !key) return null;
       const row = qKeyByHash.get(sha256(key));
       if (!row || row.revoked_at) return null;
       const user = qUserById.get(row.user_id);
-      return user ? { user, keyId: row.id } : null;
+      if (!user) return null;
+      try {
+        qTouchKey.run(at, row.id);
+      } catch {
+        // 只读打开等极端情形不阻断鉴权
+      }
+      return { user, keyId: row.id };
     },
 
     revokeKey(keyId, at = Date.now()) {
@@ -236,7 +291,7 @@ export function openAccounts(dbPath) {
 
     listKeys(userId) {
       return db.prepare(
-        'SELECT id, prefix, label, created_at, revoked_at FROM api_keys WHERE user_id = ? ORDER BY created_at'
+        'SELECT id, prefix, label, created_at, revoked_at, last_used_at FROM api_keys WHERE user_id = ? ORDER BY created_at'
       ).all(userId);
     },
 

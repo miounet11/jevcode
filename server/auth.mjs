@@ -10,7 +10,10 @@
  *   约束，后续加验证只需加字段。
  */
 
-import { randomBytes, randomUUID, scryptSync, timingSafeEqual, createHash } from 'node:crypto';
+import { randomBytes, randomUUID, scrypt, scryptSync, timingSafeEqual, createHash } from 'node:crypto';
+import { promisify } from 'node:util';
+
+const scryptAsync = promisify(scrypt);
 
 /** scrypt 参数：N=2^15, r=8, p=1 → 约 32MB 内存/次，兼顾安全与单机可用 */
 const SCRYPT = { N: 32768, r: 8, p: 1, keylen: 64 };
@@ -27,15 +30,23 @@ export function hashPassword(password, saltBuf) {
   return `scrypt$${SCRYPT.N}$${SCRYPT.r}$${SCRYPT.p}$${b64(salt)}$${b64(hash)}`;
 }
 
-/** 常量时间比对，避免按字符提前返回泄漏信息 */
-export function verifyPassword(password, stored) {
-  if (typeof stored !== 'string') return false;
+/** 异步口令 hash（走 libuv 线程池，不阻塞 Node 事件循环） */
+export async function hashPasswordAsync(password, saltBuf) {
+  const salt = saltBuf || randomBytes(16);
+  const hash = await scryptAsync(password, salt, SCRYPT.keylen, {
+    N: SCRYPT.N, r: SCRYPT.r, p: SCRYPT.p, maxmem: 128 * SCRYPT.N * SCRYPT.r * 2,
+  });
+  return `scrypt$${SCRYPT.N}$${SCRYPT.r}$${SCRYPT.p}$${b64(salt)}$${b64(hash)}`;
+}
+
+function parseStoredHash(stored) {
+  if (typeof stored !== 'string') return null;
   const parts = stored.split('$');
-  if (parts.length !== 6 || parts[0] !== 'scrypt') return false;
+  if (parts.length !== 6 || parts[0] !== 'scrypt') return null;
   const [, N, r, p, saltB64, hashB64] = parts;
 
   // 长度与盐都必须校验。不校验的话，伪造的空哈希（如 scrypt$N$r$p$$）会让
-  // expected 变成零长 buffer，scryptSync 也返回零长，两个空 buffer 被
+  // expected 变成零长 buffer，scrypt 也返回零长，两个空 buffer 被
   // timingSafeEqual 判等 → 任意口令都能通过。已用探针实测复现。
   let expected;
   let salt;
@@ -43,20 +54,41 @@ export function verifyPassword(password, stored) {
     expected = Buffer.from(hashB64, 'base64url');
     salt = Buffer.from(saltB64, 'base64url');
   } catch {
-    return false;
+    return null;
   }
-  if (expected.length !== SCRYPT.keylen) return false;
-  if (salt.length === 0) return false;
+  if (expected.length !== SCRYPT.keylen) return null;
+  if (salt.length === 0) return null;
+  return { N: Number(N), r: Number(r), p: Number(p), salt, expected };
+}
 
+/** 常量时间比对，避免按字符提前返回泄漏信息 */
+export function verifyPassword(password, stored) {
+  const parsed = parseStoredHash(stored);
+  if (!parsed) return false;
   let actual;
   try {
-    actual = scryptSync(password, salt, expected.length, {
-      N: Number(N), r: Number(r), p: Number(p), maxmem: 128 * Number(N) * Number(r) * 2,
+    actual = scryptSync(password, parsed.salt, parsed.expected.length, {
+      N: parsed.N, r: parsed.r, p: parsed.p, maxmem: 128 * parsed.N * parsed.r * 2,
     });
   } catch {
     return false;
   }
-  return actual.length === expected.length && timingSafeEqual(actual, expected);
+  return actual.length === parsed.expected.length && timingSafeEqual(actual, parsed.expected);
+}
+
+/** 异步口令校验（走 libuv 线程池，避免高并发登录阻塞 HTTP 服务） */
+export async function verifyPasswordAsync(password, stored) {
+  const parsed = parseStoredHash(stored);
+  if (!parsed) return false;
+  let actual;
+  try {
+    actual = await scryptAsync(password, parsed.salt, parsed.expected.length, {
+      N: parsed.N, r: parsed.r, p: parsed.p, maxmem: 128 * parsed.N * parsed.r * 2,
+    });
+  } catch {
+    return false;
+  }
+  return actual.length === parsed.expected.length && timingSafeEqual(actual, parsed.expected);
 }
 
 /** 密码强度：至少 8 位。不强制复杂度，避免逼出可预测的变体。 */
@@ -177,6 +209,53 @@ export function withSessions(accounts, { sessionTtlMs = 30 * 24 * 60 * 60 * 1000
       if (pBad) return { ok: false, reason: pBad };
       db.prepare('UPDATE credentials SET password = ?, updated_at = ? WHERE user_id = ?')
         .run(hashPassword(newPassword), at, userId);
+      const info = db.prepare(
+        'UPDATE sessions SET revoked_at = ? WHERE user_id = ? AND revoked_at IS NULL'
+      ).run(at, userId);
+      return { ok: true, revokedSessions: Number(info.changes) };
+    },
+
+    /** 异步注册（先在线程池算 scrypt，再落库；避免阻塞 HTTP 事件循环） */
+    async registerAsync(email, password, at = Date.now()) {
+      const eBad = emailProblem(email);
+      if (eBad) return { ok: false, reason: eBad };
+      const pBad = passwordProblem(password);
+      if (pBad) return { ok: false, reason: pBad };
+      const norm = email.trim().toLowerCase();
+      if (accounts.getUserByEmail(norm)) return { ok: false, reason: 'email already registered' };
+
+      const hashed = await hashPasswordAsync(password);
+      if (accounts.getUserByEmail(norm)) return { ok: false, reason: 'email already registered' };
+      const user = accounts.createUser(norm, 'free', at);
+      db.prepare('INSERT INTO credentials (user_id, password, updated_at) VALUES (?, ?, ?)')
+        .run(user.id, hashed, at);
+      return { ok: true, user };
+    },
+
+    /** 异步登录（不阻塞事件循环） */
+    async loginAsync(email, password, at = Date.now()) {
+      const bad = { ok: false, reason: 'invalid email or password' };
+      if (typeof email !== 'string' || typeof password !== 'string') return bad;
+      const user = accounts.getUserByEmail(email.trim().toLowerCase());
+      if (!user) return bad;
+      const cred = qCred.get(user.id);
+      if (!cred || !(await verifyPasswordAsync(password, cred.password))) return bad;
+
+      const { token, expiresAt } = this.issueSession(user.id, at);
+      return { ok: true, token, expiresAt, user };
+    },
+
+    /** 异步改密（不阻塞事件循环；旧会话全部失效） */
+    async changePasswordAsync(userId, oldPassword, newPassword, at = Date.now()) {
+      const cred = qCred.get(userId);
+      if (!cred || !(await verifyPasswordAsync(oldPassword, cred.password))) {
+        return { ok: false, reason: 'current password is incorrect' };
+      }
+      const pBad = passwordProblem(newPassword);
+      if (pBad) return { ok: false, reason: pBad };
+      const hashed = await hashPasswordAsync(newPassword);
+      db.prepare('UPDATE credentials SET password = ?, updated_at = ? WHERE user_id = ?')
+        .run(hashed, at, userId);
       const info = db.prepare(
         'UPDATE sessions SET revoked_at = ? WHERE user_id = ? AND revoked_at IS NULL'
       ).run(at, userId);

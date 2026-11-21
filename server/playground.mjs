@@ -13,7 +13,7 @@ import { randomBytes } from 'node:crypto';
 import { issueCaptcha, verifyCaptcha } from './captcha.mjs';
 import { appendRecords, buildRecord, cleanCompareItems, readRecent, runCompare } from './compare.mjs';
 import { billableInputTokens, cleanQuestions, toUpstreamQuestions } from './questions.mjs';
-import { MICROUSD_PER_CENT, inputCostMicroUsd, microUsdToUsd } from './plans.mjs';
+import { MICROUSD_PER_CENT, microUsdToUsd } from './plans.mjs';
 import path from 'node:path';
 
 const PORT = Number(process.env.PLAYGROUND_PORT || 8790);
@@ -28,6 +28,8 @@ const COMPARE_HOUR_LIMIT = 40;
 const DATA = process.env.PLAYGROUND_DATA || '/var/www/jevcode/shared/runs';
 const COMPARE_LOG = process.env.COMPARE_LOG || path.join(DATA, 'compare-log.jsonl');
 const HOUR_LIMIT = 20;
+const V1_RPM_LIMIT = Number(process.env.PLAYGROUND_V1_RPM || 120);
+const AUTH_RPM_LIMIT = Number(process.env.PLAYGROUND_AUTH_RPM || 30);
 const MAX_STATE = 4000;
 const MAX_QUESTIONS = 6;
 // 账号账本：未配置时服务照常跑，只是没有 key 鉴权（保留匿名 IP 限频）。
@@ -63,8 +65,44 @@ if (ACCOUNTS_DB) {
   }
 }
 
-const hits = new Map();
-const compareHits = new Map();
+/**
+ * 有界滑动窗口限频器：定期清理过期键，避免长驻进程内存缓慢增长。
+ */
+function createRateLimiter({ limit, windowMs, maxKeys = 10_000 }) {
+  const buckets = new Map();
+  const prune = (now = Date.now()) => {
+    const cutoff = now - windowMs;
+    for (const [key, list] of buckets) {
+      const kept = list.filter((t) => t > cutoff);
+      if (kept.length === 0) buckets.delete(key);
+      else buckets.set(key, kept);
+    }
+  };
+  const timer = setInterval(() => prune(), Math.min(windowMs, 10 * 60 * 1000));
+  timer.unref();
+
+  return {
+    check(key, now = Date.now()) {
+      if (limit <= 0) return { ok: true };
+      const cutoff = now - windowMs;
+      const list = (buckets.get(key) || []).filter((t) => t > cutoff);
+      if (list.length >= limit) {
+        buckets.set(key, list);
+        const retryAfterSec = Math.max(1, Math.ceil((list[0] + windowMs - now) / 1000));
+        return { ok: false, retryAfterSec };
+      }
+      list.push(now);
+      buckets.set(key, list);
+      if (buckets.size > maxKeys) prune(now);
+      return { ok: true };
+    },
+  };
+}
+
+const tryLimiter = createRateLimiter({ limit: HOUR_LIMIT, windowMs: 60 * 60 * 1000 });
+const compareLimiter = createRateLimiter({ limit: COMPARE_HOUR_LIMIT, windowMs: 60 * 60 * 1000 });
+const v1KeyLimiter = createRateLimiter({ limit: V1_RPM_LIMIT, windowMs: 60 * 1000 });
+const authLimiter = createRateLimiter({ limit: AUTH_RPM_LIMIT, windowMs: 60 * 1000 });
 
 const SESSION_COOKIE = 'jev_session';
 
@@ -78,15 +116,24 @@ function sessionToken(req) {
   return '';
 }
 
-/** 会话 Cookie。HttpOnly + SameSite=Lax：前端脚本读不到，跨站请求不带上。 */
-function setSessionCookie(res, token, expiresAt) {
-  const maxAge = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
-  res.setHeader('set-cookie',
-    `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}`);
+/** 生产或经 HTTPS 反代时强制下发 Secure Cookie；本地 HTTP 调试/测试仍可工作。 */
+function isSecureRequest(req) {
+  if (process.env.NODE_ENV === 'production') return true;
+  const proto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim().toLowerCase();
+  return proto === 'https';
 }
 
-function clearSessionCookie(res) {
-  res.setHeader('set-cookie', `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`);
+/** 会话 Cookie。HttpOnly + SameSite=Lax (+ HTTPS/生产下 Secure)。 */
+function setSessionCookie(res, token, expiresAt, secure = false) {
+  const maxAge = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
+  const sec = secure ? '; Secure' : '';
+  res.setHeader('set-cookie',
+    `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax${sec}; Max-Age=${maxAge}`);
+}
+
+function clearSessionCookie(res, secure = false) {
+  const sec = secure ? '; Secure' : '';
+  res.setHeader('set-cookie', `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax${sec}; Max-Age=0`);
 }
 
 /** 当前登录用户；未登录返回 null */
@@ -98,36 +145,22 @@ function currentUser(req) {
   return s ? { user: s.user, session: s } : null;
 }
 
+/** 优先采用 nginx real_ip 校验后覆写的 X-Real-IP，避免客户端伪造 X-Forwarded-For 首项。 */
 function clientIp(req) {
+  const real = req.headers['x-real-ip'];
+  if (typeof real === 'string' && real.trim()) return real.trim();
   const fwd = req.headers['x-forwarded-for'];
   if (typeof fwd === 'string' && fwd) return fwd.split(',')[0].trim();
   return req.socket.remoteAddress || 'unknown';
 }
 
-function allow(ip) {
-  const now = Date.now();
-  const windowStart = now - 60 * 60 * 1000;
-  const list = (hits.get(ip) || []).filter((t) => t > windowStart);
-  if (list.length >= HOUR_LIMIT) {
-    hits.set(ip, list);
-    return false;
-  }
-  list.push(now);
-  hits.set(ip, list);
-  return true;
-}
-
-function allowCompare(ip) {
-  const now = Date.now();
-  const windowStart = now - 60 * 60 * 1000;
-  const list = (compareHits.get(ip) || []).filter((t) => t > windowStart);
-  if (list.length >= COMPARE_HOUR_LIMIT) {
-    compareHits.set(ip, list);
-    return false;
-  }
-  list.push(now);
-  compareHits.set(ip, list);
-  return true;
+function sendRateLimited(res, retryAfterSec, message) {
+  res.writeHead(429, {
+    'content-type': 'application/json; charset=utf-8',
+    'retry-after': String(retryAfterSec || 60),
+    'cache-control': 'no-store',
+  });
+  res.end(JSON.stringify({ error: 'rate_limit_exceeded', message }));
 }
 
 function send(res, status, body) {
@@ -194,6 +227,7 @@ function presentEntry(entry) {
     ts: entry.ts,
     kind: entry.kind,
     ref: entry.ref,
+    keyId: entry.key_id ?? null,
     microUsd: micro,
     cents: Math.trunc(micro / MICROUSD_PER_CENT),
     usd: microUsdToUsd(Math.abs(micro)),
@@ -207,16 +241,6 @@ function spendView(userId) {
     spentMicroUsd,
     spentUsd: microUsdToUsd(spentMicroUsd),
   };
-}
-
-/** 余额够不够覆盖这次输入。不够就不打上游。 */
-function canAfford(userId, tokens) {
-  const cost = inputCostMicroUsd(tokens);
-  const balance = accounts.balance(userId);
-  if (!balance || balance.microUsd < cost) {
-    return { ok: false, reason: 'insufficient_credit', balance };
-  }
-  return { ok: true, cost, balance };
 }
 
 // 12 位 [a-z0-9] 的 run id。/lang/r/{id} 分享页路由与 /api/runs/{id} 都按 [a-z0-9]{12} 匹配，
@@ -281,7 +305,9 @@ const server = createServer(async (req, res) => {
     if (req.method === 'GET' && runMatch) {
       try {
         const raw = await readFile(path.join(DATA, `${runMatch[1]}.json`), 'utf8');
-        send(res, 200, JSON.parse(raw));
+        // 公开分享接口剥离内部 userId，避免泄漏账号 UUID
+        const { userId: _omit, ...pub } = JSON.parse(raw);
+        send(res, 200, pub);
       } catch {
         send(res, 404, { error: 'not found' });
       }
@@ -330,6 +356,7 @@ const server = createServer(async (req, res) => {
         return;
       }
       const userId = resolved.user.id;
+      const keyId = resolved.keyId;
 
       if (req.method === 'GET' && url.pathname === '/v1/me') {
         send(res, 200, {
@@ -350,6 +377,11 @@ const server = createServer(async (req, res) => {
       }
 
       if (req.method === 'POST' && url.pathname === '/v1/judge') {
+        const rl = v1KeyLimiter.check(keyId);
+        if (!rl.ok) {
+          sendRateLimited(res, rl.retryAfterSec, 'Too many requests for this API key. Slow down and retry.');
+          return;
+        }
         const body = await readBody(req);
         const state = String(body.state || '').trim();
         const questions = cleanQuestions(body.questions, MAX_QUESTIONS);
@@ -369,8 +401,10 @@ const server = createServer(async (req, res) => {
         }
 
         const tokens = billableInputTokens(state, toUpstreamQuestions(questions));
-        const quota = canAfford(userId, tokens);
-        if (!quota.ok) {
+        // 原子预扣：消除并发请求同时通过余额检查导致的 TOCTOU 超扣竞态；
+        // 上游失败时按精确 entryId 立即回退，不影响同账号并发中的其他请求。
+        const reservation = accounts.reserveInputTokens(userId, tokens, { keyId });
+        if (!reservation.ok) {
           res.writeHead(429, {
             'content-type': 'application/json; charset=utf-8',
             'retry-after': '60',
@@ -378,8 +412,8 @@ const server = createServer(async (req, res) => {
           });
           res.end(JSON.stringify({
             error: 'quota_exceeded',
-            message: quota.reason,
-            credit: quota.balance || null,
+            message: reservation.reason,
+            credit: reservation.balance || null,
           }));
           return;
         }
@@ -388,7 +422,8 @@ const server = createServer(async (req, res) => {
         try {
           result = await judge(state, questions);
         } catch (err) {
-          // 还没扣费。上游的 4xx/5xx 一律折算成 502。
+          accounts.refundEntry(reservation.entryId);
+          // 上游的 4xx/5xx 一律折算成 502。
           const upstream = err && err.message === 'upstream';
           send(res, upstream ? 502 : 500, {
             error: upstream ? 'upstream_unavailable' : 'request_failed',
@@ -399,28 +434,32 @@ const server = createServer(async (req, res) => {
           });
           return;
         }
-        accounts.chargeInputTokens(userId, tokens);
 
-        // id 必须全部落在 [a-z0-9]，否则 /lang/r/ 分享页路由（页内正则同样约束）打不开。
-        // base64url 会产出 '-'/'_'，实测约 32% 的 id 含连字符 → 分享链接 404。改用 base36 补齐 12 位。
+        // id 必须全部落在 [a-z0-9]，便于需要分享时与 /lang/r/{id} 路由对齐。
         const id = runId();
-        const record = {
-          id,
-          createdAt: new Date().toISOString(),
-          state,
-          questions,
-          answers: result.answers || {},
-          model: result.model || MODEL,
-          userId,
-        };
-        await mkdir(DATA, { recursive: true });
-        await writeFile(path.join(DATA, `${id}.json`), JSON.stringify(record));
+        const model = result.model || MODEL;
+        const answers = result.answers || {};
+
+        // 隐私保护：程序化 /v1/judge 默认不将用户业务输入落盘到公开可读的 runs/ 目录；
+        // 只有调用方显式传 share: true 时才生成可公开访问的分享记录。
+        if (body.share === true) {
+          const record = {
+            id,
+            createdAt: new Date().toISOString(),
+            state,
+            questions,
+            answers,
+            model,
+          };
+          await mkdir(DATA, { recursive: true });
+          await writeFile(path.join(DATA, `${id}.json`), JSON.stringify(record));
+        }
 
         // 响应形态与上游一致（model + answers），额外附 id 与 credit 便于对账
         send(res, 200, {
           id,
-          model: record.model,
-          answers: record.answers,
+          model,
+          answers,
           credit: accounts.balance(userId),
         });
         return;
@@ -445,6 +484,24 @@ const server = createServer(async (req, res) => {
       if (!auth) {
         send(res, 503, { error: 'accounts are not configured' });
         return;
+      }
+
+      const secureCookie = isSecureRequest(req);
+
+      // 认证写接口限频（按客户端 IP），防暴力撞库与 scrypt CPU 放大攻击
+      if (
+        req.method === 'POST'
+        && (url.pathname === '/api/auth/login'
+          || url.pathname === '/api/auth/register'
+          || url.pathname === '/api/auth/otp/request'
+          || url.pathname === '/api/auth/otp/verify'
+          || url.pathname === '/api/auth/password')
+      ) {
+        const rl = authLimiter.check(clientIp(req));
+        if (!rl.ok) {
+          sendRateLimited(res, rl.retryAfterSec, 'Too many authentication requests. Please retry shortly.');
+          return;
+        }
       }
 
       // 验证码登录：请求发码
@@ -494,7 +551,7 @@ const server = createServer(async (req, res) => {
           send(res, 401, { error: 'invalid_code', message: 'The code is invalid or has expired.' });
           return;
         }
-        setSessionCookie(res, r.token, r.expiresAt);
+        setSessionCookie(res, r.token, r.expiresAt, secureCookie);
         send(res, 200, {
           user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
           credit: accounts.balance(r.user.id),
@@ -513,17 +570,14 @@ const server = createServer(async (req, res) => {
           send(res, 400, { error: 'captcha answer is incorrect or expired' });
           return;
         }
-        const r = auth.register(String(b.email || ''), String(b.password || ''));
+        const r = await auth.registerAsync(String(b.email || ''), String(b.password || ''));
         if (!r.ok) {
           send(res, 400, { error: r.reason });
           return;
         }
-        const login = auth.login(String(b.email || '').trim().toLowerCase(), String(b.password || ''));
-        if (!login.ok) {
-          send(res, 500, { error: 'registered but login failed' });
-          return;
-        }
-        setSessionCookie(res, login.token, login.expiresAt);
+        // 直接签发会话，避免注册后立即再算一遍 scrypt
+        const session = auth.issueSession(r.user.id);
+        setSessionCookie(res, session.token, session.expiresAt, secureCookie);
         send(res, 201, {
           user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
           credit: accounts.balance(r.user.id),
@@ -533,13 +587,13 @@ const server = createServer(async (req, res) => {
 
       if (req.method === 'POST' && url.pathname === '/api/auth/login') {
         const b = await readBody(req);
-        const r = auth.login(String(b.email || ''), String(b.password || ''));
+        const r = await auth.loginAsync(String(b.email || ''), String(b.password || ''));
         if (!r.ok) {
           // 统一 401，不区分账号不存在与密码错误
           send(res, 401, { error: r.reason });
           return;
         }
-        setSessionCookie(res, r.token, r.expiresAt);
+        setSessionCookie(res, r.token, r.expiresAt, secureCookie);
         send(res, 200, {
           user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
           credit: accounts.balance(r.user.id),
@@ -547,9 +601,30 @@ const server = createServer(async (req, res) => {
         return;
       }
 
+      if (req.method === 'POST' && url.pathname === '/api/auth/password') {
+        const me = currentUser(req);
+        if (!me) {
+          send(res, 401, { error: 'not signed in' });
+          return;
+        }
+        const b = await readBody(req);
+        const r = await auth.changePasswordAsync(
+          me.user.id, String(b.oldPassword || ''), String(b.newPassword || ''),
+        );
+        if (!r.ok) {
+          send(res, 400, { error: r.reason });
+          return;
+        }
+        // 旧会话全部失效，为当前浏览器重新签发新会话
+        const fresh = auth.issueSession(me.user.id);
+        setSessionCookie(res, fresh.token, fresh.expiresAt, secureCookie);
+        send(res, 200, { ok: true, revokedSessions: r.revokedSessions });
+        return;
+      }
+
       if (req.method === 'POST' && url.pathname === '/api/auth/logout') {
         auth.logout(sessionToken(req));
-        clearSessionCookie(res);
+        clearSessionCookie(res, secureCookie);
         send(res, 200, { ok: true });
         return;
       }
@@ -585,6 +660,7 @@ const server = createServer(async (req, res) => {
           keys: accounts.listKeys(me.user.id).map((k) => ({
             id: k.id, prefix: k.prefix, label: k.label,
             createdAt: k.created_at, revokedAt: k.revoked_at,
+            lastUsedAt: k.last_used_at ?? null,
           })),
         });
         return;
@@ -662,6 +738,7 @@ const server = createServer(async (req, res) => {
       // 鉴权三路：会话 Cookie（网页登录）→ Bearer API key（程序调用）→ 匿名 IP 限频。
       // 前两者走账号额度（跨 IP 生效，换 IP 刷不掉），第三条保持试用可用。
       let userId = null;
+      let keyId = null;
       const session = currentUser(req);
       // 注意别命名为 auth：会遮蔽模块级的 auth（withSessions 返回值）。
       const authHeader = req.headers.authorization || '';
@@ -676,27 +753,34 @@ const server = createServer(async (req, res) => {
           return;
         }
         userId = resolved.user.id;
+        keyId = resolved.keyId;
       }
 
       const tokens = billableInputTokens(state, toUpstreamQuestions(questions));
-      if (userId) {
-        const quota = canAfford(userId, tokens);
-        if (!quota.ok) {
+      let reservation = null;
+      if (userId && accounts) {
+        reservation = accounts.reserveInputTokens(userId, tokens, { keyId });
+        if (!reservation.ok) {
           res.writeHead(429, {
             'content-type': 'application/json; charset=utf-8',
             'cache-control': 'no-store',
           });
-          res.end(JSON.stringify({ error: quota.reason, credit: quota.balance || null }));
+          res.end(JSON.stringify({ error: reservation.reason, credit: reservation.balance || null }));
           return;
         }
-      } else if (!allow(ip)) {
+      } else if (!tryLimiter.check(ip).ok) {
         send(res, 429, { error: 'hourly limit reached' });
         return;
       }
 
-      // 成功之后才扣。上游失败直接抛出，余额不动。匿名试用不入账。
-      const result = await judge(state, questions);
-      if (userId && accounts) accounts.chargeInputTokens(userId, tokens);
+      // 原子预扣后调用上游；上游失败时按精确 entryId 回退，匿名试用不入账。
+      let result;
+      try {
+        result = await judge(state, questions);
+      } catch (err) {
+        if (reservation && accounts) accounts.refundEntry(reservation.entryId);
+        throw err;
+      }
 
       // 同上：id 用 base36 补齐 12 位，保证 [a-z0-9]，分享页路由才能命中
       const id = runId();
@@ -732,7 +816,7 @@ const server = createServer(async (req, res) => {
         send(res, 400, { error: 'items must be 1 to 8 choice questions' });
         return;
       }
-      if (!allowCompare(clientIp(req))) {
+      if (!compareLimiter.check(clientIp(req)).ok) {
         send(res, 429, { error: 'hourly limit reached' });
         return;
       }

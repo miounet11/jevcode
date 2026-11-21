@@ -253,3 +253,59 @@ test('旧美分账本只迁移一次', async () => {
   again.close();
   rmSync(dir, { recursive: true, force: true });
 });
+
+test('原子预扣与精确行退款：记录 key_id、刷新 last_used_at、不误删并发扣费', () => {
+  const a = fresh();
+  const u = a.createUser('res@example.com');
+  const { key, record } = a.issueKey(u.id, 'svc');
+  const t1 = 1_800_000_000_000;
+  const resolved = a.resolveKey(key, t1);
+  assert.equal(resolved.keyId, record.id);
+  const listed = a.listKeys(u.id);
+  assert.equal(listed[0].last_used_at, t1, 'resolveKey 应刷新 last_used_at');
+
+  const r1 = a.reserveInputTokens(u.id, 1000, { keyId: record.id, at: t1 + 1 });
+  const r2 = a.reserveInputTokens(u.id, 2000, { keyId: record.id, at: t1 + 2 });
+  assert.equal(r1.ok, true);
+  assert.equal(r2.ok, true);
+  assert.notEqual(r1.entryId, r2.entryId);
+
+  // 撤销较早的 r1，较晚的 r2 必须完好保留
+  assert.equal(a.refundEntry(r1.entryId), true);
+  assert.equal(a.refundEntry(r1.entryId), false, '重复退款应返回 false');
+  assert.equal(a.balance(u.id).microUsd, SIGNUP_CREDIT_MICROUSD - inputCostMicroUsd(2000));
+  const entries = a.entries(u.id);
+  const judgeRow = entries.find((e) => e.kind === 'judge');
+  assert.equal(judgeRow.key_id, record.id, 'ledger 应记录消费对应的 key_id');
+  a.close();
+});
+
+test('旧表结构缺 key_id / last_used_at 时自动幂等迁移', async () => {
+  const { mkdtempSync, rmSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const path = await import('node:path');
+  const { DatabaseSync } = await import('node:sqlite');
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-mig-'));
+  const file = path.join(dir, 'acct.db');
+
+  const raw = new DatabaseSync(file);
+  raw.exec(`
+    CREATE TABLE users (id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, plan TEXT NOT NULL DEFAULT 'free', created_at INTEGER NOT NULL);
+    CREATE TABLE api_keys (id TEXT PRIMARY KEY, user_id TEXT NOT NULL, hash TEXT NOT NULL UNIQUE, prefix TEXT NOT NULL, label TEXT, created_at INTEGER NOT NULL, revoked_at INTEGER);
+    CREATE TABLE ledger (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT NOT NULL, ts INTEGER NOT NULL, cents INTEGER NOT NULL, kind TEXT NOT NULL, ref TEXT);
+    CREATE TABLE schema_meta (k TEXT PRIMARY KEY, v TEXT NOT NULL);
+    INSERT INTO schema_meta (k, v) VALUES ('ledger_unit', 'microusd');
+  `);
+  raw.close();
+
+  const a = openAccounts(file);
+  const u = a.createUser('mig@example.com');
+  const { key, record } = a.issueKey(u.id, 'old');
+  assert.equal(a.resolveKey(key, 123456).keyId, record.id);
+  assert.equal(a.listKeys(u.id)[0].last_used_at, 123456);
+  const r = a.reserveInputTokens(u.id, 1000, { keyId: record.id });
+  assert.equal(r.ok, true);
+  assert.equal(a.entries(u.id)[0].key_id, record.id);
+  a.close();
+  rmSync(dir, { recursive: true, force: true });
+});
