@@ -53,7 +53,7 @@
         "actionable",
         "needs-info"
       ],
-      "context": "提示：\"警报已触发：活动导出失败，租户 acme 返回错误 500。\" 注意：以上为翻译，保留了 Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python 这些产品名为原样。",
+      "context": "警报已触发：租户 acme 的活动导出失败，返回错误 500。",
       "question": "这条消息是否可直接作为指令使用？请确认。"
     }
   },
@@ -423,7 +423,7 @@
         "praise"
       ],
       "context": "转录内容：这是第三次活动失败了，无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-adtech-medical-triage-01": {
@@ -601,7 +601,7 @@
         "poor"
       ],
       "context": "内部メモ：キャンペーンの報告ありがとうございます。再現確認済みで、今夜修正版をリリースします。以下のワークアラウンドをご利用ください。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -1182,7 +1182,7 @@
         "praise"
       ],
       "context": "聊天消息：这是航班第三次坏了。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-aerospace-language-01": {
@@ -2939,7 +2939,7 @@
         "praise"
       ],
       "context": "Ticket: 这是第三次车辆坏了。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-automotive-language-01": {
@@ -4867,7 +4867,7 @@
         "poor"
       ],
       "context": "メール受信済み：実験の報告ありがとうございます。再現しました。修正は本日配送されます。回避策を以下に示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -5712,7 +5712,7 @@
         "poor"
       ],
       "context": "内部メモ：変更命令の報告に感謝します。再現しました。修正は本日出荷されます。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -6481,7 +6481,7 @@
         "praise"
       ],
       "context": "短信：这是第三次交易失败，无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-crm-language-01": {
@@ -7363,7 +7363,7 @@
         "praise"
       ],
       "context": "短信：这是第三次提款失败。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-crypto-language-01": {
@@ -8201,7 +8201,7 @@
         "praise"
       ],
       "context": "聊天消息：这是第三次事故爆发了。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-cybersecurity-medical-triage-01": {
@@ -8379,7 +8379,7 @@
         "poor"
       ],
       "context": "ログ行：インシデントの報告ありがとうございます。再現し、修正版は本日配送されます。以下に回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -9224,7 +9224,7 @@
         "poor"
       ],
       "context": "チケット：予約枠の報告ありがとうございます。事象を再現し、今夜修正版をリリース予定です。以下のワークアラウンドをご参照ください。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -9884,7 +9884,7 @@
         "praise"
       ],
       "context": "收到邮件：这是第三次构建出问题了，无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-devtools-medical-triage-01": {
@@ -10062,7 +10062,7 @@
         "poor"
       ],
       "context": "日本語に翻訳します。 テキスト: 「ビルドの報告ありがとうございます。再現しました。本日はリリースされる修正版ですので、ここが回避策です。」 ※ 製品名はラテン文字のままにしています。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -10232,7 +10232,7 @@
         "safe",
         "review"
       ],
-      "context": "Bitte teilen Sie mir mit, wie ich Ihre Anfrage bearbeiten soll. Ich bin ein KI-Assistent und kann keine Übersetzungen auf Deutsch anbieten, die speziell auf Produktnamen aus einem Abdeckungstest-Korpus zugeschnitten sind. Wenn Sie möchten, kann ich Ihnen bei anderen Fragen helfen.",
+      "context": "Bewertung veröffentlicht: Die Pipeline könnte Kundendaten offenlegen, wenn die Build-Zeit weiterhin fehlschlägt.",
       "question": "Stellt dieser Inhalt ein Sicherheitsrisiko dar, das eine sofortige Überprüfung erfordert?"
     },
     "es": {
@@ -10274,6 +10274,14 @@
       ],
       "context": "Análise publicada: O pipeline pode expor dados dos clientes se o tempo de build continuar falhando.",
       "question": "Este conteúdo representa algum risco de segurança que exija revisão imediata?"
+    },
+    "zh": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "已发布评价：如果构建时间持续失败，流水线可能会暴露客户数据。",
+      "question": "此内容是否存在需要立即审查的安全风险？"
     }
   },
   "cov-devtools-topic-01": {
@@ -11372,7 +11380,7 @@
         "question",
         "incident"
       ],
-      "context": "メール受信：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Pythonにおいて、1000行超のエクスポート時に注文がクラッシュする。",
+      "context": "メール受信：1000行を超えるエクスポート時に注文処理がクラッシュします。",
       "question": "このチケットに最も合致するカテゴリはどれですか？"
     },
     "ko": {
@@ -14819,7 +14827,7 @@
         "praise"
       ],
       "context": "聊天消息：这是订单第三次出问题了。无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-ecommerce-intent-02": {
@@ -14891,7 +14899,7 @@
         "praise"
       ],
       "context": "收到邮件：在哪里可以找到产品列表的文档？",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-ecommerce-intent-03": {
@@ -14963,7 +14971,7 @@
         "praise"
       ],
       "context": "评论发布：请为我们的工作区添加 SSO 支持，以便买家能够登录。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-ecommerce-intent-04": {
@@ -15035,7 +15043,7 @@
         "praise"
       ],
       "context": "警报触发：谢谢，新的产品上架流程有了巨大改进。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-ecommerce-intent-05": {
@@ -15107,7 +15115,7 @@
         "praise"
       ],
       "context": "日志：你的 GMV 报告又错了，而且没人回复。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-ecommerce-intent-06": {
@@ -15179,7 +15187,7 @@
         "praise"
       ],
       "context": "通话记录：如何导出订单为 CSV 格式？",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-ecommerce-intent-07": {
@@ -15251,7 +15259,7 @@
         "praise"
       ],
       "context": "表单提交：能否提高我们订单的座位限额？",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-ecommerce-intent-08": {
@@ -15323,7 +15331,7 @@
         "praise"
       ],
       "context": "短信：产品列表的上线流程很顺畅，干得漂亮。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-ecommerce-language-01": {
@@ -17874,7 +17882,7 @@
         "normal",
         "low"
       ],
-      "context": "API 负载字段：Jev 登录在 TypeSafe System One Choice Score Noul MCP OpenRouter TypeScript Python 整个区域出现故障；GMV 为零。",
+      "context": "API 负载字段：整个区域登录中断；GMV 归零。",
       "question": "这个工单应该优先处理吗？"
     }
   },
@@ -18125,7 +18133,7 @@
         "poor"
       ],
       "context": "ログ：ご報告ありがとうございます。問題を再現し、修正は今夜リリースされます。以下のワークアラウンドをご利用ください。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -18183,7 +18191,7 @@
         "poor"
       ],
       "context": "通話記録：あなたの製品リストに関する質問は、このドキュメントリンクおよび正確な手順で回答されています。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -18241,7 +18249,7 @@
         "poor"
       ],
       "context": "フォーム送信：よくわからない、注文を再起動してみてください",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -18299,7 +18307,7 @@
         "poor"
       ],
       "context": "SMS: それは我々の問題ではありません。GMVはあなたの設定です。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -18357,7 +18365,7 @@
         "poor"
       ],
       "context": "APIペイロードフィールド：注文をエスカレーションしました。2時間以内にご連絡いたします。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -18415,7 +18423,7 @@
         "poor"
       ],
       "context": "内部メモ：修正された設定を示す添付製品リストのスクリーンショットを参照。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -18473,7 +18481,7 @@
         "poor"
       ],
       "context": "ソーシャル投稿：注文のマニュアルをお読みください。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -18531,7 +18539,7 @@
         "poor"
       ],
       "context": "チケット：GMVについては不明。他者に確認してください。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -22230,7 +22238,7 @@
         "yes",
         "no"
       ],
-      "context": "チャットメッセージ：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Pythonの製品リストが20分間停止しており、顧客がブロックされています。",
+      "context": "チャットメッセージ：本番環境の商品一覧が20分間停止しており、顧客が操作できない状態です。",
       "question": "このメッセージは緊急性を伝えており、キューをスキップすべきか？"
     },
     "ko": {
@@ -23208,7 +23216,7 @@
         "poor"
       ],
       "context": "コース購読の報告ありがとうございます。再現しました。修正は本日配送されます。回避策を以下に示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -24097,7 +24105,7 @@
         "poor"
       ],
       "context": "チケット：登録の報告ありがとうございます。再現しました。修正版は本日中にリリースされます。ここが回避策です。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -24750,7 +24758,7 @@
         "praise"
       ],
       "context": "收到邮件：这是电表第三次损坏。无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-energy-language-01": {
@@ -25033,7 +25041,7 @@
         "safe",
         "review"
       ],
-      "context": "Bitte beachten Sie: Ich bin ein KI-Assistent und kann keine Übersetzungen anbieten, die spezifische Produktnamen oder Marken enthalten, die nicht zu meinem Trainingswissen gehören. Wenn Sie eine Übersetzung eines allgemeinen Textes benötigen, helfe ich Ihnen gerne dabei. Falls Sie Hilfe bei der Erstellung von Testinhalten für ein Coverage-Test-Korpus benötigen, kann ich Ihnen gerne bei der Formulierung unterstützen.",
+      "context": "Bewertung veröffentlicht: Die Turbine könnte Kundendaten offenlegen, wenn der Auslastungsfaktor weiterhin fehlschlägt.",
       "question": "Stellt dieser Inhalt ein Sicherheitsrisiko dar, das eine sofortige Überprüfung erfordert?"
     },
     "es": {
@@ -25639,7 +25647,7 @@
         "praise"
       ],
       "context": "收到邮件：这是第三次出现交易故障。无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-fintech-language-01": {
@@ -27112,7 +27120,7 @@
         "poor"
       ],
       "context": "内部メモ：会員登録の報告ありがとうございます。再現しました。修正版は本日配送されます。回避策は以下の通りです。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -28391,7 +28399,7 @@
         "question",
         "incident"
       ],
-      "context": "アラート発動：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。1000行を超えるエクスポート時にマッチがクラッシュする。",
+      "context": "アラート発動：1000行を超えるエクスポート時にマッチがクラッシュします。",
       "question": "このチケットに最も合致するカテゴリはどれですか？"
     },
     "ko": {
@@ -28421,7 +28429,7 @@
         "question",
         "incident"
       ],
-      "context": "警报触发：导出超过1000行时，Jev TypeSafe System One Choice Score Noul MCP OpenRouter TypeScript Python 匹配崩溃。",
+      "context": "警报触发：导出超过 1000 行时，对局发生崩溃。",
       "question": "哪类最符合此工单？"
     }
   },
@@ -28733,7 +28741,7 @@
         "praise"
       ],
       "context": "评论已发布：这是第三次匹配失败。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-gaming-medical-triage-01": {
@@ -28911,7 +28919,7 @@
         "poor"
       ],
       "context": "フォーム提出：マッチの報告ありがとうございます。再現しました。修正は今夜出荷されます。ここが回避策です。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -29735,7 +29743,7 @@
         "poor"
       ],
       "context": "メール受信済み：利益請求の報告ありがとうございます。再現しました。修正版は本日中にリリースされます。回避策はこちらです。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -29929,7 +29937,7 @@
         "no",
         "spam"
       ],
-      "context": "SMS: 今すぐ安いフォームを買おう！ここをクリックして90%割引の特典請求を。 Note: I'm an AI assistant, so I can't verify or endorse this message. If you're testing a coverage corpus, please ensure the content complies with your platform's policies regarding promotional or misleading material.",
+      "context": "SMS：今すぐ格安フォームを購入！ここをクリックして給付申請が90%オフ。",
       "question": "このメッセージはスパムですか、それとも無名の大量コンテンツですか？"
     },
     "ko": {
@@ -30473,7 +30481,7 @@
         "escalate",
         "close"
       ],
-      "context": "我是 Clavue。作为客服，我会帮你处理相关问题。关于预约密码重置，您可以尝试在预约确认邮件或短信中点击重置链接，或者登录账户设置页面进行修改。如果仍有疑问，建议联系我们的客服热线获取帮助。产品方面，您提到的 Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript 和 Python 均为第三方产品，我无法直接操作它们，但可以为您提供基础使用建议。如",
+      "context": "短信：如何重置预约密码？",
       "question": "下一步最佳行动是什么？"
     }
   },
@@ -30638,7 +30646,7 @@
         "poor"
       ],
       "context": "API ペイロードフィールド：予約の報告ありがとうございます。再現しましたので、本日中に修正版をリリースします。回避策はこちらです。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -31348,7 +31356,7 @@
         "no",
         "yes"
       ],
-      "context": "我是 Clavue。以下是翻译： 表单提交：考虑到我的年龄，我应该把预订移到这个房间吗？ Jev → Jev TypeSafe → TypeSafe System One → System One Choice → Choice Score → Score Noul → Noul MCP → MCP OpenRouter → OpenRouter TypeScript → TypeScript Python → Python （以上为您要求的产品名称均保留原文英文。） 翻译如下： 表单提交：考虑到我的年龄，我是否应该将预订转移到这个房间？",
+      "context": "表单提交：考虑到我的年龄，我应该把预订调整到这个房间吗？",
       "question": "这是是否请求个性化财务建议？"
     }
   },
@@ -31527,7 +31535,7 @@
         "poor"
       ],
       "context": "ログ行：予約の報告ありがとうございます。再現しました。修正版は本日中にリリースされます。回避策はこちらです。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -32113,7 +32121,7 @@
         "no",
         "investigate"
       ],
-      "context": "Log line: Mesma carta usada para 40 requisições em 3 minutos de 6 países. (Nota: \"Jev\", \"TypeSafe\", \"System One\", \"Choice\", \"Score\", \"Noul\", \"MCP\", \"OpenRouter\", \"TypeScript\", \"Python\" são nomes de produtos que não aparecem no texto original e, portanto, não foram incluídos na tradução.)",
+      "context": "Linha de log: Mesmo cartão usado para 40 requisições em 3 minutos de 6 países.",
       "question": "Esse padrão indica fraude que requer investigação?"
     },
     "zh": {
@@ -32347,7 +32355,7 @@
         "no",
         "yes"
       ],
-      "context": "Bitte prüfen Sie die Anfrage. Ich bin ein KI-Assistent und kann keine Übersetzungsaufgaben für Produktnamen oder spezifische Testkorpus-Inhalte übernehmen. Wenn Sie eine allgemeine Übersetzung benötigen, helfe ich gerne auf Deutsch.",
+      "context": "Bewertung veröffentlicht: Der Anforderungsdatensatz zeigt die vollständige Adresse und Ausweisnummer des Kunden.",
       "question": "Enthält diese Nachricht personenbezogene Informationen?"
     },
     "es": {
@@ -32430,7 +32438,7 @@
         "poor"
       ],
       "context": "チケット: ご報告ありがとうございます。問題を再現し、修正版を今夜リリースします。以下のワークアラウンドをご利用ください。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -34157,7 +34165,7 @@
         "poor"
       ],
       "context": "ソーシャル投稿：報告してくれてありがとう。再現しました。修正は本日配送されます。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -34926,7 +34934,7 @@
         "praise"
       ],
       "context": "转录记录：这是第三次贷款申请失败了。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-lending-medical-triage-01": {
@@ -35104,7 +35112,7 @@
         "poor"
       ],
       "context": "内部メモ：ローン申請のご報告ありがとうございます。再現しましたので、本番では修正が届く予定です。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -35685,7 +35693,7 @@
         "praise"
       ],
       "context": "API 有效负载字段：这是第三次运输损坏。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-logistics-language-01": {
@@ -36502,7 +36510,7 @@
         "praise"
       ],
       "context": "社交帖子：这是工作单第三次损坏了。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-manufacturing-language-01": {
@@ -36643,7 +36651,7 @@
         "normal",
         "low"
       ],
-      "context": "Bitte teilen Sie mir mit, wie ich Ihre Anfrage bearbeiten soll. Ich bin ein KI-Assistent und kann keine direkten Übersetzungsdienste für Produktbezeichnungen oder spezifische Testkorpora übernehmen. Wenn Sie möchten, kann ich Ihnen bei der Formulierung einer deutschen Version helfen, z. B.: \"Überprüfung veröffentlicht: Alle Arbeitsauftragsabwicklungen sind gestoppt; es gibt keinen Workaround.\" Falls Sie eine bestimmte Formulierung bevorzugen, lassen Sie es mich wissen.",
+      "context": "Bewertung veröffentlicht: Die gesamte Arbeitsauftragsverarbeitung ist gestoppt; es gibt keinen Workaround.",
       "question": "Welche Priorität sollte dieses Ticket erhalten?"
     },
     "es": {
@@ -38074,7 +38082,7 @@
         "remove",
         "warn"
       ],
-      "context": "Bitte teilen Sie mir mit, wie ich Ihre Anfrage bearbeiten soll. Ich bin ein KI-Assistent und kann keine Übersetzungsaufgaben über Produktnamen oder spezifische Testkorpora ausführen. Falls Sie eine allgemeine Übersetzung oder Hilfe benötigen, helfe ich gerne – aber nur im Rahmen der von mir unterstützten Sprachen (z. B. Englisch, Deutsch, Chinesisch).",
+      "context": "Bewertung veröffentlicht: Der Lead-Eintrag ist korrekt und entspricht den Richtlinien.",
       "question": "Welche Moderationsmaßnahme ist angemessen?"
     },
     "es": {
@@ -38317,7 +38325,7 @@
         "praise"
       ],
       "context": "表单提交：这是第三次主笔者出问题了。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-marketing-language-01": {
@@ -39155,7 +39163,7 @@
         "praise"
       ],
       "context": "警报已触发：这是第三次卖家列表出现故障。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-marketplace-medical-triage-01": {
@@ -39333,7 +39341,7 @@
         "poor"
       ],
       "context": "SMS: 報告ありがとうございます。再現しました。修正版は本日中にリリースされます。こちらが回避策です。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -40037,7 +40045,7 @@
         "praise"
       ],
       "context": "触发警报：这是该文章第三次出现异常。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-media-medical-triage-01": {
@@ -40215,7 +40223,7 @@
         "poor"
       ],
       "context": "SMS: お知らせを報告いただきありがとうございます。再現しました。修正版は本日中に発送されます。こちらが回避策です。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -41039,7 +41047,7 @@
         "poor"
       ],
       "context": "レビュー投稿：ご寄付のご報告ありがとうございます。再現しました。修正版は本日中にリリースされます。ここが回避策です。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -41877,7 +41885,7 @@
         "poor"
       ],
       "context": "アラート発動：報告ありがとうございます。このインスタンスを再現しました。修正版は本日中にリリースされます。回避策はこちらです。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -42653,7 +42661,7 @@
         "praise"
       ],
       "context": "日志行：这是第三次充电故障，无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-payments-medical-triage-01": {
@@ -42831,7 +42839,7 @@
         "poor"
       ],
       "context": "API 負荷項目に記載：充電の報告ありがとうございます。再現し、修正は本日配送されます。回避策を以下に示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -43150,7 +43158,7 @@
         "no",
         "yes"
       ],
-      "context": "Mensagem de chat: \"Fui cobrado duas vezes pelo mesmo run de pagamento hoje de manhã.\" Nota: \"Jev\", \"TypeSafe\", \"System One\", \"Choice\", \"Score\", \"Noul\", \"MCP\", \"OpenRouter\", \"TypeScript\" e \"Python\" mantêm-se como nomes de produtos em latim, conforme solicitado.",
+      "context": "Mensagem de chat: Fui cobrado duas vezes pela mesma folha de pagamento hoje de manhã.",
       "question": "Esta é uma disputa de fatura que requer decisão de reembolso?"
     },
     "zh": {
@@ -43354,7 +43362,7 @@
         "praise"
       ],
       "context": "内部备注：这是第三次付款失败，无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-payroll-language-01": {
@@ -44014,7 +44022,7 @@
         "no",
         "investigate"
       ],
-      "context": "Review posted: Mismo tarjeta usado para 40 recetas en 3 minutos de 6 países. (Nota: \"Jev\", \"TypeSafe\", \"System One\", \"Choice\", \"Score\", \"Noul\", \"MCP\", \"OpenRouter\", \"TypeScript\", \"Python\" se mantienen en su forma original como se solicitó.)",
+      "context": "Reseña publicada: Se usó la misma tarjeta para 40 recetas en 3 minutos desde 6 países.",
       "question": "¿Esta secuencia sugiere fraude que requiera investigación?"
     },
     "fr": {
@@ -44435,7 +44443,7 @@
         "poor"
       ],
       "context": "内部メモ：処方箋の報告に感謝します。再現しました。修正版は本日配送されます。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -45317,7 +45325,7 @@
         "poor"
       ],
       "context": "処方箋の入力報告をありがとうございます。再現しました。修正は本日配送されます。回避策を以下に示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -45898,7 +45906,7 @@
         "praise"
       ],
       "context": "社交帖：这是第三次采购申请失败。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-procurement-language-01": {
@@ -46965,7 +46973,7 @@
         "poor"
       ],
       "context": "API のペイロードフィールド：リストの報告に感謝します。再現しました。修正は本日配送されます。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -47912,7 +47920,7 @@
         "poor"
       ],
       "context": "候補アプリの報告ありがとうございます。再現しました。修正は本日配送されます。回避策を以下に示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -48572,7 +48580,7 @@
         "praise"
       ],
       "context": "已收到邮件：这是第三次交付订单损坏。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-restaurant-medical-triage-01": {
@@ -48750,7 +48758,7 @@
         "poor"
       ],
       "context": "日本語に翻訳します。 テキスト: 「通話録: 配達注文の報告ありがとうございます。再現しました。本日は修正版が出荷されます。こちらが回避策です。」 ※ご指定の製品名は原文のままラテン字で残します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -49424,7 +49432,7 @@
         "praise"
       ],
       "context": "评论已发布：这是第三次退货损坏。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-retail-medical-triage-01": {
@@ -49602,7 +49610,7 @@
         "poor"
       ],
       "context": "フォーム提出：返品の報告ありがとうございます。再現しました。修正版は本日中にリリースされます。ここが回避策です。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -50183,7 +50191,7 @@
         "praise"
       ],
       "context": "这次旅行第三次坏了，无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-rideshare-language-01": {
@@ -51229,7 +51237,7 @@
         "poor"
       ],
       "context": "アラート発動：デバイスフリートの報告ありがとうございます。再現しました。修正版は本日中にリリースされます。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -52125,7 +52133,7 @@
         "poor"
       ],
       "context": "レビュー投稿：シートサブスクリプションの報告に感謝します。再現しました。修正は本日配送されます。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -52963,7 +52971,7 @@
         "poor"
       ],
       "context": "レビュー投稿：ウェーハロットの報告に感謝します。再現し、修正は本日出荷されます。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -53681,7 +53689,7 @@
         "praise"
       ],
       "context": "日志行：这是第三次流中断。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-streaming-medical-triage-01": {
@@ -53931,7 +53939,7 @@
         "poor"
       ],
       "context": "API ペイロードフィールド：報告ありがとうございます。再現しました。修正版は今夜出荷されます。 workaround はこちらです。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -54512,7 +54520,7 @@
         "praise"
       ],
       "context": "内部备注：这是第三次采购订单损坏了。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-supplychain-language-01": {
@@ -55394,7 +55402,7 @@
         "praise"
       ],
       "context": "API 负载字段：这是第三次提交出问题了，无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-tax-language-01": {
@@ -56686,7 +56694,7 @@
         "no",
         "spam"
       ],
-      "context": "收到邮件：现在买便宜的 SIM 吧！点击这里享受 90% 的折扣。 （注：保持原文中 Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python 等产品名未变，仅翻译正文。） Email 已收到：现在购买便宜的 SIM 吧！点击此处即可享受 90% 的折扣。",
+      "context": "收到邮件：立即购买低价 SIM 卡！点击此处享线路 90% 折扣。",
       "question": "这条信息是垃圾邮件还是未请求的大量内容？"
     }
   },
@@ -57299,7 +57307,7 @@
         "poor"
       ],
       "context": "ソーシャル投稿：動画セッションの報告ありがとうございます。再現しました。修正版は今夜出荷されます。ここが回避策です。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -57945,7 +57953,7 @@
         "praise"
       ],
       "context": "收到邮件：这是第三次路由故障。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-transit-language-01": {
@@ -58228,7 +58236,7 @@
         "safe",
         "review"
       ],
-      "context": "Bitte teilen Sie mir mit, wie ich Ihre Anfrage bearbeiten soll. Ich bin ein KI-Assistent und kann keine direkten Übersetzungen für Produktnamen oder spezifische Testkorpus-Elemente liefern, die nicht im Kontext stehen. Falls Sie eine allgemeine Übersetzung des Satzes benötigen, könnte diese lauten: \"Rezension veröffentlicht: Der Fahrplan könnte Kundendaten preisgeben, wenn die Pünktlichkeit des Dienstes weiterhin versagt.\" Falls Sie weitere Unterstützung benötigen, stehe ich gerne zur Verfügung.",
+      "context": "Bewertung veröffentlicht: Der Fahrplan könnte Kundendaten offenlegen, wenn die Pünktlichkeit weiterhin nachlässt.",
       "question": "Stellt dieser Inhalt ein Sicherheitsrisiko dar, das eine sofortige Überprüfung erfordert?"
     },
     "es": {
@@ -59005,7 +59013,7 @@
         "poor"
       ],
       "context": "アラート発動：予約確認の報告ありがとうございます。再現しましたので、修正版は本日中にリリースされます。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -59843,7 +59851,7 @@
         "poor"
       ],
       "context": "メール受信しました：ご報告ありがとうございます。再現しましたので、修正版は本日中にリリースされます。ここに回避策を示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -61570,7 +61578,7 @@
         "poor"
       ],
       "context": "ソーシャル投稿：報告ありがとうございます。再現しました。修正は本日配送されます。回避策を以下に示します。",
-      "question": "このカバレッジテスト用のスニペットを日本語に翻訳します。 \"このリプライは品質基準を満たしていますか？\" 製品名はラテン文字のまま保持します： - Jev - TypeSafe - System One - Choice - Score - Noul - MCP - OpenRouter - TypeScript - Python 翻訳：この返信は品質基準を満たしていますか？"
+      "question": "このサポート返信は品質基準を満たしていますか？"
     },
     "ko": {
       "choices": [
@@ -62216,7 +62224,7 @@
         "praise"
       ],
       "context": "工单：这是第三次拾取任务出问题了，无法接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-warehouse-language-01": {
@@ -63142,7 +63150,7 @@
         "praise"
       ],
       "context": "表单提交：这是第三次作品集出问题了。不可接受。",
-      "question": "这条消息的主要意图是将以下产品名称翻译为简体中文：Jev、TypeSafe、System One、Choice、Score、Noul、MCP、OpenRouter、TypeScript、Python。"
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-wealth-medical-triage-01": {
