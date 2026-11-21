@@ -1748,5 +1748,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-escalation-01",
+    "state": "Ticket: GMV breach affecting all buyer in production right now.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-02",
+    "state": "Chat message: Legal counsel requests immediate review of the product listing.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-03",
+    "state": "Email received: Third repeat contact about the same unresolved order.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-04",
+    "state": "Review posted: Regulator deadline for the order is today.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
   }
 ]
