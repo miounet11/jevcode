@@ -1804,5 +1804,61 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-escalation-05",
+    "state": "Alert fired: General question about product listing pricing tiers.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-06",
+    "state": "Log line: Feature request for the order roadmap.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-07",
+    "state": "Call transcript: Documentation typo on the product listing page.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-08",
+    "state": "Form submission: Scheduling a demo of the GMV dashboard.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
   }
 ]
