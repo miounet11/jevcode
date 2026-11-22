@@ -2,6 +2,19 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-22 — P2/P3 体验转化与 SEO 细节优化
+
+### 改动
+
+- **匿名访客跳过无谓 `/api/auth/me` 请求**：`server/playground.mjs` 在签发 `HttpOnly` 会话 Cookie 时同步下发无敏感信息的非 HttpOnly 提示位 `jev_auth=1`（登出及过期 `/me` 自动清理）；`src/components/Header.astro` 仅在存在 `jev_auth=1` 时请求 `/api/auth/me`，消除 99%+ 匿名浏览触发的后端打点。
+- **账户页「建 Key 即首调」激活引导 + 改密表单**：`src/pages/[lang]/account.astro` 与 `src/i18n/pages/account.ts` 新增自定义 Key 备注、`最近使用（lastUsedAt）`列、新建 Key 后直接展示带当前明文 Key 的 `curl` / `Python` 首调代码及「用这把密钥试跑一次」页内实测按钮（`credentials: 'omit'` 走真实 Bearer Key 鉴权并展示实测耗时与响应），并补齐页内「修改密码」表单（对接 `POST /api/auth/password`）；顺带修正日语「残り额度」错字为「残りクレジット」。
+- **接口耗时可观测性**：`/v1/judge` 与 `/api/try` 响应头新增 `Server-Timing: upstream;dur=<ms>`；实测 VPS 至 `api.clavue.com/v1/judge` 网络握手 <0.1s、热态单问判定 ~0.82s，此前 10–15s 尖刺系上游大输入/多问排队推理耗时。
+- **SEO / GEO 细节收口**：`astro.config.mjs` 的 `@astrojs/sitemap` `defaultLocale` 由 `'zh'` 统一为 `'en'`（与 `i18n.defaultLocale`、`BaseLayout` `x-default` 及 nginx `/` → `/en/` 一致）；由 `public/favicon-32.png` 生成标准 `public/favicon.ico` 消除 404 榜首；`public/robots.txt` 对占回源 80%+ 压力的高频商业外链爬虫（`SemrushBot` / `AhrefsBot`）设置 `Crawl-delay: 10` 并屏蔽 `MJ12bot` / `DotBot`，继续完整放行搜索引擎与 AI 答案引擎。
+
+### 验证
+
+- `npm test` / `npm run test:e2e` / `npm run check` / `npm run build` 全绿；同步后端并执行 `./deploy/deploy.sh --skip-build` 全量上线验证。
+
 ## 2026-11-21 — P1 安全、计费准确性与 Nginx 真实 IP 加固
 
 ### 改动

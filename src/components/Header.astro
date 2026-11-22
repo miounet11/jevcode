@@ -247,11 +247,12 @@ const themeToggleUi = {
   });
 
   // 顶栏登录入口：已登录则显示「我的账户」，未登录显示「登录」。
-  // 静态站无法在建站时知道会话状态，只能客户端问一次；失败就保持默认的
-  // 「登录」——不能因为接口抖动让入口消失。
+  // 登录时服务端同时下发非 HttpOnly 的 jev_auth=1 提示 Cookie；未带提示位的
+  // 匿名访客直接跳过 /api/auth/me，避免静态站每次页面浏览都白打后端。
   (async () => {
     const link = document.querySelector<HTMLAnchorElement>('[data-auth-link]');
     if (!link) return;
+    if (!/(?:^|;\s*)jev_auth=1(?:;|$)/.test(document.cookie)) return;
     const accountLabel = link.dataset.accountLabel;
     const accountHref = link.dataset.accountHref;
     if (!accountLabel || !accountHref) return;

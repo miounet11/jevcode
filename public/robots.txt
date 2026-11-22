@@ -80,4 +80,20 @@ User-agent: Bingbot
 Allow: /
 Disallow: /api/
 
+# Commercial SEO backlink crawlers generated >80% of origin crawl load with no
+# search/answer-engine referral traffic; throttle rather than blocking entirely.
+User-agent: SemrushBot
+Crawl-delay: 10
+Disallow: /api/
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+Disallow: /api/
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
 Sitemap: https://www.jevcode.ai/sitemap-index.xml

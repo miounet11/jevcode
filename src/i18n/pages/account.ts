@@ -32,7 +32,7 @@ export const remaining: Localized<string> = {
 };
 
 export const perDay: Localized<string> = {
-  zh: '剩余额度', en: 'credit left', ja: '残り额度', ko: '남은 크레딧', de: 'Restguthaben', fr: 'crédit restant', es: 'crédito restante', pt: 'crédito restante',
+  zh: '剩余额度', en: 'credit left', ja: '残りクレジット', ko: '남은 크레딧', de: 'Restguthaben', fr: 'crédit restant', es: 'crédito restante', pt: 'crédito restante',
 };
 
 export const email: Localized<string> = {
@@ -167,4 +167,99 @@ export const copyKey: Localized<string> = {
 
 export const copied: Localized<string> = {
   zh: '已复制', en: 'Copied', ja: 'コピーしました', ko: '복사됨', de: 'Kopiert', fr: 'Copié', es: 'Copiado', pt: 'Copiado',
+};
+
+export const lastUsed: Localized<string> = {
+  zh: '最近使用', en: 'Last used', ja: '最終利用', ko: '최근 사용', de: 'Zuletzt genutzt', fr: 'Dernière utilisation', es: 'Último uso', pt: 'Último uso',
+};
+
+export const keyLabelPlaceholder: Localized<string> = {
+  zh: '备注（如 prod / local）',
+  en: 'Label (e.g. prod / local)',
+  ja: 'メモ（例: prod / local）',
+  ko: '메모 (예: prod / local)',
+  de: 'Notiz (z. B. prod / local)',
+  fr: 'Note (ex. prod / local)',
+  es: 'Nota (ej. prod / local)',
+  pt: 'Nota (ex. prod / local)',
+};
+
+export const quickstartTitle: Localized<string> = {
+  zh: '立刻试调这把密钥',
+  en: 'Run your first call with this key',
+  ja: 'このキーで最初の呼び出しを試す',
+  ko: '이 키로 첫 호출 실행하기',
+  de: 'Ersten Aufruf mit diesem Key testen',
+  fr: 'Faire votre premier appel avec cette clé',
+  es: 'Haz tu primera llamada con esta clave',
+  pt: 'Faça sua primeira chamada com esta chave',
+};
+
+export const copySnippet: Localized<string> = {
+  zh: '复制代码', en: 'Copy snippet', ja: 'コードをコピー', ko: '코드 복사', de: 'Code kopieren', fr: 'Copier le code', es: 'Copiar código', pt: 'Copiar código',
+};
+
+export const testCall: Localized<string> = {
+  zh: '用这把密钥试跑一次',
+  en: 'Run a live test call',
+  ja: 'このキーでテスト実行',
+  ko: '이 키로 테스트 호출',
+  de: 'Live-Testaufruf starten',
+  fr: 'Lancer un appel test',
+  es: 'Probar llamada en vivo',
+  pt: 'Fazer chamada de teste',
+};
+
+export const testing: Localized<string> = {
+  zh: '请求中…', en: 'Calling…', ja: '実行中…', ko: '호출 중…', de: 'Wird aufgerufen…', fr: 'Appel en cours…', es: 'Llamando…', pt: 'Chamando…',
+};
+
+export const testOk: Localized<string> = {
+  zh: '调用成功', en: 'Call succeeded', ja: '呼び出し成功', ko: '호출 성공', de: 'Aufruf erfolgreich', fr: 'Appel réussi', es: 'Llamada exitosa', pt: 'Chamada bem-sucedida',
+};
+
+export const testFail: Localized<string> = {
+  zh: '调用失败', en: 'Call failed', ja: '呼び出し失敗', ko: '호출 실패', de: 'Aufruf fehlgeschlagen', fr: 'Échec de l\'appel', es: 'Llamada fallida', pt: 'Falha na chamada',
+};
+
+export const pwSection: Localized<string> = {
+  zh: '修改密码', en: 'Change password', ja: 'パスワード変更', ko: '비밀번호 변경', de: 'Passwort ändern', fr: 'Changer le mot de passe', es: 'Cambiar contraseña', pt: 'Alterar senha',
+};
+
+export const pwOld: Localized<string> = {
+  zh: '当前密码', en: 'Current password', ja: '現在のパスワード', ko: '현재 비밀번호', de: 'Aktuelles Passwort', fr: 'Mot de passe actuel', es: 'Contraseña actual', pt: 'Senha atual',
+};
+
+export const pwNew: Localized<string> = {
+  zh: '新密码（至少 8 位）', en: 'New password (min 8 chars)', ja: '新しいパスワード（8文字以上）', ko: '새 비밀번호 (8자 이상)', de: 'Neues Passwort (mind. 8 Zeichen)', fr: 'Nouveau mot de passe (8 caractères min.)', es: 'Nueva contraseña (mín. 8 caracteres)', pt: 'Nova senha (mín. 8 caracteres)',
+};
+
+export const pwSubmit: Localized<string> = {
+  zh: '更新密码', en: 'Update password', ja: 'パスワードを更新', ko: '비밀번호 업데이트', de: 'Passwort aktualisieren', fr: 'Mettre à jour', es: 'Actualizar contraseña', pt: 'Atualizar senha',
+};
+
+export const pwSaving: Localized<string> = {
+  zh: '保存中…', en: 'Saving…', ja: '保存中…', ko: '저장 중…', de: 'Speichert…', fr: 'Enregistrement…', es: 'Guardando…', pt: 'Salvando…',
+};
+
+export const pwOk: Localized<string> = {
+  zh: '密码已更新，其他设备会话已自动退出。',
+  en: 'Password updated. Other device sessions have been signed out.',
+  ja: 'パスワードを更新しました。他端末のセッションは終了しました。',
+  ko: '비밀번호가 변경되었습니다. 다른 기기 세션이 로그아웃되었습니다.',
+  de: 'Passwort aktualisiert. Andere Gerätesitzungen wurden abgemeldet.',
+  fr: 'Mot de passe mis à jour. Les autres sessions ont été déconnectées.',
+  es: 'Contraseña actualizada. Se cerraron las demás sesiones.',
+  pt: 'Senha atualizada. As sessões em outros dispositivos foram encerradas.',
+};
+
+export const pwFail: Localized<string> = {
+  zh: '修改失败，请检查当前密码是否正确且新密码不少于 8 位。',
+  en: 'Update failed. Check your current password and use at least 8 characters.',
+  ja: '更新に失敗しました。現在のパスワードと 8 文字以上の新パスワードを確認してください。',
+  ko: '변경에 실패했습니다. 현재 비밀번호와 새 비밀번호(8자 이상)를 확인하세요.',
+  de: 'Aktualisierung fehlgeschlagen. Prüfe das aktuelle Passwort und mindestens 8 Zeichen.',
+  fr: 'Échec de la mise à jour. Vérifiez votre mot de passe actuel (8 caractères min.).',
+  es: 'Error al actualizar. Verifica tu contraseña actual y usa al menos 8 caracteres.',
+  pt: 'Falha ao atualizar. Verifique sua senha atual e use ao menos 8 caracteres.',
 };

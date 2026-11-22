@@ -120,13 +120,14 @@ test('P1：/v1/judge 隐私落盘、并发原子预扣防超扣、精确退款�
   });
 
   try {
-    // 1. 默认 /v1/judge 不写盘，GET /api/runs/:id 必须 404
+    // 1. 默认 /v1/judge 不写盘，GET /api/runs/:id 必须 404，且带 Server-Timing 耗时头
     const rPriv = await fetch(`${base}/v1/judge`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', authorization: `Bearer ${k1}` },
       body: JSON.stringify(probeBody),
     });
     assert.equal(rPriv.status, 200);
+    assert.match(rPriv.headers.get('server-timing') || '', /upstream;dur=\d+/, '应返回 Server-Timing 上游耗时头');
     const privJson = await rPriv.json();
     assert.match(privJson.id, /^[a-z0-9]{12}$/);
     assert.equal(existsSync(path.join(dataDir, `${privJson.id}.json`)), false, '默认 /v1/judge 不得落盘');
@@ -258,9 +259,15 @@ test('P1：单 Key RPM 限频、认证 IP 限频、Secure Cookie 与改密路由
       }),
     });
     assert.equal(regHttps.status, 201);
-    const httpsCookie = (regHttps.headers.getSetCookie?.() || []).join(';');
-    assert.match(httpsCookie, /;\s*Secure/i, `HTTPS 反代应下发 Secure Cookie，实际: ${httpsCookie}`);
-    const sess1 = httpsCookie.split(';')[0];
+    const httpsCookies = regHttps.headers.getSetCookie?.() || [];
+    const sessHeader = httpsCookies.find((c) => c.startsWith('jev_session=')) || '';
+    const hintHeader = httpsCookies.find((c) => c.startsWith('jev_auth=')) || '';
+    assert.match(sessHeader, /;\s*HttpOnly/i, `jev_session 必须为 HttpOnly: ${sessHeader}`);
+    assert.match(sessHeader, /;\s*Secure/i, `HTTPS 反代应下发 Secure Cookie，实际: ${sessHeader}`);
+    assert.match(hintHeader, /^jev_auth=1;/, `登录/注册应下发 jev_auth=1 提示 Cookie: ${hintHeader}`);
+    assert.doesNotMatch(hintHeader, /;\s*HttpOnly/i, 'jev_auth 提示位必须可供前端读取');
+    assert.match(hintHeader, /;\s*Secure/i, `HTTPS 下 jev_auth 也应带 Secure: ${hintHeader}`);
+    const sess1 = sessHeader.split(';')[0];
 
     // 第二个会话（本地 HTTP，不含 Secure）
     const loginHttp = await fetch(`${base}/api/auth/login`, {
@@ -271,7 +278,13 @@ test('P1：单 Key RPM 限频、认证 IP 限频、Secure Cookie 与改密路由
     assert.equal(loginHttp.status, 200);
     const httpCookie = (loginHttp.headers.getSetCookie?.() || []).join(';');
     assert.doesNotMatch(httpCookie, /;\s*Secure/i, `本地 HTTP 不应加 Secure，实际: ${httpCookie}`);
-    const sess2 = httpCookie.split(';')[0];
+    const sess2 = (loginHttp.headers.getSetCookie?.() || [])[0].split(';')[0];
+
+    // 未登录但带陈旧 jev_auth=1 提示位访问 /api/auth/me 时，服务端应主动清掉提示位
+    const staleMe = await fetch(`${base}/api/auth/me`, { headers: { cookie: 'jev_auth=1' } });
+    assert.equal(staleMe.status, 200);
+    const cleared = (staleMe.headers.getSetCookie?.() || []).join(';');
+    assert.match(cleared, /jev_auth=;.*Max-Age=0/i, `陈旧提示位应被清理: ${cleared}`);
 
     // 3. POST /api/auth/password 改密：踢掉其他设备会话，刷新当前会话
     const chg = await fetch(`${base}/api/auth/password`, {
@@ -317,4 +330,23 @@ test('P1：nginx 配置启用 Cloudflare real_ip 且覆盖 /topics 裸路径跳�
   assert.ok(cfHeaders.length >= 2, 'www 与 api 两个 server 块均须启用 CF-Connecting-IP');
   assert.match(conf, /location ~ \^\//);
   assert.match(conf, /\|topics\|/);
+});
+
+test('P2/P3：匿名访客跳过 /me、sitemap 默认语言与站点对齐、favicon.ico 合法且 robots 节流商业爬虫', () => {
+  const header = readFileSync(new URL('../src/components/Header.astro', import.meta.url), 'utf8');
+  assert.match(header, /jev_auth=1/, 'Header.astro 应先检查 jev_auth=1 再发 /api/auth/me');
+
+  const astroCfg = readFileSync(new URL('../astro.config.mjs', import.meta.url), 'utf8');
+  const defaults = astroCfg.match(/defaultLocale:\s*'([^']+)'/g) ?? [];
+  assert.equal(defaults.length, 2);
+  assert.ok(defaults.every((d) => d.includes("'en'")), `i18n 与 sitemap 的 defaultLocale 均应为 en，实际 ${defaults}`);
+
+  const ico = readFileSync(new URL('../public/favicon.ico', import.meta.url));
+  assert.ok(ico.length > 100, 'favicon.ico 不应为空');
+  assert.deepEqual([...ico.subarray(0, 4)], [0, 0, 1, 0], 'favicon.ico 应具备合法 ICO 文件头');
+
+  const robots = readFileSync(new URL('../public/robots.txt', import.meta.url), 'utf8');
+  assert.match(robots, /User-agent:\s*SemrushBot[\s\S]*?Crawl-delay:\s*10/);
+  assert.match(robots, /User-agent:\s*AhrefsBot[\s\S]*?Crawl-delay:\s*10/);
+  assert.match(robots, /User-agent:\s*GPTBot[\s\S]*?Allow:\s*\//);
 });

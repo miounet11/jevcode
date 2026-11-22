@@ -105,15 +105,23 @@ const v1KeyLimiter = createRateLimiter({ limit: V1_RPM_LIMIT, windowMs: 60 * 100
 const authLimiter = createRateLimiter({ limit: AUTH_RPM_LIMIT, windowMs: 60 * 1000 });
 
 const SESSION_COOKIE = 'jev_session';
+// 非 HttpOnly 登录态提示位（不含任何凭证，仅作前端是否需要请求 /api/auth/me 的开关，
+// 让 99% 匿名浏览直接跳过 /api/auth/me）。
+const AUTH_HINT_COOKIE = 'jev_auth';
 
-/** 从 Cookie 头取会话 token */
-function sessionToken(req) {
+/** 从 Cookie 头取指定键 */
+function readCookie(req, name) {
   const raw = req.headers.cookie || '';
   for (const part of raw.split(';')) {
     const [k, ...v] = part.trim().split('=');
-    if (k === SESSION_COOKIE) return decodeURIComponent(v.join('='));
+    if (k === name) return decodeURIComponent(v.join('='));
   }
   return '';
+}
+
+/** 从 Cookie 头取会话 token */
+function sessionToken(req) {
+  return readCookie(req, SESSION_COOKIE);
 }
 
 /** 生产或经 HTTPS 反代时强制下发 Secure Cookie；本地 HTTP 调试/测试仍可工作。 */
@@ -123,17 +131,33 @@ function isSecureRequest(req) {
   return proto === 'https';
 }
 
-/** 会话 Cookie。HttpOnly + SameSite=Lax (+ HTTPS/生产下 Secure)。 */
+/** 会话 Cookie（HttpOnly）+ 轻量登录态提示 Cookie（供 Header.astro 跳过匿名 /me）。 */
 function setSessionCookie(res, token, expiresAt, secure = false) {
   const maxAge = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
   const sec = secure ? '; Secure' : '';
-  res.setHeader('set-cookie',
-    `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax${sec}; Max-Age=${maxAge}`);
+  res.setHeader('set-cookie', [
+    `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax${sec}; Max-Age=${maxAge}`,
+    `${AUTH_HINT_COOKIE}=1; Path=/; SameSite=Lax${sec}; Max-Age=${maxAge}`,
+  ]);
 }
 
 function clearSessionCookie(res, secure = false) {
   const sec = secure ? '; Secure' : '';
-  res.setHeader('set-cookie', `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax${sec}; Max-Age=0`);
+  res.setHeader('set-cookie', [
+    `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax${sec}; Max-Age=0`,
+    `${AUTH_HINT_COOKIE}=; Path=/; SameSite=Lax${sec}; Max-Age=0`,
+  ]);
+}
+
+function setAuthHintCookie(res, expiresAt, secure = false) {
+  const maxAge = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
+  const sec = secure ? '; Secure' : '';
+  res.setHeader('set-cookie', `${AUTH_HINT_COOKIE}=1; Path=/; SameSite=Lax${sec}; Max-Age=${maxAge}`);
+}
+
+function clearAuthHintCookie(res, secure = false) {
+  const sec = secure ? '; Secure' : '';
+  res.setHeader('set-cookie', `${AUTH_HINT_COOKIE}=; Path=/; SameSite=Lax${sec}; Max-Age=0`);
 }
 
 /** 当前登录用户；未登录返回 null */
@@ -163,11 +187,12 @@ function sendRateLimited(res, retryAfterSec, message) {
   res.end(JSON.stringify({ error: 'rate_limit_exceeded', message }));
 }
 
-function send(res, status, body) {
+function send(res, status, body, extraHeaders = null) {
   const raw = JSON.stringify(body);
   res.writeHead(status, {
     'content-type': 'application/json; charset=utf-8',
     'cache-control': 'no-store',
+    ...(extraHeaders || {}),
   });
   res.end(raw);
 }
@@ -419,6 +444,7 @@ const server = createServer(async (req, res) => {
         }
 
         let result;
+        const t0 = Date.now();
         try {
           result = await judge(state, questions);
         } catch (err) {
@@ -431,9 +457,10 @@ const server = createServer(async (req, res) => {
               ? (err.detail || 'judgment backend is temporarily unavailable')
               : 'internal error',
             credit: accounts.balance(userId),
-          });
+          }, { 'server-timing': `upstream;dur=${Date.now() - t0}` });
           return;
         }
+        const upstreamMs = Date.now() - t0;
 
         // id 必须全部落在 [a-z0-9]，便于需要分享时与 /lang/r/{id} 路由对齐。
         const id = runId();
@@ -461,7 +488,7 @@ const server = createServer(async (req, res) => {
           model,
           answers,
           credit: accounts.balance(userId),
-        });
+        }, { 'server-timing': `upstream;dur=${upstreamMs}` });
         return;
       }
 
@@ -646,13 +673,16 @@ const server = createServer(async (req, res) => {
 
       if (req.method === 'GET' && url.pathname === '/api/auth/me') {
         const me = currentUser(req);
+        const hasHint = readCookie(req, AUTH_HINT_COOKIE) === '1';
         if (!me) {
           // 站点允许 guest（/api/try 有匿名 IP 限频），「我是谁」探测未登录时
           // 返回 200 + { user: null }，而不是 401——浏览器控制台会把 401 记成
           // 红色报错，用户误判成故障；前端（Header/account）只需判断 user。
+          if (hasHint) clearAuthHintCookie(res, secureCookie);
           send(res, 200, { user: null });
           return;
         }
+        if (!hasHint) setAuthHintCookie(res, me.session.expiresAt, secureCookie);
         send(res, 200, {
           user: { id: me.user.id, email: me.user.email, plan: me.user.plan },
           credit: accounts.balance(me.user.id),
@@ -775,12 +805,14 @@ const server = createServer(async (req, res) => {
 
       // 原子预扣后调用上游；上游失败时按精确 entryId 回退，匿名试用不入账。
       let result;
+      const t0 = Date.now();
       try {
         result = await judge(state, questions);
       } catch (err) {
         if (reservation && accounts) accounts.refundEntry(reservation.entryId);
         throw err;
       }
+      const upstreamMs = Date.now() - t0;
 
       // 同上：id 用 base36 补齐 12 位，保证 [a-z0-9]，分享页路由才能命中
       const id = runId();
@@ -798,7 +830,7 @@ const server = createServer(async (req, res) => {
       await writeFile(path.join(DATA, `${id}.json`), JSON.stringify(record));
       const payload = { ...record };
       if (userId && accounts) payload.credit = accounts.balance(userId) || {};
-      send(res, 200, payload);
+      send(res, 200, payload, { 'server-timing': `upstream;dur=${upstreamMs}` });
       return;
     }
 

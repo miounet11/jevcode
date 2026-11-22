@@ -48,6 +48,21 @@ const copy = {
   apiDocs: pick(lang, accountCopy.apiDocs),
   copyKey: pick(lang, accountCopy.copyKey),
   copied: pick(lang, accountCopy.copied),
+  lastUsed: pick(lang, accountCopy.lastUsed),
+  keyLabelPlaceholder: pick(lang, accountCopy.keyLabelPlaceholder),
+  quickstartTitle: pick(lang, accountCopy.quickstartTitle),
+  copySnippet: pick(lang, accountCopy.copySnippet),
+  testCall: pick(lang, accountCopy.testCall),
+  testing: pick(lang, accountCopy.testing),
+  testOk: pick(lang, accountCopy.testOk),
+  testFail: pick(lang, accountCopy.testFail),
+  pwSection: pick(lang, accountCopy.pwSection),
+  pwOld: pick(lang, accountCopy.pwOld),
+  pwNew: pick(lang, accountCopy.pwNew),
+  pwSubmit: pick(lang, accountCopy.pwSubmit),
+  pwSaving: pick(lang, accountCopy.pwSaving),
+  pwOk: pick(lang, accountCopy.pwOk),
+  pwFail: pick(lang, accountCopy.pwFail),
 };
 ---
 
@@ -81,7 +96,7 @@ const copy = {
             <thead>
               <tr>
                 <th>{copy.prefix}</th><th>{copy.label}</th>
-                <th>{copy.created}</th><th></th>
+                <th>{copy.created}</th><th>{copy.lastUsed}</th><th></th>
               </tr>
             </thead>
             <tbody id="keys-body"></tbody>
@@ -89,11 +104,19 @@ const copy = {
           <p class="acct__hint">{copy.revokeNote}</p>
 
           <div class="acct__actions">
+            <input
+              type="text"
+              id="key-label"
+              class="acct__input"
+              maxlength="48"
+              placeholder={copy.keyLabelPlaceholder}
+              aria-label={copy.label}
+            />
             <button class="btn btn--primary" type="button" id="issue">{copy.issue}</button>
             <a class="btn btn--ghost" href={`/${lang}/api/`}>{copy.apiDocs}</a>
             <button class="btn btn--ghost" type="button" id="logout">{copy.logout}</button>
           </div>
-          <p class="acct__newkey" id="newkey" hidden></p>
+          <div class="acct__newkey" id="newkey" hidden></div>
         </div>
 
         <div class="acct__keys">
@@ -105,6 +128,26 @@ const copy = {
             </thead>
             <tbody id="led-body"></tbody>
           </table>
+        </div>
+
+        <div class="acct__keys">
+          <details class="acct__pw" id="pw-details">
+            <summary>{copy.pwSection}</summary>
+            <form class="acct__pw-form" id="pw-form" novalidate>
+              <label class="acct__field">
+                <span>{copy.pwOld}</span>
+                <input id="pw-old" type="password" autocomplete="current-password" required />
+              </label>
+              <label class="acct__field">
+                <span>{copy.pwNew}</span>
+                <input id="pw-new" type="password" autocomplete="new-password" minlength="8" required />
+              </label>
+              <div class="acct__actions">
+                <button class="btn btn--ghost" type="submit" id="pw-submit">{copy.pwSubmit}</button>
+              </div>
+              <p class="acct__hint" id="pw-msg" role="status" aria-live="polite"></p>
+            </form>
+          </details>
         </div>
       </div>
     </div>
@@ -149,6 +192,13 @@ const copy = {
 
       const tdCreated = document.createElement('td');
       tdCreated.textContent = k.createdAt ? new Date(k.createdAt).toISOString().slice(0, 10) : '—';
+
+      const tdLastUsed = document.createElement('td');
+      tdLastUsed.textContent = k.lastUsedAt
+        ? new Date(k.lastUsedAt).toLocaleString(locale, {
+            month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+          })
+        : '—';
 
       const tdAct = document.createElement('td');
       if (k.revokedAt) {
@@ -196,7 +246,7 @@ const copy = {
         tdAct.append(b);
       }
 
-      tr.append(tdPrefix, tdLabel, tdCreated, tdAct);
+      tr.append(tdPrefix, tdLabel, tdCreated, tdLastUsed, tdAct);
       tb.append(tr);
     }
   }
@@ -280,8 +330,139 @@ const copy = {
     } catch { /* 明细拿不到不影响主要信息 */ }
   }
 
+  function buildSnippets(key) {
+    const curl = `curl -sS https://api.jevcode.ai/v1/judge \\\n  -H "Authorization: Bearer ${key}" \\\n  -H "Content-Type: application/json" \\\n  -d '{"state":"Checkout failed twice with HTTP 502.","questions":{"urgent":{"type":"noul","instructions":"Needs immediate escalation?"}}}'`;
+    const py = `import requests\n\nr = requests.post(\n    "https://api.jevcode.ai/v1/judge",\n    headers={"Authorization": "Bearer ${key}"},\n    json={\n        "state": "Checkout failed twice with HTTP 502.",\n        "questions": {"urgent": {"type": "noul", "instructions": "Needs immediate escalation?"}},\n    },\n)\nprint(r.json())`;
+    return { curl, py };
+  }
+
+  function renderNewKeyCard(key) {
+    const box = document.getElementById('newkey');
+    box.hidden = false;
+    box.replaceChildren();
+
+    const warn = document.createElement('strong');
+    warn.textContent = copy.newKeyWarn;
+
+    const keyRow = document.createElement('div');
+    keyRow.className = 'acct__newkey-row';
+    const code = document.createElement('code');
+    code.textContent = key;
+    const copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
+    copyBtn.className = 'btn btn--ghost acct__copy';
+    copyBtn.textContent = copy.copyKey;
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(key);
+        copyBtn.textContent = copy.copied;
+      } catch { /* ignore */ }
+    });
+    keyRow.append(code, copyBtn);
+
+    // 建 Key 即首调：带当前明文 Key 的一键示例 + 页内真实试跑按钮，缩短首次调用距离
+    const qsTitle = document.createElement('p');
+    qsTitle.className = 'acct__qs-title';
+    qsTitle.textContent = copy.quickstartTitle;
+
+    const snippets = buildSnippets(key);
+    let activeTab = 'curl';
+
+    const tabBar = document.createElement('div');
+    tabBar.className = 'acct__tabs';
+    const tabCurl = document.createElement('button');
+    tabCurl.type = 'button';
+    tabCurl.className = 'acct__tab is-active';
+    tabCurl.textContent = 'curl';
+    const tabPy = document.createElement('button');
+    tabPy.type = 'button';
+    tabPy.className = 'acct__tab';
+    tabPy.textContent = 'Python';
+    const copySnipBtn = document.createElement('button');
+    copySnipBtn.type = 'button';
+    copySnipBtn.className = 'btn btn--ghost acct__copy';
+    copySnipBtn.textContent = copy.copySnippet;
+
+    const pre = document.createElement('pre');
+    pre.className = 'acct__snippet';
+    const preCode = document.createElement('code');
+    preCode.textContent = snippets.curl;
+    pre.append(preCode);
+
+    const setTab = (next) => {
+      activeTab = next;
+      tabCurl.classList.toggle('is-active', next === 'curl');
+      tabPy.classList.toggle('is-active', next === 'py');
+      preCode.textContent = snippets[next];
+      copySnipBtn.textContent = copy.copySnippet;
+    };
+    tabCurl.addEventListener('click', () => setTab('curl'));
+    tabPy.addEventListener('click', () => setTab('py'));
+    copySnipBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(snippets[activeTab]);
+        copySnipBtn.textContent = copy.copied;
+      } catch { /* ignore */ }
+    });
+
+    const testBtn = document.createElement('button');
+    testBtn.type = 'button';
+    testBtn.className = 'btn btn--primary acct__copy';
+    testBtn.textContent = copy.testCall;
+    const testOut = document.createElement('pre');
+    testOut.className = 'acct__test-out';
+    testOut.hidden = true;
+
+    testBtn.addEventListener('click', async () => {
+      testBtn.disabled = true;
+      testBtn.textContent = copy.testing;
+      testOut.hidden = false;
+      testOut.textContent = copy.testing;
+      const t0 = performance.now();
+      try {
+        // credentials: 'omit' 跳过会话 Cookie，强制走这把刚签发的 Bearer Key 鉴权
+        const r = await fetch('/api/try', {
+          method: 'POST',
+          credentials: 'omit',
+          headers: {
+            'content-type': 'application/json',
+            authorization: `Bearer ${key}`,
+          },
+          body: JSON.stringify({
+            state: 'Checkout failed twice with HTTP 502.',
+            questions: {
+              urgent: { type: 'noul', instructions: 'Needs immediate escalation?' },
+            },
+          }),
+        });
+        const ms = Math.round(performance.now() - t0);
+        const resJson = await r.json().catch(() => ({}));
+        if (r.ok) {
+          testOut.textContent = `${copy.testOk} (${ms} ms)\n` + JSON.stringify({
+            model: resJson.model,
+            answers: resJson.answers,
+            credit: resJson.credit,
+          }, null, 2);
+          await load();
+        } else {
+          testOut.textContent = `${copy.testFail} (HTTP ${r.status}, ${ms} ms)\n` + JSON.stringify(resJson, null, 2);
+        }
+      } catch (err) {
+        testOut.textContent = `${copy.testFail}: ${err && err.message ? err.message : 'network error'}`;
+      } finally {
+        testBtn.disabled = false;
+        testBtn.textContent = copy.testCall;
+      }
+    });
+
+    tabBar.append(tabCurl, tabPy, copySnipBtn, testBtn);
+    box.append(warn, keyRow, qsTitle, tabBar, pre, testOut);
+  }
+
   document.getElementById('issue').addEventListener('click', async (e) => {
     const btn = e.currentTarget;
+    const labelInput = document.getElementById('key-label');
+    const customLabel = (labelInput && labelInput.value ? labelInput.value.trim() : '') || 'web';
     btn.disabled = true;
     const label = btn.textContent;
     btn.textContent = copy.issuing;
@@ -290,37 +471,55 @@ const copy = {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify({ label: 'web' }),
+        body: JSON.stringify({ label: customLabel }),
       });
       const d = await r.json().catch(() => ({}));
-      const box = document.getElementById('newkey');
       if (r.ok && d.key) {
-        box.hidden = false;
-        box.replaceChildren();
-        const warn = document.createElement('strong');
-        warn.textContent = copy.newKeyWarn;
-        const code = document.createElement('code');
-        code.textContent = d.key;
-        // 一键复制：新密钥明文只出现一次，别让用户手动划选
-        const copyBtn = document.createElement('button');
-        copyBtn.type = 'button';
-        copyBtn.className = 'btn btn--ghost acct__copy';
-        copyBtn.textContent = copy.copyKey;
-        copyBtn.addEventListener('click', async () => {
-          try {
-            await navigator.clipboard.writeText(d.key);
-            copyBtn.textContent = copy.copied;
-            copyBtn.disabled = true;
-          } catch {
-            /* 复制失败就保持原样，用户仍可手动选择 */
-          }
-        });
-        box.append(warn, code, copyBtn);
+        if (labelInput) labelInput.value = '';
+        renderNewKeyCard(d.key);
         await load();
       }
     } finally {
       btn.disabled = false;
       btn.textContent = label;
+    }
+  });
+
+  document.getElementById('pw-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const oldEl = document.getElementById('pw-old');
+    const newEl = document.getElementById('pw-new');
+    const btn = document.getElementById('pw-submit');
+    const pwMsg = document.getElementById('pw-msg');
+    const oldPassword = oldEl.value;
+    const newPassword = newEl.value;
+    if (!oldPassword || newPassword.length < 8) {
+      pwMsg.textContent = copy.pwFail;
+      return;
+    }
+    btn.disabled = true;
+    const prev = btn.textContent;
+    btn.textContent = copy.pwSaving;
+    pwMsg.textContent = '';
+    try {
+      const r = await fetch('/api/auth/password', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ oldPassword, newPassword }),
+      });
+      if (r.ok) {
+        oldEl.value = '';
+        newEl.value = '';
+        pwMsg.textContent = copy.pwOk;
+      } else {
+        pwMsg.textContent = copy.pwFail;
+      }
+    } catch {
+      pwMsg.textContent = copy.pwFail;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = prev;
     }
   });
 
@@ -349,9 +548,31 @@ const copy = {
   .acct__table th, .acct__table :global(td) { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); }
   .acct__table th { color: var(--fg-dim); font-weight: 500; }
   .acct__none { color: var(--fg-dim); font-size: 14px; }
-  .acct__actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
-  .acct__newkey { margin-top: 14px; display: grid; gap: 8px; justify-items: start; font-size: 14px; padding: 14px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--bg-elev); }
+  .acct__actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; align-items: center; }
+  .acct__input {
+    padding: 8px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    background: var(--bg-elev);
+    color: var(--fg);
+    font: inherit;
+    font-size: 14px;
+    min-width: 180px;
+  }
+  .acct__newkey { margin-top: 14px; display: grid; gap: 10px; font-size: 14px; padding: 16px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--bg-elev); }
+  .acct__newkey :global(.acct__newkey-row) { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .acct__newkey :global(code) { word-break: break-all; padding: 8px 10px; background: var(--bg-code); border-radius: 8px; display: block; }
+  .acct__newkey :global(.acct__qs-title) { margin: 6px 0 0; font-size: 13px; color: var(--fg-muted); font-weight: 600; }
+  .acct__newkey :global(.acct__tabs) { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .acct__newkey :global(.acct__tab) { background: none; border: 1px solid var(--border-strong); border-radius: 8px; padding: 5px 11px; color: var(--fg-muted); font: inherit; font-size: 13px; cursor: pointer; }
+  .acct__newkey :global(.acct__tab.is-active) { border-color: var(--accent-border); color: var(--accent-strong); background: var(--accent-soft); }
+  .acct__newkey :global(.acct__snippet),
+  .acct__newkey :global(.acct__test-out) { margin: 0; padding: 12px; background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px; overflow-x: auto; font-size: 12.5px; line-height: 1.5; }
+  .acct__newkey :global(.acct__snippet code) { padding: 0; background: none; }
+  .acct__pw summary { cursor: pointer; font-size: 15px; font-weight: 600; color: var(--fg-muted); }
+  .acct__pw-form { display: grid; gap: 12px; max-width: 380px; margin-top: 14px; }
+  .acct__field { display: grid; gap: 6px; font-size: 13.5px; color: var(--fg-muted); }
+  .acct__field input { padding: 9px 12px; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--bg-elev); color: var(--fg); font: inherit; }
   /* acct__revoked / acct__copy / acct__revoke 都挂在 JS 动态生成的节点上，
      单类选择器同样带 [cid]，用 :global 包住才命中。 */
   :global(.acct__copy) { min-height: 36px; padding: 6px 14px; font-size: 14px; }

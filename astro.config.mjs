@@ -52,10 +52,11 @@ export default defineConfig({
       serialize: lastmodSerialize,
       filter: sitemapInclude,
       i18n: {
-        defaultLocale: 'zh',
+        // 与顶层 i18n.defaultLocale('en')、BaseLayout x-default 及 nginx `/` → `/en/` 对齐
+        defaultLocale: 'en',
         locales: {
-          zh: 'zh-CN',
           en: 'en',
+          zh: 'zh-CN',
           ja: 'ja',
           ko: 'ko',
           de: 'de',
