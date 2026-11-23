@@ -1860,5 +1860,65 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-escalation-09",
+    "state": "SMS: The order has been broken for three weeks and legal is now involved.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-escalation-10",
+    "state": "API payload field: Could you share the product listing changelog for the last release?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Should this be escalated to a senior or on-call team?",
+        "options": [
+          "no",
+          "escalate"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-01",
+    "state": "Chat message: The order invoice was charged twice this month.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-02",
+    "state": "Email received: The product listing API returns 500 on every request.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
   }
 ]

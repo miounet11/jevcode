@@ -832,6 +832,14 @@
     "text": "| **TypeSafe Jev** | `decide.NewJevResolver` or `decide.MustNewJevResolver` | `POST /v1/systemone` at `https://api.typesafe.ai/v1/systemone` |"
   },
   {
+    "repo": "cnhuye/mobile-jev-ultrafast",
+    "name": "mobile-jev-ultrafast",
+    "file": "README.md",
+    "branch": "main",
+    "line": 143,
+    "text": "| `TYPESAFE_BASE_URL` | Endpoint URL (scheme + host + path) | `https://api.typesafe.ai/v1/systemone` |"
+  },
+  {
     "repo": "cnsunyour/tg-guard-bot",
     "name": "tg-guard-bot",
     "file": "README.md",
@@ -1446,6 +1454,14 @@
     "branch": "main",
     "line": 5,
     "text": "一个分析你和 Crush 或对象聊天的小工具，支持 Jev、OpenAI Decisions（测试版）和常见文本大模型。帮你读懂一点对方的情绪和想法，也看看自己的回复哪里没表达好、可以怎么调整。"
+  },
+  {
+    "repo": "FFatTiger/new-api-plugin-typesafe",
+    "name": "new-api-plugin-typesafe",
+    "file": "README.md",
+    "branch": "main",
+    "line": 17,
+    "text": "| TypeSafe 原生 | `https://api.typesafe.ai` | 需要 TypeSafe key（console.typesafe.ai） |"
   },
   {
     "repo": "filedcom/playjev",
