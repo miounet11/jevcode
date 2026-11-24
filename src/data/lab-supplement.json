@@ -1920,5 +1920,69 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-routing-03",
+    "state": "Review posted: We want to upgrade the order to the enterprise plan.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-04",
+    "state": "Alert fired: We need a DPA for the GMV data we send you.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-05",
+    "state": "Log line: Refund request for the cancelled product listing.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-06",
+    "state": "Call transcript: order login fails with invalid token errors.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
   }
 ]

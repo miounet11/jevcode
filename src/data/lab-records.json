@@ -912,5 +912,33 @@
     "ok": true,
     "choice": "technical",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-routing-03",
+    "ts": "2026-11-24T01:33:03.086Z",
+    "ok": true,
+    "choice": "sales",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-routing-04",
+    "ts": "2026-11-24T01:33:04.962Z",
+    "ok": true,
+    "choice": "compliance",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-routing-05",
+    "ts": "2026-11-24T01:33:06.024Z",
+    "ok": true,
+    "choice": "billing",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-routing-06",
+    "ts": "2026-11-24T01:33:08.215Z",
+    "ok": true,
+    "choice": "technical",
+    "model": "clavue-jev"
   }
 ]
