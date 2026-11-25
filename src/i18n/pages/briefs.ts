@@ -69,3 +69,36 @@ export const totalLabel: Localized<string> = {
 export const latestLabel: Localized<string> = {
   zh: '按发布日倒序分页显示，每页 100 篇。', en: 'Newest first, 100 per page.', ja: '公開日の新しい順に 1 ページ 100 件ずつ表示します。', ko: '발행일 최신순으로 페이지당 100편씩 표시합니다.', de: 'Neueste zuerst, 100 pro Seite.', fr: 'Les plus récents d’abord, 100 par page.', es: 'Los más recientes primero, 100 por página.', pt: 'Os mais recentes primeiro, 100 por página.',
 };
+
+export const alsoAcceptableTpl: Localized<string> = {
+  zh: '{chosen}（可接受：{others}）',
+  en: '{chosen} (also acceptable: {others})',
+  ja: '{chosen}（許容：{others}）',
+  ko: '{chosen} (허용: {others})',
+  de: '{chosen} (ebenfalls akzeptiert: {others})',
+  fr: '{chosen} (également accepté : {others})',
+  es: '{chosen} (también aceptable: {others})',
+  pt: '{chosen} (também aceitável: {others})',
+};
+
+export const tagLabel: Localized<string> = {
+  zh: '标签',
+  en: 'Tag',
+  ja: 'タグ',
+  ko: '태그',
+  de: 'Tag',
+  fr: 'Étiquette',
+  es: 'Etiqueta',
+  pt: 'Tag',
+};
+
+export const stageLabel: Localized<string> = {
+  zh: '阶段',
+  en: 'Stage',
+  ja: '段階',
+  ko: '단계',
+  de: 'Phase',
+  fr: 'Étape',
+  es: 'Etapa',
+  pt: 'Etapa',
+};

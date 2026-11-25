@@ -25,7 +25,7 @@ const copy = {
   inputTokens: pick(lang, pricingCopy.inputTokens),
   cta: pick(lang, pricingCopy.cta),
   cols: pick(lang, pricingCopy.cols),
-  rows: pick(lang, pricingCopy.rows).map(([a, b]) => [a, b.replace('{credit}', `$${signupUsd}`).replace('{tokens}', tokenCount)] as [string, string]),
+  rows: pick(lang, pricingCopy.rows).map(([a, b]) => [a, b.replace('{credit}', signupUsd).replace('{tokens}', tokenCount)] as [string, string]),
   note: pick(lang, pricingCopy.note),
   back: pick(lang, pricingCopy.back),
 };
@@ -47,7 +47,7 @@ const copy = {
           <p class="pricing__quota">
             {copy.signup}: <b>${signupUsd}</b> &middot; {tokenCount} {copy.inputTokens}
           </p>
-          <a class="btn btn--primary" href={`/${lang}/login/`}>{copy.cta}</a>
+          <a class="btn btn--primary" href={`/${lang}/login/?mode=register`}>{copy.cta}</a>
         </div>
       </div>
 

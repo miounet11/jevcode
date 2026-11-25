@@ -366,29 +366,113 @@ def _translate_term(term, lang, prompt):
     return out if valid_term(term, lang, out) else None
 
 
+def _translate_prompt(text, lang, attempt):
+    """三次重试必须换温度和提示。同一 payload + temperature 0 时，
+    本地模型会确定性吐出英文或提示词回显，三次失败完全相同，
+    写回时 entry.pop 会把整条译文删掉。"""
+    lang_name = LANG_NAME[lang]
+    native_hint = NATIVE_HINT.get(lang, "")
+    if attempt == 0:
+        return 0, PROMPT.format(lang_name=lang_name, text=text, native_hint=native_hint)
+    if attempt == 1:
+        return 0.25, (
+            f"Retry. Translate the following into {lang_name} only. "
+            "The entire answer must be a pure target-language translation. "
+            "Zero preamble, zero notes, zero quotes, zero explanation, "
+            "and do not answer the sentence as if the user asked you a question. "
+            f"{native_hint}\n\n"
+            f'Text: "{text}"'
+        )
+    return 0.45, (
+        f"Translate this short sentence into {lang_name} ({native_hint}). "
+        f"Output ONLY the translated sentence:\n\n{text}"
+    )
+
+
+# 答问、自我介绍、注释行。出现在某一行上就丢掉这一行，但同一段回复里
+# 引号中的译文仍可单独过 clean / valid_body。
+_ASIDE = re.compile(
+    r"(?i)我是\s*clavue|i'm clavue|i am clavue|clavue\s*[:：]|KI-Assistent|as an AI|language model|"
+    r"请联系|如果您需要|建议您|官方文档|我可以帮|客服|写手|进一步的帮助|翻译如下|翻译说明"
+)
+
+
+def _translation_candidates(raw):
+    """整段优先；整段带注释时再试每一行，以及同一行里用引号包住的译文。
+
+    不把「我是 Clavue，……"真正的译文"」整段扔掉，只丢掉声明本身。
+    """
+    raw = raw or ""
+    if not _ASIDE.search(raw):
+        yield raw
+    for line in re.split(r"[\r\n]+", raw):
+        line = line.strip()
+        if not line or line == raw.strip():
+            continue
+        if _ASIDE.search(line):
+            continue
+        if re.match(r"^(翻译如下|翻译[:：]|注意|注[:：]|说明|以下为|（注|（说明|Note\b|Translation\b)", line, re.I):
+            continue
+        yield line
+    for match in re.finditer(r"[\"“]([^\"“”\n]{8,240})[\"”]", raw):
+        yield match.group(1).strip()
+
+
+def _accept_translation(source, lang, raw, field):
+    """在通过 clean() 与 valid_body() 的候选里，留下最像一句译文的那条。
+
+    整句英文原文还嵌在结果里、或「Clavue:」后面接着作答的，不写回。
+    比原文膨胀成一段答问的，也不写回。
+    """
+    src_norm = " ".join((source or "").split()).lower()
+    src_len = len(source or "")
+    best = None
+    best_score = None
+    for piece in _translation_candidates(raw):
+        piece = re.sub(r"^(?:文本|译文)[:：]\s*", "", (piece or "").strip())
+        out = clean(piece)
+        if not out or not valid_body(source, lang, out, field=field):
+            continue
+        out_norm = " ".join(out.split()).lower()
+        if len(src_norm) >= 12 and src_norm in out_norm:
+            continue
+        if re.search(r"(?i)clavue\s*[:：]|我是\s*clavue|i'm clavue|i am clavue", out):
+            continue
+        if _ASIDE.search(out):
+            continue
+        if lang in CJK_LANGS and src_len >= 40 and len(out) > max(120, int(src_len * 1.8)):
+            continue
+        expected = src_len * (0.55 if lang in CJK_LANGS else 1.05)
+        score = abs(len(out) - expected)
+        if best_score is None or score < best_score:
+            best = out
+            best_score = score
+    return best
+
+
 def translate(text, lang, field="context"):
     budget = max(120, int(len(text) * 2.2))
-    payload = json.dumps({
-        "model": GEN_MODEL,
-        "messages": [{"role": "user", "content": PROMPT.format(
-            lang_name=LANG_NAME[lang], text=text, native_hint=NATIVE_HINT.get(lang, ""))}],
-        "max_tokens": min(budget, 1200),
-        "temperature": 0,
-    }).encode("utf-8")
-    req = urllib.request.Request(GEN_URL, data=payload, headers={"Content-Type": "application/json"})
     last = None
     for attempt in range(3):
+        temperature, content = _translate_prompt(text, lang, attempt)
+        payload = json.dumps({
+            "model": GEN_MODEL,
+            "messages": [{"role": "user", "content": content}],
+            "max_tokens": min(budget, 1200),
+            "temperature": temperature,
+        }).encode("utf-8")
+        req = urllib.request.Request(GEN_URL, data=payload, headers={"Content-Type": "application/json"})
         try:
             with urllib.request.urlopen(req, timeout=60) as r:
                 d = json.loads(r.read().decode("utf-8"))
-            out = clean(d.get("choices", [{}])[0].get("message", {}).get("content", ""))
-            if out is None:
-                raise ValueError("bad translation output")
-            # 校验必须在这里做，不能只留到写回时。写回时才发现就等于没有重试：
-            # 那时的失败只会让这一条回退到旧值（而旧值往往正是那条英文），
-            # 坏值原样留在文件里，下一轮再「成功」一次，永远修不好。
-            if not valid_body(text, lang, out, field=field):
-                raise ValueError(f"untranslated or echoed output: {out[:40]!r}")
+            raw = d.get("choices", [{}])[0].get("message", {}).get("content", "")
+            out = _accept_translation(text, lang, raw, field)
+            if not out:
+                # 校验必须在这里做，不能只留到写回时。写回时才发现就等于没有重试：
+                # 那时的失败只会让这一条回退到旧值（而旧值往往正是那条英文），
+                # 坏值原样留在文件里，下一轮再「成功」一次，永远修不好。
+                preview = clean(raw) or (raw or "")
+                raise ValueError(f"untranslated or echoed output: {preview[:40]!r}")
             return out
         except Exception as e:  # noqa: BLE001 - 重试后仍失败则记为 None
             last = e
@@ -498,13 +582,35 @@ if missing:
     term.update(retry)
     print(f"术语重试补齐 {len(retry)}/{len(set(missing))} 条")
 
+# 同一句英文已经在别的案例上有合格译文时，缺译的 id 直接复用，
+# 不再单独向模型要一次——那次结果常常更差，还会把共用句盖掉。
+known_body = {}
+for src_row in briefs:
+    for lang0, prev0 in (out.get(src_row["id"]) or {}).items():
+        if not isinstance(prev0, dict):
+            continue
+        if valid_body(src_row["context"], lang0, prev0.get("context"), field="context"):
+            known_body.setdefault((lang0, src_row["context"], "context"), prev0["context"])
+        if valid_body(src_row["question"], lang0, prev0.get("question"), field="question"):
+            known_body.setdefault((lang0, src_row["question"], "question"), prev0["question"])
+
 applied = 0
 for b in briefs:
     entry = out.setdefault(b["id"], {})
     for lang in LANGS:
         prev = entry.get(lang) or {}
-        ctx = body.get((lang, b["context"], "context")) or prev.get("context")
-        q = body.get((lang, b["question"], "question")) or prev.get("question")
+        # 键是 (语言, 原文) 不是 id。同一句已经有合格译文时必须留着，
+        # 不能用本轮为「别的 id 缺译」补上的结果覆盖，否则一条回显会写进所有共用该句的案例。
+        fresh_ctx = body.get((lang, b["context"], "context"))
+        fresh_q = body.get((lang, b["question"], "question"))
+        prev_ctx = prev.get("context")
+        prev_q = prev.get("question")
+        ctx = prev_ctx if valid_body(b["context"], lang, prev_ctx, field="context") else (
+            known_body.get((lang, b["context"], "context")) or fresh_ctx or prev_ctx
+        )
+        q = prev_q if valid_body(b["question"], lang, prev_q, field="question") else (
+            known_body.get((lang, b["question"], "question")) or fresh_q or prev_q
+        )
         # 两个字段都得是真译文才写。本轮没翻出来就沿用旧值；旧值本身是英文
         # 或提示词回显时整条删掉，不能让它在 merge 里永生——之前正是「只跳过
         # 不删除」，16 条提示词回显的坏值才从旧文件里原样活了下来。

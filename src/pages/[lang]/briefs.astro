@@ -36,7 +36,7 @@ const listIndex = lang === 'en' || lang === 'zh' || localizedLangs.has(lang);
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path} index={listIndex}>
   <section class="section">
     <div class="wrap">
-      <main class="doc">
+      <div class="doc">
         <p class="doc__breadcrumb">
           <a href={`/${lang}/`}>{t('site.name')}</a> / {copy.title}
         </p>
@@ -52,7 +52,7 @@ const listIndex = lang === 'en' || lang === 'zh' || localizedLangs.has(lang);
           ))}
         </ul>
         {pages > 1 && <BriefPager lang={lang} pageNo={pageNo} pages={pages} label={pick(lang, copySrc.paginationLabel)} />}
-      </main>
+      </div>
     </div>
   </section>
 </BaseLayout>

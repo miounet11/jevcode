@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { languages, useTranslations, type Lang } from '../../../i18n/ui';
+import { languages, pick, useTranslations, type Lang } from '../../../i18n/ui';
+import * as topicsCopy from '../../../i18n/pages/topics';
 import briefs from '../../../data/daily-briefs.json';
 import briefI18n from '../../../data/briefs-i18n.json';
 import { projects } from '../../../data/ecosystem';
@@ -37,15 +38,18 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Lang };
 const { entries } = Astro.props as { entries: TrafficEntry[] };
 const t = useTranslations(lang);
-const title = `${entries.length} topics | ${t('site.name')}`;
+const heading = pick(lang, topicsCopy.heading);
+const n = String(entries.length);
+const title = pick(lang, topicsCopy.titleTpl).replace('{n}', n);
+const desc = pick(lang, topicsCopy.descTpl).replace('{n}', n);
 ---
 
-<BaseLayout lang={lang} title={title} description={`${entries.length} aggregated content topics`} path={`/${lang}/topics/`}>
+<BaseLayout lang={lang} title={title} description={desc} path={`/${lang}/topics/`}>
   <div class="wrap docs-shell">
-    <main class="doc">
-      <p class="doc__breadcrumb"><a href={`/${lang}/`}>{t('site.name')}</a> / Topics</p>
-      <h1 class="doc__title">Topics</h1>
-      <p class="doc__desc">{entries.length} aggregated content topics</p>
+    <div class="doc">
+      <p class="doc__breadcrumb"><a href={`/${lang}/`}>{t('site.name')}</a> / {heading}</p>
+      <h1 class="doc__title">{heading}</h1>
+      <p class="doc__desc">{desc}</p>
       <ul class="hub__list">
         {entries.map((entry) => (
           <li class="hub__item">
@@ -54,7 +58,7 @@ const title = `${entries.length} topics | ${t('site.name')}`;
           </li>
         ))}
       </ul>
-    </main>
+    </div>
   </div>
 </BaseLayout>
 

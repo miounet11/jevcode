@@ -211,7 +211,7 @@ export const ui = {
     'home.models.count': 'live model',
     'home.models.caps': 'Capability coverage',
     'home.models.api': 'Judgment API',
-    'home.models.promo': 'Limited-time offer: get $5 in credit on signup, free for one month.',
+    'home.models.promo': 'Try without an account (20 calls/hour). Sign up for $5 in credit to call from your own code.',
     'home.models.cta': 'See how to connect',
     'home.trials.title': 'Join a test',
     'home.trials.lead':
@@ -291,7 +291,7 @@ export const ui = {
     'home.models.count': 'ライブモデル',
     'home.models.caps': '能力カバレッジ',
     'home.models.api': '判定 API',
-    'home.models.promo': '期間限定：登録で $5 分のクレジット、1か月無料。',
+    'home.models.promo': '登録不要で試せます（1 時間 20 回）。登録で $5 のクレジットが付与され、自分のプログラムから呼び出せます。',
     'home.models.cta': '接続方法を見る',
     'home.trials.title': 'テストに参加',
     'home.trials.lead':
@@ -387,7 +387,7 @@ export const ui = {
     'home.models.count': '라이브 모델',
     'home.models.caps': '능력 범위',
     'home.models.api': '판정 API',
-    'home.models.promo': '기간 한정: 가입 시 $5 크레딧, 한 달 무료.',
+    'home.models.promo': '가입 없이 체험할 수 있습니다(시간당 20회). 가입 시 $5 크레딧으로 프로그램에서 바로 호출하세요.',
     'home.models.cta': '연결 방법 보기',
     'home.trials.title': '테스트 참여',
     'home.trials.lead':
@@ -432,7 +432,7 @@ export const ui = {
     'nav.lab': 'Labor',
     'nav.pricing': 'Preise',
     'nav.api': 'API',
-    'nav.try': 'Try now',
+    'nav.try': 'Jetzt testen',
     'nav.compare': 'Vergleich',
     'nav.scenes': 'Live',
     'nav.signin': 'Anmelden', 'nav.account': 'Konto',
@@ -488,7 +488,7 @@ export const ui = {
     'home.models.count': 'Live-Modell',
     'home.models.caps': 'Fähigkeitsabdeckung',
     'home.models.api': 'Urteil-API',
-    'home.models.promo': 'Zeitlich begrenzt: 5 $ Guthaben bei Anmeldung, einen Monat kostenlos.',
+    'home.models.promo': 'Ohne Konto testen (20 Aufrufe/Stunde). Bei Anmeldung $5 Guthaben für den eigenen Code.',
     'home.models.cta': 'Verbindung ansehen',
     'home.trials.title': 'An einem Test teilnehmen',
     'home.trials.lead':
@@ -530,7 +530,7 @@ export const ui = {
     'nav.community': 'Communauté',
     'nav.menu': 'Menu',
     'nav.lab': 'Laboratoire',
-    'nav.demos': 'Demos',
+    'nav.demos': 'Démos',
     'nav.pricing': 'Tarifs',
     'nav.try': 'Essayer',
     'nav.api': 'API',
@@ -589,7 +589,7 @@ export const ui = {
     'home.models.count': 'modèle en direct',
     'home.models.caps': 'Couverture des capacités',
     'home.models.api': 'API de jugement',
-    'home.models.promo': 'Offre limitée : 5 $ de crédit à l\'inscription, gratuit pendant un mois.',
+    'home.models.promo': 'Essayez sans compte (20 appels/heure). Inscrivez-vous pour 5 $ de crédit et appelez l’API depuis votre code.',
     'home.models.cta': 'Voir comment se connecter',
     'home.trials.title': 'Participer à un test',
     'home.trials.lead':
@@ -689,7 +689,7 @@ export const ui = {
     'home.models.count': 'modelo en vivo',
     'home.models.caps': 'Cobertura de capacidades',
     'home.models.api': 'API de juicio',
-    'home.models.promo': 'Oferta por tiempo limitado: 5 $ de crédito al registrarte, gratis durante un mes.',
+    'home.models.promo': 'Pruébalo sin cuenta (20 llamadas/hora). Regístrate con $5 de crédito para llamarlo desde tu código.',
     'home.models.cta': 'Ver cómo conectar',
     'home.trials.title': 'Participar en una prueba',
     'home.trials.lead':
@@ -789,7 +789,7 @@ export const ui = {
     'home.models.count': 'modelo ao vivo',
     'home.models.caps': 'Cobertura de capacidades',
     'home.models.api': 'API de julgamento',
-    'home.models.promo': 'Oferta por tempo limitado: $5 de crédito no cadastro, grátis por um mês.',
+    'home.models.promo': 'Teste sem conta (20 chamadas/hora). Cadastre-se com $5 de crédito para chamar do seu código.',
     'home.models.cta': 'Ver como conectar',
     'home.trials.title': 'Participar de um teste',
     'home.trials.lead':

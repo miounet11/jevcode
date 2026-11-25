@@ -117,7 +117,7 @@ const description = fill(pick(lang, entityCopy.categoryMetaDescription), {
 
 <BaseLayout lang={lang} title={`${catTitle} — ${t('nav.ecosystem')}`} description={description} path={path} schema={schema}>
   <div class="wrap docs-shell">
-    <main class="doc">
+    <div class="doc">
       <p class="doc__breadcrumb">
         <a href={`/${lang}/`}>{t('site.name')}</a> /
         <a href={`/${lang}/ecosystem/`}>{t('nav.ecosystem')}</a> / {catTitle}
@@ -161,7 +161,7 @@ const description = fill(pick(lang, entityCopy.categoryMetaDescription), {
       </ul>
 
       <p><a href={`/${lang}/ecosystem/`}>{copy.back}</a></p>
-    </main>
+    </div>
   </div>
 </BaseLayout>
 

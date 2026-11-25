@@ -17,7 +17,7 @@ const path = `/${lang}/api/`;
 
 const copy = {
   title: 'API',
-  lead: pick(lang, apiCopy.lead).replace('{credit}', `$${centsToUsd(SIGNUP_CREDIT_CENTS)}`).replace('{rate}', `$${INPUT_USD_PER_MILLION}`),
+  lead: pick(lang, apiCopy.lead).replace('{credit}', centsToUsd(SIGNUP_CREDIT_CENTS)).replace('{rate}', String(INPUT_USD_PER_MILLION)),
   getKeyLead: pick(lang, apiCopy.getKeyLead),
   getKey: pick(lang, apiCopy.getKey),
   authTitle: pick(lang, apiCopy.authTitle),
@@ -63,8 +63,8 @@ const okExample = `{
   "model": "clavue-jev",
   "answers": {
     "relevance":  { "noul": 0.92 },
-    "confidence": { "noul": 0.78 },
-    "severity":   { "choice": "medium" }
+    "confidence": { "confidence": 0.78 },
+    "severity":   { "choice": "medium", "confidence": 0.84 }
   },
   "credit": { "cents": ${SIGNUP_CREDIT_CENTS}, "usd": "${centsToUsd(SIGNUP_CREDIT_CENTS)}", "microUsd": ${SIGNUP_CREDIT_MICROUSD}, "inputTokensLeft": ${SIGNUP_INPUT_TOKENS} }
 }`;

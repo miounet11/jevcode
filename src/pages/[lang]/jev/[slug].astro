@@ -41,7 +41,7 @@ const schema = entrySchema(lang, entry);
   schema={schema}
 >
   <div class="wrap docs-shell">
-    <main class="doc">
+    <div class="doc">
       <p class="doc__breadcrumb">
         <a href={`/${lang}/`}>{t('site.name')}</a> /
         <a href={`/${lang}/jev/`}>{c.back}</a> / {entry.name}
@@ -81,7 +81,7 @@ const schema = entrySchema(lang, entry);
         <dt>{c.reviewed}</dt>
         <dd>{entry.reviewedAt}</dd>
       </dl>
-    </main>
+    </div>
   </div>
 </BaseLayout>
 

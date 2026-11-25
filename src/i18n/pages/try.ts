@@ -1,5 +1,16 @@
 import type { Localized } from '../ui';
 
+export const eyebrow: Localized<string> = {
+  zh: '免费试用',
+  en: 'Free trial',
+  ja: '無料お試し',
+  ko: '무료 체험',
+  de: 'Kostenlos testen',
+  fr: 'Essai gratuit',
+  es: 'Prueba gratis',
+  pt: 'Teste grátis',
+};
+
 export const title: Localized<string> = {
   zh: '试一次判定', en: 'Try a judgment', ja: '判定を試す', ko: '판정 시도', de: 'Ein Urteil versuchen', fr: 'Essayer un jugement', es: 'Probar un juicio', pt: 'Tentar um julgamento',
 };
@@ -35,6 +46,17 @@ export const copied: Localized<string> = {
   zh: '链接已复制', en: 'Link copied', ja: 'リンクをコピーしました', ko: '링크 복사됨', de: 'Link kopiert', fr: 'Lien copié', es: 'Enlace copiado', pt: 'Link copiado',
 };
 
+export const copyLink: Localized<string> = {
+  zh: '复制分享链接',
+  en: 'Copy share link',
+  ja: '共有リンクをコピー',
+  ko: '공유 링크 복사',
+  de: 'Freigabelink kopieren',
+  fr: 'Copier le lien de partage',
+  es: 'Copiar enlace para compartir',
+  pt: 'Copiar link de compartilhamento',
+};
+
 export const compareLink: Localized<string> = {
   zh: '看 clavue-jev 和 jev-1.13.0 的同题对比', en: 'Compare clavue-jev with jev-1.13.0 on the same questions', ja: 'clavue-jev と jev-1.13.0 の同問比較を見る', ko: 'clavue-jev와 jev-1.13.0의 같은 문제 비교 보기', de: 'clavue-jev mit jev-1.13.0 bei denselben Fragen vergleichen', fr: 'Comparer clavue-jev et jev-1.13.0 sur les mêmes questions', es: 'Comparar clavue-jev con jev-1.13.0 en las mismas preguntas', pt: 'Comparar clavue-jev com jev-1.13.0 nas mesmas perguntas',
 };
@@ -68,12 +90,12 @@ export const ctaButton: Localized<string> = {
 
 /** 客户端脚本文案。 */
 export const client: Localized<Record<string, string>> = {
-  zh: { needState: '先写一段情况说明。', failed: '没跑成，等一下再试。', tooLong: '最长 4000 字，删一点再试。', tooShort: '太短了，至少写 8 个字。' },
-  en: { needState: 'Write a state first.', failed: 'The judgment failed. Try again later.', tooLong: 'state is capped at 4000 characters.', tooShort: 'state needs at least 8 characters.' },
-  ja: { needState: '先に状態を書いてください。', failed: '判定に失敗しました。しばらくしてからお試しください。', tooLong: 'state は最大 4000 文字です。', tooShort: 'state は 8 文字以上必要です。' },
-  ko: { needState: '먼저 상태를 적어 주세요.', failed: '판정에 실패했습니다. 잠시 후 다시 시도하세요.', tooLong: 'state는 최대 4000자입니다.', tooShort: 'state는 최소 8자입니다.' },
-  de: { needState: 'Schreibe zuerst einen Zustand.', failed: 'Das Urteil ist fehlgeschlagen. Versuche es später erneut.', tooLong: 'state ist auf 4000 Zeichen begrenzt.', tooShort: 'state braucht mindestens 8 Zeichen.' },
-  fr: { needState: "Écrivez d'abord un état.", failed: 'Le jugement a échoué. Réessayez plus tard.', tooLong: 'state est limité à 4000 caractères.', tooShort: 'state nécessite au moins 8 caractères.' },
-  es: { needState: 'Escribe primero un estado.', failed: 'El juicio falló. Inténtalo más tarde.', tooLong: 'state está limitado a 4000 caracteres.', tooShort: 'state necesita al menos 8 caracteres.' },
-  pt: { needState: 'Escreva primeiro um estado.', failed: 'O julgamento falhou. Tente mais tarde.', tooLong: 'state é limitado a 4000 caracteres.', tooShort: 'state precisa de pelo menos 8 caracteres.' },
+  zh: { needState: '先写一段情况说明。', failed: '没跑成，等一下再试。', tooLong: '最长 4000 字，删一点再试。', tooShort: '太短了，至少写 8 个字。', limit: '本小时免费试用次数已用完，稍后再试或注册领取 $5 额度。' },
+  en: { needState: 'Write a state first.', failed: 'The judgment failed. Try again later.', tooLong: 'state is capped at 4000 characters.', tooShort: 'state needs at least 8 characters.', limit: 'Hourly free limit reached. Try again later or sign up for $5 in credit.' },
+  ja: { needState: '先に状態を書いてください。', failed: '判定に失敗しました。しばらくしてからお試しください。', tooLong: 'state は最大 4000 文字です。', tooShort: 'state は 8 文字以上必要です。', limit: 'この1時間の無料お試し回数を使い切りました。しばらくしてから再試行するか、登録して $5 のクレジットを受け取ってください。' },
+  ko: { needState: '먼저 상태를 적어 주세요.', failed: '판정에 실패했습니다. 잠시 후 다시 시도하세요.', tooLong: 'state는 최대 4000자입니다.', tooShort: 'state는 최소 8자입니다.', limit: '이번 시간 무료 체험 횟수를 모두 사용했습니다. 잠시 후 다시 시도하거나 가입하고 $5 크레딧을 받으세요.' },
+  de: { needState: 'Schreibe zuerst einen Zustand.', failed: 'Das Urteil ist fehlgeschlagen. Versuche es später erneut.', tooLong: 'state ist auf 4000 Zeichen begrenzt.', tooShort: 'state braucht mindestens 8 Zeichen.', limit: 'Das kostenlose Stundenlimit ist erreicht. Versuche es später erneut oder melde dich an und erhalte $5 Guthaben.' },
+  fr: { needState: "Écrivez d'abord un état.", failed: 'Le jugement a échoué. Réessayez plus tard.', tooLong: 'state est limité à 4000 caractères.', tooShort: 'state nécessite au moins 8 caractères.', limit: 'La limite gratuite de l’heure est atteinte. Réessayez plus tard ou inscrivez-vous pour 5 $ de crédit.' },
+  es: { needState: 'Escribe primero un estado.', failed: 'El juicio falló. Inténtalo más tarde.', tooLong: 'state está limitado a 4000 caracteres.', tooShort: 'state necesita al menos 8 caracteres.', limit: 'Se alcanzó el límite gratuito de esta hora. Inténtalo más tarde o regístrate para recibir $5 de crédito.' },
+  pt: { needState: 'Escreva primeiro um estado.', failed: 'O julgamento falhou. Tente mais tarde.', tooLong: 'state é limitado a 4000 caracteres.', tooShort: 'state precisa de pelo menos 8 caracteres.', limit: 'O limite gratuito desta hora foi atingido. Tente mais tarde ou cadastre-se para receber $5 de crédito.' },
 };

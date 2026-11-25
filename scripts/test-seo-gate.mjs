@@ -11,6 +11,7 @@
  *  1) llms.txt 七种非英文语言 + 英文都有一节，且标题层级正确
  *  2) llms.txt 只列真实存在且有译文的案例（与 noindex 口径一致）
  *  3) diffSitemap 两个方向都能抓出差异
+ *  4) 友链至少 20 条、URL 不重复，且 rel="friend" 不被补成 nofollow
  */
 
 import { test } from 'node:test';
@@ -224,4 +225,84 @@ test('案例页可索引性：真实数据与构建产物零不一致', () => {
   });
   assert.deepEqual(wronglyIndexable, []);
   assert.deepEqual(wronglyNoindex, []);
+});
+
+/** 从 site.ts 抽出 partners。不跑 TS 加载器，避免测试依赖构建链。 */
+function parsePartners(src) {
+  const start = src.indexOf('export const partners');
+  assert.ok(start >= 0, 'site.ts 缺少 partners');
+  const body = src.slice(start);
+  const end = body.indexOf('\n];');
+  assert.ok(end > 0, 'partners 数组没有结束');
+  const block = body.slice(0, end);
+  const re = /name:\s*(['"])((?:\\.|(?!\1).)*)\1[\s\S]*?url:\s*(['"])(https:\/\/[^'"]+)\3[\s\S]*?zh:\s*(['"])((?:\\.|(?!\5).)*)\5[\s\S]*?en:\s*(['"])((?:\\.|(?!\7).)*)\7/g;
+  return [...block.matchAll(re)].map((m) => ({
+    name: m[2],
+    url: m[4],
+    zh: m[6],
+    en: m[8],
+  }));
+}
+
+function normPartnerUrl(url) {
+  return url.replace(/\/+$/, '');
+}
+
+function anchorHref(tag) {
+  const m = tag.match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+  return m ? (m[1] ?? m[2] ?? '') : '';
+}
+
+test('友链至少 20 条、描述齐全且 URL 不重复', () => {
+  const src = readFileSync(new URL('../src/data/site.ts', import.meta.url), 'utf8');
+  const partners = parsePartners(src);
+  const nameCount = (src.slice(src.indexOf('export const partners')).match(/\bname:/g) ?? []).length;
+  assert.equal(partners.length, nameCount, 'partners 解析漏了条目');
+  assert.ok(partners.length >= 20, `友链只有 ${partners.length} 条`);
+
+  const seen = new Set();
+  for (const p of partners) {
+    assert.ok(p.name.trim(), `空名称: ${p.url}`);
+    assert.ok(p.zh.trim(), `空 zh 描述: ${p.url}`);
+    assert.ok(p.en.trim(), `空 en 描述: ${p.url}`);
+    assert.match(p.url, /^https:\/\//);
+    const key = normPartnerUrl(p.url);
+    assert.ok(!seen.has(key), `重复友链 URL: ${p.url}`);
+    seen.add(key);
+  }
+  assert.equal(seen.size, partners.length);
+  const urls = new Set(partners.map((p) => p.url));
+  assert.ok(urls.has('https://www.xntou.cn/'), '缺少 https://www.xntou.cn/');
+  assert.ok(urls.has('https://www.lawshen.cn/'), '缺少 https://www.lawshen.cn/');
+});
+
+test('友链 rel=friend 不被 nofollow-external 补成 nofollow', () => {
+  const footer = readFileSync(new URL('../src/components/Footer.astro', import.meta.url), 'utf8');
+  assert.match(footer, /rel="friend noopener noreferrer"/);
+  const script = readFileSync(new URL('./nofollow-external.mjs', import.meta.url), 'utf8');
+  assert.match(script, /if \(isFriendLink\(tag\)\) return tag;/);
+
+  const distZh = fileURLToPath(new URL('../dist/zh/index.html', import.meta.url));
+  const distEn = fileURLToPath(new URL('../dist/en/index.html', import.meta.url));
+  if (!existsSync(distZh) || !existsSync(distEn)) return;
+
+  const partners = parsePartners(readFileSync(new URL('../src/data/site.ts', import.meta.url), 'utf8'));
+  for (const file of [distZh, distEn]) {
+    const html = readFileSync(file, 'utf8');
+    const anchors = [...html.matchAll(/<a\b[^>]*>/gi)].map((m) => m[0]);
+    const friends = anchors.filter((tag) => /\brel\s*=\s*["'][^"']*\bfriend\b/i.test(tag));
+    for (const tag of friends) {
+      assert.doesNotMatch(tag, /\bnofollow\b/i, `${file} 友链被加了 nofollow: ${tag}`);
+    }
+    // dist 可能还是本波之前的构建。含 xntou.cn 时，核对已经渲染出来的友链 href：
+    // 每条都要带 friend，且不能带 nofollow。未重建则上面的 friend 锚点检查已足够。
+    if (!html.includes('xntou.cn')) continue;
+    const wanted = new Set(partners.map((p) => normPartnerUrl(p.url)));
+    const present = anchors.filter((tag) => wanted.has(normPartnerUrl(anchorHref(tag))));
+    assert.ok(present.length > 0, `${file} 含 xntou.cn 但没有匹配到友链 href`);
+    for (const tag of present) {
+      assert.match(tag, /\bfriend\b/, tag);
+      assert.doesNotMatch(tag, /\bnofollow\b/i, tag);
+    }
+  }
 });

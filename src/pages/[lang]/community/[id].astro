@@ -102,7 +102,7 @@ const articleSchema = {
 <BaseLayout lang={lang} title={pageTitle} description={desc} path={path} index={detailIndex} schema={[articleSchema]}>
   <section class="section">
     <div class="wrap">
-      <main class="doc">
+      <div class="doc">
         <p class="doc__breadcrumb">
           <a href={`/${lang}/`}>{t('site.name')}</a> /
           <a href={`/${lang}/community/`}>{copy.crumb}</a> / @{entry.screenName}
@@ -170,7 +170,7 @@ const articleSchema = {
         <p class="pback">
           <a href={`/${lang}/community/`}>{copy.back}</a>
         </p>
-      </main>
+      </div>
     </div>
   </section>
 </BaseLayout>

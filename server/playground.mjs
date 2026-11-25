@@ -208,15 +208,24 @@ function escapeHtml(value) {
 function sharePage(lang, run) {
   const zh = lang === 'zh';
   const title = zh ? '一次判定结果' : 'A judgment result';
+  const bar = (label, value) => {
+    const pct = Math.round(Number(value) * 100);
+    return `<div class="bar"><div><span>${escapeHtml(label)}</span><b>${pct}%</b></div><i><em style="width:${pct}%"></em></i></div>`;
+  };
   const bars = Object.entries(run.answers || {}).map(([name, answer]) => {
-    if (typeof answer?.noul === 'number') {
-      const pct = Math.round(answer.noul * 100);
-      return `<div class="bar"><div><span>${escapeHtml(name)}</span><b>${pct}%</b></div><i><em style="width:${pct}%"></em></i></div>`;
+    if (typeof answer?.noul === 'number') return bar(name, answer.noul);
+    if (answer?.choice) {
+      let html = `<p><b>${escapeHtml(name)}</b> → ${escapeHtml(answer.choice)}</p>`;
+      if (typeof answer.confidence === 'number') html += bar(answer.choice, answer.confidence);
+      else if (answer.confidence && typeof answer.confidence === 'object') {
+        html += Object.entries(answer.confidence).map(([option, p]) => bar(option, p)).join('');
+      }
+      return html;
     }
-    if (answer?.choice) return `<p><b>${escapeHtml(name)}</b> → ${escapeHtml(answer.choice)}</p>`;
+    if (typeof answer?.confidence === 'number') return bar(name, answer.confidence);
     return '';
   }).join('');
-  return `<!doctype html><html lang="${escapeHtml(lang)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title} | JevCode</title><style>
+  return `<!doctype html><html lang="${escapeHtml(lang)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>${title} | JevCode</title><style>
     body{margin:0;background:#0b0d12;color:#e7edf5;font:16px/1.5 ui-sans-serif,system-ui,sans-serif}
     main{max-width:760px;margin:0 auto;padding:64px 24px}
     h1{font-size:clamp(32px,5vw,52px);letter-spacing:-.04em;margin:8px 0 18px}

@@ -2,6 +2,23 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-25 — 全面验收修复与 13 站友链接入（grok build 开发 + Jev 双轮门控验收）
+
+### 改动
+
+- **友链生态扩展与页脚重排**：`src/data/site.ts` 新增 13 个经实测 HTTPS 200 的高质量友链（`https://www.xntou.cn/` 星网数科 · 加盟选择专家、`https://www.lawshen.cn/` 律肃审、秒搭、GrokHome、OpenAICN、RooHome、Qwen Code、Qwen3 Coder、New API、妙唱、可圈可点、因评、Socrates，全站共 23 条友链）；`src/components/Footer.astro` 与 `src/styles/global.css` 改为三栏主体 + 独立全宽折行 `.footer__friends` 友链行，保留 `rel="friend noopener noreferrer"` 豁免 `nofollow`；`scripts/test-seo-gate.mjs` 补充友链完整性与无 `nofollow` 回归测试。
+- **P0 交互功能修复**：修复 `src/pages/[lang]/lab.astro` 因 `typeof answer.confidence === 'number'` 优先于 `answer.choice` 导致所有选择题结果被吞的故障；修复 `src/pages/[lang]/try.astro` 与 `src/i18n/pages/try.ts` 缺失选择题置信度条、8 语言硬编码中文「免费试用」、未转义 `innerHTML` 及缺失 HTTP 429 提示，并补齐一键复制分享链接按钮；修复 `src/pages/[lang]/builds.astro` 来源链接 `href="syndication + Jev judgment"` 404 死链。
+- **分享页 SEO 与渲染加固**：`server/playground.mjs` 的 `sharePage` 新增 `<meta name="robots" content="noindex, nofollow">`，补齐 `choice` 数值置信度条与独立 `confidence` 渲染，并在 `scripts/test-playground-security.mjs` 补充端到端单测。
+- **转化文案与多语言一致性**：修复 `src/pages/[lang]/pricing.astro` 与 `src/pages/[lang]/api.astro` 全 8 语言（16 页）双美元符 `$$5.00` / `$$0.042` 错误，并将 `/pricing/` 注册按钮指向 `/login/?mode=register`、对齐 `/api/` 响应示例；修正 `src/i18n/ui.ts` 7 种非中文 `home.models.promo` 不实「free for one month」描述及 `de`/`fr` 导航词。
+- **P0 翻译门禁自愈与基线清零**：强化 `scripts/translate-briefs.py` 三次重试递进温度（0 / 0.25 / 0.45）、多候选安全提取与已有合格译文保护；补齐 `src/data/briefs-i18n.json` 全部 48 条缺失译文并收紧 `scripts/content-check-baseline.json` 至 `[]`（`0 硬问题 / 0 软问题`）。
+- **SEO / 无障碍合规与运维脚本**：消除全部 14 个页面模板的嵌套 `<main>` 地标违规；新增 `src/i18n/pages/topics.ts` 修复 `/topics/` 全 8 语言重复品牌标题（`76 topics | JevCode | JevCode`）及 `/topics/[topic]` 面包屑/返回链接；消除 `src/pages/[lang]/briefs/[id].astro` QAPage JSON-LD 8 语言硬编码中文 `（可接受：...）`；清理 `src/layouts/BaseLayout.astro` 最后一个 `ts(6133)` hint；新增 `scripts/prune-runs.mjs` 过期分享文件清理工具及单元测试。
+
+### 验证
+
+- `npm run check`：`0 errors, 0 warnings, 0 hints`，`jev-i18n` 全通；`node scripts/i18n-gaps.mjs`：0 缺口。
+- `npm test`：**315 / 315 通过**（`fail 0`）；`npm run test:e2e`：**64 通过 / 0 失败**。
+- `npm run build` & `node scripts/preflight.mjs --json`：`19,402` 页构建完成、`check-seo` 双向一致、`content-check` 硬 0 / 软 0、全站 19,401 HTML 零 `$$` / 零重复品牌标题 / 零嵌套 `<main>` / 23 条友链零 `nofollow`。
+
 ## 2026-11-22 — P2/P3 体验转化与 SEO 细节优化
 
 ### 改动

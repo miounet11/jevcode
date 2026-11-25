@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { languages, useTranslations, type Lang } from '../../../i18n/ui';
+import { languages, pick, useTranslations, type Lang } from '../../../i18n/ui';
+import * as topicsCopy from '../../../i18n/pages/topics';
 import briefs from '../../../data/daily-briefs.json';
 import briefI18n from '../../../data/briefs-i18n.json';
 import { projects } from '../../../data/ecosystem';
@@ -44,6 +45,9 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Lang };
 const { entry } = Astro.props as { entry: TrafficEntry };
 const t = useTranslations(lang);
+const topicsHeading = pick(lang, topicsCopy.heading);
+const entriesLabel = pick(lang, topicsCopy.entriesTpl).replace('{n}', String(entry.relatedCount));
+const backToTopics = pick(lang, topicsCopy.backToTopics);
 
 const isDownload = entry.topic === DOWNLOAD_CATEGORY.id;
 const software = isDownload ? listDownloadSoftware({ locale: lang }) : [];
@@ -80,15 +84,14 @@ const schema = [
 
 <BaseLayout lang={lang} title={entry.title} description={entry.description} path={entry.path} schema={schema}>
   <div class="wrap docs-shell">
-    <main class="doc">
+    <div class="doc">
       <p class="doc__breadcrumb">
-        <a href={`/${lang}/`}>{t('site.name')}</a> /
-        <a href={`/${lang}/topics/`}>{entry.label.startsWith('AI') ? 'Topics' : entry.label}</a> / {entry.label}
+        <a href={`/${lang}/`}>{t('site.name')}</a> / <a href={`/${lang}/topics/`}>{topicsHeading}</a> / {entry.label}
       </p>
 
       <h1 class="doc__title">{entry.title}</h1>
       <p class="doc__desc">{entry.description}</p>
-      <p class="topic__count">{entry.relatedCount} entries · {entry.keywords.slice(0, 6).join(' · ')}</p>
+      <p class="topic__count">{entriesLabel} · {entry.keywords.slice(0, 6).join(' · ')}</p>
 
       {isDownload && (
         <section class="download">
@@ -123,8 +126,8 @@ const schema = [
         ))}
       </ul>
 
-      <p class="topic__back"><a href={`/${lang}/topics/`}>{entry.label}</a></p>
-    </main>
+      <p class="topic__back"><a href={`/${lang}/topics/`}>{backToTopics}</a></p>
+    </div>
   </div>
 </BaseLayout>
 

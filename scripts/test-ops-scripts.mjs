@@ -13,7 +13,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn, execFile } from 'node:child_process';
-import { mkdtempSync, rmSync, existsSync, writeFileSync, readFileSync, readdirSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, rmSync, existsSync, writeFileSync, readFileSync, readdirSync, utimesSync } from 'node:fs';
+import { pruneRuns } from './prune-runs.mjs';
 import { blockingDirty } from './pipeline-guard.mjs';
 import { applyMetrics, insertEntries, mergeTweets, tweetsFromSearch } from './lib/community-x.mjs';
 import { nextScenarios } from './lib/lab-supplement.mjs';
@@ -756,6 +757,74 @@ test('cron 失败分支接入工作区自愈、包含日志轮转，并安装带
   const reportSh = readFileSync(new URL('./daily-report-cron.sh', import.meta.url), 'utf8');
   assert.match(reportSh, /source \.env/);
   assert.match(reportSh, /exec node scripts\/daily-report\.mjs/);
+});
+
+test('prune-runs：过期的 12 位 json 被删，近期记录、compare-log 和其它文件保留', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-prune-'));
+  try {
+    const now = Date.parse('2026-11-25T00:00:00Z');
+    const day = 86400_000;
+    const write = (name, ageDays, body) => {
+      const file = path.join(dir, name);
+      writeFileSync(file, body);
+      const when = new Date(now - ageDays * day);
+      utimesSync(file, when, when);
+    };
+    write('abcdef012345.json', 40, 'old-run');
+    write('zzzzzzzzzzzz.json', 2, 'new-run');
+    write('compare-log.jsonl', 400, 'keep-log');
+    write('notes.txt', 400, 'keep-note');
+    // 大写文件名必须和上面的 12 位小写文件错开：macOS 默认不区分大小写，
+    // ABCDEF012345.json 会覆盖 abcdef012345.json。
+    write('ABCDEFGHIJKL.json', 400, 'keep-upper');
+    write('short.json', 400, 'keep-short');
+    const nested = path.join(dir, 'nested');
+    mkdirSync(nested);
+    writeFileSync(path.join(nested, 'abcdef012345.json'), 'keep-nested');
+
+    const result = pruneRuns({ dir, maxAgeDays: 30, now });
+    assert.equal(result.scanned, 2);
+    assert.equal(result.deleted, 1);
+    assert.equal(result.kept, 1);
+    assert.equal(result.freedBytes, Buffer.byteLength('old-run'));
+    assert.equal(existsSync(path.join(dir, 'abcdef012345.json')), false);
+    assert.equal(readFileSync(path.join(dir, 'zzzzzzzzzzzz.json'), 'utf8'), 'new-run');
+    assert.equal(readFileSync(path.join(dir, 'compare-log.jsonl'), 'utf8'), 'keep-log');
+    assert.equal(readFileSync(path.join(dir, 'notes.txt'), 'utf8'), 'keep-note');
+    assert.equal(readFileSync(path.join(dir, 'ABCDEFGHIJKL.json'), 'utf8'), 'keep-upper');
+    assert.equal(readFileSync(path.join(dir, 'short.json'), 'utf8'), 'keep-short');
+    assert.equal(readFileSync(path.join(nested, 'abcdef012345.json'), 'utf8'), 'keep-nested');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('prune-runs：--dry-run 报告将删除的数量，但不删文件', async () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-prune-'));
+  try {
+    const old = path.join(dir, 'abc123def456.json');
+    const recent = path.join(dir, 'fff000eee111.json');
+    const log = path.join(dir, 'compare-log.jsonl');
+    writeFileSync(old, 'stale');
+    writeFileSync(recent, 'fresh');
+    writeFileSync(log, 'log');
+    const ancient = new Date(Date.now() - 90 * 86400_000);
+    utimesSync(old, ancient, ancient);
+    utimesSync(log, ancient, ancient);
+
+    const r = await run('scripts/prune-runs.mjs', [`--dir=${dir}`, '--days=30', '--dry-run', '--json']);
+    assert.equal(r.code, 0, r.out);
+    const payload = JSON.parse(r.out);
+    assert.equal(payload.dryRun, true);
+    assert.equal(payload.deleted, 1);
+    assert.equal(payload.kept, 1);
+    assert.equal(payload.scanned, 2);
+    assert.equal(readFileSync(old, 'utf8'), 'stale');
+    assert.equal(readFileSync(recent, 'utf8'), 'fresh');
+    assert.equal(readFileSync(log, 'utf8'), 'log');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('支线抓取脚本具备网络超时保护，避免单点挂死耗尽 900s 预算', () => {

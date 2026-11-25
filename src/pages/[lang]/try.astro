@@ -12,6 +12,7 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const path = `/${lang}/try/`;
 const copy = {
+  eyebrow: pick(lang, tryCopy.eyebrow),
   title: pick(lang, tryCopy.title),
   lead: pick(lang, tryCopy.lead),
   state: pick(lang, tryCopy.state),
@@ -19,6 +20,7 @@ const copy = {
   running: pick(lang, tryCopy.running),
   share: pick(lang, tryCopy.share),
   copied: pick(lang, tryCopy.copied),
+  copyLink: pick(lang, tryCopy.copyLink),
   ctaTitle: pick(lang, tryCopy.ctaTitle),
   ctaLead: pick(lang, tryCopy.ctaLead),
   ctaButton: pick(lang, tryCopy.ctaButton),
@@ -41,7 +43,7 @@ const preset = {
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
   <section class="section">
     <div class="wrap try">
-      <p class="eyebrow"><span class="eyebrow__dot"></span>免费试用</p>
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{copy.eyebrow}</p>
       <h1>{copy.title}</h1>
       <p class="try__lead">{copy.lead}</p>
       <p class="try__lead"><a href={`/${lang}/compare/`}>{pick(lang, tryCopy.compareLink)}</a></p>
@@ -54,7 +56,10 @@ const preset = {
 
       <div class="try__result" id="result" hidden>
         <div id="bars"></div>
-        <a class="btn btn--ghost" id="share" href="#"></a>
+        <div class="try__share">
+          <a class="btn btn--ghost" id="share" href="#"></a>
+          <button class="btn btn--ghost" id="copy-share" type="button">{copy.copyLink}</button>
+        </div>
         <aside class="try__cta">
           <p class="try__cta-title">{copy.ctaTitle}</p>
           <p class="try__cta-lead">{copy.ctaLead}</p>
@@ -72,26 +77,48 @@ const preset = {
   const resultEl = document.getElementById('result');
   const barsEl = document.getElementById('bars');
   const shareEl = document.getElementById('share');
+  const copyShareEl = document.getElementById('copy-share');
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[c]));
+  }
 
   function bar(label, value) {
     const pct = Math.round(Number(value) * 100);
-    return `<div class="try__bar"><div class="try__bar-label"><span>${label}</span><b>${pct}%</b></div><div class="try__track"><span style="width:${pct}%"></span></div></div>`;
+    return `<div class="try__bar"><div class="try__bar-label"><span>${esc(label)}</span><b>${pct}%</b></div><div class="try__track"><span style="width:${pct}%"></span></div></div>`;
   }
 
   function render(record) {
     const html = [];
     for (const [name, answer] of Object.entries(record.answers || {})) {
       if (typeof answer.noul === 'number') html.push(bar(name, answer.noul));
-      else if (answer.choice && answer.confidence) {
-        html.push(`<p class="try__choice"><b>${name}</b> → ${answer.choice}</p>`);
-        for (const [option, p] of Object.entries(answer.confidence)) html.push(bar(option, p));
-      }
+      else if (answer.choice) {
+        html.push(`<p class="try__choice"><b>${esc(name)}</b> → ${esc(answer.choice)}</p>`);
+        if (typeof answer.confidence === 'number') html.push(bar(answer.choice, answer.confidence));
+        else if (answer.confidence && typeof answer.confidence === 'object') {
+          for (const [option, p] of Object.entries(answer.confidence)) html.push(bar(option, p));
+        }
+      } else if (typeof answer.confidence === 'number') html.push(bar(name, answer.confidence));
     }
     barsEl.innerHTML = html.join('');
     shareEl.href = `/${lang}/r/${record.id}/`;
     shareEl.textContent = copy.share;
     resultEl.hidden = false;
   }
+
+  let copyTimer = 0;
+  copyShareEl.addEventListener('click', async () => {
+    const href = shareEl.getAttribute('href');
+    if (!href || href === '#') return;
+    try {
+      await navigator.clipboard.writeText(new URL(href, location.origin).href);
+      copyShareEl.textContent = copy.copied;
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => { copyShareEl.textContent = copy.copyLink; }, 1600);
+    } catch {}
+  });
 
   runEl.addEventListener('click', async () => {
     errorEl.hidden = true;
@@ -108,13 +135,14 @@ const preset = {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ state: stateEl.value, questions: preset.questions }),
       });
+      if (res.status === 429) throw Object.assign(new Error(clientCopy.limit), { limit: true });
       const data = await res.json();
       if (!res.ok) throw new Error(clientCopy.failed);
       render(data);
       history.replaceState({}, '', `/${lang}/r/${data.id}/`);
     } catch (err) {
       errorEl.hidden = false;
-      errorEl.textContent = clientCopy.failed;
+      errorEl.textContent = err && err.limit ? clientCopy.limit : clientCopy.failed;
     } finally {
       runEl.disabled = false;
       runEl.classList.remove('is-loading');
@@ -149,6 +177,7 @@ const preset = {
   #run.is-loading { opacity: 0.75; cursor: progress; }
   .try__error { color: var(--rose); }
   .try__result { margin-top: 28px; display: grid; gap: 14px; }
+  .try__share { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
   .try__cta {
     margin-top: 8px; padding: 18px;
     border: 1px solid var(--border-strong); border-radius: 12px;

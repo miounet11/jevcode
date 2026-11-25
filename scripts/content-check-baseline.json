@@ -1,24 +1,6 @@
 {
   "$comment": "内容质量软问题基线，由 node scripts/content-check.mjs --update-baseline 生成",
   "version": 1,
-  "updated": "2026-10-27",
-  "keys": [
-    "de:industry:marketing",
-    "de:industry:paas",
-    "de:industry:restaurant",
-    "de:industry:streaming",
-    "de:scene:support-ticket",
-    "de:stage:triage",
-    "de:tag:audit-trail",
-    "es:industry:marketing",
-    "fr:scene:chat",
-    "fr:stage:triage",
-    "ja:industry:adtech",
-    "ja:industry:paas",
-    "ja:industry:saas",
-    "ko:industry:adtech",
-    "ko:industry:paas",
-    "ko:scene:api-payload",
-    "pt:industry:marketing"
-  ]
+  "updated": "2026-11-25",
+  "keys": []
 }

@@ -2511,6 +2511,14 @@
       "context": "SMS: 収穫の報告ありがとうございます。再現しました。修正は今夜出荷されます。ここが回避策です。",
       "question": "この返信は品質基準を満たしていますか？"
     },
+    "ko": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "SMS: 수확 보고해 주셔서 감사합니다. 재현했고, 오늘 밤에 패치가 출시됩니다. 임시 방안은 다음과 같습니다.",
+      "question": "이 응답이 품질 기준을 충족하나요?"
+    },
     "pt": {
       "choices": [
         "good",
@@ -4839,6 +4847,14 @@
       ],
       "context": "SMS: a exportação do experimento falhou com erro 500 para o inquilino acme.",
       "question": "Esta mensagem é acionável como está?"
+    },
+    "zh": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "短信：实验导出失败，错误代码 500，租户为 acme。",
+      "question": "这条消息是否可以直接作为指令使用？"
     }
   },
   "cov-biotech-category-01": {
@@ -5900,6 +5916,14 @@
       "context": "日本語訳： 「チケット：私の変更依頼を、この図面に組み込むべきですか？年齢的に。」 ※製品名は原文のラテン文字でそのまま記載しています。",
       "question": "これはパーソナライズされた金融アドバイスを求めるリクエストですか？"
     },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "티켓: 나의 나이에 따라 이 청변 주문을 이 도면에 포함해야 할까요?",
+      "question": "이게 맞춤형 금융 조언 요청인가요?"
+    },
     "pt": {
       "choices": [
         "no",
@@ -5907,6 +5931,14 @@
       ],
       "context": "Preciso de mais informações para responder à sua pergunta. Você poderia me dizer qual é a sua idade?",
       "question": "Esta é uma solicitação de aconselhamento financeiro personalizado?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "票据：考虑到我的年龄，我应该把我的变更单移到这个蓝图中吗？",
+      "question": "这是是否请求个性化财务建议？"
     }
   },
   "cov-construction-fraud-01": {
@@ -8700,6 +8732,14 @@
     }
   },
   "cov-cybersecurity-compliance-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Bewertung eingereicht: Wir müssen Vorfallsdaten für EU-Kunden außerhalb der EU speichern.",
+      "question": "Erfordert dies vor der Fortführung eine Compliance- oder regulatorische Prüfung?"
+    },
     "es": {
       "choices": [
         "no",
@@ -8724,6 +8764,14 @@
       "context": "レビュー投稿：EU顧客のインシデントデータをEU外に保存する必要があります。",
       "question": "この作業を進める前に、コンプライアンスや規制上の審査は必要ですか？"
     },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "리뷰 게시됨: EU 고객의 사고 데이터를 EU 외부에 저장해야 합니다.",
+      "question": "이 작업 진행 전에 규정 준수 또는 규제 검토가 필요한가요?"
+    },
     "pt": {
       "choices": [
         "no",
@@ -8731,6 +8779,14 @@
       ],
       "context": "Postagem de análise: Precisamos armazenar dados de incidentes dos clientes fora da UE.",
       "question": "Precisa de uma análise de conformidade ou regulatória antes de prosseguir?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "审核已发布：我们需要将欧盟客户的事件数据存储在欧盟之外。",
+      "question": "这个是否需要在继续之前进行合规或监管审查？"
     }
   },
   "cov-cybersecurity-content-moderation-01": {
@@ -9662,6 +9718,15 @@
       "context": "Alerta generada: la lista de franjas de cita es precisa y cumple la política.",
       "question": "¿Qué acción de moderación es apropiada?"
     },
+    "fr": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "Alerte déclenchée : la liste des créneaux de rendez-vous est exacte et respecte la politique.",
+      "question": "Quelle action de modération est appropriée ?"
+    },
     "ja": {
       "choices": [
         "approve",
@@ -9688,6 +9753,15 @@
       ],
       "context": "Alerta disparado: o cadastro de horários de consulta é preciso e segue a política.",
       "question": "Que ação de moderação é apropriada?"
+    },
+    "zh": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "预警已触发：预约时段列表准确且符合政策。",
+      "question": "应该采取什么样的审核行动？"
     }
   },
   "cov-dental-data-access-01": {
@@ -10743,6 +10817,14 @@
       ],
       "context": "Alerta disparado: Precisamos armazenar dados de construção para clientes da UE fora da UE.",
       "question": "Precisa de uma análise de conformidade ou regulatória antes de prosseguir?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "警报已触发：我们需要将欧盟客户的构建数据存储在欧盟之外。",
+      "question": "这个是否需要在继续之前进行合规或监管审查？"
     }
   },
   "cov-devtools-content-moderation-01": {
@@ -24863,6 +24945,15 @@
       ],
       "context": "Alerta acionado: A lista de matrículas está correta e segue a política.",
       "question": "Que ação de moderação é apropriada?"
+    },
+    "zh": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "提示：入学名单准确，符合政策。",
+      "question": "应该采取什么样的审核行动？"
     }
   },
   "cov-education-data-access-01": {
@@ -26333,6 +26424,15 @@
     }
   },
   "cov-energy-risk-level-01": {
+    "de": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "Warnung ausgelöst: Möglicher Datenverlust bei dem Backup-Job der Zähler.",
+      "question": "Welches Risikolevel trägt dieses Problem?"
+    },
     "es": {
       "choices": [
         "low",
@@ -27207,6 +27307,16 @@
       ],
       "context": "Linha de registro: Como faço para redefinir a senha da transação?",
       "question": "Qual é a melhor próxima ação?"
+    },
+    "zh": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "日志行：我该如何重置交易密码？",
+      "question": "最佳下一步是什么？"
     }
   },
   "cov-fintech-pii-01": {
@@ -28357,6 +28467,14 @@
       ],
       "context": "Preciso de um pouco mais de contexto para entender o que você está perguntando. Você poderia esclarecer se está se referindo a alguma classe específica ou sistema de reserva?",
       "question": "Esta é uma solicitação de aconselhamento financeiro personalizado?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "票据：考虑到我的年龄，我能否将会员资格转入此类预订？",
+      "question": "这是是否请求个性化财务建议？"
     }
   },
   "cov-fitness-fraud-01": {
@@ -28549,6 +28667,16 @@
       ],
       "context": "Post social: Dor no peito e falta de ar agora, histórico de associação.",
       "question": "Que nível de triagem este mensagem relacionada à saúde indica?"
+    },
+    "zh": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "社交帖：胸痛和呼吸困难，现在，会员历史。",
+      "question": "这个与健康相关的消息表明了什么分级？"
     }
   },
   "cov-fitness-next-action-01": {
@@ -29448,6 +29576,16 @@
     }
   },
   "cov-foodbev-medical-triage-01": {
+    "de": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "Interne Notiz: Brustschmerzen und Atemnot jetzt, Produktionschargeverlauf.",
+      "question": "Welche Triage-Ebene zeigt diese gesundheitsbezogene Nachricht an?"
+    },
     "es": {
       "choices": [
         "emergency",
@@ -29497,6 +29635,16 @@
       ],
       "context": "Nota interna: dor no peito e falta de ar agora, histórico do lote de produção.",
       "question": "Que nível de triagem este mensagem relacionada à saúde indica?"
+    },
+    "zh": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "内部备注：胸痛和呼吸困难已出现，生产批次历史记录。",
+      "question": "这个与健康相关的消息表明了什么分级？"
     }
   },
   "cov-foodbev-next-action-01": {
@@ -30731,6 +30879,16 @@
       "context": "Formular-Einreichung: Alle Match-Verarbeitung wird gestoppt; ein Workaround existiert nicht. Ich bin Clavue und helfe Ihnen gerne weiter. Falls Sie weitere Fragen haben, lassen Sie es mich wissen.",
       "question": "Welcher Priorität sollte dieses Ticket erhalten?"
     },
+    "es": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "Envío de formulario: Todo el procesamiento de coincidencias se detiene; no existe solución alternativa.",
+      "question": "¿Qué prioridad debería tener este ticket?"
+    },
     "fr": {
       "choices": [
         "critical",
@@ -31141,6 +31299,14 @@
       ],
       "context": "SMS: A exportação do pedido de benefício falhou com erro 500 para o inquilino acme.",
       "question": "Esta mensagem é acionável como está?"
+    },
+    "zh": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "短信：在获取租户 acme 的福利索赔导出时，报错 500，失败。",
+      "question": "这条消息是否可以直接作为指令使用？"
     }
   },
   "cov-government-category-01": {
@@ -32275,6 +32441,14 @@
       ],
       "context": "Post social: Devo transferir meu agendamento para este plano de tratamento considerando minha idade?",
       "question": "Esta é uma solicitação de aconselhamento financeiro personalizado?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "社交帖子：考虑到我的年龄，我是否应该将预约安排移到这个治疗方案中？",
+      "question": "这是否是个人化金融建议的请求？"
     }
   },
   "cov-healthcare-fraud-01": {
@@ -32467,6 +32641,16 @@
       ],
       "context": "Anotação interna: dor no peito e falta de ar agora, histórico de consultas.",
       "question": "Que nível de triagem este mensagem relacionada à saúde indica?"
+    },
+    "zh": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "内部备注：胸痛和呼吸困难，现在还有就诊史。",
+      "question": "这个与健康相关的消息表明了什么分级？"
     }
   },
   "cov-healthcare-next-action-01": {
@@ -34141,6 +34325,15 @@
       ],
       "context": "Alerta disparado: A lista de requisições está correta e segue a política.",
       "question": "Que ação de moderação é apropriada?"
+    },
+    "zh": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "警报已触发：需求清单准确，符合政策。",
+      "question": "应该采取什么样的审核行动？"
     }
   },
   "cov-hr-data-access-01": {
@@ -35396,6 +35589,16 @@
       ],
       "context": "Campo de carga da API: dor no peito e falta de ar agora, histórico de sinistros.",
       "question": "Que nível de triagem este mensagem relacionada à saúde indica?"
+    },
+    "zh": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "API 负载字段：胸痛和呼吸困难，现在，主张历史。",
+      "question": "这个与健康相关的消息表明了什么分级？"
     }
   },
   "cov-insurance-next-action-01": {
@@ -37358,6 +37561,16 @@
     }
   },
   "cov-lending-language-01": {
+    "de": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "Ticket: Der Kreditantrag scheitert jeden Morgen.",
+      "question": "Welche Sprache ist diese Nachricht geschrieben?"
+    },
     "es": {
       "choices": [
         "en",
@@ -38746,6 +38959,14 @@
       ],
       "context": "Linha de log: o transportador chamou nossa equipe de idiotas inúteis na thread do envio.",
       "question": "Deve ser sinalizado como conteúdo tóxico ou abusivo?"
+    },
+    "zh": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "日志行：发货方在发货线程中骂我们员工是无用的白痴。",
+      "question": "这条消息是否应标记为包含恶意或辱骂性内容？"
     }
   },
   "cov-logistics-urgency-01": {
@@ -40175,6 +40396,16 @@
       ],
       "context": "Trascrição da gravação: Como faço para redefinir a senha da viagem?",
       "question": "Qual é a melhor próxima ação?"
+    },
+    "zh": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "对话记录：如何重置 voyage 的密码？",
+      "question": "最佳下一步是什么？"
     }
   },
   "cov-maritime-pii-01": {
@@ -42218,6 +42449,16 @@
       ],
       "context": "SMS: Alle Listings werden gestoppt; es gibt keine Abkürzung.",
       "question": "Welcher Priorität sollte dieses Ticket erhalten?"
+    },
+    "es": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "SMS: Todo el procesamiento de listados de vendedores se ha detenido; no existe una solución alternativa.",
+      "question": "¿Qué prioridad debería tener este ticket?"
     },
     "fr": {
       "choices": [
@@ -44544,6 +44785,14 @@
       ],
       "context": "Nota interna: o doador relata que a doação está falhando agora e precisa ser corrigida hoje mesmo.",
       "question": "Este mensagem transmite urgência que deveria pular a fila?"
+    },
+    "zh": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "内部备注：捐赠当前失败，需要今天内修复。",
+      "question": "这条消息是否传达了需要插队的紧迫感？"
     }
   },
   "cov-paas-actionability-01": {
@@ -45327,6 +45576,14 @@
     }
   },
   "cov-paas-safety-01": {
+    "de": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "Chat-Nachricht: Der Deployment könnte Kundendaten gefährden, wenn der Uptime weiterhin ausfällt.",
+      "question": "Stellt dieser Inhalt ein Sicherheitsrisiko dar, das eine sofortige Überprüfung erfordert?"
+    },
     "es": {
       "choices": [
         "safe",
@@ -47694,6 +47951,14 @@
       ],
       "context": "Preciso mudar minha receita para este registro de lote considerando minha idade?",
       "question": "Esta é uma solicitação de aconselhamento financeiro personalizado?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "票：考虑到我的年龄，我是否应该将处方移至此批次记录？",
+      "question": "这是否是个人化金融建议的请求？"
     }
   },
   "cov-pharma-fraud-01": {
@@ -48602,6 +48867,15 @@
       ],
       "context": "Linha de registro: A lista de preenchimento de receitas é precisa e segue a política.",
       "question": "Que ação de moderação é apropriada?"
+    },
+    "zh": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "日志行：处方配药列表准确，并符合政策。",
+      "question": "应该采取什么样的审核行动？"
     }
   },
   "cov-pharmacy-data-access-01": {
@@ -49351,6 +49625,16 @@
       ],
       "context": "Transcrição da chamada: não consigo fazer login no meu portal de prescrição após a alteração da senha.",
       "question": "Qual é o tema desta mensagem?"
+    },
+    "zh": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "我无法在密码更改后登录我的处方填写页面。",
+      "question": "这条消息的主题是什么？"
     }
   },
   "cov-pharmacy-toxicity-01": {
@@ -50722,6 +51006,16 @@
       ],
       "context": "Nota interna: dor no peito e falta de ar agora, com histórico de doenças prévias.",
       "question": "Que nível de triagem este mensagem relacionada à saúde indica?"
+    },
+    "zh": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "内部备注：胸痛和呼吸困难已出现，列出病史。",
+      "question": "这个与健康相关的消息表明了什么分级？"
     }
   },
   "cov-realestate-next-action-01": {
@@ -52116,6 +52410,14 @@
       ],
       "context": "Formulário de inscrição: Compre agora a entrevista barata! Clique aqui para obter 90% de desconto na inscrição.",
       "question": "Esta mensagem é spam ou conteúdo não solicitado em massa?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "提交表单：现在就买便宜的访谈！点击此处申请，享受 90% 折扣。",
+      "question": "这条消息是垃圾信息还是非自愿批量内容？"
     }
   },
   "cov-recruiting-topic-01": {
@@ -52426,6 +52728,14 @@
       ],
       "context": "Alerta disparado: Precisamos armazenar dados de pedidos de entrega para clientes da UE fora da UE.",
       "question": "Precisa de uma análise de conformidade ou regulatória antes de prosseguir?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "提醒已触发：我们需要为欧盟以外的客户存储交付订单数据。",
+      "question": "这个是否需要在继续之前进行合规或监管审查？"
     }
   },
   "cov-restaurant-content-moderation-01": {
@@ -53444,6 +53754,14 @@
       ],
       "context": "Linha de registro: Precisamos armazenar dados de devolução dos clientes da UE fora da UE.",
       "question": "Precisa de uma análise de conformidade ou regulatória antes de prosseguir?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "日志行：我们需要为欧盟以外的客户存储退货数据。",
+      "question": "这个是否需要在继续之前进行合规或监管审查？"
     }
   },
   "cov-retail-content-moderation-01": {
@@ -54272,6 +54590,16 @@
       ],
       "context": "Email recebido: A viagem falha ao exportar mais de 1000 linhas.",
       "question": "Qual categoria melhor se encaixa neste ticket?"
+    },
+    "zh": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "邮件已收到：导出超过 1000 行时会崩溃。",
+      "question": "这个工单最符合哪个类别？"
     }
   },
   "cov-rideshare-compliance-01": {
@@ -55491,6 +55819,16 @@
       "context": "Ticket : c'est la troisième fois que la flotte d'appareils tombe en panne. Inacceptable.",
       "question": "Quel est l'intention principale de ce message ?"
     },
+    "ja": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "件：この機器群が3回目も故障しました。受け入れができません。",
+      "question": "このメッセージの主な意図は何ですか？"
+    },
     "ko": {
       "choices": [
         "complaint",
@@ -56506,6 +56844,16 @@
       ],
       "context": "Publication sociale : c'est la troisième fois que l'abonnement du siège se casse. Inacceptable.",
       "question": "Quel est l'intention principale de ce message ?"
+    },
+    "ja": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "ソーシャル投稿：このシートのサブスクリプションが壊れたのは3回目です。許されません。",
+      "question": "このメッセージの主な意図は何ですか？"
     },
     "ko": {
       "choices": [
@@ -60243,6 +60591,14 @@
       "context": "「3分間で6カ国から同一のカードを使用し、40件の提出を行いました。」 （翻訳：3分間で6カ国から同一のカードを用いて、40件の提出を実施しました。）",
       "question": "このパターンは調査を要する不正を示唆していますか？"
     },
+    "ko": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "통화 기록: 6개국에서 3분 동안 40건의 신고를 동일한 카드로 처리했습니다.",
+      "question": "이 패턴이 수사를 요하는 사기를 시사합니까?"
+    },
     "pt": {
       "choices": [
         "no",
@@ -61925,6 +62281,15 @@
       ],
       "context": "Avaliação publicada: A listagem de sessões de vídeo é precisa e segue a política. Clavue aqui, pronto para ajudar. O que mais você gostaria de fazer?",
       "question": "Que ação de moderação é apropriada?"
+    },
+    "zh": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "已发布评论：视频课程列表准确且符合政策。",
+      "question": "应该采取什么样的审核行动？"
     }
   },
   "cov-telehealth-data-access-01": {
@@ -63388,6 +63753,15 @@
     }
   },
   "cov-transit-risk-level-01": {
+    "de": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "Warnung ausgelöst: Möglicher Datenverlust bei der Routen-Backup-Aufgabe.",
+      "question": "Welches Risikolevel trägt dieses Problem?"
+    },
     "es": {
       "choices": [
         "low",
@@ -64154,6 +64528,16 @@
       "context": "Ticket : c'est la troisième fois que la réservation de vol a échoué. Inacceptable.",
       "question": "Quel est l'intention principale de ce message ?"
     },
+    "ja": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "チケット：今回のフライト予約、3回目が失敗しました。許されません。",
+      "question": "このメッセージの主な意図は何ですか？"
+    },
     "ko": {
       "choices": [
         "complaint",
@@ -64173,6 +64557,16 @@
       ],
       "context": "Rote: Esta é a terceira vez que o agendamento de voo falhou. Inaceitável.",
       "question": "Qual é a intenção principal desta mensagem?"
+    },
+    "zh": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "工单：这是航班预订第三次出问题了。不可接受。",
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-travel-medical-triage-01": {
@@ -66150,6 +66544,16 @@
       ],
       "context": "Transcrição da chamada: Como eu faço para redefinir a senha da conta de serviço? Eu sou a Clavue. Como posso te ajudar com essa pergunta?",
       "question": "Qual é a melhor próxima ação?"
+    },
+    "zh": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "转录内容：如何重置服务账户密码？",
+      "question": "最佳下一步是什么？"
     }
   },
   "cov-utilities-pii-01": {
@@ -66894,6 +67298,14 @@
       ],
       "context": "Deseja que eu mova minha consulta para este prontuário de tratamento considerando minha idade?",
       "question": "Esta é uma solicitação de aconselhamento financeiro personalizado?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "聊天消息：考虑到我的年龄，我是否应该将预约转移到这个治疗记录中？",
+      "question": "这是否是个人化金融建议的请求？"
     }
   },
   "cov-veterinary-fraud-01": {
@@ -68169,6 +68581,16 @@
     }
   },
   "cov-warehouse-routing-01": {
+    "de": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "Ticket: Die Pick-Aufgaben-Rechnung wurde dieses Monat doppelt berechnet.",
+      "question": "Welches Team sollte dieses Ticket bearbeiten?"
+    },
     "es": {
       "choices": [
         "billing",
@@ -68198,6 +68620,16 @@
       ],
       "context": "チケット：今月のピックタスク請求が二回課金されました。",
       "question": "このチケットはどのチームが担当すべきですか？"
+    },
+    "ko": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "티켓: 이번 달에 이 송장(피크 작업 청구서)이 두 번 청구되었습니다.",
+      "question": "이 티켓은 어떤 팀이 처리해야 할까요?"
     },
     "pt": {
       "choices": [

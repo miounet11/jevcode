@@ -264,6 +264,7 @@ export const site = {
  * 友链站点。
  *
  * 定位描述取自各站首页的 title/description（2026-09-19 实采），不臆造。
+ * 2026-11-25 追加 13 条已核对友链（星网数科 · 加盟选择专家、律肃审及同批站点）。
  * 按约定只链首页：站点的 /downloads、/releases 等深层路径会随版本变动，
  * 链首页最不容易失效。
  */
@@ -356,19 +357,107 @@ export const partners: Partner[] = [
     },
   },
   {
-    name: '加盟选择专家',
+    name: '星网数科 · 加盟选择专家',
     url: 'https://www.xntou.cn/',
     desc: {
-      zh: '星网数科多模态智能引擎：加盟选址、项目决策与招商视觉合规',
-      en: 'Multimodal AI engine for franchise site selection, project vetting and compliance',
+      zh: '加盟选择专家官方多模态智能引擎，覆盖加盟选址、项目决策、门头视觉、招商视频与合规风控',
+      en: 'Multimodal AI engine for franchise site selection, project decisions, storefront visuals, video and compliance',
     },
   },
   {
     name: '律肃审',
     url: 'https://www.lawshen.cn/',
     desc: {
-      zh: '法律条文查询、普法解读与法院律所名录，公开内容均标出处',
-      en: 'Chinese statutes, plain-language legal explainers, court and law-firm directory with cited sources',
+      zh: '法律条文查询、普法解读、法院与律所地图，全部核对并标注公开出处',
+      en: 'Chinese statutes, legal guides, and court & law firm directory with verified public citations',
+    },
+  },
+  {
+    name: '秒搭',
+    url: 'https://www.imiaoda.com.cn/',
+    desc: {
+      zh: '面向中文用户的 AI 工作台，生成 PPT、文档、网页、表格与合同审阅',
+      en: 'Chinese AI workbench for slides, documents, web pages, spreadsheets and contract review',
+    },
+  },
+  {
+    name: 'GrokHome',
+    url: 'https://www.grokhome.cn/',
+    desc: {
+      zh: 'AI 订阅价格地图：ChatGPT / Claude / Gemini 官方地区价与卡网有货对照',
+      en: 'AI subscription price map comparing official regional plans and verified reseller availability',
+    },
+  },
+  {
+    name: 'OpenAICN',
+    url: 'https://www.openaicn.cn/',
+    desc: {
+      zh: '大模型官方 API Token 单价、缓存读写、订阅 Plan 与中转倍率对照表',
+      en: 'Official API token pricing, cache rates, subscription plans and relay multipliers across frontier LLMs',
+    },
+  },
+  {
+    name: 'RooHome',
+    url: 'https://www.roohome.cn/',
+    desc: {
+      zh: '编辑器里的 Agent 工坊：自定义 Mode YAML、MCP JSON 与 .roo 规则',
+      en: 'Editor Agent workshop for custom Mode YAML, MCP JSON and .roo rule configurations',
+    },
+  },
+  {
+    name: 'Qwen Code',
+    url: 'https://www.qwen-code.com/',
+    desc: {
+      zh: '基于 Qwen 的智能 AI 编程助手',
+      en: 'Intelligent AI coding assistant powered by Qwen',
+    },
+  },
+  {
+    name: 'Qwen3 Coder',
+    url: 'https://www.qwen3coder.cn/',
+    desc: {
+      zh: '基于通义千问 3 代大模型的智能编程工具，提供代码生成、补全与审查',
+      en: 'AI coding tool powered by Qwen 3 for code generation, completion and review',
+    },
+  },
+  {
+    name: 'New API',
+    url: 'https://www.myclaude.cn/',
+    desc: {
+      zh: 'AI 接口聚合管理平台，支持 OpenAI / Claude / Gemini 多渠道负载均衡与计费',
+      en: 'Unified AI API gateway supporting OpenAI, Claude and Gemini load balancing and billing',
+    },
+  },
+  {
+    name: '妙唱',
+    url: 'https://www.miaoda.xin/',
+    desc: {
+      zh: '听、说、读、写与歌曲跟唱一体化平台',
+      en: 'Integrated listening, speaking, reading, writing and sing-along platform',
+    },
+  },
+  {
+    name: '可圈可点',
+    url: 'https://www.incpjy.cn/',
+    desc: {
+      zh: 'IDC 算力、网站软件、企业 AI、现场培训与出海内容一站式交付',
+      en: 'One-stop delivery for IDC compute, web software, enterprise AI, training and global content',
+    },
+  },
+  {
+    name: '因评',
+    url: 'https://www.inping.com/',
+    desc: {
+      zh: '全国城市本地生活、政策解读、办事服务与法律知识结构化内容平台',
+      en: 'Structured city services, policy guides, local life and legal knowledge directory',
+    },
+  },
+  {
+    name: 'Socrates',
+    url: 'https://ixinxiang.xyz/',
+    desc: {
+      zh: '面向专业团队的策略优先内容生成 Python SDK 与 CLI',
+      en: 'Strategy-first content generation Python SDK and CLI for professional teams',
     },
   },
 ];

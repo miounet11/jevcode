@@ -38,7 +38,7 @@ const words = (label: Parameters<typeof verificationMeaning>[0]) => verification
   schema={schema}
 >
   <div class="wrap docs-shell">
-    <main class="doc">
+    <div class="doc">
       <p class="doc__breadcrumb">
         <a href={`/${lang}/`}>{t('site.name')}</a> / {t('nav.ecosystem')}
       </p>
@@ -87,7 +87,7 @@ const words = (label: Parameters<typeof verificationMeaning>[0]) => verification
           </ul>
         </section>
       ))}
-    </main>
+    </div>
   </div>
 </BaseLayout>
 

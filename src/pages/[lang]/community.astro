@@ -36,7 +36,7 @@ const dateShort = (iso: string) => iso.slice(0, 10);
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
   <section class="section">
     <div class="wrap">
-      <main class="doc">
+      <div class="doc">
         <p class="doc__breadcrumb">
           <a href={`/${lang}/`}>{t('site.name')}</a> / {copy.title}
         </p>
@@ -79,7 +79,7 @@ const dateShort = (iso: string) => iso.slice(0, 10);
             </div>
           </section>
         ))}
-      </main>
+      </div>
     </div>
   </section>
 </BaseLayout>

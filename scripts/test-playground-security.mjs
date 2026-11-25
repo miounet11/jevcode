@@ -17,7 +17,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import net from 'node:net';
 import path from 'node:path';
@@ -314,6 +314,54 @@ test('P1：单 Key RPM 限频、认证 IP 限频、Secure Cookie 与改密路由
     });
     assert.equal(l5.status, 429);
     assert.equal((await l5.json()).error, 'rate_limit_exceeded');
+  } finally {
+    child.kill('SIGTERM');
+    upstream.close();
+    await sleep(150);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('W2：分享页 noindex，渲染 choice 与数值 confidence，并转义 state', async () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-w2-share-'));
+  const dbPath = path.join(dir, 'acct.db');
+  const dataDir = path.join(dir, 'runs');
+  mkdirSync(dataDir, { recursive: true });
+  const id = 'sharepage0k1';
+  writeFileSync(path.join(dataDir, `${id}.json`), JSON.stringify({
+    id,
+    model: 'clavue-jev',
+    state: 'payout <script>alert(1)</script> & "x"',
+    answers: {
+      urgency: { noul: 0.42 },
+      route: { choice: 'billing', confidence: 0.91 },
+    },
+  }));
+
+  const upPort = await freePort();
+  const upstream = createServer((_, res) => {
+    res.writeHead(200, { 'content-type': 'application/json' });
+    res.end('{}');
+  });
+  await new Promise((r) => upstream.listen(upPort, '127.0.0.1', r));
+
+  const { base, child } = await startPlayground({
+    dbPath,
+    dataDir,
+    upstreamUrl: `http://127.0.0.1:${upPort}/v1/systemone`,
+  });
+
+  try {
+    const res = await fetch(`${base}/en/r/${id}/`);
+    assert.equal(res.status, 200);
+    const html = await res.text();
+    assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+    assert.match(html, /billing/);
+    assert.match(html, /91%/);
+    assert.match(html, /42%/);
+    assert.doesNotMatch(html, /<script/i);
+    assert.match(html, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
+    assert.match(html, /&amp;/);
   } finally {
     child.kill('SIGTERM');
     upstream.close();

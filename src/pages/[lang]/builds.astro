@@ -59,7 +59,7 @@ const usecases = snapshot.usecases.filter((entry) => entry[0]);
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
   <div class="wrap docs-shell">
     <Sidebar lang={lang} />
-    <main class="doc">
+    <div class="doc">
       <p class="doc__breadcrumb">
         <a href={`/${lang}/`}>{t('site.name')}</a> / {t('nav.builds')}
       </p>
@@ -103,9 +103,9 @@ const usecases = snapshot.usecases.filter((entry) => entry[0]);
       <div class="build-pager" data-pager></div>
       <p class="eco__snapshot">
         {copy.updated}
-        <a href={snapshot.source}>{copy.source}</a>
+        <span> · {copy.source}: {snapshot.source}</span>
       </p>
-    </main>
+    </div>
   </div>
 </BaseLayout>
 

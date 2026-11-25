@@ -56,6 +56,9 @@ const copy = {
   judgment: pick(lang, copySrc.judgmentLabel),
   probabilities: pick(lang, copySrc.probabilitiesLabel),
   noJudgment: pick(lang, copySrc.noJudgment),
+  tag: pick(lang, copySrc.tagLabel),
+  stage: pick(lang, copySrc.stageLabel),
+  alsoAcceptableTpl: pick(lang, copySrc.alsoAcceptableTpl),
 };
 const text = localizedBrief(entry, lang, briefI18n as Record<string, Record<string, { context: string; question: string; choices: string[] }>>);
 const flat = text.context.replace(/\s+/g, ' ').trim();
@@ -88,7 +91,9 @@ const answerNode: Record<string, unknown> | undefined = judged
         // accept 常常只有一个选项、且与判定相同，直接拼会得到「是（是）」。
         // 只在确实存在其它可接受选项时才附注。
         const others = accepted.filter((a) => a !== chosen);
-        return others.length ? `${chosen}（可接受：${others.join(' / ')}）` : chosen;
+        return others.length
+          ? copy.alsoAcceptableTpl.replace('{chosen}', chosen).replace('{others}', others.join(' / '))
+          : chosen;
       })(),
       inLanguage: bodyLang,
       // ts 理论上总有，但旧数据里出现过缺字段的记录；slice 一个 undefined 会
@@ -123,7 +128,7 @@ const pageSchema: Record<string, unknown>[] = [
 <BaseLayout lang={lang} title={pageTitle} description={desc} path={path} index={detailIndex} schema={pageSchema}>
   <section class="section">
     <div class="wrap">
-      <main class="doc">
+      <div class="doc">
         <p class="doc__breadcrumb">
           <a href={`/${lang}/`}>{t('site.name')}</a>
           /
@@ -134,8 +139,8 @@ const pageSchema: Record<string, unknown>[] = [
         <p class="doc__desc">{localizeTerm('dimension', entry.dimension, lang, briefTerms)} · {localizeTerm('stage', entry.stage, lang, briefTerms)}</p>
         <div class="pmeta">
           <span class="pmeta__item"><span class="pmeta__k">{copy.published}</span><span class="pmeta__v">{entry.published}</span></span>
-          <span class="pmeta__item"><span class="pmeta__k">tag</span><span class="pmeta__v">{localizeTerm('tag', entry.tag, lang, briefTerms)}</span></span>
-          <span class="pmeta__item"><span class="pmeta__k">stage</span><span class="pmeta__v">{localizeTerm('stage', entry.stage, lang, briefTerms)}</span></span>
+          <span class="pmeta__item"><span class="pmeta__k">{copy.tag}</span><span class="pmeta__v">{localizeTerm('tag', entry.tag, lang, briefTerms)}</span></span>
+          <span class="pmeta__item"><span class="pmeta__k">{copy.stage}</span><span class="pmeta__v">{localizeTerm('stage', entry.stage, lang, briefTerms)}</span></span>
         </div>
         <h2>{copy.context}</h2>
         <blockquote class="pquote"><p class="pquote__text" lang={bodyLang}>{text.context}</p></blockquote>
@@ -196,7 +201,7 @@ const pageSchema: Record<string, unknown>[] = [
           </nav>
         )}
         <p class="pback"><a href={`/${lang}/briefs/`}>{copy.back}</a></p>
-      </main>
+      </div>
     </div>
   </section>
 </BaseLayout>

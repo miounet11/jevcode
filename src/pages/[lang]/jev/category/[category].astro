@@ -49,7 +49,7 @@ const shown = new Map(entries.map((e) => [e.slug, assertionFor(e, lang)] as cons
   schema={schema}
 >
   <div class="wrap docs-shell">
-    <main class="doc">
+    <div class="doc">
       <p class="doc__breadcrumb">
         <a href={`/${lang}/`}>{t('site.name')}</a> /
         <a href={`/${lang}/jev/`}>{c.back}</a> / {label}
@@ -80,7 +80,7 @@ const shown = new Map(entries.map((e) => [e.slug, assertionFor(e, lang)] as cons
           </li>
         ))}
       </ul>
-    </main>
+    </div>
   </div>
 </BaseLayout>
 

@@ -1002,17 +1002,22 @@ img {
 }
 .footer__grid {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  grid-template-columns: 1.8fr 1fr 1fr;
   gap: 40px;
-  margin-bottom: 34px;
+  margin-bottom: 28px;
 }
-.footer__col h4 {
+.footer__col h4,
+.footer__friends h4 {
   font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--fg-muted);
   margin: 0 0 13px;
+}
+.footer__friends {
+  border-top: 1px solid var(--border);
+  padding: 20px 0 24px;
 }
 .footer__col ul {
   list-style: none;
@@ -1028,12 +1033,29 @@ img {
 .footer__col a:hover {
   color: var(--accent);
 }
-/* 外链在 hover 时给出极小的位移提示，表明会离开本站 */
+/* 友链单独占满一行，避免 23 条把第四列撑歪 */
+.footer__partners {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.footer__partners li {
+  margin-bottom: 0;
+}
+/* 外链在 hover 时给出极小的位移提示，表明会离开本站。
+   颜色写在链接自身上：友链已不在 .footer__col 里，深浅色都走变量。 */
 .footer__partners a {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  color: var(--fg-dim);
   transition: color 0.15s ease;
+}
+.footer__partners a:hover {
+  color: var(--accent);
 }
 .footer__partners a::after {
   content: '↗';

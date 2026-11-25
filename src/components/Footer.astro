@@ -48,20 +48,20 @@ const partnerDesc = (p: (typeof partners)[number]) => (lang === 'zh' ? p.desc.zh
           <li><a href={`/${lang}/map/`}>{pick(lang, mapCopy.title)}</a></li>
         </ul>
       </div>
+    </div>
 
-      <div class="footer__col">
-        <h4>{t('footer.partners')}</h4>
-        <ul class="footer__partners">
-          {partners.map((p) => (
-            <li>
-              {/* 友链不加 nofollow：这是双方约定好的互换，加了就等于单方面放弃这次互换。
-                  正文里的普通外链仍由 scripts/nofollow-external.mjs 补 nofollow，
-                  该脚本按 rel 里的 friend 标记豁免这里。 */}
-              <a href={p.url} rel="friend noopener noreferrer" target="_blank" title={partnerDesc(p)}>{p.name}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div class="footer__friends">
+      <h4>{t('footer.partners')}</h4>
+      <ul class="footer__partners">
+        {partners.map((p) => (
+          <li>
+            {/* 友链不加 nofollow：这是双方约定好的互换，加了就等于单方面放弃这次互换。
+                正文里的普通外链仍由 scripts/nofollow-external.mjs 补 nofollow，
+                该脚本按 rel 里的 friend 标记豁免这里。 */}
+            <a href={p.url} rel="friend noopener noreferrer" target="_blank" title={partnerDesc(p)}>{p.name}</a>
+          </li>
+        ))}
+      </ul>
     </div>
 
     <div class="footer__bottom">

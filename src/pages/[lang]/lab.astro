@@ -310,12 +310,16 @@ const recordRows = labRecords as { id: string; ts: string; ok: boolean; choice: 
       if (typeof answer.noul === 'number') {
         html.push(`<p class="lab__line"><b>${esc(name)}</b></p>`);
         html.push(bar('noul', answer.noul));
+      } else if (answer.choice) {
+        html.push(`<p class="lab__line"><b>${esc(name)}</b> → ${esc(answer.choice)}</p>`);
+        if (typeof answer.confidence === 'number') {
+          html.push(bar(answer.choice, answer.confidence));
+        } else if (answer.confidence && typeof answer.confidence === 'object') {
+          for (const [option, p] of Object.entries(answer.confidence)) html.push(bar(option, p));
+        }
       } else if (typeof answer.confidence === 'number') {
         html.push(`<p class="lab__line"><b>${esc(name)}</b></p>`);
         html.push(bar('confidence', answer.confidence));
-      } else if (answer.choice) {
-        html.push(`<p class="lab__line"><b>${esc(name)}</b> → ${esc(answer.choice)}</p>`);
-        for (const [option, p] of Object.entries(answer.confidence || {})) html.push(bar(option, p));
       }
     }
     resultEl.innerHTML = html.length ? html.join('') : `<p class="lab__line">${esc(copy.noAnswers)}</p>`;
