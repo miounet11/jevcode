@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { GPU_PROFILES, type GpuProfile } from '../../../data/gpus';
+import { PLAN_META, centsToUsd } from '../../../../server/plans.mjs';
+import * as copy from '../../../i18n/pages/gpus';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const gpu of GPU_PROFILES) {
+      paths.push({ params: { lang, slug: gpu.slug }, props: { gpu } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { gpu } = Astro.props as { gpu: GpuProfile };
+const path = `/${lang}/gpus/${gpu.slug}/`;
+const t = (bag: Parameters<typeof pick<string>>[1]) => pick(lang, bag);
+const credit = centsToUsd(PLAN_META.signupCreditCents);
+const summary = pick(lang, gpu.summary);
+const specs = [
+  [t(copy.specArch), gpu.arch],
+  [t(copy.specVram), `${gpu.vramGb} GB ${gpu.vramType}`],
+  [t(copy.specBandwidth), `${gpu.bandwidthGbs.toLocaleString('en-US')} GB/s`],
+  [t(copy.specFp8), `${gpu.fp8Tflops.toLocaleString('en-US')} TFLOPS`],
+  [t(copy.specTdp), `${gpu.tdpW} W`],
+  [t(copy.specInterconnect), gpu.interconnect],
+  [t(copy.specCloud), gpu.typicalCloudUsdHr],
+  [t(copy.specSavings), gpu.jevBypassSavings],
+];
+---
+
+<BaseLayout lang={lang} title={gpu.name} description={summary} path={path}>
+  <div class="wrap">
+    <div class="doc gpu">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t(copy.home)}</a> /
+        <a href={`/${lang}/gpus/`}>{t(copy.backToMatrix)}</a> /
+        {gpu.name}
+      </p>
+      <p class="gpu__eyebrow">{gpu.vendor} · {gpu.tier}</p>
+      <h1 class="doc__title">{gpu.name}</h1>
+      <p class="doc__desc">{pick(lang, gpu.tagline)}</p>
+
+      <figure class="gpu__hero">
+        <img
+          src={gpu.heroImage}
+          alt={gpu.name}
+          width="1344"
+          height="768"
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+
+      <dl class="gpu__specs">
+        {specs.map(([k, v]) => (
+          <div>
+            <dt>{k}</dt>
+            <dd>{v}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <h2>{t(copy.bestUseHeading)}</h2>
+      <p>{summary}</p>
+      <p>{pick(lang, gpu.bestUse)}</p>
+
+      <h2>{t(copy.futureHeading)}</h2>
+      <p>{pick(lang, gpu.futureNote)}</p>
+
+      <h2>{t(copy.workloadsHeading)}</h2>
+      <div class="gpu__table-wrap">
+        <table class="gpu__table">
+          <thead>
+            <tr>
+              <th>{t(copy.colModel)}</th>
+              <th>{t(copy.colEngine)}</th>
+              <th>{t(copy.colDecode)}</th>
+              <th>{t(copy.colTtft)}</th>
+              <th>{t(copy.colConcurrency)}</th>
+              <th>{t(copy.colJevRole)}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {gpu.workloads.map((w) => (
+              <tr>
+                <td>{w.model}</td>
+                <td>{w.engine}</td>
+                <td>{w.decodeTps}</td>
+                <td>{w.ttftMs}</td>
+                <td>{w.maxConcurrency}</td>
+                <td>{w.jevRole}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>{t(copy.configHeading)}</h2>
+      <p class="gpu__cfg-title">{gpu.configTitle}</p>
+      <div class="gpu__cfg">
+        <button type="button" data-copy data-label={t(copy.copyBtn)} data-done={t(copy.copiedBtn)}>{t(copy.copyBtn)}</button>
+        <pre><code>{gpu.configCode}</code></pre>
+      </div>
+
+      <aside class="gpu__cta">
+        <h2>{t(copy.ctaTitle)}</h2>
+        <p>{t(copy.ctaLead).replace('{credit}', credit)}</p>
+        <p class="gpu__actions">
+          <a class="btn btn--primary" href={`/${lang}/try/`}>{t(copy.ctaTry)}</a>
+          <a class="btn btn--ghost" href={`/${lang}/login/?mode=register`}>{t(copy.ctaRegister)}</a>
+        </p>
+        <p class="gpu__actions">
+          <a href={`/${lang}/recipes/`}>{t(copy.recipesLink)}</a>
+          <a href={`/${lang}/industries/`}>{t(copy.industriesLink)}</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const btn = document.querySelector('[data-copy]');
+  const code = document.querySelector('.gpu__cfg code');
+  btn?.addEventListener('click', async () => {
+    const label = btn.getAttribute('data-label') || '';
+    const done = btn.getAttribute('data-done') || label;
+    try {
+      await navigator.clipboard.writeText(code?.textContent || '');
+      btn.textContent = done;
+      window.setTimeout(() => { btn.textContent = label; }, 1600);
+    } catch {
+      btn.textContent = label;
+    }
+  });
+</script>
+
+<style>
+  .gpu__eyebrow { margin: 0; color: var(--accent); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .gpu__hero { margin: 1rem 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; aspect-ratio: 16 / 9; background: var(--bg-code); }
+  .gpu__hero img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .gpu__specs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin: 1rem 0 1.5rem; }
+  @media (min-width: 800px) { .gpu__specs { grid-template-columns: repeat(4, 1fr); } }
+  .gpu__specs div { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.65rem 0.75rem; }
+  .gpu__specs dt { color: var(--muted); font-size: 0.75rem; }
+  .gpu__specs dd { margin: 0.15rem 0 0; }
+  .gpu__table-wrap { overflow-x: auto; }
+  .gpu__table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .gpu__table th, .gpu__table td { text-align: left; padding: 0.5rem 0.45rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .gpu__cfg { position: relative; }
+  .gpu__cfg button { position: absolute; top: 0.45rem; right: 0.45rem; }
+  .gpu__cfg-title { color: var(--muted); font-size: 0.85rem; }
+  .gpu__cta { margin-top: 1.5rem; padding: 1rem 1.1rem; border: 1px solid var(--accent-border); border-radius: var(--radius); background: var(--accent-soft); }
+  .gpu__cta h2 { margin-top: 0; }
+  .gpu__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+</style>

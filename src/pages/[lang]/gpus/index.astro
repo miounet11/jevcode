@@ -1,0 +1,280 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { GPU_PROFILES } from '../../../data/gpus';
+import * as copy from '../../../i18n/pages/gpus';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const path = `/${lang}/gpus/`;
+const t = (bag: Parameters<typeof pick<string>>[1]) => pick(lang, bag);
+
+const pageTitle = t(copy.title);
+const pageDescription = t(copy.description);
+const canonical = new URL(path, Astro.site).href;
+const roadmap = GPU_PROFILES.find((g) => g.slug === 'next-gen-b300-rubin-roadmap') ?? GPU_PROFILES[0];
+
+const tiers = [
+  ['all', t(copy.tierAll)],
+  ['consumer', t(copy.tierConsumer)],
+  ['workstation', t(copy.tierWorkstation)],
+  ['datacenter', t(copy.tierDatacenter)],
+  ['roadmap', t(copy.tierRoadmap)],
+] as const;
+
+const vendors = ['all', 'NVIDIA', 'AMD', 'Apple', 'Future Roadmap'] as const;
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    name: pageTitle,
+    description: pageDescription,
+    url: canonical,
+    inLanguage: lang,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: GPU_PROFILES.length,
+      itemListElement: GPU_PROFILES.map((g, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: g.name,
+        url: new URL(`/${lang}/gpus/${g.slug}/`, Astro.site).href,
+      })),
+    },
+  },
+];
+---
+
+<BaseLayout lang={lang} title={pageTitle} description={pageDescription} path={path} schema={schema}>
+  <div class="wrap">
+    <div class="doc gpu">
+      <p class="gpu__eyebrow">{t(copy.eyebrow)}</p>
+      <h1 class="doc__title">{pageTitle}</h1>
+      <p class="doc__desc">{t(copy.lead)}</p>
+
+      <figure class="gpu__hero">
+        <img
+          src="/img/guides/gpus-hero.webp"
+          alt={t(copy.heroAlt)}
+          width="1344"
+          height="768"
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+
+      <div class="gpu__bar">
+        <div class="gpu__chips" role="group" aria-label={t(copy.tierAll)}>
+          {tiers.map(([id, label], i) => (
+            <button type="button" class:list={['gpu__chip', { 'is-on': i === 0 }]} data-tier={id}>{label}</button>
+          ))}
+        </div>
+        <label class="gpu__vendor">
+          <span>{t(copy.vendorLabel)}</span>
+          <select data-vendor>
+            {vendors.map((v) => (
+              <option value={v}>{v === 'all' ? t(copy.tierAll) : v}</option>
+            ))}
+          </select>
+        </label>
+        <label class="gpu__search">
+          <span class="gpu__sr">{t(copy.searchLabel)}</span>
+          <input type="search" data-q placeholder={t(copy.searchLabel)} />
+        </label>
+      </div>
+
+      <p class="gpu__empty" data-empty hidden>{t(copy.noMatch)}</p>
+
+      <div class="gpu__table-wrap">
+        <table class="gpu__table">
+          <thead>
+            <tr>
+              <th><button type="button" data-sort="name">{t(copy.specGpu)}</button></th>
+              <th><button type="button" data-sort="arch">{t(copy.specArch)}</button></th>
+              <th><button type="button" data-sort="vram">{t(copy.specVram)}</button></th>
+              <th><button type="button" data-sort="bw">{t(copy.specBandwidth)}</button></th>
+              <th><button type="button" data-sort="fp8">{t(copy.specFp8)}</button></th>
+              <th><button type="button" data-sort="tdp">{t(copy.specTdp)}</button></th>
+              <th>{t(copy.specInterconnect)}</th>
+              <th>{t(copy.specCloud)}</th>
+              <th><button type="button" data-sort="save">{t(copy.specSavings)}</button></th>
+            </tr>
+          </thead>
+          <tbody>
+            {GPU_PROFILES.map((g) => (
+              <tr
+                data-row
+                data-tier={g.tier}
+                data-vendor={g.vendor}
+                data-name={g.name.toLowerCase()}
+                data-arch={g.arch.toLowerCase()}
+                data-vram={g.vramGb}
+                data-bw={g.bandwidthGbs}
+                data-fp8={g.fp8Tflops}
+                data-tdp={g.tdpW}
+                data-save={parseInt(g.jevBypassSavings, 10) || 0}
+              >
+                <td><a href={`/${lang}/gpus/${g.slug}/`}>{g.name}</a></td>
+                <td>{g.arch}</td>
+                <td>{g.vramGb} GB {g.vramType}</td>
+                <td>{g.bandwidthGbs.toLocaleString('en-US')} GB/s</td>
+                <td>{g.fp8Tflops.toLocaleString('en-US')}</td>
+                <td>{g.tdpW} W</td>
+                <td>{g.interconnect}</td>
+                <td>{g.typicalCloudUsdHr}</td>
+                <td>{g.jevBypassSavings}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="gpu__cards">
+        {GPU_PROFILES.map((g) => (
+          <li
+            data-card
+            data-tier={g.tier}
+            data-vendor={g.vendor}
+            data-name={g.name.toLowerCase()}
+            data-arch={g.arch.toLowerCase()}
+          >
+            <p class="gpu__meta">{g.vendor} · {g.tier}</p>
+            <h2><a href={`/${lang}/gpus/${g.slug}/`}>{g.name}</a></h2>
+            <p>{pick(lang, g.tagline)}</p>
+            <dl>
+              <div><dt>{t(copy.specVram)}</dt><dd>{g.vramGb} GB</dd></div>
+              <div><dt>{t(copy.specBandwidth)}</dt><dd>{g.bandwidthGbs.toLocaleString('en-US')} GB/s</dd></div>
+              <div><dt>{t(copy.specFp8)}</dt><dd>{g.fp8Tflops.toLocaleString('en-US')} TFLOPS</dd></div>
+              <div><dt>{t(copy.specTdp)}</dt><dd>{g.tdpW} W</dd></div>
+              <div><dt>{t(copy.specSavings)}</dt><dd>{g.jevBypassSavings}</dd></div>
+            </dl>
+            <a class="btn btn--ghost" href={`/${lang}/gpus/${g.slug}/`}>{t(copy.viewDetails)}</a>
+          </li>
+        ))}
+      </ul>
+
+      <section class="gpu__road">
+        <img
+          src="/img/guides/gpus-roadmap.webp"
+          alt={t(copy.roadmapAlt)}
+          width="1344"
+          height="768"
+          loading="lazy"
+          decoding="async"
+        />
+        <div>
+          <h2>{t(copy.roadmapTitle)}</h2>
+          <p>{t(copy.roadmapLead)}</p>
+          <p><a href={`/${lang}/gpus/${roadmap.slug}/`}>{roadmap.name}</a></p>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const root = document.querySelector('.gpu');
+  const q = root?.querySelector<HTMLInputElement>('[data-q]');
+  const vendor = root?.querySelector<HTMLSelectElement>('[data-vendor]');
+  const body = root?.querySelector('tbody');
+  if (root && q && vendor && body) {
+    const rows = [...root.querySelectorAll<HTMLElement>('[data-row]')];
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-card]')];
+    const empty = root.querySelector<HTMLElement>('[data-empty]');
+    let tier = 'all';
+    let sortKey = 'vram';
+    let dir = -1;
+
+    const field = (el: HTMLElement) => (sortKey === 'name' || sortKey === 'arch'
+      ? el.dataset[sortKey] || ''
+      : Number(el.dataset[sortKey] || 0));
+
+    const apply = () => {
+      const query = q.value.trim().toLowerCase();
+      let shown = 0;
+      for (const el of [...rows, ...cards]) {
+        const text = `${el.dataset.name || ''} ${el.dataset.arch || ''}`;
+        const on = (tier === 'all' || el.dataset.tier === tier)
+          && (vendor.value === 'all' || el.dataset.vendor === vendor.value)
+          && (!query || text.includes(query));
+        el.hidden = !on;
+        if (on && el.hasAttribute('data-row')) shown += 1;
+      }
+      if (empty) empty.hidden = shown > 0;
+      const vis = rows.filter((r) => !r.hidden);
+      vis.sort((a, b) => {
+        const av = field(a);
+        const bv = field(b);
+        if (av < bv) return -dir;
+        if (av > bv) return dir;
+        return 0;
+      });
+      for (const r of vis) body.append(r);
+      for (const r of rows) if (r.hidden) body.append(r);
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('.gpu__chip').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        tier = btn.dataset.tier || 'all';
+        root.querySelectorAll('.gpu__chip').forEach((c) => c.classList.toggle('is-on', c === btn));
+        apply();
+      });
+    });
+    vendor.addEventListener('change', apply);
+    q.addEventListener('input', apply);
+    root.querySelectorAll<HTMLButtonElement>('[data-sort]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const next = btn.dataset.sort || 'name';
+        dir = sortKey === next ? -dir : next === 'name' || next === 'arch' ? 1 : -1;
+        sortKey = next;
+        apply();
+      });
+    });
+  }
+</script>
+
+<style>
+  .gpu__eyebrow { margin: 0; color: var(--accent); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .gpu__hero, .gpu__road img {
+    margin: 1rem 0 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-code);
+  }
+  .gpu__hero img, .gpu__road img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .gpu__bar { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: end; margin: 1.25rem 0; }
+  .gpu__chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .gpu__chip, .gpu__vendor select, .gpu__search input {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: inherit;
+    border-radius: 999px;
+    min-height: 36px;
+    padding: 0.3rem 0.75rem;
+  }
+  .gpu__chip.is-on { background: var(--accent-soft); border-color: var(--accent-border); }
+  .gpu__vendor, .gpu__search { display: grid; gap: 0.2rem; font-size: 0.8rem; }
+  .gpu__search input { border-radius: var(--radius); min-width: 12rem; }
+  .gpu__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .gpu__table-wrap { overflow-x: auto; }
+  .gpu__table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .gpu__table th, .gpu__table td { text-align: left; padding: 0.55rem 0.45rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .gpu__table button { background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0; }
+  .gpu__cards { list-style: none; padding: 0; display: grid; gap: 0.8rem; margin: 1rem 0 0; }
+  @media (min-width: 800px) { .gpu__cards { grid-template-columns: 1fr 1fr; } }
+  .gpu__cards li { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1rem; }
+  .gpu__cards h2 { font-size: 1.05rem; margin: 0.2rem 0; }
+  .gpu__meta { margin: 0; color: var(--muted); font-size: 0.78rem; }
+  .gpu__cards dl { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 0.8rem; margin: 0.6rem 0; }
+  .gpu__cards dt { color: var(--muted); font-size: 0.75rem; }
+  .gpu__cards dd { margin: 0; }
+  .gpu__road { display: grid; gap: 1rem; margin-top: 2rem; }
+  @media (min-width: 800px) { .gpu__road { grid-template-columns: 1.2fr 1fr; align-items: center; } }
+  .gpu__road img { margin: 0; }
+  .gpu__empty { color: var(--muted); }
+</style>

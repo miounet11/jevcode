@@ -1,0 +1,234 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, useTranslations, type Lang } from '../../../i18n/ui';
+import { INDUSTRY_CASES, type IndustryCase } from '../../../data/industries';
+import { GPU_PROFILES } from '../../../data/gpus';
+import { CODE_RECIPES } from '../../../data/recipes';
+import * as copy from '../../../i18n/pages/industries';
+import { PLAN_META, centsToUsd } from '../../../../server/plans.mjs';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const item of INDUSTRY_CASES) {
+      paths.push({ params: { lang, slug: item.slug }, props: { item } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { item } = Astro.props as { item: IndustryCase };
+const t = useTranslations(lang);
+const path = `/${lang}/industries/${item.slug}/`;
+const name = pick(lang, item.name);
+const tagline = pick(lang, item.tagline);
+const hubTitle = pick(lang, copy.title);
+const eyebrow = pick(lang, copy.eyebrow);
+const credit = centsToUsd(PLAN_META.signupCreditCents);
+const ctaLead = pick(lang, copy.ctaLead).replace('{credit}', credit);
+
+const gpu = GPU_PROFILES.find((profile) => profile.slug === item.recommendedGpuSlug);
+const recipe = CODE_RECIPES.find((entry) => entry.slug === item.recommendedRecipeSlug);
+const gpuName = gpu?.name ?? item.recommendedGpuSlug;
+const recipeName = recipe ? pick(lang, recipe.title) : item.recommendedRecipeSlug;
+
+const kpis = [
+  { label: pick(lang, copy.colRegion), value: item.regionFocus },
+  { label: pick(lang, copy.colCompliance), value: item.compliance },
+  { label: pick(lang, copy.colLatency), value: item.latencyTarget },
+  { label: pick(lang, copy.colBypass), value: item.llmBypassRate },
+];
+
+const canonical = new URL(path, Astro.site).href;
+const schema = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t('site.name'), item: new URL(`/${lang}/`, Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: hubTitle, item: new URL(`/${lang}/industries/`, Astro.site).href },
+      { '@type': 'ListItem', position: 3, name, item: canonical },
+    ],
+  },
+];
+const copiedLabel = pick(lang, copy.copiedBtn);
+const copyLabel = pick(lang, copy.copyBtn);
+---
+
+<BaseLayout lang={lang} title={name} description={tagline} path={path} schema={schema}>
+  <div class="wrap">
+    <div class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a>
+        {' / '}
+        <a href={`/${lang}/industries/`}>{eyebrow}</a>
+        {' / '}
+        {name}
+      </p>
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{item.sector}</p>
+      <h1 class="doc__title">{name}</h1>
+      <p class="doc__desc">{tagline}</p>
+      <img
+        class="ind-hero"
+        src={item.heroImage}
+        alt={name}
+        width="1344"
+        height="768"
+        loading="eager"
+        decoding="async"
+      />
+
+      <dl class="ind-kpis">
+        {kpis.map((kpi) => (
+          <div>
+            <dt>{kpi.label}</dt>
+            <dd>{kpi.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <section>
+        <h2>{pick(lang, copy.problemHeading)}</h2>
+        <p>{pick(lang, item.problem)}</p>
+      </section>
+      <section>
+        <h2>{pick(lang, copy.solutionHeading)}</h2>
+        <p>{pick(lang, item.solution)}</p>
+      </section>
+      <section>
+        <h2>{pick(lang, copy.impactHeading)}</h2>
+        <p>{pick(lang, item.impact)}</p>
+      </section>
+
+      <section class="ind-block">
+        <div class="ind-block__bar">
+          <h2>{pick(lang, copy.payloadHeading)}</h2>
+          <button type="button" data-copy="ind-payload" data-label={copyLabel} data-copied={copiedLabel}>{copyLabel}</button>
+        </div>
+        <pre id="ind-payload"><code>{item.samplePayload}</code></pre>
+      </section>
+
+      <section class="ind-block">
+        <div class="ind-block__bar">
+          <h2>
+            {pick(lang, copy.codeHeading)}
+            <span class="ind-badge">{item.codeLang}</span>
+          </h2>
+          <button type="button" data-copy="ind-code" data-label={copyLabel} data-copied={copiedLabel}>{copyLabel}</button>
+        </div>
+        <pre id="ind-code"><code>{item.codeSnippet}</code></pre>
+      </section>
+
+      <section>
+        <h2>{pick(lang, copy.recommendedStackHeading)}</h2>
+        <ul class="ind-links">
+          <li>
+            <span>{pick(lang, copy.gpuLinkLabel)}</span>
+            <a href={`/${lang}/gpus/${item.recommendedGpuSlug}/`}>{gpuName}</a>
+          </li>
+          <li>
+            <span>{pick(lang, copy.recipeLinkLabel)}</span>
+            <a href={`/${lang}/recipes/${item.recommendedRecipeSlug}/`}>{recipeName}</a>
+          </li>
+        </ul>
+        <p><a href={`/${lang}/industries/`}>{pick(lang, copy.backToHub)}</a></p>
+      </section>
+
+      <section class="ind-cta">
+        <h2>{pick(lang, copy.ctaTitle)}</h2>
+        <p>{ctaLead}</p>
+        <div class="cta-row">
+          <a class="btn btn--primary" href={`/${lang}/try/`}>{pick(lang, copy.ctaTry)}</a>
+          <a class="btn btn--ghost" href={`/${lang}/login/?mode=register`}>{pick(lang, copy.ctaRegister)}</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-copy]');
+  for (const button of buttons) {
+    button.addEventListener('click', async () => {
+      const id = button.dataset.copy;
+      const source = id ? document.getElementById(id) : null;
+      const text = source?.textContent ?? '';
+      await navigator.clipboard.writeText(text);
+      const copied = button.dataset.copied || 'Copied';
+      const label = button.dataset.label || button.textContent || '';
+      button.textContent = copied;
+      window.setTimeout(() => {
+        button.textContent = label;
+      }, 1600);
+    });
+  }
+</script>
+
+<style>
+  .ind-hero {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 0.5rem 0 1rem;
+  }
+  .ind-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0 0 1.5rem;
+  }
+  .ind-kpis div {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.7rem 0.75rem;
+    background: var(--accent-soft);
+  }
+  .ind-kpis dt { font-size: 0.72rem; color: var(--fg-dim); }
+  .ind-kpis dd { margin: 0.2rem 0 0; color: var(--fg); font-size: 0.92rem; }
+  .ind-block { margin: 1.25rem 0; }
+  .ind-block__bar { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+  .ind-block h2 { display: flex; align-items: center; gap: 0.5rem; }
+  .ind-block button {
+    border: 1px solid var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--fg);
+    border-radius: 999px;
+    padding: 0.28rem 0.75rem;
+    font: inherit;
+    cursor: pointer;
+  }
+  .ind-block pre {
+    margin: 0;
+    overflow: auto;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-elev, transparent);
+    color: var(--fg);
+    font-size: 0.82rem;
+  }
+  .ind-badge {
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    padding: 0.1rem 0.45rem;
+  }
+  .ind-links { list-style: none; padding: 0; display: grid; gap: 0.45rem; }
+  .ind-links li { display: flex; flex-wrap: wrap; gap: 0.4rem 0.75rem; }
+  .ind-links span { color: var(--fg-dim); min-width: 7rem; }
+  .ind-cta {
+    margin-top: 1.5rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  @media (max-width: 720px) {
+    .ind-kpis { grid-template-columns: 1fr 1fr; }
+  }
+</style>

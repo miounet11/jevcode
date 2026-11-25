@@ -9,6 +9,9 @@ import Figure from '../../components/Figure.astro';
 import Cluster from '../../components/Cluster.astro';
 import { heroFigure } from '../../data/images';
 import { compareCases } from '../../data/compare-cases';
+import { GPU_PROFILES } from '../../data/gpus';
+import { INDUSTRY_CASES } from '../../data/industries';
+import { CODE_RECIPES } from '../../data/recipes';
 import * as homeCopy from '../../i18n/pages/home';
 
 export function getStaticPaths() {
@@ -51,6 +54,30 @@ const trialGroups = Object.keys(trialLabels).map((category) => ({
   items: compareCases.filter((item) => item.category === category).slice(0, 5),
 }));
 
+const matrix = [
+  {
+    href: `/${lang}/gpus/`,
+    title: t('nav.gpus'),
+    desc: t('home.matrix.gpusDesc'),
+    count: GPU_PROFILES.length,
+    image: '/img/guides/gpus-hero.webp',
+  },
+  {
+    href: `/${lang}/industries/`,
+    title: t('nav.industries'),
+    desc: t('home.matrix.industriesDesc'),
+    count: INDUSTRY_CASES.length,
+    image: '/img/guides/industries-hero.webp',
+  },
+  {
+    href: `/${lang}/recipes/`,
+    title: t('nav.recipes'),
+    desc: t('home.matrix.recipesDesc'),
+    count: CODE_RECIPES.length,
+    image: '/img/guides/recipes-hero.webp',
+  },
+];
+
 const path = `/${lang}/`;
 
 const faqs = pick(lang, homeCopy.faqs);
@@ -91,6 +118,27 @@ const faqSchema = {
         <b>{pick(lang, homeCopy.hero.stageHint)}</b>
       </a>
       <Figure fig={heroFigure} lang={lang} priority class="figure--hero" />
+    </div>
+  </section>
+
+  <section class="section home__matrix" aria-labelledby="home-matrix-title">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 class="section__title" id="home-matrix-title">{t('home.matrix.title')}</h2>
+        <p class="section__lead">{t('home.matrix.lead')}</p>
+      </div>
+      <div class="home__matrix-grid">
+        {matrix.map((card) => (
+          <a class="home__matrix-card" href={card.href}>
+            <img src={card.image} alt="" width="640" height="360" loading="lazy" decoding="async" />
+            <span class="home__matrix-copy">
+              <strong>{card.title}</strong>
+              <em>{card.count}</em>
+              <span>{card.desc}</span>
+            </span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -339,6 +387,48 @@ const faqSchema = {
 </BaseLayout>
 
 <style>
+  .home__matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .home__matrix-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bg-elev, transparent);
+    text-decoration: none;
+    color: inherit;
+  }
+  .home__matrix-card img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+  .home__matrix-copy {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 12px;
+    padding: 14px 16px 16px;
+  }
+  .home__matrix-copy strong { font-size: 18px; letter-spacing: -0.02em; }
+  .home__matrix-copy em {
+    font-style: normal;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--accent-strong);
+  }
+  .home__matrix-copy span {
+    grid-column: 1 / -1;
+    color: var(--fg-muted);
+    font-size: 14.5px;
+  }
+  @media (max-width: 800px) {
+    .home__matrix-grid { grid-template-columns: 1fr; }
+  }
   .library__faq { margin: 8px 0 12px; font-size: 18px; }
   .library__list details {
     border-top: 1px solid var(--border);

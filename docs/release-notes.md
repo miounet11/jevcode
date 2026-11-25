@@ -2,6 +2,20 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-25 — 第四阶段：全球 8 语言 GPU 显卡配置与未来路线图、全行业实战案例与全语言源码蓝图矩阵
+
+### 改动
+
+- **原创视觉资产（Clavue Image v3.1）**：通过内网 `clavue-img` 生成 8 张 16:9 轻量化无字 WebP 视觉配图（`public/img/guides/*.webp`，单张 20–126 KB），覆盖显卡集群、未来 HBM4 晶圆、全球行业网络、棱镜分流、模块化源码、双系统级联、边缘节点与 RAG 精排。
+- **显卡配置、大模型部署、性能基准与未来硬件路线图（`/[lang]/gpus/` + `[slug]`）**：新增 `src/data/gpus.ts`、`src/i18n/pages/gpus.ts` 与页面模板，覆盖 16 款消费级/工作站/数据中心及未来 2026–2027+ 路线图硬件（RTX 4060 Ti 16G / 4090 / 5090 / RTX PRO 6000 96G / Apple M4 Max 128G & M3 Ultra 512G / L4 / L40S / A100 / H100 / H200 / B200 / GB200 NVL72 / AMD MI300X & MI325X / B300 Ultra 288GB & Rubin HBM4 路线图），提供可筛选排序对比矩阵、LLM + Jev 性能基准表与一键复制生产配置（`vLLM` / `SGLang` / `TensorRT-LLM` / `MLX` / `Docker Compose` / `K8s`）。
+- **全球 18 行业实战案例库（`/[lang]/industries/` + `[slug]`）**：新增 `src/data/industries.ts`、`src/i18n/pages/industries.ts` 与页面模板，覆盖全球支付反欺诈、医疗分诊、法务合同审查、跨境电商风控、B2B SaaS 多语客服、DevOps/SRE、网络安全 SOC、智能制造、全球物流清关、游戏风控、数字媒体品牌安全、在线教育、保险理赔、电信 5G 运维、汽车车联网、房产科技、新能源电网与航旅应急，提供合规/延迟/省本 KPI、Jev JSON 契约、可运行业务代码与 GPU/源码互链。
+- **全语言源码库与端到端开发项目蓝图（`/[lang]/recipes/` + `[slug]`）**：新增 `src/data/recipes.ts`、`src/i18n/pages/recipes.ts` 与页面模板，包含 10 套主流语言/运行时生产客户端（TypeScript/Node.js、Python/FastAPI、Go、Rust、Java/Spring Boot、C#/.NET 9、PHP/Laravel、Ruby/Rails、Cloudflare Workers、Shell/GitHub Actions）与 6 套完整端到端项目蓝图（双系统 LLM 级联路由器、LangGraph 工具护栏、MCP Server、RAG 精排防幻觉门控、多语工单分诊微服务、自建 GPU vLLM+Jev 混合栈），提供完整源码与配套配置文件一键复制。
+- **8 语原生本地化与全站集成**：全量 50 个核心条目通过 `clavue-5.5-fast` 原生翻译至 `en`/`zh`/`ja`/`ko`/`de`/`fr`/`es`/`pt` 全部 8 语言（共新增 **424 个**高质量可索引页面），同步接入顶部导航 `Header.astro`、页脚 `Footer.astro`、首页 3 卡视觉展示区 `index.astro`、`map.astro`、Nginx 裸路径 302、`sitemap-lastmod.mjs`、`generate-llms-txt.mjs` 及 `scripts/test-guides-matrix.mjs` 回归门禁。
+
+### 验证
+
+- `npm run check`（90 文件 0 错 0 警 0 提示）、`npm test`、`npm run test:e2e`、`npm run build`、`node scripts/preflight.mjs --json` 全绿；全站近 2 万页 HTML 零双美元符、零嵌套 `<main>`、Sitemap 分片与重型页瘦身全部达标。
+
 ## 2026-11-25 — 第三阶段：基于线上日志的 Sitemap 分片、重型页瘦身、API 自发现、转化补齐与流量日报
 
 ### 改动

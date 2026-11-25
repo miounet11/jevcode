@@ -16,14 +16,26 @@ const path = `/${lang}/map/`;
 const title = pick(lang, mapCopy.title);
 const description = pick(lang, mapCopy.description);
 
-const list = clusterGroups.flatMap((group) =>
-  group.items
-    .filter((item) => item.href !== '/map/')
-    .map((item) => ({
-      name: clusterText(lang, item.title),
-      url: new URL(pageHref(lang, item.href), Astro.site).href,
-    })),
-);
+const guideHubs = [
+  { href: '/gpus/', name: pick(lang, { zh: '显卡配置', en: 'GPUs', ja: 'GPU構成', ko: 'GPU 구성', de: 'GPUs', fr: 'GPUs', es: 'GPUs', pt: 'GPUs' }) },
+  { href: '/industries/', name: pick(lang, { zh: '行业案例', en: 'Industries', ja: '業界事例', ko: '산업 사례', de: 'Branchen', fr: 'Secteurs', es: 'Industrias', pt: 'Indústrias' }) },
+  { href: '/recipes/', name: pick(lang, { zh: '源码库', en: 'Code', ja: 'コード集', ko: '코드 모음', de: 'Code', fr: 'Code', es: 'Código', pt: 'Código' }) },
+];
+
+const list = [
+  ...guideHubs.map((item) => ({
+    name: item.name,
+    url: new URL(pageHref(lang, item.href), Astro.site).href,
+  })),
+  ...clusterGroups.flatMap((group) =>
+    group.items
+      .filter((item) => item.href !== '/map/')
+      .map((item) => ({
+        name: clusterText(lang, item.title),
+        url: new URL(pageHref(lang, item.href), Astro.site).href,
+      })),
+  ),
+];
 const itemList = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -44,6 +56,11 @@ const itemList = {
       <h1>{title}</h1>
       <p class="directory-page__lead">{description}</p>
       <p class="directory-page__lead" set:html={pick(lang, mapCopy.lead).replaceAll('{lang}', lang)} />
+      <ul class="directory-page__hubs">
+        {guideHubs.map((item) => (
+          <li><a href={pageHref(lang, item.href)}>{item.name}</a></li>
+        ))}
+      </ul>
       <Cluster lang={lang} path={path} variant="map" />
     </div>
   </section>
@@ -55,4 +72,13 @@ const itemList = {
   .directory-page h1 { font-size: clamp(34px, 5vw, 52px); letter-spacing: -0.04em; margin: 12px 0; }
   .directory-page__lead { color: var(--fg-muted); max-width: 66ch; }
   .directory-page__lead a { color: var(--accent-strong); }
+  .directory-page__hubs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin: 18px 0 8px;
+    padding: 0;
+    list-style: none;
+  }
+  .directory-page__hubs a { color: var(--accent-strong); font-weight: 650; }
 </style>

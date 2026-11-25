@@ -1,0 +1,189 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, useTranslations, type Lang } from '../../../i18n/ui';
+import { INDUSTRY_CASES } from '../../../data/industries';
+import * as copy from '../../../i18n/pages/industries';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return (Object.keys(languages) as Lang[]).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const path = `/${lang}/industries/`;
+const t = useTranslations(lang);
+const title = pick(lang, copy.title);
+const description = pick(lang, copy.description);
+const eyebrow = pick(lang, copy.eyebrow);
+const lead = pick(lang, copy.lead);
+const filterAll = pick(lang, copy.filterAll);
+const searchPlaceholder = pick(lang, copy.searchPlaceholder);
+const colRegion = pick(lang, copy.colRegion);
+const colCompliance = pick(lang, copy.colCompliance);
+const colLatency = pick(lang, copy.colLatency);
+const colBypass = pick(lang, copy.colBypass);
+const viewCase = pick(lang, copy.viewCase);
+
+const sectors = [...new Set(INDUSTRY_CASES.map((item) => item.sector))];
+const canonical = new URL(path, Astro.site).href;
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    '@id': `${canonical}#collection`,
+    name: title,
+    description,
+    url: canonical,
+    inLanguage: lang,
+    isPartOf: new URL(`/${lang}/`, Astro.site).href,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: INDUSTRY_CASES.length,
+      itemListElement: INDUSTRY_CASES.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: pick(lang, item.name),
+        url: new URL(`/${lang}/industries/${item.slug}/`, Astro.site).href,
+      })),
+    },
+  },
+];
+---
+
+<BaseLayout lang={lang} title={title} description={description} path={path} schema={schema}>
+  <div class="wrap">
+    <div class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> / {eyebrow}
+      </p>
+      <p class="eyebrow"><span class="eyebrow__dot"></span>{eyebrow}</p>
+      <h1 class="doc__title">{title}</h1>
+      <p class="doc__desc">{lead}</p>
+      <img
+        class="ind-hero"
+        src="/img/guides/industries-hero.webp"
+        alt={title}
+        width="1344"
+        height="768"
+        loading="eager"
+        decoding="async"
+      />
+
+      <div class="ind-filter">
+        <div class="ind-filter__chips" role="group" aria-label={filterAll}>
+          <button class="ind-chip is-on" type="button" data-sector="all">{filterAll}</button>
+          {sectors.map((sector) => (
+            <button class="ind-chip" type="button" data-sector={sector}>{sector}</button>
+          ))}
+        </div>
+        <input class="ind-search" type="search" data-search placeholder={searchPlaceholder} />
+      </div>
+
+      <ul class="ind-grid" data-grid>
+        {INDUSTRY_CASES.map((item) => {
+          const name = pick(lang, item.name);
+          const tagline = pick(lang, item.tagline);
+          const hay = `${name} ${tagline} ${item.sector} ${item.regionFocus} ${item.compliance}`.toLowerCase();
+          return (
+            <li data-card data-sector={item.sector} data-q={hay}>
+              <a class="ind-card" href={`/${lang}/industries/${item.slug}/`}>
+                <p class="ind-card__sector">{item.sector}</p>
+                <h2>{name}</h2>
+                <p class="ind-card__tag">{tagline}</p>
+                <dl>
+                  <div><dt>{colRegion}</dt><dd>{item.regionFocus}</dd></div>
+                  <div><dt>{colCompliance}</dt><dd>{item.compliance}</dd></div>
+                  <div><dt>{colLatency}</dt><dd>{item.latencyTarget}</dd></div>
+                  <div><dt>{colBypass}</dt><dd>{item.llmBypassRate}</dd></div>
+                </dl>
+                <span class="ind-card__more">{viewCase}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <p class="ind-empty" data-empty hidden>{searchPlaceholder}</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-card]')];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-sector]')];
+  const search = document.querySelector<HTMLInputElement>('[data-search]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  let sector = 'all';
+  let q = '';
+
+  function apply() {
+    let shown = 0;
+    for (const card of cards) {
+      const okSector = sector === 'all' || card.dataset.sector === sector;
+      const okQuery = q === '' || (card.dataset.q ?? '').includes(q);
+      const visible = okSector && okQuery;
+      card.hidden = !visible;
+      if (visible) shown += 1;
+    }
+    if (empty) empty.hidden = shown !== 0;
+  }
+
+  for (const chip of chips) {
+    chip.addEventListener('click', () => {
+      sector = chip.dataset.sector || 'all';
+      for (const other of chips) other.classList.toggle('is-on', other === chip);
+      apply();
+    });
+  }
+
+  search?.addEventListener('input', () => {
+    q = search.value.trim().toLowerCase();
+    apply();
+  });
+</script>
+
+<style>
+  .ind-hero {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 1rem 0 1.25rem;
+    background: var(--bg-elev, transparent);
+  }
+  .ind-filter { display: grid; gap: 0.75rem; margin-bottom: 1.25rem; }
+  .ind-filter__chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .ind-chip, .ind-search {
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--fg-muted);
+    border-radius: 999px;
+    font: inherit;
+  }
+  .ind-chip { padding: 0.28rem 0.7rem; cursor: pointer; }
+  .ind-chip.is-on { color: var(--fg); border-color: var(--accent-border); background: var(--accent-soft); }
+  .ind-search { border-radius: 8px; padding: 0.55rem 0.75rem; color: var(--fg); width: min(100%, 28rem); }
+  .ind-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.85rem; grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr)); }
+  .ind-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    height: 100%;
+    padding: 0.95rem 1rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: inherit;
+    text-decoration: none;
+    background: var(--card-hover-tint);
+  }
+  .ind-card:hover { border-color: var(--accent-border); }
+  .ind-card h2 { font-size: 1.05rem; line-height: 1.35; margin: 0; color: var(--fg); }
+  .ind-card__sector { margin: 0; font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
+  .ind-card__tag { margin: 0; color: var(--fg-muted); font-size: 0.9rem; }
+  .ind-card dl { margin: 0.25rem 0 0; display: grid; gap: 0.35rem; }
+  .ind-card dl div { display: grid; gap: 0.1rem; }
+  .ind-card dt { font-size: 0.72rem; color: var(--fg-dim); }
+  .ind-card dd { margin: 0; font-size: 0.84rem; color: var(--fg); }
+  .ind-card__more { margin-top: auto; color: var(--accent); font-size: 0.85rem; }
+  .ind-empty { color: var(--fg-muted); }
+</style>

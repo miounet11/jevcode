@@ -23,6 +23,9 @@ const ROUTES = [
   { re: /^\/([a-z]{2})?\/?(cases|concepts|patterns|primitives|sdk)\/([a-z0-9-]+)\/?$/, file: (m) => `src/content/docs/${m[1] || 'en'}/${m[2]}/${m[3]}.md` },
   // 各独立页面：/{lang}/<page>/
   { re: /^\/([a-z]{2})?\/?(compare|ecosystem|lab|map|playground|pricing|scenes|try|builds|api|community|introduction|quickstart)\/?$/, file: (m) => `src/pages/${m[1] ? `[lang]/${m[2]}.astro` : `${m[2]}.astro`}` },
+  { re: /^\/[a-z]{2}\/gpus(\/.*)?$/, file: () => 'src/data/gpus.ts' },
+  { re: /^\/[a-z]{2}\/industries(\/.*)?$/, file: () => 'src/data/industries.ts' },
+  { re: /^\/[a-z]{2}\/recipes(\/.*)?$/, file: () => 'src/data/recipes.ts' },
   // 生态分类页：整页是分类下所有项目的聚合，跟着数据文件走。
   { re: /^\/[a-z]{2}\/ecosystem\/category\/[a-z0-9-]+\/?$/, file: () => 'src/data/ecosystem.ts' },
   // 语言首页：/{lang}/

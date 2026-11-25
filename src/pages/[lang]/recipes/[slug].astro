@@ -1,0 +1,192 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { CODE_RECIPES, type CodeRecipe } from '../../../data/recipes';
+import { GPU_PROFILES } from '../../../data/gpus';
+import * as copy from '../../../i18n/pages/recipes';
+import { PLAN_META, centsToUsd } from '../../../../server/plans.mjs';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const recipe of CODE_RECIPES) {
+      paths.push({ params: { lang, slug: recipe.slug }, props: { recipe } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { recipe } = Astro.props as { recipe: CodeRecipe };
+const path = `/${lang}/recipes/${recipe.slug}/`;
+const title = pick(lang, recipe.title);
+const hub = pick(lang, copy.title);
+const description = pick(lang, recipe.tagline);
+const credit = centsToUsd(PLAN_META.signupCreditCents);
+const gpu = GPU_PROFILES.find((g) => g.slug === recipe.relatedGpuSlug);
+const gpuName = gpu?.name ?? recipe.relatedGpuSlug;
+
+const ui = {
+  runtimeLabel: pick(lang, copy.runtimeLabel),
+  latencyLabel: pick(lang, copy.latencyLabel),
+  overviewHeading: pick(lang, copy.overviewHeading),
+  sourceHeading: pick(lang, copy.sourceHeading),
+  configHeading: pick(lang, copy.configHeading),
+  pairedGpuHeading: pick(lang, copy.pairedGpuHeading),
+  copyBtn: pick(lang, copy.copyBtn),
+  copiedBtn: pick(lang, copy.copiedBtn),
+  backToHub: pick(lang, copy.backToHub),
+  ctaTitle: pick(lang, copy.ctaTitle),
+  ctaLead: pick(lang, copy.ctaLead).replace('{credit}', credit),
+  ctaTry: pick(lang, copy.ctaTry),
+  ctaRegister: pick(lang, copy.ctaRegister),
+  overview: pick(lang, recipe.overview),
+  home: {
+    en: 'Home', zh: '首页', ja: 'ホーム', ko: '홈', de: 'Start', fr: 'Accueil', es: 'Inicio', pt: 'Início',
+  }[lang],
+};
+
+const canonical = new URL(path, Astro.site).href;
+const schema = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: ui.home, item: new URL(`/${lang}/`, Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: hub, item: new URL(`/${lang}/recipes/`, Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: title, item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout lang={lang} title={title} description={description} path={path} schema={schema}>
+  <div class="wrap docs-shell">
+    <div class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{ui.home}</a> /
+        <a href={`/${lang}/recipes/`}>{hub}</a> / {title}
+      </p>
+      <h1 class="doc__title">{title}</h1>
+      <p class="doc__desc">{description}</p>
+      <img
+        class="rx-hero"
+        src={recipe.heroImage}
+        alt={title}
+        width="1344"
+        height="768"
+        loading="eager"
+        decoding="async"
+      />
+      <p class="rx-kpis">
+        <span>{ui.runtimeLabel}: {recipe.runtime}</span>
+        <span>{ui.latencyLabel}: {recipe.latencyProfile}</span>
+      </p>
+
+      <h2>{ui.overviewHeading}</h2>
+      <p>{ui.overview}</p>
+
+      <section class="rx-code">
+        <div class="rx-code__bar">
+          <h2>{ui.sourceHeading}</h2>
+          <code>{recipe.sourceFilename}</code>
+          <button type="button" data-copy data-label={ui.copyBtn} data-copied={ui.copiedBtn}>{ui.copyBtn}</button>
+        </div>
+        <pre><code>{recipe.sourceCode}</code></pre>
+      </section>
+
+      <section class="rx-code">
+        <div class="rx-code__bar">
+          <h2>{ui.configHeading}</h2>
+          <code>{recipe.configFilename}</code>
+          <button type="button" data-copy data-label={ui.copyBtn} data-copied={ui.copiedBtn}>{ui.copyBtn}</button>
+        </div>
+        <pre><code>{recipe.configCode}</code></pre>
+      </section>
+
+      <h2>{ui.pairedGpuHeading}</h2>
+      <p><a href={`/${lang}/gpus/${recipe.relatedGpuSlug}/`}>{gpuName}</a></p>
+
+      <aside class="rx-cta">
+        <h2>{ui.ctaTitle}</h2>
+        <p>{ui.ctaLead}</p>
+        <p class="rx-cta__actions">
+          <a class="btn btn--primary" href={`/${lang}/try/`}>{ui.ctaTry}</a>
+          <a class="btn btn--ghost" href={`/${lang}/login/?mode=register`}>{ui.ctaRegister}</a>
+        </p>
+      </aside>
+      <p><a href={`/${lang}/recipes/`}>{ui.backToHub}</a></p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+    button.addEventListener('click', async () => {
+      const text = button.closest('section')?.querySelector('pre code')?.textContent ?? '';
+      await navigator.clipboard.writeText(text);
+      button.textContent = button.dataset.copied ?? 'Copied';
+      window.setTimeout(() => {
+        button.textContent = button.dataset.label ?? 'Copy';
+      }, 1600);
+    });
+  }
+</script>
+
+<style>
+  .rx-hero {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+  }
+  .rx-kpis { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
+  .rx-kpis span {
+    font-size: 13px;
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+    background: var(--bg-elev);
+    border-radius: 999px;
+    padding: 6px 12px;
+  }
+  .rx-code { margin: 22px 0; }
+  .rx-code__bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  .rx-code__bar h2 { margin: 0; font-size: 1.15rem; }
+  .rx-code__bar code { color: var(--fg-dim); font-size: 13px; }
+  .rx-code__bar button {
+    margin-left: auto;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-elev-2);
+    color: var(--fg);
+    cursor: pointer;
+    font: inherit;
+  }
+  .rx-code pre {
+    overflow: auto;
+    margin: 10px 0 0;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .rx-cta {
+    margin: 28px 0 16px;
+    padding: 16px;
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius);
+    background: var(--accent-soft);
+  }
+  .rx-cta h2 { margin: 0 0 8px; font-size: 1.15rem; }
+  .rx-cta__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+</style>

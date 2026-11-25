@@ -40,6 +40,9 @@ const SECTIONS = {
   coverage: { en: 'Jev coverage', zh: 'Jev 覆盖', ja: 'Jev カバレッジ', ko: 'Jev 커버리지', de: 'Jev-Coverage', fr: 'Couverture Jev', es: 'Cobertura Jev', pt: 'Cobertura Jev' },
   categories: { en: 'Ecosystem categories', zh: '生态分类', ja: 'エコシステムのカテゴリ', ko: '생태계 카테고리', de: 'Ökosystem-Kategorien', fr: 'Catégories de l\u2019écosystème', es: 'Categorías del ecosistema', pt: 'Categorias do ecossistema' },
   topics: { en: 'Topic index', zh: '主题索引', ja: 'トピック索引', ko: '주제 색인', de: 'Themenindex', fr: 'Index des sujets', es: 'Índice de temas', pt: 'Índice de tópicos' },
+  gpus: { en: 'GPUs', zh: '显卡配置', ja: 'GPU構成', ko: 'GPU 구성', de: 'GPUs', fr: 'GPUs', es: 'GPUs', pt: 'GPUs' },
+  industries: { en: 'Industries', zh: '行业案例', ja: '業界事例', ko: '산업 사례', de: 'Branchen', fr: 'Secteurs', es: 'Industrias', pt: 'Indústrias' },
+  recipes: { en: 'Code', zh: '源码库', ja: 'コード集', ko: '코드 모음', de: 'Code', fr: 'Code', es: 'Código', pt: 'Código' },
   downloads: { en: 'AI software downloads', zh: 'AI 软件下载', ja: 'AI ソフトウェア ダウンロード', ko: 'AI 소프트웨어 다운로드', de: 'AI-Software-Downloads', fr: 'Téléchargements de logiciels IA', es: 'Descargas de software de IA', pt: 'Downloads de software de IA' },
 };
 
@@ -106,6 +109,9 @@ export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosyst
     '- [Scenes](https://www.jevcode.ai/en/scenes/): worked examples of judgment tasks.',
     '- [Builds](https://www.jevcode.ai/en/builds/): release notes and build history.',
     '- [Map](https://www.jevcode.ai/en/map/): site directory of every indexable section.',
+    '- [GPUs](https://www.jevcode.ai/en/gpus/): GPU profiles for running clavue-jev in front of local and cloud cards.',
+    '- [Industries](https://www.jevcode.ai/en/industries/): industry cases with latency targets and recommended GPU plus recipe.',
+    '- [Code](https://www.jevcode.ai/en/recipes/): typed clients and blueprints.',
     '',
     'Every product page above also exists at /zh/, /ja/, /ko/, /de/, /fr/, /es/ and /pt/.',
     '',
@@ -131,7 +137,7 @@ export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosyst
     lines.push(`### ${pick('docs', code)}`, '');
     // 只列真实存在列表页的章节：concepts/ 与 cases/ 是纯目录，没有 index.md，
     // 指向它们会得到 404。这类断链由 check-seo 的 llms.txt 校验兜住。
-    for (const section of ['patterns', 'sdk', 'lab', 'compare']) {
+    for (const section of ['patterns', 'sdk', 'lab', 'compare', 'gpus', 'industries', 'recipes']) {
       lines.push(`- [${pick(section, code)}](${SITE}/${code}/${section}/)`);
     }
     lines.push('');
