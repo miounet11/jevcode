@@ -355,4 +355,20 @@ export const partners: Partner[] = [
       en: 'Price comparison, relay-station reviews and model leaderboards',
     },
   },
+  {
+    name: '加盟选择专家',
+    url: 'https://www.xntou.cn/',
+    desc: {
+      zh: '星网数科多模态智能引擎：加盟选址、项目决策与招商视觉合规',
+      en: 'Multimodal AI engine for franchise site selection, project vetting and compliance',
+    },
+  },
+  {
+    name: '律肃审',
+    url: 'https://www.lawshen.cn/',
+    desc: {
+      zh: '法律条文查询、普法解读与法院律所名录，公开内容均标出处',
+      en: 'Chinese statutes, plain-language legal explainers, court and law-firm directory with cited sources',
+    },
+  },
 ];
