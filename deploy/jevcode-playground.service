@@ -4,12 +4,17 @@ After=network.target
 
 [Service]
 Type=simple
+User=jevcode
+Group=jevcode
 WorkingDirectory=/opt/jevcode-playground
 EnvironmentFile=/etc/jevcode/playground.env
 ExecStart=/usr/bin/node /opt/jevcode-playground/playground.mjs
 Restart=on-failure
 RestartSec=2
 NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/jevcode-accounts /var/www/jevcode/shared/runs
 
 [Install]
 WantedBy=multi-user.target

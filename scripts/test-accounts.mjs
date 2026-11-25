@@ -10,9 +10,10 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import {
   openAccounts, SIGNUP_CREDIT_CENTS, SIGNUP_CREDIT_MICROUSD, centsToUsd,
-  inputCostMicroUsd, SIGNUP_INPUT_TOKENS,
+  inputCostMicroUsd, SIGNUP_INPUT_TOKENS, FUNNEL_EVENTS, MICROUSD_PER_CENT,
 } from '../server/accounts.mjs';
 
 const fresh = () => openAccounts(':memory:');
@@ -308,4 +309,118 @@ test('旧表结构缺 key_id / last_used_at 时自动幂等迁移', async () => 
   assert.equal(a.entries(u.id)[0].key_id, record.id);
   a.close();
   rmSync(dir, { recursive: true, force: true });
+});
+
+test('代金券：签发只存哈希，兑换入账，重放/过期/吊销/坏码都不双倍入账', () => {
+  const a = fresh();
+  const u = a.createUser('voucher@example.com');
+  const before = a.balanceMicro(u.id);
+
+  assert.throws(() => a.issueVoucher(0), /positive integer/);
+  assert.throws(() => a.issueVoucher(1.5), /positive integer/);
+  assert.throws(() => a.issueVoucher(100, { expiresAt: Date.now() - 1000 }), /expiresAt/);
+
+  const { code, record } = a.issueVoucher(250, { label: 'x'.repeat(120), at: 1_700_000_000_000 });
+  assert.match(code, /^jev_v_[A-Za-z0-9_-]+$/);
+  assert.equal(record.prefix, code.slice(0, 12));
+  assert.equal(record.cents, 250);
+  assert.equal(record.usd, '2.50');
+  assert.equal(record.label.length, 80);
+  const stored = a._db.prepare('SELECT * FROM vouchers WHERE id = ?').get(record.id);
+  assert.equal(stored.hash, createHash('sha256').update(code).digest('hex'));
+  assert.equal(JSON.stringify(stored).includes(code), false, '库里不能留下完整明文');
+
+  const listed = a.listVouchers();
+  assert.equal(listed[0].id, record.id);
+  assert.equal('hash' in listed[0], false);
+  assert.equal(listed[0].prefix, record.prefix);
+
+  const ok = a.redeemVoucher(u.id, `  ${code}  `);
+  assert.equal(ok.ok, true);
+  assert.equal(ok.creditedCents, 250);
+  assert.equal(ok.creditedUsd, centsToUsd(250));
+  assert.equal(ok.prefix, record.prefix);
+  assert.equal(a.balanceMicro(u.id), before + 250 * MICROUSD_PER_CENT);
+  assert.equal(ok.balance.microUsd, before + 250 * MICROUSD_PER_CENT);
+  const topups = a.entries(u.id).filter((e) => e.kind === 'topup' && String(e.ref).startsWith('voucher:'));
+  assert.equal(topups.length, 1);
+  assert.equal(topups[0].ref, `voucher:${record.prefix}`);
+
+  const replay = a.redeemVoucher(u.id, code);
+  assert.deepEqual(replay, { ok: false, reason: 'already_redeemed' });
+  assert.equal(a.balanceMicro(u.id), before + 250 * MICROUSD_PER_CENT, '重放不能再次入账');
+  assert.equal(a.revokeVoucher(record.id), false, '已兑换的券不能吊销');
+
+  const expired = a.issueVoucher(100, { expiresAt: 5_000, at: 1_000 });
+  const exp = a.redeemVoucher(u.id, expired.code, 5_000);
+  assert.equal(exp.ok, false);
+  assert.equal(exp.reason, 'expired');
+
+  const revoked = a.issueVoucher(80);
+  assert.equal(a.revokeVoucher(revoked.record.id), true);
+  assert.equal(a.revokeVoucher(revoked.record.id), false);
+  assert.equal(a.redeemVoucher(u.id, revoked.code).reason, 'revoked');
+
+  assert.equal(a.redeemVoucher(u.id, 'jev_v_not-a-real-code').reason, 'not_found');
+  assert.equal(a.redeemVoucher(u.id, '   ').reason, 'invalid_code');
+  assert.equal(a.redeemVoucher('missing-user', code).reason, 'no_such_user');
+  assert.equal(a.balanceMicro(u.id), before + 250 * MICROUSD_PER_CENT);
+
+  const users = a.listUsers();
+  assert.equal(users[0].email, 'voucher@example.com');
+  assert.equal(users[0].balanceMicroUsd, before + 250 * MICROUSD_PER_CENT);
+  assert.equal(users[0].activeKeys, 0);
+  assert.equal('hash' in users[0], false);
+  a.close();
+});
+
+test('用户列表按创建时间倒序，并带余额、消费与有效 key 数', () => {
+  const a = fresh();
+  const older = a.createUser('older@example.com', 'free', 1_000);
+  const newer = a.createUser('newer@example.com', 'free', 2_000);
+  a.issueKey(newer.id, 'live');
+  const revoked = a.issueKey(newer.id, 'dead');
+  a.revokeKey(revoked.record.id);
+  a.reserveInputTokens(older.id, 1000, { at: 3_000 });
+  const rows = a.listUsers();
+  assert.deepEqual(rows.map((u) => u.email), ['newer@example.com', 'older@example.com']);
+  assert.equal(rows[0].activeKeys, 1);
+  assert.equal(rows[0].plan, 'free');
+  assert.equal(rows[0].balanceMicroUsd, SIGNUP_CREDIT_MICROUSD);
+  assert.equal(rows[0].spentMicroUsd, 0);
+  assert.equal(rows[1].spentMicroUsd, inputCostMicroUsd(1000));
+  assert.equal(rows[1].balanceMicroUsd, SIGNUP_CREDIT_MICROUSD - inputCostMicroUsd(1000));
+  a.close();
+});
+
+test('漏斗计数：白名单、语言清洗、按 UTC 日聚合，窗口含今天', () => {
+  const a = fresh();
+  assert.equal(a.recordEvent('drop_table'), false);
+  assert.equal(a.recordEvent(''), false);
+  const now = Date.parse('2026-11-25T15:00:00.000Z');
+  for (const event of FUNNEL_EVENTS) {
+    assert.equal(a.recordEvent(event, 'en', now), true);
+  }
+  assert.equal(a.recordEvent('try_run', 'en', now), true);
+  assert.equal(a.recordEvent('try_run', 'ZH', now), true, '非小写两位语言记为 unknown');
+  assert.equal(a.recordEvent('try_run', 'eng', now), true);
+  assert.equal(a.recordEvent('login_ok', 'ja', Date.parse('2026-11-10T00:00:00.000Z')), true);
+
+  const summary = a.funnelSummary(7, now);
+  assert.equal(summary.days, 7);
+  assert.equal(summary.since, '2026-11-19');
+  assert.equal(summary.totals.try_run, 4, '2 次 en + ZH + eng，都落在 11-25');
+  assert.equal(summary.totals.login_ok, 1, '窗口内只有 11-25 那次，11-10 在窗外');
+  assert.equal(summary.totals.register_ok, 1);
+  assert.equal(summary.byDay.at(-1).day, '2026-11-25');
+  assert.equal(summary.byDay.at(-1).events.try_run, 4);
+  assert.equal(summary.byDay.some((d) => d.day === '2026-11-10'), false);
+
+  const wide = a.funnelSummary(30, now);
+  assert.equal(wide.since, '2026-10-27');
+  assert.equal(wide.totals.login_ok, 2);
+
+  a._db.exec('PRAGMA query_only = ON');
+  assert.equal(a.recordEvent('try_run', 'en', now), false, '只读库失败时静默返回 false');
+  a.close();
 });

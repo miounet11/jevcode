@@ -60,6 +60,7 @@ export const rows: Localized<[string, string][]> = {
     ['处理速度（jev-1.13.0 公布）', '每秒 100K token，每秒 40 次请求，随负载调整'],
     ['不注册试用', '每个 IP 每小时 20 次，不扣钱'],
     ['单次上限', '情况说明最长 4000 字，最多 6 个问题'],
+    ['额度充值', '赠送额度用完后，可在「我的账户」页输入预付充值码即时入账'],
   ],
   en: [
     ['Input', '$0.042 / million tokens ($42 / billion)'],
@@ -69,6 +70,7 @@ export const rows: Localized<[string, string][]> = {
     ['Rate (published for jev-1.13.0)', '100K tokens/s and 40 requests/s; published limits move with load'],
     ['Anonymous try', '20 calls per IP per hour, not billed'],
     ['Per-call cap on this site', 'state up to 4000 characters, up to 6 questions'],
+    ['Top-up', 'After signup credit runs out, redeem prepaid credit codes anytime on your Account page'],
   ],
   ja: [
     ['入力', '$0.042 / 100 万トークン（10 億あたり $42）'],
@@ -78,6 +80,7 @@ export const rows: Localized<[string, string][]> = {
     ['レート（jev-1.13.0 公表）', '100K トークン/秒、40 リクエスト/秒。公表値は負荷で変動'],
     ['匿名トライアル', 'IP あたり 1 時間 20 回、課金なし'],
     ['当サイトの 1 回上限', 'state 最大 4000 文字、質問は最大 6 個'],
+    ['チャージ', '登録特典を使い切ったあとは、「マイアカウント」でプリペイドのチャージコードを入力するとすぐ反映されます'],
   ],
   ko: [
     ['입력', '$0.042 / 백만 토큰 ($42 / 십억)'],
@@ -87,6 +90,7 @@ export const rows: Localized<[string, string][]> = {
     ['레이트(jev-1.13.0 공개)', '100K 토큰/s, 40 요청/s. 공개 한도는 부하에 따라 변동'],
     ['익명 체험', 'IP당 시간당 20회, 과금 없음'],
     ['이 사이트의 호출당 상한', 'state 최대 4000자, 질문 최대 6개'],
+    ['충전', '가입 크레딧을 모두 쓴 뒤에는 「내 계정」에서 선불 충전 코드를 입력하면 바로 반영됩니다'],
   ],
   de: [
     ['Eingabe', '$0.042 / Million Token ($42 / Milliarde)'],
@@ -96,6 +100,7 @@ export const rows: Localized<[string, string][]> = {
     ['Rate (für jev-1.13.0 veröffentlicht)', '100K Token/s und 40 Anfragen/s; veröffentlichte Grenzen schwanken mit der Last'],
     ['Anonymer Test', '20 Aufrufe pro IP und Stunde, nicht berechnet'],
     ['Limit pro Aufruf auf dieser Site', 'state bis 4000 Zeichen, bis zu 6 Fragen'],
+    ['Aufladen', 'Wenn das Anmeldeguthaben aufgebraucht ist, kannst du auf der Kontoseite jederzeit einen Prepaid-Code einlösen'],
   ],
   fr: [
     ['Entrée', '0,042 $ / million de tokens (42 $ / milliard)'],
@@ -105,6 +110,7 @@ export const rows: Localized<[string, string][]> = {
     ['Débit (publié pour jev-1.13.0)', '100K tokens/s et 40 requêtes/s ; les limites publiées varient avec la charge'],
     ['Essai anonyme', '20 appels par IP et par heure, non facturés'],
     ['Plafond par appel sur ce site', 'state jusqu\'à 4000 caractères, jusqu\'à 6 questions'],
+    ['Recharge', 'Une fois le crédit d\'inscription épuisé, saisissez un code prépayé à tout moment sur la page Compte'],
   ],
   es: [
     ['Entrada', '$0.042 / millón de tokens ($42 / mil millones)'],
@@ -114,6 +120,7 @@ export const rows: Localized<[string, string][]> = {
     ['Velocidad (publicada para jev-1.13.0)', '100K tokens/s y 40 solicitudes/s; los límites publicados varían con la carga'],
     ['Prueba anónima', '20 llamadas por IP y hora, sin cargo'],
     ['Límite por llamada en este sitio', 'state hasta 4000 caracteres, hasta 6 preguntas'],
+    ['Recarga', 'Cuando se acabe el crédito de registro, canjea códigos prepago en cualquier momento en tu página de cuenta'],
   ],
   pt: [
     ['Entrada', '$0.042 / milhão de tokens ($42 / bilhão)'],
@@ -123,6 +130,7 @@ export const rows: Localized<[string, string][]> = {
     ['Taxa (publicada para jev-1.13.0)', '100K tokens/s e 40 requisições/s; os limites publicados variam com a carga'],
     ['Teste anônimo', '20 chamadas por IP por hora, sem cobrança'],
     ['Limite por chamada neste site', 'state até 4000 caracteres, até 6 perguntas'],
+    ['Recarga', 'Depois que o crédito de cadastro acabar, resgate códigos pré-pagos a qualquer momento na página da conta'],
   ],
 };
 

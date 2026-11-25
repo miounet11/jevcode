@@ -12,6 +12,8 @@
 | `/api/auth/logout` | POST | 登出 |
 | `/api/auth/me` | GET | 当前用户 + 额度 + Key 列表（含 `lastUsedAt`；未登录返回 `200 {"user":null}`） |
 | `/api/auth/ledger` | GET | 余额、累计消费与消费流水（含 `keyId`） |
+| `/api/auth/redeem` | POST | 预付充值码原子兑换入账。需登录，JSON 体 `{ "code": "..." }`；同一码只入账一次，成功返回入账美分与新余额 |
+| `/api/auth/capabilities` | GET | 不依赖登录态。返回 `{ ok, otpEnabled, redeemEnabled }`，前端据此决定是否展示验证码登录与兑换入口 |
 | `/api/keys` | POST | 签发 API Key（明文只返回一次） |
 | `/api/keys/revoke` | POST | 吊销自己的 Key |
 
@@ -48,10 +50,25 @@ NODE_ENV=production
 但验证码登录会以「看起来可用、实际发不出信」的形态漏出去。设了之后未配发信通道
 时 `/api/auth/otp/*` 正确返回 `503 code_login_unavailable`。
 
-目录要先建好并给运行用户写权限（service 里没配 `User=`，即以 root 运行）：
+`deploy/jevcode-playground.service` 已配置以专用非 root 系统用户 `jevcode` 运行，并启用 `ProtectSystem=strict` 与 `PrivateTmp=true`：
+
+```ini
+User=jevcode
+Group=jevcode
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/jevcode-accounts /var/www/jevcode/shared/runs
+```
+
+`ProtectSystem=strict` 下进程只能写 `ReadWritePaths` 列出的目录。首次建站或迁移时创建系统用户并授权：
 
 ```bash
-install -d -m 0750 /var/lib/jevcode-accounts
+id jevcode >/dev/null 2>&1 || useradd --system --no-create-home --shell /usr/sbin/nologin jevcode
+install -d -o jevcode -g jevcode -m 0750 /var/lib/jevcode-accounts
+install -d -o jevcode -g jevcode -m 0755 /var/www/jevcode/shared/runs
+chown root:jevcode /etc/jevcode /etc/jevcode/playground.env
+chmod 0750 /etc/jevcode && chmod 0640 /etc/jevcode/playground.env
 ```
 
 ### 2. 重载 nginx
@@ -119,15 +136,16 @@ node /opt/jevcode-playground/backup-accounts.mjs
 # 产物在 /var/backups/jevcode-accounts/accounts-<UTC时间戳>.db
 ```
 
-已装定时任务 `/etc/cron.d/jevcode-backup`（每小时一次，保留最近 168 份）。
+已装定时任务 `/etc/cron.d/jevcode-backup`（每小时以 `jevcode` 用户运行一次，保留最近 168 份，避免 root 打开 WAL 库留下 root 属主 `-wal`/`-shm`）。
 日志写到 `/var/log/jevcode-backup.log`。改保留份数用 `BACKUP_KEEP`。
 
-**恢复**：停服 → 用快照覆盖 `accounts.db` 并删掉同目录 `-wal`/`-shm`
+**恢复**：停服 → 用快照覆盖 `accounts.db`、还原属主为 `jevcode:jevcode` 并删掉同目录 `-wal`/`-shm`
 → 起服。
 
 ```bash
 systemctl stop jevcode-playground
 cp /var/backups/jevcode-accounts/accounts-<时间戳>.db /var/lib/jevcode-accounts/accounts.db
+chown jevcode:jevcode /var/lib/jevcode-accounts/accounts.db
 rm -f /var/lib/jevcode-accounts/accounts.db-wal /var/lib/jevcode-accounts/accounts.db-shm
 systemctl start jevcode-playground
 ```
@@ -147,14 +165,53 @@ systemctl start jevcode-playground
 node /opt/jevcode-playground/healthcheck.mjs   # 全绿时输出 OK 并退出 0
 ```
 
+## 管理账号与预付充值码
+
+`scripts/admin-accounts.mjs` 随 `deploy/sync-server-scripts.sh` 同步到
+`/opt/jevcode-playground/admin-accounts.mjs`。它读 `PLAYGROUND_ACCOUNTS_DB`，
+在服务器上查看用户、手工入账、签发或作废预付充值码。用户兑换走上面的
+`POST /api/auth/redeem`，入账与核销在同一个事务里完成。
+
+```bash
+set -a; . /etc/jevcode/playground.env; set +a
+cd /opt/jevcode-playground
+
+node admin-accounts.mjs summary [--days=7] [--json]
+                                         # 用户数、余额合计、充值码（有效 / 已兑 / 作废 / 过期）
+node admin-accounts.mjs users [--limit=50] [--json]
+                                         # 列出用户（邮箱、套餐、余额）
+node admin-accounts.mjs credit <email> <cents> [--ref=manual] [--json]
+                                         # 手工入账，cents 为正整数美分
+node admin-accounts.mjs issue-voucher <cents> [--label=...] [--days=90] [--json]
+                                         # 签发预付充值码；明文只在这次打印
+node admin-accounts.mjs vouchers [--limit=100] [--json]
+                                         # 列出充值码及状态
+node admin-accounts.mjs revoke-voucher <id> [--json]
+                                         # 作废尚未兑换的充值码（参数是 id，不是明文码）
+```
+
+库路径默认 `PLAYGROUND_ACCOUNTS_DB`，也可用 `--db=path` 覆盖。
+
+## 对照运行记录清理
+
+`/etc/cron.d/jevcode-prune-runs` 每天以 `jevcode` 用户跑 `prune-runs.mjs --days=30`，删除
+`/var/www/jevcode/shared/runs` 里超过 30 天的 12 位运行记录。`compare-log.jsonl`、
+其它文件和子目录不动。脚本由 `deploy/sync-server-scripts.sh` 同步到
+`/opt/jevcode-playground/prune-runs.mjs`，日志 `/var/log/jevcode-prune-runs.log` 纳入 `/etc/logrotate.d/jevcode` 轮转。
+
+```
+# /etc/cron.d/jevcode-prune-runs
+15 3 * * * jevcode /usr/bin/node /opt/jevcode-playground/prune-runs.mjs --days=30 >> /var/log/jevcode-prune-runs.log 2>&1
+```
+
 ## 验证码登录（可选）
 
-发信通道靠 `MAIL_TRANSPORT` / SMTP 相关 env 配置；没配则 `/api/auth/otp/*`
-返回 `503 code_login_unavailable`，**密码登录不受影响**。产品流程不使用验证码登录。
+发信通道靠 `MAIL_TRANSPORT` / SMTP 相关 env 配置；没配时 `/api/auth/capabilities`
+返回 `otpEnabled: false`、`/login/` 隐藏验证码模式入口、`/api/auth/otp/*` 返回
+`503 code_login_unavailable`，**密码登录不受影响**。一旦配置好发信通道，前端自动暴露邮箱验证码登录入口，无需重新构建。
 
 ## 尚未实现
 
-- 邮箱验证、找回密码
-- 支付与订阅生命周期（付费档价格未定，`PLAN_META.paid` 是占位）
-- 额度用完后的按量充值（`accounts.credit()` 已具备入账能力，缺支付打通）
-- 管理端（查看用户、手工调额）
+- 邮箱验证
+- SMTP 密码重置（找回密码）
+- 自动化第三方支付 webhook 与订阅生命周期（付费档价格未定，`PLAN_META.paid` 是占位；`accounts.credit()` 与预付充值码已能入账，缺支付回调打通）

@@ -20,6 +20,8 @@ export interface JevUiCopy {
     empty: string;
     /** 枢纽页的分类导航标题，同时用作 nav 的 aria-label。 */
     categories: string;
+    /** 分类预览超出条数时，链到该分类全量页。count 是该分类条目总数。 */
+    viewAll: (count: number) => string;
   };
   category: {
     lead: (count: number) => string;
@@ -51,6 +53,7 @@ const EN: JevUiCopy = {
     labels: 'Labels',
     empty: 'No publicly verified entries yet.',
     categories: 'Categories',
+    viewAll: (count) => `View all ${count} entries in this category →`,
   },
   category: {
     lead: (count) =>
@@ -83,6 +86,7 @@ const ZH: JevUiCopy = {
     labels: '验证标签',
     empty: '暂无可公开的条目。',
     categories: '分类',
+    viewAll: (count) => `查看该分类全部 ${count} 条 →`,
   },
   category: {
     lead: (count) => `收录 ${count} 个条目，按证据与决策归类。每条给出具体决策与可点开的证据链接。`,
@@ -114,6 +118,7 @@ const JA: JevUiCopy = {
     labels: 'ラベル',
     empty: '公開できる項目はまだありません。',
     categories: 'カテゴリ',
+    viewAll: (count) => `このカテゴリの全 ${count} 件を見る →`,
   },
   category: {
     lead: (count) => `このカテゴリの ${count} 件。各項目に具体的な判断と開ける根拠リンクがあります。`,
@@ -145,6 +150,7 @@ const KO: JevUiCopy = {
     labels: '라벨',
     empty: '공개할 수 있는 항목이 아직 없습니다.',
     categories: '카테고리',
+    viewAll: (count) => `이 분류의 전체 ${count}개 보기 →`,
   },
   category: {
     lead: (count) => `이 분류의 ${count}개 항목. 각 항목에 구체적 결정과 열어볼 수 있는 근거 링크가 있습니다.`,
@@ -176,6 +182,7 @@ const DE: JevUiCopy = {
     labels: 'Labels',
     empty: 'Noch keine öffentlich belegten Einträge.',
     categories: 'Kategorien',
+    viewAll: (count) => `Alle ${count} Einträge dieser Kategorie ansehen →`,
   },
   category: {
     lead: (count) => `${count} Einträge in dieser Kategorie. Jeder nennt die konkrete Entscheidung und verlinkt einen öffnbaren Beleg.`,
@@ -207,6 +214,7 @@ const FR: JevUiCopy = {
     labels: 'Étiquettes',
     empty: 'Aucune entrée publiquement vérifiée pour le moment.',
     categories: 'Catégories',
+    viewAll: (count) => `Voir les ${count} entrées de cette catégorie →`,
   },
   category: {
     lead: (count) => `${count} entrées dans cette catégorie. Chacune nomme la décision concrète et renvoie à une preuve ouvrable.`,
@@ -238,6 +246,7 @@ const ES: JevUiCopy = {
     labels: 'Etiquetas',
     empty: 'Todavía no hay entradas verificadas públicamente.',
     categories: 'Categorías',
+    viewAll: (count) => `Ver las ${count} entradas de esta categoría →`,
   },
   category: {
     lead: (count) => `${count} entradas en esta categoría. Cada una indica la decisión concreta y enlaza evidencia abrible.`,
@@ -269,6 +278,7 @@ const PT: JevUiCopy = {
     labels: 'Rótulos',
     empty: 'Ainda não há entradas verificadas publicamente.',
     categories: 'Categorias',
+    viewAll: (count) => `Ver todas as ${count} entradas desta categoria →`,
   },
   category: {
     lead: (count) => `${count} entradas nesta categoria. Cada uma declara a decisão concreta e aponta evidência abrível.`,

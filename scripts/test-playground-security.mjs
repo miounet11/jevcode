@@ -398,3 +398,206 @@ test('P2/P3：匿名访客跳过 /me、sitemap 默认语言与站点对齐、fav
   assert.match(robots, /User-agent:\s*AhrefsBot[\s\S]*?Crawl-delay:\s*10/);
   assert.match(robots, /User-agent:\s*GPTBot[\s\S]*?Allow:\s*\//);
 });
+
+function runAdmin(args, dbPath) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [
+      path.join(ROOT, 'scripts/admin-accounts.mjs'),
+      `--db=${dbPath}`,
+      ...args,
+    ], { cwd: ROOT });
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (d) => { stdout += d; });
+    child.stderr.on('data', (d) => { stderr += d; });
+    child.on('error', reject);
+    child.on('close', (code) => resolve({ code, stdout, stderr }));
+  });
+}
+
+test('P2-A：capabilities、代金券兑换与漏斗计数', async () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-p2a-redeem-'));
+  const dbPath = path.join(dir, 'acct.db');
+  const dataDir = path.join(dir, 'runs');
+
+  const issued = openAccounts(dbPath);
+  const voucher = issued.issueVoucher(1000, { label: 'p2a' });
+  issued.close();
+
+  const upPort = await freePort();
+  const upstream = createServer((_, res) => {
+    res.writeHead(200, { 'content-type': 'application/json' });
+    res.end(JSON.stringify({ model: 'clavue-jev', answers: { q1: { noul: 0.5 } } }));
+  });
+  await new Promise((r) => upstream.listen(upPort, '127.0.0.1', r));
+
+  const { base, child } = await startPlayground({
+    dbPath,
+    dataDir,
+    upstreamUrl: `http://127.0.0.1:${upPort}/v1/systemone`,
+    extraEnv: {
+      NODE_ENV: 'production',
+      MAIL_TRANSPORT: '',
+      MAIL_WEBHOOK_URL: '',
+      SMTP_URL: '',
+    },
+  });
+
+  try {
+    const capRes = await fetch(`${base}/api/auth/capabilities`);
+    assert.equal(capRes.status, 200);
+    assert.deepEqual(await capRes.json(), { ok: true, otpEnabled: false, redeemEnabled: true });
+
+    const anon = await fetch(`${base}/api/auth/redeem`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ code: voucher.code }),
+    });
+    assert.equal(anon.status, 401);
+    assert.equal((await anon.json()).error, 'not signed in');
+
+    const cap = await (await fetch(`${base}/api/auth/captcha`)).json();
+    const m = cap.question.match(/^(\d+)\s*([+−-])\s*(\d+)/);
+    const ans = m[2] === '+' ? Number(m[1]) + Number(m[3]) : Number(m[1]) - Number(m[3]);
+    const reg = await fetch(`${base}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', referer: 'https://jevcode.ai/zh/account' },
+      body: JSON.stringify({
+        email: 'redeem@example.com',
+        password: 'redeem-password-1',
+        captchaToken: cap.token,
+        captchaAnswer: String(ans),
+      }),
+    });
+    assert.equal(reg.status, 201);
+    const sess = (reg.headers.getSetCookie?.() || []).find((c) => c.startsWith('jev_session='));
+    assert.ok(sess, '注册应下发会话 Cookie');
+    const cookie = sess.split(';')[0];
+
+    const bad = await fetch(`${base}/api/auth/redeem`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', cookie },
+      body: JSON.stringify({ code: 'short' }),
+    });
+    assert.equal(bad.status, 400);
+    assert.deepEqual(await bad.json(), { error: 'invalid_voucher', reason: 'invalid_code' });
+
+    const missing = await fetch(`${base}/api/auth/redeem`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', cookie },
+      body: JSON.stringify({ code: 'jev_v_definitely-missing' }),
+    });
+    assert.equal(missing.status, 400);
+    assert.equal((await missing.json()).reason, 'not_found');
+
+    const ok = await fetch(`${base}/api/auth/redeem`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', cookie, referer: 'https://jevcode.ai/zh/account' },
+      body: JSON.stringify({ code: voucher.code }),
+    });
+    assert.equal(ok.status, 200);
+    const body = await ok.json();
+    assert.equal(body.ok, true);
+    assert.equal(body.creditedCents, 1000);
+    assert.equal(body.creditedUsd, '10.00');
+    assert.equal(body.prefix, voucher.record.prefix);
+    assert.equal(body.credit.cents, 1500);
+    assert.equal(body.credit.usd, '15.00');
+
+    const me = await (await fetch(`${base}/api/auth/me`, { headers: { cookie } })).json();
+    assert.equal(me.credit.cents, 1500);
+    assert.equal(me.credit.usd, '15.00');
+
+    const again = await fetch(`${base}/api/auth/redeem`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', cookie },
+      body: JSON.stringify({ code: voucher.code }),
+    });
+    assert.equal(again.status, 400);
+    assert.equal((await again.json()).reason, 'already_redeemed');
+    const meAgain = await (await fetch(`${base}/api/auth/me`, { headers: { cookie } })).json();
+    assert.equal(meAgain.credit.cents, 1500, '重复兑换不能再次入账');
+
+    const keyRes = await fetch(`${base}/api/keys`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', cookie },
+      body: JSON.stringify({ label: 'p2a' }),
+    });
+    assert.equal(keyRes.status, 201);
+
+    const check = openAccounts(dbPath);
+    const funnel = check.funnelSummary(7);
+    assert.ok((funnel.totals.voucher_redeemed || 0) >= 1);
+    assert.ok((funnel.totals.register_ok || 0) >= 1);
+    assert.ok((funnel.totals.key_created || 0) >= 1);
+    const zh = check._db.prepare(
+      "SELECT count FROM funnel_daily WHERE event = 'voucher_redeemed' AND lang = 'zh'"
+    ).get();
+    assert.equal(Number(zh.count), 1);
+    check.close();
+  } finally {
+    child.kill('SIGTERM');
+    upstream.close();
+    await sleep(150);
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('P2-A：admin-accounts CLI 对临时库签发、汇总、列表与吊销', async () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-p2a-cli-'));
+  const dbPath = path.join(dir, 'acct.db');
+  try {
+    const issued = await runAdmin(['issue-voucher', '2500', '--label=wave-a', '--days=30', '--json'], dbPath);
+    assert.equal(issued.code, 0, issued.stderr);
+    const voucher = JSON.parse(issued.stdout);
+    assert.match(voucher.code, /^jev_v_/);
+    assert.match(voucher.warning, /only once/i);
+    assert.equal(voucher.cents, 2500);
+    assert.equal(voucher.usd, '25.00');
+
+    const prep = openAccounts(dbPath);
+    prep.createUser('op@example.com');
+    prep.close();
+
+    const credited = await runAdmin(['credit', 'op@example.com', '100', '--ref=manual', '--json'], dbPath);
+    assert.equal(credited.code, 0, credited.stderr);
+    const credit = JSON.parse(credited.stdout);
+    assert.equal(credit.creditedCents, 100);
+    assert.equal(credit.balance.usd, '6.00');
+
+    const missing = await runAdmin(['credit', 'nobody@example.com', '100'], dbPath);
+    assert.notEqual(missing.code, 0);
+    assert.match(missing.stderr, /no such user/i);
+
+    const summaryRun = await runAdmin(['summary', '--days=7', '--json'], dbPath);
+    assert.equal(summaryRun.code, 0, summaryRun.stderr);
+    const summary = JSON.parse(summaryRun.stdout);
+    assert.equal(summary.users, 1);
+    assert.equal(summary.usd.granted, '6.00');
+    assert.equal(summary.usd.topup, '1.00');
+    assert.equal(summary.vouchers.total, 1);
+    assert.equal(summary.vouchers.active, 1);
+    assert.equal(summary.funnel.days, 7);
+
+    const listRun = await runAdmin(['vouchers', '--json'], dbPath);
+    assert.equal(listRun.code, 0, listRun.stderr);
+    const list = JSON.parse(listRun.stdout);
+    assert.equal(list.length, 1);
+    assert.equal(list[0].id, voucher.id);
+    assert.equal(list[0].status, 'active');
+    assert.equal(list[0].prefix, voucher.prefix);
+    assert.equal('hash' in list[0], false);
+
+    const revoked = await runAdmin(['revoke-voucher', voucher.id, '--json'], dbPath);
+    assert.equal(revoked.code, 0, revoked.stderr);
+    assert.equal(JSON.parse(revoked.stdout).ok, true);
+    const after = JSON.parse((await runAdmin(['vouchers', '--json'], dbPath)).stdout);
+    assert.equal(after[0].status, 'revoked');
+
+    const again = await runAdmin(['revoke-voucher', voucher.id], dbPath);
+    assert.notEqual(again.code, 0);
+    assert.match(again.stderr, /could not revoke/i);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

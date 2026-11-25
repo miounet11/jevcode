@@ -15,6 +15,7 @@ import assert from 'node:assert/strict';
 import { spawn, execFile } from 'node:child_process';
 import { mkdtempSync, mkdirSync, rmSync, existsSync, writeFileSync, readFileSync, readdirSync, utimesSync } from 'node:fs';
 import { pruneRuns } from './prune-runs.mjs';
+import { filterBuildOutput, isNoisyBuildLine } from './lib/build-log.mjs';
 import { blockingDirty } from './pipeline-guard.mjs';
 import { applyMetrics, insertEntries, mergeTweets, tweetsFromSearch } from './lib/community-x.mjs';
 import { nextScenarios } from './lib/lab-supplement.mjs';
@@ -825,6 +826,51 @@ test('prune-runs：--dry-run 报告将删除的数量，但不删文件', async 
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('build-log：丢掉 Astro 逐页路由行，保留检查、错误与摘要', () => {
+  const route = '16:55:16   ├─ /en/briefs/example/index.html (+1ms)';
+  assert.equal(isNoisyBuildLine(route), true);
+  assert.equal(isNoisyBuildLine('16:55:16   └─ /pt/jev/index.html (+2ms)'), true);
+  assert.equal(isNoisyBuildLine('16:55:16   │ /ko/jev/index.html'), true);
+  assert.equal(isNoisyBuildLine('\r'), true);
+  assert.equal(isNoisyBuildLine('\r\r'), true);
+  assert.equal(isNoisyBuildLine('check-seo: 0 issues'), false);
+  assert.equal(isNoisyBuildLine('ERROR failed to render'), false);
+  assert.equal(isNoisyBuildLine('nofollow: /hidden'), false);
+  assert.equal(isNoisyBuildLine('✓ Completed in 12.40s'), false);
+  assert.equal(isNoisyBuildLine('Indexed 19401 pages'), false);
+  assert.equal(isNoisyBuildLine('16:55:16 [build] building client'), false);
+
+  const filtered = filterBuildOutput([
+    '16:55:16 [build] building client',
+    route,
+    '16:55:16   └─ /pt/jev/index.html (+1ms)',
+    'check-seo: 0 issues',
+    'ERROR failed to render',
+    'nofollow: /hidden',
+    '✓ Completed in 12.40s',
+    'Indexed 19401 pages',
+    'Running Pagefind',
+    '\r',
+  ].join('\n'));
+  assert.doesNotMatch(filtered, /\/en\/briefs/);
+  assert.doesNotMatch(filtered, /\/pt\/jev/);
+  assert.match(filtered, /\[build\] building client/);
+  assert.match(filtered, /check-seo:/);
+  assert.match(filtered, /ERROR failed to render/);
+  assert.match(filtered, /nofollow:/);
+  assert.match(filtered, /✓ Completed/);
+  assert.match(filtered, /Indexed 19401 pages/);
+  assert.match(filtered, /Running Pagefind/);
+  assert.match(filtered, /\[build-log\] omitted 3 per-page route lines/);
+});
+
+test('sync-server-scripts 同步 prune-runs 与 admin-accounts', () => {
+  const sh = readFileSync(new URL('../deploy/sync-server-scripts.sh', import.meta.url), 'utf8');
+  const filesBlock = sh.slice(sh.indexOf('FILES=('), sh.indexOf(')', sh.indexOf('FILES=(')));
+  assert.match(filesBlock, /scripts\/prune-runs\.mjs/);
+  assert.match(filesBlock, /scripts\/admin-accounts\.mjs/);
 });
 
 test('支线抓取脚本具备网络超时保护，避免单点挂死耗尽 900s 预算', () => {

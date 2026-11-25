@@ -263,3 +263,114 @@ export const pwFail: Localized<string> = {
   es: 'Error al actualizar. Verifica tu contraseña actual y usa al menos 8 caracteres.',
   pt: 'Falha ao atualizar. Verifique sua senha atual e use ao menos 8 caracteres.',
 };
+
+export const redeemSection: Localized<string> = {
+  zh: '兑换充值码',
+  en: 'Redeem a credit code',
+  ja: 'チャージコードを使う',
+  ko: '충전 코드 사용',
+  de: 'Guthaben-Code einlösen',
+  fr: 'Utiliser un code de crédit',
+  es: 'Canjear un código de crédito',
+  pt: 'Resgatar um código de crédito',
+};
+
+export const redeemLead: Localized<string> = {
+  zh: '输入预付充值码，额度立即入账并写入下方消费明细。',
+  en: 'Enter a prepaid credit code to top up your balance immediately.',
+  ja: 'プリペイドのチャージコードを入力すると、残高にすぐ反映され、下の利用履歴にも記録されます。',
+  ko: '선불 충전 코드를 입력하면 잔액에 바로 반영되고, 아래 사용 내역에도 기록됩니다.',
+  de: 'Gib einen Prepaid-Code ein. Das Guthaben wird sofort gutgeschrieben und unten in den Ausgaben vermerkt.',
+  fr: 'Saisissez un code prépayé : le crédit est ajouté tout de suite et apparaît dans les dépenses ci-dessous.',
+  es: 'Introduce un código prepago. El crédito se abona al instante y queda en el detalle de gastos de abajo.',
+  pt: 'Informe um código pré-pago. O crédito entra na hora e aparece no extrato de gastos abaixo.',
+};
+
+export const redeemPlaceholder: Localized<string> = {
+  zh: '例如 jev_v_...',
+  en: 'e.g. jev_v_...',
+  ja: '例: jev_v_...',
+  ko: '예: jev_v_...',
+  de: 'z. B. jev_v_...',
+  fr: 'ex. jev_v_...',
+  es: 'p. ej. jev_v_...',
+  pt: 'ex. jev_v_...',
+};
+
+export const redeemSubmit: Localized<string> = {
+  zh: '兑换额度',
+  en: 'Redeem credit',
+  ja: 'クレジットを反映',
+  ko: '크레딧 충전',
+  de: 'Guthaben einlösen',
+  fr: 'Ajouter le crédit',
+  es: 'Canjear crédito',
+  pt: 'Resgatar crédito',
+};
+
+export const redeemWorking: Localized<string> = {
+  zh: '兑换中…',
+  en: 'Redeeming…',
+  ja: '反映中…',
+  ko: '충전 중…',
+  de: 'Wird eingelöst…',
+  fr: 'Activation…',
+  es: 'Canjeando…',
+  pt: 'Resgatando…',
+};
+
+export const redeemEmpty: Localized<string> = {
+  zh: '请先输入充值码。',
+  en: 'Enter a credit code first.',
+  ja: '先にチャージコードを入力してください。',
+  ko: '먼저 충전 코드를 입력하세요.',
+  de: 'Gib zuerst einen Code ein.',
+  fr: 'Saisissez d\'abord un code.',
+  es: 'Introduce primero un código.',
+  pt: 'Informe primeiro um código.',
+};
+
+/** 占位是 {usd}，货币符号写在占位前面。客户端只替换 {usd}。 */
+export const redeemOkTpl: Localized<string> = {
+  zh: '兑换成功，已入账 ${usd}。',
+  en: 'Redeemed! Added ${usd} to your balance.',
+  ja: '反映しました。残高に ${usd} を追加しました。',
+  ko: '충전되었습니다. 잔액에 ${usd}를 추가했습니다.',
+  de: 'Eingelöst. ${usd} wurden gutgeschrieben.',
+  fr: 'Code accepté. ${usd} ont été ajoutés à votre solde.',
+  es: 'Canjeado. Se añadieron ${usd} a tu saldo.',
+  pt: 'Resgatado. ${usd} foram adicionados ao seu saldo.',
+};
+
+export const redeemUsed: Localized<string> = {
+  zh: '该充值码已被使用。',
+  en: 'This code has already been redeemed.',
+  ja: 'このコードはすでに使用されています。',
+  ko: '이미 사용된 코드입니다.',
+  de: 'Dieser Code wurde bereits eingelöst.',
+  fr: 'Ce code a déjà été utilisé.',
+  es: 'Este código ya fue canjeado.',
+  pt: 'Este código já foi resgatado.',
+};
+
+export const redeemExpired: Localized<string> = {
+  zh: '该充值码已过期。',
+  en: 'This code has expired.',
+  ja: 'このコードは期限切れです。',
+  ko: '이 코드는 만료되었습니다.',
+  de: 'Dieser Code ist abgelaufen.',
+  fr: 'Ce code a expiré.',
+  es: 'Este código ha caducado.',
+  pt: 'Este código expirou.',
+};
+
+export const redeemFail: Localized<string> = {
+  zh: '充值码无效或已停用，请核对后重试。',
+  en: 'Invalid or revoked code. Check it and try again.',
+  ja: 'コードが無効か停止されています。確認してもう一度お試しください。',
+  ko: '코드가 유효하지 않거나 중지되었습니다. 확인 후 다시 시도하세요.',
+  de: 'Code ungültig oder gesperrt. Prüfe ihn und versuche es erneut.',
+  fr: 'Code invalide ou révoqué. Vérifiez-le et réessayez.',
+  es: 'Código no válido o revocado. Revísalo e inténtalo de nuevo.',
+  pt: 'Código inválido ou revogado. Confira e tente de novo.',
+};

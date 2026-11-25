@@ -25,6 +25,11 @@ export {
   INPUT_USD_PER_MILLION, OUTPUT_USD_PER_MILLION, SIGNUP_INPUT_TOKENS,
 };
 
+/** 一方漏斗允许写入的事件名。其它名字一律丢弃，避免把任意字符串灌进聚合表。 */
+export const FUNNEL_EVENTS = Object.freeze([
+  'try_run', 'compare_run', 'register_ok', 'login_ok', 'key_created', 'v1_judge_ok', 'voucher_redeemed',
+]);
+
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS users (
   id          TEXT PRIMARY KEY,
@@ -58,6 +63,28 @@ CREATE TABLE IF NOT EXISTS schema_meta (
 );
 CREATE INDEX IF NOT EXISTS idx_ledger_user ON ledger(user_id, ts);
 CREATE INDEX IF NOT EXISTS idx_keys_hash ON api_keys(hash);
+-- 预付代金券。库里只存明文的 sha256；prefix 供对账，不能反推完整码。
+CREATE TABLE IF NOT EXISTS vouchers (
+  id          TEXT PRIMARY KEY,
+  hash        TEXT NOT NULL UNIQUE,
+  prefix      TEXT NOT NULL,
+  cents       INTEGER NOT NULL,
+  label       TEXT,
+  created_at  INTEGER NOT NULL,
+  expires_at  INTEGER,
+  redeemed_by TEXT REFERENCES users(id),
+  redeemed_at INTEGER,
+  revoked_at  INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_vouchers_hash ON vouchers(hash);
+-- 零 PII 的一方漏斗日聚合。day 为 UTC YYYY-MM-DD。
+CREATE TABLE IF NOT EXISTS funnel_daily (
+  day   TEXT NOT NULL,
+  event TEXT NOT NULL,
+  lang  TEXT NOT NULL DEFAULT 'unknown',
+  count INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (day, event, lang)
+);
 `;
 
 const sha256 = (s) => createHash('sha256').update(s).digest('hex');
@@ -293,6 +320,164 @@ export function openAccounts(dbPath) {
       return db.prepare(
         'SELECT id, prefix, label, created_at, revoked_at, last_used_at FROM api_keys WHERE user_id = ? ORDER BY created_at'
       ).all(userId);
+    },
+
+    /**
+     * 签发预付代金券。明文 code 只在返回值里出现一次，库里只存 sha256。
+     * cents 为美分；expiresAt 为毫秒时间戳或 null。
+     */
+    issueVoucher(cents, { label = '', expiresAt = null, at = Date.now() } = {}) {
+      if (!Number.isInteger(cents) || cents <= 0) {
+        throw new Error('voucher cents must be a positive integer');
+      }
+      if (!(expiresAt == null || (Number.isFinite(expiresAt) && expiresAt > at))) {
+        throw new Error('voucher expiresAt must be null or a future timestamp');
+      }
+      const code = `jev_v_${randomBytes(18).toString('base64url')}`;
+      const id = randomUUID();
+      const prefix = code.slice(0, 12);
+      const cleanLabel = String(label || '').slice(0, 80);
+      const exp = expiresAt ?? null;
+      db.prepare(
+        'INSERT INTO vouchers (id, hash, prefix, cents, label, created_at, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      ).run(id, sha256(code), prefix, cents, cleanLabel, at, exp);
+      return {
+        code,
+        record: {
+          id,
+          prefix,
+          cents,
+          usd: centsToUsd(cents),
+          label: cleanLabel,
+          createdAt: at,
+          expiresAt: exp,
+        },
+      };
+    },
+
+    /**
+     * 兑换代金券。检查、标记、入账放在同一个 IMMEDIATE 事务里，重放不会双倍入账。
+     */
+    redeemVoucher(userId, rawCode, at = Date.now()) {
+      const code = String(rawCode || '').trim();
+      if (!code) return { ok: false, reason: 'invalid_code' };
+
+      const rollback = (result) => {
+        db.exec('ROLLBACK');
+        return result;
+      };
+
+      db.exec('BEGIN IMMEDIATE');
+      try {
+        if (!qUserById.get(userId)) return rollback({ ok: false, reason: 'no_such_user' });
+        const row = db.prepare('SELECT * FROM vouchers WHERE hash = ?').get(sha256(code));
+        if (!row) return rollback({ ok: false, reason: 'not_found' });
+        if (row.revoked_at != null) return rollback({ ok: false, reason: 'revoked' });
+        if (row.redeemed_at != null) return rollback({ ok: false, reason: 'already_redeemed' });
+        if (row.expires_at != null && at >= row.expires_at) return rollback({ ok: false, reason: 'expired' });
+
+        const info = db.prepare(
+          'UPDATE vouchers SET redeemed_by = ?, redeemed_at = ? WHERE id = ? AND redeemed_at IS NULL AND revoked_at IS NULL'
+        ).run(userId, at, row.id);
+        if (info.changes !== 1) {
+          throw new Error('voucher redeem did not update exactly one row');
+        }
+        record(userId, row.cents * MICROUSD_PER_CENT, 'topup', `voucher:${row.prefix}`, at);
+        db.exec('COMMIT');
+        return {
+          ok: true,
+          voucherId: row.id,
+          prefix: row.prefix,
+          creditedCents: row.cents,
+          creditedUsd: centsToUsd(row.cents),
+          balance: presentBalance(balanceMicro(userId)),
+        };
+      } catch (err) {
+        try { db.exec('ROLLBACK'); } catch { /* 未开始或已结束 */ }
+        throw err;
+      }
+    },
+
+    /** 代金券列表，新的在前。不返回 hash。 */
+    listVouchers(limit = 100) {
+      const n = Number.isInteger(limit) && limit > 0 ? limit : 100;
+      return db.prepare(
+        `SELECT id, prefix, cents, label, created_at, expires_at, redeemed_by, redeemed_at, revoked_at
+         FROM vouchers ORDER BY created_at DESC LIMIT ?`
+      ).all(n);
+    },
+
+    /** 吊销尚未兑换的券。已兑换或已吊销返回 false。 */
+    revokeVoucher(id, at = Date.now()) {
+      const info = db.prepare(
+        'UPDATE vouchers SET revoked_at = ? WHERE id = ? AND redeemed_at IS NULL AND revoked_at IS NULL'
+      ).run(at, id);
+      return info.changes > 0;
+    },
+
+    /** 用户列表，新的在前。余额与消费为微美元，activeKeys 不含已吊销的 key。 */
+    listUsers(limit = 100) {
+      const n = Number.isInteger(limit) && limit > 0 ? limit : 100;
+      return db.prepare(
+        `SELECT u.id, u.email, u.plan, u.created_at,
+                COALESCE((SELECT SUM(cents) FROM ledger WHERE user_id = u.id), 0) AS balanceMicroUsd,
+                COALESCE((SELECT SUM(CASE WHEN cents < 0 THEN -cents ELSE 0 END) FROM ledger WHERE user_id = u.id), 0) AS spentMicroUsd,
+                (SELECT COUNT(*) FROM api_keys WHERE user_id = u.id AND revoked_at IS NULL) AS activeKeys
+         FROM users u
+         ORDER BY u.created_at DESC
+         LIMIT ?`
+      ).all(n).map((row) => ({
+        id: row.id,
+        email: row.email,
+        plan: row.plan,
+        created_at: row.created_at,
+        balanceMicroUsd: Number(row.balanceMicroUsd),
+        spentMicroUsd: Number(row.spentMicroUsd),
+        activeKeys: Number(row.activeKeys),
+      }));
+    },
+
+    /**
+     * 记一条零 PII 漏斗事件。非法事件名返回 false。
+     * 只读库或写入失败时吞掉错误，遥测不能拖垮请求。
+     */
+    recordEvent(event, lang = 'unknown', at = Date.now()) {
+      if (!FUNNEL_EVENTS.includes(event)) return false;
+      const cleanLang = /^[a-z]{2}$/.test(lang) ? lang : 'unknown';
+      const day = new Date(at).toISOString().slice(0, 10);
+      try {
+        db.prepare(
+          `INSERT INTO funnel_daily (day, event, lang, count) VALUES (?, ?, ?, 1)
+           ON CONFLICT(day, event, lang) DO UPDATE SET count = count + 1`
+        ).run(day, event, cleanLang);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+
+    /**
+     * 最近 days 天（含今天）的漏斗汇总。since 为窗口起始 UTC 日期。
+     * totals / byDay.events 按事件名累加，不区分语言。
+     */
+    funnelSummary(days = 7, now = Date.now()) {
+      const n = Number.isInteger(days) && days > 0 ? days : 7;
+      const todayStart = Date.parse(`${new Date(now).toISOString().slice(0, 10)}T00:00:00.000Z`);
+      const since = new Date(todayStart - (n - 1) * 86400000).toISOString().slice(0, 10);
+      const rows = db.prepare(
+        'SELECT day, event, count FROM funnel_daily WHERE day >= ? ORDER BY day ASC'
+      ).all(since);
+      const totals = {};
+      const byDayMap = new Map();
+      for (const row of rows) {
+        const count = Number(row.count);
+        totals[row.event] = (totals[row.event] || 0) + count;
+        if (!byDayMap.has(row.day)) byDayMap.set(row.day, {});
+        const events = byDayMap.get(row.day);
+        events[row.event] = (events[row.event] || 0) + count;
+      }
+      const byDay = [...byDayMap.entries()].map(([day, events]) => ({ day, events }));
+      return { days: n, since, totals, byDay };
     },
 
     close: () => db.close(),

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { languages, useTranslations, type Lang } from '../../../i18n/ui';
-import { entriesByCategory, REGISTRY_REVIEWED_AT, categoryLabel } from '../../../lib/content/registry';
+import { entriesByCategory, REGISTRY_REVIEWED_AT, categoryLabel, type CoverageEntry } from '../../../lib/content/registry';
 import { assertionFor, jevCopy, verificationMeaning } from '../../../lib/content/jev-copy';
 import { hubDescription, hubTitle } from '../../../lib/seo/metadata';
 import { hubSchema } from '../../../lib/seo/schema';
@@ -17,10 +17,34 @@ const t = useTranslations(lang);
 
 const groups = entriesByCategory();
 const total = groups.reduce((n, g) => n + g.entries.length, 0);
+const PREVIEW_PER_CATEGORY = 6;
+// 枢纽只预览证据更强、复核更新的条目；全量列表在分类页。
+const EVIDENCE_PRIORITY = ['call-site-verified', 'reviewer-reproduced', 'third-party-reproduced'];
+function evidenceRank(entry: CoverageEntry): number {
+  let rank = EVIDENCE_PRIORITY.length;
+  for (const label of entry.verification) {
+    const i = EVIDENCE_PRIORITY.indexOf(label);
+    if (i >= 0 && i < rank) rank = i;
+  }
+  return rank;
+}
+function previewEntries(entries: CoverageEntry[]): CoverageEntry[] {
+  return [...entries]
+    .sort((a, b) => {
+      const byEvidence = evidenceRank(a) - evidenceRank(b);
+      if (byEvidence !== 0) return byEvidence;
+      return b.reviewedAt.localeCompare(a.reviewedAt);
+    })
+    .slice(0, PREVIEW_PER_CATEGORY);
+}
+const previews = groups.map((group) => ({
+  ...group,
+  preview: previewEntries(group.entries),
+}));
 // 断言只有 zh / en 两版；预先算好文字与实际语言，模板只负责渲染。
 const shown = new Map(
-  groups.flatMap((g) =>
-    g.entries.map((e) => [e.slug, assertionFor(e, lang)] as const),
+  previews.flatMap((g) =>
+    g.preview.map((e) => [e.slug, assertionFor(e, lang)] as const),
   ),
 );
 
@@ -60,11 +84,11 @@ const words = (label: Parameters<typeof verificationMeaning>[0]) => verification
         </nav>
       )}
 
-      {groups.map((group) => (
+      {previews.map((group) => (
         <section class="jev__group">
-          <h2>{categoryLabel(group.category, lang)}</h2>
+          <h2><a href={categoryPath(lang, group.category)}>{categoryLabel(group.category, lang)}</a> <span class="jev__count">({group.entries.length})</span></h2>
           <ul class="jev__list">
-            {group.entries.map((entry) => (
+            {group.preview.map((entry) => (
               <li class="jev__item">
                 <h3 class="jev__name">
                   <a href={entryPath(lang, entry.slug)}>{entry.name}</a>
@@ -85,6 +109,11 @@ const words = (label: Parameters<typeof verificationMeaning>[0]) => verification
               </li>
             ))}
           </ul>
+          {group.entries.length > PREVIEW_PER_CATEGORY && (
+            <p class="jev__more">
+              <a href={categoryPath(lang, group.category)}>{c.viewAll(group.entries.length)}</a>
+            </p>
+          )}
         </section>
       ))}
     </div>
@@ -118,6 +147,23 @@ const words = (label: Parameters<typeof verificationMeaning>[0]) => verification
   }
   .jev__group {
     margin-top: 2.5rem;
+  }
+  .jev__group h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .jev__group h2 a:hover,
+  .jev__group h2 a:focus-visible {
+    text-decoration: underline;
+  }
+  .jev__count {
+    margin-left: 0.4rem;
+    color: var(--muted, #8a8a8a);
+    font-size: 0.85rem;
+    font-weight: 400;
+  }
+  .jev__more {
+    margin: 0.75rem 0 0;
   }
   .jev__list {
     list-style: none;

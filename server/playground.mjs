@@ -169,6 +169,13 @@ function currentUser(req) {
   return s ? { user: s.user, session: s } : null;
 }
 
+/** 从 Referer 取站点语言前缀；对不上已知语言时记 unknown，不落任何用户标识。 */
+function reqLang(req) {
+  const ref = String(req.headers.referer || req.headers.referrer || '');
+  const m = ref.match(/^https?:\/\/[^/]+\/(en|zh|ja|ko|de|fr|es|pt)(?:\/|$)/);
+  return m ? m[1] : 'unknown';
+}
+
 /** 优先采用 nginx real_ip 校验后覆写的 X-Real-IP，避免客户端伪造 X-Forwarded-For 首项。 */
 function clientIp(req) {
   const real = req.headers['x-real-ip'];
@@ -492,6 +499,7 @@ const server = createServer(async (req, res) => {
         }
 
         // 响应形态与上游一致（model + answers），额外附 id 与 credit 便于对账
+        accounts?.recordEvent('v1_judge_ok', reqLang(req));
         send(res, 200, {
           id,
           model,
@@ -517,6 +525,16 @@ const server = createServer(async (req, res) => {
         return;
       }
 
+      // 前端据此决定是否展示验证码登录 / 兑换码入口。不依赖登录态。
+      if (req.method === 'GET' && url.pathname === '/api/auth/capabilities') {
+        send(res, 200, {
+          ok: true,
+          otpEnabled: Boolean(otp),
+          redeemEnabled: Boolean(accounts),
+        });
+        return;
+      }
+
       if (!auth) {
         send(res, 503, { error: 'accounts are not configured' });
         return;
@@ -531,7 +549,8 @@ const server = createServer(async (req, res) => {
           || url.pathname === '/api/auth/register'
           || url.pathname === '/api/auth/otp/request'
           || url.pathname === '/api/auth/otp/verify'
-          || url.pathname === '/api/auth/password')
+          || url.pathname === '/api/auth/password'
+          || url.pathname === '/api/auth/redeem')
       ) {
         const rl = authLimiter.check(clientIp(req));
         if (!rl.ok) {
@@ -588,6 +607,7 @@ const server = createServer(async (req, res) => {
           return;
         }
         setSessionCookie(res, r.token, r.expiresAt, secureCookie);
+        accounts?.recordEvent('login_ok', reqLang(req));
         send(res, 200, {
           user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
           credit: accounts.balance(r.user.id),
@@ -614,6 +634,7 @@ const server = createServer(async (req, res) => {
         // 直接签发会话，避免注册后立即再算一遍 scrypt
         const session = auth.issueSession(r.user.id);
         setSessionCookie(res, session.token, session.expiresAt, secureCookie);
+        accounts?.recordEvent('register_ok', reqLang(req));
         send(res, 201, {
           user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
           credit: accounts.balance(r.user.id),
@@ -630,9 +651,38 @@ const server = createServer(async (req, res) => {
           return;
         }
         setSessionCookie(res, r.token, r.expiresAt, secureCookie);
+        accounts?.recordEvent('login_ok', reqLang(req));
         send(res, 200, {
           user: { id: r.user.id, email: r.user.email, plan: r.user.plan },
           credit: accounts.balance(r.user.id),
+        });
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/auth/redeem') {
+        const me = currentUser(req);
+        if (!me) {
+          send(res, 401, { error: 'not signed in' });
+          return;
+        }
+        const b = await readBody(req);
+        const code = typeof b.code === 'string' ? b.code.trim() : '';
+        if (typeof b.code !== 'string' || code.length < 8 || code.length > 128) {
+          send(res, 400, { error: 'invalid_voucher', reason: 'invalid_code' });
+          return;
+        }
+        const r = accounts.redeemVoucher(me.user.id, b.code);
+        if (!r.ok) {
+          send(res, 400, { error: 'invalid_voucher', reason: r.reason });
+          return;
+        }
+        accounts.recordEvent('voucher_redeemed', reqLang(req));
+        send(res, 200, {
+          ok: true,
+          creditedCents: r.creditedCents,
+          creditedUsd: r.creditedUsd,
+          prefix: r.prefix,
+          credit: r.balance,
         });
         return;
       }
@@ -723,6 +773,7 @@ const server = createServer(async (req, res) => {
       const b = await readBody(req);
       const label = String(b.label || '').slice(0, 64);
       const { key, record } = accounts.issueKey(me.user.id, label);
+      accounts?.recordEvent('key_created', reqLang(req));
       send(res, 201, {
         // 明文 key 只在此出现一次，服务端只留 sha256
         key,
@@ -839,6 +890,7 @@ const server = createServer(async (req, res) => {
       await writeFile(path.join(DATA, `${id}.json`), JSON.stringify(record));
       const payload = { ...record };
       if (userId && accounts) payload.credit = accounts.balance(userId) || {};
+      accounts?.recordEvent('try_run', reqLang(req));
       send(res, 200, payload, { 'server-timing': `upstream;dur=${upstreamMs}` });
       return;
     }
@@ -874,6 +926,7 @@ const server = createServer(async (req, res) => {
       } catch (err) {
         console.error(`[compare] log failed: ${err.message}`);
       }
+      accounts?.recordEvent('compare_run', reqLang(req));
       send(res, 200, { results, recorded });
       return;
     }

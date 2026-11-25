@@ -1,14 +1,15 @@
 /**
  * /jev 的结构化数据。
  *
- * ItemList 的每一项都带 evidenceUrl，使生成式引擎在读 JSON-LD 时
- * 就能拿到可核对的来源，而不是只拿到一段自述。
+ * 枢纽页的 ItemList 只列非空分类集合。每个分类页自己的 categorySchema
+ * 才展开该分类的全部条目，并且每一项都带 evidenceUrl，使生成式引擎在读
+ * JSON-LD 时就能拿到可核对的来源，而不是只拿到一段自述。
  */
 import type { Lang } from '../../i18n/ui';
 import { hubUrl, entryUrl, hubPath, categoryUrl } from '../routing/domains';
 import {
   categoryLabel,
-  COVERAGE_ENTRIES,
+  entriesByCategory,
   REGISTRY_REVIEWED_AT,
   VERIFICATION_MEANING,
   type Category,
@@ -25,6 +26,8 @@ function assertionFor(lang: Lang, entry: CoverageEntry): string {
 export function hubSchema(lang: Lang): Record<string, unknown>[] {
   const url = hubUrl(lang);
   const title = hubTitle(lang);
+  // entriesByCategory() 已按 CATEGORIES 顺序滤掉空分类。
+  const groups = entriesByCategory().filter((group) => group.entries.length > 0);
 
   return [
     {
@@ -42,17 +45,14 @@ export function hubSchema(lang: Lang): Record<string, unknown>[] {
       '@type': 'ItemList',
       '@id': `${url}#list`,
       name: title,
-      numberOfItems: COVERAGE_ENTRIES.length,
+      numberOfItems: groups.length,
       itemListOrder: 'https://schema.org/ItemListOrderAscending',
-      itemListElement: COVERAGE_ENTRIES.map((entry, index) => ({
+      itemListElement: groups.map((group, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        name: entry.name,
-        url: entryUrl(lang, entry.slug),
-        ...(entry.lang ? { additionalType: entry.lang } : {}),
-        description: assertionFor(lang, entry),
-        sameAs: entry.repoUrl,
-        subjectOf: { '@type': 'CreativeWork', url: entry.evidenceUrl },
+        name: categoryLabel(group.category, lang),
+        url: categoryUrl(lang, group.category),
+        description: categoryDescription(lang, group.category, group.entries.length),
       })),
     },
   ];

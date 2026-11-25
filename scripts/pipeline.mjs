@@ -23,7 +23,7 @@
  *   GITHUB_TOKEN     可选，抓取限流用
  */
 
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { bumpGate1Streak, resetGate1Streak } from './lib/gate-streak.mjs';
 import { isEcoStale } from './lib/eco-staleness.mjs';
@@ -31,6 +31,7 @@ import { dropLastCommit } from './lib/cycle-commit.mjs';
 import { describeReleaseFiles } from './lib/release-description.mjs';
 import { loadPendingState } from './lib/pending-state.mjs';
 import { FETCHED_FILES, STAGE_FILES, SIDE_FILES } from './lib/pipeline-files.mjs';
+import { filterBuildOutput } from './lib/build-log.mjs';
 
 const DRY = process.argv.includes('--dry-run');
 const SKIP_FETCH = process.argv.includes('--skip-fetch');
@@ -195,6 +196,32 @@ function checkoutFiles(files) {
       say(`WARN 还原 ${file} 失败: ${err.message}`);
     }
   }
+}
+
+/**
+ * 阶段 4 的构建。Astro 逐页路由行不进 cron.log；失败时仍打印过滤后的
+ * 全文，并附上合并输出的最后 40 行原文。
+ */
+function runNpmBuild() {
+  const result = spawnSync('npm', ['run', 'build'], {
+    encoding: 'utf8',
+    maxBuffer: 64 * 1024 * 1024,
+    env: process.env,
+  });
+  const stdout = result.stdout ?? '';
+  const stderr = result.stderr ?? '';
+  const combined = [stdout, stderr].filter((part) => part.length > 0).join('\n');
+  const ok = result.status === 0 && !result.error;
+  let filtered = filterBuildOutput(combined);
+  if (filtered && !filtered.endsWith('\n')) filtered += '\n';
+  process.stdout.write(filtered);
+  if (!ok) {
+    const tail = combined.split('\n').slice(-40).join('\n');
+    process.stdout.write(`[build-log] last 40 raw lines:\n${tail}\n`);
+    if (result.error) process.stdout.write(`[build-log] spawn error: ${result.error.message}\n`);
+    if (result.signal) process.stdout.write(`[build-log] signal: ${result.signal}\n`);
+  }
+  return ok;
 }
 
 function run(cmd, opts = {}) {
@@ -530,12 +557,7 @@ let linkReport = 'not run';
 let i18nReport = 'not run';
 let contentReport = 'not run';
 let seoReport = 'not run';
-try {
-  run('npm run build', { stdio: 'inherit' });
-  buildOk = true;
-} catch {
-  buildOk = false;
-}
+buildOk = runNpmBuild();
 if (buildOk) {
   try {
     // 注意不能用 tail -3：astro check 末尾是 0 errors / 0 warnings / 0 hints + 空行，

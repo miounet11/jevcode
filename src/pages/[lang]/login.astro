@@ -41,6 +41,13 @@ const copy = {
   captchaNeed: pick(lang, loginCopy.captchaNeed),
   captchaWrong: pick(lang, loginCopy.captchaWrong),
   captchaFail: pick(lang, loginCopy.captchaFail),
+  toOtp: pick(lang, loginCopy.toOtp),
+  toPassword: pick(lang, loginCopy.toPassword),
+  otpSend: pick(lang, loginCopy.otpSend),
+  otpSent: pick(lang, loginCopy.otpSent),
+  otpCode: pick(lang, loginCopy.otpCode),
+  otpVerify: pick(lang, loginCopy.otpVerify),
+  otpBadCode: pick(lang, loginCopy.otpBadCode),
 };
 ---
 
@@ -56,11 +63,17 @@ const copy = {
           <span>{copy.email}</span>
           <input id="email" name="email" type="email" autocomplete="email" required />
         </label>
-        <label class="auth__field">
+        <label class="auth__field" id="password-field">
           <span>{copy.password}</span>
           <input id="password" name="password" type="password"
                  autocomplete="current-password" minlength="8"
                  aria-describedby="pw-rules" required />
+        </label>
+
+        <label class="auth__field" id="otp-field" hidden>
+          <span>{copy.otpCode}</span>
+          <input id="otp-code" name="otp" type="text" inputmode="numeric"
+                 maxlength="6" autocomplete="one-time-code" spellcheck="false" />
         </label>
 
         <div class="pw" id="pw-hint" hidden>
@@ -89,6 +102,7 @@ const copy = {
         <div class="auth__actions">
           <button class="btn btn--primary" type="submit" id="submit">{copy.signIn}</button>
           <button class="btn btn--ghost" type="button" id="toggle">{copy.toSignUp}</button>
+          <button class="btn btn--ghost" type="button" id="otp-toggle" hidden>{copy.toOtp}</button>
         </div>
         <p class="auth__msg" id="msg" role="status" aria-live="polite"></p>
         <a class="auth__link" id="account-link" href={`/${lang}/account/`} hidden>{copy.goAccount}</a>
@@ -101,10 +115,14 @@ const copy = {
   const form = document.getElementById('auth-form');
   const email = document.getElementById('email');
   const password = document.getElementById('password');
+  const passwordField = document.getElementById('password-field');
   const submit = document.getElementById('submit');
   const toggle = document.getElementById('toggle');
   const msg = document.getElementById('msg');
   const accountLink = document.getElementById('account-link');
+  const otpToggle = document.getElementById('otp-toggle');
+  const otpField = document.getElementById('otp-field');
+  const otpCode = document.getElementById('otp-code');
 
   // ---- 密码强度提示 ----
   const pwRules = document.getElementById('pw-rules');
@@ -178,7 +196,18 @@ const copy = {
   if (new URLSearchParams(location.search).get('mode') === 'register') mode = 'register';
 
   function render() {
+    const isOtp = mode === 'otp';
     const isLogin = mode === 'login';
+    passwordField.hidden = isOtp;
+    otpToggle.textContent = isOtp ? copy.toPassword : copy.toOtp;
+    toggle.hidden = isOtp;
+    if (isOtp) {
+      captchaField.hidden = true;
+      pwHint.hidden = true;
+      submit.textContent = otpField.hidden ? copy.otpSend : copy.otpVerify;
+      return;
+    }
+    otpField.hidden = true;
     submit.textContent = isLogin ? copy.signIn : copy.signUp;
     toggle.textContent = isLogin ? copy.toSignUp : copy.toSignIn;
     password.setAttribute('autocomplete', isLogin ? 'current-password' : 'new-password');
@@ -191,15 +220,87 @@ const copy = {
   email.addEventListener('input', updatePwHint);
   captchaRefresh.addEventListener('click', loadCaptcha);
 
+  let passwordMode = mode === 'register' ? 'register' : 'login';
+
   toggle.addEventListener('click', () => {
     mode = mode === 'login' ? 'register' : 'login';
+    passwordMode = mode;
+    otpCode.value = '';
     msg.textContent = '';
     render();
   });
 
+  otpToggle.addEventListener('click', () => {
+    msg.textContent = '';
+    if (mode === 'otp') {
+      mode = passwordMode;
+    } else {
+      passwordMode = mode === 'register' ? 'register' : 'login';
+      mode = 'otp';
+      otpField.hidden = true;
+      otpCode.value = '';
+    }
+    render();
+  });
+
+  // 发信未配置时（当前生产默认）保持整页与原来一致：按钮一直 hidden。
+  fetch('/api/auth/capabilities', { credentials: 'same-origin' })
+    .then((res) => (res.ok ? res.json() : null))
+    .then((data) => {
+      if (data && data.otpEnabled === true) otpToggle.hidden = false;
+    })
+    .catch(() => {});
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     msg.textContent = '';
+
+    if (mode === 'otp') {
+      const em = email.value.trim();
+      if (!em) { msg.textContent = copy.needFields; return; }
+      const codeStep = !otpField.hidden;
+      const code = otpCode.value.trim();
+      if (codeStep && !code) { msg.textContent = copy.otpBadCode; return; }
+
+      submit.disabled = true;
+      submit.textContent = copy.working;
+      try {
+        if (!codeStep) {
+          const res = await fetch('/api/auth/otp/request', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ email: em }),
+          });
+          if (res.ok) {
+            otpField.hidden = false;
+            msg.textContent = copy.otpSent;
+            otpCode.focus();
+            return;
+          }
+          msg.textContent = copy.failed;
+        } else {
+          const res = await fetch('/api/auth/otp/verify', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ email: em, code }),
+          });
+          if (res.ok) {
+            accountLink.hidden = false;
+            window.location.assign(accountPath);
+            return;
+          }
+          msg.textContent = copy.otpBadCode;
+        }
+      } catch {
+        msg.textContent = codeStep ? copy.otpBadCode : copy.failed;
+      } finally {
+        submit.disabled = false;
+        submit.textContent = otpField.hidden ? copy.otpSend : copy.otpVerify;
+      }
+      return;
+    }
 
     const em = email.value.trim();
     const pw = password.value;
@@ -311,6 +412,12 @@ const copy = {
   }
   .auth__captcha-refresh { flex: 0 0 auto; }
   .auth__actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  /* .btn / .auth__field 的 display 会盖过浏览器默认的 [hidden]。用 id 把隐藏态钉死，
+     otp 未开启时登录页保持原样。 */
+  #otp-toggle[hidden],
+  #otp-field[hidden],
+  #password-field[hidden],
+  #toggle[hidden] { display: none; }
   .auth__msg { min-height: 1.4em; margin: 0; color: var(--fg-muted); font-size: 14px; }
   .auth__link { font-size: 14px; }
 </style>

@@ -118,3 +118,80 @@ export const captchaWrong: Localized<string> = {
 export const captchaFail: Localized<string> = {
   zh: '题目没加载出来，点「换一题」试试。', en: 'Could not load. Tap "New question" to retry.', ja: '読み込めませんでした。「別の問題」を押してください。', ko: '불러오지 못했습니다. "다른 문제"를 눌러 주세요.', de: 'Laden fehlgeschlagen. Tippe auf "Neue Aufgabe".', fr: 'Chargement impossible. Touchez « Nouvelle question ».', es: 'No se pudo cargar. Pulsa "Otra pregunta".', pt: 'Não foi possível carregar. Toque em "Outra pergunta".',
 };
+
+export const toOtp: Localized<string> = {
+  zh: '改用邮箱验证码登录',
+  en: 'Sign in with email code',
+  ja: 'メール認証コードでログイン',
+  ko: '이메일 인증 코드로 로그인',
+  de: 'Mit E-Mail-Code anmelden',
+  fr: 'Se connecter avec un code e-mail',
+  es: 'Entrar con código de correo',
+  pt: 'Entrar com código por e-mail',
+};
+
+export const toPassword: Localized<string> = {
+  zh: '改用密码登录',
+  en: 'Sign in with password',
+  ja: 'パスワードでログイン',
+  ko: '비밀번호로 로그인',
+  de: 'Mit Passwort anmelden',
+  fr: 'Se connecter avec un mot de passe',
+  es: 'Entrar con contraseña',
+  pt: 'Entrar com senha',
+};
+
+export const otpSend: Localized<string> = {
+  zh: '发送 6 位验证码',
+  en: 'Send 6-digit code',
+  ja: '6 桁のコードを送信',
+  ko: '6자리 코드 보내기',
+  de: '6-stelligen Code senden',
+  fr: 'Envoyer le code à 6 chiffres',
+  es: 'Enviar código de 6 dígitos',
+  pt: 'Enviar código de 6 dígitos',
+};
+
+export const otpSent: Localized<string> = {
+  zh: '验证码已发送至邮箱，10 分钟内有效。',
+  en: 'Code sent to your email. Valid for 10 minutes.',
+  ja: '認証コードをメールに送信しました。10 分間有効です。',
+  ko: '인증 코드를 이메일로 보냈습니다. 10분 동안 유효합니다.',
+  de: 'Code wurde an deine E-Mail gesendet. 10 Minuten gültig.',
+  fr: 'Code envoyé à votre e-mail. Valable 10 minutes.',
+  es: 'Código enviado a tu correo. Válido durante 10 minutos.',
+  pt: 'Código enviado ao seu e-mail. Válido por 10 minutos.',
+};
+
+export const otpCode: Localized<string> = {
+  zh: '6 位验证码',
+  en: '6-digit code',
+  ja: '6 桁のコード',
+  ko: '6자리 코드',
+  de: '6-stelliger Code',
+  fr: 'Code à 6 chiffres',
+  es: 'Código de 6 dígitos',
+  pt: 'Código de 6 dígitos',
+};
+
+export const otpVerify: Localized<string> = {
+  zh: '验证并登录',
+  en: 'Verify and sign in',
+  ja: '確認してログイン',
+  ko: '인증하고 로그인',
+  de: 'Prüfen und anmelden',
+  fr: 'Vérifier et se connecter',
+  es: 'Verificar e iniciar sesión',
+  pt: 'Verificar e entrar',
+};
+
+export const otpBadCode: Localized<string> = {
+  zh: '验证码无效或已过期。',
+  en: 'Invalid or expired code.',
+  ja: 'コードが無効か期限切れです。',
+  ko: '코드가 유효하지 않거나 만료되었습니다.',
+  de: 'Code ungültig oder abgelaufen.',
+  fr: 'Code invalide ou expiré.',
+  es: 'Código no válido o caducado.',
+  pt: 'Código inválido ou expirado.',
+};

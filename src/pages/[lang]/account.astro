@@ -63,6 +63,16 @@ const copy = {
   pwSaving: pick(lang, accountCopy.pwSaving),
   pwOk: pick(lang, accountCopy.pwOk),
   pwFail: pick(lang, accountCopy.pwFail),
+  redeemSection: pick(lang, accountCopy.redeemSection),
+  redeemLead: pick(lang, accountCopy.redeemLead),
+  redeemPlaceholder: pick(lang, accountCopy.redeemPlaceholder),
+  redeemSubmit: pick(lang, accountCopy.redeemSubmit),
+  redeemWorking: pick(lang, accountCopy.redeemWorking),
+  redeemEmpty: pick(lang, accountCopy.redeemEmpty),
+  redeemOkTpl: pick(lang, accountCopy.redeemOkTpl),
+  redeemUsed: pick(lang, accountCopy.redeemUsed),
+  redeemExpired: pick(lang, accountCopy.redeemExpired),
+  redeemFail: pick(lang, accountCopy.redeemFail),
 };
 ---
 
@@ -117,6 +127,16 @@ const copy = {
             <button class="btn btn--ghost" type="button" id="logout">{copy.logout}</button>
           </div>
           <div class="acct__newkey" id="newkey" hidden></div>
+        </div>
+
+        <div class="acct__keys" id="redeem-section">
+          <h2>{copy.redeemSection}</h2>
+          <p class="acct__hint">{copy.redeemLead}</p>
+          <form class="acct__actions" id="redeem-form" novalidate>
+            <input id="redeem-code" class="acct__input" type="text" autocomplete="off" spellcheck="false" maxlength="128" placeholder={copy.redeemPlaceholder} aria-label={copy.redeemSection} />
+            <button class="btn btn--primary" type="submit" id="redeem-btn">{copy.redeemSubmit}</button>
+          </form>
+          <p class="acct__hint" id="redeem-msg" role="status" aria-live="polite"></p>
         </div>
 
         <div class="acct__keys">
@@ -485,6 +505,48 @@ const copy = {
     }
   });
 
+  document.getElementById('redeem-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('redeem-code');
+    const btn = document.getElementById('redeem-btn');
+    const redeemMsg = document.getElementById('redeem-msg');
+    const code = input.value.trim();
+    if (!code) {
+      redeemMsg.textContent = copy.redeemEmpty;
+      return;
+    }
+    btn.disabled = true;
+    const prev = btn.textContent;
+    btn.textContent = copy.redeemWorking;
+    redeemMsg.textContent = '';
+    try {
+      const res = await fetch('/api/auth/redeem', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        input.value = '';
+        // 文案里的金额占位已经带货币符号。只替换 {usd}，不要再拼一个货币符号。
+        redeemMsg.textContent = copy.redeemOkTpl.replace('{usd}', String(data.creditedUsd || ''));
+        await load();
+      } else if (data.reason === 'already_redeemed') {
+        redeemMsg.textContent = copy.redeemUsed;
+      } else if (data.reason === 'expired') {
+        redeemMsg.textContent = copy.redeemExpired;
+      } else {
+        redeemMsg.textContent = copy.redeemFail;
+      }
+    } catch {
+      redeemMsg.textContent = copy.redeemFail;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = prev;
+    }
+  });
+
   document.getElementById('pw-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const oldEl = document.getElementById('pw-old');
@@ -549,6 +611,7 @@ const copy = {
   .acct__table th { color: var(--fg-dim); font-weight: 500; }
   .acct__none { color: var(--fg-dim); font-size: 14px; }
   .acct__actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; align-items: center; }
+  #redeem-code { flex: 1 1 240px; }
   .acct__input {
     padding: 8px 12px;
     border: 1px solid var(--border-strong);

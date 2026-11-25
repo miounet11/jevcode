@@ -52,6 +52,24 @@ for (const lang of LANGS) {
   }
 }
 
+// viewAll 与 lead 一样是函数：8 种语言在 n=12 时都要非空，且彼此不能相同
+// （相同说明漏翻后回退成了同一句英文）。
+{
+  const seen = new Map();
+  for (const lang of LANGS) {
+    const viewAll = jevCopy(lang).hub?.viewAll;
+    const out = typeof viewAll === 'function' ? viewAll(12) : undefined;
+    if (typeof out !== 'string' || !out.trim()) {
+      fail('ui.hub.viewAll', `${lang} 在 count=12 时为空`);
+      continue;
+    }
+    if (seen.has(out)) {
+      fail('ui.hub.viewAll', `${lang} 与 ${seen.get(out)} 文案相同（"${out}"）`);
+    }
+    seen.set(out, lang);
+  }
+}
+
 // ---- 2. 分类名 ----
 for (const category of CATEGORIES) {
   const seen = new Map();

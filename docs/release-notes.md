@@ -2,6 +2,20 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-25 — 第二阶段：预付充值码变现、一方漏斗统计、/jev/ 瘦身 90% 与非 root 运维加固
+
+### 改动
+
+- **预付充值码变现与一方无 Cookie 转化漏斗**：`server/accounts.mjs` 幂等迁移新增 `vouchers`（仅存 `sha256(code)` 散列）与 `funnel_daily` 表，提供 `issueVoucher`、`BEGIN IMMEDIATE` 原子兑换 `redeemVoucher`、`listVouchers`、`revokeVoucher`、`listUsers`、`recordEvent`、`funnelSummary`；`server/playground.mjs` 新增 `GET /api/auth/capabilities` 与受限频保护的 `POST /api/auth/redeem`，并在关键转化路径（`try_run` / `compare_run` / `register_ok` / `login_ok` / `key_created` / `v1_judge_ok` / `voucher_redeemed`）记录按日按语种聚合的无 PII 计数；新增运维 CLI `scripts/admin-accounts.mjs`（支持 `summary` / `users` / `credit` / `issue-voucher` / `vouchers` / `revoke-voucher`）。
+- **前端充值、自动能力探测 OTP 与可选统计埋点**：`src/pages/[lang]/account.astro` 与 `src/i18n/pages/account.ts` 补齐 8 语言预付充值码兑换区块（兑换后即时刷新余额与流水）；`src/i18n/pages/pricing.ts` 补充 8 语言额度充值说明；`src/pages/[lang]/login.astro` 与 `src/i18n/pages/login.ts` 基于 `/api/auth/capabilities` 渐进增强，仅当服务端开启邮件通道（`otpEnabled: true`）时自动露出验证码登录，默认零噪音；`src/layouts/BaseLayout.astro` 增加构建期可选 `PUBLIC_CF_BEACON_TOKEN` 挂钩（未配时零外部脚本注入）。
+- **性能瘦身与管线日志降噪**：`src/pages/[lang]/jev/index.astro`、`src/lib/seo/schema.ts` 与 `src/lib/content/jev-copy.ts` 将 `/[lang]/jev/` 枢纽页改为 11 大类分组 + 每类精选 6 条高证据度条目 + 分类全量入口，HTML 体积从 **917 KB 降至 95.8 KB（-89.3%）**，593 条词条仍由各分类页完整承载；新增 `scripts/lib/build-log.mjs` 并在 `scripts/pipeline.mjs` 接入，过滤 `cron.log` 中每次约 19,400 行路由逐页刷屏（失败时保留尾部原始输出）；`deploy/sync-server-scripts.sh` 纳入 `prune-runs.mjs` 与 `admin-accounts.mjs`。
+- **生产非 root 加固与过期分享清理**：`deploy/jevcode-playground.service` 切换为专用系统用户 `User=jevcode` / `Group=jevcode`，开启 `PrivateTmp=true`、`ProtectSystem=strict` 与最小化 `ReadWritePaths=/var/lib/jevcode-accounts /var/www/jevcode/shared/runs`；VPS 同步执行 `prune-runs.mjs --days=30` 清理过期分享记录并接入 `/etc/cron.d/jevcode-prune-runs` 每日自动清理与 `/etc/logrotate.d/jevcode` 日志轮转，同时将 `/etc/cron.d/jevcode-backup` 统一至 `jevcode` 用户防止 WAL 权限冲突；同步更新 `deploy/ACCOUNTS-DEPLOY.md`。
+
+### 验证
+
+- `npm run check`：`0 errors, 0 warnings, 0 hints`；`npm test`：**322 / 322 通过**（`fail 0`）；`npm run test:e2e`：**64 / 64 通过**；`node scripts/preflight.mjs --json` 全绿。
+- 生产核验：`jevcode-playground` 进程属主为 `jevcode:jevcode`；`/api/auth/capabilities`、`POST /api/auth/redeem`、`/api/try`、`/en/jev/`（~96 KB）、`/en/account/` 充值 UI 及 `admin-accounts.mjs summary` 全部通过，过期 runs 文件已回收。
+
 ## 2026-11-25 — 全面验收修复与 13 站友链接入（grok build 开发 + Jev 双轮门控验收）
 
 ### 改动
