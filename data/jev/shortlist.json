@@ -2240,6 +2240,14 @@
     "text": "**Who the evaluator is.** The configured endpoint is `https://api.typesafe.ai/v1/systemone` — System One, and this hook is its application surface inside Claude Code. A System One key is what it needs; which variable holds that key is what decides whether it runs."
   },
   {
+    "repo": "JoshuaSP/open-jev",
+    "name": "open-jev",
+    "file": "README.md",
+    "branch": "main",
+    "line": 169,
+    "text": "Sources: [DiffusionGemma](https://huggingface.co/google/diffusiongemma-26B-A4B-it), [Transformers sampler](https://github.com/huggingface/transformers/blob/v5.11.0/src/transformers/models/diffusion_gemma/generation_diffusion_gemma.py), [TypeSafe public evaluations](https://evals.typesafe.ai/), [Jev introduction](https://typesafe.ai/blog/introducing-system-one-models-and-jev)."
+  },
+  {
     "repo": "jozefRudy/job_search",
     "name": "job_search",
     "file": "README.md",
@@ -2662,6 +2670,14 @@
     "branch": "main",
     "line": 5,
     "text": "**Native DeepSeek Harness (DSH) plugin with Jev or Luna Decisions as its judgment model.**"
+  },
+  {
+    "repo": "lvndry/jazz",
+    "name": "jazz",
+    "file": "plugins/jev/README.md",
+    "branch": "main",
+    "line": 91,
+    "text": "Jev sends decision inputs to `https://api.typesafe.ai/v1/systemone`: the current"
   },
   {
     "repo": "lykycy123/RoboJEV",
@@ -4414,6 +4430,14 @@
     "branch": "main",
     "line": 8,
     "text": "Jev is not a text model. It returns typed decisions (Choice / Score / Noul) with calibrated"
+  },
+  {
+    "repo": "tomerglick57/Jevstiller",
+    "name": "Jevstiller",
+    "file": "README.md",
+    "branch": "main",
+    "line": 238,
+    "text": "Jevstiller runs on your own Jev key and your own traffic, so TypeSafe's [Master Customer Agreement](https://typesafe.ai/legal/mca) applies to how you use it. Read it first. §2.3(b) says a customer may not use Jev's output to \"perform model distillation, train a model to imitate the output of the Services, or develop (or to facilitate the development of) a similar or competing product or service\", and §6(a) lets TypeSafe suspend access over a breach."
   },
   {
     "repo": "tonone-ai/tonone",

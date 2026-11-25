@@ -1984,5 +1984,69 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-routing-07",
+    "state": "Form submission: Requesting a quote for 500 product listing seats.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-08",
+    "state": "SMS: GDPR deletion request for the order data.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-09",
+    "state": "API payload field: The order export includes data from another tenant.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-routing-10",
+    "state": "Internal note: We need an SSO integration quote for the product listing before Q1.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which team should handle this ticket?",
+        "options": [
+          "billing",
+          "technical",
+          "sales",
+          "compliance"
+        ]
+      }
+    }
   }
 ]
