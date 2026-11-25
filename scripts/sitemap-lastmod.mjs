@@ -26,6 +26,8 @@ const ROUTES = [
   { re: /^\/[a-z]{2}\/gpus(\/.*)?$/, file: () => 'src/data/gpus.ts' },
   { re: /^\/[a-z]{2}\/industries(\/.*)?$/, file: () => 'src/data/industries.ts' },
   { re: /^\/[a-z]{2}\/recipes(\/.*)?$/, file: () => 'src/data/recipes.ts' },
+  { re: /^\/[a-z]{2}\/configs(\/.*)?$/, file: () => 'src/data/configs.ts' },
+  { re: /^\/[a-z]{2}\/vibecoding(\/.*)?$/, file: () => 'src/data/vibecoding.ts' },
   // 生态分类页：整页是分类下所有项目的聚合，跟着数据文件走。
   { re: /^\/[a-z]{2}\/ecosystem\/category\/[a-z0-9-]+\/?$/, file: () => 'src/data/ecosystem.ts' },
   // 语言首页：/{lang}/

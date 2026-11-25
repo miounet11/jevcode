@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { VIBE_TUTORIALS, type VibeTrack, type VibeLevel } from '../../../data/vibecoding';
+import * as copy from '../../../i18n/pages/vibecoding';
+
+export function getStaticPaths() {
+  return (Object.keys(languages) as Lang[]).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const path = `/${lang}/vibecoding/`;
+const title = pick(lang, copy.title);
+const description = pick(lang, copy.description);
+const hubUrl = new URL(path, Astro.site).href;
+
+const trackCopy: Record<VibeTrack, string> = {
+  foundations: pick(lang, copy.trackFoundations),
+  workflows: pick(lang, copy.trackWorkflows),
+  blueprints: pick(lang, copy.trackBlueprints),
+  operations: pick(lang, copy.trackOperations),
+  roadmap: pick(lang, copy.trackRoadmap),
+};
+const levelCopy: Record<VibeLevel, string> = {
+  beginner: pick(lang, copy.levelBeginner),
+  intermediate: pick(lang, copy.levelIntermediate),
+  advanced: pick(lang, copy.levelAdvanced),
+};
+
+const t = {
+  eyebrow: pick(lang, copy.eyebrow),
+  lead: pick(lang, copy.lead),
+  filterAll: pick(lang, copy.filterAll),
+  searchPlaceholder: pick(lang, copy.searchPlaceholder),
+  completionLabel: pick(lang, copy.completionLabel),
+  timeLabel: pick(lang, copy.timeLabel),
+  minutesSuffix: pick(lang, copy.minutesSuffix),
+  startTutorial: pick(lang, copy.startTutorial),
+};
+
+const tracks: VibeTrack[] = ['foundations', 'workflows', 'blueprints', 'operations', 'roadmap'];
+
+const cards = VIBE_TUTORIALS.map((tutorial) => ({
+  slug: tutorial.slug,
+  track: tutorial.track,
+  level: tutorial.level,
+  completionPct: tutorial.completionPct,
+  estimatedMinutes: tutorial.estimatedMinutes,
+  title: pick(lang, tutorial.title),
+  tagline: pick(lang, tutorial.tagline),
+  href: `/${lang}/vibecoding/${tutorial.slug}/`,
+}));
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    name: title,
+    url: hubUrl,
+    description,
+    inLanguage: lang,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: cards.length,
+      itemListElement: cards.map((card, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: card.title,
+        url: new URL(card.href, Astro.site).href,
+      })),
+    },
+  },
+];
+---
+
+<BaseLayout lang={lang} title={title} description={description} path={path} schema={schema}>
+  <div class="wrap docs-shell">
+    <div class="doc">
+      <p class="vb-eyebrow">{t.eyebrow}</p>
+      <h1 class="doc__title">{title}</h1>
+      <p class="doc__desc">{t.lead}</p>
+      <img
+        class="vb-hero"
+        src="/img/guides/vibecoding-hero.webp"
+        alt={title}
+        width="1344"
+        height="768"
+        loading="eager"
+        decoding="async"
+      />
+
+      <div class="vb-filter">
+        <div role="tablist" aria-label={title}>
+          <button type="button" role="tab" data-track="all" aria-selected="true">{t.filterAll}</button>
+          {tracks.map((track) => (
+            <button type="button" role="tab" data-track={track} aria-selected="false">{trackCopy[track]}</button>
+          ))}
+        </div>
+        <input type="search" data-vibe-search placeholder={t.searchPlaceholder} aria-label={t.searchPlaceholder} />
+      </div>
+
+      <ul class="vb-grid">
+        {cards.map((card) => (
+          <li data-vibe data-track={card.track} data-q={`${card.title} ${card.tagline} ${card.track} ${card.level} ${card.slug}`.toLowerCase()}>
+            <article>
+              <p class="vb-badges">
+                <span>{trackCopy[card.track]}</span>
+                <span>{levelCopy[card.level]}</span>
+                <span>{t.timeLabel}: {card.estimatedMinutes} {t.minutesSuffix}</span>
+              </p>
+              <h2><a href={card.href}>{card.title}</a></h2>
+              <p>{card.tagline}</p>
+              <div class="vb-readiness" title={`${t.completionLabel}: ${card.completionPct}%`}>
+                <div class="vb-readiness__bar" role="img" aria-label={`${t.completionLabel}: ${card.completionPct}%`}>
+                  <span style={`width:${card.completionPct}%`}></span>
+                </div>
+                <span class="vb-readiness__label">{t.completionLabel}: {card.completionPct}%</span>
+              </div>
+              <a class="vb-open" href={card.href}>{t.startTutorial}</a>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('[data-track]')];
+  const input = document.querySelector<HTMLInputElement>('[data-vibe-search]');
+  const items = [...document.querySelectorAll<HTMLElement>('[data-vibe]')];
+  let track = 'all';
+  let q = '';
+
+  function apply() {
+    for (const item of items) {
+      const okTrack = track === 'all' || item.dataset.track === track;
+      const okQ = !q || (item.dataset.q ?? '').includes(q);
+      item.hidden = !(okTrack && okQ);
+    }
+  }
+
+  for (const tab of tabs) {
+    tab.addEventListener('click', () => {
+      track = tab.dataset.track ?? 'all';
+      for (const other of tabs) other.setAttribute('aria-selected', String(other === tab));
+      apply();
+    });
+  }
+  input?.addEventListener('input', () => {
+    q = input.value.trim().toLowerCase();
+    apply();
+  });
+</script>
+
+<style>
+  .vb-eyebrow { margin: 0 0 8px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .vb-hero { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--border); margin: 0 0 22px; }
+  .vb-filter { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+  .vb-filter [role="tablist"] { display: flex; gap: 6px; flex-wrap: wrap; }
+  .vb-filter button, .vb-filter input {
+    min-height: 44px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-elev);
+    color: var(--fg);
+    font: inherit;
+  }
+  .vb-filter button { padding: 0 14px; cursor: pointer; color: var(--fg-muted); }
+  .vb-filter button[aria-selected="true"] { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); }
+  .vb-filter input { flex: 1 1 220px; padding: 0 12px; }
+  .vb-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .vb-grid article { height: 100%; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-elev); }
+  .vb-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+  .vb-badges span { font-size: 12px; color: var(--fg-dim); border: 1px solid var(--border); border-radius: 999px; padding: 3px 9px; }
+  .vb-grid h2 { font-size: 1.05rem; margin: 0 0 8px; line-height: 1.3; }
+  .vb-grid h2 a { color: var(--fg); text-decoration: none; }
+  .vb-grid h2 a:hover { color: var(--accent); }
+  .vb-grid p { margin: 0 0 10px; color: var(--fg-muted); font-size: 14px; }
+  .vb-readiness { margin: 10px 0 12px; }
+  .vb-readiness__bar { height: 7px; border-radius: 999px; background: var(--bg-elev-2); overflow: hidden; }
+  .vb-readiness__bar span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+  .vb-readiness__label { display: block; margin-top: 5px; font-size: 12px; color: var(--fg-dim); }
+  .vb-open { font-size: 14px; font-weight: 600; }
+</style>

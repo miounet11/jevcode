@@ -1,0 +1,219 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { SCENARIO_CONFIGS } from '../../../data/configs';
+import * as copy from '../../../i18n/pages/configs';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const path = `/${lang}/configs/`;
+const t = (bag: Parameters<typeof pick<string>>[1]) => pick(lang, bag);
+
+const pageTitle = t(copy.title);
+const pageDescription = t(copy.description);
+const canonical = new URL(path, Astro.site).href;
+const futureConfigs = SCENARIO_CONFIGS.filter((item) => item.maturity === 'future_roadmap');
+const maturityLabel = (m: string) =>
+  m === 'production_ready' ? t(copy.maturityProduction)
+  : m === 'hybrid_assisted' ? t(copy.maturityHybrid)
+  : t(copy.maturityFuture);
+
+const filters = [
+  ['all', t(copy.filterAll)],
+  ['production_ready', t(copy.maturityProduction)],
+  ['hybrid_assisted', t(copy.maturityHybrid)],
+  ['future_roadmap', t(copy.maturityFuture)],
+] as const;
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    name: pageTitle,
+    description: pageDescription,
+    url: canonical,
+    inLanguage: lang,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: SCENARIO_CONFIGS.length,
+      itemListElement: SCENARIO_CONFIGS.map((item, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: pick(lang, item.title),
+        url: new URL(`/${lang}/configs/${item.slug}/`, Astro.site).href,
+      })),
+    },
+  },
+];
+---
+
+<BaseLayout lang={lang} title={pageTitle} description={pageDescription} path={path} schema={schema}>
+  <div class="wrap">
+    <div class="doc cfg">
+      <p class="cfg__eyebrow">{t(copy.eyebrow)}</p>
+      <h1 class="doc__title">{pageTitle}</h1>
+      <p class="doc__desc">{t(copy.lead)}</p>
+
+      <figure class="cfg__hero">
+        <img
+          src="/img/guides/configs-hero.webp"
+          alt={t(copy.heroAlt)}
+          width="1344"
+          height="768"
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+
+      <div class="cfg__bar">
+        <div class="cfg__chips" role="group" aria-label={t(copy.filterAll)}>
+          {filters.map(([id, label], i) => (
+            <button type="button" class:list={['cfg__chip', { 'is-on': i === 0 }]} data-maturity={id}>{label}</button>
+          ))}
+        </div>
+        <label class="cfg__search">
+          <span class="cfg__sr">{t(copy.searchPlaceholder)}</span>
+          <input type="search" data-q placeholder={t(copy.searchPlaceholder)} />
+        </label>
+      </div>
+
+      <p class="cfg__empty" data-empty hidden>{t(copy.noMatch)}</p>
+
+      <ul class="cfg__cards">
+        {SCENARIO_CONFIGS.map((item) => (
+          <li
+            data-card
+            data-maturity={item.maturity}
+            data-name={`${item.slug} ${item.category} ${pick(lang, item.title)} ${pick(lang, item.tagline)}`.toLowerCase()}
+          >
+            <p class="cfg__meta">{item.category} · {maturityLabel(item.maturity)}</p>
+            <h2><a href={`/${lang}/configs/${item.slug}/`}>{pick(lang, item.title)}</a></h2>
+            <p class="cfg__tagline">{pick(lang, item.tagline)}</p>
+
+            <div class="cfg__readiness">
+              <div class="cfg__readiness-head">
+                <span>{t(copy.completionLabel)}</span>
+                <strong>{item.completionPct}%</strong>
+              </div>
+              <div
+                class="cfg__progress"
+                role="progressbar"
+                aria-label={t(copy.completionLabel)}
+                aria-valuenow={item.completionPct}
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                <span style={`width:${item.completionPct}%`}></span>
+              </div>
+              <div class="cfg__split">
+                <span>{t(copy.autoHandledLabel)} <strong>{item.autoHandledPct}%</strong></span>
+                <span>{t(copy.escalationLabel)} <strong>{item.escalationPct}%</strong></span>
+              </div>
+            </div>
+
+            <div class="cfg__badges">
+              <span class="cfg__badge">{t(copy.latencyLabel)} · {item.latencyTarget}</span>
+              <span class="cfg__badge">{t(copy.costLabel)} · {item.costPerMillion}</span>
+            </div>
+            <a class="btn btn--ghost" href={`/${lang}/configs/${item.slug}/`}>{t(copy.viewConfig)}</a>
+          </li>
+        ))}
+      </ul>
+
+      <section class="cfg__future">
+        <img
+          src="/img/guides/configs-future.webp"
+          alt={t(copy.futureAlt)}
+          width="1344"
+          height="768"
+          loading="lazy"
+          decoding="async"
+        />
+        <div>
+          <h2>{t(copy.futureRoadmapBannerTitle)}</h2>
+          <p>{t(copy.futureRoadmapBannerLead)}</p>
+          <ul>
+            {futureConfigs.map((item) => (
+              <li><a href={`/${lang}/configs/${item.slug}/`}>{pick(lang, item.title)}</a></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const root = document.querySelector('.cfg');
+  const q = root?.querySelector<HTMLInputElement>('[data-q]');
+  if (root && q) {
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-card]')];
+    const empty = root.querySelector<HTMLElement>('[data-empty]');
+    let maturity = 'all';
+    const apply = () => {
+      const query = q.value.trim().toLowerCase();
+      let shown = 0;
+      for (const card of cards) {
+        const on = (maturity === 'all' || card.dataset.maturity === maturity)
+          && (!query || (card.dataset.name || '').includes(query));
+        card.hidden = !on;
+        if (on) shown += 1;
+      }
+      if (empty) empty.hidden = shown > 0;
+    };
+    root.querySelectorAll<HTMLButtonElement>('.cfg__chip').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        maturity = btn.dataset.maturity || 'all';
+        root.querySelectorAll('.cfg__chip').forEach((c) => c.classList.toggle('is-on', c === btn));
+        apply();
+      });
+    });
+    q.addEventListener('input', apply);
+  }
+</script>
+
+<style>
+  .cfg__eyebrow { margin: 0; color: var(--accent); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .cfg__hero, .cfg__future img {
+    margin: 1rem 0 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-code);
+  }
+  .cfg__hero img, .cfg__future img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .cfg__bar { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: end; margin: 1.25rem 0; }
+  .cfg__chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .cfg__chip, .cfg__search input {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: inherit;
+    border-radius: 999px;
+    min-height: 36px;
+    padding: 0.3rem 0.75rem;
+  }
+  .cfg__chip.is-on { background: var(--accent-soft); border-color: var(--accent-border); }
+  .cfg__search { display: grid; gap: 0.2rem; font-size: 0.8rem; }
+  .cfg__search input { border-radius: var(--radius); min-width: 12rem; }
+  .cfg__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .cfg__empty { color: var(--muted); }
+  .cfg__cards { list-style: none; padding: 0; display: grid; gap: 0.9rem; margin: 1rem 0 0; }
+  @media (min-width: 800px) { .cfg__cards { grid-template-columns: 1fr 1fr; } }
+  .cfg__cards li { border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+  .cfg__meta { margin: 0; color: var(--muted); font-size: 0.78rem; }
+  .cfg__cards h2 { font-size: 1.05rem; margin: 0.3rem 0; }
+  .cfg__tagline { margin: 0 0 0.8rem; color: var(--muted); font-size: 0.88rem; }
+  .cfg__readiness-head { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.3rem; }
+  .cfg__progress { height: 8px; border-radius: 999px; background: var(--bg-code); overflow: hidden; }
+  .cfg__progress span { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+  .cfg__split { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.45rem; font-size: 0.78rem; color: var(--muted); }
+  .cfg__badges { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.8rem 0; }
+  .cfg__badge { border: 1px solid var(--border); border-radius: 999px; padding: 0.2rem 0.6rem; font-size: 0.75rem; }
+  .cfg__future { display: grid; gap: 1rem; margin-top: 2rem; }
+  @media (min-width: 800px) { .cfg__future { grid-template-columns: 1.2fr 1fr; align-items: center; } }
+  .cfg__future img { margin: 0; }
+  .cfg__future ul { padding-left: 1.2rem; }
+</style>

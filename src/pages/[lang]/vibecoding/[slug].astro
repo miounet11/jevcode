@@ -1,0 +1,202 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { VIBE_TUTORIALS, type VibeTutorial, type VibeTrack, type VibeLevel } from '../../../data/vibecoding';
+import { SCENARIO_CONFIGS } from '../../../data/configs';
+import * as copy from '../../../i18n/pages/vibecoding';
+import { PLAN_META, centsToUsd } from '../../../../server/plans.mjs';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const item of VIBE_TUTORIALS) {
+      paths.push({ params: { lang, slug: item.slug }, props: { item } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { item } = Astro.props as { item: VibeTutorial };
+const path = `/${lang}/vibecoding/${item.slug}/`;
+const title = pick(lang, item.title);
+const hub = pick(lang, copy.title);
+const description = pick(lang, item.tagline);
+const credit = centsToUsd(PLAN_META.signupCreditCents);
+const relatedConfig = SCENARIO_CONFIGS.find((config) => config.slug === item.relatedConfigSlug);
+const relatedConfigTitle = relatedConfig ? pick(lang, relatedConfig.title) : item.relatedConfigSlug;
+
+const trackCopy: Record<VibeTrack, string> = {
+  foundations: pick(lang, copy.trackFoundations),
+  workflows: pick(lang, copy.trackWorkflows),
+  blueprints: pick(lang, copy.trackBlueprints),
+  operations: pick(lang, copy.trackOperations),
+  roadmap: pick(lang, copy.trackRoadmap),
+};
+const levelCopy: Record<VibeLevel, string> = {
+  beginner: pick(lang, copy.levelBeginner),
+  intermediate: pick(lang, copy.levelIntermediate),
+  advanced: pick(lang, copy.levelAdvanced),
+};
+
+const ui = {
+  home: { en: 'Home', zh: '首页', ja: 'ホーム', ko: '홈', de: 'Start', fr: 'Accueil', es: 'Inicio', pt: 'Início' }[lang],
+  completionLabel: pick(lang, copy.completionLabel),
+  timeLabel: pick(lang, copy.timeLabel),
+  minutesSuffix: pick(lang, copy.minutesSuffix),
+  overviewHeading: pick(lang, copy.overviewHeading),
+  readinessHeading: pick(lang, copy.readinessHeading),
+  stepsHeading: pick(lang, copy.stepsHeading),
+  promptHeading: pick(lang, copy.promptHeading),
+  configHeading: pick(lang, copy.configHeading),
+  programHeading: pick(lang, copy.programHeading),
+  relatedConfigHeading: pick(lang, copy.relatedConfigHeading),
+  copyBtn: pick(lang, copy.copyBtn),
+  copiedBtn: pick(lang, copy.copiedBtn),
+  backToHub: pick(lang, copy.backToHub),
+  ctaTitle: pick(lang, copy.ctaTitle),
+  ctaLead: pick(lang, copy.ctaLead).replace('{credit}', credit),
+  ctaTry: pick(lang, copy.ctaTry),
+  ctaRegister: pick(lang, copy.ctaRegister),
+  overview: pick(lang, item.overview),
+  readinessNote: pick(lang, item.readinessNote),
+  steps: item.steps.map((step) => pick(lang, step)),
+};
+
+const canonical = new URL(path, Astro.site).href;
+const schema = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: ui.home, item: new URL(`/${lang}/`, Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: hub, item: new URL(`/${lang}/vibecoding/`, Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: title, item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout lang={lang} title={title} description={description} path={path} schema={schema}>
+  <div class="wrap docs-shell">
+    <div class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{ui.home}</a> /
+        <a href={`/${lang}/vibecoding/`}>{hub}</a> / {title}
+      </p>
+      <h1 class="doc__title">{title}</h1>
+      <p class="doc__desc">{description}</p>
+      <img
+        class="vb-hero"
+        src={item.heroImage}
+        alt={title}
+        width="1344"
+        height="768"
+        loading="eager"
+        decoding="async"
+      />
+      <div class="vb-kpis">
+        <span class="vb-kpi-readiness">
+          {ui.completionLabel}: {item.completionPct}%
+          <span class="vb-bar" role="img" aria-label={`${ui.completionLabel}: ${item.completionPct}%`}>
+            <span style={`width:${item.completionPct}%`}></span>
+          </span>
+        </span>
+        <span>{trackCopy[item.track]}</span>
+        <span>{levelCopy[item.level]}</span>
+        <span>{ui.timeLabel}: {item.estimatedMinutes} {ui.minutesSuffix}</span>
+      </div>
+      <div class="vb-readiness-note">
+        <h2>{ui.readinessHeading}</h2>
+        <p>{ui.readinessNote}</p>
+      </div>
+
+      <h2>{ui.overviewHeading}</h2>
+      <p>{ui.overview}</p>
+
+      <h2>{ui.stepsHeading}</h2>
+      <ol class="vb-steps">
+        {ui.steps.map((step, i) => <li><span class="vb-step-num">{i + 1}</span><span>{step}</span></li>)}
+      </ol>
+
+      <section class="vb-code">
+        <div class="vb-code__bar">
+          <h2>{ui.promptHeading}</h2>
+          <button type="button" data-copy data-label={ui.copyBtn} data-copied={ui.copiedBtn}>{ui.copyBtn}</button>
+        </div>
+        <pre><code>{item.vibePrompt}</code></pre>
+      </section>
+
+      <section class="vb-code">
+        <div class="vb-code__bar">
+          <h2>{ui.configHeading}</h2>
+          <code>{item.configFilename}</code>
+          <button type="button" data-copy data-label={ui.copyBtn} data-copied={ui.copiedBtn}>{ui.copyBtn}</button>
+        </div>
+        <pre><code>{item.configCode}</code></pre>
+      </section>
+
+      <section class="vb-code">
+        <div class="vb-code__bar">
+          <h2>{ui.programHeading}</h2>
+          <code>{item.programFilename}</code>
+          <button type="button" data-copy data-label={ui.copyBtn} data-copied={ui.copiedBtn}>{ui.copyBtn}</button>
+        </div>
+        <pre><code>{item.programCode}</code></pre>
+      </section>
+
+      <h2>{ui.relatedConfigHeading}</h2>
+      <p><a href={`/${lang}/configs/${item.relatedConfigSlug}/`}>{relatedConfigTitle}</a></p>
+
+      <aside class="vb-cta">
+        <h2>{ui.ctaTitle}</h2>
+        <p>{ui.ctaLead}</p>
+        <p class="vb-cta__actions">
+          <a class="btn btn--primary" href={`/${lang}/try/`}>{ui.ctaTry}</a>
+          <a class="btn btn--ghost" href={`/${lang}/login/?mode=register`}>{ui.ctaRegister}</a>
+        </p>
+      </aside>
+      <p><a href={`/${lang}/vibecoding/`}>{ui.backToHub}</a></p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+    button.addEventListener('click', async () => {
+      const text = button.closest('section')?.querySelector('pre code')?.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = button.dataset.copied ?? 'Copied';
+        window.setTimeout(() => {
+          button.textContent = button.dataset.label ?? 'Copy';
+        }, 1600);
+      } catch {
+        button.textContent = button.dataset.label ?? 'Copy';
+      }
+    });
+  }
+</script>
+
+<style>
+  .vb-hero { width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; }
+  .vb-kpis { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
+  .vb-kpis > span { font-size: 13px; color: var(--fg-muted); border: 1px solid var(--border); background: var(--bg-elev); border-radius: 999px; padding: 6px 12px; }
+  .vb-kpi-readiness { display: inline-flex; flex-direction: column; gap: 5px; }
+  .vb-bar { display: block; width: 120px; height: 6px; border-radius: 999px; background: var(--bg-elev-2); overflow: hidden; }
+  .vb-bar > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+  .vb-readiness-note { margin: 18px 0; padding: 12px 14px; border-left: 3px solid var(--accent); background: var(--bg-elev); }
+  .vb-readiness-note h2 { margin: 0 0 6px; font-size: 1.05rem; }
+  .vb-readiness-note p { margin: 0; color: var(--fg-muted); }
+  .vb-steps { list-style: none; counter-reset: none; padding: 0; margin: 0 0 22px; }
+  .vb-steps li { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .vb-step-num { flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+  .vb-code { margin: 22px 0; }
+  .vb-code__bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .vb-code__bar h2 { margin: 0; font-size: 1.15rem; }
+  .vb-code__bar code { color: var(--fg-dim); font-size: 13px; }
+  .vb-code__bar button { margin-left: auto; min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elev-2); color: var(--fg); cursor: pointer; font: inherit; }
+  .vb-code pre { overflow: auto; margin: 10px 0 0; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-elev); font-family: var(--font-mono); font-size: 13px; line-height: 1.5; }
+  .vb-cta { margin: 28px 0 16px; padding: 16px; border: 1px solid var(--accent-border); border-radius: var(--radius); background: var(--accent-soft); }
+  .vb-cta h2 { margin: 0 0 8px; font-size: 1.15rem; }
+  .vb-cta__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+</style>

@@ -13,6 +13,8 @@ import { GPU_PROFILES } from '../../data/gpus';
 import { INDUSTRY_CASES } from '../../data/industries';
 import { CODE_RECIPES } from '../../data/recipes';
 import * as homeCopy from '../../i18n/pages/home';
+import { SCENARIO_CONFIGS } from '../../data/configs';
+import { VIBE_TUTORIALS } from '../../data/vibecoding';
 
 export function getStaticPaths() {
   return (Object.keys(languages) as Lang[]).map((lang) => ({ params: { lang } }));
@@ -75,6 +77,20 @@ const matrix = [
     desc: t('home.matrix.recipesDesc'),
     count: CODE_RECIPES.length,
     image: '/img/guides/recipes-hero.webp',
+  },
+  {
+    href: `/${lang}/configs/`,
+    title: t('nav.configs'),
+    desc: t('home.matrix.configsDesc'),
+    count: SCENARIO_CONFIGS.length,
+    image: '/img/guides/configs-hero.webp',
+  },
+  {
+    href: `/${lang}/vibecoding/`,
+    title: t('nav.vibecoding'),
+    desc: t('home.matrix.vibecodingDesc'),
+    count: VIBE_TUTORIALS.length,
+    image: '/img/guides/vibecoding-hero.webp',
   },
 ];
 
@@ -389,7 +405,7 @@ const faqSchema = {
 <style>
   .home__matrix-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 16px;
   }
   .home__matrix-card {

@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { SCENARIO_CONFIGS, type ScenarioConfig } from '../../../data/configs';
+import { PLAN_META, centsToUsd } from '../../../../server/plans.mjs';
+import * as copy from '../../../i18n/pages/configs';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const item of SCENARIO_CONFIGS) {
+      paths.push({ params: { lang, slug: item.slug }, props: { item } });
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { item } = Astro.props as { item: ScenarioConfig };
+const path = `/${lang}/configs/${item.slug}/`;
+const t = (bag: Parameters<typeof pick<string>>[1]) => pick(lang, bag);
+const credit = centsToUsd(PLAN_META.signupCreditCents);
+const pageTitle = pick(lang, item.title);
+const pageDescription = pick(lang, item.summary);
+---
+
+<BaseLayout lang={lang} title={pageTitle} description={pageDescription} path={path}>
+  <div class="wrap">
+    <div class="doc cfg-detail">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t(copy.home)}</a> /
+        <a href={`/${lang}/configs/`}>{t(copy.backToHub)}</a> /
+        {pageTitle}
+      </p>
+      <h1 class="doc__title">{pageTitle}</h1>
+      <p class="doc__desc">{pick(lang, item.tagline)}</p>
+
+      <figure class="cfg-detail__hero">
+        <img src={item.heroImage} alt={pageTitle} width="1344" height="768" loading="eager" decoding="async" />
+      </figure>
+
+      <section class="cfg-detail__strip" aria-label={t(copy.completionLabel)}>
+        <div class="cfg-detail__completion">
+          <div class="cfg-detail__completion-head">
+            <span>{t(copy.completionLabel)}</span>
+            <strong>{item.completionPct}%</strong>
+          </div>
+          <div class="cfg-detail__progress" role="progressbar" aria-label={t(copy.completionLabel)} aria-valuenow={item.completionPct} aria-valuemin="0" aria-valuemax="100">
+            <span style={`width:${item.completionPct}%`}></span>
+          </div>
+        </div>
+        <dl class="cfg-detail__metrics">
+          <div><dt>{t(copy.autoHandledLabel)}</dt><dd>{item.autoHandledPct}%</dd></div>
+          <div><dt>{t(copy.escalationLabel)}</dt><dd>{item.escalationPct}%</dd></div>
+          <div><dt>{t(copy.latencyLabel)}</dt><dd>{item.latencyTarget}</dd></div>
+          <div><dt>{t(copy.costLabel)}</dt><dd>{item.costPerMillion}</dd></div>
+        </dl>
+      </section>
+
+      <h2>{t(copy.summaryHeading)}</h2>
+      <p>{pageDescription}</p>
+
+      <h2>{t(copy.readinessHeading)}</h2>
+      <p>{pick(lang, item.readinessNote)}</p>
+
+      <h2>{t(copy.futureEvolutionHeading)}</h2>
+      <p>{pick(lang, item.futureEvolution)}</p>
+
+      <h2>{t(copy.currentConfigHeading)}</h2>
+      <p class="cfg-detail__filename">{item.configFilename}</p>
+      <div class="cfg-detail__code" data-copy-block>
+        <button type="button" data-copy data-label={t(copy.copyBtn)} data-done={t(copy.copiedBtn)}>{t(copy.copyBtn)}</button>
+        <pre><code>{item.configCode}</code></pre>
+      </div>
+
+      <h2>{t(copy.futureConfigHeading)}</h2>
+      <p class="cfg-detail__filename">{item.futureFilename}</p>
+      <div class="cfg-detail__code" data-copy-block>
+        <button type="button" data-copy data-label={t(copy.copyBtn)} data-done={t(copy.copiedBtn)}>{t(copy.copyBtn)}</button>
+        <pre><code>{item.futureCode}</code></pre>
+      </div>
+
+      <aside class="cfg-detail__cta">
+        <h2>{t(copy.ctaTitle)}</h2>
+        <p>{t(copy.ctaLead).replace('{credit}', credit)}</p>
+        <p class="cfg-detail__actions">
+          <a class="btn btn--primary" href={`/${lang}/try/`}>{t(copy.ctaTry)}</a>
+          <a class="btn btn--ghost" href={`/${lang}/login/?mode=register`}>{t(copy.ctaRegister)}</a>
+          <a href={`/${lang}/vibecoding/`}>{t(copy.vibecodingLink)}</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-copy-block]').forEach((block) => {
+    const btn = block.querySelector<HTMLButtonElement>('[data-copy]');
+    const code = block.querySelector('code');
+    btn?.addEventListener('click', async () => {
+      const label = btn.getAttribute('data-label') || '';
+      const done = btn.getAttribute('data-done') || label;
+      try {
+        await navigator.clipboard.writeText(code?.textContent || '');
+        btn.textContent = done;
+        window.setTimeout(() => { btn.textContent = label; }, 1600);
+      } catch {
+        btn.textContent = label;
+      }
+    });
+  });
+</script>
+
+<style>
+  .cfg-detail__hero { margin: 1rem 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; aspect-ratio: 16 / 9; background: var(--bg-code); }
+  .cfg-detail__hero img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .cfg-detail__strip { border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; margin: 1rem 0 1.5rem; }
+  .cfg-detail__completion-head { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem; }
+  .cfg-detail__progress { height: 10px; border-radius: 999px; background: var(--bg-code); overflow: hidden; }
+  .cfg-detail__progress span { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+  .cfg-detail__metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin: 1rem 0 0; }
+  @media (min-width: 800px) { .cfg-detail__metrics { grid-template-columns: repeat(4, 1fr); } }
+  .cfg-detail__metrics div { border-top: 1px solid var(--border); padding-top: 0.5rem; }
+  .cfg-detail__metrics dt { color: var(--muted); font-size: 0.75rem; }
+  .cfg-detail__metrics dd { margin: 0.15rem 0 0; font-weight: 600; }
+  .cfg-detail__filename { color: var(--muted); font-size: 0.85rem; margin: 0.4rem 0; }
+  .cfg-detail__code { position: relative; margin-bottom: 1.5rem; }
+  .cfg-detail__code button { position: absolute; top: 0.45rem; right: 0.45rem; }
+  .cfg-detail__code pre { overflow-x: auto; }
+  .cfg-detail__cta { margin-top: 1.5rem; padding: 1rem 1.1rem; border: 1px solid var(--accent-border); border-radius: var(--radius); background: var(--accent-soft); }
+  .cfg-detail__cta h2 { margin-top: 0; }
+  .cfg-detail__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+</style>
