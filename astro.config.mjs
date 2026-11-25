@@ -49,6 +49,7 @@ export default defineConfig({
   devToolbar: { enabled: false },
   integrations: [
     sitemap({
+      entryLimit: 3000,
       serialize: lastmodSerialize,
       filter: sitemapInclude,
       i18n: {

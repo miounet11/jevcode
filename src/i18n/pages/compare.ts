@@ -152,3 +152,48 @@ export const client: Localized<Record<string, unknown>> = {
     expected: 'Esperada', retest: 'Retestar', noRecords: 'Ainda sem resultados. Execute uma pergunta e a narração aparecerá aqui.',
   },
 };
+
+/** {credit} 由页面替换为不含 $ 的金额，例如 5.00，文案里只保留一个 $。 */
+export const ctaTitle: Localized<string> = {
+  zh: '把 clavue-jev 接入你的业务',
+  en: 'Use clavue-jev in your own app',
+  ja: '自分のアプリに clavue-jev を組み込む',
+  ko: '내 앱에 clavue-jev 연결하기',
+  de: 'clavue-jev in der eigenen App nutzen',
+  fr: 'Utilisez clavue-jev dans votre application',
+  es: 'Usa clavue-jev en tu propia aplicación',
+  pt: 'Use o clavue-jev na sua aplicação',
+};
+
+export const ctaLead: Localized<string> = {
+  zh: '注册即送 ${credit} 免费 API 额度（约 1.19 亿输入 token），直接调用 POST /v1/judge。',
+  en: 'New accounts include ${credit} in free API credit — roughly 119M input tokens on POST /v1/judge.',
+  ja: '新規アカウントには ${credit} の無料 API クレジットが付きます。POST /v1/judge でおよそ 1.19 億入力トークンです。',
+  ko: '새 계정에는 ${credit} 무료 API 크레딧이 포함됩니다. POST /v1/judge 기준 약 1.19억 입력 토큰입니다.',
+  de: 'Neue Konten enthalten ${credit} kostenloses API-Guthaben — etwa 119 Mio. Eingabetoken für POST /v1/judge.',
+  fr: 'Les nouveaux comptes incluent ${credit} de crédit API offert — environ 119 M de jetons d\'entrée sur POST /v1/judge.',
+  es: 'Las cuentas nuevas incluyen ${credit} de crédito API gratis — unos 119 M de tokens de entrada en POST /v1/judge.',
+  pt: 'Contas novas incluem ${credit} de crédito API grátis — cerca de 119 M de tokens de entrada em POST /v1/judge.',
+};
+
+export const ctaRegister: Localized<string> = {
+  zh: '免费领取 API 密钥',
+  en: 'Create free API key',
+  ja: '無料の API キーを作成',
+  ko: '무료 API 키 만들기',
+  de: 'Kostenlosen API-Schlüssel erstellen',
+  fr: 'Créer une clé API gratuite',
+  es: 'Crear clave API gratis',
+  pt: 'Criar chave API grátis',
+};
+
+export const ctaTry: Localized<string> = {
+  zh: '自定义输入试跑',
+  en: 'Try your own prompt',
+  ja: '自分のプロンプトで試す',
+  ko: '내 프롬프트로 시험하기',
+  de: 'Eigenen Prompt testen',
+  fr: 'Essayer votre propre prompt',
+  es: 'Probar tu propio prompt',
+  pt: 'Testar o seu próprio prompt',
+};

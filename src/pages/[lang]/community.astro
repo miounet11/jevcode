@@ -31,6 +31,18 @@ const groups = pulseCategories.map((c) => ({
 
 const fmt = (n: number) => (n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M` : n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n));
 const dateShort = (iso: string) => iso.slice(0, 10);
+
+/** 列表只留摘要。全文在 /community/[id]/，卡片本身仍然链过去。 */
+function excerpt(text: string, max = 220): string {
+  const flat = text.replace(/\s+/g, ' ').trim();
+  if (flat.length <= max) return flat;
+  const head = flat.slice(0, max);
+  const last = head[head.length - 1] ?? '';
+  const cjk = /[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]/.test(last);
+  const spaceAt = head.lastIndexOf(' ');
+  if (cjk || spaceAt <= 0) return `${head}…`;
+  return `${head.slice(0, spaceAt).trimEnd()}…`;
+}
 ---
 
 <BaseLayout lang={lang} title={copy.title} description={copy.lead} path={path}>
@@ -70,7 +82,7 @@ const dateShort = (iso: string) => iso.slice(0, 10);
                     <span class="pulse__views" title="views">▲ {fmt(e.views)}</span>
                   </div>
                   <h3 class="pulse__title">{entryTitle(e.text)}</h3>
-                  <p class="pulse__text" lang="en">{e.text}</p>
+                  <p class="pulse__text" lang="en">{excerpt(e.text)}</p>
                   <div class="pulse__actions">
                     <span class="pulse__link">{copy.open} →</span>
                   </div>

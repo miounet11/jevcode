@@ -36,6 +36,7 @@ FILES=(
   scripts/daily-report.mjs
   scripts/prune-runs.mjs
   scripts/admin-accounts.mjs
+  scripts/traffic-report.mjs
 )
 
 log()  { printf '\033[36m[sync]\033[0m %s\n' "$*"; }

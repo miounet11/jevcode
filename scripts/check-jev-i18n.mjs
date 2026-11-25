@@ -23,7 +23,7 @@ const fail = (where, message) => errors.push(`${where}: ${message}`);
 // ---- 1. 界面文案 ----
 const SECTIONS = {
   hub: ['title', 'evidence', 'reviewed', 'labels', 'empty'],
-  category: ['evidence', 'labels', 'back'],
+  category: ['evidence', 'labels', 'back', 'pagerLabel', 'prev', 'next'],
   entry: [
     'evidence', 'labels', 'decision', 'category', 'language',
     'added', 'reviewed', 'repo', 'back', 'labelsNote',
@@ -48,6 +48,30 @@ for (const lang of LANGS) {
       if (typeof out !== 'string' || !out.trim()) {
         fail(`ui.${section}.lead`, `${lang} 在 count=${n} 时为空`);
       }
+    }
+  }
+}
+
+// pageOf：8 种语言都要带上页码与总页数。
+// 西班牙语和葡萄牙语的「Página N de M」是同一句，不能拿跨语言去重当漏翻。
+// 非英文只要不等于英文句，就说明没有走 jevCopy 的英文回退。
+{
+  const english = jevCopy('en').category.pageOf(2, 8);
+  for (const lang of LANGS) {
+    const pageOf = jevCopy(lang).category?.pageOf;
+    for (const [page, total] of [[1, 1], [2, 8]]) {
+      const out = typeof pageOf === 'function' ? pageOf(page, total) : undefined;
+      if (
+        typeof out !== 'string'
+        || !out.trim()
+        || !out.includes(String(page))
+        || !out.includes(String(total))
+      ) {
+        fail('ui.category.pageOf', `${lang} 在 page=${page} total=${total} 时无效`);
+      }
+    }
+    if (lang !== 'en' && typeof pageOf === 'function' && pageOf(2, 8) === english) {
+      fail('ui.category.pageOf', `${lang} 仍是英文回退（"${english}"）`);
     }
   }
 }

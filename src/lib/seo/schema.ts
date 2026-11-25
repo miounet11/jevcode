@@ -6,7 +6,7 @@
  * JSON-LD 时就能拿到可核对的来源，而不是只拿到一段自述。
  */
 import type { Lang } from '../../i18n/ui';
-import { hubUrl, entryUrl, hubPath, categoryUrl } from '../routing/domains';
+import { hubUrl, entryUrl, hubPath, categoryUrl, absoluteUrl } from '../routing/domains';
 import {
   categoryLabel,
   entriesByCategory,
@@ -15,7 +15,8 @@ import {
   type Category,
   type CoverageEntry,
 } from '../content/registry';
-import { categoryDescription, hubDescription, hubTitle } from './metadata';
+import { CATEGORY_PAGE_SIZE, categoryDescription, categoryTitle, hubDescription, hubTitle } from './metadata';
+import { jevCopy } from '../content/jev-copy';
 
 const htmlLang = (lang: Lang): string => (lang === 'zh' ? 'zh-CN' : lang);
 
@@ -103,16 +104,40 @@ export function categorySchema(
   lang: Lang,
   category: Category,
   entries: CoverageEntry[],
+  pagePath?: string,
+  totalItems?: number,
 ): Record<string, unknown>[] {
-  const url = categoryUrl(lang, category);
+  const url = pagePath ? absoluteUrl(pagePath) : categoryUrl(lang, category);
   const label = categoryLabel(category, lang);
+  const pageNum = pagePath ? Number(pagePath.match(/\/page\/(\d+)\/$/)?.[1] ?? 1) : 1;
+  const described = totalItems ?? entries.length;
+  const totalPages = Math.max(1, Math.ceil(described / CATEGORY_PAGE_SIZE));
+  const name = categoryTitle(
+    lang,
+    category,
+    pageNum > 1 ? pageNum : undefined,
+    pageNum > 1 ? totalPages : undefined,
+  );
+  const crumbs: Record<string, unknown>[] = [
+    { '@type': 'ListItem', position: 1, name: 'JevCode', item: absoluteUrl('/') },
+    { '@type': 'ListItem', position: 2, name: 'Jev coverage', item: hubUrl(lang) },
+    { '@type': 'ListItem', position: 3, name: label, item: categoryUrl(lang, category) },
+  ];
+  if (pageNum > 1) {
+    crumbs.push({
+      '@type': 'ListItem',
+      position: 4,
+      name: jevCopy(lang).category.pageOf(pageNum, totalPages),
+      item: url,
+    });
+  }
 
   return [
     {
       '@type': 'CollectionPage',
       '@id': `${url}#page`,
-      name: `${label} · ${hubTitle(lang)}`,
-      description: categoryDescription(lang, category, entries.length),
+      name,
+      description: categoryDescription(lang, category, described),
       url,
       inLanguage: htmlLang(lang),
       dateModified: REGISTRY_REVIEWED_AT,
@@ -135,11 +160,7 @@ export function categorySchema(
     },
     {
       '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'JevCode', item: new URL('/', 'https://www.jevcode.ai').href },
-        { '@type': 'ListItem', position: 2, name: 'Jev coverage', item: hubUrl(lang) },
-        { '@type': 'ListItem', position: 3, name: label, item: url },
-      ],
+      itemListElement: crumbs,
     },
   ];
 }

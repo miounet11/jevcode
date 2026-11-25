@@ -2,6 +2,20 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-25 — 第三阶段：基于线上日志的 Sitemap 分片、重型页瘦身、API 自发现、转化补齐与流量日报
+
+### 改动
+
+- **Sitemap 分片与 IndexNow 多文件读取**：`astro.config.mjs` 为 `@astrojs/sitemap` 增加 `entryLimit: 3000`，将此前单文件 **19.0 MB（线上耗时 1.14s）** 的 `sitemap-0.xml` 拆分为多份轻量分片；`scripts/indexnow-submit.mjs` 升级 `readSitemapEntries()` 自动合并全部 `dist/sitemap-*.xml`（排除 `sitemap-index.xml`）；`deploy/nginx/jevcode.conf` 补齐 `application/xml` gzip 压缩。
+- **API 自发现与非搜索爬虫节流**：`server/playground.mjs` 新增免鉴权 `GET /v1/models`（OpenAI 兼容模型清单）与 `GET /` 服务发现文档（同步在 `deploy/nginx/jevcode.conf` 的 `api.jevcode.ai` 放行 `location = /`），`/v1/judge`、`/v1/me`、`/v1/usage` 继续严格 Bearer 鉴权；`public/robots.txt` 对线上高频非搜索爬虫（`ElevenlabsCrawler` / `SERankingBacklinksBot` / `ShapBot` / `RiverBot`）增设 `Crawl-delay: 10`，同时继续完整放行搜索引擎与 AI 答案引擎。
+- **重型页面全量瘦身**：`src/pages/[lang]/jev/category/[category].astro` 与 `page/[page].astro` 引入 60 条分页，将 472 条的 `other-list` 从 **~706 KB 降至 ~105 KB/页**（8 语分页文案与 `check-jev-i18n.mjs`、`categorySchema` 同步更新）；`src/pages/[lang]/community.astro` 服务端对 327 张卡片做 220 字干净摘要截断；`src/pages/[lang]/ecosystem.astro` 移除 211 行重复内联 `data-search` 属性改由客户端惰性索引。
+- **高流量落地页转化补齐**：为真实访客活跃的 `/[lang]/compare/`（`src/pages/[lang]/compare.astro`、`src/i18n/pages/compare.ts`）与全部 4,744 个 `/[lang]/jev/[slug]` 详情页（`src/pages/[lang]/jev/[slug].astro`、`src/i18n/pages/jev-cta.ts`）补充 8 语言「免费领 `$5.00` API 密钥 / 在线试跑」转化入口与分类页内链。
+- **生产流量日报 CLI 与 systemd 内核级沙箱加固**：新增零依赖 `scripts/traffic-report.mjs`（聚合 Nginx 访问日志、搜索/AI 爬虫与真实浏览器会话、非扫描 404/5xx 及 `accounts.db` 漏斗数据，支持 `--json` 与 `--feishu`）并纳入 `deploy/sync-server-scripts.sh` 与 VPS 每日定时任务；`deploy/jevcode-playground.service` 补齐 `PrivateDevices`、`ProtectHome`、`ProtectKernel*`、`CapabilityBoundingSet=` 等内核级沙箱加固。
+
+### 验证
+
+- `npm run check`、`node scripts/i18n-gaps.mjs`、`npm run build`、`npm test`、`npm run test:e2e`、`node scripts/preflight.mjs --json` 全绿；线上验证分片 Sitemap、`/v1/models`、`api.jevcode.ai/`、重型页瘦身结果、非 root 深度沙箱与 `traffic-report.mjs` 实跑。
+
 ## 2026-11-25 — 第二阶段：预付充值码变现、一方漏斗统计、/jev/ 瘦身 90% 与非 root 运维加固
 
 ### 改动

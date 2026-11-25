@@ -11,6 +11,9 @@
  *   6. POST /api/auth/password 改密并吊销其他设备会话
  *   7. 认证写接口按客户端 IP（优先 X-Real-IP）限频
  *   8. nginx 配置包含 Cloudflare set_real_ip_from、CF-Connecting-IP 及 /topics 裸路径重定向
+ *   9. 公开 GET / 与 GET /v1/models；未带 Bearer 的 /v1/me 与 /v1/judge 仍为 401
+ *  10. nginx gzip application/xml，且 api 子域 location = / 反代发现接口
+ *  11. robots.txt 对商业爬虫 Crawl-delay: 10 且 Disallow: /api/
  */
 
 import { test } from 'node:test';
@@ -378,6 +381,74 @@ test('P1：nginx 配置启用 Cloudflare real_ip 且覆盖 /topics 裸路径跳�
   assert.ok(cfHeaders.length >= 2, 'www 与 api 两个 server 块均须启用 CF-Connecting-IP');
   assert.match(conf, /location ~ \^\//);
   assert.match(conf, /\|topics\|/);
+  assert.match(conf, /application\/xml(?:\s|;)/);
+  assert.match(
+    conf,
+    /location = \/ \{[\s\S]*?limit_req zone=jevcode_intake burst=20 nodelay;[\s\S]*?limit_except GET HEAD \{ deny all; \}[\s\S]*?proxy_pass http:\/\/127\.0\.0\.1:8790;/,
+  );
+});
+
+test('E1：公开 GET / 与 /v1/models，未授权 /v1/me 与 /v1/judge 仍为 401', async () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'jev-e1-public-'));
+  const dbPath = path.join(dir, 'acct.db');
+  const dataDir = path.join(dir, 'runs');
+  mkdirSync(dataDir, { recursive: true });
+
+  const upPort = await freePort();
+  const upstream = createServer((_, res) => {
+    res.writeHead(200, { 'content-type': 'application/json' });
+    res.end('{}');
+  });
+  await new Promise((r) => upstream.listen(upPort, '127.0.0.1', r));
+
+  const { base, child } = await startPlayground({
+    dbPath,
+    dataDir,
+    upstreamUrl: `http://127.0.0.1:${upPort}/v1/systemone`,
+  });
+
+  try {
+    const root = await fetch(`${base}/`);
+    assert.equal(root.status, 200);
+    const rootBody = await root.json();
+    assert.equal(rootBody.service, 'jevcode-api');
+    assert.equal(rootBody.status, 'ok');
+    assert.equal(rootBody.models_endpoint, '/v1/models');
+    assert.equal(rootBody.endpoints.models, 'GET /v1/models');
+    assert.equal(rootBody.endpoints.judge, 'POST /v1/judge');
+    assert.equal(rootBody.endpoints.me, 'GET /v1/me');
+    assert.equal(rootBody.endpoints.usage, 'GET /v1/usage');
+    assert.equal(rootBody.endpoints.health, 'GET /health');
+    assert.equal(rootBody.docs, 'https://www.jevcode.ai/en/api/');
+    assert.equal(rootBody.signup, 'https://www.jevcode.ai/en/login/?mode=register');
+
+    const models = await fetch(`${base}/v1/models`);
+    assert.equal(models.status, 200);
+    const modelsBody = await models.json();
+    assert.equal(modelsBody.object, 'list');
+    assert.equal(modelsBody.data.length, 1);
+    assert.equal(modelsBody.data[0].id, 'clavue-jev');
+    assert.equal(modelsBody.data[0].object, 'model');
+    assert.equal(modelsBody.data[0].owned_by, 'jevcode');
+    assert.equal(modelsBody.data[0].pricing.input_per_million_usd, 0.042);
+    assert.equal(modelsBody.data[0].pricing.output_per_million_usd, 0);
+    assert.equal(modelsBody.data[0].pricing.free_signup_credit_usd, 5);
+    assert.equal(modelsBody.data[0].docs_url, 'https://www.jevcode.ai/en/api/');
+
+    const me = await fetch(`${base}/v1/me`);
+    assert.equal(me.status, 401);
+    const judge = await fetch(`${base}/v1/judge`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '{}',
+    });
+    assert.equal(judge.status, 401);
+  } finally {
+    child.kill('SIGTERM');
+    upstream.close();
+    await sleep(150);
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('P2/P3：匿名访客跳过 /me、sitemap 默认语言与站点对齐、favicon.ico 合法且 robots 节流商业爬虫', () => {
@@ -397,6 +468,13 @@ test('P2/P3：匿名访客跳过 /me、sitemap 默认语言与站点对齐、fav
   assert.match(robots, /User-agent:\s*SemrushBot[\s\S]*?Crawl-delay:\s*10/);
   assert.match(robots, /User-agent:\s*AhrefsBot[\s\S]*?Crawl-delay:\s*10/);
   assert.match(robots, /User-agent:\s*GPTBot[\s\S]*?Allow:\s*\//);
+  for (const bot of ['ElevenlabsCrawler', 'SERankingBacklinksBot', 'ShapBot', 'RiverBot']) {
+    assert.match(
+      robots,
+      new RegExp(`User-agent:\\s*${bot}\\s+Crawl-delay:\\s*10\\s+Disallow:\\s*/api/`),
+      `${bot} 应 Crawl-delay: 10 且 Disallow: /api/`,
+    );
+  }
 });
 
 function runAdmin(args, dbPath) {

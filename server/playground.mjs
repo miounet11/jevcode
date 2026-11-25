@@ -13,8 +13,11 @@ import { randomBytes } from 'node:crypto';
 import { issueCaptcha, verifyCaptcha } from './captcha.mjs';
 import { appendRecords, buildRecord, cleanCompareItems, readRecent, runCompare } from './compare.mjs';
 import { billableInputTokens, cleanQuestions, toUpstreamQuestions } from './questions.mjs';
-import { MICROUSD_PER_CENT, microUsdToUsd } from './plans.mjs';
+import { INPUT_USD_PER_MILLION, MICROUSD_PER_CENT, SIGNUP_CREDIT_CENTS, microUsdToUsd } from './plans.mjs';
 import path from 'node:path';
+
+const inputRateUsd = INPUT_USD_PER_MILLION;
+const signupUsd = SIGNUP_CREDIT_CENTS / 100;
 
 const PORT = Number(process.env.PLAYGROUND_PORT || 8790);
 const KEY = process.env.JEVCODE_PLAYGROUND_KEY || '';
@@ -329,6 +332,24 @@ const server = createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === 'GET' && url.pathname === '/') {
+      send(res, 200, {
+        service: 'jevcode-api',
+        status: 'ok',
+        models_endpoint: '/v1/models',
+        endpoints: {
+          models: 'GET /v1/models',
+          judge: 'POST /v1/judge',
+          me: 'GET /v1/me',
+          usage: 'GET /v1/usage',
+          health: 'GET /health',
+        },
+        docs: 'https://www.jevcode.ai/en/api/',
+        signup: 'https://www.jevcode.ai/en/login/?mode=register',
+      });
+      return;
+    }
+
     const pageMatch = url.pathname.match(/^\/(en|zh|ja|ko|de|fr|es|pt)\/r\/([a-z0-9]{12})\/?$/);
     if (req.method === 'GET' && pageMatch) {
       try {
@@ -359,6 +380,25 @@ const server = createServer(async (req, res) => {
     // 与 /api/try 的分工：/api/try 是网页试用（Cookie 或匿名限频），
     // /v1/* 是给程序调用的正式接口，必须带 Bearer key，且响应形态与上游一致。
     if (url.pathname.startsWith('/v1/')) {
+      if (req.method === 'GET' && url.pathname === '/v1/models') {
+        send(res, 200, {
+          object: 'list',
+          data: [{
+            id: 'clavue-jev',
+            object: 'model',
+            owned_by: 'jevcode',
+            description: 'Fast structured System One judgment model (noul, choice, confidence).',
+            pricing: {
+              input_per_million_usd: Number(inputRateUsd),
+              output_per_million_usd: 0,
+              free_signup_credit_usd: Number(signupUsd),
+            },
+            docs_url: 'https://www.jevcode.ai/en/api/',
+          }],
+        });
+        return;
+      }
+
       if (!KEY) {
         send(res, 503, { error: 'service_unavailable', message: 'judgment backend is not configured' });
         return;

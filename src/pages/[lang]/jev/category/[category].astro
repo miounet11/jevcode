@@ -4,12 +4,17 @@ import { languages, useTranslations, type Lang } from '../../../../i18n/ui';
 import {
   CATEGORIES,
   categoryLabel,
-  COVERAGE_ENTRIES,
   type Category,
   type CoverageEntry,
 } from '../../../../lib/content/registry';
 import { assertionFor, jevCopy, verificationMeaning } from '../../../../lib/content/jev-copy';
-import { categoryDescription, categoryTitle } from '../../../../lib/seo/metadata';
+import {
+  CATEGORY_PAGE_SIZE,
+  categoryDescription,
+  categoryPageCount,
+  categoryTitle,
+  entriesForCategory,
+} from '../../../../lib/seo/metadata';
 import { categorySchema } from '../../../../lib/seo/schema';
 import { entryPath } from '../../../../lib/routing/domains';
 
@@ -17,7 +22,7 @@ export function getStaticPaths() {
   const paths = [];
   for (const lang of Object.keys(languages) as Lang[]) {
     for (const category of CATEGORIES) {
-      const entries = COVERAGE_ENTRIES.filter((e) => e.category === category);
+      const entries = entriesForCategory(category);
       if (entries.length === 0) continue;
       paths.push({ params: { lang, category }, props: { entries, category } });
     }
@@ -34,18 +39,24 @@ const t = useTranslations(lang);
 const label = categoryLabel(category, lang);
 
 const c = jevCopy(lang).category;
+const totalPages = categoryPageCount(entries.length);
+const page = 1;
+const pageEntries = entries.length > CATEGORY_PAGE_SIZE ? entries.slice(0, CATEGORY_PAGE_SIZE) : entries;
 const lead = c.lead(entries.length);
-const schema = categorySchema(lang, category, entries);
+const path = `/${lang}/jev/category/${category}/`;
+const pageHref = (n: number) =>
+  n <= 1 ? path : `/${lang}/jev/category/${category}/page/${n}/`;
+const schema = categorySchema(lang, category, pageEntries, undefined, entries.length);
 const words = (l: Parameters<typeof verificationMeaning>[0]) => verificationMeaning(l, lang);
 // 断言只有 zh / en 两版，预先算好文字与实际语言。
-const shown = new Map(entries.map((e) => [e.slug, assertionFor(e, lang)] as const));
+const shown = new Map(pageEntries.map((e) => [e.slug, assertionFor(e, lang)] as const));
 ---
 
 <BaseLayout
   lang={lang}
   title={categoryTitle(lang, category)}
   description={categoryDescription(lang, category, entries.length)}
-  path={`/${lang}/jev/category/${category}/`}
+  path={path}
   schema={schema}
 >
   <div class="wrap docs-shell">
@@ -59,7 +70,7 @@ const shown = new Map(entries.map((e) => [e.slug, assertionFor(e, lang)] as cons
       <p class="doc__desc">{lead}</p>
 
       <ul class="jev__list">
-        {entries.map((entry) => (
+        {pageEntries.map((entry) => (
           <li class="jev__item">
             <h2 class="jev__name">
               <a href={entryPath(lang, entry.slug)}>{entry.name}</a>
@@ -80,6 +91,27 @@ const shown = new Map(entries.map((e) => [e.slug, assertionFor(e, lang)] as cons
           </li>
         ))}
       </ul>
+
+      {totalPages > 1 && (
+        <nav class="jev__pager" aria-label={c.pagerLabel}>
+          {page > 1 && (
+            <a class="jev__pager__step" href={pageHref(page - 1)} rel="prev">{c.prev}</a>
+          )}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+            <a
+              class="jev__pager__num"
+              href={pageHref(n)}
+              aria-current={n === page ? 'page' : undefined}
+              aria-label={c.pageOf(n, totalPages)}
+            >
+              {n}
+            </a>
+          ))}
+          {page < totalPages && (
+            <a class="jev__pager__step" href={pageHref(page + 1)} rel="next">{c.next}</a>
+          )}
+        </nav>
+      )}
     </div>
   </div>
 </BaseLayout>
@@ -120,5 +152,30 @@ const shown = new Map(entries.map((e) => [e.slug, assertionFor(e, lang)] as cons
     padding: 0 0.5rem;
     margin-right: 0.35rem;
     font-size: 0.78rem;
+  }
+  .jev__pager {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  .jev__pager__num,
+  .jev__pager__step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 12px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: 1px solid var(--border, #2a2a2a);
+    border-radius: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .jev__pager__num[aria-current='page'] {
+    font-weight: 600;
+    border-color: currentColor;
   }
 </style>

@@ -28,6 +28,12 @@ export interface JevUiCopy {
     evidence: string;
     labels: string;
     back: string;
+    /** 分页导航的 aria-label。 */
+    pagerLabel: string;
+    prev: string;
+    next: string;
+    /** 页码读法，例如 Page 2 of 8。标题后缀与分页链接共用这一句。 */
+    pageOf: (page: number, total: number) => string;
   };
   entry: {
     evidence: string;
@@ -61,6 +67,10 @@ const EN: JevUiCopy = {
     evidence: 'Evidence',
     labels: 'Labels',
     back: 'Back to coverage',
+    pagerLabel: 'Pagination',
+    prev: 'Previous',
+    next: 'Next',
+    pageOf: (page, total) => `Page ${page} of ${total}`,
   },
   entry: {
     evidence: 'Evidence',
@@ -93,6 +103,10 @@ const ZH: JevUiCopy = {
     evidence: '证据',
     labels: '验证标签',
     back: '返回覆盖地图',
+    pagerLabel: '分页导航',
+    prev: '上一页',
+    next: '下一页',
+    pageOf: (page, total) => `第 ${page} / ${total} 页`,
   },
   entry: {
     evidence: '证据链接',
@@ -125,6 +139,10 @@ const JA: JevUiCopy = {
     evidence: '根拠',
     labels: 'ラベル',
     back: 'カバレッジに戻る',
+    pagerLabel: 'ページ移動',
+    prev: '前へ',
+    next: '次へ',
+    pageOf: (page, total) => `${page} / ${total} ページ`,
   },
   entry: {
     evidence: '根拠リンク',
@@ -157,6 +175,10 @@ const KO: JevUiCopy = {
     evidence: '근거',
     labels: '라벨',
     back: '커버리지로 돌아가기',
+    pagerLabel: '페이지 이동',
+    prev: '이전',
+    next: '다음',
+    pageOf: (page, total) => `${page} / ${total} 페이지`,
   },
   entry: {
     evidence: '근거 링크',
@@ -189,6 +211,10 @@ const DE: JevUiCopy = {
     evidence: 'Beleg',
     labels: 'Labels',
     back: 'Zurück zur Coverage',
+    pagerLabel: 'Seitenwechsel',
+    prev: 'Zurück',
+    next: 'Weiter',
+    pageOf: (page, total) => `Seite ${page} von ${total}`,
   },
   entry: {
     evidence: 'Beleg-Link',
@@ -221,6 +247,10 @@ const FR: JevUiCopy = {
     evidence: 'Preuve',
     labels: 'Étiquettes',
     back: 'Retour à la couverture',
+    pagerLabel: 'Navigation des pages',
+    prev: 'Précédent',
+    next: 'Suivant',
+    pageOf: (page, total) => `Page ${page} sur ${total}`,
   },
   entry: {
     evidence: 'Lien de preuve',
@@ -253,6 +283,10 @@ const ES: JevUiCopy = {
     evidence: 'Evidencia',
     labels: 'Etiquetas',
     back: 'Volver a la cobertura',
+    pagerLabel: 'Paginación',
+    prev: 'Anterior',
+    next: 'Siguiente',
+    pageOf: (page, total) => `Página ${page} de ${total}`,
   },
   entry: {
     evidence: 'Enlace de evidencia',
@@ -285,6 +319,10 @@ const PT: JevUiCopy = {
     evidence: 'Evidência',
     labels: 'Rótulos',
     back: 'Voltar à cobertura',
+    pagerLabel: 'Paginação',
+    prev: 'Anterior',
+    next: 'Seguinte',
+    pageOf: (page, total) => `Página ${page} de ${total}`,
   },
   entry: {
     evidence: 'Link da evidência',

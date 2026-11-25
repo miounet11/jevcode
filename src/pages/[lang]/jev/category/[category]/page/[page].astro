@@ -1,0 +1,186 @@
+---
+import BaseLayout from '../../../../../../layouts/BaseLayout.astro';
+import { languages, useTranslations, type Lang } from '../../../../../../i18n/ui';
+import { CATEGORIES, categoryLabel, type Category, type CoverageEntry } from '../../../../../../lib/content/registry';
+import { assertionFor, jevCopy, verificationMeaning } from '../../../../../../lib/content/jev-copy';
+import {
+  CATEGORY_PAGE_SIZE,
+  categoryDescription,
+  categoryPageCount,
+  categoryTitle,
+  entriesForCategory,
+} from '../../../../../../lib/seo/metadata';
+import { categorySchema } from '../../../../../../lib/seo/schema';
+import { entryPath } from '../../../../../../lib/routing/domains';
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const lang of Object.keys(languages) as Lang[]) {
+    for (const category of CATEGORIES) {
+      const all = entriesForCategory(category);
+      const totalPages = categoryPageCount(all.length);
+      if (all.length <= CATEGORY_PAGE_SIZE) continue;
+      for (let page = 2; page <= totalPages; page += 1) {
+        const start = (page - 1) * CATEGORY_PAGE_SIZE;
+        paths.push({
+          params: { lang, category, page: String(page) },
+          props: {
+            category,
+            page,
+            total: all.length,
+            entries: all.slice(start, start + CATEGORY_PAGE_SIZE),
+          },
+        });
+      }
+    }
+  }
+  return paths;
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { entries, category, page, total } = Astro.props as {
+  entries: CoverageEntry[];
+  category: Category;
+  page: number;
+  total: number;
+};
+const t = useTranslations(lang);
+const label = categoryLabel(category, lang);
+const c = jevCopy(lang).category;
+const totalPages = categoryPageCount(total);
+const lead = c.lead(total);
+const path = `/${lang}/jev/category/${category}/page/${page}/`;
+const pageHref = (n: number) =>
+  n <= 1 ? `/${lang}/jev/category/${category}/` : `/${lang}/jev/category/${category}/page/${n}/`;
+const schema = categorySchema(lang, category, entries, path, total);
+const words = (l: Parameters<typeof verificationMeaning>[0]) => verificationMeaning(l, lang);
+const shown = new Map(entries.map((e) => [e.slug, assertionFor(e, lang)] as const));
+---
+
+<BaseLayout
+  lang={lang}
+  title={categoryTitle(lang, category, page, totalPages)}
+  description={categoryDescription(lang, category, total)}
+  path={path}
+  schema={schema}
+>
+  <div class="wrap docs-shell">
+    <div class="doc">
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t('site.name')}</a> /
+        <a href={`/${lang}/jev/`}>{c.back}</a> /
+        <a href={`/${lang}/jev/category/${category}/`}>{label}</a> /
+        {c.pageOf(page, totalPages)}
+      </p>
+
+      <h1 class="doc__title">{label}</h1>
+      <p class="doc__desc">{lead}</p>
+
+      <ul class="jev__list">
+        {entries.map((entry) => (
+          <li class="jev__item">
+            <h2 class="jev__name">
+              <a href={entryPath(lang, entry.slug)}>{entry.name}</a>
+            </h2>
+            <p class="jev__assertion" lang={shown.get(entry.slug)?.sourceLang}>
+              {shown.get(entry.slug)?.text}
+            </p>
+            <p class="jev__evidence">
+              <span class="jev__key">{c.evidence}</span>
+              <a href={entry.evidenceUrl} rel="noopener">{entry.evidenceUrl}</a>
+            </p>
+            <p class="jev__labels">
+              <span class="jev__key">{c.labels}</span>
+              {entry.verification.map((v) => (
+                <span class="jev__label" title={words(v)}>{v}</span>
+              ))}
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <nav class="jev__pager" aria-label={c.pagerLabel}>
+        {page > 1 && (
+          <a class="jev__pager__step" href={pageHref(page - 1)} rel="prev">{c.prev}</a>
+        )}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+          <a
+            class="jev__pager__num"
+            href={pageHref(n)}
+            aria-current={n === page ? 'page' : undefined}
+            aria-label={c.pageOf(n, totalPages)}
+          >
+            {n}
+          </a>
+        ))}
+        {page < totalPages && (
+          <a class="jev__pager__step" href={pageHref(page + 1)} rel="next">{c.next}</a>
+        )}
+      </nav>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .jev__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .jev__item {
+    border-left: 2px solid var(--border, #2a2a2a);
+    padding-left: 1rem;
+  }
+  .jev__name {
+    font-size: 1.05rem;
+    margin: 0 0 0.35rem;
+  }
+  .jev__assertion {
+    margin: 0 0 0.5rem;
+  }
+  .jev__evidence,
+  .jev__labels {
+    font-size: 0.85rem;
+    margin: 0.2rem 0;
+    word-break: break-word;
+  }
+  .jev__key {
+    color: var(--muted, #8a8a8a);
+    margin-right: 0.5rem;
+  }
+  .jev__label {
+    display: inline-block;
+    border: 1px solid var(--border, #2a2a2a);
+    border-radius: 999px;
+    padding: 0 0.5rem;
+    margin-right: 0.35rem;
+    font-size: 0.78rem;
+  }
+  .jev__pager {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  .jev__pager__num,
+  .jev__pager__step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 12px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: 1px solid var(--border, #2a2a2a);
+    border-radius: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .jev__pager__num[aria-current='page'] {
+    font-weight: 600;
+    border-color: currentColor;
+  }
+</style>

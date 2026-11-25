@@ -90,6 +90,22 @@ User-agent: AhrefsBot
 Crawl-delay: 10
 Disallow: /api/
 
+User-agent: ElevenlabsCrawler
+Crawl-delay: 10
+Disallow: /api/
+
+User-agent: SERankingBacklinksBot
+Crawl-delay: 10
+Disallow: /api/
+
+User-agent: ShapBot
+Crawl-delay: 10
+Disallow: /api/
+
+User-agent: RiverBot
+Crawl-delay: 10
+Disallow: /api/
+
 User-agent: MJ12bot
 Disallow: /
 

@@ -141,7 +141,6 @@ const copy = {
                 data-stars={p.stars}
                 data-language={p.language ?? ''}
                 data-topics={(p.topics ?? []).join(' ')}
-                data-search={`${p.repo} ${p.desc[lang] ?? p.desc.en} ${(p.topics ?? []).join(' ')}`.toLowerCase()}
               >
                 <a class="project-name" href={`/${lang}/ecosystem/${projectSlug(p.repo)}/`}>
                   <span class="project-repo">{p.repo}</span>
@@ -184,6 +183,13 @@ const copy = {
   let topic = 'all';
   let q = '';
 
+  // 搜索串不再写进 HTML：211 行各自重复 repo、译文和 topics 会把页面撑到几百 KB。
+  // 初始化时读一次文本并缓存，输入时只做 includes。
+  const searchText = new Map<HTMLElement, string>();
+  for (const row of rows) {
+    searchText.set(row, ((row.textContent ?? '') + ' ' + (row.dataset.topics ?? '')).toLowerCase());
+  }
+
   function apply() {
     let shown = 0;
     for (const row of rows) {
@@ -192,7 +198,7 @@ const copy = {
       // topics 以空格分隔，需按词匹配，避免 'agent' 命中 'ai-agents'
       const okTopic =
         topic === 'all' || (row.dataset.topics ?? '').split(' ').includes(topic);
-      const okQ = !q || (row.dataset.search ?? '').includes(q);
+      const okQ = !q || (searchText.get(row) ?? '').includes(q);
       const on = okCat && okLang && okTopic && okQ;
       row.hidden = !on;
       if (on) shown++;

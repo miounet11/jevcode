@@ -57,7 +57,16 @@ User=jevcode
 Group=jevcode
 NoNewPrivileges=true
 PrivateTmp=true
+PrivateDevices=true
 ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+CapabilityBoundingSet=
+AmbientCapabilities=
 ReadWritePaths=/var/lib/jevcode-accounts /var/www/jevcode/shared/runs
 ```
 

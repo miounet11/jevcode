@@ -4,6 +4,7 @@ import { languages, pick, type Lang } from '../../i18n/ui';
 import { compareCases } from '../../data/compare-cases';
 import * as cmpCopy from '../../i18n/pages/compare';
 import * as homeCopy from '../../i18n/pages/home';
+import { PLAN_META, centsToUsd } from '../../../server/plans.mjs';
 
 export const prerender = true;
 
@@ -13,6 +14,7 @@ export function getStaticPaths() {
 
 const lang = Astro.params.lang as Lang;
 const path = `/${lang}/compare/`;
+const signupUsd = centsToUsd(PLAN_META.signupCreditCents);
 const title = pick(lang, cmpCopy.title);
 const description = pick(lang, cmpCopy.description);
 const clientCopyJson = JSON.stringify(pick(lang, cmpCopy.client)).replaceAll('<', '\\u003c');
@@ -51,6 +53,17 @@ const counts = compareCases.reduce<Record<string, number>>((acc, item) => {
         </div>
         <div id="cmp-play-result" class="compare__pair"></div>
       </div>
+
+      <aside class="compare__cta">
+        <div class="compare__cta-copy">
+          <p class="compare__cta-title">{pick(lang, cmpCopy.ctaTitle)}</p>
+          <p class="compare__cta-lead">{pick(lang, cmpCopy.ctaLead).replace('{credit}', signupUsd)}</p>
+        </div>
+        <div class="compare__cta-actions">
+          <a class="btn btn--primary" href={`/${lang}/login/?mode=register`}>{pick(lang, cmpCopy.ctaRegister)}</a>
+          <a class="btn btn--ghost" href={`/${lang}/try/`}>{pick(lang, cmpCopy.ctaTry)}</a>
+        </div>
+      </aside>
 
       <div class="compare__toolbar">
         <div class="compare__filters" id="cmp-filters" role="tablist">
@@ -392,6 +405,21 @@ const counts = compareCases.reduce<Record<string, number>>((acc, item) => {
     white-space: pre-wrap;
   }
   .compare__actions, .compare__filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .compare__cta {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    background: var(--bg-elev);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 16px;
+  }
+  .compare__cta-copy { flex: 1 1 280px; display: grid; gap: 4px; }
+  .compare__cta-title { font-weight: 600; margin: 0; }
+  .compare__cta-lead { margin: 0; font-size: 14px; color: var(--fg-dim); }
+  .compare__cta-actions { display: flex; flex-wrap: wrap; gap: 8px; }
   .compare__toolbar { margin-top: 28px; display: grid; gap: 12px; }
   .compare__filters button, .compare__row button {
     border: 1px solid var(--border);

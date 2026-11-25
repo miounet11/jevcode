@@ -12,6 +12,23 @@ import {
   type Category,
   type CoverageEntry,
 } from '../content/registry';
+import { jevCopy } from '../content/jev-copy';
+
+/** 分类落地页每页条数。第 1 页与 /page/N/ 必须切同一份有序列表。 */
+export const CATEGORY_PAGE_SIZE = 60;
+
+/**
+ * 某一分类的条目，顺序就是登记表顺序。
+ * 分类首页和后续分页都从这里取，避免两套排序把同一条拆丢或重复。
+ */
+export function entriesForCategory(category: Category): CoverageEntry[] {
+  return COVERAGE_ENTRIES.filter((entry) => entry.category === category);
+}
+
+export function categoryPageCount(total: number): number {
+  if (total <= 0) return 1;
+  return Math.ceil(total / CATEGORY_PAGE_SIZE);
+}
 
 const HEAD_COPY: Record<Lang, { title: string; description: string }> = {
   en: {
@@ -119,9 +136,19 @@ export function entryDescription(lang: Lang, entry: CoverageEntry): string {
   return `${entry.name}: ${assertion} ${frame.evidence}: ${entry.evidenceUrl} (${frame.reviewed} ${entry.reviewedAt}).`;
 }
 
-/** 分类落地页标题：分类名 + 本语言枢纽标题，避免与枢纽页标题重复。 */
-export function categoryTitle(lang: Lang, category: Category): string {
-  return `${categoryLabel(category, lang)} · ${hubTitle(lang)}`;
+/**
+ * 分类落地页标题：分类名 + 本语言枢纽标题，避免与枢纽页标题重复。
+ * `page > 1` 时追加本语言页码（来自 jev-copy 的 pageOf），第 1 页保持原标题。
+ */
+export function categoryTitle(
+  lang: Lang,
+  category: Category,
+  page?: number,
+  totalPages?: number,
+): string {
+  const base = `${categoryLabel(category, lang)} · ${hubTitle(lang)}`;
+  if (page == null || page <= 1 || totalPages == null || totalPages < page) return base;
+  return `${base} — ${jevCopy(lang).category.pageOf(page, totalPages)}`;
 }
 
 export function categoryDescription(lang: Lang, category: Category, count: number): string {

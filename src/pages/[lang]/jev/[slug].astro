@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { languages, useTranslations, type Lang } from '../../../i18n/ui';
+import { languages, pick, useTranslations, type Lang } from '../../../i18n/ui';
 import {
   categoryLabel,
   COVERAGE_ENTRIES,
@@ -10,6 +10,8 @@ import { assertionFor, jevCopy, verificationMeaning } from '../../../lib/content
 import { entryDescription, entryTitle } from '../../../lib/seo/metadata';
 import { entrySchema } from '../../../lib/seo/schema';
 import { entryPath } from '../../../lib/routing/domains';
+import * as jevCta from '../../../i18n/pages/jev-cta';
+import { PLAN_META, centsToUsd } from '../../../../server/plans.mjs';
 
 export function getStaticPaths() {
   const paths = [];
@@ -31,6 +33,13 @@ const category = categoryLabel(entry.category, lang);
 
 const c = jevCopy(lang).entry;
 const schema = entrySchema(lang, entry);
+const signupUsd = centsToUsd(PLAN_META.signupCreditCents);
+const cta = {
+  title: pick(lang, jevCta.title),
+  lead: pick(lang, jevCta.lead).replace('{credit}', signupUsd),
+  tryBtn: pick(lang, jevCta.tryBtn),
+  registerBtn: pick(lang, jevCta.registerBtn),
+};
 ---
 
 <BaseLayout
@@ -69,7 +78,7 @@ const schema = entrySchema(lang, entry);
       <h2>{c.category}</h2>
       <dl class="jev__facts">
         <dt>{c.category}</dt>
-        <dd>{category}</dd>
+        <dd><a href={`/${lang}/jev/category/${entry.category}/`}>{category}</a></dd>
         <dt>{c.repo}</dt>
         <dd><a href={entry.repoUrl} rel="noopener">{entry.repoUrl}</a></dd>
         {entry.lang && (<>
@@ -81,6 +90,15 @@ const schema = entrySchema(lang, entry);
         <dt>{c.reviewed}</dt>
         <dd>{entry.reviewedAt}</dd>
       </dl>
+
+      <aside class="jev__cta">
+        <p class="jev__cta-title">{cta.title}</p>
+        <p class="jev__cta-lead">{cta.lead}</p>
+        <div class="jev__cta-actions">
+          <a class="btn btn--primary" href={`/${lang}/try/`}>{cta.tryBtn}</a>
+          <a class="btn btn--ghost" href={`/${lang}/login/?mode=register`}>{cta.registerBtn}</a>
+        </div>
+      </aside>
     </div>
   </div>
 </BaseLayout>
@@ -115,4 +133,17 @@ const schema = entrySchema(lang, entry);
     margin: 0;
     word-break: break-word;
   }
+  .jev__cta {
+    margin-top: 28px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-elev);
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+  }
+  .jev__cta-title { font-weight: 600; margin: 0; }
+  .jev__cta-lead { margin: 0; font-size: 14px; color: var(--fg-dim); }
+  .jev__cta-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 </style>
