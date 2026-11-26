@@ -36,6 +36,11 @@ const t = {
   timeLabel: pick(lang, copy.timeLabel),
   minutesSuffix: pick(lang, copy.minutesSuffix),
   startTutorial: pick(lang, copy.startTutorial),
+  sortLabel: pick(lang, copy.sortLabel),
+  sortDefault: pick(lang, copy.sortDefault),
+  sortCompletion: pick(lang, copy.sortCompletion),
+  sortTime: pick(lang, copy.sortTime),
+  openWorkbench: pick(lang, copy.openWorkbench),
 };
 
 const tracks: VibeTrack[] = ['foundations', 'workflows', 'blueprints', 'operations', 'roadmap'];
@@ -46,6 +51,7 @@ const cards = VIBE_TUTORIALS.map((tutorial) => ({
   level: tutorial.level,
   completionPct: tutorial.completionPct,
   estimatedMinutes: tutorial.estimatedMinutes,
+  relatedConfigSlug: tutorial.relatedConfigSlug,
   title: pick(lang, tutorial.title),
   tagline: pick(lang, tutorial.tagline),
   href: `/${lang}/vibecoding/${tutorial.slug}/`,
@@ -96,11 +102,24 @@ const schema = [
           ))}
         </div>
         <input type="search" data-vibe-search placeholder={t.searchPlaceholder} aria-label={t.searchPlaceholder} />
+        <label class="vb-sort">
+          <span class="vb-sort__sr">{t.sortLabel}</span>
+          <select data-vibe-sort aria-label={t.sortLabel}>
+            <option value="default">{t.sortDefault}</option>
+            <option value="completion">{t.sortCompletion}</option>
+            <option value="time">{t.sortTime}</option>
+          </select>
+        </label>
       </div>
 
       <ul class="vb-grid">
-        {cards.map((card) => (
-          <li data-vibe data-track={card.track} data-q={`${card.title} ${card.tagline} ${card.track} ${card.level} ${card.slug}`.toLowerCase()}>
+        {cards.map((card, i) => (
+          <li
+            data-vibe
+            data-idx={i}
+            data-completion={card.completionPct}
+            data-minutes={card.estimatedMinutes}
+            data-track={card.track} data-q={`${card.title} ${card.tagline} ${card.track} ${card.level} ${card.slug}`.toLowerCase()}>
             <article>
               <p class="vb-badges">
                 <span>{trackCopy[card.track]}</span>
@@ -109,13 +128,23 @@ const schema = [
               </p>
               <h2><a href={card.href}>{card.title}</a></h2>
               <p>{card.tagline}</p>
-              <div class="vb-readiness" title={`${t.completionLabel}: ${card.completionPct}%`}>
-                <div class="vb-readiness__bar" role="img" aria-label={`${t.completionLabel}: ${card.completionPct}%`}>
+              <div class="vb-readiness">
+                <div
+                  class="vb-readiness__bar"
+                  role="progressbar"
+                  aria-label={t.completionLabel}
+                  aria-valuenow={card.completionPct}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
                   <span style={`width:${card.completionPct}%`}></span>
                 </div>
                 <span class="vb-readiness__label">{t.completionLabel}: {card.completionPct}%</span>
               </div>
-              <a class="vb-open" href={card.href}>{t.startTutorial}</a>
+              <p class="vb-actions">
+                <a class="vb-open" href={card.href}>{t.startTutorial}</a>
+                <a class="vb-wb" href={`/${lang}/workbench/?scenario=${card.relatedConfigSlug}`}>{t.openWorkbench}</a>
+              </p>
             </article>
           </li>
         ))}
@@ -127,6 +156,8 @@ const schema = [
 <script>
   const tabs = [...document.querySelectorAll<HTMLButtonElement>('[data-track]')];
   const input = document.querySelector<HTMLInputElement>('[data-vibe-search]');
+  const sort = document.querySelector<HTMLSelectElement>('[data-vibe-sort]');
+  const grid = document.querySelector<HTMLElement>('.vb-grid');
   const items = [...document.querySelectorAll<HTMLElement>('[data-vibe]')];
   let track = 'all';
   let q = '';
@@ -138,6 +169,22 @@ const schema = [
       item.hidden = !(okTrack && okQ);
     }
   }
+
+  function sortCards() {
+    const mode = sort?.value || 'default';
+    const key = mode === 'completion' ? 'completion' : mode === 'time' ? 'minutes' : null;
+    const ordered = [...items];
+    if (key === 'completion') {
+      ordered.sort((a, b) => Number(b.dataset.completion || 0) - Number(a.dataset.completion || 0));
+    } else if (key === 'minutes') {
+      ordered.sort((a, b) => Number(a.dataset.minutes || 0) - Number(b.dataset.minutes || 0));
+    } else {
+      ordered.sort((a, b) => Number(a.dataset.idx || 0) - Number(b.dataset.idx || 0));
+    }
+    ordered.forEach((item) => grid?.append(item));
+  }
+
+  sort?.addEventListener('change', sortCards);
 
   for (const tab of tabs) {
     tab.addEventListener('click', () => {
@@ -168,6 +215,12 @@ const schema = [
   .vb-filter button { padding: 0 14px; cursor: pointer; color: var(--fg-muted); }
   .vb-filter button[aria-selected="true"] { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); }
   .vb-filter input { flex: 1 1 220px; padding: 0 12px; }
+  .vb-sort { display: grid; gap: 4px; font-size: 12px; color: var(--fg-muted); }
+  .vb-sort__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .vb-sort select {
+    min-height: 44px; padding: 0 10px; border: 1px solid var(--border);
+    border-radius: 8px; background: var(--bg-elev); color: var(--fg); font: inherit;
+  }
   .vb-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
   .vb-grid article { height: 100%; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-elev); }
   .vb-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
@@ -181,4 +234,6 @@ const schema = [
   .vb-readiness__bar span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
   .vb-readiness__label { display: block; margin-top: 5px; font-size: 12px; color: var(--fg-dim); }
   .vb-open { font-size: 14px; font-weight: 600; }
+  .vb-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .vb-wb { font-size: 13px; color: var(--accent); }
 </style>

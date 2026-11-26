@@ -279,6 +279,51 @@ export const heroAlt: Localized<string> = {
   pt: 'Racks de inferência GPU e placas locais dispostos como matriz de hardware',
 };
 
+export const compareBtn: Localized<string> = {
+  en: 'Compare', zh: '加入对比', ja: '比較に追加', ko: '비교 추가', de: 'Vergleichen', fr: 'Comparer', es: 'Comparar', pt: 'Comparar',
+};
+
+export const comparedBtn: Localized<string> = {
+  en: 'Selected', zh: '已选对比', ja: '選択済み', ko: '선택됨', de: 'Ausgewählt', fr: 'Sélectionné', es: 'Seleccionado', pt: 'Selecionado',
+};
+
+export const compareTitle: Localized<string> = {
+  en: 'Side-by-side GPU comparison',
+  zh: '双卡参数实时对比',
+  ja: '2 つの GPU を並べて比較',
+  ko: 'GPU 2종 나란히 비교',
+  de: 'GPU direkt nebeneinander vergleichen',
+  fr: 'Comparaison de GPU côte à côte',
+  es: 'Comparación de GPU lado a lado',
+  pt: 'Comparação de GPUs lado a lado',
+};
+
+export const compareHint: Localized<string> = {
+  en: 'Pick any 2 GPUs above to compare VRAM, bandwidth, FP8, power, cloud rate, and Jev bypass savings.',
+  zh: '在上方任选 2 款 GPU，实时对比显存、带宽、FP8 算力、功耗、云价格与 Jev 旁路收益。',
+  ja: '上から GPU を 2 つ選ぶと、VRAM、帯域、FP8、消費電力、クラウド料金、Jev バイパス節約を比較できます。',
+  ko: '위에서 GPU 2종을 선택하면 VRAM, 대역폭, FP8, 전력, 클라우드 요금, Jev 우회 절감을 비교합니다.',
+  de: 'Wählen Sie oben 2 GPUs, um VRAM, Bandbreite, FP8, Leistung, Cloud-Preis und Jev-Bypass-Ersparnis zu vergleichen.',
+  fr: 'Choisissez 2 GPU ci-dessus pour comparer VRAM, bande passante, FP8, puissance, tarif cloud et économies de contournement Jev.',
+  es: 'Elija 2 GPU arriba para comparar VRAM, ancho de banda, FP8, potencia, tarifa de nube y ahorro de bypass Jev.',
+  pt: 'Escolha 2 GPUs acima para comparar VRAM, largura de banda, FP8, potência, preço de nuvem e poupança de bypass Jev.',
+};
+
+export const compareClear: Localized<string> = {
+  en: 'Clear', zh: '清空', ja: 'クリア', ko: '지우기', de: 'Leeren', fr: 'Effacer', es: 'Limpiar', pt: 'Limpar',
+};
+
+export const openWorkbench: Localized<string> = {
+  en: 'Configure in Workbench',
+  zh: '在工作台配置此卡',
+  ja: 'ワークベンチで設定',
+  ko: '워크벤치에서 구성',
+  de: 'Im Workbench konfigurieren',
+  fr: 'Configurer dans Workbench',
+  es: 'Configurar en Workbench',
+  pt: 'Configurar no Workbench',
+};
+
 export const roadmapAlt: Localized<string> = {
   en: 'B300 288GB and Rubin HBM4 roadmap capacity plan',
   zh: 'B300 288GB 与 Rubin HBM4 路线图容量规划',

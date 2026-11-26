@@ -58,12 +58,19 @@ const ui = {
   ctaLead: pick(lang, copy.ctaLead).replace('{credit}', credit),
   ctaTry: pick(lang, copy.ctaTry),
   ctaRegister: pick(lang, copy.ctaRegister),
+  openWorkbench: pick(lang, copy.openWorkbench),
+  checklistProgress: pick(lang, copy.checklistProgress),
+  resetChecklist: pick(lang, copy.resetChecklist),
   overview: pick(lang, item.overview),
   readinessNote: pick(lang, item.readinessNote),
   steps: item.steps.map((step) => pick(lang, step)),
 };
 
 const canonical = new URL(path, Astro.site).href;
+const storageKey = `jevcode:vibe:${item.slug}`;
+const relatedConfigHref = `/${lang}/workbench/?scenario=${item.relatedConfigSlug}`;
+const progressText = ui.checklistProgress;
+const totalSteps = ui.steps.length;
 const schema = [
   {
     '@type': 'BreadcrumbList',
@@ -97,7 +104,14 @@ const schema = [
       <div class="vb-kpis">
         <span class="vb-kpi-readiness">
           {ui.completionLabel}: {item.completionPct}%
-          <span class="vb-bar" role="img" aria-label={`${ui.completionLabel}: ${item.completionPct}%`}>
+          <span
+            class="vb-bar"
+            role="progressbar"
+            aria-label={ui.completionLabel}
+            aria-valuenow={item.completionPct}
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
             <span style={`width:${item.completionPct}%`}></span>
           </span>
         </span>
@@ -113,9 +127,21 @@ const schema = [
       <h2>{ui.overviewHeading}</h2>
       <p>{ui.overview}</p>
 
-      <h2>{ui.stepsHeading}</h2>
-      <ol class="vb-steps">
-        {ui.steps.map((step, i) => <li><span class="vb-step-num">{i + 1}</span><span>{step}</span></li>)}
+      <div class="vb-steps__bar">
+        <h2>{ui.stepsHeading}</h2>
+        <p class="vb-steps__progress" data-step-progress>{ui.checklistProgress}: 0 / {totalSteps}</p>
+        <button type="button" class="vb-step-reset" data-step-reset>{ui.resetChecklist}</button>
+      </div>
+      <ol class="vb-steps" data-steps-list data-storage-key={storageKey} data-progress-text={progressText} data-total-steps={String(totalSteps)}>
+        {ui.steps.map((step, i) => (
+          <li>
+            <label class="vb-step-check">
+              <input type="checkbox" data-step-check={i} />
+              <span class="vb-step-num">{i + 1}</span>
+              <span>{step}</span>
+            </label>
+          </li>
+        ))}
       </ol>
 
       <section class="vb-code">
@@ -146,6 +172,9 @@ const schema = [
 
       <h2>{ui.relatedConfigHeading}</h2>
       <p><a href={`/${lang}/configs/${item.relatedConfigSlug}/`}>{relatedConfigTitle}</a></p>
+      <p class="vb-wb-link">
+        <a class="btn btn--primary" href={relatedConfigHref}>{ui.openWorkbench}</a>
+      </p>
 
       <aside class="vb-cta">
         <h2>{ui.ctaTitle}</h2>
@@ -175,6 +204,34 @@ const schema = [
       }
     });
   }
+
+  const list = document.querySelector<HTMLElement>('[data-steps-list]');
+  const storageKey = list?.dataset.storageKey || 'jevcode:vibe:steps';
+  const progressText = list?.dataset.progressText || 'Steps completed';
+  const checks = [...document.querySelectorAll<HTMLInputElement>('[data-step-check]')];
+  const totalSteps = Number(list?.dataset.totalSteps || checks.length);
+  const progress = document.querySelector<HTMLElement>('[data-step-progress]');
+  const reset = document.querySelector<HTMLButtonElement>('[data-step-reset]');
+
+  const render = () => {
+    if (progress) progress.textContent = `${progressText}: ${checks.filter((box) => box.checked).length} / ${totalSteps}`;
+  };
+  const persist = () => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(checks.map((box) => box.checked)));
+    } catch { /* 隐私模式下存储不可用 */ }
+  };
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) ?? 'null');
+    if (Array.isArray(saved)) checks.forEach((box, i) => { box.checked = Boolean(saved[i]); });
+  } catch { /* 忽略损坏或不可用的存储 */ }
+  render();
+  checks.forEach((box) => box.addEventListener('change', () => { render(); persist(); }));
+  reset?.addEventListener('click', () => {
+    checks.forEach((box) => { box.checked = false; });
+    render();
+    persist();
+  });
 </script>
 
 <style>
@@ -187,6 +244,14 @@ const schema = [
   .vb-readiness-note { margin: 18px 0; padding: 12px 14px; border-left: 3px solid var(--accent); background: var(--bg-elev); }
   .vb-readiness-note h2 { margin: 0 0 6px; font-size: 1.05rem; }
   .vb-readiness-note p { margin: 0; color: var(--fg-muted); }
+  .vb-steps__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .vb-steps__bar h2 { margin: 0; }
+  .vb-steps__progress { margin: 0; font-size: 13px; color: var(--fg-muted); }
+  .vb-step-reset { padding: 4px 10px; font: inherit; font-size: 12px; color: var(--fg-muted); background: transparent; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; }
+  .vb-step-check { display: flex; flex: 1; gap: 12px; align-items: flex-start; cursor: pointer; }
+  .vb-step-check input { margin-top: 6px; accent-color: var(--accent); }
+  .vb-step-check:has(input:checked) > span:last-child { text-decoration: line-through; opacity: 0.65; }
+  .vb-wb-link { margin: 12px 0; }
   .vb-steps { list-style: none; counter-reset: none; padding: 0; margin: 0 0 22px; }
   .vb-steps li { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
   .vb-step-num { flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 13px; font-weight: 700; }

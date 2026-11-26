@@ -220,6 +220,17 @@ export const copiedBtn: Localized<string> = {
   pt: 'Copiado',
 };
 
+export const openWorkbench: Localized<string> = {
+  en: 'Build this stack in Workbench',
+  zh: '在工作台生成该行业配置',
+  ja: 'このスタックを Workbench で生成',
+  ko: '이 스택을 워크벤치에서 생성',
+  de: 'Diesen Stack im Workbench erstellen',
+  fr: 'Générer cette pile dans Workbench',
+  es: 'Generar esta pila en Workbench',
+  pt: 'Gerar esta pilha no Workbench',
+};
+
 export const backToHub: Localized<string> = {
   en: 'All industry cases',
   zh: '全部行业案例',

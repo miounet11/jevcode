@@ -1,0 +1,596 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { SCENARIO_CONFIGS } from '../../../data/configs';
+import { GPU_PROFILES } from '../../../data/gpus';
+import { VIBE_TUTORIALS } from '../../../data/vibecoding';
+import { PLAN_META, centsToUsd } from '../../../../server/plans.mjs';
+import * as copy from '../../../i18n/pages/workbench';
+import {
+  STACKS,
+  IDES,
+  POSTURES,
+  HORIZONS,
+  estimateWorkbench,
+  generateArtifacts,
+} from '../../../lib/workbench/generator.mjs';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const path = `/${lang}/workbench/`;
+const t = (bag: Parameters<typeof pick<string>>[1]) => pick(lang, bag);
+const credit = centsToUsd(PLAN_META.signupCreditCents);
+
+const scenario = SCENARIO_CONFIGS[0];
+const gpu = GPU_PROFILES[0];
+const stack = STACKS[0];
+const ide = IDES[0];
+const monthlyRequests = 5000000;
+const avgInputTokens = 600;
+const posture = POSTURES[0];
+const horizon = HORIZONS[0];
+
+const input = {
+  scenario,
+  gpu,
+  stack: stack.id,
+  ide: ide.id,
+  monthlyRequests,
+  avgInputTokens,
+  posture,
+  horizon,
+};
+const initialEst = estimateWorkbench(input);
+const artifacts = generateArtifacts(input);
+const tutorial = VIBE_TUTORIALS.find((item) => item.relatedConfigSlug === scenario.slug);
+
+const pageTitle = t(copy.title);
+const pageDescription = t(copy.description);
+const canonical = new URL(path, Astro.site).href;
+
+const schema = [
+  {
+    '@type': 'WebApplication',
+    name: pageTitle,
+    description: pageDescription,
+    url: canonical,
+    inLanguage: lang,
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', description: 'Free to use; clavue-jev API billed per input token.' },
+    featureList: [
+      'Interactive scenario, GPU, stack, and IDE selection',
+      'Live readiness and cost simulation',
+      'Generated config, agent rules, starter code, and verifier',
+      'One-click bundle export and shareable configuration URL',
+    ],
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t(copy.home), item: new URL(`/${lang}/`, Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: pageTitle, item: canonical },
+    ],
+  },
+];
+
+const wbData = {
+  lang,
+  scenarios: SCENARIO_CONFIGS.map((s) => ({
+    slug: s.slug,
+    category: s.category,
+    maturity: s.maturity,
+    completionPct: s.completionPct,
+    autoHandledPct: s.autoHandledPct,
+    escalationPct: s.escalationPct,
+    latencyTarget: s.latencyTarget,
+    title: pick(lang, s.title),
+  })),
+  gpus: GPU_PROFILES.map((g) => ({ slug: g.slug, name: g.name, vramGb: g.vramGb })),
+  stacks: STACKS,
+  ides: IDES,
+  tutorials: VIBE_TUTORIALS.map((item) => ({
+    slug: item.slug,
+    relatedConfigSlug: item.relatedConfigSlug,
+    title: pick(lang, item.title),
+  })),
+  labels: {
+    fitLocal: t(copy.fitLocal),
+    fitHybrid: t(copy.fitHybrid),
+    fitCluster: t(copy.fitCluster),
+    copyBtn: t(copy.copyBtn),
+    copiedBtn: t(copy.copiedBtn),
+    copyShareBtn: t(copy.copyShareBtn),
+    copiedShareBtn: t(copy.copiedShareBtn),
+    perMonthSuffix: t(copy.perMonthSuffix),
+  },
+};
+const wbJson = JSON.stringify(wbData).replace(/</g, '\\u003c');
+
+const fitLabel = (fit: string) =>
+  fit === 'cluster_scale' ? t(copy.fitCluster)
+  : fit === 'local_fit' ? t(copy.fitLocal)
+  : t(copy.fitHybrid);
+const usd = (n: number) => '$' + n.toFixed(2);
+---
+
+<BaseLayout lang={lang} title={pageTitle} description={pageDescription} path={path} schema={schema}>
+  <div class="wrap">
+    <div class="doc wb" data-wb>
+      <p class="doc__breadcrumb">
+        <a href={`/${lang}/`}>{t(copy.home)}</a> / {pageTitle}
+      </p>
+      <p class="wb__eyebrow">{t(copy.eyebrow)}</p>
+      <h1 class="doc__title">{pageTitle}</h1>
+      <p class="doc__desc">{t(copy.lead)}</p>
+
+      <figure class="wb__figure">
+        <img
+          src="/img/guides/workbench-hero.webp"
+          alt={t(copy.heroAlt)}
+          width="1344"
+          height="768"
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+
+      <section class="wb__panel" aria-labelledby="wb-controls-title">
+        <h2 id="wb-controls-title">{t(copy.controlsHeading)}</h2>
+        <div class="wb__controls">
+          <label class="wb__field">
+            <span>{t(copy.scenarioLabel)}</span>
+            <select data-ctl="scenario">
+              {SCENARIO_CONFIGS.map((s) => (
+                <option value={s.slug} selected={s.slug === scenario.slug}>{pick(lang, s.title)}</option>
+              ))}
+            </select>
+          </label>
+          <label class="wb__field">
+            <span>{t(copy.gpuLabel)}</span>
+            <select data-ctl="gpu">
+              {GPU_PROFILES.map((g) => (
+                <option value={g.slug} selected={g.slug === gpu.slug}>{g.name}</option>
+              ))}
+            </select>
+          </label>
+          <label class="wb__field">
+            <span>{t(copy.stackLabel)}</span>
+            <select data-ctl="stack">
+              {STACKS.map((s) => (
+                <option value={s.id} selected={s.id === stack.id}>{s.label}</option>
+              ))}
+            </select>
+          </label>
+          <label class="wb__field">
+            <span>{t(copy.ideLabel)}</span>
+            <select data-ctl="ide">
+              {IDES.map((i) => (
+                <option value={i.id} selected={i.id === ide.id}>{i.label}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div class="wb__slider">
+          <label class="wb__field">
+            <span>{t(copy.requestsLabel)} · <output data-out="req">{monthlyRequests.toLocaleString('en-US')}</output></span>
+            <input type="range" data-ctl="req" min="10000" max="1000000000" step="10000" value={monthlyRequests} />
+          </label>
+          <div class="wb__presets" role="group" aria-label={t(copy.requestsLabel)}>
+            <button type="button" data-preset="100000">100K</button>
+            <button type="button" data-preset="1000000">1M</button>
+            <button type="button" data-preset="5000000">5M</button>
+            <button type="button" data-preset="50000000">50M</button>
+            <button type="button" data-preset="200000000">200M</button>
+          </div>
+        </div>
+
+        <div class="wb__slider">
+          <label class="wb__field">
+            <span>{t(copy.tokensLabel)} · <output data-out="tok">{avgInputTokens.toLocaleString('en-US')}</output></span>
+            <input type="range" data-ctl="tok" min="100" max="4000" step="50" value={avgInputTokens} />
+          </label>
+        </div>
+
+        <div class="wb__chips">
+          <span class="wb__chip-label">{t(copy.postureLabel)}</span>
+          <div role="group" aria-label={t(copy.postureLabel)}>
+            <button type="button" data-ctl="posture" data-value="balanced" class:list={['wb__chip', { 'is-on': posture === 'balanced' }]}>{t(copy.postureBalanced)}</button>
+            <button type="button" data-ctl="posture" data-value="strict" class:list={['wb__chip', { 'is-on': posture === 'strict' }]}>{t(copy.postureStrict)}</button>
+            <button type="button" data-ctl="posture" data-value="regulated" class:list={['wb__chip', { 'is-on': posture === 'regulated' }]}>{t(copy.postureRegulated)}</button>
+          </div>
+        </div>
+
+        <div class="wb__chips">
+          <span class="wb__chip-label">{t(copy.horizonLabel)}</span>
+          <div role="group" aria-label={t(copy.horizonLabel)}>
+            <button type="button" data-ctl="horizon" data-value="2025-2026" class:list={['wb__chip', { 'is-on': horizon === '2025-2026' }]}>{t(copy.horizonNow)}</button>
+            <button type="button" data-ctl="horizon" data-value="2026-2027" class:list={['wb__chip', { 'is-on': horizon === '2026-2027' }]}>{t(copy.horizonFuture)}</button>
+          </div>
+        </div>
+      </section>
+
+      <figure class="wb__figure">
+        <img
+          src="/img/guides/workbench-readiness.webp"
+          alt={t(copy.readinessAlt)}
+          width="1344"
+          height="768"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+
+      <section class="wb__panel wb__strip" aria-labelledby="wb-strip-title">
+        <h2 id="wb-strip-title">{t(copy.readinessHeading)}</h2>
+        <div class="wb__completion">
+          <div class="wb__completion-head">
+            <span>{t(copy.completionLabel)}</span>
+            <strong data-kpi="completion">{initialEst.completionPct}%</strong>
+          </div>
+          <div
+            class="wb__progress"
+            role="progressbar"
+            aria-label={t(copy.completionLabel)}
+            aria-valuenow={initialEst.completionPct}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            data-progress
+          >
+            <span style={`width:${initialEst.completionPct}%`}></span>
+          </div>
+        </div>
+        <dl class="wb__kpis">
+          <div><dt>{t(copy.autoHandledLabel)}</dt><dd data-kpi="auto">{initialEst.autoHandledPct}%</dd></div>
+          <div><dt>{t(copy.escalationLabel)}</dt><dd data-kpi="escalation">{initialEst.escalationPct}%</dd></div>
+          <div><dt>{t(copy.jevCostLabel)}</dt><dd data-kpi="jev">{usd(initialEst.jevMonthlyUsd)}<small>{t(copy.perMonthSuffix)}</small></dd></div>
+          <div><dt>{t(copy.frontierCostLabel)}</dt><dd data-kpi="frontier">{usd(initialEst.frontierOnlyMonthlyUsd)}<small>{t(copy.perMonthSuffix)}</small></dd></div>
+          <div><dt>{t(copy.savingsLabel)}</dt><dd data-kpi="savings">{usd(initialEst.monthlySavingsUsd)}<small>{t(copy.perMonthSuffix)}</small></dd></div>
+          <div><dt>{t(copy.latencyLabel)}</dt><dd data-kpi="latency">{initialEst.targetLatencyMs} ms</dd></div>
+          <div><dt>{t(copy.gpuFitLabel)}</dt><dd data-kpi="fit">{fitLabel(initialEst.gpuFit)}</dd></div>
+        </dl>
+        <div class="wb__links">
+          <h3>{t(copy.linksHeading)}</h3>
+          <a data-link="scenario" href={`/${lang}/configs/${scenario.slug}/`}>{t(copy.viewScenarioLink)}</a>
+          <a data-link="gpu" href={`/${lang}/gpus/${gpu.slug}/`}>{t(copy.viewGpuLink)}</a>
+          <a data-link="tutorial" href={tutorial ? `/${lang}/vibecoding/${tutorial.slug}/` : `/${lang}/vibecoding/`}>{t(copy.viewTutorialLink)}</a>
+        </div>
+      </section>
+
+      <figure class="wb__figure">
+        <img
+          src="/img/guides/workbench-export.webp"
+          alt={t(copy.exportAlt)}
+          width="1344"
+          height="768"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+
+      <section class="wb__panel wb__artifacts" aria-labelledby="wb-artifacts-title">
+        <h2 id="wb-artifacts-title">{t(copy.artifactsHeading)}</h2>
+        <div class="wb__tabs" role="tablist" aria-label={t(copy.artifactsHeading)}>
+          <button type="button" role="tab" aria-selected="true" data-tab="config">{t(copy.tabConfig)}</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="rules">{t(copy.tabRules)}</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="starter">{t(copy.tabStarter)}</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="verifier">{t(copy.tabVerifier)}</button>
+        </div>
+        <div class="wb__codewrap">
+          <div class="wb__codebar">
+            <span data-filename="active">jevcode.config.yaml</span>
+            <div class="wb__code-actions">
+              <button type="button" data-action="copy" data-label={t(copy.copyBtn)} data-done={t(copy.copiedBtn)}>{t(copy.copyBtn)}</button>
+              <button type="button" data-action="download-file">{t(copy.downloadFileBtn)}</button>
+            </div>
+          </div>
+          <pre><code data-code>{artifacts.jevConfigYaml}</code></pre>
+        </div>
+        <div class="wb__actions">
+          <button type="button" class="btn btn--primary" data-action="download-bundle">{t(copy.downloadBundleBtn)}</button>
+          <button type="button" class="btn btn--ghost" data-action="share" data-label={t(copy.copyShareBtn)} data-done={t(copy.copiedShareBtn)}>{t(copy.copyShareBtn)}</button>
+        </div>
+      </section>
+
+      <aside class="wb__cta">
+        <h2>{t(copy.ctaTitle)}</h2>
+        <p>{t(copy.ctaLead).replace('{credit}', credit)}</p>
+        <p class="wb__cta-actions">
+          <a class="btn btn--primary" href={`/${lang}/try/`}>{t(copy.ctaTry)}</a>
+          <a class="btn btn--ghost" href={`/${lang}/login/?mode=register`}>{t(copy.ctaRegister)}</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+
+  <script type="application/json" id="wb-data" set:html={wbJson}></script>
+</BaseLayout>
+
+<script>
+  import { estimateWorkbench, generateArtifacts } from '../../../lib/workbench/generator.mjs';
+
+  const root = document.querySelector<HTMLElement>('[data-wb]');
+  const dataNode = document.getElementById('wb-data');
+  if (root && dataNode) {
+    const data = JSON.parse(dataNode.textContent || '{}');
+    const q = new URLSearchParams(location.search);
+    const validScenario = (v: string | null) =>
+      data.scenarios.some((s: { slug: string }) => s.slug === v) ? v! : data.scenarios[0].slug;
+    const validGpu = (v: string | null) =>
+      data.gpus.some((g: { slug: string }) => g.slug === v) ? v! : data.gpus[0].slug;
+    const validStack = (v: string | null) =>
+      data.stacks.some((s: { id: string }) => s.id === v) ? v! : data.stacks[0].id;
+    const validIde = (v: string | null) =>
+      data.ides.some((i: { id: string }) => i.id === v) ? v! : data.ides[0].id;
+    const validPosture = (v: string | null) =>
+      v === 'strict' || v === 'regulated' ? v : 'balanced';
+    const validHorizon = (v: string | null) =>
+      v === '2026-2027' ? v : '2025-2026';
+
+    const state: {
+      scenario: string; gpu: string; stack: string; ide: string;
+      req: number; tok: number; posture: string; horizon: string;
+    } = {
+      scenario: validScenario(q.get('scenario')),
+      gpu: validGpu(q.get('gpu')),
+      stack: validStack(q.get('stack')),
+      ide: validIde(q.get('ide')),
+      req: Number(q.get('req')) || 5000000,
+      tok: Number(q.get('tok')) || 600,
+      posture: validPosture(q.get('posture')),
+      horizon: validHorizon(q.get('horizon')),
+    };
+
+    const one = <T extends HTMLElement>(selector: string) => root.querySelector<T>(selector);
+    const all = <T extends HTMLElement>(selector: string) => [...root.querySelectorAll<T>(selector)];
+    const setText = (selector: string, value: string) => {
+      const node = one<HTMLElement>(selector);
+      if (node) node.textContent = value;
+    };
+    const pretty = (n: number) => n.toLocaleString('en-US');
+    const usd = (n: number) => '$' + n.toFixed(2);
+
+    let currentTab = 'config';
+
+    const tabToKey: Record<string, keyof ReturnType<typeof generateArtifacts>> = {
+      config: 'jevConfigYaml',
+      rules: 'agentRulesMd',
+      starter: 'starterCode',
+      verifier: 'verifierCode',
+    };
+    const activeFilename = (tab: string, art: ReturnType<typeof generateArtifacts>) =>
+      tab === 'config'
+        ? 'jevcode.config.yaml'
+        : tab === 'rules'
+          ? art.agentRulesFilename
+          : tab === 'starter'
+            ? art.starterFilename
+            : art.verifierFilename;
+
+    const currentInput = () => ({
+      scenario: data.scenarios.find((s: { slug: string }) => s.slug === state.scenario) || data.scenarios[0],
+      gpu: data.gpus.find((g: { slug: string }) => g.slug === state.gpu) || data.gpus[0],
+      stack: state.stack,
+      ide: state.ide,
+      monthlyRequests: state.req,
+      avgInputTokens: state.tok,
+      posture: state.posture,
+      horizon: state.horizon,
+    });
+
+    const syncUrl = () => {
+      const params = new URLSearchParams();
+      params.set('scenario', state.scenario);
+      params.set('gpu', state.gpu);
+      params.set('stack', state.stack);
+      params.set('ide', state.ide);
+      params.set('req', String(state.req));
+      params.set('tok', String(state.tok));
+      params.set('posture', state.posture);
+      params.set('horizon', state.horizon);
+      history.replaceState(null, '', location.pathname + '?' + params.toString());
+    };
+
+    const render = () => {
+      const input = currentInput();
+      const est = estimateWorkbench(input);
+      const artifacts = generateArtifacts(input);
+
+      setText('[data-out="req"]', pretty(est.monthlyRequests));
+      setText('[data-out="tok"]', pretty(est.avgInputTokens));
+      setText('[data-kpi="completion"]', est.completionPct + '%');
+      setText('[data-kpi="auto"]', est.autoHandledPct + '%');
+      setText('[data-kpi="escalation"]', est.escalationPct + '%');
+      setText('[data-kpi="jev"]', usd(est.jevMonthlyUsd));
+      setText('[data-kpi="frontier"]', usd(est.frontierOnlyMonthlyUsd));
+      setText('[data-kpi="savings"]', usd(est.monthlySavingsUsd));
+      setText('[data-kpi="latency"]', est.targetLatencyMs + ' ms');
+      setText('[data-kpi="fit"]', est.gpuFit === 'cluster_scale' ? data.labels.fitCluster : est.gpuFit === 'local_fit' ? data.labels.fitLocal : data.labels.fitHybrid);
+
+      for (const kpi of ['jev', 'frontier', 'savings']) {
+        const node = one<HTMLElement>(`[data-kpi="${kpi}"]`);
+        if (node && !node.querySelector('small')) {
+          const small = document.createElement('small');
+          small.textContent = data.labels.perMonthSuffix;
+          node.appendChild(small);
+        }
+      }
+
+      const progress = one<HTMLElement>('[data-progress]');
+      if (progress) {
+        progress.setAttribute('aria-valuenow', String(est.completionPct));
+        const bar = progress.querySelector<HTMLElement>('span');
+        if (bar) bar.style.width = est.completionPct + '%';
+      }
+
+      const scenarioLink = one<HTMLAnchorElement>('[data-link="scenario"]');
+      if (scenarioLink) scenarioLink.setAttribute('href', `/${data.lang}/configs/${state.scenario}/`);
+      const gpuLink = one<HTMLAnchorElement>('[data-link="gpu"]');
+      if (gpuLink) gpuLink.setAttribute('href', `/${data.lang}/gpus/${state.gpu}/`);
+      const tutorial = data.tutorials.find((item: { relatedConfigSlug: string }) => item.relatedConfigSlug === state.scenario);
+      const tutorialLink = one<HTMLAnchorElement>('[data-link="tutorial"]');
+      if (tutorialLink) {
+        tutorialLink.setAttribute('href', tutorial ? `/${data.lang}/vibecoding/${tutorial.slug}/` : `/${data.lang}/vibecoding/`);
+        tutorialLink.hidden = false;
+      }
+
+      setText('[data-code]', String(artifacts[tabToKey[currentTab]] ?? ''));
+      setText('[data-filename="active"]', activeFilename(currentTab, artifacts));
+
+      for (const select of all<HTMLSelectElement>('select[data-ctl]')) {
+        const key = select.dataset.ctl!;
+        if (state[key as keyof typeof state] !== undefined && select.value !== String(state[key as keyof typeof state])) {
+          select.value = String(state[key as keyof typeof state]);
+        }
+      }
+      const reqInput = one<HTMLInputElement>('input[data-ctl="req"]');
+      if (reqInput && Number(reqInput.value) !== est.monthlyRequests) reqInput.value = String(est.monthlyRequests);
+      const tokInput = one<HTMLInputElement>('input[data-ctl="tok"]');
+      if (tokInput && Number(tokInput.value) !== est.avgInputTokens) tokInput.value = String(est.avgInputTokens);
+
+      for (const chip of all<HTMLButtonElement>('button[data-ctl="posture"], button[data-ctl="horizon"]')) {
+        const key = chip.dataset.ctl as 'posture' | 'horizon';
+        chip.classList.toggle('is-on', chip.dataset.value === state[key]);
+      }
+
+      syncUrl();
+      return artifacts;
+    };
+
+    let lastArtifacts = render();
+
+    for (const select of all<HTMLSelectElement>('select[data-ctl]')) {
+      select.addEventListener('change', () => {
+        const key = select.dataset.ctl as keyof typeof state;
+        (state[key] as string) = select.value;
+        lastArtifacts = render();
+      });
+    }
+
+    for (const preset of all<HTMLButtonElement>('[data-preset]')) {
+      preset.addEventListener('click', () => {
+        state.req = Number(preset.dataset.preset) || state.req;
+        lastArtifacts = render();
+      });
+    }
+
+    const reqInput = one<HTMLInputElement>('input[data-ctl="req"]');
+    reqInput?.addEventListener('input', () => {
+      state.req = Number(reqInput.value) || 10000;
+      lastArtifacts = render();
+    });
+    const tokInput = one<HTMLInputElement>('input[data-ctl="tok"]');
+    tokInput?.addEventListener('input', () => {
+      state.tok = Number(tokInput.value) || 100;
+      lastArtifacts = render();
+    });
+
+    for (const chip of all<HTMLButtonElement>('button[data-ctl="posture"], button[data-ctl="horizon"]')) {
+      chip.addEventListener('click', () => {
+        const key = chip.dataset.ctl as 'posture' | 'horizon';
+        state[key] = chip.dataset.value!;
+        lastArtifacts = render();
+      });
+    }
+
+    for (const tab of all<HTMLButtonElement>('[data-tab]')) {
+      tab.addEventListener('click', () => {
+        currentTab = tab.dataset.tab!;
+        for (const other of all<HTMLButtonElement>('[data-tab]')) {
+          other.setAttribute('aria-selected', String(other === tab));
+        }
+        setText('[data-code]', String(lastArtifacts[tabToKey[currentTab]] ?? ''));
+        setText('[data-filename="active"]', activeFilename(currentTab, lastArtifacts));
+      });
+    }
+
+    const copyFeedback = async (btn: HTMLButtonElement, text: string) => {
+      const label = btn.dataset.label || '';
+      const done = btn.dataset.done || label;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = done;
+        window.setTimeout(() => { btn.textContent = label; }, 1600);
+      } catch {
+        btn.textContent = label;
+      }
+    };
+
+    const download = (filename: string, content: string) => {
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(url);
+    };
+
+    for (const btn of all<HTMLButtonElement>('[data-action]')) {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        if (action === 'copy') {
+          void copyFeedback(btn, String(lastArtifacts[tabToKey[currentTab]] ?? ''));
+        } else if (action === 'download-file') {
+          download(activeFilename(currentTab, lastArtifacts), String(lastArtifacts[tabToKey[currentTab]] ?? ''));
+        } else if (action === 'download-bundle') {
+          download(lastArtifacts.bootstrapFilename, lastArtifacts.bootstrapScript);
+        } else if (action === 'share') {
+          syncUrl();
+          void copyFeedback(btn, location.href);
+        }
+      });
+    }
+  }
+</script>
+
+<style>
+  .wb__eyebrow { color: var(--accent); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 0.4rem; }
+  .wb__figure { margin: 1.2rem 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; aspect-ratio: 16 / 9; background: var(--bg-code); }
+  .wb__figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .wb__panel { border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; margin: 1.2rem 0; background: var(--bg-elev); }
+  .wb__panel h2 { margin-top: 0; font-size: 1.15rem; }
+  .wb__controls { display: grid; gap: 0.9rem; }
+  @media (min-width: 760px) { .wb__controls { grid-template-columns: 1fr 1fr; } }
+  .wb__field { display: grid; gap: 0.35rem; font-size: 0.85rem; color: var(--fg-muted); }
+  .wb__field > span { display: flex; justify-content: space-between; gap: 0.5rem; }
+  .wb__field select, .wb__field input[type='range'] { width: 100%; }
+  .wb__field select { padding: 0.45rem 0.5rem; color: var(--fg); background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius); font: inherit; }
+  .wb__field input[type='range'] { accent-color: var(--accent); }
+  .wb__field output { color: var(--fg); font-family: var(--font-mono); }
+  .wb__slider { display: grid; gap: 0.4rem; }
+  .wb__presets, .wb__chips > div { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .wb__presets button, .wb__chip { padding: 0.3rem 0.6rem; font: inherit; font-size: 0.8rem; color: var(--fg-muted); background: var(--bg-code); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; }
+  .wb__chip.is-on { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); }
+  .wb__chip-label { font-size: 0.85rem; color: var(--fg-muted); }
+  .wb__chips { display: grid; gap: 0.4rem; }
+  .wb__completion-head { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem; }
+  .wb__progress { height: 10px; border-radius: 999px; background: var(--bg-code); overflow: hidden; }
+  .wb__progress span { display: block; height: 100%; border-radius: 999px; background: var(--accent); transition: width 0.2s ease; }
+  .wb__kpis { display: grid; gap: 0.6rem; margin: 1rem 0 0; }
+  @media (min-width: 560px) { .wb__kpis { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 960px) { .wb__kpis { grid-template-columns: repeat(4, 1fr); } }
+  .wb__kpis div { border-top: 1px solid var(--border); padding-top: 0.5rem; }
+  .wb__kpis dt { color: var(--fg-muted); font-size: 0.75rem; }
+  .wb__kpis dd { margin: 0.15rem 0 0; font-weight: 600; font-family: var(--font-mono); }
+  .wb__kpis small { color: var(--fg-muted); font-weight: 400; }
+  .wb__links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem; margin-top: 1rem; }
+  .wb__links h3 { margin: 0; font-size: 0.9rem; }
+  .wb__links a { color: var(--accent); font-size: 0.85rem; }
+  .wb__tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.6rem; }
+  .wb__tabs button { padding: 0.4rem 0.7rem; font: inherit; font-size: 0.8rem; font-family: var(--font-mono); color: var(--fg-muted); background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; }
+  .wb__tabs button[aria-selected='true'] { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); }
+  .wb__codewrap { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--bg-code); }
+  .wb__codebar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.8rem; color: var(--fg-muted); }
+  .wb__code-actions { display: flex; gap: 0.4rem; }
+  .wb__code-actions button { padding: 0.25rem 0.55rem; font: inherit; font-size: 0.78rem; color: var(--fg); background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; }
+  .wb__codewrap pre { margin: 0; padding: 0.8rem; max-height: 30rem; overflow: auto; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; }
+  .wb__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.9rem; }
+  .wb__cta { margin: 1.4rem 0 0; padding: 1rem 1.1rem; border: 1px solid var(--accent-border); border-radius: var(--radius); background: var(--accent-soft); }
+  .wb__cta h2 { margin-top: 0; font-size: 1.1rem; }
+  .wb__cta-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+</style>

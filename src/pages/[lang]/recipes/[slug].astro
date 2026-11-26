@@ -25,6 +25,9 @@ const description = pick(lang, recipe.tagline);
 const credit = centsToUsd(PLAN_META.signupCreditCents);
 const gpu = GPU_PROFILES.find((g) => g.slug === recipe.relatedGpuSlug);
 const gpuName = gpu?.name ?? recipe.relatedGpuSlug;
+const stackPrefixes = ['python', 'typescript', 'go', 'rust', 'java', 'csharp'] as const;
+const stackParam = stackPrefixes.find((p) => recipe.slug.startsWith(p));
+const workbenchHref = `/${lang}/workbench/?gpu=${encodeURIComponent(recipe.relatedGpuSlug)}${stackParam ? `&stack=${stackParam}` : ''}`;
 
 const ui = {
   runtimeLabel: pick(lang, copy.runtimeLabel),
@@ -35,6 +38,7 @@ const ui = {
   pairedGpuHeading: pick(lang, copy.pairedGpuHeading),
   copyBtn: pick(lang, copy.copyBtn),
   copiedBtn: pick(lang, copy.copiedBtn),
+  openWorkbench: pick(lang, copy.openWorkbench),
   backToHub: pick(lang, copy.backToHub),
   ctaTitle: pick(lang, copy.ctaTitle),
   ctaLead: pick(lang, copy.ctaLead).replace('{credit}', credit),
@@ -110,6 +114,7 @@ const schema = [
         <h2>{ui.ctaTitle}</h2>
         <p>{ui.ctaLead}</p>
         <p class="rx-cta__actions">
+          <a class="btn btn--ghost" href={workbenchHref}>{ui.openWorkbench}</a>
           <a class="btn btn--primary" href={`/${lang}/try/`}>{ui.ctaTry}</a>
           <a class="btn btn--ghost" href={`/${lang}/login/?mode=register`}>{ui.ctaRegister}</a>
         </p>
@@ -123,7 +128,11 @@ const schema = [
   for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
     button.addEventListener('click', async () => {
       const text = button.closest('section')?.querySelector('pre code')?.textContent ?? '';
-      await navigator.clipboard.writeText(text);
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        return;
+      }
       button.textContent = button.dataset.copied ?? 'Copied';
       window.setTimeout(() => {
         button.textContent = button.dataset.label ?? 'Copy';

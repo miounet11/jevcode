@@ -106,7 +106,7 @@ export const SCENARIO_CONFIGS: ScenarioConfig[] = [
     "title": {
       "en": "Dual-System LLM Cascade Router (Cache → 8B/32B → Frontier)",
       "zh": "双系统大模型级联路由配置（缓存 → 32B → 旗舰模型）",
-      "ja": "デュアルシステム LLM 級联ルーター (キャッシュ → 8B/32B → フロンティア)",
+      "ja": "デュアルシステム LLM カスケードルーター (キャッシュ → 8B/32B → フロンティア)",
       "ko": "듀얼 시스템 LLM 캐스케이드 라우터 (캐시 → 8B/32B → 프론티어)",
       "de": "Dual-System LLM Cascade Router (Cache → 8B/32B → Frontier)",
       "fr": "Routeur Cascade LLM Dual-System (Cache → 8B/32B → Frontier)",
@@ -1247,7 +1247,7 @@ export const SCENARIO_CONFIGS: ScenarioConfig[] = [
       "zh": "2026–2027+ 未来配置：视觉 + 语音 + 文本统一 System One 多模态路由",
       "ja": "2026–2027+ 将来構成：統合されたビジョン + オーディオ + テキスト システムワンルーティング",
       "ko": "2026–2027+ 미래 구성: 통합 비전 + 오디오 + 텍스트 시스템 원 라우팅",
-      "de": "2026–2027+ Zukonfiguration: Unified Vision + Audio + Text System One Routing",
+      "de": "2026–2027+ Zukunftskonfiguration: Unified Vision + Audio + Text System One Routing",
       "fr": "2026–2027+ Configuration future : Routage Système Unifié Vision + Audio + Texte",
       "es": "2026–2027+ Configuración futura: Enrutamiento de Sistema Unificado Visión + Audio + Texto",
       "pt": "2026–2027+ Configuração futura: Roteamento de Sistema Unificado Visão + Áudio + Texto"
@@ -1314,7 +1314,7 @@ export const SCENARIO_CONFIGS: ScenarioConfig[] = [
       "zh": "2027+ 未来配置：全自主多 Agent 集群治理与预算熔断策略",
       "ja": "2027+ 未来設定: 自律型マルチエージェント艦隊のガバナンスと予算管理",
       "ko": "2027+ 미래 설정: 자율 다중 에이전트艦대 거버넌스 및 예산 제어",
-      "de": "2027+ Zukonfiguration: Autonome Multi-Agenten-Flotten-Governance & Budgetsteuerung",
+      "de": "2027+ Zukunftskonfiguration: Autonome Multi-Agenten-Flotten-Governance & Budgetsteuerung",
       "fr": "Configuration 2027+ : Gouvernance de flotte multi-agents autonome & Contrôle budgétaire",
       "es": "Configuración 2027+: Gobernanza de flota multiagente autónoma y control presupuestario",
       "pt": "Configuração 2027+: Governança de frota multiagente autônoma e controle orçamentário"

@@ -92,6 +92,13 @@ const matrix = [
     count: VIBE_TUTORIALS.length,
     image: '/img/guides/vibecoding-hero.webp',
   },
+  {
+    href: `/${lang}/workbench/`,
+    title: t('nav.workbench'),
+    desc: t('home.matrix.workbenchDesc'),
+    count: '20 × 16',
+    image: '/img/guides/workbench-hero.webp',
+  },
 ];
 
 const path = `/${lang}/`;
@@ -405,7 +412,7 @@ const faqSchema = {
 <style>
   .home__matrix-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
   }
   .home__matrix-card {
@@ -441,6 +448,9 @@ const faqSchema = {
     grid-column: 1 / -1;
     color: var(--fg-muted);
     font-size: 14.5px;
+  }
+  @media (max-width: 980px) {
+    .home__matrix-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 800px) {
     .home__matrix-grid { grid-template-columns: 1fr; }

@@ -99,7 +99,7 @@ export const completionLabel: Localized<string> = {
   ja: '完了レディネス',
   ko: '완료 준비도',
   de: 'Abschlussbereitschaft',
-  fr: 'Maturity de complétion',
+  fr: 'Maturité de complétion',
   es: 'Madurez de finalización',
   pt: 'Prontidão de conclusão',
 };
@@ -317,4 +317,40 @@ export const ctaTry: Localized<string> = {
 
 export const ctaRegister: Localized<string> = {
   en: 'Create account', zh: '注册账户', ja: 'アカウント作成', ko: '계정 만들기', de: 'Konto erstellen', fr: 'Créer un compte', es: 'Crear cuenta', pt: 'Criar conta',
+};
+
+export const sortLabel: Localized<string> = {
+  en: 'Sort by', zh: '排序', ja: '並び替え', ko: '정렬', de: 'Sortieren', fr: 'Trier', es: 'Ordenar', pt: 'Ordenar',
+};
+
+export const sortDefault: Localized<string> = {
+  en: 'Default order', zh: '默认顺序', ja: '既定の順序', ko: '기본 순서', de: 'Standardreihenfolge', fr: 'Ordre par défaut', es: 'Orden predeterminado', pt: 'Ordem padrão',
+};
+
+export const sortCompletion: Localized<string> = {
+  en: 'Completion (high to low)', zh: '完成度（从高到低）', ja: '完了度（高い順）', ko: '완료도 (높은 순)', de: 'Abschlussbereitschaft (hoch → niedrig)', fr: 'Complétion (décroissante)', es: 'Finalización (de mayor a menor)', pt: 'Conclusão (maior para menor)',
+};
+
+export const sortAutoHandled: Localized<string> = {
+  en: 'Auto-handled (high to low)', zh: '自动处理（从高到低）', ja: '自動処理（高い順）', ko: '자동 처리 (높은 순)', de: 'Automatisch erledigt (hoch → niedrig)', fr: 'Auto-traité (décroissant)', es: 'Auto-gestionado (de mayor a menor)', pt: 'Automático (maior para menor)',
+};
+
+export const openWorkbench: Localized<string> = {
+  en: 'Customize in Workbench', zh: '在工作台定制导出', ja: 'ワークベンチでカスタマイズ', ko: '워크벤치에서 맞춤 설정', de: 'Im Workbench anpassen', fr: 'Personnaliser dans Workbench', es: 'Personalizar en Workbench', pt: 'Personalizar no Workbench',
+};
+
+export const workbenchBannerTitle: Localized<string> = {
+  en: 'Take any scenario into the Workbench', zh: '把任意场景带进工作台', ja: 'どのシナリオもワークベンチへ', ko: '모든 시나리오를 워크벤치로', de: 'Jedes Szenario in den Workbench übernehmen', fr: 'Emportez n’importe quel scénario dans Workbench', es: 'Lleva cualquier escenario al Workbench', pt: 'Leve qualquer cenário para o Workbench',
+};
+
+export const workbenchBannerLead: Localized<string> = {
+  en: 'Open the live Workbench with a scenario preloaded, tune the prompts and model mix, then export the config you actually need.', zh: '在工作台中预载场景，调整提示词与模型组合，导出你真正需要的配置。', ja: 'シナリオを読み込んだワークベンチでプロンプトとモデルの組み合わせを調整し、必要な設定を書き出します。', ko: '시나리오를 미리 불러온 워크벤치에서 프롬프트와 모델 조합을 조정하고 필요한 구성을 내보내세요.', de: 'Öffnen Sie den Live-Workbench mit vor geladenem Szenario, passen Sie Prompts und Modellmix an und exportieren Sie die benötigte Konfiguration.', fr: 'Ouvrez le Workbench avec un scénario préchargé, ajustez les prompts et le mix de modèles, puis exportez la config dont vous avez besoin.', es: 'Abre el Workbench con un escenario precargado, ajusta los prompts y la mezcla de modelos y exporta la configuración que necesitas.', pt: 'Abra o Workbench com um cenário pré-carregado, ajuste os prompts e a mistura de modelos e exporte a configuração necessária.',
+};
+
+export const workbenchBannerCta: Localized<string> = {
+  en: 'Open Workbench', zh: '打开工作台', ja: 'ワークベンチを開く', ko: '워크벤치 열기', de: 'Workbench öffnen', fr: 'Ouvrir Workbench', es: 'Abrir Workbench', pt: 'Abrir Workbench',
+};
+
+export const relatedTutorialsHeading: Localized<string> = {
+  en: 'Paired Vibe Coding tutorials', zh: '配套 Vibe Coding 实战教程', ja: '対応するバイブコーディングチュートリアル', ko: '연계된 바이브 코딩 튜토리얼', de: 'Passende Vibe-Coding-Tutorials', fr: 'Tutoriels de vibe coding associés', es: 'Tutoriales de vibe coding relacionados', pt: 'Tutoriais de vibe coding relacionados',
 };

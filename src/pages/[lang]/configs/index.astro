@@ -77,14 +77,25 @@ const schema = [
           <span class="cfg__sr">{t(copy.searchPlaceholder)}</span>
           <input type="search" data-q placeholder={t(copy.searchPlaceholder)} />
         </label>
+        <label class="cfg__sort">
+          <span class="cfg__sr">{t(copy.sortLabel)}</span>
+          <select data-sort aria-label={t(copy.sortLabel)}>
+            <option value="default">{t(copy.sortDefault)}</option>
+            <option value="completion">{t(copy.sortCompletion)}</option>
+            <option value="auto">{t(copy.sortAutoHandled)}</option>
+          </select>
+        </label>
       </div>
 
       <p class="cfg__empty" data-empty hidden>{t(copy.noMatch)}</p>
 
       <ul class="cfg__cards">
-        {SCENARIO_CONFIGS.map((item) => (
+        {SCENARIO_CONFIGS.map((item, i) => (
           <li
             data-card
+            data-idx={i}
+            data-completion={item.completionPct}
+            data-auto={item.autoHandledPct}
             data-maturity={item.maturity}
             data-name={`${item.slug} ${item.category} ${pick(lang, item.title)} ${pick(lang, item.tagline)}`.toLowerCase()}
           >
@@ -117,7 +128,10 @@ const schema = [
               <span class="cfg__badge">{t(copy.latencyLabel)} · {item.latencyTarget}</span>
               <span class="cfg__badge">{t(copy.costLabel)} · {item.costPerMillion}</span>
             </div>
-            <a class="btn btn--ghost" href={`/${lang}/configs/${item.slug}/`}>{t(copy.viewConfig)}</a>
+            <div class="cfg__actions">
+              <a class="btn btn--ghost" href={`/${lang}/configs/${item.slug}/`}>{t(copy.viewConfig)}</a>
+              <a class="btn btn--ghost" href={`/${lang}/workbench/?scenario=${item.slug}`}>{t(copy.openWorkbench)}</a>
+            </div>
           </li>
         ))}
       </ul>
@@ -141,6 +155,14 @@ const schema = [
           </ul>
         </div>
       </section>
+
+      <section class="cfg__workbench">
+        <div>
+          <h2>{t(copy.workbenchBannerTitle)}</h2>
+          <p>{t(copy.workbenchBannerLead)}</p>
+        </div>
+        <a class="btn btn--primary" href={`/${lang}/workbench/`}>{t(copy.workbenchBannerCta)}</a>
+      </section>
     </div>
   </div>
 </BaseLayout>
@@ -148,7 +170,9 @@ const schema = [
 <script>
   const root = document.querySelector('.cfg');
   const q = root?.querySelector<HTMLInputElement>('[data-q]');
+  const sort = root?.querySelector<HTMLSelectElement>('[data-sort]');
   if (root && q) {
+    const list = root.querySelector<HTMLElement>('.cfg__cards');
     const cards = [...root.querySelectorAll<HTMLElement>('[data-card]')];
     const empty = root.querySelector<HTMLElement>('[data-empty]');
     let maturity = 'all';
@@ -163,6 +187,18 @@ const schema = [
       }
       if (empty) empty.hidden = shown > 0;
     };
+    const sortCards = () => {
+      const mode = sort?.value || 'default';
+      const key = mode === 'completion' ? 'completion' : mode === 'auto' ? 'auto' : null;
+      const ordered = [...cards];
+      if (key) {
+        ordered.sort((a, b) => Number(b.dataset[key] || 0) - Number(a.dataset[key] || 0));
+      } else {
+        ordered.sort((a, b) => Number(a.dataset.idx || 0) - Number(b.dataset.idx || 0));
+      }
+      ordered.forEach((card) => list?.append(card));
+    };
+    sort?.addEventListener('change', sortCards);
     root.querySelectorAll<HTMLButtonElement>('.cfg__chip').forEach((btn) => {
       btn.addEventListener('click', () => {
         maturity = btn.dataset.maturity || 'all';
@@ -198,6 +234,19 @@ const schema = [
   .cfg__chip.is-on { background: var(--accent-soft); border-color: var(--accent-border); }
   .cfg__search { display: grid; gap: 0.2rem; font-size: 0.8rem; }
   .cfg__search input { border-radius: var(--radius); min-width: 12rem; }
+  .cfg__sort { display: grid; gap: 0.2rem; font-size: 0.8rem; }
+  .cfg__sort select {
+    border: 1px solid var(--border); background: transparent; color: inherit;
+    border-radius: var(--radius); min-height: 36px; padding: 0.3rem 0.75rem;
+  }
+  .cfg__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
+  .cfg__workbench {
+    display: grid; gap: 1rem; align-items: center; margin-top: 2rem; padding: 1.25rem;
+    border: 1px solid var(--accent-border); border-radius: var(--radius); background: var(--accent-soft);
+  }
+  .cfg__workbench h2 { margin: 0 0 0.35rem; font-size: 1.1rem; }
+  .cfg__workbench p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+  @media (min-width: 800px) { .cfg__workbench { grid-template-columns: 1fr auto; } }
   .cfg__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .cfg__empty { color: var(--muted); }
   .cfg__cards { list-style: none; padding: 0; display: grid; gap: 0.9rem; margin: 1rem 0 0; }

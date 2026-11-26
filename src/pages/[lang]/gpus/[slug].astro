@@ -111,6 +111,7 @@ const specs = [
         <h2>{t(copy.ctaTitle)}</h2>
         <p>{t(copy.ctaLead).replace('{credit}', credit)}</p>
         <p class="gpu__actions">
+          <a class="btn btn--primary" href={`/${lang}/workbench/?gpu=${gpu.slug}`}>{t(copy.openWorkbench)}</a>
           <a class="btn btn--primary" href={`/${lang}/try/`}>{t(copy.ctaTry)}</a>
           <a class="btn btn--ghost" href={`/${lang}/login/?mode=register`}>{t(copy.ctaRegister)}</a>
         </p>

@@ -138,6 +138,17 @@ export const copyBtn: Localized<string> = {
   en: 'Copy', zh: '复制', ja: 'コピー', ko: '복사', de: 'Kopieren', fr: 'Copier', es: 'Copiar', pt: 'Copiar',
 };
 
+export const openWorkbench: Localized<string> = {
+  en: 'Customize stack in Workbench',
+  zh: '在工作台定制代码与配置',
+  ja: 'ワークベンチでスタックをカスタマイズ',
+  ko: '워크벤치에서 스택 맞춤 설정',
+  de: 'Stack im Workbench anpassen',
+  fr: 'Personnaliser la pile dans Workbench',
+  es: 'Personalizar la pila en Workbench',
+  pt: 'Personalizar a pilha no Workbench',
+};
+
 export const copiedBtn: Localized<string> = {
   en: 'Copied', zh: '已复制', ja: 'コピーしました', ko: '복사됨', de: 'Kopiert', fr: 'Copié', es: 'Copiado', pt: 'Copiado',
 };

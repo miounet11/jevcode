@@ -2,6 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { languages, pick, type Lang } from '../../../i18n/ui';
 import { SCENARIO_CONFIGS, type ScenarioConfig } from '../../../data/configs';
+import { VIBE_TUTORIALS } from '../../../data/vibecoding';
 import { PLAN_META, centsToUsd } from '../../../../server/plans.mjs';
 import * as copy from '../../../i18n/pages/configs';
 
@@ -20,6 +21,7 @@ const { item } = Astro.props as { item: ScenarioConfig };
 const path = `/${lang}/configs/${item.slug}/`;
 const t = (bag: Parameters<typeof pick<string>>[1]) => pick(lang, bag);
 const credit = centsToUsd(PLAN_META.signupCreditCents);
+const relatedTutorials = VIBE_TUTORIALS.filter((tut) => tut.relatedConfigSlug === item.slug);
 const pageTitle = pick(lang, item.title);
 const pageDescription = pick(lang, item.summary);
 ---
@@ -56,6 +58,21 @@ const pageDescription = pick(lang, item.summary);
           <div><dt>{t(copy.costLabel)}</dt><dd>{item.costPerMillion}</dd></div>
         </dl>
       </section>
+
+      <p class="cfg-detail__workbench">
+        <a class="btn btn--primary" href={`/${lang}/workbench/?scenario=${item.slug}`}>{t(copy.openWorkbench)}</a>
+      </p>
+
+      {relatedTutorials.length > 0 && (
+        <section class="cfg-detail__tutorials">
+          <h2>{t(copy.relatedTutorialsHeading)}</h2>
+          <ul>
+            {relatedTutorials.map((tut) => (
+              <li><a href={`/${lang}/vibecoding/${tut.slug}/`}>{pick(lang, tut.title)}</a></li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <h2>{t(copy.summaryHeading)}</h2>
       <p>{pageDescription}</p>
@@ -130,4 +147,8 @@ const pageDescription = pick(lang, item.summary);
   .cfg-detail__cta { margin-top: 1.5rem; padding: 1rem 1.1rem; border: 1px solid var(--accent-border); border-radius: var(--radius); background: var(--accent-soft); }
   .cfg-detail__cta h2 { margin-top: 0; }
   .cfg-detail__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+  .cfg-detail__workbench { margin: 0 0 1.5rem; }
+  .cfg-detail__tutorials { margin: 1.5rem 0; padding: 1rem 1.1rem; border: 1px solid var(--border); border-radius: var(--radius); }
+  .cfg-detail__tutorials h2 { margin-top: 0; font-size: 1.1rem; }
+  .cfg-detail__tutorials ul { margin: 0; padding-left: 1.2rem; }
 </style>

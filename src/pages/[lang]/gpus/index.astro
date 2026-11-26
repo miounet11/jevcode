@@ -17,6 +17,46 @@ const pageDescription = t(copy.description);
 const canonical = new URL(path, Astro.site).href;
 const roadmap = GPU_PROFILES.find((g) => g.slug === 'next-gen-b300-rubin-roadmap') ?? GPU_PROFILES[0];
 
+// 默认预选两张热门卡，面板打开即可用；slug 不存在时回退到前两张。
+const cmpFirst = 'rtx-5090-32g';
+const cmpSecond = 'nvidia-b200-192g';
+const cmpASlug = GPU_PROFILES.some((g) => g.slug === cmpFirst) ? cmpFirst : (GPU_PROFILES[0]?.slug ?? '');
+const cmpBSlug = GPU_PROFILES.some((g) => g.slug === cmpSecond)
+  ? cmpSecond
+  : (GPU_PROFILES.find((g) => g.slug !== cmpASlug)?.slug ?? '');
+
+const cmpJson = JSON.stringify({
+  lang,
+  gpus: GPU_PROFILES.map((g) => ({
+    slug: g.slug,
+    name: g.name,
+    arch: g.arch,
+    vram: `${g.vramGb} GB ${g.vramType}`,
+    vramGb: g.vramGb,
+    bw: g.bandwidthGbs,
+    fp8: g.fp8Tflops,
+    tdp: g.tdpW,
+    interconnect: g.interconnect,
+    cloud: g.typicalCloudUsdHr,
+    savings: g.jevBypassSavings,
+    savingsPct: Number.parseInt(g.jevBypassSavings, 10) || 0,
+  })),
+  labels: {
+    compare: t(copy.compareBtn),
+    selected: t(copy.comparedBtn),
+    arch: t(copy.specArch),
+    vram: t(copy.specVram),
+    bw: t(copy.specBandwidth),
+    fp8: t(copy.specFp8),
+    tdp: t(copy.specTdp),
+    interconnect: t(copy.specInterconnect),
+    cloud: t(copy.specCloud),
+    savings: t(copy.specSavings),
+    details: t(copy.viewDetails),
+    workbench: t(copy.openWorkbench),
+  },
+}).replaceAll('<', '\\u003c').replaceAll('&', '\\u0026');
+
 const tiers = [
   ['all', t(copy.tierAll)],
   ['consumer', t(copy.tierConsumer)],
@@ -101,6 +141,7 @@ const schema = [
               <th>{t(copy.specInterconnect)}</th>
               <th>{t(copy.specCloud)}</th>
               <th><button type="button" data-sort="save">{t(copy.specSavings)}</button></th>
+              <th><span class="gpu__sr">{t(copy.compareBtn)}</span></th>
             </tr>
           </thead>
           <tbody>
@@ -126,11 +167,52 @@ const schema = [
                 <td>{g.interconnect}</td>
                 <td>{g.typicalCloudUsdHr}</td>
                 <td>{g.jevBypassSavings}</td>
+                <td>
+                  <button type="button" class="gpu__cmp-btn" data-compare-slug={g.slug} aria-pressed="false">{t(copy.compareBtn)}</button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <script type="application/json" id="gpu-cmp-data" set:html={cmpJson} />
+
+      <section class="gpu__cmp" data-cmp-panel aria-live="polite">
+        <div class="gpu__cmp-head">
+          <h2>{t(copy.compareTitle)}</h2>
+          <p>{t(copy.compareHint)}</p>
+        </div>
+        <div class="gpu__cmp-pickers">
+          <label>
+            <span>Slot A</span>
+            <select data-cmp-a>
+              {GPU_PROFILES.map((g) => (
+                <option value={g.slug} selected={g.slug === cmpASlug}>{g.name}</option>
+              ))}
+            </select>
+          </label>
+          <span class="gpu__cmp-vs">vs</span>
+          <label>
+            <span>Slot B</span>
+            <select data-cmp-b>
+              {GPU_PROFILES.map((g) => (
+                <option value={g.slug} selected={g.slug === cmpBSlug}>{g.name}</option>
+              ))}
+            </select>
+          </label>
+          <button type="button" class="gpu__cmp-clear" data-cmp-clear>{t(copy.compareClear)}</button>
+        </div>
+        <div class="gpu__cmp-body" data-cmp-output>
+          <table class="gpu__cmp-table">
+            <thead>
+              <tr><th></th><th data-cmp-name-a></th><th data-cmp-name-b></th></tr>
+            </thead>
+            <tbody data-cmp-rows></tbody>
+          </table>
+          <p class="gpu__cmp-cleared" data-cmp-empty hidden>{t(copy.compareHint)}</p>
+        </div>
+      </section>
 
       <ul class="gpu__cards">
         {GPU_PROFILES.map((g) => (
@@ -151,7 +233,11 @@ const schema = [
               <div><dt>{t(copy.specTdp)}</dt><dd>{g.tdpW} W</dd></div>
               <div><dt>{t(copy.specSavings)}</dt><dd>{g.jevBypassSavings}</dd></div>
             </dl>
-            <a class="btn btn--ghost" href={`/${lang}/gpus/${g.slug}/`}>{t(copy.viewDetails)}</a>
+            <div class="gpu__card-actions">
+              <a class="btn btn--ghost" href={`/${lang}/gpus/${g.slug}/`}>{t(copy.viewDetails)}</a>
+              <button type="button" class="gpu__cmp-btn" data-compare-slug={g.slug} aria-pressed="false">{t(copy.compareBtn)}</button>
+              <a class="btn btn--ghost" href={`/${lang}/workbench/?gpu=${g.slug}`}>{t(copy.openWorkbench)}</a>
+            </div>
           </li>
         ))}
       </ul>
@@ -234,6 +320,142 @@ const schema = [
       });
     });
   }
+
+  // 侧边对比面板：从 JSON 读取数据集，预选两张卡即可实时对比，点击卡片按钮可换入。
+  const cmpData = document.getElementById('gpu-cmp-data');
+  const panel = document.querySelector<HTMLElement>('[data-cmp-panel]');
+  if (cmpData && panel) {
+    type CmpGpu = {
+      slug: string; name: string; arch: string; vram: string; vramGb: number;
+      bw: number; fp8: number; tdp: number; interconnect: string;
+      cloud: string; savings: string; savingsPct: number;
+    };
+    type CmpPayload = {
+      lang: string;
+      gpus: CmpGpu[];
+      labels: Record<string, string>;
+    };
+    let payload: CmpPayload;
+    try {
+      payload = JSON.parse(cmpData.textContent || '{}') as CmpPayload;
+    } catch {
+      payload = { lang: 'en', gpus: [], labels: {} };
+    }
+    const cats = payload.gpus;
+    const L = payload.labels;
+    const bySlug = new Map(cats.map((g) => [g.slug, g]));
+    const selA = panel.querySelector<HTMLSelectElement>('[data-cmp-a]');
+    const selB = panel.querySelector<HTMLSelectElement>('[data-cmp-b]');
+    const rowsBox = panel.querySelector<HTMLElement>('[data-cmp-rows]');
+    const nameA = panel.querySelector<HTMLElement>('[data-cmp-name-a]');
+    const nameB = panel.querySelector<HTMLElement>('[data-cmp-name-b]');
+    const table = panel.querySelector<HTMLTableElement>('.gpu__cmp-table');
+    const empty = panel.querySelector<HTMLElement>('[data-cmp-empty]');
+    const clearBtn = panel.querySelector<HTMLButtonElement>('[data-cmp-clear]');
+    let slotA = selA?.value || '';
+    let slotB = selB?.value || '';
+
+    const link = (href: string, text: string) => {
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = text;
+      return a;
+    };
+
+    const syncBtns = () => {
+      document.querySelectorAll<HTMLButtonElement>('[data-compare-slug]').forEach((b) => {
+        const on = Boolean(b.dataset.compareSlug && (b.dataset.compareSlug === slotA || b.dataset.compareSlug === slotB));
+        b.classList.toggle('is-on', on);
+        b.setAttribute('aria-pressed', String(on));
+        b.textContent = on ? (L.selected || 'Selected') : (L.compare || 'Compare');
+      });
+    };
+
+    const render = () => {
+      const a = bySlug.get(slotA);
+      const b = bySlug.get(slotB);
+      const has = Boolean(a || b);
+      if (table) table.hidden = !has;
+      if (empty) empty.hidden = has;
+      syncBtns();
+      if ((!a && !b) || !rowsBox) return;
+
+      if (nameA) nameA.replaceChildren(a ? link(`/${payload.lang}/gpus/${a.slug}/`, a.name) : document.createTextNode('—'));
+      if (nameB) nameB.replaceChildren(b ? link(`/${payload.lang}/gpus/${b.slug}/`, b.name) : document.createTextNode('—'));
+      if (rowsBox) rowsBox.replaceChildren();
+
+      const rows: { label: string; a: string; b: string; hi?: 'a' | 'b'; workbench?: boolean }[] = [
+        { label: L.arch || 'Architecture', a: a?.arch || '—', b: b?.arch || '—' },
+        { label: L.vram || 'VRAM', a: a?.vram || '—', b: b?.vram || '—', hi: a && b ? (a.vramGb > b.vramGb ? 'a' : a.vramGb < b.vramGb ? 'b' : undefined) : undefined },
+        { label: L.bw || 'Bandwidth', a: a ? `${a.bw.toLocaleString('en-US')} GB/s` : '—', b: b ? `${b.bw.toLocaleString('en-US')} GB/s` : '—', hi: a && b ? (a.bw > b.bw ? 'a' : a.bw < b.bw ? 'b' : undefined) : undefined },
+        { label: L.fp8 || 'FP8', a: a ? `${a.fp8.toLocaleString('en-US')} TFLOPS` : '—', b: b ? `${b.fp8.toLocaleString('en-US')} TFLOPS` : '—', hi: a && b ? (a.fp8 > b.fp8 ? 'a' : a.fp8 < b.fp8 ? 'b' : undefined) : undefined },
+        { label: L.tdp || 'TDP', a: a ? `${a.tdp} W` : '—', b: b ? `${b.tdp} W` : '—', hi: a && b ? (a.tdp < b.tdp ? 'a' : a.tdp > b.tdp ? 'b' : undefined) : undefined },
+        { label: L.interconnect || 'Interconnect', a: a?.interconnect || '—', b: b?.interconnect || '—' },
+        { label: L.cloud || 'Typical cloud', a: a?.cloud || '—', b: b?.cloud || '—' },
+        { label: L.savings || 'Jev bypass savings', a: a?.savings || '—', b: b?.savings || '—', hi: a && b ? (a.savingsPct > b.savingsPct ? 'a' : a.savingsPct < b.savingsPct ? 'b' : undefined) : undefined },
+      ];
+
+      for (const row of rows) {
+        const tr = document.createElement('tr');
+        const th = document.createElement('th');
+        th.scope = 'row';
+        th.textContent = row.label;
+        tr.append(th);
+        for (const side of ['a', 'b'] as const) {
+          const td = document.createElement('td');
+          td.textContent = row[side];
+          if (row.hi === side) td.classList.add('is-better');
+          tr.append(td);
+        }
+        rowsBox.append(tr);
+      }
+
+      if (a || b) {
+        const tr = document.createElement('tr');
+        const th = document.createElement('th');
+        th.scope = 'row';
+        th.textContent = L.workbench || 'Workbench';
+        tr.append(th);
+        for (const gpu of [a, b]) {
+          const td = document.createElement('td');
+          td.append(gpu ? link(`/${payload.lang}/workbench/?gpu=${gpu.slug}`, L.workbench || 'Workbench') : document.createTextNode('—'));
+          tr.append(td);
+        }
+        rowsBox.append(tr);
+      }
+    };
+
+    const setSlot = (slug: string, which: 'a' | 'b') => {
+      if (!bySlug.has(slug)) return;
+      if (which === 'a') { slotA = slug; if (selA) selA.value = slug; }
+      else { slotB = slug; if (selB) selB.value = slug; }
+      render();
+    };
+
+    selA?.addEventListener('change', () => { slotA = selA.value; render(); });
+    selB?.addEventListener('change', () => { slotB = selB.value; render(); });
+    clearBtn?.addEventListener('click', () => {
+      slotA = '';
+      slotB = '';
+      render();
+    });
+
+    for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-compare-slug]')) {
+      btn.addEventListener('click', () => {
+        const slug = btn.dataset.compareSlug || '';
+        if (!bySlug.has(slug)) return;
+        // 轮换填入：优先 A，再 B，之后覆盖较旧的一侧。
+        if (!slotA) setSlot(slug, 'a');
+        else if (!slotB || slotB === slug) setSlot(slug, 'b');
+        else if (!bySlug.has(slotB)) setSlot(slug, 'b');
+        else setSlot(slug, 'a');
+
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
+
+    render();
+  }
 </script>
 
 <style>
@@ -273,6 +495,52 @@ const schema = [
   .gpu__cards dl { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 0.8rem; margin: 0.6rem 0; }
   .gpu__cards dt { color: var(--muted); font-size: 0.75rem; }
   .gpu__cards dd { margin: 0; }
+  .gpu__card-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.6rem; }
+  .gpu__cmp-btn {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: inherit;
+    border-radius: var(--radius);
+    min-height: 36px;
+    padding: 0 0.7rem;
+    font: inherit;
+    cursor: pointer;
+  }
+  .gpu__cmp-btn.is-on { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent); }
+  .gpu__cmp { margin: 1rem 0 0; border: 1px solid var(--accent-border); border-radius: var(--radius); background: var(--bg-elev); padding: 0.9rem 1rem; }
+  .gpu__cmp-head h2 { margin: 0 0 0.25rem; font-size: 1.05rem; }
+  .gpu__cmp-head p { margin: 0; color: var(--muted); font-size: 0.82rem; }
+  .gpu__cmp-pickers { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: end; margin: 0.8rem 0; }
+  .gpu__cmp-pickers label { display: grid; gap: 0.2rem; font-size: 0.78rem; color: var(--muted); flex: 1 1 12rem; }
+  .gpu__cmp-pickers select {
+    border: 1px solid var(--border);
+    background: var(--bg-elev-2);
+    color: inherit;
+    border-radius: var(--radius);
+    min-height: 36px;
+    padding: 0 0.5rem;
+    font: inherit;
+    max-width: 100%;
+  }
+  .gpu__cmp-vs { color: var(--muted); padding-bottom: 0.6rem; }
+  .gpu__cmp-clear {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: inherit;
+    border-radius: var(--radius);
+    min-height: 36px;
+    padding: 0 0.8rem;
+    font: inherit;
+    cursor: pointer;
+  }
+  .gpu__cmp-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .gpu__cmp-table th, .gpu__cmp-table td { text-align: left; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .gpu__cmp-table thead th { color: var(--muted); font-weight: 600; }
+  .gpu__cmp-table td.is-better { color: var(--accent); font-weight: 600; }
+  .gpu__cmp-cleared { color: var(--muted); margin: 0; }
+  @media (max-width: 560px) {
+    .gpu__cmp-table { display: block; overflow-x: auto; white-space: nowrap; }
+  }
   .gpu__road { display: grid; gap: 1rem; margin-top: 2rem; }
   @media (min-width: 800px) { .gpu__road { grid-template-columns: 1.2fr 1fr; align-items: center; } }
   .gpu__road img { margin: 0; }

@@ -2,6 +2,18 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-26 — 第六阶段：全球 8 语交互式 AI 架构与配置工作台、GPU 双卡对比器与六大旗舰频道生态闭环（多路 `clavue` CLI 并行开发）
+
+### 改动
+
+- **原创视觉资产（Clavue Image v3.1）**：生成并逐张目视验收 3 张 16:9 无字 WebP 封面图（`public/img/guides/workbench-{hero,export,readiness}.webp`，单张 50–88 KB；其中 `workbench-readiness.webp` 经目视复检重绘消除伪字瑕疵）。
+- **全球 8 语交互式工程工作台（`/[lang]/workbench/`）**：新增纯 ESM 浏览器与 Node 同源测算/生成引擎 `src/lib/workbench/generator.mjs`（580 行）、8 语词表 `src/i18n/pages/workbench.ts` 与页面模板 `src/pages/[lang]/workbench/index.astro`，支持 20 场景 × 16 GPU × 6 语言技术栈 × 5 AI Vibe Coding IDE/CLI × 流量规模/安全姿态/2025–2027+ 演进周期实时计算量化可完成度、自动化/升级占比与 `$0.042/1M` 成本节省，并一键切换复制、单文件下载或导出 `bootstrap-jev-stack.sh` 完整四件套启动包（`jevcode.config.yaml`、`AGENTS.md`/`.cursorrules`、可运行程序源码、`verify-jev.mjs`）及 URL 分享深链。
+- **GPU 双卡实时对比与六频道深度闭环**：在 `/[lang]/gpus/` 新增任意双卡参数对比面板与工作台深链；升级 `/[lang]/configs/` 与 `/[lang]/vibecoding/` 增加排序、标准 ARIA `role="progressbar"`、持久化步骤勾选清单与工作台深链；修复 4 处德/日/法小语种细节词并加固全部详情页剪贴板异常兜底；首页矩阵升级为均衡 6 卡 3×2 网格，同步接入导航、页脚、`/map/`、`llms.txt`（743 行）、`sitemap-lastmod.mjs`、Nginx 裸路径 302（`workbench`）及 `scripts/test-workbench.mjs`（15 项单测）。
+
+### 验证
+
+- `npm run check`（100 文件 0 错 0 警 0 提示）、`i18n-gaps: 0`、`npm run build`（20,194 页）、`npm test`（355/355）、`npm run test:e2e`（64/64）、`node scripts/preflight.mjs --json` 全绿；全站 20,194 页 HTML 审计 `nestedMain: 0`、`badDD: 0`、`badTypo: 0`、`rawTsLeak: 0`，`vibeProgress: 136/136`、`wbProgress: 8/8`、`gpuCmp: 8/8`。
+
 ## 2026-11-26 — 第五阶段：全球 8 语言场景配置与可完成度矩阵、程序开发配置方案与 AI Vibe Coding 全流程教程（`clavue` CLI 开发）
 
 ### 改动

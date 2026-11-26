@@ -133,6 +133,9 @@ const copyLabel = pick(lang, copy.copyBtn);
             <a href={`/${lang}/recipes/${item.recommendedRecipeSlug}/`}>{recipeName}</a>
           </li>
         </ul>
+        <p>
+          <a class="btn btn--ghost" href={`/${lang}/workbench/?gpu=${item.recommendedGpuSlug}`}>{pick(lang, copy.openWorkbench)}</a>
+        </p>
         <p><a href={`/${lang}/industries/`}>{pick(lang, copy.backToHub)}</a></p>
       </section>
 
@@ -155,7 +158,11 @@ const copyLabel = pick(lang, copy.copyBtn);
       const id = button.dataset.copy;
       const source = id ? document.getElementById(id) : null;
       const text = source?.textContent ?? '';
-      await navigator.clipboard.writeText(text);
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        return;
+      }
       const copied = button.dataset.copied || 'Copied';
       const label = button.dataset.label || button.textContent || '';
       button.textContent = copied;

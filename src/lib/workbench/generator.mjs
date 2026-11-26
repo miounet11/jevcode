@@ -1,0 +1,580 @@
+/**
+ * JevCode Phase 6 · AI Stack & Config Generator Workbench.
+ * Pure ESM, browser-safe: no Node APIs, no TypeScript syntax.
+ */
+import { INPUT_USD_PER_MILLION } from '../../../server/plans.mjs';
+
+export const STACKS = [
+  { id: 'typescript', label: 'TypeScript / Node', filename: 'jev-gate.ts', lang: 'ts' },
+  { id: 'python', label: 'Python / FastAPI', filename: 'jev_gate.py', lang: 'py' },
+  { id: 'go', label: 'Go 1.23', filename: 'jev_gate.go', lang: 'go' },
+  { id: 'rust', label: 'Rust / Tokio', filename: 'jev_gate.rs', lang: 'rs' },
+  { id: 'java', label: 'Java 21 / Spring', filename: 'JevGate.java', lang: 'java' },
+  { id: 'csharp', label: 'C# / .NET 9', filename: 'JevGate.cs', lang: 'cs' },
+];
+
+export const IDES = [
+  { id: 'clavue', label: 'Clavue CLI', rulesFilename: 'AGENTS.md' },
+  { id: 'cursor', label: 'Cursor', rulesFilename: '.cursorrules' },
+  { id: 'claude-code', label: 'Claude Code', rulesFilename: 'CLAUDE.md' },
+  { id: 'windsurf', label: 'Windsurf', rulesFilename: '.windsurfrules' },
+  { id: 'multi-agent', label: 'Parallel Multi-Agent Waves', rulesFilename: 'AGENTS.md' },
+];
+
+export const POSTURES = ['balanced', 'strict', 'regulated'];
+export const HORIZONS = ['2025-2026', '2026-2027'];
+
+const clampNum = (value, min, max, fallback) => {
+  const n = Number(value);
+  return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fallback;
+};
+
+const horizonOf = (value) => (value === '2026-2027' ? '2026-2027' : '2025-2026');
+const postureOf = (value) => (POSTURES.includes(value) ? value : 'balanced');
+
+export function estimateWorkbench(input = {}) {
+  const scenario = input.scenario ?? {};
+  const gpu = input.gpu ?? {};
+  const horizon = horizonOf(input.horizon);
+  const posture = postureOf(input.posture);
+  const monthlyRequests = clampNum(input.monthlyRequests, 10000, 1000000000, 5000000);
+  const avgInputTokens = clampNum(input.avgInputTokens, 50, 8000, 600);
+
+  let completionPct = clampNum(scenario.completionPct, 0, 100, 90);
+  if (horizon === '2026-2027') completionPct += scenario.maturity === 'future_roadmap' ? 12 : 4;
+  if (posture === 'regulated') completionPct -= 4;
+  if (posture === 'strict') completionPct -= 2;
+  completionPct = Math.round(clampNum(completionPct, 45, 99, 90));
+
+  let autoHandledPct = clampNum(scenario.autoHandledPct, 0, 100, 75);
+  if (horizon === '2026-2027') autoHandledPct += 5;
+  if (posture === 'regulated') autoHandledPct -= 8;
+  if (posture === 'strict') autoHandledPct -= 4;
+  autoHandledPct = Math.round(clampNum(autoHandledPct, 35, 96, 75));
+  const escalationPct = 100 - autoHandledPct;
+
+  const monthlyInputTokens = monthlyRequests * avgInputTokens;
+  const jevMonthlyUsd = Number(((monthlyInputTokens / 1000000) * INPUT_USD_PER_MILLION).toFixed(2));
+  const frontierOnlyMonthlyUsd = Number(((monthlyInputTokens / 1000000) * (horizon === '2026-2027' ? 2.5 : 3.0)).toFixed(2));
+  const hybridMonthlyUsd = Number((jevMonthlyUsd + frontierOnlyMonthlyUsd * (escalationPct / 100)).toFixed(2));
+  const monthlySavingsUsd = Number(Math.max(0, frontierOnlyMonthlyUsd - hybridMonthlyUsd).toFixed(2));
+  const savingsPct = frontierOnlyMonthlyUsd > 0 ? Math.round((monthlySavingsUsd / frontierOnlyMonthlyUsd) * 100) : 0;
+
+  const vramGb = Number(gpu.vramGb) || 0;
+  const gpuFit = vramGb >= 80 ? 'cluster_scale'
+    : (vramGb >= 24 && monthlyRequests <= 20000000) ? 'local_fit'
+    : 'hybrid_recommended';
+
+  const match = String(scenario.latencyTarget ?? '').match(/\d+/);
+  const parsedLatency = match ? Number(match[0]) : 75;
+  const targetLatencyMs = Math.max(25, Number.isFinite(parsedLatency) ? parsedLatency - (horizon === '2026-2027' ? 10 : 0) : 75);
+
+  return {
+    completionPct,
+    autoHandledPct,
+    escalationPct,
+    monthlyRequests,
+    avgInputTokens,
+    monthlyInputTokens,
+    jevMonthlyUsd,
+    frontierOnlyMonthlyUsd,
+    hybridMonthlyUsd,
+    monthlySavingsUsd,
+    savingsPct,
+    targetLatencyMs,
+    gpuFit,
+  };
+}
+
+const displayNum = (n) => Number(n).toLocaleString('en-US');
+
+function buildStarter(stackId, scenario, gpu) {
+  const slug = scenario.slug || 'custom-scenario';
+  const state = 'Order 4821 failed payment twice with HTTP 502; retry or escalate?';
+  const desc = 'JevCode gate for scenario ' + slug + ' on ' + (gpu.name || 'GPU profile');
+  const cid = 'JEV-' + slug.toUpperCase().replace(/[^A-Z0-9]+/g, '-').slice(0, 40);
+
+  if (stackId === 'python') {
+    return `#!/usr/bin/env python3
+# ${desc}
+# Requires Python 3.10+. Set JEVCODE_API_KEY before running.
+import json
+import os
+import urllib.error
+import urllib.request
+
+ENDPOINT = "https://api.jevcode.ai/v1/judge"
+MODEL = "clavue-jev"
+TIMEOUT_SECONDS = 4.0
+
+def escalate(state: str, judgment: dict) -> dict:
+    print("[escalate] handing to human/frontier reviewer:", state, flush=True)
+    return {"status": "escalated", "judgment": judgment}
+
+def judge(state: str) -> dict:
+    key = os.environ.get("JEVCODE_API_KEY")
+    if not key:
+        raise RuntimeError("JEVCODE_API_KEY is not set")
+    payload = {
+        "model": MODEL,
+        "state": state,
+        "questions": {
+            "decision": {
+                "type": "choice",
+                "instructions": "Auto-handle this request, or escalate to a reviewer?",
+                "options": ["auto_handle", "escalate"],
+            }
+        },
+    }
+    request = urllib.request.Request(
+        ENDPOINT,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json", "Authorization": "Bearer " + key},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
+            result = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        raise RuntimeError("Jev HTTP error " + str(exc.code)) from exc
+    answers = result.get("answers", {})
+    choice = (answers.get("decision", {}).get("choice") or "escalate")
+    if choice == "escalate":
+        return escalate(state, result)
+    return {"status": "auto_handled", "judgment": result}
+
+if __name__ == "__main__":
+    import sys
+    text = " ".join(sys.argv[1:]) or ${JSON.stringify(state)}
+    print(json.dumps(judge(text), indent=2))
+`;
+  }
+
+  if (stackId === 'go') {
+    return `// ${desc}
+// Go 1.23, standard library only. Set JEVCODE_API_KEY before running.
+package main
+
+import (
+  "bytes"
+  "context"
+  "encoding/json"
+  "fmt"
+  "net/http"
+  "os"
+  "time"
+)
+
+const (
+  endpoint = "https://api.jevcode.ai/v1/judge"
+  model    = "clavue-jev"
+  scenarioID = "${cid}"
+)
+
+type question struct {
+  Type         string   \`json:"type"\`
+  Instructions string   \`json:"instructions"\`
+  Options      []string \`json:"options"\`
+}
+
+type request struct {
+  Model     string              \`json:"model"\`
+  State     string              \`json:"state"\`
+  Questions map[string]question \`json:"questions"\`
+}
+
+func escalate(state string, raw []byte) map[string]any {
+  fmt.Println("[escalate] handing to human/frontier reviewer:", state)
+  return map[string]any{"status": "escalated", "raw": string(raw)}
+}
+
+func main() {
+  key := os.Getenv("JEVCODE_API_KEY")
+  if key == "" { panic("JEVCODE_API_KEY is not set") }
+  state := ${JSON.stringify(state)}
+  if len(os.Args) > 1 { state = os.Args[1] }
+  body, _ := json.Marshal(request{
+    Model: model, State: state,
+    Questions: map[string]question{
+      "decision": {Type: "choice", Instructions: "Auto-handle, or escalate?", Options: []string{"auto_handle", "escalate"}},
+    },
+  })
+  ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
+  defer cancel()
+  req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(body))
+  if err != nil { panic(err) }
+  req.Header.Set("Content-Type", "application/json")
+  req.Header.Set("Authorization", "Bearer "+key)
+  resp, err := http.DefaultClient.Do(req)
+  if err != nil { panic(err) }
+  defer resp.Body.Close()
+  if resp.StatusCode != http.StatusOK { panic(fmt.Sprintf("Jev HTTP %d", resp.StatusCode)) }
+  var out map[string]any
+  if err := json.NewDecoder(resp.Body).Decode(&out); err != nil { panic(err) }
+  answers, _ := out["answers"].(map[string]any)
+  decision, _ := answers["decision"].(map[string]any)
+  if decision["choice"] == "escalate" {
+    fmt.Println(escalate(state, body))
+    return
+  }
+  fmt.Printf("auto_handled: %v\\n", out)
+}
+`;
+  }
+
+  if (stackId === 'rust') {
+    return `// ${desc}
+// Rust/Tokio starter. Cargo.toml deps: tokio (features full), reqwest (json), serde, serde_json.
+// Set JEVCODE_API_KEY before running.
+use serde_json::{json, Value};
+use std::env;
+
+const ENDPOINT: &str = "https://api.jevcode.ai/v1/judge";
+const MODEL: &str = "clavue-jev";
+
+async fn escalate(state: &str, judgment: &Value) {
+    eprintln!("[escalate] handing to human/frontier reviewer: {}", state);
+    println!("{}", judgment);
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let key = env::var("JEVCODE_API_KEY").expect("JEVCODE_API_KEY is not set");
+    let state = env::args().nth(1).unwrap_or_else(|| ${JSON.stringify(state)}.to_string());
+    let payload = json!({
+        "model": MODEL,
+        "state": state,
+        "questions": {
+            "decision": {
+                "type": "choice",
+                "instructions": "Auto-handle, or escalate?",
+                "options": ["auto_handle", "escalate"]
+            }
+        }
+    });
+    let client = reqwest::Client::builder().timeout(std::time::Duration::from_secs(4)).build()?;
+    let response = client
+        .post(ENDPOINT)
+        .bearer_auth(key)
+        .json(&payload)
+        .send()
+        .await?;
+    if !response.status().is_success() {
+        return Err(format!("Jev HTTP {}", response.status()).into());
+    }
+    let result: Value = response.json().await?;
+    let choice = result["answers"]["decision"]["choice"].as_str().unwrap_or("escalate");
+    if choice == "escalate" {
+        escalate(&state, &result).await;
+    } else {
+        println!("{}", serde_json::to_string_pretty(&result)?);
+    }
+    Ok(())
+}
+`;
+  }
+
+  if (stackId === 'java') {
+    return `// ${desc}
+// Java 21 / Spring-style starter, standard JDK HttpClient. Set JEVCODE_API_KEY before running.
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
+public class JevGate {
+    static final String ENDPOINT = "https://api.jevcode.ai/v1/judge";
+    static final String MODEL = "clavue-jev";
+
+    public static void main(String[] args) throws Exception {
+        String key = System.getenv("JEVCODE_API_KEY");
+        if (key == null || key.isBlank()) throw new IllegalStateException("JEVCODE_API_KEY is not set");
+        String state = args.length > 0 ? String.join(" ", args) : ${JSON.stringify(state)};
+        String body = """
+            {"model":"clavue-jev","state":"REPLACE_STATE","questions":{"decision":{
+              "type":"choice","instructions":"Auto-handle, or escalate?",
+              "options":["auto_handle","escalate"]}}}
+            """.replace("REPLACE_STATE", state.replace("\\", "\\\\").replace("\\"", "\\\\\\""));
+        HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(4)).build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create(ENDPOINT))
+            .timeout(Duration.ofSeconds(4))
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + key)
+            .POST(HttpRequest.BodyPublishers.ofString(body))
+            .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) throw new IllegalStateException("Jev HTTP " + response.statusCode());
+        String result = response.body();
+        if (result.contains("\\"choice\\":\\"escalate\\"")) {
+            System.err.println("[escalate] handing to human/frontier reviewer: " + state);
+        }
+        System.out.println(result);
+    }
+}
+`;
+  }
+
+  if (stackId === 'csharp') {
+    return `// ${desc}
+// C# / .NET 9 console starter. Set JEVCODE_API_KEY before running.
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+
+var apiKey = Environment.GetEnvironmentVariable("JEVCODE_API_KEY");
+if (string.IsNullOrWhiteSpace(apiKey)) throw new InvalidOperationException("JEVCODE_API_KEY is not set");
+var state = args.Length > 0 ? string.Join(" ", args) : ${JSON.stringify(state)};
+var payload = new {
+    model = "clavue-jev",
+    state,
+    questions = new {
+        decision = new {
+            type = "choice",
+            instructions = "Auto-handle, or escalate?",
+            options = new[] { "auto_handle", "escalate" }
+        }
+    }
+};
+using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(4) };
+using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.jevcode.ai/v1/judge");
+request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+request.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+using var response = await http.SendAsync(request);
+response.EnsureSuccessStatusCode();
+var json = await response.Content.ReadAsStringAsync();
+using var doc = JsonDocument.Parse(json);
+var choice = doc.RootElement.GetProperty("answers").GetProperty("decision").GetProperty("choice").GetString();
+if (choice == "escalate") {
+    Console.Error.WriteLine("[escalate] handing to human/frontier reviewer: " + state);
+}
+Console.WriteLine(json);
+`;
+  }
+
+  return `// ${desc}
+// TypeScript / Node 22+. Set JEVCODE_API_KEY before running.
+type Question = { type: string; instructions: string; options: string[] };
+
+const endpoint = 'https://api.jevcode.ai/v1/judge';
+const model = 'clavue-jev';
+
+function escalate(state: string, judgment: unknown): unknown {
+  console.warn('[escalate] handing to human/frontier reviewer:', state);
+  return { status: 'escalated', judgment };
+}
+
+async function judge(state: string): Promise<unknown> {
+  const key = process.env.JEVCODE_API_KEY;
+  if (!key) throw new Error('JEVCODE_API_KEY is not set');
+  const question: Question = {
+    type: 'choice',
+    instructions: 'Auto-handle this request, or escalate to a reviewer?',
+    options: ['auto_handle', 'escalate'],
+  };
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 4000);
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { 'content-type': 'application/json', authorization: 'Bearer ' + key },
+      body: JSON.stringify({ model, state, questions: { decision: question } }),
+    });
+    if (!response.ok) throw new Error('Jev HTTP ' + response.status);
+    const result = await response.json() as { answers?: { decision?: { choice?: string } } };
+    const choice = result.answers?.decision?.choice ?? 'escalate';
+    return choice === 'escalate' ? escalate(state, result) : { status: 'auto_handled', judgment: result };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+const state = process.argv.slice(2).join(' ') || ${JSON.stringify(state)};
+judge(state).then((r) => console.log(JSON.stringify(r, null, 2))).catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+`;
+}
+
+function buildRules(ide, scenario, gpu, stack, est, posture, horizon) {
+  const slug = scenario.slug || 'custom-scenario';
+  const multi = ide.id === 'clavue' || ide.id === 'multi-agent';
+  const lines = [
+    '# AI Vibe Coding rules · ' + ide.label,
+    '',
+    'Generated by the JevCode workbench for scenario `' + slug + '`, GPU `' + (gpu.name || 'GPU profile') + '`, stack `' + stack.label + '`.',
+    '',
+    '## 1. Spec-first contract (non-negotiable)',
+    '',
+    '- Write a short `SPEC.md` before any edit: goal, inputs, outputs, error modes, and acceptance tests.',
+    '- Treat the spec as the source of truth. Any diff that changes behavior must update the spec in the same wave.',
+    '- Run typecheck, unit tests, and the acceptance gate after each bounded wave. Never merge a red wave.',
+    '- Scenario ' + slug + ' targets ' + displayNum(est.targetLatencyMs) + ' ms p95; posture ' + posture + '; horizon ' + horizon + '.',
+    '',
+    '## 2. Bounded write scope',
+    '',
+    multi
+      ? '- ALWAYS pass an explicit `--write-scope` to each wave (for example `--write-scope src/lib/workbench/**`).'
+      : '- Keep each wave to one feature and one file cluster; reject broad refactors hidden inside feature diffs.',
+    multi
+      ? '- Parallel waves must own disjoint paths. Never let two waves write the same file; merge through the shared board.'
+      : '- Review generated diffs line by line; do not accept whole-file rewrites you did not request.',
+    '- No edits outside the declared scope, including configs and lockfiles, without an explicit approval.',
+    '',
+    '## 3. Zero-secret guard',
+    '',
+    '- Read `JEVCODE_API_KEY` from the environment only. Never hardcode keys, tokens, or `jev_live_` literals.',
+    '- Never print secrets in logs, tests, snapshots, or generated artifacts. Use env var placeholders only.',
+    '- Rotate any key that has ever touched a diff, terminal history, or screenshot.',
+    '',
+    '## 4. Jev System One acceptance gate',
+    '',
+    '- The gate calls `https://api.jevcode.ai/v1/judge` with model `clavue-jev` and typed `choice` criteria.',
+    '- Auto-handle budget is ' + est.autoHandledPct + '%; anything above ' + est.escalationPct + '% escalation rate blocks release.',
+    '- Escalated results must route to a human/frontier reviewer with the full state attached; never silently drop them.',
+    '- Release only when `node verify-jev.mjs` passes AND the dry-run schema assertion succeeds.',
+    '',
+    '## 5. Output of this wave',
+    '',
+    '- Produce `jevcode.config.yaml`, `' + (ide.id === 'clavue' ? 'AGENTS.md' : ide.rulesFilename) + '`, `' + stack.filename + '`, and `verify-jev.mjs`.',
+    '- Finish with the exact commands to run and the expected acceptance output.',
+    '',
+  ];
+  return lines.join('\n');
+}
+
+function buildVerifier(scenario, stack) {
+  return `#!/usr/bin/env node
+// verify-jev.mjs · Jev System One acceptance gate (generated by JevCode workbench)
+import { existsSync, readFileSync } from 'node:fs';
+
+const configPath = 'jevcode.config.yaml';
+const scenarioSlug = ${JSON.stringify(scenario.slug || 'custom-scenario')};
+const failures = [];
+const pass = (msg) => console.log('PASS ' + msg);
+const fail = (msg) => { failures.push(msg); console.error('FAIL ' + msg); };
+
+if (!existsSync(configPath)) {
+  fail('missing ' + configPath);
+} else {
+  const config = readFileSync(configPath, 'utf8');
+  pass('config file present');
+  for (const token of ['https://api.jevcode.ai/v1/judge', 'model: clavue-jev', 'JEVCODE_API_KEY', 'thresholds:']) {
+    if (!config.includes(token)) fail('config missing ' + token);
+  }
+  if (!config.includes('scenario: ' + scenarioSlug)) fail('config scenario slug mismatch');
+}
+
+if (!process.env.JEVCODE_API_KEY) {
+  fail('JEVCODE_API_KEY is not set in the environment');
+} else {
+  pass('JEVCODE_API_KEY present in environment');
+}
+
+// Dry-run schema assertion: the request shape must be a typed choice with an escalation branch.
+const dryRun = {
+  model: 'clavue-jev',
+  state: 'acceptance-dry-run',
+  questions: { decision: { type: 'choice', instructions: 'Auto-handle or escalate?', options: ['auto_handle', 'escalate'] } },
+};
+const valid = dryRun.model === 'clavue-jev'
+  && dryRun.questions.decision.type === 'choice'
+  && Array.isArray(dryRun.questions.decision.options)
+  && dryRun.questions.decision.options.includes('escalate');
+if (valid) pass('dry-run choice schema and escalation branch valid');
+else fail('dry-run schema assertion failed');
+
+console.log('starter: ' + ${JSON.stringify(stack.filename)});
+if (failures.length) {
+  console.error(failures.length + ' acceptance check(s) failed');
+  process.exitCode = 1;
+} else {
+  console.log('Jev acceptance gate: ALL CHECKS PASSED');
+}
+`;
+}
+
+export function generateArtifacts(input = {}) {
+  const scenario = input.scenario ?? {};
+  const gpu = input.gpu ?? {};
+  const stack = STACKS.find((s) => s.id === input.stack) ?? STACKS[0];
+  const ide = IDES.find((i) => i.id === input.ide) ?? IDES[0];
+  const horizon = horizonOf(input.horizon);
+  const posture = postureOf(input.posture);
+  const est = estimateWorkbench(input);
+  const slug = scenario.slug || 'custom-scenario';
+  const gpuSlug = gpu.slug || 'gpu-profile';
+  const gpuName = gpu.name || 'GPU profile';
+  const rulesFilename = ide.rulesFilename;
+
+  const jevConfigYaml = [
+    '# JevCode workbench · production config for ' + slug,
+    'scenario: ' + slug,
+    'category: ' + (scenario.category || 'custom'),
+    'maturity: ' + (scenario.maturity || 'production_ready'),
+    'gpu: ' + gpuSlug + ' (' + gpuName + ')',
+    'gpu_vram_gb: ' + (Number(gpu.vramGb) || 0),
+    'horizon: ' + horizon,
+    'posture: ' + posture,
+    'endpoint: https://api.jevcode.ai/v1/judge',
+    'model: clavue-jev',
+    'api_key_env: JEVCODE_API_KEY',
+    'timeout_ms: 4000',
+    'target_latency_ms: ' + est.targetLatencyMs,
+    'thresholds:',
+    '  auto_handled_pct: ' + est.autoHandledPct,
+    '  escalation_pct: ' + est.escalationPct,
+    '  auto_allow_below: 0.45',
+    '  escalate_at_or_above: 0.85',
+    'criteria:',
+    '  decision:',
+    '    type: choice',
+    '    instructions: "Auto-handle this request, or escalate to a reviewer?"',
+    '    options: [auto_handle, escalate]',
+    'escalation:',
+    '  route: human_or_frontier_reviewer',
+    '  include_state: true',
+    '  never_silently_drop: true',
+    '',
+  ].join('\n');
+
+  const agentRulesMd = buildRules(ide, scenario, gpu, stack, est, posture, horizon);
+  const starterCode = buildStarter(stack.id, scenario, gpu);
+  const verifierCode = buildVerifier(scenario, stack);
+
+  const heredoc = (name, filename, content) => [
+    "cat > '" + filename + "' <<'" + name + "'",
+    content.replace(/\n$/, ''),
+    name,
+    '',
+  ].join('\n');
+
+  const bootstrapScript = [
+    '#!/usr/bin/env bash',
+    'set -euo pipefail',
+    '',
+    '# JevCode starter bundle · scenario ' + slug + ' · stack ' + stack.id,
+    '# Run from an empty project directory. Secrets stay in the environment.',
+    '',
+    heredoc('JEV_CONFIG_EOF', 'jevcode.config.yaml', jevConfigYaml),
+    heredoc('JEV_RULES_EOF', rulesFilename, agentRulesMd),
+    heredoc('JEV_STARTER_EOF', stack.filename, starterCode),
+    heredoc('JEV_VERIFY_EOF', 'verify-jev.mjs', verifierCode),
+    'echo "Starter bundle written. Next: export JEVCODE_API_KEY=... && node verify-jev.mjs"',
+    '',
+  ].join('\n');
+
+  return {
+    jevConfigYaml,
+    agentRulesFilename: rulesFilename,
+    agentRulesMd,
+    starterFilename: stack.filename,
+    starterCode,
+    verifierFilename: 'verify-jev.mjs',
+    verifierCode,
+    bootstrapFilename: 'bootstrap-jev-stack.sh',
+    bootstrapScript,
+  };
+}

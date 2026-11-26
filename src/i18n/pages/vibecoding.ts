@@ -298,6 +298,34 @@ export const ctaRegister: Localized<string> = {
   pt: 'Criar conta',
 };
 
+export const sortLabel: Localized<string> = {
+  en: 'Sort by', zh: '排序', ja: '並び替え', ko: '정렬', de: 'Sortieren', fr: 'Trier', es: 'Ordenar', pt: 'Ordenar',
+};
+
+export const sortDefault: Localized<string> = {
+  en: 'Default order', zh: '默认顺序', ja: '既定の順序', ko: '기본 순서', de: 'Standardreihenfolge', fr: 'Ordre par défaut', es: 'Orden predeterminado', pt: 'Ordem padrão',
+};
+
+export const sortCompletion: Localized<string> = {
+  en: 'Completion (high to low)', zh: '完成度（从高到低）', ja: '完了度（高い順）', ko: '완료도 (높은 순)', de: 'Abschlussbereitschaft (hoch → niedrig)', fr: 'Complétion (décroissante)', es: 'Finalización (de mayor a menor)', pt: 'Conclusão (maior para menor)',
+};
+
+export const sortTime: Localized<string> = {
+  en: 'Reading time (short to long)', zh: '阅读时间（从短到长）', ja: '読了時間（短い順）', ko: '읽기 시간 (짧은 순)', de: 'Lesezeit (kurz → lang)', fr: 'Temps de lecture (croissant)', es: 'Tiempo de lectura (de menor a mayor)', pt: 'Tempo de leitura (menor para maior)',
+};
+
+export const openWorkbench: Localized<string> = {
+  en: 'Open stack in Workbench', zh: '在工作台生成配套方案', ja: 'ワークベンチでスタックを生成', ko: '워크벤치에서 스택 생성', de: 'Stack im Workbench öffnen', fr: 'Ouvrir la pile dans Workbench', es: 'Abrir el stack en Workbench', pt: 'Abrir o stack no Workbench',
+};
+
+export const checklistProgress: Localized<string> = {
+  en: 'Steps completed', zh: '已完成步骤', ja: '完了したステップ', ko: '완료한 단계', de: 'Abgeschlossene Schritte', fr: 'Étapes terminées', es: 'Pasos completados', pt: 'Etapas concluídas',
+};
+
+export const resetChecklist: Localized<string> = {
+  en: 'Reset progress', zh: '重置进度', ja: '進捗をリセット', ko: '진행도 초기화', de: 'Fortschritt zurücksetzen', fr: 'Réinitialiser la progression', es: 'Reiniciar progreso', pt: 'Redefinir progresso',
+};
+
 export const vibecodingCopy = {
   title,
   description,
@@ -331,4 +359,11 @@ export const vibecodingCopy = {
   ctaLead,
   ctaTry,
   ctaRegister,
+  sortLabel,
+  sortDefault,
+  sortCompletion,
+  sortTime,
+  openWorkbench,
+  checklistProgress,
+  resetChecklist,
 };
