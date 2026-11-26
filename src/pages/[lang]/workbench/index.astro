@@ -13,6 +13,7 @@ import {
   HORIZONS,
   estimateWorkbench,
   generateArtifacts,
+  buildDryRunContract,
 } from '../../../lib/workbench/generator.mjs';
 
 export function getStaticPaths() {
@@ -45,6 +46,7 @@ const input = {
 };
 const initialEst = estimateWorkbench(input);
 const artifacts = generateArtifacts(input);
+const initialContract = buildDryRunContract(input);
 const tutorial = VIBE_TUTORIALS.find((item) => item.relatedConfigSlug === scenario.slug);
 
 const pageTitle = t(copy.title);
@@ -106,6 +108,36 @@ const wbData = {
     copyShareBtn: t(copy.copyShareBtn),
     copiedShareBtn: t(copy.copiedShareBtn),
     perMonthSuffix: t(copy.perMonthSuffix),
+    dryRunHeading: t(copy.dryRunHeading),
+    dryRunLead: t(copy.dryRunLead),
+    dryRunQuotaNote: t(copy.dryRunQuotaNote),
+    dryRunStateLabel: t(copy.dryRunStateLabel),
+    dryRunNormalBtn: t(copy.dryRunNormalBtn),
+    dryRunRiskBtn: t(copy.dryRunRiskBtn),
+    dryRunRunBtn: t(copy.dryRunRunBtn),
+    dryRunRunningBtn: t(copy.dryRunRunningBtn),
+    dryRunQuestionsHeading: t(copy.dryRunQuestionsHeading),
+    dryRunThresholdsLabel: t(copy.dryRunThresholdsLabel),
+    dryRunVerdictAuto: t(copy.dryRunVerdictAuto),
+    dryRunVerdictEscalate: t(copy.dryRunVerdictEscalate),
+    dryRunBypassBadge: t(copy.dryRunBypassBadge),
+    dryRunEscalateBadge: t(copy.dryRunEscalateBadge),
+    dryRunUpstreamLabel: t(copy.dryRunUpstreamLabel),
+    dryRunRttLabel: t(copy.dryRunRttLabel),
+    dryRunModelLabel: t(copy.dryRunModelLabel),
+    dryRunDecisionLabel: t(copy.dryRunDecisionLabel),
+    dryRunRiskLabel: t(copy.dryRunRiskLabel),
+    dryRunLaneLabel: t(copy.dryRunLaneLabel),
+    dryRunShareBtn: t(copy.dryRunShareBtn),
+    dryRunCopyShareBtn: t(copy.dryRunCopyShareBtn),
+    dryRunRawJsonLabel: t(copy.dryRunRawJsonLabel),
+    dryRunCopyJsonBtn: t(copy.dryRunCopyJsonBtn),
+    dryRunErrEmpty: t(copy.dryRunErrEmpty),
+    dryRunErrShort: t(copy.dryRunErrShort),
+    dryRunErrLong: t(copy.dryRunErrLong),
+    dryRunErrLimit: t(copy.dryRunErrLimit),
+    dryRunErrFailed: t(copy.dryRunErrFailed),
+    ctaRegister: t(copy.ctaRegister),
   },
 };
 const wbJson = JSON.stringify(wbData).replace(/</g, '\\u003c');
@@ -261,6 +293,45 @@ const usd = (n: number) => '$' + n.toFixed(2);
         </div>
       </section>
 
+      <section class="wb__panel wb__dryrun" data-dryrun aria-labelledby="wb-dryrun-title">
+        <h2 id="wb-dryrun-title">{t(copy.dryRunHeading)}</h2>
+        <p class="wb__dryrun-lead">{t(copy.dryRunLead)}</p>
+        <p class="wb__dryrun-note">{t(copy.dryRunQuotaNote)}</p>
+        <div class="wb__dryrun-samples">
+          <button type="button" data-dryrun-sample="normal">{t(copy.dryRunNormalBtn)}</button>
+          <button type="button" data-dryrun-sample="risk">{t(copy.dryRunRiskBtn)}</button>
+        </div>
+        <label class="wb__field"><span>{t(copy.dryRunStateLabel)}</span><textarea rows="4" data-dryrun-state>{initialContract.normalState}</textarea></label>
+        <div class="wb__dryrun-contract" data-dryrun-contract>
+          <strong>{t(copy.dryRunQuestionsHeading)}</strong>
+          <ul>
+            <li><code>decision</code> — {initialContract.questions.decision.instructions}</li>
+            <li><code>risk_score</code> — {initialContract.questions.risk_score.instructions}</li>
+            <li><code>route_lane</code> — {initialContract.questions.route_lane.instructions}</li>
+          </ul>
+          <p>{t(copy.dryRunThresholdsLabel)}: auto_allow_below &lt; {initialContract.thresholds.autoAllowBelow}, escalate_at_or_above ≥ {initialContract.thresholds.escalateAtOrAbove}</p>
+        </div>
+        <div class="wb__actions">
+          <button type="button" class="btn btn--primary" data-dryrun-run>{t(copy.dryRunRunBtn)}</button>
+        </div>
+        <p class="wb__dryrun-err" data-dryrun-error hidden></p>
+        <a class="wb__dryrun-limit-link" data-dryrun-limit-link hidden href={`/${lang}/login/?mode=register`}>{t(copy.ctaRegister)}</a>
+        <div class="wb__dryrun-res" data-dryrun-result hidden aria-live="polite">
+          <span class="wb__dryrun-verdict" data-dryrun-verdict></span>
+          <dl class="wb__dryrun-telemetry">
+            <div><dt>{t(copy.dryRunModelLabel)}</dt><dd data-dryrun-model>—</dd></div>
+            <div><dt>{t(copy.dryRunUpstreamLabel)}</dt><dd data-dryrun-upstream>—</dd></div>
+            <div><dt>{t(copy.dryRunRttLabel)}</dt><dd data-dryrun-rtt>—</dd></div>
+          </dl>
+          <div class="wb__dryrun-bars" data-dryrun-bars></div>
+          <div class="wb__dryrun-actions">
+            <a class="btn btn--ghost" data-dryrun-share href="#">{t(copy.dryRunShareBtn)}</a>
+            <button type="button" class="btn btn--ghost" data-dryrun-copy-share data-label={t(copy.dryRunCopyShareBtn)} data-done={t(copy.copiedShareBtn)}>{t(copy.dryRunCopyShareBtn)}</button>
+            <details class="wb__dryrun-json"><summary>{t(copy.dryRunRawJsonLabel)}</summary><button type="button" data-dryrun-copy-json data-label={t(copy.dryRunCopyJsonBtn)} data-done={t(copy.copiedBtn)}>{t(copy.dryRunCopyJsonBtn)}</button><pre><code data-dryrun-json></code></pre></details>
+          </div>
+        </div>
+      </section>
+
       <figure class="wb__figure">
         <img
           src="/img/guides/workbench-export.webp"
@@ -311,7 +382,13 @@ const usd = (n: number) => '$' + n.toFixed(2);
 </BaseLayout>
 
 <script>
-  import { estimateWorkbench, generateArtifacts } from '../../../lib/workbench/generator.mjs';
+  import {
+    estimateWorkbench,
+    generateArtifacts,
+    buildDryRunContract,
+    evaluateDryRunResult,
+    parseServerTimingMs,
+  } from '../../../lib/workbench/generator.mjs';
 
   const root = document.querySelector<HTMLElement>('[data-wb]');
   const dataNode = document.getElementById('wb-data');
@@ -395,10 +472,96 @@ const usd = (n: number) => '$' + n.toFixed(2);
       history.replaceState(null, '', location.pathname + '?' + params.toString());
     };
 
+    type DryContract = ReturnType<typeof buildDryRunContract>;
+    let dryRunContract = buildDryRunContract(currentInput());
+    let lastDryRunScenario = state.scenario;
+    let lastShareUrl = '';
+    let lastRawJson = '';
+
+    const hideDryRunStale = () => {
+      const result = one<HTMLElement>('[data-dryrun-result]');
+      if (result) result.hidden = true;
+      const err = one<HTMLElement>('[data-dryrun-error]');
+      if (err) err.hidden = true;
+      const link = one<HTMLElement>('[data-dryrun-limit-link]');
+      if (link) link.hidden = true;
+    };
+    const showDryRunError = (message: string, limit = false) => {
+      const err = one<HTMLElement>('[data-dryrun-error]');
+      if (err) { err.textContent = message; err.hidden = false; }
+      const link = one<HTMLElement>('[data-dryrun-limit-link]');
+      if (link) link.hidden = !limit;
+      const result = one<HTMLElement>('[data-dryrun-result]');
+      if (result) result.hidden = true;
+    };
+    const renderDryRunContract = (contract: DryContract) => {
+      const host = one<HTMLElement>('[data-dryrun-contract]');
+      if (!host) return;
+      host.replaceChildren();
+      const heading = document.createElement('strong');
+      heading.textContent = data.labels.dryRunQuestionsHeading;
+      host.appendChild(heading);
+      const list = document.createElement('ul');
+      const questions: Array<[string, string]> = [
+        ['decision', contract.questions.decision.instructions],
+        ['risk_score', contract.questions.risk_score.instructions],
+        ['route_lane', contract.questions.route_lane.instructions],
+      ];
+      for (const [key, instructions] of questions) {
+        const li = document.createElement('li');
+        const code = document.createElement('code');
+        code.textContent = key;
+        li.appendChild(code);
+        li.appendChild(document.createTextNode(' — ' + instructions));
+        list.appendChild(li);
+      }
+      host.appendChild(list);
+      const thresholds = document.createElement('p');
+      thresholds.textContent = `${data.labels.dryRunThresholdsLabel}: auto_allow_below < ${contract.thresholds.autoAllowBelow}, escalate_at_or_above ≥ ${contract.thresholds.escalateAtOrAbove}`;
+      host.appendChild(thresholds);
+    };
+    const addBar = (label: string, value: number, text: string) => {
+      const host = one<HTMLElement>('[data-dryrun-bars]');
+      if (!host) return;
+      const pct = Math.max(0, Math.min(100, Math.round(value)));
+      const row = document.createElement('div');
+      row.className = 'wb__dryrun-bar';
+      const head = document.createElement('div');
+      head.className = 'wb__dryrun-bar-head';
+      const name = document.createElement('span');
+      name.textContent = label;
+      const val = document.createElement('span');
+      val.textContent = text;
+      head.appendChild(name);
+      head.appendChild(val);
+      const track = document.createElement('div');
+      track.className = 'wb__progress';
+      track.setAttribute('role', 'progressbar');
+      track.setAttribute('aria-label', label);
+      track.setAttribute('aria-valuenow', String(pct));
+      track.setAttribute('aria-valuemin', '0');
+      track.setAttribute('aria-valuemax', '100');
+      const fill = document.createElement('span');
+      fill.style.width = pct + '%';
+      track.appendChild(fill);
+      row.appendChild(head);
+      row.appendChild(track);
+      host.appendChild(row);
+    };
+
     const render = () => {
       const input = currentInput();
       const est = estimateWorkbench(input);
       const artifacts = generateArtifacts(input);
+
+      dryRunContract = buildDryRunContract(input);
+      renderDryRunContract(dryRunContract);
+      if (state.scenario !== lastDryRunScenario) {
+        lastDryRunScenario = state.scenario;
+        const area = one<HTMLTextAreaElement>('[data-dryrun-state]');
+        if (area) area.value = dryRunContract.normalState;
+        hideDryRunStale();
+      }
 
       setText('[data-out="req"]', pretty(est.monthlyRequests));
       setText('[data-out="tok"]', pretty(est.avgInputTokens));
@@ -545,6 +708,82 @@ const usd = (n: number) => '$' + n.toFixed(2);
         }
       });
     }
+
+    for (const sample of all<HTMLButtonElement>('[data-dryrun-sample]')) {
+      sample.addEventListener('click', () => {
+        const area = one<HTMLTextAreaElement>('[data-dryrun-state]');
+        if (area) area.value = sample.dataset.dryrunSample === 'risk' ? dryRunContract.riskState : dryRunContract.normalState;
+      });
+    }
+
+    const runBtn = one<HTMLButtonElement>('[data-dryrun-run]');
+    runBtn?.addEventListener('click', async () => {
+      const area = one<HTMLTextAreaElement>('[data-dryrun-state]');
+      const rawText = area?.value ?? '';
+      const trimmed = rawText.trim();
+      if (trimmed.length === 0) { showDryRunError(data.labels.dryRunErrEmpty); return; }
+      if (trimmed.length < 8) { showDryRunError(data.labels.dryRunErrShort); return; }
+      if (trimmed.length > 4000) { showDryRunError(data.labels.dryRunErrLong); return; }
+
+      const originalLabel = data.labels.dryRunRunBtn;
+      runBtn.disabled = true;
+      runBtn.textContent = data.labels.dryRunRunningBtn;
+      const err = one<HTMLElement>('[data-dryrun-error]');
+      if (err) err.hidden = true;
+      const link = one<HTMLElement>('[data-dryrun-limit-link]');
+      if (link) link.hidden = true;
+      const t0 = performance.now();
+      try {
+        const res = await fetch('/api/try', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ state: rawText, questions: dryRunContract.questions }),
+        });
+        if (res.status === 429) { showDryRunError(data.labels.dryRunErrLimit, true); return; }
+        if (!res.ok) { showDryRunError(data.labels.dryRunErrFailed); return; }
+        const record = await res.json();
+        const serverTiming = parseServerTimingMs(res.headers.get('server-timing'));
+        const rtt = Math.round(performance.now() - t0);
+        const verdict = evaluateDryRunResult(record, dryRunContract);
+        const auto = verdict.verdict === 'auto_handled';
+        const card = one<HTMLElement>('[data-dryrun-result]');
+        if (card) card.hidden = false;
+        const badge = one<HTMLElement>('[data-dryrun-verdict]');
+        if (badge) {
+          badge.textContent = auto ? data.labels.dryRunVerdictAuto : data.labels.dryRunVerdictEscalate;
+          badge.title = auto ? data.labels.dryRunBypassBadge : data.labels.dryRunEscalateBadge;
+          badge.classList.toggle('is-auto', auto);
+          badge.classList.toggle('is-escalated', !auto);
+        }
+        setText('[data-dryrun-model]', String(record.model ?? '—'));
+        setText('[data-dryrun-upstream]', serverTiming === null ? '—' : String(serverTiming));
+        setText('[data-dryrun-rtt]', String(rtt));
+        const bars = one<HTMLElement>('[data-dryrun-bars]');
+        if (bars) bars.replaceChildren();
+        const toPct = (v: number | null) => (typeof v === 'number' && Number.isFinite(v) ? Math.max(0, Math.min(100, Math.round(v * 100))) : 0);
+        const decisionPct = toPct(verdict.decisionConfidence);
+        const riskPct = toPct(verdict.riskScore);
+        const lanePct = toPct(verdict.routeConfidence);
+        addBar(data.labels.dryRunDecisionLabel, decisionPct, `${verdict.decisionChoice ?? '—'} · ${decisionPct}%`);
+        addBar(data.labels.dryRunRiskLabel, riskPct, `${riskPct}%`);
+        addBar(data.labels.dryRunLaneLabel, lanePct, `${verdict.routeLane ?? '—'} · ${lanePct}%`);
+        lastShareUrl = new URL(`/${data.lang}/r/${record.id}/`, location.origin).href;
+        const share = one<HTMLAnchorElement>('[data-dryrun-share]');
+        if (share) share.href = `/${data.lang}/r/${record.id}/`;
+        lastRawJson = JSON.stringify(record, null, 2);
+        setText('[data-dryrun-json]', lastRawJson);
+      } catch {
+        showDryRunError(data.labels.dryRunErrFailed);
+      } finally {
+        runBtn.disabled = false;
+        runBtn.textContent = originalLabel;
+      }
+    });
+
+    const copyShare = one<HTMLButtonElement>('[data-dryrun-copy-share]');
+    copyShare?.addEventListener('click', () => { void copyFeedback(copyShare, lastShareUrl || location.href); });
+    const copyJson = one<HTMLButtonElement>('[data-dryrun-copy-json]');
+    copyJson?.addEventListener('click', () => { void copyFeedback(copyJson, lastRawJson); });
   }
 </script>
 
@@ -554,6 +793,32 @@ const usd = (n: number) => '$' + n.toFixed(2);
   .wb__figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .wb__panel { border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; margin: 1.2rem 0; background: var(--bg-elev); }
   .wb__panel h2 { margin-top: 0; font-size: 1.15rem; }
+  .wb__dryrun-lead, .wb__dryrun-note { color: var(--fg-muted); font-size: 0.85rem; margin: 0.35rem 0; }
+  .wb__dryrun-note { font-size: 0.78rem; }
+  .wb__dryrun-samples { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.6rem 0; }
+  .wb__dryrun-samples button { padding: 0.3rem 0.6rem; font: inherit; font-size: 0.8rem; color: var(--fg-muted); background: var(--bg-code); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; }
+  .wb__dryrun textarea { width: 100%; padding: 0.6rem; color: var(--fg); background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius); font: inherit; font-family: var(--font-mono); font-size: 0.8rem; resize: vertical; }
+  .wb__dryrun-contract { margin: 0.8rem 0; padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-code); font-size: 0.8rem; color: var(--fg-muted); }
+  .wb__dryrun-contract ul { margin: 0.4rem 0; padding-left: 1.1rem; }
+  .wb__dryrun-contract code { color: var(--fg); }
+  .wb__dryrun-contract p { margin: 0.4rem 0 0; }
+  .wb__dryrun-err { color: #c0392b; font-size: 0.85rem; margin: 0.6rem 0 0; }
+  .wb__dryrun-limit-link { display: inline-block; margin-top: 0.4rem; color: var(--accent); font-size: 0.85rem; }
+  .wb__dryrun-res { margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--border); }
+  .wb__dryrun-verdict { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+  .wb__dryrun-verdict.is-auto { color: var(--accent); background: var(--accent-soft); }
+  .wb__dryrun-verdict.is-escalated { color: var(--fg); background: color-mix(in srgb, var(--fg-muted) 18%, transparent); }
+  .wb__dryrun-telemetry { display: grid; gap: 0.5rem; margin: 0.8rem 0; }
+  @media (min-width: 600px) { .wb__dryrun-telemetry { grid-template-columns: repeat(3, 1fr); } }
+  .wb__dryrun-telemetry dt { color: var(--fg-muted); font-size: 0.72rem; }
+  .wb__dryrun-telemetry dd { margin: 0.1rem 0 0; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; }
+  .wb__dryrun-bars { display: grid; gap: 0.6rem; margin: 0.8rem 0; }
+  .wb__dryrun-bar-head { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.78rem; color: var(--fg-muted); margin-bottom: 0.25rem; }
+  .wb__dryrun-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+  .wb__dryrun-json { width: 100%; font-size: 0.8rem; color: var(--fg-muted); }
+  .wb__dryrun-json summary { cursor: pointer; }
+  .wb__dryrun-json button { margin-left: 0.6rem; padding: 0.2rem 0.5rem; font: inherit; font-size: 0.78rem; color: var(--fg); background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; }
+  .wb__dryrun-json pre { max-height: 18rem; overflow: auto; padding: 0.6rem; background: var(--bg-code); border-radius: var(--radius); font-family: var(--font-mono); font-size: 0.75rem; }
   .wb__controls { display: grid; gap: 0.9rem; }
   @media (min-width: 760px) { .wb__controls { grid-template-columns: 1fr 1fr; } }
   .wb__field { display: grid; gap: 0.35rem; font-size: 0.85rem; color: var(--fg-muted); }

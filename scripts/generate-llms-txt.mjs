@@ -117,7 +117,7 @@ export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosyst
     '- [Code](https://www.jevcode.ai/en/recipes/): typed clients and blueprints.',
     '- [Configs](https://www.jevcode.ai/en/configs/): scenario configs from production-ready to future roadmap, with automation and escalation splits.',
     '- [Vibe Coding](https://www.jevcode.ai/en/vibecoding/): prompt-to-program tutorials with copy-ready config and code for every step.',
-    '- [Workbench](https://www.jevcode.ai/en/workbench/): interactive 8-language stack & config generator with readiness simulator and copy/download starter kit.',
+    '- [Workbench](https://www.jevcode.ai/en/workbench/): interactive 8-language stack & config generator with readiness simulator, live /api/try dry-run verifier, and copy/download starter kit.',
     '',
     'Every product page above also exists at /zh/, /ja/, /ko/, /de/, /fr/, /es/ and /pt/.',
     '',

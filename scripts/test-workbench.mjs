@@ -8,8 +8,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { estimateWorkbench, generateArtifacts, STACKS, IDES } from '../src/lib/workbench/generator.mjs';
+import { estimateWorkbench, generateArtifacts, STACKS, IDES, buildDryRunContract, evaluateDryRunResult, parseServerTimingMs, SCENARIO_DRY_RUNS } from '../src/lib/workbench/generator.mjs';
 import { INPUT_USD_PER_MILLION } from '../server/plans.mjs';
+import { cleanQuestions, toUpstreamQuestions } from '../server/questions.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const read = (rel) => readFileSync(path.join(root, rel), 'utf8');
@@ -249,4 +250,95 @@ test('nginx 裸路径重定向与 SEO 脚本均已接入 workbench', () => {
   assert.match(line, /workbench/, '裸路径正则未覆盖 workbench');
   assert.ok(read('scripts/generate-llms-txt.mjs').includes('workbench'), 'generate-llms-txt.mjs 未接入 workbench');
   assert.ok(read('scripts/sitemap-lastmod.mjs').includes('workbench'), 'sitemap-lastmod.mjs 未接入 workbench');
+});
+
+// ---------- Phase 7 · Live Dry-Run 契约与策略裁决 ----------
+
+test('buildDryRunContract 覆盖 configs.ts 全部 20 个场景且常规/高风险样本合法且相异', () => {
+  const configsSrc = read('src/data/configs.ts');
+  const slugs = [...configsSrc.matchAll(/"slug":\s*"([^"]+)"/g)].map((m) => m[1]);
+  assert.equal(slugs.length, 20, `预期 20 个场景 slug，实测 ${slugs.length}`);
+  for (const slug of slugs) {
+    const c = buildDryRunContract({ scenario: { slug }, posture: 'balanced', horizon: '2025-2026' });
+    assert.equal(c.scenarioSlug, slug);
+    assert.ok(c.normalState.length >= 20 && c.normalState.length <= 1000, `${slug} normalState 长度异常`);
+    assert.ok(c.riskState.length >= 20 && c.riskState.length <= 1000, `${slug} riskState 长度异常`);
+    assert.notEqual(c.normalState, c.riskState, `${slug} normalState 与 riskState 相同`);
+  }
+});
+
+test('buildDryRunContract 问题结构 100% 通过 cleanQuestions 与 toUpstreamQuestions 校验', () => {
+  const c = buildDryRunContract({ scenario: { slug: 'edge-api-abuse-firewall' }, posture: 'strict', horizon: '2026-2027' });
+  const cleaned = cleanQuestions(c.questions);
+  assert.ok(cleaned, 'cleanQuestions 返回 null');
+  assert.deepEqual(Object.keys(cleaned), ['decision', 'risk_score', 'route_lane']);
+  const upstream = toUpstreamQuestions(cleaned);
+  assert.ok(upstream.decision.criteria && Object.keys(upstream.decision.criteria).length === 2);
+  assert.ok(upstream.route_lane.criteria && Object.keys(upstream.route_lane.criteria).length >= 2);
+  assert.equal(upstream.risk_score.type, 'noul');
+});
+
+test('balanced -> strict -> regulated 策略阈值逐级收紧且与 YAML 完全对齐', () => {
+  const b = buildDryRunContract({ posture: 'balanced' });
+  const s = buildDryRunContract({ posture: 'strict' });
+  const r = buildDryRunContract({ posture: 'regulated' });
+  assert.ok(b.thresholds.autoAllowBelow > s.thresholds.autoAllowBelow && s.thresholds.autoAllowBelow > r.thresholds.autoAllowBelow);
+  assert.ok(b.thresholds.escalateAtOrAbove > s.thresholds.escalateAtOrAbove && s.thresholds.escalateAtOrAbove > r.thresholds.escalateAtOrAbove);
+  const yaml = generateArtifacts({ scenario: { slug: 'edge-api-abuse-firewall' }, posture: 'regulated' }).jevConfigYaml;
+  assert.ok(yaml.includes(`auto_allow_below: ${r.thresholds.autoAllowBelow}`));
+  assert.ok(yaml.includes(`escalate_at_or_above: ${r.thresholds.escalateAtOrAbove}`));
+});
+
+test('evaluateDryRunResult 正确判定放行与三种升级触发分支', () => {
+  const c = buildDryRunContract({ scenario: { slug: 'edge-api-abuse-firewall' }, posture: 'balanced' });
+  const pass = evaluateDryRunResult({
+    answers: {
+      decision: { choice: 'auto_handle', confidence: 0.92 },
+      risk_score: { noul: 0.12 },
+      route_lane: { choice: 'edge_cache', confidence: 0.90 },
+    },
+  }, c);
+  assert.equal(pass.verdict, 'auto_handled');
+  assert.deepEqual(pass.triggers, ['policy_pass']);
+
+  const escChoice = evaluateDryRunResult({
+    answers: { decision: { choice: 'escalate', confidence: 0.95 }, risk_score: { noul: 0.2 } },
+  }, c);
+  assert.equal(escChoice.verdict, 'escalated');
+  assert.ok(escChoice.triggers.includes('choice_escalate'));
+
+  const escRisk = evaluateDryRunResult({
+    answers: { decision: { choice: 'auto_handle', confidence: 0.95 }, risk_score: { noul: 0.88 } },
+  }, c);
+  assert.equal(escRisk.verdict, 'escalated');
+  assert.ok(escRisk.triggers.includes('risk_threshold'));
+
+  const escLowConf = evaluateDryRunResult({
+    answers: { decision: { choice: 'auto_handle', confidence: 0.40 }, risk_score: { noul: 0.20 } },
+  }, c);
+  assert.equal(escLowConf.verdict, 'escalated');
+  assert.ok(escLowConf.triggers.includes('low_confidence'));
+});
+
+test('parseServerTimingMs 正确解析 upstream 耗时并兜底异常输入', () => {
+  assert.equal(parseServerTimingMs('upstream;dur=74.2'), 74);
+  assert.equal(parseServerTimingMs('cache;desc="hit", upstream;dur=120.6'), 121);
+  assert.equal(parseServerTimingMs(''), null);
+  assert.equal(parseServerTimingMs(null), null);
+  assert.equal(parseServerTimingMs('upstream;dur=abc'), null);
+});
+
+test('workbench/index.astro 接入 /api/try、不含 innerHTML 且不含 <main', () => {
+  const src = read('src/pages/[lang]/workbench/index.astro');
+  assert.ok(src.includes('/api/try'), '缺少 /api/try 调用');
+  assert.ok(src.includes('data-dryrun'), '缺少 data-dryrun 容器');
+  assert.equal(src.includes('innerHTML'), false, 'workbench/index.astro 不应使用 innerHTML');
+  assert.equal(/<main\b/.test(src), false, 'workbench/index.astro 含嵌套 <main');
+});
+
+test('generator.mjs 保持浏览器安全：零 Node 内置模块与服务端模块引用', () => {
+  const src = read('src/lib/workbench/generator.mjs');
+  const runtimeCode = src.split('function buildVerifier')[0];
+  assert.equal(/node:/.test(runtimeCode), false, 'generator.mjs 不得引用 node:* 模块');
+  assert.equal(src.includes('questions.mjs'), false, 'generator.mjs 不得引用 server/questions.mjs');
 });

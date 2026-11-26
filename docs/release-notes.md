@@ -2,6 +2,18 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-26 — 第七阶段：工作台闭环实跑（Live Dry-Run 接入真实 `/api/try` 与 `clavue-jev` 策略验真）
+
+### 改动
+
+- **20 场景 Dry-Run 契约库与策略裁决器**：扩展 `src/lib/workbench/generator.mjs`（保持纯 ESM 零 Node API），覆盖全部 20 个场景的正常放行样本与高风险升级样本，导出 `buildDryRunContract()`、`evaluateDryRunResult()` 与 `parseServerTimingMs()`，并让 `generateArtifacts()` 输出的 `jevcode.config.yaml` 阈值与实时 Dry-Run 契约单一数据源对齐。
+- **全 8 语工作台 Live Dry-Run 交互面板**：更新 `src/i18n/pages/workbench.ts` 与 `src/pages/[lang]/workbench/index.astro`，在工作台内直接调用同源 `POST /api/try`（复用 20 次/小时匿名试用或登录态 `$5.00` 额度），支持样本切换、自定义业务输入、实时 `decision` / `risk_score` / `route_lane` 策略裁决徽标、`server-timing` 上游耗时与浏览器 RTT、无 `innerHTML` 的 ARIA `role="progressbar"` 置信度/风险进度条、可分享结果链接 `/[lang]/r/{id}/` 与原始 JSON 检视。
+- **GEO 与自动化门禁扩展**：同步更新 `scripts/generate-llms-txt.mjs` 与 `scripts/test-workbench.mjs`（新增 7 项 Phase 7 契约、阈值、裁决、遥测解析与浏览器安全审计单测），并顺手修复今日日更 4 条异常译文前缀泄漏（`cov-pharmacy-actionability-01` 等）。
+
+### 验证
+
+- `npm run check`（100 文件 0 错 0 警 0 提示）、`i18n-gaps: 0`、`npm run build`（20,194+ 页）、`npm test`、`npm run test:e2e`、`node scripts/preflight.mjs --json` 全绿；公网全 8 语 `/workbench/` 探活及真实线上 `POST https://www.jevcode.ai/api/try` 双样本实测与 `/en/r/{id}/` 分享页全部通过。
+
 ## 2026-11-26 — 第六阶段：全球 8 语交互式 AI 架构与配置工作台、GPU 双卡对比器与六大旗舰频道生态闭环（多路 `clavue` CLI 并行开发）
 
 ### 改动

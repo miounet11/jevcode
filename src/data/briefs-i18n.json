@@ -11897,7 +11897,7 @@
         "good",
         "poor"
       ],
-      "context": "日本語に翻訳します。 テキスト: 「ビルドの報告ありがとうございます。再現しました。本日はリリースされる修正版ですので、ここが回避策です。」 ※ 製品名はラテン文字のままにしています。",
+      "context": "ビルドの報告ありがとうございます。再現しました。本日リリース予定の修正版があります。こちらが回避策です。",
       "question": "この返信は品質基準を満たしていますか？"
     },
     "ko": {
@@ -50673,7 +50673,7 @@
         "actionable",
         "needs-info"
       ],
-      "context": "아래와 같이 번역하겠습니다:",
+      "context": "양식 제출: 테넌트 acme에서 처방 조제 내역 내보내기가 오류 500으로 실패합니다.",
       "question": "이 메시지가 그대로 실행 가능한가요?"
     },
     "pt": {
@@ -50681,7 +50681,7 @@
         "actionable",
         "needs-info"
       ],
-      "context": "</response>",
+      "context": "Envio de formulário: A exportação do preenchimento de receita falha com erro 500 para o locatário acme.",
       "question": "Esta mensagem é acionável como está?"
     },
     "zh": {
@@ -55363,7 +55363,7 @@
         "good",
         "poor"
       ],
-      "context": "日本語に翻訳します。 テキスト: 「通話録: 配達注文の報告ありがとうございます。再現しました。本日は修正版が出荷されます。こちらが回避策です。」 ※ご指定の製品名は原文のままラテン字で残します。",
+      "context": "通話録: 配達注文の報告ありがとうございます。再現しました。本日は修正版が出荷されます。こちらが回避策です。",
       "question": "この返信は品質基準を満たしていますか？"
     },
     "ko": {
