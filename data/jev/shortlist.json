@@ -2664,6 +2664,14 @@
     "text": "The vendored GPL Chocolate Doom fork lives in `vendor/chocolate-doom`. `browser_doom_bridge.c` exposes the real engine's health, armor, ammo, damage, coordinates, kills, line-of-sight monsters, and visible pickups to JavaScript. The browser converts that observation to the same bounded tactical schema for both players. **Jev receives structured game state, not raw pixels.** Jev never controls engine internals directly: the local controller executes each macro as movement, turning, firing, weapon, or use inputs."
   },
   {
+    "repo": "lukstei/slop-grader",
+    "name": "slop-grader",
+    "file": "README.md",
+    "branch": "main",
+    "line": 431,
+    "text": "| `TYPESAFE_API_KEY` | API key for direct Jev access via TypeSafe AI. Automatically selects `jev`. |"
+  },
+  {
     "repo": "luobosibing2/dsh-jev-plugin",
     "name": "deepseek-harness-jev",
     "file": "README.md",
@@ -3222,6 +3230,14 @@
     "branch": "main",
     "line": 13,
     "text": "shared accounts), asks TypeSafe to rank what is left and choose an effort, starts the chosen"
+  },
+  {
+    "repo": "nikuscs/orbs",
+    "name": "orbs",
+    "file": "README.md",
+    "branch": "main",
+    "line": 17,
+    "text": "- ✅ **Approvals you control.** Each bot has a permission mode: read-only, ask, auto or full. Auto lets [Jev](https://typesafe.ai) approve safe calls and asks you about the rest, using your own plain-language rules."
   },
   {
     "repo": "Nisaka520/JevIntent",

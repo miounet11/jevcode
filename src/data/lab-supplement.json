@@ -2048,5 +2048,69 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-category-01",
+    "state": "Email received: The order crashes when exporting more than 1000 rows.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-02",
+    "state": "Review posted: Please add bulk edit for the product listing list.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-03",
+    "state": "Alert fired: How do I change the timezone on the GMV report?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-04",
+    "state": "Log line: All order processing is down for the last 15 minutes.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
   }
 ]

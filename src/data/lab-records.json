@@ -968,5 +968,33 @@
     "ok": true,
     "choice": "technical",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-category-01",
+    "ts": "2026-11-26T01:32:19.968Z",
+    "ok": true,
+    "choice": "bug",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-category-02",
+    "ts": "2026-11-26T01:32:22.230Z",
+    "ok": true,
+    "choice": "feature-request",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-category-03",
+    "ts": "2026-11-26T01:32:23.205Z",
+    "ok": true,
+    "choice": "question",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-category-04",
+    "ts": "2026-11-26T01:32:24.164Z",
+    "ok": true,
+    "choice": "incident",
+    "model": "clavue-jev"
   }
 ]
