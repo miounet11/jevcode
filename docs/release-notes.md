@@ -2,6 +2,19 @@
 
 按时间倒序记录修复类与运维类发布，供发布核验与事后追踪。日常内容刷新（`chore(eco)`）不在此列。
 
+## 2026-11-27 — 第八阶段：Jev 联合定标的 Top 10 全 8 语交互式图形化工具套件（4 路 `clavue` CLI 并行开发）
+
+### 改动
+
+- **Jev (`clavue-jev`) 联合架构定标与 Top 10 排序**：确定 `hub_plus_10_dedicated_pages`（枢纽 + 10 独立页）、`zero_dep_interactive_svg_plus_webp`（零依赖交互式 SVG + 原创 WebP）与 `yes_on_judgment_tools`（5 款裁决/验证类工具直连 `/api/try`）三大架构原则，并评定 Top 10 工具矩阵（`schema-studio`、`cascade-flow`、`threshold-lab`、`batch-matrix`、`vibe-gate-builder`、`latency-budget`、`curl-sdk-studio`、`cost-calculator`、`prompt-gate-tester`、`credit-runway`）。
+- **原创视觉资产（Clavue Image v3.1）**：生成并逐张目视验收 3 张 16:9 无字 WebP 封面图（`public/img/guides/tools-{hero,live,sim}.webp`）。
+- **全 8 语 88 页图形化工具矩阵**：新增纯 ESM 浏览器同源引擎 `src/lib/tools/engines.mjs`、工具元数据 `src/data/tools.ts`、8 语词表 `src/i18n/pages/tools.ts`、实时裁决画布 `src/components/tools/LiveToolsCanvas.astro`（直连 `/api/try`、解析 `server-timing`、8 项提示注入安全向量矩阵）与零依赖交互式 SVG 模拟器 `src/components/tools/SimToolsCanvas.astro`，产出 `/[lang]/tools/` 与 10 个 `/[lang]/tools/[slug]/` 共 **88 个静态页面**，接入首页特色横幅、导航、页脚、`/map/`、Nginx 裸路径 302、`sitemap-lastmod.mjs`、`llms.txt` 及 `scripts/test-tools-suite.mjs`（20 项单测）。
+- **日更简报多语言修复**：补全 `src/data/briefs-i18n.json` 中 `cov-rideshare-next-action-01` 的 `zh` 译文并清理异常 `de`/`ja` 字段。
+
+### 验证
+
+- `npm run check`、`i18n-gaps: 0`、`npm run build`、`npm test`、`npm run test:e2e`、`node scripts/preflight.mjs --json` 全绿；公网全 8 语 88 个工具页探活、3 张 WebP 配图、真实线上 `POST https://www.jevcode.ai/api/try` 安全向量实测及 Jev Round 8 终验全部通过。
+
 ## 2026-11-26 — 第七阶段：工作台闭环实跑（Live Dry-Run 接入真实 `/api/try` 与 `clavue-jev` 策略验真）
 
 ### 改动

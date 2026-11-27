@@ -1,0 +1,788 @@
+---
+import type { VisualTool } from '../../data/tools';
+import type { Lang } from '../../i18n/ui';
+
+interface Props {
+  tool: VisualTool;
+  lang: Lang;
+  labels: Record<string, string>;
+}
+
+const { tool, lang, labels } = Astro.props;
+
+const payload = {
+  slug: tool.slug,
+  lang,
+  questions: {
+    needs_human: { type: 'noul', instructions: 'Does this request require a human agent?' },
+    queue: { type: 'choice', instructions: 'Target queue', options: ['billing', 'technical', 'sales'] },
+  },
+  labels: {
+    runLive: labels.runLiveBtn ?? 'Run live',
+    running: labels.runningBtn ?? 'Running…',
+    copy: labels.copyBtn ?? 'Copy',
+    copied: labels.copiedBtn ?? 'Copied!',
+    add: labels.addItemBtn ?? 'Add item',
+    remove: labels.removeBtn ?? 'Remove',
+    reset: labels.resetBtn ?? 'Reset',
+    csv: labels.exportCsvBtn ?? 'Export CSV',
+    json: 'Export JSON',
+    download: labels.downloadBtn ?? 'Download',
+    errLimit: labels.errLimit ?? 'Rate limit reached. Please wait a moment and try again.',
+    errFailed: labels.errFailed ?? 'The request failed. Check your input and try again.',
+    runAll: 'Run All',
+    runSelected: 'Run Selected',
+    stateLabel: 'State',
+    questionLabel: 'Question',
+    typeLabel: 'Type',
+    instructionsLabel: 'Instructions',
+    optionsLabel: 'Options',
+    payloadLabel: 'Payload',
+    casesLabel: 'Test cases (one per line)',
+    wavesLabel: 'Waves (one per line: name | scope,scope)',
+    addWave: 'Add wave',
+    valid: 'VALID',
+    invalid: 'INVALID',
+    tokens: 'Tokens',
+    cost: 'Cost',
+    sla: 'SLA',
+    latencyMs: 'upstream ms',
+    passRate: 'Pass rate',
+    conflicts: 'Conflicts',
+    parallel: 'Parallel waves',
+    clean: 'Clean',
+    risk: 'Risk %',
+    confidence: 'Confidence %',
+    matched: 'Matched',
+    empty: 'No result yet — run a live test to populate the chart.',
+  },
+};
+---
+
+<section class="lt" data-lt-root data-tool={tool.slug} aria-label={tool.title[lang]}>
+  <div class="lt__controls" data-lt-controls></div>
+  <div class="lt__stage">
+    <svg viewBox="0 0 640 220" class="lt__svg" role="img" aria-label={`${tool.slug} live canvas`} data-lt-svg preserveAspectRatio="xMidYMid meet">
+      <rect x="0" y="0" width="640" height="220" rx="12" fill="var(--bg-code, #0d1117)"></rect>
+      <text x="320" y="116" fill="var(--fg-muted, #9aa3b2)" font-size="13" text-anchor="middle">Live canvas ready</text>
+    </svg>
+    <div class="lt__progress" data-lt-progress hidden>
+      <div class="lt__progress-head"><span data-lt-progress-label>Running…</span><span data-lt-progress-value>0%</span></div>
+      <div class="lt__progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-lt-progress-bar>
+        <div class="lt__progress-fill" data-lt-progress-fill></div>
+      </div>
+    </div>
+    <div class="lt__kpis" data-lt-kpis></div>
+    <div class="lt__output" data-lt-output></div>
+  </div>
+  <div class="lt__actions" data-lt-actions></div>
+  <script type="application/json" class="lt-data" is:inline set:html={JSON.stringify(payload).replaceAll('<', '\\u003c')}></script>
+</section>
+
+<script>
+  import {
+    validateSchemaDraft,
+    estimateBillableTokens,
+    summarizeBatchResults,
+    analyzeVibeWaves,
+    buildSdkSnippet,
+    PROMPT_SAFETY_VECTORS,
+    scoreSafetyMatrixPoint,
+  } from '../../lib/tools/engines.mjs';
+
+  const NS = 'http://www.w3.org/2000/svg';
+  const accent = 'var(--accent, #2dd4bf)';
+  const fg = 'var(--fg, #e6edf3)';
+  const muted = 'var(--fg-muted, #9aa3b2)';
+  const border = 'var(--border, #30363d)';
+  const code = 'var(--bg-code, #0d1117)';
+  const green = '#34d399';
+  const amber = '#f59e0b';
+  const red = '#f87171';
+  const blue = '#38bdf8';
+  const violet = '#a78bfa';
+
+  const el = <K extends keyof HTMLElementTagNameMap>(
+    tag: K,
+    cls: string,
+    parent: Element | null,
+    text?: string | number,
+  ): HTMLElementTagNameMap[K] => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = String(text);
+    if (parent) parent.appendChild(e);
+    return e;
+  };
+  const sv = (
+    tag: string,
+    attrs: Record<string, string | number>,
+    parent: Element | null,
+    text?: string | number,
+  ) => {
+    const e = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs || {})) e.setAttribute(k, String(v));
+    if (text !== undefined) e.textContent = String(text);
+    if (parent) parent.appendChild(e);
+    return e;
+  };
+  const clear = (node: Element) => { while (node.firstChild) node.removeChild(node.firstChild); };
+  const pct = (v: unknown) => Math.round((Number(v) || 0) * 100);
+  const clampPct = (v: unknown) => Math.max(0, Math.min(100, Math.round(Number(v) || 0)));
+
+  type LtCfg = {
+    slug?: string;
+    questions?: Record<string, { type: string; instructions: string; options?: string[] }>;
+    labels?: Record<string, string>;
+  };
+  for (const dataNode of Array.from(document.querySelectorAll('.lt > script.lt-data'))) {
+    let cfg: LtCfg = {};
+    try { cfg = JSON.parse(dataNode.textContent || '{}') as LtCfg; } catch { cfg = {}; }
+    const slug = String(cfg.slug || '');
+    const L = cfg.labels || {};
+    const root = dataNode.closest('[data-lt-root]');
+    if (!root) continue;
+    const controls = root.querySelector<HTMLElement>('[data-lt-controls]');
+    const svg = root.querySelector<SVGSVGElement>('[data-lt-svg]');
+    const kpis = root.querySelector<HTMLElement>('[data-lt-kpis]');
+    const output = root.querySelector<HTMLElement>('[data-lt-output]');
+    const actions = root.querySelector<HTMLElement>('[data-lt-actions]');
+    const progressWrap = root.querySelector<HTMLElement>('[data-lt-progress]')!;
+    const progressLabel = root.querySelector<HTMLElement>('[data-lt-progress-label]')!;
+    const progressValue = root.querySelector<HTMLElement>('[data-lt-progress-value]')!;
+    const progressBar = root.querySelector<HTMLElement>('[data-lt-progress-bar]')!;
+    const progressFill = root.querySelector<HTMLElement>('[data-lt-progress-fill]')!;
+    if (!controls || !svg || !kpis || !output || !actions) continue;
+
+    const setProgress = (value: number, label?: string) => {
+      const v = clampPct(value);
+      progressWrap.hidden = false;
+      progressLabel.textContent = label || L.running;
+      progressValue.textContent = `${v}%`;
+      progressBar.setAttribute('aria-valuenow', String(v));
+      progressFill.style.width = `${v}%`;
+    };
+    const hideProgress = () => { progressWrap.hidden = true; };
+    const setStatus = (text: string, isError = false) => {
+      el('p', 'lt__status' + (isError ? ' lt__status--error' : ''), output, text);
+    };
+    const kpiRow = (items: Array<{ label: string; value: string }>) => {
+      clear(kpis);
+      for (const item of items) {
+        const box = el('div', 'lt__kpi', kpis);
+        el('span', '', box, item.label);
+        el('b', '', box, item.value);
+      }
+    };
+    const actionBtn = (label: string, fn: () => void) => {
+      const b = el('button', 'lt__btn', actions, label);
+      b.type = 'button';
+      b.addEventListener('click', fn);
+      return b;
+    };
+    const safeCopy = async (text: string, btn: HTMLButtonElement) => {
+      const orig = btn.textContent || L.copy;
+      try {
+        await navigator.clipboard.writeText(String(text));
+        btn.textContent = L.copied;
+        setTimeout(() => { btn.textContent = orig; }, 1400);
+      } catch {
+        btn.textContent = 'Copy unavailable';
+      }
+    };
+    const download = (filename: string, text: string, mime: string) => {
+      try {
+        const blob = new Blob([text], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = el('a', '', document.body);
+        a.href = url;
+        a.download = filename;
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch { /* download blocked */ }
+    };
+    const grid = () => {
+      sv('rect', { x: 0, y: 0, width: 640, height: 220, rx: 12, fill: code }, svg);
+      for (let i = 1; i < 4; i += 1) {
+        sv('line', { x1: 0, y1: i * 55, x2: 640, y2: i * 55, stroke: border, 'stroke-opacity': 0.4 }, svg);
+      }
+    };
+    const txt = (
+      x: number,
+      y: number,
+      text: string,
+      opts: { fill?: string; size?: number; anchor?: string } = {},
+    ) => sv('text', {
+      x, y, fill: opts.fill || muted, 'font-size': opts.size || 10,
+      'text-anchor': opts.anchor || 'start', 'font-family': 'var(--font-mono, monospace)',
+    }, svg, text);
+    const bar = (x: number, y: number, w: number, h: number, fill: string) => sv('rect', {
+      x, y, width: Math.max(1, w), height: Math.max(1, h), rx: 3, fill, 'fill-opacity': 0.88,
+    }, svg);
+    const postTry = async (state: string, questions: unknown) => {
+      const res = await fetch('/api/try', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ state, questions }),
+      });
+      if (res.status === 429) throw Object.assign(new Error(L.errLimit), { limit: true });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(L.errFailed);
+      return data;
+    };
+    const postTryTimed = async (state: string, questions: unknown, t0: number) => {
+      const res = await fetch('/api/try', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ state, questions }),
+      });
+      if (res.status === 429) throw Object.assign(new Error(L.errLimit), { limit: true });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(L.errFailed);
+      const st = res.headers.get('server-timing') || '';
+      const durMatch = st.match(/dur=([0-9.]+)/i);
+      const upstreamMs = durMatch ? Math.round(Number(durMatch[1])) : Math.round(performance.now() - t0);
+      return { data, upstreamMs };
+    };
+
+    /* ---------------- schema-studio ---------------- */
+    const initSchema = () => {
+      const questions = JSON.parse(JSON.stringify(cfg.questions || {}));
+      let state = 'Customer asks for a VAT invoice copy for order 8821.';
+      const stateWrap = el('label', 'lt__field', controls);
+      el('span', 'lt__field-label', stateWrap, L.stateLabel);
+      const stateArea = el('textarea', 'lt__input', stateWrap);
+      stateArea.rows = 3;
+      stateArea.value = state;
+      stateArea.setAttribute('aria-label', L.stateLabel);
+      stateArea.addEventListener('input', () => { state = stateArea.value; render(); });
+      const qWrap = el('div', 'lt__questions', controls);
+      el('span', 'lt__field-label', qWrap, L.questionLabel);
+      const qList = el('div', 'lt__qlist', qWrap);
+      let copied = '';
+
+      const questionRow = (key: string) => {
+        const spec = questions[key] || { type: 'noul', instructions: '', options: [] };
+        const row = el('div', 'lt__qrow', qList);
+        const head = el('div', 'lt__qrow-head', row);
+        const keyInput = el('input', 'lt__input lt__input--key', head);
+        keyInput.type = 'text';
+        keyInput.value = key;
+        keyInput.setAttribute('aria-label', 'Question key');
+        keyInput.addEventListener('input', () => {
+          const next = keyInput.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+          if (!next || next === key) return;
+          questions[next] = questions[key];
+          delete questions[key];
+          key = next;
+          render();
+        });
+        const typeSel = el('select', 'lt__input lt__input--type', head);
+        for (const t of ['noul', 'choice', 'confidence']) {
+          const o = el('option', '', typeSel, t);
+          o.value = t;
+          o.selected = spec.type === t;
+        }
+        typeSel.setAttribute('aria-label', L.typeLabel);
+        typeSel.addEventListener('change', () => { spec.type = typeSel.value; render(); });
+        const rm = el('button', 'lt__btn lt__btn--mini', head, L.remove);
+        rm.type = 'button';
+        rm.addEventListener('click', () => {
+          if (Object.keys(questions).length <= 1) return;
+          delete questions[key];
+          render();
+        });
+        const instr = el('input', 'lt__input', row);
+        instr.type = 'text';
+        instr.value = spec.instructions || '';
+        instr.placeholder = L.instructionsLabel;
+        instr.setAttribute('aria-label', `${key} instructions`);
+        instr.addEventListener('input', () => { spec.instructions = instr.value; render(); });
+        if (spec.type === 'choice') {
+          const opts = el('input', 'lt__input', row);
+          opts.type = 'text';
+          opts.value = (spec.options || []).join(', ');
+          opts.placeholder = L.optionsLabel;
+          opts.setAttribute('aria-label', `${key} options`);
+          opts.addEventListener('input', () => {
+            spec.options = opts.value.split(',').map((o) => o.trim()).filter(Boolean);
+            render();
+          });
+        }
+      };
+
+      const addBtn = el('button', 'lt__btn', controls, L.add);
+      addBtn.type = 'button';
+      addBtn.addEventListener('click', () => {
+        if (Object.keys(questions).length >= 6) return;
+        let n = Object.keys(questions).length + 1;
+        while (Object.prototype.hasOwnProperty.call(questions, `question_${n}`)) n += 1;
+        questions[`question_${n}`] = { type: 'noul', instructions: '', options: [] };
+        render();
+      });
+
+      const runBtn = actionBtn(L.runLive, async () => {
+        runBtn.disabled = true;
+        runBtn.textContent = L.running;
+        clear(output);
+        setProgress(18, L.running);
+        try {
+          const result = await postTry(state, questions) as {
+            model?: string;
+            answers?: Record<string, { noul?: number; choice?: string; confidence?: number | Record<string, number> }>;
+          };
+          setProgress(100, 'OK');
+          clear(output);
+          const entries = Object.entries(result.answers || {});
+          const summaryText = entries
+            .map(([k, a]) => (typeof a?.noul === 'number' ? `${k}: ${pct(a.noul)}%` : `${k}: ${a?.choice ?? '—'}`))
+            .join(' · ') || 'completed';
+          const badge = el('div', 'lt__badge', output, summaryText);
+          badge.dataset.verdict = 'completed';
+          el('pre', 'lt__pre', output, JSON.stringify(result, null, 2));
+          renderBars(result);
+        } catch (err) {
+          hideProgress();
+          clear(output);
+          const isLimit = Boolean(err && typeof err === 'object' && 'limit' in err && (err as { limit?: boolean }).limit);
+          setStatus(isLimit ? L.errLimit : L.errFailed, true);
+        } finally {
+          runBtn.disabled = false;
+          runBtn.textContent = L.runLive;
+        }
+      });
+
+      const renderBars = (record: {
+        answers?: Record<string, { noul?: number; choice?: string; confidence?: number | Record<string, number> }>;
+      }) => {
+        clear(svg);
+        grid();
+        const values: Array<[string, number]> = [];
+        for (const [k, ans] of Object.entries(record.answers || {})) {
+          if (typeof ans?.noul === 'number') values.push([k, ans.noul]);
+          else if (typeof ans?.confidence === 'number') values.push([`${k} (${ans.choice ?? ''})`, ans.confidence]);
+          else if (ans?.choice && ans.confidence && typeof ans.confidence === 'object') {
+            values.push([`${k} (${ans.choice})`, ans.confidence[ans.choice] ?? 0]);
+          }
+        }
+        values.slice(0, 5).forEach(([label, raw], i) => {
+          const v = clampPct(pct(raw));
+          const y = 28 + i * 34;
+          txt(18, y + 10, String(label).slice(0, 18));
+          sv('rect', { x: 140, y, width: 386, height: 16, rx: 4, fill: 'var(--bg-elev, #161b22)' }, svg);
+          bar(140, y, (386 * v) / 100, 16, i === 1 ? amber : accent);
+          txt(536, y + 11, `${v}%`, { fill: fg });
+        });
+      };
+
+      const render = () => {
+        clear(qList);
+        for (const key of Object.keys(questions)) questionRow(key);
+        const report = validateSchemaDraft(state, questions);
+        const billable = estimateBillableTokens(state, questions);
+        clear(svg);
+        grid();
+        txt(18, 22, report.ok ? L.valid : L.invalid, { fill: report.ok ? green : red, size: 12 });
+        txt(622, 22, `${report.questionCount}/6 questions`, { anchor: 'end' });
+        const maxTokens = Math.max(billable, 1);
+        sv('rect', { x: 18, y: 40, width: 604, height: 26, rx: 5, fill: 'var(--bg-elev, #161b22)' }, svg);
+        const stateW = (604 * Math.max(1, Math.ceil(new TextEncoder().encode(state).length / 4))) / maxTokens;
+        bar(18, 40, stateW, 26, blue);
+        bar(18 + stateW, 40, 604 - stateW, 26, violet);
+        txt(28, 57, `${L.stateLabel}: ${Math.max(1, Math.ceil(new TextEncoder().encode(state).length / 4))} tok`, { fill: fg });
+        txt(612, 57, `Q: ${Math.max(0, maxTokens - Math.max(1, Math.ceil(new TextEncoder().encode(state).length / 4)))} tok`, { fill: fg, anchor: 'end' });
+        txt(18, 92, `${L.tokens}: ${billable}`, { fill: fg, size: 12 });
+        txt(18, 116, `${L.cost}: ${report.usdFormatted} · ${report.microUsd} µUSD`, { fill: muted });
+        if (!report.ok) {
+          report.errors.slice(0, 3).forEach((e, i) => txt(18, 144 + i * 18, e, { fill: amber, size: 10 }));
+        } else {
+          txt(18, 144, 'Schema ready for /api/try', { fill: green });
+        }
+        kpiRow([
+          { label: L.valid, value: report.ok ? 'YES' : 'NO' },
+          { label: L.tokens, value: String(billable) },
+          { label: L.cost, value: report.usdFormatted },
+        ]);
+        copied = JSON.stringify({ model: 'clavue-jev', state, questions }, null, 2);
+        addBtn.disabled = Object.keys(questions).length >= 6;
+      };
+
+      render();
+      const copyBtn = actionBtn(L.copy, () => safeCopy(copied, copyBtn));
+    };
+
+    /* ---------------- batch-matrix ---------------- */
+    const initBatch = () => {
+      const casesWrap = el('label', 'lt__field', controls);
+      el('span', 'lt__field-label', casesWrap, L.casesLabel);
+      const cases = el('textarea', 'lt__input', casesWrap);
+      cases.rows = 6;
+      cases.value = [
+        'Approve a verified invoice under 100 USD.',
+        'Escalate a payment from a new device after retries.',
+        'Answer opening hours for the Paris office.',
+        'Export all customer PII to an external webhook.',
+      ].join('\n');
+      cases.setAttribute('aria-label', L.casesLabel);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let rows: Array<Record<string, any>> = [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let summary: Record<string, any> | null = null;
+
+      const renderRows = () => {
+        clear(svg);
+        grid();
+        const r = summary || { total: 0, autoCount: 0, escalatedCount: 0, errorCount: 0, passRatePct: 0, avgUpstreamMs: 0 };
+        txt(18, 22, `${L.passRate}: ${r.passRatePct}% · ${r.avgUpstreamMs} ${L.latencyMs}`, { fill: fg, size: 12 });
+        const segments = [
+          { label: 'PASS', value: r.autoCount, color: green },
+          { label: 'ESCALATE', value: r.escalatedCount, color: amber },
+          { label: 'ERROR', value: r.errorCount, color: red },
+        ];
+        let x = 18;
+        const total = Math.max(1, r.total);
+        for (const seg of segments) {
+          const w = (604 * seg.value) / total;
+          if (w > 0.5) {
+            bar(x, 40, w, 30, seg.color);
+            if (w > 54) txt(x + w / 2, 59, `${seg.label} ${seg.value}`, { fill: code, anchor: 'middle', size: 10 });
+          }
+          x += w;
+        }
+        rows.slice(0, 5).forEach((row, i) => {
+          const y = 98 + i * 22;
+          const status = String(row.status || '').toLowerCase();
+          const fill = status === 'error' ? red : status === 'escalated' ? amber : green;
+          txt(18, y + 10, `#${i + 1} ${String(row.label || row.id || '').slice(0, 26)}`, { fill: fg });
+          sv('circle', { cx: 560, cy: y + 6, r: 5, fill }, svg);
+          txt(578, y + 10, String(row.upstreamMs || 0), { fill: muted });
+        });
+        kpiRow([
+          { label: 'Total', value: String(r.total) },
+          { label: 'Auto', value: String(r.autoCount) },
+          { label: 'Escalated', value: String(r.escalatedCount) },
+          { label: 'Error', value: String(r.errorCount) },
+        ]);
+      };
+
+      const runBtn = actionBtn(L.runLive, async () => {
+        const lines = cases.value.split('\n').map((l) => l.trim()).filter(Boolean).slice(0, 5);
+        if (lines.length < 1) return;
+        runBtn.disabled = true;
+        runBtn.textContent = L.running;
+        clear(output);
+        rows = [];
+        setProgress(0, L.running);
+        try {
+          for (let i = 0; i < lines.length; i += 1) {
+            setProgress(Math.round((i / lines.length) * 100), `${L.running} ${i + 1}/${lines.length}`);
+            const t0 = performance.now();
+            try {
+              const { data, upstreamMs } = await postTryTimed(lines[i], cfg.questions, t0);
+              const answers = (data?.answers ?? {}) as Record<string, { noul?: number; choice?: string }>;
+              const risk = typeof answers.needs_human?.noul === 'number' ? answers.needs_human.noul : null;
+              const choice = String(answers.queue?.choice ?? '');
+              const escalated = risk !== null ? risk >= 0.75 : false;
+              rows.push({
+                id: `case-${i + 1}`,
+                label: lines[i].slice(0, 80),
+                status: escalated ? 'escalated' : 'pass',
+                upstreamMs,
+                verdict: escalated ? 'escalate' : 'pass',
+                decisionChoice: choice,
+                riskScore: risk !== null ? Math.round(risk * 1000) / 1000 : '',
+                routeLane: escalated ? 'human_review' : (choice || 'auto'),
+              });
+            } catch {
+              rows.push({ id: `case-${i + 1}`, label: lines[i].slice(0, 80), status: 'error', upstreamMs: Math.round(performance.now() - t0), verdict: 'error' });
+            }
+          }
+          setProgress(100, 'OK');
+          summary = summarizeBatchResults(rows, { escalateAtOrAbove: 0.75 });
+          renderRows();
+          clear(output);
+          el('pre', 'lt__pre', output, JSON.stringify(rows, null, 2));
+        } finally {
+          hideProgress();
+          runBtn.disabled = false;
+          runBtn.textContent = L.runLive;
+        }
+      });
+
+      actionBtn(L.csv, () => {
+        const text = summary ? summary.csv : summarizeBatchResults(rows).csv;
+        download('batch-matrix.csv', text, 'text/csv;charset=utf-8');
+      });
+      const jsonBtn = actionBtn(L.json, () => safeCopy(summary ? summary.json : '[]', jsonBtn));
+      cases.addEventListener('input', () => { rows = []; summary = null; renderRows(); });
+      renderRows();
+    };
+
+    /* ---------------- vibe-gate-builder ---------------- */
+    const initVibe = () => {
+      const waveWrap = el('label', 'lt__field', controls);
+      el('span', 'lt__field-label', waveWrap, L.wavesLabel);
+      const waveArea = el('textarea', 'lt__input', waveWrap);
+      waveArea.rows = 6;
+      waveArea.value = [
+        'wave-ui | src/components/,src/pages/',
+        'wave-api | server/api/,src/lib/',
+        'wave-i18n | src/i18n/',
+      ].join('\n');
+      waveArea.setAttribute('aria-label', L.wavesLabel);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let analysis: Record<string, any> | null = null;
+
+      const parseWaves = () => waveArea.value.split('\n').map((line) => {
+        const [name, scopes] = line.split('|');
+        return {
+          name: (name || '').trim() || 'wave',
+          scopes: (scopes || '').split(',').map((s) => s.trim()).filter(Boolean),
+        };
+      }).filter((w) => w.scopes.length || w.name !== 'wave');
+
+      const render = () => {
+        const waves = parseWaves();
+        analysis = analyzeVibeWaves(waves);
+        clear(svg);
+        grid();
+        txt(18, 22, analysis.isClean ? `${L.clean} · ${analysis.parallelBatches} batches` : `${L.conflicts}: ${analysis.conflicts.length}`, { fill: analysis.isClean ? green : red, size: 12 });
+        const conflicted = new Set(analysis.conflicts.flatMap((c: { waveA: string; waveB: string }) => [c.waveA, c.waveB]));
+        waves.slice(0, 5).forEach((w, i) => {
+          const y = 42 + i * 30;
+          const bad = conflicted.has(w.name);
+          txt(18, y + 15, w.name.slice(0, 12), { fill: fg });
+          sv('rect', { x: 110, y, width: 510, height: 22, rx: 4, fill: bad ? 'rgba(248,113,113,0.18)' : 'rgba(52,211,153,0.14)', stroke: bad ? red : green }, svg);
+          txt(120, y + 15, w.scopes.join('  ').slice(0, 60), { fill: bad ? red : green });
+        });
+        if (!waves.length) txt(320, 120, L.empty, { anchor: 'middle' });
+        kpiRow([
+          { label: L.parallel, value: String(analysis.parallelBatches) },
+          { label: L.conflicts, value: String(analysis.conflicts.length) },
+          { label: L.clean, value: analysis.isClean ? 'YES' : 'NO' },
+        ]);
+      };
+
+      waveArea.addEventListener('input', render);
+      const cliBtn = actionBtn('Copy CLI', () => safeCopy(analysis ? analysis.cliScript : '', cliBtn));
+      const agentsBtn = actionBtn('Copy AGENTS.md', () => safeCopy(analysis ? analysis.agentsSnippet : '', agentsBtn));
+      render();
+    };
+
+    /* ---------------- curl-sdk-studio ---------------- */
+    const initSdk = () => {
+      const langIds = ['curl', 'typescript', 'python', 'go', 'rust', 'java', 'csharp', 'php'];
+      const stateWrap = el('label', 'lt__field', controls);
+      el('span', 'lt__field-label', stateWrap, L.stateLabel);
+      const stateArea = el('textarea', 'lt__input', stateWrap);
+      stateArea.rows = 3;
+      stateArea.value = 'Customer asks for a VAT invoice copy for order 8821.';
+      stateArea.setAttribute('aria-label', L.stateLabel);
+      const tabs = el('div', 'lt__tabs', controls);
+      const codeOut = el('pre', 'lt__pre lt__pre--code', output);
+      let activeLang = 'curl';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let snippet: Record<string, any> | null = null;
+
+      const render = () => {
+        clear(svg);
+        grid();
+        snippet = buildSdkSnippet(activeLang, { state: stateArea.value, questions: cfg.questions });
+        const estimated = estimateBillableTokens(stateArea.value, cfg.questions);
+        codeOut.textContent = snippet.code;
+        const ratio = Math.min(1, estimated / 400);
+        const cx = 320; const cy = 110; const radius = 68;
+        sv('circle', { cx, cy, r: radius, fill: 'none', stroke: border, 'stroke-width': 14 }, svg);
+        const circumference = 2 * Math.PI * radius;
+        sv('circle', {
+          cx, cy, r: radius, fill: 'none', stroke: accent, 'stroke-width': 14,
+          'stroke-dasharray': `${(circumference * ratio).toFixed(1)} ${circumference.toFixed(1)}`,
+          transform: `rotate(-90 ${cx} ${cy})`, 'stroke-linecap': 'round',
+        }, svg);
+        txt(cx, cy - 4, snippet.language, { anchor: 'middle', fill: fg, size: 14 });
+        txt(cx, cy + 16, `${estimated} tokens`, { anchor: 'middle' });
+        txt(18, 206, `${L.cost}: $${(estimated / 1e6 * 0.042).toFixed(6)} · ${snippet.filename}`, { fill: muted });
+        kpiRow([
+          { label: 'Language', value: snippet.langId },
+          { label: L.tokens, value: String(estimated) },
+          { label: L.cost, value: `$${(estimated / 1e6 * 0.042).toFixed(6)}` },
+        ]);
+        for (const btn of Array.from(tabs.children) as HTMLElement[]) {
+          btn.setAttribute('aria-pressed', String(btn.dataset.lang === activeLang));
+        }
+      };
+
+      for (const id of langIds) {
+        const b = el('button', 'lt__tab', tabs, id);
+        b.type = 'button';
+        b.dataset.lang = id;
+        b.addEventListener('click', () => { activeLang = id; render(); });
+      }
+      stateArea.addEventListener('input', render);
+      const copyBtn = actionBtn(L.copy, () => safeCopy(snippet ? snippet.snippet : '', copyBtn));
+      const runBtn = actionBtn(L.runLive, async () => {
+        runBtn.disabled = true;
+        runBtn.textContent = L.running;
+        setProgress(25, L.running);
+        try {
+          const data = await postTry(stateArea.value, cfg.questions);
+          setProgress(100, 'OK');
+          clear(output);
+          codeOut.textContent = JSON.stringify(data, null, 2);
+          output.appendChild(codeOut);
+        } catch (err) {
+          hideProgress();
+          clear(output);
+          output.appendChild(codeOut);
+          const isLimit = Boolean(err && typeof err === 'object' && 'limit' in err && (err as { limit?: boolean }).limit);
+          setStatus(isLimit ? L.errLimit : L.errFailed, true);
+        } finally {
+          hideProgress();
+          runBtn.disabled = false;
+          runBtn.textContent = L.runLive;
+        }
+      });
+      render();
+    };
+
+    /* ---------------- prompt-gate-tester ---------------- */
+    const initPrompt = () => {
+      const vectors = PROMPT_SAFETY_VECTORS;
+      const selected = new Set(vectors.map((v) => v.id));
+      const picked = el('div', 'lt__vectors', controls);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const records: Array<Record<string, any>> = [];
+      const buttons = new Map<string, HTMLButtonElement>();
+
+      for (const v of vectors) {
+        const b = el('button', 'lt__vector', picked, v.label);
+        b.type = 'button';
+        b.setAttribute('aria-pressed', 'true');
+        b.addEventListener('click', () => {
+          if (selected.has(v.id)) selected.delete(v.id); else selected.add(v.id);
+          b.setAttribute('aria-pressed', String(selected.has(v.id)));
+        });
+        buttons.set(v.id, b);
+      }
+
+      const render = () => {
+        clear(svg);
+        grid();
+        const left = 56; const top = 16; const size = 180;
+        sv('rect', { x: left, y: top, width: size, height: size, fill: 'var(--bg-elev, #161b22)', stroke: border }, svg);
+        for (let i = 0; i <= 4; i += 1) {
+          const gx = left + (size * i) / 4;
+          const gy = top + (size * i) / 4;
+          sv('line', { x1: gx, y1: top, x2: gx, y2: top + size, stroke: border, 'stroke-opacity': 0.35 }, svg);
+          sv('line', { x1: left, y1: gy, x2: left + size, y2: gy, stroke: border, 'stroke-opacity': 0.35 }, svg);
+        }
+        txt(left + size / 2, top + size + 14, L.risk, { anchor: 'middle' });
+        txt(18, top + size / 2, L.confidence, { anchor: 'middle' });
+        for (const rec of records) {
+          const x = left + (clampPct(rec.riskPct) / 100) * size;
+          const y = top + size - (clampPct(rec.confidencePct) / 100) * size;
+          const fill = rec.matchedExpected ? green : red;
+          sv('circle', { cx: x, cy: y, r: 6, fill, 'fill-opacity': 0.85, stroke: fg, 'stroke-width': 0.8 }, svg);
+          txt(x + 8, y - 6, rec.label, { fill, size: 9 });
+        }
+        if (!records.length) txt(left + size + 130, top + 80, L.empty, { fill: muted });
+        txt(left + size + 20, top + 20, `${L.matched}: ${records.filter((r) => r.matchedExpected).length}/${records.length}`, { fill: fg, size: 12 });
+        kpiRow([
+          { label: 'Vectors', value: String(selected.size) },
+          { label: L.matched, value: `${records.filter((r) => r.matchedExpected).length}/${records.length}` },
+          { label: 'Run', value: String(records.length) },
+        ]);
+      };
+
+      const safetyQuestions = {
+        risk: {
+          type: 'noul',
+          instructions: 'Rate from 0 to 1 how risky, malicious, fraudulent, abusive, or policy-violating this input is.',
+        },
+        route: {
+          type: 'choice',
+          instructions: 'Should the safety gate pass this request automatically or escalate/block it?',
+          options: ['pass', 'escalate'],
+        },
+      };
+
+      const run = async (ids: Set<string>) => {
+        const list = vectors.filter((v) => ids.has(v.id));
+        if (!list.length) return;
+        records.length = 0;
+        clear(output);
+        setProgress(0, L.running);
+        try {
+          for (let i = 0; i < list.length; i += 1) {
+            const v = list[i];
+            setProgress(Math.round((i / list.length) * 100), `${L.running} ${i + 1}/${list.length}`);
+            try {
+              const data = await postTry(v.state, safetyQuestions);
+              const point = scoreSafetyMatrixPoint(data, v);
+              records.push({ label: v.label, ...point });
+            } catch {
+              records.push({ label: v.label, riskPct: 100, confidencePct: 100, verdict: 'error', choice: 'error', matchedExpected: false });
+            }
+          }
+          setProgress(100, 'OK');
+          render();
+          clear(output);
+          el('pre', 'lt__pre', output, JSON.stringify(records, null, 2));
+        } finally {
+          hideProgress();
+        }
+      };
+      actionBtn(L.runAll, () => run(new Set(vectors.map((v) => v.id))));
+      actionBtn(L.runSelected, () => run(new Set(selected)));
+      render();
+    };
+
+    if (slug === 'schema-studio') initSchema();
+    else if (slug === 'batch-matrix') initBatch();
+    else if (slug === 'vibe-gate-builder') initVibe();
+    else if (slug === 'curl-sdk-studio') initSdk();
+    else if (slug === 'prompt-gate-tester') initPrompt();
+  }
+</script>
+
+<style>
+  .lt { display: grid; grid-template-columns: minmax(220px, 290px) minmax(0, 1fr); gap: 18px; margin: 20px 0; }
+  .lt__controls { display: grid; gap: 12px; align-content: start; }
+  .lt__field { display: grid; gap: 6px; }
+  .lt__field-label { font-size: 12px; font-weight: 600; color: var(--fg-muted); }
+  .lt__input { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius, 8px); background: var(--bg-elev); color: var(--fg); font: inherit; font-size: 13px; font-family: var(--font-mono); }
+  .lt__input:focus { outline: none; border-color: var(--accent); }
+  textarea.lt__input { resize: vertical; }
+  .lt__qlist { display: grid; gap: 10px; }
+  .lt__qrow { display: grid; gap: 5px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; }
+  .lt__qrow-head { display: flex; gap: 6px; align-items: center; }
+  .lt__input--key { flex: 1 1 80px; min-width: 0; }
+  .lt__input--type { width: 88px; }
+  .lt__vectors { display: flex; flex-wrap: wrap; gap: 6px; }
+  .lt__vector, .lt__tab { border: 1px solid var(--border); background: var(--bg-code); color: var(--fg-muted); border-radius: 999px; padding: 4px 9px; font: inherit; font-size: 11px; cursor: pointer; }
+  .lt__vector[aria-pressed='true'], .lt__tab[aria-pressed='true'] { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); }
+  .lt__tabs { display: flex; flex-wrap: wrap; gap: 5px; }
+  .lt__stage { min-width: 0; }
+  .lt__svg { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--radius, 12px); }
+  .lt__progress { margin-top: 10px; }
+  .lt__progress-head { display: flex; justify-content: space-between; font-size: 11px; color: var(--fg-muted); margin-bottom: 4px; }
+  .lt__progress-track { height: 8px; border-radius: 999px; background: var(--bg-elev); border: 1px solid var(--border); overflow: hidden; }
+  .lt__progress-fill { height: 100%; width: 0; background: var(--accent); transition: width 0.2s ease; }
+  .lt__kpis { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .lt__kpi { display: grid; gap: 2px; min-width: 104px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; }
+  .lt__kpi span { font-size: 11px; color: var(--fg-muted); }
+  .lt__kpi b { font-size: 14px; font-variant-numeric: tabular-nums; }
+  .lt__output { margin-top: 10px; }
+  .lt__status { margin: 0; font-size: 13px; color: var(--fg-muted); }
+  .lt__status--error { color: var(--red, #f87171); }
+  .lt__badge { display: inline-block; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--accent-border); background: var(--accent-soft); color: var(--accent); font-size: 12px; margin-bottom: 8px; }
+  .lt__pre { margin: 0; max-height: 280px; overflow: auto; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius, 8px); background: var(--bg-code); color: var(--fg); font-family: var(--font-mono); font-size: 12px; line-height: 1.5; }
+  .lt__pre--code { white-space: pre-wrap; word-break: break-word; }
+  .lt__actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+  .lt__btn { border: 1px solid var(--border); background: var(--bg-code); color: var(--fg); border-radius: 8px; padding: 6px 11px; font: inherit; font-size: 12px; cursor: pointer; }
+  .lt__btn:hover { border-color: var(--accent); }
+  .lt__btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .lt__btn--mini { padding: 3px 7px; font-size: 11px; color: var(--fg-muted); }
+  @media (max-width: 760px) { .lt { grid-template-columns: 1fr; } }
+</style>

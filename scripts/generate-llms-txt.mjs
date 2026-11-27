@@ -46,6 +46,7 @@ const SECTIONS = {
   configs: { en: 'Configs', zh: '场景配置', ja: '設定集', ko: '구성 가이드', de: 'Konfigs', fr: 'Configs', es: 'Configs', pt: 'Configs' },
   vibecoding: { en: 'Vibe Coding', zh: 'Vibe编程', ja: 'Vibe Coding', ko: 'Vibe 코딩', de: 'Vibe Coding', fr: 'Vibe Coding', es: 'Vibe Coding', pt: 'Vibe Coding' },
   workbench: { en: 'Workbench', zh: '交互工作台', ja: 'ワークベンチ', ko: '워크벤치', de: 'Workbench', fr: 'Atelier', es: 'Taller', pt: 'Bancada' },
+  tools: { en: 'Visual tools', zh: '图形工具', ja: '視覚ツール', ko: '시각 도구', de: 'Grafik-Tools', fr: 'Outils visuels', es: 'Herramientas', pt: 'Ferramentas' },
   downloads: { en: 'AI software downloads', zh: 'AI 软件下载', ja: 'AI ソフトウェア ダウンロード', ko: 'AI 소프트웨어 다운로드', de: 'AI-Software-Downloads', fr: 'Téléchargements de logiciels IA', es: 'Descargas de software de IA', pt: 'Downloads de software de IA' },
 };
 
@@ -118,6 +119,7 @@ export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosyst
     '- [Configs](https://www.jevcode.ai/en/configs/): scenario configs from production-ready to future roadmap, with automation and escalation splits.',
     '- [Vibe Coding](https://www.jevcode.ai/en/vibecoding/): prompt-to-program tutorials with copy-ready config and code for every step.',
     '- [Workbench](https://www.jevcode.ai/en/workbench/): interactive 8-language stack & config generator with readiness simulator, live /api/try dry-run verifier, and copy/download starter kit.',
+    '- [Visual tools](https://www.jevcode.ai/en/tools/): Top 10 Jev-curated interactive graphical tools (Schema Studio, Cascade Sankey, Threshold ROC Lab, Batch Matrix, Vibe Wave Planner, Latency Waterfall, 8-Lang SDK Studio, ROI Calculator, Prompt-Injection Heatmap, $5 Credit Runway).',
     '',
     'Every product page above also exists at /zh/, /ja/, /ko/, /de/, /fr/, /es/ and /pt/.',
     '',
@@ -143,7 +145,7 @@ export function buildLlmsTxt({ briefs, briefMap, terms, docsByLang = {}, ecosyst
     lines.push(`### ${pick('docs', code)}`, '');
     // 只列真实存在列表页的章节：concepts/ 与 cases/ 是纯目录，没有 index.md，
     // 指向它们会得到 404。这类断链由 check-seo 的 llms.txt 校验兜住。
-    for (const section of ['patterns', 'sdk', 'lab', 'compare', 'gpus', 'industries', 'recipes', 'configs', 'vibecoding', 'workbench']) {
+    for (const section of ['patterns', 'sdk', 'lab', 'compare', 'gpus', 'industries', 'recipes', 'configs', 'vibecoding', 'workbench', 'tools']) {
       lines.push(`- [${pick(section, code)}](${SITE}/${code}/${section}/)`);
     }
     lines.push('');

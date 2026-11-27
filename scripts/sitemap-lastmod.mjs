@@ -29,6 +29,7 @@ const ROUTES = [
   { re: /^\/[a-z]{2}\/configs(\/.*)?$/, file: () => 'src/data/configs.ts' },
   { re: /^\/[a-z]{2}\/vibecoding(\/.*)?$/, file: () => 'src/data/vibecoding.ts' },
   { re: /^\/[a-z]{2}\/workbench(\/.*)?$/, file: () => 'src/lib/workbench/generator.mjs' },
+  { re: /^\/[a-z]{2}\/tools(\/.*)?$/, file: () => 'src/data/tools.ts' },
   // 生态分类页：整页是分类下所有项目的聚合，跟着数据文件走。
   { re: /^\/[a-z]{2}\/ecosystem\/category\/[a-z0-9-]+\/?$/, file: () => 'src/data/ecosystem.ts' },
   // 语言首页：/{lang}/

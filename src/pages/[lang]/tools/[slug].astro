@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { VISUAL_TOOLS, type VisualTool } from '../../../data/tools';
+import SimToolsCanvas from '../../../components/tools/SimToolsCanvas.astro';
+import LiveToolsCanvas from '../../../components/tools/LiveToolsCanvas.astro';
+import * as copy from '../../../i18n/pages/tools';
+
+export function getStaticPaths() {
+  const langs = Object.keys(languages) as Lang[];
+  return langs.flatMap((lang) =>
+    VISUAL_TOOLS.map((tool) => ({ params: { lang, slug: tool.slug }, props: { tool, lang } })),
+  );
+}
+
+const { tool, lang } = Astro.props as { tool: VisualTool; lang: Lang };
+const path = `/${lang}/tools/${tool.slug}/`;
+const toolTitle = pick(lang, tool.title);
+const toolTagline = pick(lang, tool.tagline);
+const summary = pick(lang, tool.summary);
+const highlights = pick(lang, tool.highlights);
+const relatedHref = `/${lang}${tool.relatedHref}`;
+
+const labelKeys = [
+  'title', 'description', 'eyebrow', 'lead', 'home', 'heroAlt',
+  'filterAll', 'catLiveApi', 'catVisualSim', 'catDevOps',
+  'searchPlaceholder', 'noMatch', 'jevScoreLabel', 'liveApiBadge',
+  'zeroQuotaBadge', 'openToolBtn', 'backToHub', 'relatedLinkLabel',
+  'runLiveBtn', 'runningBtn', 'copyBtn', 'copiedBtn', 'exportSvgBtn',
+  'exportCsvBtn', 'downloadBtn', 'addItemBtn', 'removeBtn', 'resetBtn',
+  'quotaNote', 'errLimit', 'errFailed', 'monthlyReqsLabel',
+  'avgTokensLabel', 'cacheHitLabel', 'jevAutoLabel', 'localPctLabel',
+  'frontierPriceLabel', 'growthPctLabel', 'autoAllowLabel',
+  'escalateAtLabel', 'postureLabel', 'slaMsLabel', 'creditUsdLabel',
+  'dailyReqsLabel', 'ctaTitle', 'ctaLead', 'ctaTry', 'ctaRegister',
+] as const;
+
+const labels: Record<string, string> = Object.fromEntries(
+  labelKeys.map((key) => [key, pick(lang, copy[key])]),
+);
+
+const LIVE_SLUGS = ['schema-studio', 'batch-matrix', 'vibe-gate-builder', 'curl-sdk-studio', 'prompt-gate-tester'];
+const usesLiveCanvas = LIVE_SLUGS.includes(tool.slug);
+
+const credit = '5.00';
+const ctaLead = pick(lang, copy.ctaLead).replace('{credit}', credit);
+
+const toolUrl = new URL(path, Astro.site).href;
+const schema = [
+  {
+    '@type': 'SoftwareApplication',
+    name: toolTitle,
+    description: toolTagline,
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Web',
+    url: toolUrl,
+    inLanguage: lang,
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: pick(lang, copy.home), item: new URL(`/${lang}/`, Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: pick(lang, copy.title), item: new URL(`/${lang}/tools/`, Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: toolTitle, item: toolUrl },
+    ],
+  },
+];
+---
+
+<BaseLayout lang={lang} title={toolTitle} description={toolTagline} path={path} schema={schema}>
+  <div class="wrap">
+    <div class="doc tl-detail">
+      <nav class="tl-crumbs" aria-label={pick(lang, copy.title)}>
+        <a href={`/${lang}/`}>{pick(lang, copy.home)}</a>
+        <span aria-hidden="true">/</span>
+        <a href={`/${lang}/tools/`}>{pick(lang, copy.title)}</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{toolTitle}</span>
+      </nav>
+
+      <div class="tl-switcher" aria-label={pick(lang, copy.title)}>
+        {VISUAL_TOOLS.map((item) => (
+          <a
+            href={`/${lang}/tools/${item.slug}/`}
+            aria-current={item.slug === tool.slug ? 'page' : undefined}
+          >{pick(lang, item.title)}</a>
+        ))}
+      </div>
+
+      <p class="tl-eyebrow">{pick(lang, copy.eyebrow)}</p>
+      <h1 class="doc__title">{toolTitle}</h1>
+      <p class="doc__desc">{toolTagline}</p>
+
+      <img
+        class="tl-hero"
+        src={tool.heroImage}
+        alt={toolTitle}
+        width="1344"
+        height="768"
+        loading="eager"
+        decoding="async"
+      />
+
+      <p class="tl-kpi"><span>{pick(lang, copy.jevScoreLabel)}</span> <strong>{tool.jevPriority}%</strong></p>
+
+      <p class="tl-summary">{summary}</p>
+
+      <ul class="tl-highlights">
+        {highlights.map((item) => <li>{item}</li>)}
+      </ul>
+
+      {usesLiveCanvas ? (
+        <LiveToolsCanvas tool={tool} lang={lang} labels={labels} />
+      ) : (
+        <SimToolsCanvas tool={tool} lang={lang} labels={labels} />
+      )}
+
+      <section class="tl-related">
+        <h2>{toolTitle}</h2>
+        <a href={relatedHref}>{pick(lang, copy.relatedLinkLabel)}</a>
+      </section>
+
+      <section class="tl-cta">
+        <h2>{pick(lang, copy.ctaTitle)}</h2>
+        <p>{ctaLead}</p>
+        <div class="tl-cta__actions">
+          <a href={`/${lang}/try/`}>{pick(lang, copy.ctaTry)}</a>
+          <a href={`/${lang}/login/?mode=register`}>{pick(lang, copy.ctaRegister)}</a>
+        </div>
+      </section>
+
+      <a class="tl-back" href={`/${lang}/tools/`}>{pick(lang, copy.backToHub)}</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tl-crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.85rem; color: var(--fg-muted); margin-bottom: 12px; }
+  .tl-switcher { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tl-switcher a { font-size: 0.78rem; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; color: var(--fg-muted); background: var(--bg-elev); }
+  .tl-switcher a[aria-current='page'] { color: var(--accent); border-color: var(--accent-border); background: var(--accent-soft); font-weight: 600; }
+  .tl-eyebrow { margin: 0 0 6px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .tl-hero { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--border); margin: 0 0 18px; }
+  .tl-kpi { display: inline-flex; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--accent-border); background: var(--accent-soft); font-size: 0.85rem; margin: 0 0 14px; }
+  .tl-kpi strong { color: var(--accent); }
+  .tl-summary { color: var(--fg-muted); }
+  .tl-highlights { margin: 0 0 20px; padding-left: 20px; color: var(--fg-muted); display: grid; gap: 4px; }
+  .tl-related { margin: 22px 0 14px; }
+  .tl-related h2 { font-size: 1.05rem; margin: 0 0 6px; }
+  .tl-cta { margin: 20px 0 16px; padding: 16px; border: 1px solid var(--accent-border); border-radius: var(--radius); background: var(--accent-soft); }
+  .tl-cta h2 { margin: 0 0 8px; font-size: 1.1rem; }
+  .tl-cta__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .tl-cta__actions a { padding: 8px 14px; border-radius: var(--radius); border: 1px solid var(--accent-border); background: var(--bg-elev); font-weight: 600; font-size: 0.88rem; }
+  .tl-back { display: inline-block; margin-top: 8px; }
+</style>

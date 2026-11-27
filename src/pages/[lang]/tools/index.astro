@@ -1,0 +1,196 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { languages, pick, type Lang } from '../../../i18n/ui';
+import { VISUAL_TOOLS } from '../../../data/tools';
+import * as copy from '../../../i18n/pages/tools';
+
+export function getStaticPaths() {
+  return (Object.keys(languages) as Lang[]).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const path = `/${lang}/tools/`;
+const pageTitle = pick(lang, copy.title);
+const pageDescription = pick(lang, copy.description);
+const hubUrl = new URL(path, Astro.site).href;
+
+const t = {
+  eyebrow: pick(lang, copy.eyebrow),
+  lead: pick(lang, copy.lead),
+  filterAll: pick(lang, copy.filterAll),
+  catLiveApi: pick(lang, copy.catLiveApi),
+  catVisualSim: pick(lang, copy.catVisualSim),
+  catDevOps: pick(lang, copy.catDevOps),
+  searchPlaceholder: pick(lang, copy.searchPlaceholder),
+  noMatch: pick(lang, copy.noMatch),
+  jevScoreLabel: pick(lang, copy.jevScoreLabel),
+  liveApiBadge: pick(lang, copy.liveApiBadge),
+  zeroQuotaBadge: pick(lang, copy.zeroQuotaBadge),
+  openToolBtn: pick(lang, copy.openToolBtn),
+  heroAlt: pick(lang, copy.heroAlt),
+};
+
+const cards = VISUAL_TOOLS.map((tool) => ({
+  slug: tool.slug,
+  category: tool.category,
+  usesLiveApi: tool.usesLiveApi,
+  jevPriority: tool.jevPriority,
+  title: pick(lang, tool.title),
+  tagline: pick(lang, tool.tagline),
+  highlights: pick(lang, tool.highlights),
+  href: `/${lang}/tools/${tool.slug}/`,
+}));
+
+const categoryLabels: Record<string, string> = {
+  live_api: t.catLiveApi,
+  visual_sim: t.catVisualSim,
+  dev_ops: t.catDevOps,
+};
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    name: pageTitle,
+    url: hubUrl,
+    description: pageDescription,
+    inLanguage: lang,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: cards.length,
+      itemListElement: cards.map((card, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: card.title,
+        url: new URL(card.href, Astro.site).href,
+      })),
+    },
+  },
+];
+---
+
+<BaseLayout lang={lang} title={pageTitle} description={pageDescription} path={path} schema={schema}>
+  <div class="wrap">
+    <div class="doc tl">
+      <p class="tl-eyebrow">{t.eyebrow}</p>
+      <h1 class="doc__title">{pageTitle}</h1>
+      <p class="doc__desc">{t.lead}</p>
+
+      <img
+        class="tl-hero"
+        src="/img/guides/tools-hero.webp"
+        alt={t.heroAlt}
+        width="1344"
+        height="768"
+        loading="eager"
+        decoding="async"
+      />
+
+      <div class="tl-filter">
+        <div class="tl-chips" role="group" aria-label={pageTitle}>
+          <button type="button" data-filter="all" aria-pressed="true">{t.filterAll}</button>
+          <button type="button" data-filter="live_api" aria-pressed="false">{t.catLiveApi}</button>
+          <button type="button" data-filter="visual_sim" aria-pressed="false">{t.catVisualSim}</button>
+          <button type="button" data-filter="dev_ops" aria-pressed="false">{t.catDevOps}</button>
+        </div>
+        <input type="search" data-tool-search placeholder={t.searchPlaceholder} aria-label={t.searchPlaceholder} />
+      </div>
+
+      <ul class="tl-grid">
+        {cards.map((card) => (
+          <li
+            data-tool-card
+            data-category={card.category}
+            data-q={`${card.title} ${card.tagline} ${card.slug} ${card.category} ${card.highlights.join(' ')}`.toLowerCase()}
+          >
+            <article>
+              <div class="tl-card__head">
+                <span class="tl-card__score">{t.jevScoreLabel}: {card.jevPriority}%</span>
+                <span class="tl-card__badge">{categoryLabels[card.category]}</span>
+                <span class="tl-card__badge">{card.usesLiveApi ? t.liveApiBadge : t.zeroQuotaBadge}</span>
+              </div>
+              <svg class="tl-card__icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+                <path d="M12 2 L14 9 L21 12 L14 15 L12 22 L10 15 L3 12 L10 9 Z" fill="currentColor" opacity="0.85" />
+              </svg>
+              <h2><a href={card.href}>{card.title}</a></h2>
+              <p class="tl-card__tagline">{card.tagline}</p>
+              <ul class="tl-card__highlights">
+                {card.highlights.map((item) => <li>{item}</li>)}
+              </ul>
+              <a class="tl-card__open" href={card.href}>{t.openToolBtn}</a>
+            </article>
+          </li>
+        ))}
+      </ul>
+
+      <p class="tl-empty" data-no-match hidden>{t.noMatch}</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+  const input = document.querySelector<HTMLInputElement>('[data-tool-search]');
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-tool-card]')];
+  const empty = document.querySelector<HTMLElement>('[data-no-match]');
+  let category = 'all';
+  let query = '';
+
+  function apply() {
+    let visible = 0;
+    for (const card of cards) {
+      const okCategory = category === 'all' || card.dataset.category === category;
+      const okQuery = !query || (card.dataset.q ?? '').includes(query);
+      card.hidden = !(okCategory && okQuery);
+      if (!card.hidden) visible++;
+    }
+    if (empty) empty.hidden = visible !== 0;
+  }
+
+  for (const chip of chips) {
+    chip.addEventListener('click', () => {
+      category = chip.dataset.filter ?? 'all';
+      for (const other of chips) other.setAttribute('aria-pressed', String(other === chip));
+      apply();
+    });
+  }
+
+  if (input) {
+    input.addEventListener('input', () => {
+      query = input.value.trim().toLowerCase();
+      apply();
+    });
+  }
+</script>
+
+<style>
+  .tl-eyebrow { margin: 0 0 8px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .tl-hero { width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--border); margin: 0 0 20px; }
+  .tl-filter { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+  .tl-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tl-chips button, .tl-filter input {
+    border: 1px solid var(--border);
+    background: var(--bg-elev);
+    color: var(--fg);
+    border-radius: 999px;
+    min-height: 36px;
+    padding: 6px 14px;
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .tl-chips button[aria-pressed='true'] { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent); }
+  .tl-filter input { border-radius: var(--radius); min-width: 14rem; cursor: text; }
+  .tl-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 760px) { .tl-grid { grid-template-columns: 1fr; } }
+  .tl-grid li { border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; background: var(--bg-elev); }
+  .tl-grid article { display: grid; gap: 10px; height: 100%; align-content: start; }
+  .tl-card__head { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.75rem; }
+  .tl-card__score { color: var(--accent); font-weight: 700; border: 1px solid var(--accent-border); background: var(--accent-soft); border-radius: 999px; padding: 2px 8px; }
+  .tl-card__badge { color: var(--fg-muted); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; }
+  .tl-card__icon { color: var(--accent); }
+  .tl-grid h2 { margin: 0; font-size: 1.1rem; }
+  .tl-card__tagline { margin: 0; color: var(--fg-muted); font-size: 0.9rem; }
+  .tl-card__highlights { margin: 0; padding-left: 18px; color: var(--fg-muted); font-size: 0.84rem; display: grid; gap: 4px; }
+  .tl-card__open { justify-self: start; margin-top: auto; color: var(--accent); font-weight: 600; font-size: 0.88rem; }
+  .tl-empty { color: var(--fg-muted); }
+</style>

@@ -162,6 +162,14 @@ const faqSchema = {
           </a>
         ))}
       </div>
+      <a class="home__matrix-card home__matrix-card--featured" href={`/${lang}/tools/`}>
+        <img src="/img/guides/tools-hero.webp" alt="" width="640" height="360" loading="lazy" decoding="async" />
+        <span class="home__matrix-copy">
+          <strong>{t('nav.tools')}</strong>
+          <em>10</em>
+          <span>{t('home.matrix.toolsDesc')}</span>
+        </span>
+      </a>
     </div>
   </section>
 
@@ -448,6 +456,27 @@ const faqSchema = {
     grid-column: 1 / -1;
     color: var(--fg-muted);
     font-size: 14.5px;
+  }
+  .home__matrix-card--featured {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    margin-top: 16px;
+    border-color: var(--accent-border);
+  }
+  .home__matrix-card--featured img {
+    height: 100%;
+    min-height: 240px;
+    aspect-ratio: auto;
+  }
+  .home__matrix-card--featured .home__matrix-copy {
+    align-content: center;
+    padding: 22px 24px;
+  }
+  .home__matrix-card--featured .home__matrix-copy strong { font-size: 22px; }
+  @media (max-width: 800px) {
+    .home__matrix-card--featured { grid-template-columns: 1fr; }
+    .home__matrix-card--featured img { min-height: 0; aspect-ratio: 16 / 9; }
   }
   @media (max-width: 980px) {
     .home__matrix-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

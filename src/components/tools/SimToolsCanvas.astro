@@ -1,0 +1,413 @@
+---
+import type { VisualTool } from '../../data/tools';
+import type { Lang } from '../../i18n/ui';
+
+interface Props {
+  tool: VisualTool;
+  lang: Lang;
+  labels: Record<string, string>;
+}
+
+const { tool, lang, labels } = Astro.props;
+
+const payload = {
+  slug: tool.slug,
+  lang,
+  labels: {
+    monthlyRequests: labels.monthlyReqsLabel ?? 'Monthly requests',
+    avgInputTokens: labels.avgTokensLabel ?? 'Avg input tokens',
+    cacheHitPct: labels.cacheHitLabel ?? 'Cache hit rate',
+    jevAutoPct: labels.jevAutoLabel ?? 'Jev auto-allow',
+    localPct: labels.localPctLabel ?? 'Local 8B share',
+    frontierUsdPerM: labels.frontierPriceLabel ?? 'Frontier $/M tokens',
+    autoAllowBelow: labels.autoAllowLabel ?? 'Auto-allow below',
+    escalateAtOrAbove: labels.escalateAtLabel ?? 'Escalate at or above',
+    posture: labels.postureLabel ?? 'Posture',
+    edgeMs: labels.edgeMsLabel ?? 'Edge ms',
+    jevMs: labels.jevMsLabel ?? 'Jev ms',
+    cacheMs: labels.cacheMsLabel ?? 'Cache ms',
+    local8bMs: labels.local8bMsLabel ?? 'Local 8B ms',
+    frontierMs: labels.frontierMsLabel ?? 'Frontier ms',
+    slaMs: labels.slaMsLabel ?? 'SLA (ms)',
+    monthlyGrowthPct: labels.growthPctLabel ?? 'Monthly growth',
+    creditUsd: labels.creditUsdLabel ?? 'API credit (USD)',
+    dailyRequests: labels.dailyReqsLabel ?? 'Daily requests',
+    exportSvg: labels.exportSvgBtn ?? 'Export SVG',
+    copyYaml: labels.copyBtn ?? 'Copy YAML',
+    copied: labels.copiedBtn ?? 'Copied!',
+    active: labels.active ?? 'active',
+  },
+};
+---
+
+<section class="sim-tools" data-sim-root data-tool={tool.slug} aria-label={tool.title[lang]}>
+  <div class="sim-tools__controls" data-sim-controls></div>
+  <div class="sim-tools__stage">
+    <svg viewBox="0 0 680 280" role="img" aria-label={`${tool.slug} simulation`} data-sim-svg preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="sim-tools__kpis" data-sim-kpis></div>
+  </div>
+  <div class="sim-tools__actions" data-sim-actions></div>
+  <script type="application/json" class="st-data" is:inline set:html={JSON.stringify(payload).replaceAll('<', '\\u003c')}></script>
+</section>
+
+<script>
+  import {
+    computeCascadeFlow,
+    computeThresholdCurve,
+    computeLatencyWaterfall,
+    computeRoiProjection,
+    computeCreditRunway,
+  } from '../../lib/tools/engines.mjs';
+
+  const NS = 'http://www.w3.org/2000/svg';
+  type Cfg = { slug?: string; labels?: Record<string, string> };
+  for (const dataNode of Array.from(document.querySelectorAll('.sim-tools > script.st-data'))) {
+    let cfg: Cfg = {};
+    try { cfg = JSON.parse(dataNode.textContent || '{}') as Cfg; } catch { cfg = {}; }
+    const slug = String(cfg.slug || '');
+    const L = cfg.labels || {};
+    const root = dataNode.closest('[data-sim-root]');
+    if (root) {
+      const controls = root.querySelector<HTMLElement>('[data-sim-controls]')!;
+      const kpis = root.querySelector<HTMLElement>('[data-sim-kpis]')!;
+      const actions = root.querySelector<HTMLElement>('[data-sim-actions]')!;
+      const svg = root.querySelector<SVGSVGElement>('[data-sim-svg]')!;
+
+      const node = <K extends keyof HTMLElementTagNameMap>(
+        tag: K,
+        cls: string,
+        parent: Element | null,
+        text?: string | number,
+      ): HTMLElementTagNameMap[K] => {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text !== undefined) e.textContent = String(text);
+        if (parent) parent.appendChild(e);
+        return e;
+      };
+      const s = (
+        tag: string,
+        attrs: Record<string, string | number>,
+        parent: Element | null,
+        text?: string | number,
+      ) => {
+        const e = document.createElementNS(NS, tag);
+        for (const [k, v] of Object.entries(attrs || {})) e.setAttribute(k, String(v));
+        if (text !== undefined) e.textContent = String(text);
+        if (parent) parent.appendChild(e);
+        return e;
+      };
+      const accent = 'var(--accent, #2dd4bf)';
+      const fg = 'var(--fg, #e6edf3)';
+      const muted = 'var(--fg-muted, #9aa3b2)';
+      const border = 'var(--border, #30363d)';
+      const code = 'var(--bg-code, #0d1117)';
+      const money = (n: number) => `$${Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+      const clearSvg = () => { while (svg.firstChild) svg.removeChild(svg.firstChild); };
+      const clear = (el: Element) => { while (el.firstChild) el.removeChild(el.firstChild); };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let state: Record<string, any> = {};
+      let exportText = '';
+
+      const slider = (
+        key: string,
+        label: string,
+        min: number,
+        max: number,
+        step: number,
+        value: number,
+        suffix = '',
+        onChange: () => void,
+      ) => {
+        const wrap = node('label', 'sim-tools__field', controls);
+        const head = node('span', 'sim-tools__field-head', wrap);
+        node('span', '', head, label);
+        const out = node('b', '', head, `${value}${suffix}`);
+        const input = node('input', '', wrap);
+        input.type = 'range';
+        input.min = String(min); input.max = String(max); input.step = String(step);
+        input.value = String(value);
+        input.setAttribute('aria-label', label);
+        input.addEventListener('input', () => {
+          const v = Number(input.value);
+          out.textContent = `${v}${suffix}`;
+          state[key] = v;
+          onChange();
+        });
+        return input;
+      };
+
+      const kpiRow = (items: Array<{ label: string; value: string }>) => {
+        clear(kpis);
+        for (const item of items) {
+          const box = node('div', 'sim-tools__kpi', kpis);
+          node('span', '', box, item.label);
+          node('b', '', box, item.value);
+        }
+      };
+
+      const actionBtn = (label: string, fn: () => void) => {
+        const b = node('button', 'sim-tools__btn', actions, label);
+        b.type = 'button';
+        b.addEventListener('click', fn);
+        return b;
+      };
+
+      const safeCopy = async (text: string, btn: HTMLButtonElement) => {
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = L.copied || 'Copied!';
+          setTimeout(() => { btn.textContent = L.copyYaml || 'Copy'; }, 1400);
+        } catch {
+          btn.textContent = 'Copy unavailable';
+        }
+      };
+      const exportSvgFile = () => {
+        try {
+          const copy = svg.cloneNode(true) as SVGSVGElement;
+          copy.setAttribute('xmlns', NS);
+          const blob = new Blob([new XMLSerializer().serializeToString(copy)], { type: 'image/svg+xml;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = `${slug || 'simulation'}.svg`;
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        } catch { /* browser may block downloads */ }
+      };
+      const grid = () => {
+        s('rect', { x: 0, y: 0, width: 680, height: 280, fill: code, rx: 12 }, svg);
+        for (let i = 1; i < 5; i += 1) {
+          s('line', { x1: 0, y1: i * 56, x2: 680, y2: i * 56, stroke: border, 'stroke-opacity': 0.45 }, svg);
+        }
+      };
+      const axisLabel = (x: number, y: number, text: string, anchor = 'start') =>
+        s('text', { x, y, fill: muted, 'font-size': 10, 'text-anchor': anchor }, svg, text);
+      const bar = (x: number, y: number, w: number, h: number, fill: string, label?: string) => {
+        s('rect', { x, y, width: Math.max(1, w), height: Math.max(1, h), rx: 3, fill, 'fill-opacity': 0.85 }, svg);
+        if (label) s('text', { x: x + Math.max(1, w) / 2, y: y - 4, fill: muted, 'font-size': 9, 'text-anchor': 'middle' }, svg, label);
+      };
+
+      const drawCascade = () => {
+        const r = computeCascadeFlow(state);
+        clearSvg(); grid();
+        const colors = [accent, '#38bdf8', '#a78bfa', '#f59e0b'];
+        const names = ['Cache hit', 'Jev gate', 'Local 8B', 'Frontier'];
+        const ys = [40, 90, 150, 215];
+        s('rect', { x: 18, y: 108, width: 116, height: 62, rx: 8, fill: accent, 'fill-opacity': 0.16, stroke: accent }, svg);
+        s('text', { x: 76, y: 132, fill: fg, 'font-size': 12, 'text-anchor': 'middle' }, svg, 'Total traffic');
+        s('text', { x: 76, y: 151, fill: muted, 'font-size': 10, 'text-anchor': 'middle' }, svg, `${r.monthlyRequests.toLocaleString('en-US')} req/mo`);
+        r.branches.forEach((b, i) => {
+          const h = Math.max(4, (b.pct / 100) * 132);
+          const y = ys[i];
+          s('path', {
+            d: `M134 139 C 250 139, 300 ${y + h / 2}, 430 ${y + h / 2} L 430 ${y + h / 2 + h} C 300 ${y + h / 2 + h}, 250 139, 134 139 Z`,
+            fill: colors[i], 'fill-opacity': 0.34, stroke: colors[i], 'stroke-opacity': 0.6,
+          }, svg);
+          s('rect', { x: 430, y, width: 224, height: Math.max(18, h), rx: 5, fill: colors[i], 'fill-opacity': 0.18, stroke: colors[i], 'stroke-opacity': 0.8 }, svg);
+          s('text', { x: 442, y: y + 15, fill: fg, 'font-size': 11 }, svg, `${names[i]}  ${b.pct}%`);
+          s('text', { x: 442, y: y + 30, fill: muted, 'font-size': 9 }, svg, `${b.requests.toLocaleString('en-US')} req · ${money(b.usd)}`);
+        });
+        axisLabel(18, 269, `Frontier-only ${money(r.frontierOnlyUsd)} · Hybrid ${money(r.hybridUsd)} · Saved ${money(r.monthlySavingsUsd)}`);
+        kpiRow([
+          { label: 'Lane sum', value: `${r.pctTotal}%` },
+          { label: 'Monthly savings', value: money(r.monthlySavingsUsd) },
+          { label: 'Savings', value: `${r.savingsPct}%` },
+        ]);
+        exportText = r.exportYaml;
+      };
+
+      const drawThreshold = () => {
+        const r = computeThresholdCurve(state);
+        clearSvg(); grid();
+        const xOf = (t: number) => 40 + t * 600;
+        const yOf = (p: number) => 242 - (p / 100) * 200;
+        const pts = r.curve.map((p) => `${xOf(p.threshold).toFixed(1)},${yOf(p.autoHandledPct).toFixed(1)}`).join(' ');
+        const falsePts = r.curve.map((p) => `${xOf(p.threshold).toFixed(1)},${yOf(p.falsePassPct).toFixed(1)}`).join(' ');
+        s('polyline', { points: pts, fill: 'none', stroke: accent, 'stroke-width': 2.5 }, svg);
+        s('polyline', { points: falsePts, fill: 'none', stroke: '#f59e0b', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }, svg);
+        for (const [t, color, label] of [[r.autoAllowBelow, '#38bdf8', 'auto-allow'], [r.escalateAtOrAbove, '#f87171', 'escalate']] as Array<[number, string, string]>) {
+          s('line', { x1: xOf(t), y1: 32, x2: xOf(t), y2: 244, stroke: color, 'stroke-width': 1.5, 'stroke-dasharray': '4 4' }, svg);
+          axisLabel(xOf(t) + 4, 44, label);
+        }
+        s('circle', { cx: xOf(r.autoAllowBelow), cy: yOf(r.current.autoHandledPct), r: 5, fill: accent, stroke: fg }, svg);
+        axisLabel(40, 266, 'confidence threshold →');
+        kpiRow([
+          { label: 'Auto-handled', value: `${r.current.autoHandledPct}%` },
+          { label: 'False pass', value: `${r.current.falsePassPct}%` },
+          { label: 'Human load', value: `${r.current.humanLoadPct}%` },
+          { label: 'Grey band', value: `${r.current.greyBandPct}%` },
+        ]);
+        exportText = JSON.stringify(r, null, 2);
+      };
+
+      const drawLatency = () => {
+        const r = computeLatencyWaterfall(state);
+        clearSvg(); grid();
+        const max = Math.max(r.slaMs, r.frontierTotal, 1) * 1.08;
+        const wOf = (ms: number) => (ms / max) * 560;
+        const lanes = [
+          { label: 'Cache', total: r.cacheTotal, parts: [state.edgeMs || 0, state.cacheMs || 0], color: accent },
+          { label: 'Local 8B', total: r.localTotal, parts: [state.edgeMs || 0, state.jevMs || 0, state.local8bMs || 0], color: '#38bdf8' },
+          { label: 'Frontier', total: r.frontierTotal, parts: [state.edgeMs || 0, state.jevMs || 0, state.frontierMs || 0], color: '#a78bfa' },
+          { label: 'Weighted p95', total: r.weightedP95, parts: [], color: r.slaPass ? '#34d399' : '#f87171' },
+        ];
+        lanes.forEach((lane, i) => {
+          const y = 38 + i * 56;
+          s('text', { x: 18, y: y + 20, fill: fg, 'font-size': 11 }, svg, lane.label);
+          let x = 120;
+          for (const part of lane.parts) {
+            const w = wOf(part);
+            s('rect', { x, y, width: Math.max(1, w), height: 26, fill: lane.color, 'fill-opacity': 0.3 + 0.16 * i, rx: 2 }, svg);
+            x += w;
+          }
+          if (!lane.parts.length) bar(120, y, wOf(lane.total), 26, lane.color, `${lane.total} ms`);
+          s('text', { x: 122 + wOf(lane.total), y: y + 18, fill: muted, 'font-size': 9 }, svg, ` ${lane.total} ms`);
+        });
+        const slaX = 120 + wOf(r.slaMs);
+        s('line', { x1: slaX, y1: 20, x2: slaX, y2: 250, stroke: '#f59e0b', 'stroke-width': 2, 'stroke-dasharray': '6 4' }, svg);
+        axisLabel(slaX + 4, 30, `SLA ${r.slaMs} ms`);
+        kpiRow([
+          { label: 'Weighted p50', value: `${r.weightedP50} ms` },
+          { label: 'Weighted p95', value: `${r.weightedP95} ms` },
+          { label: 'Saved vs frontier', value: `${r.savedMs} ms` },
+          { label: 'SLA', value: r.slaPass ? 'PASS' : 'FAIL' },
+        ]);
+        exportText = JSON.stringify(r, null, 2);
+      };
+
+      const drawRoi = () => {
+        const r = computeRoiProjection(state);
+        clearSvg(); grid();
+        const max = Math.max(r.annualFrontierUsd, 1);
+        const groupW = 52;
+        const pts: string[] = [];
+        r.months.forEach((m, i) => {
+          const x = 34 + i * groupW;
+          bar(x, 216 - (m.frontierCumUsd / max) * 176, 12, (m.frontierCumUsd / max) * 176, '#a78bfa');
+          bar(x + 14, 216 - (m.hybridCumUsd / max) * 176, 12, (m.hybridCumUsd / max) * 176, '#38bdf8');
+          const cx = x + 13;
+          const cy = 216 - (m.savedCumUsd / max) * 176;
+          pts.push(`${cx},${cy}`);
+          axisLabel(cx, 238, String(m.month), 'middle');
+        });
+        s('polyline', { points: pts.join(' '), fill: 'none', stroke: accent, 'stroke-width': 2 }, svg);
+        axisLabel(18, 264, `Annual frontier ${money(r.annualFrontierUsd)} · hybrid ${money(r.annualHybridUsd)} · savings ${money(r.annualSavingsUsd)}`);
+        kpiRow([
+          { label: 'Annual Frontier', value: money(r.annualFrontierUsd) },
+          { label: 'Annual Hybrid', value: money(r.annualHybridUsd) },
+          { label: 'Net savings', value: money(r.annualSavingsUsd) },
+          { label: 'ROI', value: `${r.roiMultiple}x` },
+        ]);
+        exportText = JSON.stringify(r, null, 2);
+      };
+
+      const drawRunway = () => {
+        const r = computeCreditRunway(state);
+        clearSvg(); grid();
+        const cx = 96; const cy = 140; const radius = 62;
+        s('circle', { cx, cy, r: radius, fill: 'none', stroke: border, 'stroke-width': 16 }, svg);
+        const usedPct = r.milestones[3] && r.milestones[3].day ? Math.min(1, (r.milestones[3].usdUsed / Math.max(0.01, r.creditUsd))) : 0;
+        const circumference = 2 * Math.PI * radius;
+        s('circle', { cx, cy, r: radius, fill: 'none', stroke: accent, 'stroke-width': 16, 'stroke-dasharray': `${(circumference * (1 - usedPct)).toFixed(1)} ${circumference.toFixed(1)}`, transform: `rotate(-90 ${cx} ${cy})`, 'stroke-linecap': 'round' }, svg);
+        s('text', { x: cx, y: cy - 3, fill: fg, 'font-size': 17, 'text-anchor': 'middle' }, svg, `${r.runwayDays}d`);
+        s('text', { x: cx, y: cy + 15, fill: muted, 'font-size': 10, 'text-anchor': 'middle' }, svg, money(r.creditUsd));
+        const maxTok = Math.max(1, r.totalTokens);
+        r.milestones.forEach((m, i) => {
+          const y = 56 + i * 50;
+          const w = (m.tokensUsed / maxTok) * 390;
+          s('text', { x: 196, y: y + 15, fill: fg, 'font-size': 10 }, svg, `Day ${m.day}`);
+          bar(260, y, w, 20, i % 2 ? '#38bdf8' : accent);
+          s('text', { x: 268 + w, y: y + 14, fill: muted, 'font-size': 9 }, svg, ` ${m.tokensUsed.toLocaleString('en-US')}`);
+        });
+        axisLabel(18, 270, `${r.totalTokens.toLocaleString('en-US')} input tokens for ${money(r.creditUsd)}`);
+        kpiRow([
+          { label: 'Runway days', value: `${r.runwayDays}` },
+          { label: 'Input tokens', value: r.totalTokens.toLocaleString('en-US') },
+          { label: 'Daily cost', value: money(r.dailyCostUsd) },
+          { label: 'Total calls', value: r.totalCalls.toLocaleString('en-US') },
+        ]);
+        exportText = JSON.stringify(r, null, 2);
+      };
+
+      const render = () => {
+        if (slug === 'cascade-flow') drawCascade();
+        else if (slug === 'threshold-lab') drawThreshold();
+        else if (slug === 'latency-budget') drawLatency();
+        else if (slug === 'cost-calculator') drawRoi();
+        else if (slug === 'credit-runway') drawRunway();
+      };
+
+      if (slug === 'cascade-flow') {
+        state = { monthlyRequests: 100000, avgInputTokens: 800, cacheHitPct: 30, jevAutoPct: 45, fastLocalPct: 20, frontierUsdPerM: 12 };
+        slider('monthlyRequests', L.monthlyRequests, 1000, 10000000, 1000, state.monthlyRequests, '', render);
+        slider('avgInputTokens', L.avgInputTokens, 1, 20000, 10, state.avgInputTokens, '', render);
+        slider('cacheHitPct', L.cacheHitPct, 0, 95, 1, state.cacheHitPct, '%', render);
+        slider('jevAutoPct', L.jevAutoPct, 0, 70, 1, state.jevAutoPct, '%', render);
+        slider('fastLocalPct', L.localPct, 0, 50, 1, state.fastLocalPct, '%', render);
+        slider('frontierUsdPerM', L.frontierUsdPerM, 1, 60, 1, state.frontierUsdPerM, '', render);
+        actionBtn(L.exportSvg, exportSvgFile);
+        const yamlBtn = actionBtn(L.copyYaml, () => safeCopy(exportText, yamlBtn));
+      } else if (slug === 'threshold-lab') {
+        state = { autoAllowBelow: 0.25, escalateAtOrAbove: 0.75, posture: 'balanced' };
+        slider('autoAllowBelow', L.autoAllowBelow, 0.05, 0.6, 0.01, state.autoAllowBelow, '', render);
+        slider('escalateAtOrAbove', L.escalateAtOrAbove, 0.4, 0.98, 0.01, state.escalateAtOrAbove, '', render);
+        const postureWrap = node('div', 'sim-tools__presets', controls);
+        for (const p of ['balanced', 'strict', 'regulated']) {
+          const b = node('button', 'sim-tools__preset', postureWrap, p);
+          b.type = 'button';
+          b.addEventListener('click', () => { state.posture = p; render(); });
+        }
+        actionBtn(L.exportSvg, exportSvgFile);
+      } else if (slug === 'latency-budget') {
+        state = { edgeMs: 12, jevMs: 42, cacheMs: 5, local8bMs: 140, frontierMs: 900, slaMs: 700, cachePct: 30, localPct: 45 };
+        for (const [key, label, max] of [['edgeMs', L.edgeMs, 300], ['jevMs', L.jevMs, 600], ['cacheMs', L.cacheMs, 200], ['local8bMs', L.local8bMs, 2000], ['frontierMs', L.frontierMs, 5000], ['slaMs', L.slaMs, 5000]] as Array<[string, string, number]>) {
+          slider(key, label, 0, max, 1, state[key], ' ms', render);
+        }
+        actionBtn(L.exportSvg, exportSvgFile);
+      } else if (slug === 'cost-calculator') {
+        state = { monthlyRequests: 100000, avgInputTokens: 800, bypassPct: 60, frontierUsdPerM: 12, monthlyGrowthPct: 8 };
+        slider('monthlyRequests', L.monthlyRequests, 1000, 10000000, 1000, state.monthlyRequests, '', render);
+        slider('avgInputTokens', L.avgInputTokens, 1, 20000, 10, state.avgInputTokens, '', render);
+        slider('bypassPct', L.jevAutoPct, 0, 100, 1, state.bypassPct, '%', render);
+        slider('frontierUsdPerM', L.frontierUsdPerM, 1, 60, 1, state.frontierUsdPerM, '', render);
+        slider('monthlyGrowthPct', L.monthlyGrowthPct, -20, 50, 1, state.monthlyGrowthPct, '%', render);
+        actionBtn(L.exportSvg, exportSvgFile);
+      } else if (slug === 'credit-runway') {
+        state = { creditUsd: 5, dailyRequests: 1000, avgInputTokens: 800 };
+        const presetWrap = node('div', 'sim-tools__presets', controls);
+        for (const amount of [5, 25, 100, 500]) {
+          const b = node('button', 'sim-tools__preset', presetWrap, `$${amount}`);
+          b.type = 'button';
+          b.addEventListener('click', () => { state.creditUsd = amount; const input = controls.querySelector<HTMLInputElement>('[data-credit-input]'); if (input) input.value = String(amount); render(); });
+        }
+        const creditInput = slider('creditUsd', L.creditUsd, 1, 1000, 1, state.creditUsd, '', render);
+        creditInput.setAttribute('data-credit-input', '');
+        slider('dailyRequests', L.dailyRequests, 1, 100000, 100, state.dailyRequests, '', render);
+        slider('avgInputTokens', L.avgInputTokens, 1, 20000, 10, state.avgInputTokens, '', render);
+        actionBtn(L.exportSvg, exportSvgFile);
+      }
+      render();
+    }
+  }
+</script>
+
+<style>
+  .sim-tools { display: grid; grid-template-columns: minmax(220px, 280px) minmax(0, 1fr); gap: 18px; margin: 20px 0; }
+  .sim-tools__controls { display: grid; gap: 12px; align-content: start; }
+  .sim-tools__field { display: grid; gap: 5px; font-size: 13px; color: var(--fg-muted); }
+  .sim-tools__field-head { display: flex; justify-content: space-between; gap: 8px; }
+  .sim-tools__field-head b { color: var(--fg); font-variant-numeric: tabular-nums; }
+  .sim-tools__field input { width: 100%; accent-color: var(--accent); }
+  .sim-tools__presets { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sim-tools__preset, .sim-tools__btn { border: 1px solid var(--border); background: var(--bg-code); color: var(--fg); border-radius: 7px; padding: 5px 9px; font: inherit; font-size: 12px; cursor: pointer; }
+  .sim-tools__preset:hover, .sim-tools__btn:hover { border-color: var(--accent); }
+  .sim-tools__stage { min-width: 0; }
+  .sim-tools__stage svg { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: 12px; }
+  .sim-tools__kpis { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .sim-tools__kpi { display: grid; gap: 2px; min-width: 112px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; }
+  .sim-tools__kpi span { font-size: 11px; color: var(--fg-muted); }
+  .sim-tools__kpi b { font-size: 15px; font-variant-numeric: tabular-nums; }
+  .sim-tools__actions { grid-column: 1 / -1; display: flex; gap: 8px; }
+  @media (max-width: 760px) { .sim-tools { grid-template-columns: 1fr; } }
+</style>
