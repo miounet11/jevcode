@@ -2112,5 +2112,69 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-category-05",
+    "state": "Call transcript: The product listing shows wrong totals after refresh.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-06",
+    "state": "Form submission: It would help to schedule order exports nightly.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-07",
+    "state": "SMS: What is the rate limit for the product listing API?",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-08",
+    "state": "API payload field: Production GMV is at zero; page already fired.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
   }
 ]

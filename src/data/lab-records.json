@@ -996,5 +996,33 @@
     "ok": true,
     "choice": "incident",
     "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-category-05",
+    "ts": "2026-11-27T01:32:19.698Z",
+    "ok": true,
+    "choice": "bug",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-category-06",
+    "ts": "2026-11-27T01:32:21.148Z",
+    "ok": true,
+    "choice": "feature-request",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-category-07",
+    "ts": "2026-11-27T01:32:22.115Z",
+    "ok": true,
+    "choice": "question",
+    "model": "clavue-jev"
+  },
+  {
+    "id": "cov-ecommerce-category-08",
+    "ts": "2026-11-27T01:32:23.083Z",
+    "ok": true,
+    "choice": "bug",
+    "model": "clavue-jev"
   }
 ]

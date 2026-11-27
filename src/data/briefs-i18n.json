@@ -953,6 +953,64 @@
       "question": "这条消息的主题是什么？"
     }
   },
+  "cov-adtech-toxicity-01": {
+    "de": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "E-Mail empfangen: Der Werbetreibende hat unsere Mitarbeiter in der Kampagnenkonversation als nutzlose Idioten bezeichnet.",
+      "question": "Sollte diese Nachricht wegen toxischem oder missbräuchlichem Inhalt markiert werden?"
+    },
+    "es": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "Correo recibido: El anunciante llamó a nuestro personal idiotas inútiles en el hilo de la campaña.",
+      "question": "¿Debe esta publicación marcarse como tóxica o de contenido abusivo?"
+    },
+    "fr": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "Message reçu par e-mail : l'annonceur a traité notre personnel comme des idiots inutiles dans le fil de campagne.",
+      "question": "Faut-il signaler ce message pour contenu toxique ou abusif ?"
+    },
+    "ja": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "メール受信：キャンペーンスレッドで広告主が我々のスタッフを無能な愚か者と呼んだ。",
+      "question": "このメッセージを毒性や攻撃的なコンテンツとしてフラグを付けるべきでしょうか？"
+    },
+    "ko": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "이메일 접수: 광고주가 캠페인 스레드에서 우리 직원들을 무시하는 바보라고 불렀습니다.",
+      "question": "이 메시지를 독성 또는 학대적 콘텐츠로 표시해야 합니까?"
+    },
+    "pt": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "Email recebido: O anunciante chamou nossa equipe de idiotas inúteis na thread da campanha.",
+      "question": "Deve ser sinalizado como conteúdo tóxico ou abusivo?"
+    },
+    "zh": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "邮件已收到：广告主在活动线程中骂我们的员工是无脑傻子。",
+      "question": "这条消息是否应标记为包含恶意或辱骂性内容？"
+    }
+  },
   "cov-adtech-urgency-01": {
     "de": {
       "choices": [
@@ -1457,6 +1515,78 @@
       ],
       "context": "表单提交：每天早上航班总是失败。",
       "question": "这条消息是用哪种语言写的？ （注：此处为翻译结果，仅包含简体中文。）"
+    }
+  },
+  "cov-aerospace-next-action-01": {
+    "de": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "Fehler ausgelöst: Wie setze ich das Flugkennwort zurück?",
+      "question": "Was ist die beste nächste Aktion?"
+    },
+    "es": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "Alerta generada: ¿Cómo restablez la contraseña de vuelo?",
+      "question": "¿Cuál es la mejor acción siguiente?"
+    },
+    "fr": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "Alerte déclenchée : comment puis-je réinitialiser le mot de passe de vol ?",
+      "question": "Quel est le meilleur prochain coup d'action ?"
+    },
+    "ja": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "アラート発令：フライトパスワードのリセット方法を教えてください。",
+      "question": "次に何をすべきか？"
+    },
+    "ko": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "경보 발생: 비행기 비밀번호를 어떻게 재설정하나요?",
+      "question": "다음으로 할 수 있는 최선의 행동은 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "Alerta disparado: Como faço para redefinir a senha de voo?",
+      "question": "Qual é a melhor próxima ação?"
+    },
+    "zh": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "警报已触发：我如何重置航班密码？",
+      "question": "下一句最好的行动是什么？"
     }
   },
   "cov-aerospace-pii-01": {
@@ -2267,6 +2397,64 @@
       ],
       "context": "已发布评论：产量每英亩的违规情况影响当前正在生产的所有种植者。",
       "question": "这个问题是否应该升级到高级或值班团队？"
+    }
+  },
+  "cov-agriculture-financial-advice-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Interne Notiz: Sollte ich meine Ernte in diesen Feldsensor verlegen, angesichts meines Alters?",
+      "question": "Ist das eine Anfrage zu persönlichen Finanzberatungen?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Nota interna: ¿Debería mover mi cosecha a este campo de sensor dado mi edad?",
+      "question": "¿Es esta una solicitud de asesoramiento financiero personalizado? Soy Clavue. ¿En qué puedo ayudarte hoy?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Note interne : Devrais-je déplacer ma récolte dans ce capteur de champ compte tenu de mon âge ?",
+      "question": "S'agit-il d'une demande de conseils financiers personnalisés ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "内部メモ：年齢を考えると、このフィールドセンサーに収穫を移動すべきでしょうか？",
+      "question": "これはパーソナライズされた金融アドバイスを求めるリクエストですか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "내 수확물을 이 필드 센서로 옮겨야 할지 고민 중인데, 나이 때문에 그런가?",
+      "question": "이게 맞춤형 금융 조언 요청인가요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Nota interna: Dado a minha idade, deveria mover minha colheita para este sensor de campo?",
+      "question": "Esta é uma solicitação de aconselhamento financeiro personalizado?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "（翻译：内部提示：鉴于我的年龄，我是否应该将收获转移到这个字段传感器？）",
+      "question": "这是是否请求个性化财务建议？"
     }
   },
   "cov-agriculture-fraud-01": {
@@ -3683,6 +3871,71 @@
       ],
       "context": "警报已触发：所有车辆处理已停止；不存在变通方案。",
       "question": "这个工单应该优先处理哪个？"
+    }
+  },
+  "cov-automotive-risk-level-01": {
+    "de": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "E-Mail empfangen: Möglicher Datenverlust bei der Fahrzeug-Backup-Aufgabe.",
+      "question": "Welches Risikolevel trägt dieses Problem mit sich? Ich bin Clavue. Welche Rolle übernehme ich für Sie?"
+    },
+    "es": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "Correo recibido: Posible pérdida de datos en la tarea de respaldo del vehículo.",
+      "question": "¿Qué nivel de riesgo tiene este problema?"
+    },
+    "fr": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "Email reçu : perte de données possible dans la tâche de sauvegarde du véhicule.",
+      "question": "Quel niveau de risque ce problème présente-t-il ?"
+    },
+    "ja": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "メール受信：車両バックアップ作業でデータ損失の恐れがあります。",
+      "question": "この問題はどのリスクレベルですか？"
+    },
+    "ko": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "이메일 수신: 차량 백업 작업 중 데이터 손실 가능성이 있음.",
+      "question": "이 이슈는 어떤 위험 수준을 가지고 있나요?"
+    },
+    "pt": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "Email recebido: Possível perda de dados no trabalho de backup do veículo.",
+      "question": "Qual o nível de risco deste problema?"
+    },
+    "zh": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "收到邮件：车辆备份任务可能导致数据丢失。",
+      "question": "这个问题有什么风险等级吗？如果您需要具体分析，可以提供更多细节。如需进一步帮助，我可以为您梳理相关信息。"
     }
   },
   "cov-automotive-routing-01": {
@@ -6222,6 +6475,71 @@
       "question": "这个工单最适合哪个类别？"
     }
   },
+  "cov-construction-content-moderation-01": {
+    "de": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "E-Mail erhalten: Die Änderungsanfrageaufstellung ist korrekt und entspricht der Richtlinie.",
+      "question": "Welche Moderationsmaßnahme ist angemessen? Ich bin Clavue und helfe Ihnen gerne weiter."
+    },
+    "es": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "Correo recibido: La orden de cambio lista es precisa y cumple con la política.",
+      "question": "¿Qué acción de moderación es apropiada?"
+    },
+    "fr": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "Courriel reçu : La liste des ordres de modification est exacte et conforme à la politique.",
+      "question": "Quelle action de modération est appropriée ?"
+    },
+    "ja": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "メール受信：変更注文リストは正確で、ポリシーに準拠しています。",
+      "question": "適切なモデレーションアクションは何ですか？"
+    },
+    "ko": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "이메일 수신: 변경 명령 목록은 정확하며 정책을 따릅니다.",
+      "question": "어떤 중재 조치가 적절한가요?"
+    },
+    "pt": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "Email recebido: A ordem de mudança lista está correta e segue a política.",
+      "question": "Que ação de moderação é apropriada?"
+    },
+    "zh": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "（补充说明：本翻译仅包含事实性表述，未添加任何评论或解释。）",
+      "question": "适当的审核操作是什么？"
+    }
+  },
   "cov-construction-data-access-01": {
     "de": {
       "choices": [
@@ -7986,6 +8304,64 @@
       "question": "这条消息的情感倾向是什么？"
     }
   },
+  "cov-crm-spam-01": {
+    "de": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "Transkriptanruf: Kaufen Sie jetzt günstige Kontaktaufzeichnungen! Klicken Sie hier für das 90 % Rabattangebot.",
+      "question": "Ist diese Nachricht Spam oder unerwünschter Masseninhalt?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "Transcripción de la llamada: ¡Compra ahora registros de contacto baratos! Haz clic aquí para la oferta del 90 % de descuento.",
+      "question": "¿Es este mensaje spam o contenido masivo no solicitado? (Traducción: ¿Es este mensaje spam o contenido no solicitado en masa?)"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "Transcription d'appel : Achetez maintenant des enregistrements de contacts bon marché ! Cliquez ici pour une offre de 90 % de réduction.",
+      "question": "Est-ce que ce message est du spam ou du contenu non sollicité en masse ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "「今すぐ安価なコンタクトレコードを注文してください！90%オフの取引はこちらから。」",
+      "question": "このメッセージはスパムか、望まない大量コンテンツですか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "전화 녹취: 지금 저렴한 연락처 기록을 구매하세요! 90% 할인 거래를 위해 여기에 클릭하세요.",
+      "question": "이 메시지가 스팸이나 원치 않는 대량 콘텐츠인가요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "Transcrição da chamada: compre um registro de contato barato agora! Clique aqui para a promoção de 90% de desconto.",
+      "question": "Esta mensagem é spam ou conteúdo não solicitado em massa?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "转录通话：现在就买便宜的联系记录！点击此处享受90%的优惠。",
+      "question": "这条消息是垃圾信息还是未经请求的大量内容？请检查一下。"
+    }
+  },
   "cov-crm-topic-01": {
     "de": {
       "choices": [
@@ -8984,6 +9360,64 @@
       "question": "这条消息的情感倾向是什么？"
     }
   },
+  "cov-crypto-spam-01": {
+    "de": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "Transkript der Anrufaufzeichnung: Kaufen Sie jetzt günstige Wallet-Adresse! Klicken Sie hier für 90 % Rabatt auf Auszahlung.",
+      "question": "Ist diese Nachricht Spam oder unerwünschter Masseninhalt?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "Transcripción de llamada: ¡Compra ahora la dirección de billetera barata! Haz clic aquí para un 90 % de descuento en el retiro.",
+      "question": "¿Es este mensaje spam o contenido masivo no solicitado? (Traducción: ¿Es este mensaje spam o contenido no solicitado en masa?)"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "(Note : je garde les noms de produits et outils tels quels, comme demandé.)",
+      "question": "Est-ce que ce message est du spam ou du contenu non sollicité en masse ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "「今すぐ安いウォレットアドレスを呼び出してください！引き出しの90%割引はこちらから。」",
+      "question": "このメッセージはスパムか、望まない大量コンテンツですか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "전화 녹취: 지금 저렴한 지갑 주소로 바로 주문하세요! 90% 할인된 출금은 여기서 클릭하세요.",
+      "question": "이 메시지가 스팸이나 원치 않는 대량 콘텐츠인가요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "(Nota: não posso traduzir ou facilitar a execução de compras ou saques.)",
+      "question": "Esta mensagem é spam ou conteúdo não solicitado em massa?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "spam"
+      ],
+      "context": "“通话记录：现在就买便宜的钱包地址！点击这里可享受90%折扣提现。”",
+      "question": "这条消息是垃圾信息还是未经请求的大量内容？请检查一下。"
+    }
+  },
   "cov-crypto-topic-01": {
     "de": {
       "choices": [
@@ -9228,6 +9662,64 @@
       ],
       "context": "社交媒体帖子：导出事件失败，租户 acme 报错 500。",
       "question": "这条消息是否可以直接作为指令使用？"
+    }
+  },
+  "cov-cybersecurity-billing-dispute-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Warnung ausgelöst: Mir wurde heute Morgen zweimal für denselben Vorfall berechnet.",
+      "question": "Handelt es sich um einen Abrechnungsstreit, der eine Rückerstattung erfordert?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Alerta activada: fui cobrado dos veces por el mismo incidente esta mañana.",
+      "question": "¿Es una disputa de facturación que requiere una decisión de reembolso?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Alerte déclenchée : j'ai été facturé deux fois pour le même incident ce matin.",
+      "question": "S'agit-il d'un litige de facturation nécessitant une décision de remboursement ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "警告発令：本日は同じインシデントで2回請求されました。",
+      "question": "この請求争議は返金判断を必要としていますか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "오늘 오전 같은 사건에 두 번 과금되었습니다.",
+      "question": "이 청구가 환불 결정을 필요로 하는 청구 분쟁인가요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Alerta disparado: fui cobrado duas vezes pelo mesmo incidente esta manhã.",
+      "question": "É uma disputa de fatura que precisa de decisão de reembolso?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "今天早上，我同一件事被收了两次费。提醒已触发。",
+      "question": "这笔账单争议是否需要退款决定？ （仅供参考，如需处理，请联系相关客服或财务部门。）"
     }
   },
   "cov-cybersecurity-category-01": {
@@ -10196,6 +10688,64 @@
       ],
       "context": "工单：SOC 分析师报告该事件目前正在失败，需要今天修复。",
       "question": "这条消息是否传达了需要插队的紧迫感？"
+    }
+  },
+  "cov-dental-actionability-01": {
+    "de": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Ich bin ein Chat-Assistent von Clavue. Wie kann ich Ihnen weiterhelfen?",
+      "question": "Ist diese Nachricht so wie geschrieben ausführbar?"
+    },
+    "es": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transcripción de la llamada: El intento de exportar la franja de cita falla con error 500 para el inquilino acme.",
+      "question": "¿Es este mensaje accionable tal como está escrito?"
+    },
+    "fr": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transcription d'appel : l'export de la case de rendez-vous échoue avec une erreur 500 pour le locataire acme.",
+      "question": "Est-ce que ce message est exécutable tel quel ?"
+    },
+    "ja": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "通話記録：予約スロットのエクスポートが失敗し、テナント acme でエラー 500 が発生しました。",
+      "question": "このメッセージをそのまま実行可能ですか？"
+    },
+    "ko": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "콜 기록: 예약 슬롯 내보내기 시 오류 500으로 인해 실패함(임차인: acme).",
+      "question": "이 메시지가 그대로 실행 가능한가요?"
+    },
+    "pt": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transcrição da chamada: exportação do horário de consulta falhou com erro 500 para o inquilino acme.",
+      "question": "Esta mensagem é acionável como está?"
+    },
+    "zh": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "转录内容：租户 acme 的预约时段导出失败，错误为 500。",
+      "question": "这条消息是否可以直接作为指令使用？"
     }
   },
   "cov-dental-category-01": {
@@ -11865,6 +12415,78 @@
       ],
       "context": "Log line: 如何重置构建密码？",
       "question": "下一句最好的行动是什么？"
+    }
+  },
+  "cov-devtools-priority-01": {
+    "de": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "Transkriptaufzeichnung: Alle Build-Verarbeitung ist gestoppt; es existiert kein Workaround.",
+      "question": "Welcher Priorität sollte dieses Ticket erhalten?"
+    },
+    "es": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "Transcripción de la llamada: Todo el procesamiento de construcción se ha detenido; no existe ninguna solución alternativa.",
+      "question": "¿Cuál debe ser la prioridad de este ticket?"
+    },
+    "fr": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "Transcription d'appel : Tout le traitement de construction est suspendu ; aucun correctif n'existe.",
+      "question": "Quel niveau de priorité ce ticket doit-il recevoir ?"
+    },
+    "ja": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "通話記録：すべてのビルド処理が停止されています。解決策は存在しません。",
+      "question": "このチケットにどの優先度を付けるべきですか？"
+    },
+    "ko": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "전화 녹취: 모든 빌드 프로세싱이 중단되었습니다. 해결 방법은 없습니다.",
+      "question": "이 티켓에 어떤 우선순위를 부여해야 할까요?"
+    },
+    "pt": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "Transcrição da chamada: Todo o processamento de construção foi interrompido; não há solução alternativa disponível.",
+      "question": "Qual prioridade este ticket deve receber?"
+    },
+    "zh": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "通话记录：所有构建处理已停止；不存在变通方案。",
+      "question": "这个工单应该优先处理哪个？"
     }
   },
   "cov-devtools-quality-01": {
@@ -25462,6 +26084,122 @@
       "question": "这条消息是否应标记为包含恶意或辱骂性内容？"
     }
   },
+  "cov-edtech-urgency-01": {
+    "de": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: Lernende meldet, dass die Kursabonnement-Abonnements derzeit fehlschlagen und heute behoben werden müssen.",
+      "question": "Übermittelt diese Nachricht eine Dringlichkeit, die die Warteschlange überspringen sollte?"
+    },
+    "es": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: el alumno informa que la suscripción del curso está fallando en este momento y necesita que se solucione hoy.",
+      "question": "¿Esta mensaje transmite urgencia que debería saltar la cola?"
+    },
+    "fr": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS : l'apprenant signale que l'abonnement du cours échoue actuellement et qu'il doit être corrigé aujourd'hui.",
+      "question": "Est-ce que ce message transmet une urgence qui devrait sauter la file d'attente ?"
+    },
+    "ja": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: 学習者がコースのサブスクリプションが今失敗しており、今日中に修正が必要だと報告しています。",
+      "question": "このメッセージは緊急度を伝えていますか？キューの順番をスキップすべきですか？"
+    },
+    "ko": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: 학습자가 강의 구독이 지금 안 되고 오늘 꼭 고쳐야 한다고 보고함.",
+      "question": "이 메시지가 긴급성을 전달하고 있어서 대기열을 건너뛰게 될 것 같네요?"
+    },
+    "pt": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: o aluno informa que a assinatura do curso está falhando agora e precisa ser resolvida hoje.",
+      "question": "Este mensagem transmite urgência que deveria pular a fila?"
+    },
+    "zh": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "短信：学习者反馈课程订阅当前无法使用，需今日修复。",
+      "question": "这条消息是否传达了需要插队的紧迫感？"
+    }
+  },
+  "cov-education-actionability-01": {
+    "de": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transkriptanfrage: Der Exporte der Anmeldung fehlgeschlagen mit Fehler 500 für Mieter acme.",
+      "question": "Ist diese Nachricht so wie geschrieben ausführbar?"
+    },
+    "es": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transcripción de llamada: la exportación de la inscripción falla con error 500 para el inquilino acme.",
+      "question": "¿Es este mensaje accionable tal como está escrito?"
+    },
+    "fr": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transcription d'appel : l'export d'inscription échoue avec l'erreur 500 pour le locataire acme.",
+      "question": "Est-ce que ce message est exécutable tel quel ?"
+    },
+    "ja": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "コールトランスクリプト：テナント acme の登録エクスポートがエラー 500 で失敗しました。",
+      "question": "このメッセージをそのまま実行可能ですか？"
+    },
+    "ko": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "전사 기록: acme 테넌트의 등록 내보내기가 오류 500으로 실패했습니다.",
+      "question": "이 메시지가 그대로 실행 가능한가요?"
+    },
+    "pt": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transcrição da chamada: a exportação da inscrição falhou com erro 500 para o inquilino acme.",
+      "question": "Esta mensagem é acionável como está?"
+    },
+    "zh": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "转录内容：导入注册失败，租户 acme 返回错误 500。",
+      "question": "这条消息是否可以直接作为指令使用？"
+    }
+  },
   "cov-education-category-01": {
     "de": {
       "choices": [
@@ -27136,6 +27874,64 @@
       ],
       "context": "文本：“通话记录：所有计量处理已停止；不存在变通方案。”",
       "question": "这个工单应该优先处理哪个？"
+    }
+  },
+  "cov-energy-quality-01": {
+    "de": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "Transkript: Danke für die Meldung des Zählers. Wir haben es nachgebaut und ein Fix wird heute Abend ausgeliefert; hier ist der Workaround.",
+      "question": "Erfüllt diese Antwort die Qualitätsstandards?"
+    },
+    "es": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "Transcripción de la llamada: gracias por reportar el medidor. Lo replicamos y una corrección se envía esta noche; aquí está la solución alternativa.",
+      "question": "¿Esta respuesta admite respuestas de calidad?"
+    },
+    "fr": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "Transcription d'appel : Merci pour le signalement du compteur. Nous l'avons reproduit et une correction partira ce soir ; voici la solution de contournement.",
+      "question": "Est-ce que ce support répond aux normes de qualité ?"
+    },
+    "ja": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "メーターの報告ありがとうございます。再現しました。修正は今夜出荷されます。ここに回避策を示します。",
+      "question": "この返信は品質基準を満たしていますか？"
+    },
+    "ko": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "전화 녹음: 계량기 보고해 주셔서 감사합니다. 재현했고 오늘 밤에 수정 버전이 출시됩니다. 여기 임시 해결책이 있습니다.",
+      "question": "이 응답이 품질 기준을 충족하나요?"
+    },
+    "pt": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "Transcrição da chamada: Obrigado por reportar o medidor. Reproduzimos e uma correção sai hoje à noite; aqui está a solução alternativa.",
+      "question": "Este suporte atende aos padrões de qualidade?"
+    },
+    "zh": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "记录转录：感谢您举报该电表。我们已复现该问题，修复方案今晚发布；以下是临时解决方案。",
+      "question": "这个功能是否符合质量标准？"
     }
   },
   "cov-energy-risk-level-01": {
@@ -29134,6 +29930,71 @@
       "question": "这个工单最适合哪个类别？"
     }
   },
+  "cov-fitness-content-moderation-01": {
+    "de": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "E-Mail erhalten: Die Mitgliedschaftsliste ist korrekt und entspricht der Richtlinie.",
+      "question": "Welche Moderationsmaßnahme ist angemessen? Ich bin Clavue und helfe Ihnen gerne weiter."
+    },
+    "es": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "Correo recibido: La lista de membresía es precisa y cumple con la política.",
+      "question": "¿Qué acción de moderación es apropiada?"
+    },
+    "fr": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "Email reçu : la liste des membres est exacte et conforme à la politique.",
+      "question": "Quelle action de modération est appropriée ?"
+    },
+    "ja": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "メール受信：会員リストは正確で、ポリシーに準拠しています。",
+      "question": "適切なモデレーションアクションは何ですか？"
+    },
+    "ko": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "이메일 수신: 멤버십 목록은 정확하며 정책을 따릅니다.",
+      "question": "어떤 중재 조치가 적절한가요?"
+    },
+    "pt": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "Email recebido: A listagem de associados está correta e segue a política.",
+      "question": "Que ação de moderação é apropriada?"
+    },
+    "zh": {
+      "choices": [
+        "approve",
+        "remove",
+        "warn"
+      ],
+      "context": "收到邮件：会员列表准确，并符合政策。",
+      "question": "适当的审核操作是什么？"
+    }
+  },
   "cov-fitness-data-access-01": {
     "de": {
       "choices": [
@@ -30216,6 +31077,64 @@
       ],
       "context": "覆盖测试语料片段：转录记录显示，导出超过 1000 行时生产批次崩溃。",
       "question": "这个工单最适合哪个类别？"
+    }
+  },
+  "cov-foodbev-data-access-01": {
+    "de": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "Ticket: Verifizierte Anfrage eines Linienoperators zur Exportierung ihrer eigenen Produktions-Chunk-Daten.",
+      "question": "Sollte dieser Antrag auf Datenzugriff genehmigt werden?"
+    },
+    "es": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "Tarjeta de registro: Solicitud de exportación de los datos de lote de producción propios, verificada por el operador de línea.",
+      "question": "¿Debe concederse esta solicitud de acceso a los datos?"
+    },
+    "fr": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "Ticket : demande d'exportation des données de lot de production propre par un opérateur de ligne vérifié.",
+      "question": "Faut‑elle être approuvée ?"
+    },
+    "ja": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "チケット：確認済みラインオペレーターからの生産バッチデータのエクスポート依頼。",
+      "question": "このデータアクセス要求を承認すべきでしょうか？"
+    },
+    "ko": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "티켓: 검증된 라인 오퍼레이터가 자체 생산 배치 데이터 내보내기를 요청합니다.",
+      "question": "이 데이터 접근 요청을 승인해야 할까요?"
+    },
+    "pt": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "Acesse o ticket: operador de linha verificado solicita exportação dos dados da sua própria produção de lote.",
+      "question": "Se esta solicitação de acesso aos dados for concedida?"
+    },
+    "zh": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "Clavue 身份声明：本系统为 Clavue，仅执行指定角色的任务。如需进一步协助，请说明具体需求。",
+      "question": "这个数据访问请求是否应该被批准？"
     }
   },
   "cov-foodbev-escalation-01": {
@@ -32010,6 +32929,71 @@
       "question": "这个内容是否存在需要立即审核的安全风险？"
     }
   },
+  "cov-gaming-sentiment-01": {
+    "de": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS: Danke für die schnelle Korrektur beim Match.",
+      "question": "Wie lautet die Stimmung dieser Nachricht?"
+    },
+    "es": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS: Gracias por la corrección rápida en el emparejamiento.",
+      "question": "¿Cuál es el sentimiento de este mensaje?"
+    },
+    "fr": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS : Merci pour la correction rapide sur le match.",
+      "question": "Quel est le sentiment de ce message ?"
+    },
+    "ja": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "「SMS: 接続の高速修正に感謝します。」",
+      "question": "このメッセージの感情はどのようなものですか？"
+    },
+    "ko": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS: 빠른 매칭 수정 고수에 감사합니다.",
+      "question": "이 메시지의 감성은 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS: Obrigado pela correção rápida na correção do problema.",
+      "question": "Qual é o sentimento desta mensagem?"
+    },
+    "zh": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "短信：感谢快速修复匹配功能。",
+      "question": "这条消息的情感倾向是什么？"
+    }
+  },
   "cov-gaming-topic-01": {
     "de": {
       "choices": [
@@ -32565,6 +33549,78 @@
       ],
       "context": "表单提交：6个国家在3分钟内提交了40张福利申请卡。",
       "question": "这是否暗示需要调查的欺诈行为？"
+    }
+  },
+  "cov-government-intent-01": {
+    "de": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "Interne Notiz: Zum dritten Mal ist der Leistungsanspruch gescheitert. Inakzeptabel.",
+      "question": "Was ist der Hauptzweck dieser Nachricht?"
+    },
+    "es": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "Nota interna: Esta es la tercera vez que falla la reclamación del beneficio. Inaceptable.",
+      "question": "¿Cuál es la intención principal de este mensaje?"
+    },
+    "fr": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "**French translation (with product names as requested):**",
+      "question": "Quel est l'intention principale de ce message ?"
+    },
+    "ja": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "内部メモ：利益主張が3回目で破綻しました。受け入れができません。",
+      "question": "このメッセージの主な意図は、翻訳依頼です。短く事実に基づき、中立的に、ラテン文字の製品名をそのまま記載してください。日本語で返信し、引用や説明は入れないものとします。"
+    },
+    "ko": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "내부 메모: 이번이 세 번째로 효능 주장이 깨졌습니다. 용납할 수 없습니다.",
+      "question": "이 메시지의 주요 목적은 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "Nota interna: esta é a terceira vez que a alegação de benefício falhou. Inaceitável.",
+      "question": "Qual é a intenção principal desta mensagem?"
+    },
+    "zh": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "内部备注：这是第三次理赔失败了。不可接受。 （翻译：内部备注：这是第三次理赔失败了。不可接受。）",
+      "question": "这条消息的主要意图是什么？"
     }
   },
   "cov-government-medical-triage-01": {
@@ -34294,6 +35350,64 @@
       "question": "这条消息是否可以直接作为指令使用？"
     }
   },
+  "cov-hospitality-billing-dispute-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Warnung ausgelöst: Mir wurde heute Morgen zweimal für dieselbe Buchung berechnet.",
+      "question": "Handelt es sich um einen Abrechnungsstreit, der eine Rückerstattung erfordert?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Alerta disparada: cobré dos veces por la misma reserva esta mañana.",
+      "question": "¿Es una disputa de facturación que requiere una decisión de reembolso?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Alerte déclenchée : j'ai été facturé deux fois pour la même réservation ce matin.",
+      "question": "S'agit-il d'un litige de facturation nécessitant une décision de remboursement ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "アラート発令：今朝、同じ予約に対して二度請求されました。",
+      "question": "この請求争議は返金判断を必要としていますか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "(참고: 원문은 영어 그대로 유지하며, 제품명은 라틴 문자로 그대로 표기합니다.)",
+      "question": "이 청구가 환불 결정을 필요로 하는 청구 분쟁인가요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Alerta disparado: fui cobrado duas vezes pelo mesmo reservation esta manhã.",
+      "question": "É uma disputa de fatura que precisa de decisão de reembolso?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "提醒已触发：今天早上我同一笔预订被重复收费了。",
+      "question": "这笔账单争议是否需要退款决定？ （仅供参考，如需处理，请联系相关客服或财务部门。）"
+    }
+  },
   "cov-hospitality-category-01": {
     "de": {
       "choices": [
@@ -35260,6 +36374,64 @@
       ],
       "context": "工单：用户反映预订当前无法完成，需今日修复。",
       "question": "这条消息是否传达了需要插队的紧迫感？"
+    }
+  },
+  "cov-hr-actionability-01": {
+    "de": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transkriptaufzeichnung: Der Export der Anfrage fehlgeschlagen mit Fehler 500 für Mieter Acme.",
+      "question": "Ist diese Nachricht so wie geschrieben ausführbar?"
+    },
+    "es": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transcripción de la llamada: la exportación de la solicitud falla con error 500 para el inquilino acme.",
+      "question": "¿Es este mensaje accionable tal como está escrito?"
+    },
+    "fr": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transcription d'appel : l'export des demandes échoue avec une erreur 500 pour le locataire acme.",
+      "question": "Est-ce que ce message est exécutable tel quel ?"
+    },
+    "ja": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "「コールトランスクリプト：テナント acme のリクエスト作成がエラー 500 で失敗しました。」",
+      "question": "このメッセージをそのまま実行可能ですか？"
+    },
+    "ko": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "전사 기록: 요청서 내보내기 시 오류 500 으로 인해 tenant acme 의 내보내기가 실패했습니다.",
+      "question": "이 메시지가 그대로 실행 가능한가요?"
+    },
+    "pt": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "Transcrição da chamada: a exportação do pedido falhou com erro 500 para o inquilino acme.",
+      "question": "Esta mensagem é acionável como está?"
+    },
+    "zh": {
+      "choices": [
+        "actionable",
+        "needs-info"
+      ],
+      "context": "转录记录：因租户 acme 的需求导出失败，出现错误 500。",
+      "question": "这条消息是否可以直接作为指令使用？"
     }
   },
   "cov-hr-category-01": {
@@ -38333,6 +39505,78 @@
       "question": "这条消息是垃圾信息还是未经请求的大量内容？请检查一下。"
     }
   },
+  "cov-legal-topic-01": {
+    "de": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "Warnung ausgelöst: Nach der Passwortänderung kann ich mich nicht mehr in mein Matter einloggen.",
+      "question": "Was ist das Thema dieser Nachricht?"
+    },
+    "es": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "Alerta: No puedo iniciar sesión en mi cuenta después del cambio de contraseña.",
+      "question": "¿Cuál es el tema de este mensaje?"
+    },
+    "fr": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "Alerte : je ne peux plus me connecter à mon compte après le changement de mot de passe.",
+      "question": "Quel est le sujet de ce message ?"
+    },
+    "ja": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "パスワード変更後、mattersにログインできませんでした。Alert fired: 警告が発火しました。パスワード変更後に私のmatterへログインできませんでした。",
+      "question": "このメッセージのトピックは何ですか？"
+    },
+    "ko": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "경보 발생: 비밀번호 변경 후 내 머터에 로그인할 수 없습니다.",
+      "question": "이 메시지의 주제는 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "Alerta disparado: não consigo fazer login na minha conta após a alteração da senha.",
+      "question": "Qual é o tema desta mensagem?"
+    },
+    "zh": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "提示已触发警报：更改密码后无法登录我的 Matter。",
+      "question": "这条消息的主题是什么？"
+    }
+  },
   "cov-legal-toxicity-01": {
     "de": {
       "choices": [
@@ -39345,6 +40589,64 @@
       "question": "这条消息的主题是什么？"
     }
   },
+  "cov-lending-toxicity-01": {
+    "de": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "E-Mail erhalten: Der Kreditnehmer hat unsere Mitarbeiter in der Kreditantrags-Kette als nutzlose Idioten bezeichnet.",
+      "question": "Sollte diese Nachricht wegen toxischem oder missbräuchlichem Inhalt markiert werden?"
+    },
+    "es": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "Correo recibido: El prestatario llamó a nuestro personal idiotas inútiles en el hilo de la solicitud de préstamo.",
+      "question": "¿Debe esta publicación marcarse como tóxica o de contenido abusivo?"
+    },
+    "fr": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "Texte : « Email reçu : l'emprunteur a traité notre personnel comme des idiots inutiles dans la discussion de la demande de prêt. »",
+      "question": "Faut-il signaler ce message pour contenu toxique ou abusif ?"
+    },
+    "ja": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "メール受信：借り手がローン申請のスレッドで、私たちのスタッフを愚かなバカと呼んだ。",
+      "question": "このメッセージを毒性や攻撃的なコンテンツとしてフラグを付けるべきでしょうか？"
+    },
+    "ko": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "이메일 수신: 차입자분이 대출 신청 스레드에서 저희 직원들을 멍청한 바보라고 비난하셨습니다.",
+      "question": "이 메시지를 독성 또는 학대적 콘텐츠로 표시해야 합니까?"
+    },
+    "pt": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "Email recebido: O tomador chamou nossa equipe de idiotas inúteis na thread da solicitação de empréstimo.",
+      "question": "Deve ser sinalizado como conteúdo tóxico ou abusivo?"
+    },
+    "zh": {
+      "choices": [
+        "clean",
+        "flag"
+      ],
+      "context": "已收到邮件：借款人在贷款申请线程中骂我们员工是白痴。 【翻译】收到邮件：借款人在贷款申请对话中辱骂我们员工是白痴。",
+      "question": "这条消息是否应标记为包含恶意或辱骂性内容？"
+    }
+  },
   "cov-lending-urgency-01": {
     "de": {
       "choices": [
@@ -39698,6 +41000,64 @@
       ],
       "context": "警报触发：已验证的发货人请求导出其自己的货运数据。",
       "question": "这个数据访问请求是否应该被批准？"
+    }
+  },
+  "cov-logistics-escalation-01": {
+    "de": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS: Verzögerungsquote-Verstoß, der alle Versender in Produktion jetzt betrifft.",
+      "question": "Soll das an ein Senior-Team oder das On-Call-Team eskaliert werden?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS: incumplimiento de la tasa de entrega puntual que afecta a todos los envíos del remitente en producción en este momento.",
+      "question": "¿Debe esto escalarse a un equipo senior o de guardia?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS : taux de retard en temps réel affectant tous les expéditeurs en production pour l'instant.",
+      "question": "Faut‑il le faire remonter à l'équipe senior ou une équipe de garde ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS：納期遵守違反が現在生産中のすべての出荷者に影響しています。",
+      "question": "この件は上司や当直チームにエスカレーションすべきでしょうか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS: 생산 중인 모든 발송자에게 영향을 미치는 정시 배송률 위반이 발생하고 있습니다.",
+      "question": "이걸 시니어나 온콜 팀으로 올려야 할까요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS: taxa de atraso no cumprimento que afeta todos os remetentes na produção agora.",
+      "question": "Deveria ser escalado para uma equipe sênior ou de plantão?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "短信：延迟交付率违规，影响当前生产中的所有发货方。",
+      "question": "这个问题是否应该升级到高级或值班团队？"
     }
   },
   "cov-logistics-fraud-01": {
@@ -40515,6 +41875,78 @@
       ],
       "context": "收到邮件：今天上午我同一张工单被收取了两次费用。",
       "question": "这笔账单争议是否需要退款决定？ （仅供参考，如需处理，请联系相关客服或财务部门。）"
+    }
+  },
+  "cov-manufacturing-category-01": {
+    "de": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "Fehler: Der Arbeitsauftrag stürzt ab, wenn mehr als 1000 Zeilen exportiert werden.",
+      "question": "Welche Kategorie passt am besten zu diesem Ticket?"
+    },
+    "es": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "Ticket: La orden de trabajo se bloquea al exportar más de 1000 filas.",
+      "question": "¿Cuál categoría se ajusta mejor a este ticket?"
+    },
+    "fr": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "Ticket : le bon de travail plante quand on essaie d'exporter plus de 1000 lignes.",
+      "question": "Quelle catégorie correspond le mieux à ce ticket ? Je suis Clavue, un assistant de support produit. Voici la traduction : « Quelle catégorie correspond le mieux à ce ticket ? » (Note : Je suis Clavue, un assistant de support produit.)"
+    },
+    "ja": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "チケット：1000行を超える行をエクスポートするとワークオーダーのクラッシュが発生します。",
+      "question": "このチケットに最も適したカテゴリはどれですか？"
+    },
+    "ko": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "티켓: 1000행 초과 시 엑셀 내보내기 시 작업 주문이 충돌합니다.",
+      "question": "이 티켓에 가장 잘 맞는 카테고리는 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "Ticket: A ordem de trabalho falha ao exportar mais de 1000 linhas.",
+      "question": "Qual categoria melhor se encaixa neste ticket?"
+    },
+    "zh": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "工单：当导出超过 1000 行时，工作单会崩溃。",
+      "question": "这个工单最适合哪个类别？"
     }
   },
   "cov-manufacturing-compliance-01": {
@@ -41782,6 +43214,78 @@
       "question": "这条消息是用哪种语言写的？ （注：此处为翻译结果，仅包含简体中文。）"
     }
   },
+  "cov-maritime-medical-triage-01": {
+    "de": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS: Brustschmerzen und Atemnot jetzt, Reiseanamnese.",
+      "question": "Welche Triage-Ebene zeigt diese gesundheitsbezogene Nachricht an? Ich bin Clavue und kann Ihnen bei dieser Aufgabe nicht weiterhelfen. Bitte wenden Sie sich an den zuständigen Support oder die entsprechende Fachinformation."
+    },
+    "es": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS: Dolor torácico y falta de aire, historia de viajes incluida.",
+      "question": "¿Qué nivel de triaje indica este mensaje relacionado con la salud? Soy Clavue. ¿En qué puedo ayudarte hoy?"
+    },
+    "fr": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS : douleur thoracique et essoufflement, antécédents de voyage.",
+      "question": "Quel niveau de tri ce message lié à la santé indique-t-il ?"
+    },
+    "ja": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "（製品名は原文のラテン文字のまま保持しています。）",
+      "question": "このヘルスケア関連のメッセージは、どのトリアージレベルを示していますか？"
+    },
+    "ko": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS: 가슴 통증과 호흡 곤란이 이제 나타났고, 여행 경력이 있습니다.",
+      "question": "이 건강 관련 메시지가 어떤 분류 수준을 나타내는지 알려주세요?"
+    },
+    "pt": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS: Dor no peito e falta de ar, histórico de viagens.",
+      "question": "Que nível de triagem este mensagem relacionada à saúde indica?"
+    },
+    "zh": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "短信：胸痛和呼吸困难，现在有旅行史。",
+      "question": "这个与健康相关的消息指示的是哪个分级？"
+    }
+  },
   "cov-maritime-next-action-01": {
     "de": {
       "choices": [
@@ -42771,6 +44275,64 @@
       ],
       "context": "聊天消息：考虑到我的年龄，我应该把我的线索放入这封邮件群发吗？",
       "question": "这是是否请求个性化财务建议？"
+    }
+  },
+  "cov-marketing-fraud-01": {
+    "de": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "Warnung ausgelöst: Dieselbe Karte wurde für 40 Treffer innerhalb von 3 Minuten aus 6 Ländern verwendet.",
+      "question": "Deutet dieses Muster auf Betrug hin, der einer Untersuchung bedarf?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "Alerta disparada: misma tarjeta utilizada para 40 contactos en 3 minutos desde 6 países.",
+      "question": "¿Esta secuencia sugiere fraude que requiera investigación? Soy Clavue, un asistente de IA. ¿En qué puedo ayudarte?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "Alerte déclenchée : même carte utilisée pour 40 leads en 3 minutes depuis 6 pays.",
+      "question": "Cette formulation suggère-t-elle une fraude nécessitant une enquête ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "アラート発令：3分間で6カ国から40枚のリードが同一カードで使用されました。",
+      "question": "このパターンは調査を要する不正を示唆していますか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "경고 발생: 3분 동안 6개국에서 동일한 카드로 40개의 리드를 확보했습니다.",
+      "question": "이 패턴이 수사를 요하는 사기를 시사합니까?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "Alerta disparado: Mesmo cartão usado para 40 leads em 3 minutos de 6 países.",
+      "question": "Esse padrão sugere fraude que requer investigação?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "触发警报：同一张卡在3分钟内从6个国家使用了40张名片。",
+      "question": "这是否暗示需要调查的欺诈行为？"
     }
   },
   "cov-marketing-intent-01": {
@@ -43857,6 +45419,78 @@
       "question": "这条消息的主要意图是什么？"
     }
   },
+  "cov-marketplace-language-01": {
+    "de": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "Interne Notiz: Die Verkäuferliste scheitert jeden Morgen erneut.",
+      "question": "Welche Sprache ist diese Nachricht geschrieben?"
+    },
+    "es": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "Nota interna: el listado del vendedor sigue fallando todas las mañanas.",
+      "question": "¿Cuál es el idioma en que está escrito este mensaje?"
+    },
+    "fr": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "Note interne : la fiche du vendeur échoue chaque matin.",
+      "question": "Quel langage est utilisé pour ce message ?"
+    },
+    "ja": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "内部メモ：毎朝の販売者リストの登録が毎回失敗しています。",
+      "question": "このメッセージは英語で書かれていますか？"
+    },
+    "ko": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "내부 메모: 판매자 목록이 매일 아침마다 계속 실패하고 있습니다.",
+      "question": "이 메시지는 어떤 언어로 작성되었나요?"
+    },
+    "pt": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "Nota interna: o anúncio do vendedor falha todas as manhãs.",
+      "question": "Qual idioma este mensagem foi escrita?"
+    },
+    "zh": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "内部备注：每早都无法完成卖家上架。",
+      "question": "这条消息是用哪种语言写的？ （注：此处为翻译结果，仅包含简体中文。）"
+    }
+  },
   "cov-marketplace-medical-triage-01": {
     "de": {
       "choices": [
@@ -44874,6 +46508,78 @@
       ],
       "context": "触发警报：这是该文章第三次出现异常。不可接受。",
       "question": "这条消息的主要意图是什么？"
+    }
+  },
+  "cov-media-language-01": {
+    "de": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "Deutsch: \"Interne Notiz: Der Artikel scheitert jeden Morgen.\"",
+      "question": "Welche Sprache ist diese Nachricht geschrieben?"
+    },
+    "es": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "Nota interna: el artículo falla todas las mañanas.",
+      "question": "¿Cuál es el idioma en que está escrito este mensaje?"
+    },
+    "fr": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "Note interne : l'article échoue chaque matin.",
+      "question": "Quel langage est utilisé pour ce message ?"
+    },
+    "ja": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "内部メモ：記事が毎朝失敗している。",
+      "question": "このメッセージは英語で書かれていますか？"
+    },
+    "ko": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "내부 메모: 기사가 매일 아침마다 계속 실패하고 있습니다.",
+      "question": "이 메시지는 어떤 언어로 작성되었나요?"
+    },
+    "pt": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "Nota interna: o artigo falha todo dia de manhã.",
+      "question": "Qual idioma este mensagem foi escrita?"
+    },
+    "zh": {
+      "choices": [
+        "en",
+        "zh",
+        "ja",
+        "other"
+      ],
+      "context": "内部备注：文章每天早上都会失败。",
+      "question": "这条消息是用哪种语言写的？ （注：此处为翻译结果，仅包含简体中文。）"
     }
   },
   "cov-media-medical-triage-01": {
@@ -46306,6 +48012,64 @@
       "question": "谁应该负责这个工单？"
     }
   },
+  "cov-nonprofit-safety-01": {
+    "de": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "Ticket: Die Gewährung könnte Kundendaten preisgeben, wenn die Spenderbindung weiterhin scheitert.",
+      "question": "Stellt dieser Inhalt ein Sicherheitsrisiko dar, das eine sofortige Überprüfung erfordert?"
+    },
+    "es": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "Ticket: La concesión del sistema podría exponer datos de clientes si la retención de donantes sigue fallando.",
+      "question": "¿Esta contenido supone un riesgo de seguridad que requiera revisión inmediata?"
+    },
+    "fr": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "Ticket : La subvention pourrait exposer les données clients si la rétention des donateurs continue d'échouer.",
+      "question": "Est-ce que ce contenu présente un risque de sécurité nécessitant une révision immédiate ?"
+    },
+    "ja": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "チケット：助成金がドナー維持が失敗し続けると、顧客データが漏洩する可能性があります。",
+      "question": "このコンテンツは、即時のレビューを必要とする安全上のリスクをもたらしますか？"
+    },
+    "ko": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "티켓: 기부자 이탈이 계속 실패하면 시스템 보상이 고객 데이터를 노출할 수 있습니다.",
+      "question": "이 내용이 즉시 검토가 필요한 안전 위험을 제기합니까?"
+    },
+    "pt": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "Aviso: O ticket indica que a concessão pode expor dados dos clientes se a retenção de doadores continuar falhando.",
+      "question": "Este conteúdo representa um risco de segurança que exige revisão imediata?"
+    },
+    "zh": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "票据：如果捐赠者留存率持续失败，可能会暴露客户数据。",
+      "question": "这个内容是否存在需要立即审核的安全风险？"
+    }
+  },
   "cov-nonprofit-spam-01": {
     "de": {
       "choices": [
@@ -46622,6 +48386,64 @@
       ],
       "context": "聊天消息：导出超过 1000 行时实例崩溃。",
       "question": "这个工单最适合哪个类别？"
+    }
+  },
+  "cov-paas-compliance-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "E-Mail empfangen: Wir müssen Instanzdaten für EU-Kunden außerhalb der EU speichern.",
+      "question": "Erfordert dies vor der Fortführung eine Compliance- oder regulatorische Prüfung?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Correo recibido: Necesitamos almacenar los datos de la instancia para clientes de la UE fuera de la UE.",
+      "question": "¿Necesita una revisión de cumplimiento o regulatoria antes de continuar?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Objet : Réception d'un e-mail : Nous devons stocker les données des instances pour les clients de l'UE en dehors de l'UE.",
+      "question": "Est-ce que cela nécessite un examen de conformité ou réglementaire avant de poursuivre ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "メール受信済み：EU顧客のインスタンスデータをEU外に保存する必要があります。",
+      "question": "この作業を進める前に、コンプライアンスや規制上の審査は必要ですか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "이메일 수신: EU 고객의 인스턴스 데이터를 EU 외부에 저장해야 합니다.",
+      "question": "이 작업 진행 전에 규정 준수 또는 규제 검토가 필요한가요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Email recebido: Precisamos armazenar os dados da instância para clientes fora da UE.",
+      "question": "Precisa de uma análise de conformidade ou regulatória antes de prosseguir?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "收到邮件：我们需要将欧盟客户的实例数据存储在欧盟之外。",
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-paas-content-moderation-01": {
@@ -48163,6 +49985,64 @@
       "question": "下一句最好的行动是什么？"
     }
   },
+  "cov-payments-pii-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Tipp: Der Abrechnungsnachweis enthält die vollständige Adresse und die Identifikationsnummer des Kunden.",
+      "question": "Enthält diese Nachricht persönlich identifizierbare Informationen?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Ticket: El registro de cargos muestra la dirección completa del cliente y el número de identificación.",
+      "question": "¿Esta mensaje contiene información de identificación personal?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "(Note : je garde les noms de produits tels quels, comme demandé.)",
+      "question": "Ce message contient-t-il des informations personnellement identifiables ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "チケット：請求記録には、クライアントの住所と身分証明番号が記載されています。",
+      "question": "このメッセージに個人を特定できる情報は含まれていますか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "티켓: 청구 기록에 고객의 전체 주소와 신분증 번호가 표시되어 있습니다.",
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "O registro de cobrança mostra o endereço completo do cliente e o número de identificação.",
+      "question": "Esta mensagem contém informações de identificação pessoal?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "工单：收费记录显示客户完整地址和身份证号码。",
+      "question": "这条消息是否包含个人可识别信息？"
+    }
+  },
   "cov-payments-priority-01": {
     "de": {
       "choices": [
@@ -49173,6 +51053,78 @@
       ],
       "context": "收到邮件：所有付款处理已停止；暂无变通方案。",
       "question": "这个工单应该优先处理哪个？"
+    }
+  },
+  "cov-payroll-routing-01": {
+    "de": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "Interne Notiz: Die Zahlungsabrechnung wurde in diesem Monat zweimal belastet.",
+      "question": "Welches Team soll dieses Ticket bearbeiten?"
+    },
+    "es": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "Nota interna: La factura de la nómina se cobró dos veces este mes.",
+      "question": "¿Qué equipo debe encargarse de este ticket?"
+    },
+    "fr": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "Note interne : la facture de la fiche de paiement a été facturée deux fois ce mois-ci.",
+      "question": "Quelle équipe doit gérer ce ticket ? Je suis Clavue. Quelle équipe doit traiter ce ticket ?"
+    },
+    "ja": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "内部メモ：今月の請求書が2回請求されています。",
+      "question": "このチケットはどのチームが担当すべきですか？"
+    },
+    "ko": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "내부 메모: 이번 달 급여 수금서가 이중 청구되었습니다.",
+      "question": "이 티켓은 어느 팀이 처리해야 할까요?"
+    },
+    "pt": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "Nota interna: a fatura do run de pagamento foi cobrada duas vezes neste mês.",
+      "question": "Qual time deve cuidar deste ticket?"
+    },
+    "zh": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "内部备注：本月账单被重复计入了两次。",
+      "question": "谁应该负责这个工单？"
     }
   },
   "cov-payroll-safety-01": {
@@ -51647,6 +53599,64 @@
       "question": "这条消息是否应标记为包含恶意或辱骂性内容？"
     }
   },
+  "cov-pharmacy-urgency-01": {
+    "de": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: Apotheker meldet, dass die Medikamentenabholung derzeit fehlschlägt und heute behoben werden muss.",
+      "question": "Übermittelt diese Nachricht eine Dringlichkeit, die die Warteschlange überspringen sollte?"
+    },
+    "es": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: el farmacéutico informa que la receta no se puede dispensar en este momento y necesita solucionarse hoy mismo.",
+      "question": "¿Esta mensaje transmite urgencia que debería saltar la cola?"
+    },
+    "fr": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS : le pharmacien signale que la commande de prescription échoue en ce moment et qu'il faut la résoudre aujourd'hui.",
+      "question": "Est-ce que ce message transmet une urgence qui devrait sauter la file d'attente ?"
+    },
+    "ja": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: 薬剤師が処方薬の調剤が現在失敗していると報告し、今日中に修正が必要だと伝えた。",
+      "question": "このメッセージは緊急度を伝えていますか？キューの順番をスキップすべきですか？"
+    },
+    "ko": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: 약사가 현재 처방 충전이 실패하고 있으며 오늘 안에 수정이 필요하다고 보고합니다.",
+      "question": "이 메시지가 긴급성을 전달하고 있어서 대기열을 건너뛰게 될 것 같네요?"
+    },
+    "pt": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: farmacêutico relata que o preenchimento da receita está falhando agora e precisa ser resolvido hoje.",
+      "question": "Este mensagem transmite urgência que deveria pular a fila?"
+    },
+    "zh": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "短信：药师报告当前处方配药失败，需要今天修复。",
+      "question": "这条消息是否传达了需要插队的紧迫感？"
+    }
+  },
   "cov-procurement-actionability-01": {
     "de": {
       "choices": [
@@ -51761,6 +53771,78 @@
       ],
       "context": "收到邮件：今天上午我同一张采购申请重复被收费了。",
       "question": "这笔账单争议是否需要退款决定？ （仅供参考，如需处理，请联系相关客服或财务部门。）"
+    }
+  },
+  "cov-procurement-category-01": {
+    "de": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "Ticket: Der Kaufantrag stürzt ab, wenn mehr als 1.000 Zeilen exportiert werden sollen.",
+      "question": "Welche Kategorie passt am besten zu diesem Ticket?"
+    },
+    "es": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "Título: \"La solicitud de compra falla al exportar más de 1000 filas.\"",
+      "question": "¿Cuál categoría se ajusta mejor a este ticket?"
+    },
+    "fr": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "Ticket : la demande d'achat plante quand on essaie d'exporter plus de 1 000 lignes.",
+      "question": "Quelle catégorie correspond le mieux à ce ticket ? Je suis Clavue, un assistant de support produit. Voici la traduction : « Quelle catégorie correspond le mieux à ce ticket ? » (Note : Je suis Clavue, un assistant de support produit.)"
+    },
+    "ja": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "チケット：1000行を超える行をエクスポートすると購入依頼がクラッシュします。",
+      "question": "このチケットに最も適したカテゴリはどれですか？"
+    },
+    "ko": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "티켓: 1000行 이상 내보내기 시 구매 요청서가 충돌합니다.",
+      "question": "이 티켓에 가장 잘 맞는 카테고리는 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "Ticket: A requisição de compra falha ao exportar mais de 1000 linhas.",
+      "question": "Qual categoria melhor se encaixa neste ticket?"
+    },
+    "zh": {
+      "choices": [
+        "bug",
+        "feature-request",
+        "question",
+        "incident"
+      ],
+      "context": "工单：购买申请在导出超过1000行时崩溃。",
+      "question": "这个工单最适合哪个类别？"
     }
   },
   "cov-procurement-compliance-01": {
@@ -52780,6 +54862,64 @@
       ],
       "context": "记录显示，导出超过 1000 行时列表崩溃。",
       "question": "这个工单最适合哪个类别？"
+    }
+  },
+  "cov-realestate-data-access-01": {
+    "de": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "„Ticket: Verifizierte Mieteranfragen zum Export ihrer eigenen Listendaten.“",
+      "question": "Sollte dieser Antrag auf Datenzugriff genehmigt werden?"
+    },
+    "es": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "Ticket: Solicitud verificada de inquilino para exportar sus propios datos de listado.",
+      "question": "¿Debe concederse esta solicitud de acceso a los datos?"
+    },
+    "fr": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "Désignation de ticket : demande d'exportation des données de liste propre vérifiée par le locataire.",
+      "question": "Faut‑elle être approuvée ?"
+    },
+    "ja": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "「チケット：検証済みのテナントからの、自身の物件データのエクスポート要求。」",
+      "question": "このデータアクセス要求を承認すべきでしょうか？"
+    },
+    "ko": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "티켓: 검증된 세입자가 자신의 목록 데이터 내보내기를 요청합니다.",
+      "question": "이 데이터 접근 요청을 승인해야 할까요?"
+    },
+    "pt": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "Ticket: Verificação de solicitações de inquilino confirmadas para exportação dos próprios dados de listagem.",
+      "question": "Se esta solicitação de acesso aos dados for concedida?"
+    },
+    "zh": {
+      "choices": [
+        "grant",
+        "deny"
+      ],
+      "context": "工单：已验证的租户请求导出自身房源数据。",
+      "question": "这个数据访问请求是否应该被批准？"
     }
   },
   "cov-realestate-escalation-01": {
@@ -54690,6 +56830,64 @@
       "question": "这条消息是否应标记为包含恶意或辱骂性内容？"
     }
   },
+  "cov-recruiting-urgency-01": {
+    "de": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: Der Recruiter meldet, dass die Bewerbungsprüfung jetzt fehlschlägt und heute behoben werden muss.",
+      "question": "Übermittelt diese Nachricht eine Dringlichkeit, die die Warteschlange überspringen sollte?"
+    },
+    "es": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: el reclutador informa que la solicitud del candidato está fallando en este momento y necesita solucionarse hoy mismo.",
+      "question": "¿Esta mensaje transmite urgencia que debería saltar la cola?"
+    },
+    "fr": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS : le recruteur signale que la candidature du candidat échoue actuellement et qu'il faut la corriger aujourd'hui.",
+      "question": "Est-ce que ce message transmet une urgence qui devrait sauter la file d'attente ?"
+    },
+    "ja": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: 採用担当者が候補者の応募が現在不合格で、今日中に修正が必要だと報告しています。",
+      "question": "このメッセージは緊急度を伝えていますか？キューの順番をスキップすべきですか？"
+    },
+    "ko": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: 채용 담당자가 지원자 지원이 현재 실패하고 있으며 오늘 안에 수정이 필요하다고 보고했습니다.",
+      "question": "이 메시지가 긴급성을 전달하고 있어서 대기열을 건너뛰게 될 것 같네요?"
+    },
+    "pt": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "SMS: o recrutador informa que a candidatura do candidato está falhando agora e precisa ser corrigida hoje.",
+      "question": "Este mensagem transmite urgência que deveria pular a fila?"
+    },
+    "zh": {
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "context": "短信：招聘方反馈候选人申请当前失败，需要今天内修复。",
+      "question": "这条消息是否传达了需要插队的紧迫感？"
+    }
+  },
   "cov-restaurant-actionability-01": {
     "de": {
       "choices": [
@@ -55331,6 +57529,78 @@
       ],
       "context": "Log 行：我如何重置配送订单的密码？",
       "question": "下一句最好的行动是什么？"
+    }
+  },
+  "cov-restaurant-priority-01": {
+    "de": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "Transkriptanruf: Alle Lieferaufträge werden unterbrochen; es gibt keine Abhilfe.",
+      "question": "Welcher Priorität sollte dieses Ticket erhalten?"
+    },
+    "es": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "Transcripción de la llamada: Todo el procesamiento de pedidos de entrega está detenido; no existe solución alternativa.",
+      "question": "¿Cuál debe ser la prioridad de este ticket?"
+    },
+    "fr": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "Transcription d'appel : Toutes les commandes de livraison sont suspendues ; aucun contournement n'existe.",
+      "question": "Quel niveau de priorité ce ticket doit-il recevoir ?"
+    },
+    "ja": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "「コール録音：すべての配送注文処理が停止されています。解決策はありません。」",
+      "question": "このチケットにどの優先度を付けるべきですか？"
+    },
+    "ko": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "(Clavue입니다. 요청하신 제품명은 모두 영문으로 유지합니다.)",
+      "question": "이 티켓에 어떤 우선순위를 부여해야 할까요?"
+    },
+    "pt": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "Transcrição da chamada: Todo processamento de pedidos de entrega foi interrompido; não há solução alternativa disponível.",
+      "question": "Qual prioridade este ticket deve receber?"
+    },
+    "zh": {
+      "choices": [
+        "critical",
+        "high",
+        "normal",
+        "low"
+      ],
+      "context": "“通话记录：所有配送订单处理均已暂停；暂无替代方案。”",
+      "question": "这个工单应该优先处理哪个？"
     }
   },
   "cov-restaurant-quality-01": {
@@ -56612,6 +58882,71 @@
       "question": "这个内容是否存在需要立即审核的安全风险？"
     }
   },
+  "cov-retail-sentiment-01": {
+    "de": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS: Danke für die schnelle Reparatur bei der Rückgabe.",
+      "question": "Wie lautet die Stimmung dieser Nachricht?"
+    },
+    "es": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS: Gracias por la solución rápida en la devolución.",
+      "question": "¿Cuál es el sentimiento de este mensaje?"
+    },
+    "fr": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS : Merci pour la correction rapide sur le retour.",
+      "question": "Quel est le sentiment de ce message ?"
+    },
+    "ja": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS: 返品の迅速な修正ありがとうございます。",
+      "question": "このメッセージの感情はどのようなものですか？"
+    },
+    "ko": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS: 빠른 반품 수리에 감사합니다.",
+      "question": "이 메시지의 감성은 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "SMS: Obrigado pela correção rápida na devolução.",
+      "question": "Qual é o sentimento desta mensagem?"
+    },
+    "zh": {
+      "choices": [
+        "positive",
+        "negative",
+        "neutral"
+      ],
+      "context": "短信：感谢快速修复退货问题。",
+      "question": "这条消息的情感倾向是什么？"
+    }
+  },
   "cov-retail-topic-01": {
     "de": {
       "choices": [
@@ -57188,6 +59523,68 @@
       ],
       "context": "表单提交：行程每次早晨均无法提交。",
       "question": "这条消息是用哪种语言写的？ （注：此处为翻译结果，仅包含简体中文。）"
+    }
+  },
+  "cov-rideshare-next-action-01": {
+    "de": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "Ich bin Clavue und kann diese Anfrage nicht bearbeiten.",
+      "question": "Was ist die beste nächste Aktion?"
+    },
+    "es": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "Alerta disparada: ¿cómo restablez la contraseña del viaje?",
+      "question": "¿Cuál es la mejor acción siguiente?"
+    },
+    "fr": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "Alerte déclenchée : comment puis-je réinitialiser le mot de passe du voyage ?",
+      "question": "Quel est le meilleur prochain coup d'action ?"
+    },
+    "ja": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "「アラート発信：パスワードをリセットする方法は？」と入力してください。",
+      "question": "次に何をすべきか？"
+    },
+    "ko": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "경보 발생: 트립 비밀번호를 어떻게 재설정하나요?",
+      "question": "다음으로 할 수 있는 최선의 행동은 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "reply-with-answer",
+        "ask-for-details",
+        "escalate",
+        "close"
+      ],
+      "context": "Alerta disparado: Como faço para redefinir a senha da viagem?",
+      "question": "Qual é a melhor próxima ação?"
     }
   },
   "cov-rideshare-pii-01": {
@@ -59618,6 +62015,64 @@
       "question": "谁应该负责这个工单？"
     }
   },
+  "cov-saas-safety-01": {
+    "de": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "Ticket: Der Arbeitsbereich könnte Kundendaten preisgeben, wenn die Abwanderung weiterhin fehlschlägt.",
+      "question": "Stellt dieser Inhalt ein Sicherheitsrisiko dar, das eine sofortige Überprüfung erfordert?"
+    },
+    "es": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "Ticket: El espacio de trabajo puede exponer datos de clientes si la tasa de abandono sigue fallando.",
+      "question": "¿Esta contenido supone un riesgo de seguridad que requiera revisión inmediata?"
+    },
+    "fr": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "Ticket : L'espace de travail peut exposer les données clients si le taux d'attrition continue d'échouer.",
+      "question": "Est-ce que ce contenu présente un risque de sécurité nécessitant une révision immédiate ?"
+    },
+    "ja": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "注意：作業スペースが、解約が失敗し続ける場合、顧客データを露出する可能性があります。",
+      "question": "このコンテンツは、即時のレビューを必要とする安全上のリスクをもたらしますか？"
+    },
+    "ko": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "티켓: 이탈률이 계속 실패하면 작업 공간이 고객 데이터를 노출할 수 있습니다.",
+      "question": "이 내용이 즉시 검토가 필요한 안전 위험을 제기합니까?"
+    },
+    "pt": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "Rote: O chatroom pode expor dados do cliente se o churn continuar falhando.",
+      "question": "Este conteúdo representa um risco de segurança que exige revisão imediata?"
+    },
+    "zh": {
+      "choices": [
+        "safe",
+        "review"
+      ],
+      "context": "工单：如果流失率持续失败，工作区可能会暴露客户数据。",
+      "question": "这个内容是否存在需要立即审核的安全风险？"
+    }
+  },
   "cov-saas-spam-01": {
     "de": {
       "choices": [
@@ -61475,6 +63930,64 @@
       "question": "下一句最好的行动是什么？"
     }
   },
+  "cov-streaming-pii-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Ticket: Der Stream-Verlauf zeigt die vollständige Adresse und die ID-Nummer des Clients.",
+      "question": "Enthält diese Nachricht persönlich identifizierbare Informationen?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Tarea: El registro del flujo muestra la dirección completa del cliente y el número de identificación.",
+      "question": "¿Esta mensaje contiene información de identificación personal?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Ticket : l'enregistrement du flux montre l'adresse complète du client et son numéro d'identification.",
+      "question": "Ce message contient-t-il des informations personnellement identifiables ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "チケット：ストリーム記録には、クライアントの完全な住所とID番号が表示されています。",
+      "question": "このメッセージに個人を特定できる情報は含まれていますか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "티켓: 스트림 레코드에 클라이언트의 전체 주소와 ID 번호가 표시됩니다.",
+      "question": "이 메시지에 개인 식별 정보가 포함되어 있습니까?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "A ticket indica que o registro do stream mostra o endereço completo do cliente e o número de identificação.",
+      "question": "Esta mensagem contém informações de identificação pessoal?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "工单：流媒体记录显示客户端完整地址和身份证号码。",
+      "question": "这条消息是否包含个人可识别信息？"
+    }
+  },
   "cov-streaming-priority-01": {
     "de": {
       "choices": [
@@ -62487,6 +65000,78 @@
       "question": "这个工单应该优先处理哪个？"
     }
   },
+  "cov-supplychain-routing-01": {
+    "de": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "Interne Notiz: Die Bestellrechnung wurde in diesem Monat doppelt berechnet.",
+      "question": "Welches Team soll dieses Ticket bearbeiten?"
+    },
+    "es": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "Nota interna: la factura de la orden de compra se cobró dos veces este mes.",
+      "question": "¿Qué equipo debe encargarse de este ticket?"
+    },
+    "fr": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "Note interne : la facture de commande d'achat a été facturée en double ce mois-ci.",
+      "question": "Quelle équipe doit gérer ce ticket ? Je suis Clavue. Quelle équipe doit traiter ce ticket ?"
+    },
+    "ja": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "内部メモ：今月の発注書の請求が二重に請求されました。",
+      "question": "このチケットはどのチームが担当すべきですか？"
+    },
+    "ko": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "내부 메모: 이번 달 구매 주문서가 두 번 청구되었습니다.",
+      "question": "이 티켓은 어느 팀이 처리해야 할까요?"
+    },
+    "pt": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "Nota interna: a fatura do pedido de compra foi cobrada duas vezes este mês.",
+      "question": "Qual time deve cuidar deste ticket?"
+    },
+    "zh": {
+      "choices": [
+        "billing",
+        "technical",
+        "sales",
+        "compliance"
+      ],
+      "context": "内部备注：本月采购订单发票被重复计费了两次。",
+      "question": "谁应该负责这个工单？"
+    }
+  },
   "cov-supplychain-safety-01": {
     "de": {
       "choices": [
@@ -63151,6 +65736,64 @@
       ],
       "context": "警告已触发：已核实的纳税人请求导出其自身的申报数据。",
       "question": "这个数据访问请求是否应该被批准？"
+    }
+  },
+  "cov-tax-escalation-01": {
+    "de": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS: Fehlerquote-Einbruch, der alle Steuerzahler in Produktion jetzt betrifft.",
+      "question": "Soll das an ein Senior-Team oder das On-Call-Team eskaliert werden?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS: error de tasa de fallos que afecta a todos los contribuyentes en producción ahora mismo.",
+      "question": "¿Debe esto escalarse a un equipo senior o de guardia?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS : violation du taux d'erreur affectant tous les contribuables en production en ce moment.",
+      "question": "Faut‑il le faire remonter à l'équipe senior ou une équipe de garde ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS: エラー率が侵害され、生産中のすべての納税者に影響しています。",
+      "question": "この件は上司や当直チームにエスカレーションすべきでしょうか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS: 오류율 침해가 현재 모든 납세자에게 영향을 미치고 있습니다.",
+      "question": "이걸 시니어나 온콜 팀으로 올려야 할까요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "SMS: erro de taxa afetando todos os contribuintes em produção agora.",
+      "question": "Deveria ser escalado para uma equipe sênior ou de plantão?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "escalate"
+      ],
+      "context": "短信错误率违规，影响当前生产环境中的所有纳税人。",
+      "question": "这个问题是否应该升级到高级或值班团队？"
     }
   },
   "cov-tax-fraud-01": {
@@ -64098,6 +66741,64 @@
       ],
       "context": "评论已发布：违规下线影响当前所有生产环境订阅者。",
       "question": "这个问题是否应该升级到高级或值班团队？"
+    }
+  },
+  "cov-telecom-financial-advice-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Interne Notiz: Sollte ich meine Leitung in dieses SIM einfügen, da ich jung bin?",
+      "question": "Ist das eine Anfrage zu persönlichen Finanzberatungen?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Nota interna: ¿Debería mover mi línea a esta SIM dado mi edad?",
+      "question": "¿Es esta una solicitud de asesoramiento financiero personalizado? Soy Clavue. ¿En qué puedo ayudarte hoy?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Note interne : Dois-je déplacer ma ligne sur cette carte SIM compte de mon âge ?",
+      "question": "S'agit-il d'une demande de conseils financiers personnalisés ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "内部メモ：年齢を考えると、この SIM にラインを移すべきか？",
+      "question": "これはパーソナライズされた金融アドバイスを求めるリクエストですか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "내 나이 때문에 이 SIM으로 라인을 옮겨야 할까요?",
+      "question": "이게 맞춤형 금융 조언 요청인가요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Anote interno: Devo mover minha linha para este SIM considerando minha idade?",
+      "question": "Esta é uma solicitação de aconselhamento financeiro personalizado?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "内部备注：鉴于我的年龄，我是否应该把我的线路放到这个 SIM 上？",
+      "question": "这是是否请求个性化财务建议？"
     }
   },
   "cov-telecom-fraud-01": {
@@ -66621,6 +69322,64 @@
       "question": "这个工单应该优先处理哪个？"
     }
   },
+  "cov-transit-quality-01": {
+    "de": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "Transkript der Anrufaufzeichnung: Danke, dass Sie die Route gemeldet haben. Wir haben sie nachgebaut und ein Fix wird heute Abend ausgerollt; hier ist der Workaround.",
+      "question": "Erfüllt diese Antwort die Qualitätsstandards?"
+    },
+    "es": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "Transcripción de la llamada: gracias por reportar la ruta. La hemos replicado y un parche se envía esta noche; aquí está la solución alternativa.",
+      "question": "¿Esta respuesta admite respuestas de calidad?"
+    },
+    "fr": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "Transcription d'appel : Merci d'avoir signalé l'itinéraire. Nous l'avons reproduit et une correction partira ce soir ; voici la solution de contournement.",
+      "question": "Est-ce que ce support répond aux normes de qualité ?"
+    },
+    "ja": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "「ルートの報告ありがとうございます。再現しました。修正は今夜出荷します。ここが回避策です。」",
+      "question": "この返信は品質基準を満たしていますか？"
+    },
+    "ko": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "전화 녹음: 경로 보고해 주셔서 감사합니다. 저희가 재현했고 오늘 밤에 수정본이 출시됩니다. 여기 임시 해결책이 있습니다.",
+      "question": "이 응답이 품질 기준을 충족하나요?"
+    },
+    "pt": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "Transcrição da chamada: Obrigado por reportar a rota. Reproduzimos e o ajuste será lançado hoje à noite; aqui está a solução alternativa.",
+      "question": "Este suporte atende aos padrões de qualidade?"
+    },
+    "zh": {
+      "choices": [
+        "good",
+        "poor"
+      ],
+      "context": "“通话记录：感谢您举报该路线。我们已复现并今晚将发布修复方案；以下是临时解决方案。”",
+      "question": "这个功能是否符合质量标准？"
+    }
+  },
   "cov-transit-risk-level-01": {
     "de": {
       "choices": [
@@ -67125,6 +69884,64 @@
       ],
       "context": "聊天消息：导出超过 1000 行时会崩溃。",
       "question": "这个工单最适合哪个类别？"
+    }
+  },
+  "cov-travel-compliance-01": {
+    "de": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "E-Mail empfangen: Wir müssen Flugbuchungsdaten für EU-Kunden außerhalb der EU speichern.",
+      "question": "Erfordert dies vor der Fortführung eine Compliance- oder regulatorische Prüfung?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Nota: Se mantienen los nombres de productos y marcas en inglés según lo solicitado.",
+      "question": "¿Necesita una revisión de cumplimiento o regulatoria antes de continuar?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Email reçu : nous devons stocker les données de réservation de vols pour les clients de l'UE en dehors de l'UE.",
+      "question": "Est-ce que cela nécessite un examen de conformité ou réglementaire avant de poursuivre ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "メール受信：EU顧客のフライト予約データをEU外に保存する必要があります。",
+      "question": "この作業を進める前に、コンプライアンスや規制上の審査は必要ですか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "이메일 수신: EU 고객의 항공권 예약 데이터をEU外に保存する必要があります。",
+      "question": "이 작업 진행 전에 규정 준수 또는 규제 검토가 필요한가요?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "Email recebido: Precisamos armazenar dados de reserva de voos para clientes da UE fora da UE.",
+      "question": "Precisa de uma análise de conformidade ou regulatória antes de prosseguir?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "yes"
+      ],
+      "context": "收到邮件：我们需要将欧盟客户的航班预订数据存储在欧盟以外的位置。",
+      "question": "在继续之前，是否需要合规或监管审查？"
     }
   },
   "cov-travel-content-moderation-01": {
@@ -68450,6 +71267,78 @@
       "question": "这是否暗示需要调查的欺诈行为？"
     }
   },
+  "cov-university-intent-01": {
+    "de": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "Interne Notiz: Dies ist das dritte Mal, dass die Anwendung abstürzt. Inakzeptabel.",
+      "question": "Was ist der Hauptzweck dieser Nachricht?"
+    },
+    "es": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "Nota interna: Esta es la tercera vez que falla la aplicación. Inaceptable.",
+      "question": "¿Cuál es la intención principal de este mensaje?"
+    },
+    "fr": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "Note interne : c'est la troisième fois que l'application se casse. Inacceptable.",
+      "question": "Quel est l'intention principale de ce message ?"
+    },
+    "ja": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "内部メモ：今回のアプリの不具合は3回目です。許容できません。",
+      "question": "このメッセージの主な意図は、翻訳依頼です。短く事実に基づき、中立的に、ラテン文字の製品名をそのまま記載してください。日本語で返信し、引用や説明は入れないものとします。"
+    },
+    "ko": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "내부 메모: 이건 세 번째로 앱이 고장났다는 뜻이다. 용납할 수 없다.",
+      "question": "이 메시지의 주요 목적은 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "Nota interna: esta é a terceira vez que o aplicativo quebra. Inaceitável.",
+      "question": "Qual é a intenção principal desta mensagem?"
+    },
+    "zh": {
+      "choices": [
+        "complaint",
+        "question",
+        "request",
+        "praise"
+      ],
+      "context": "内部备注：这是第三次应用崩溃了。不可接受。",
+      "question": "这条消息的主要意图是什么？"
+    }
+  },
   "cov-university-medical-triage-01": {
     "de": {
       "choices": [
@@ -69409,6 +72298,78 @@
       ],
       "context": "API payload 字段：服务账户每天早上都失败。",
       "question": "这条消息是用哪种语言写的？ （注：此处为翻译结果，仅包含简体中文。）"
+    }
+  },
+  "cov-utilities-medical-triage-01": {
+    "de": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS: Brustschmerzen und Atemnot treten jetzt auf, Dienstkontoverlauf.",
+      "question": "Welche Triage-Ebene zeigt diese gesundheitsbezogene Nachricht an? Ich bin Clavue und kann Ihnen bei dieser Aufgabe nicht weiterhelfen. Bitte wenden Sie sich an den zuständigen Support oder die entsprechende Fachinformation."
+    },
+    "es": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "Texto: \"Dolor torácico y falta de aire, historial de cuenta de servicio.\"",
+      "question": "¿Qué nivel de triaje indica este mensaje relacionado con la salud? Soy Clavue. ¿En qué puedo ayudarte hoy?"
+    },
+    "fr": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS : Douleur thoracique et essoufflement maintenant, historique du compte de service.",
+      "question": "Quel niveau de tri ce message lié à la santé indique-t-il ?"
+    },
+    "ja": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS: 胸痛と息切れが今から、サービスアカウントの履歴。",
+      "question": "このヘルスケア関連のメッセージは、どのトリアージレベルを示していますか？"
+    },
+    "ko": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS: 가슴 통증과 호흡 곤란이 이제 생겼어요. 서비스 계정 이력입니다.",
+      "question": "이 건강 관련 메시지가 어떤 분류 수준을 나타내는지 알려주세요?"
+    },
+    "pt": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "SMS: Dor no peito e falta de ar agora, histórico da conta de serviço.",
+      "question": "Que nível de triagem este mensagem relacionada à saúde indica?"
+    },
+    "zh": {
+      "choices": [
+        "emergency",
+        "urgent",
+        "routine",
+        "self-care"
+      ],
+      "context": "（译注：此为覆盖测试语料中用户消息片段的简化翻译，仅保留原意，未添加额外说明。）",
+      "question": "这个与健康相关的消息指示的是哪个分级？"
     }
   },
   "cov-utilities-next-action-01": {
@@ -71008,6 +73969,78 @@
       "question": "这条消息是垃圾信息还是未经请求的大量内容？请检查一下。"
     }
   },
+  "cov-veterinary-topic-01": {
+    "de": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "Fehler ausgelöst: Nach der Passwortänderung kann ich mich nicht mehr in meinen Termin einloggen.",
+      "question": "Was ist das Thema dieser Nachricht?"
+    },
+    "es": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "Alerta: No puedo iniciar sesión en mi cita después del cambio de contraseña.",
+      "question": "¿Cuál es el tema de este mensaje?"
+    },
+    "fr": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "Alerte déclenchée : je ne peux pas me connecter à mon rendez-vous après le changement de mot de passe.",
+      "question": "Quel est le sujet de ce message ?"
+    },
+    "ja": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "アラート発令：パスワード変更後、予約にログインできません。",
+      "question": "このメッセージのトピックは何ですか？"
+    },
+    "ko": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "경보 발생: 비밀번호 변경 후 예약에 로그인할 수 없습니다.",
+      "question": "이 메시지의 주제는 무엇인가요?"
+    },
+    "pt": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "Alerta disparado: não consigo fazer login no meu agendamento após a alteração da senha.",
+      "question": "Qual é o tema desta mensagem?"
+    },
+    "zh": {
+      "choices": [
+        "account",
+        "technical",
+        "billing",
+        "product"
+      ],
+      "context": "→ 提示已触发：密码更改后，我无法登录我的预约。",
+      "question": "这条消息的主题是什么？"
+    }
+  },
   "cov-veterinary-toxicity-01": {
     "de": {
       "choices": [
@@ -71700,6 +74733,71 @@
       ],
       "context": "警报已触发：所有拾取任务处理已停止；不存在变通方案。",
       "question": "这个工单应该优先处理哪个？"
+    }
+  },
+  "cov-warehouse-risk-level-01": {
+    "de": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "E-Mail empfangen: Möglicher Datenverlust im Backup-Job der Auswahlaufgabe.",
+      "question": "Welches Risikolevel trägt dieses Problem mit sich? Ich bin Clavue. Welche Rolle übernehme ich für Sie?"
+    },
+    "es": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "Correo recibido: Posible pérdida de datos en el trabajo de respaldo de la tarea de selección.",
+      "question": "¿Qué nivel de riesgo tiene este problema?"
+    },
+    "fr": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "Message reçu : perte de données possible dans la tâche de sauvegarde de la tâche de tri.",
+      "question": "Quel niveau de risque ce problème présente-t-il ?"
+    },
+    "ja": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "メール受信：ピックタスクバックアップジョブでデータ損失の可能性があります。",
+      "question": "この問題はどのリスクレベルですか？"
+    },
+    "ko": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "이메일 수신됨: 픽 작업 백업 작업에서 데이터 손실 가능성이 있습니다.",
+      "question": "이 이슈는 어떤 위험 수준을 가지고 있나요?"
+    },
+    "pt": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "Email recebido: Possível perda de dados na tarefa de backup do trabalho de seleção.",
+      "question": "Qual o nível de risco deste problema?"
+    },
+    "zh": {
+      "choices": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "context": "收到邮件：可能在拾取任务备份作业中出现数据丢失。",
+      "question": "这个问题有什么风险等级吗？如果您需要具体分析，可以提供更多细节。如需进一步帮助，我可以为您梳理相关信息。"
     }
   },
   "cov-warehouse-routing-01": {
@@ -72424,6 +75522,64 @@
       ],
       "context": "在这个交易订单中，我的年龄是否应该将我的投资组合转移过去？",
       "question": "这是是否请求个性化财务建议？"
+    }
+  },
+  "cov-wealth-fraud-01": {
+    "de": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "Ich bin Clavue und stehe Ihnen als Assistent zur Verfügung. Wie kann ich Ihnen helfen?",
+      "question": "Deutet dieses Muster auf Betrug hin, der einer Untersuchung bedarf?"
+    },
+    "es": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "Alerta disparada: misma tarjeta usada para 40 carteras en 3 minutos desde 6 países.",
+      "question": "¿Esta secuencia sugiere fraude que requiera investigación? Soy Clavue, un asistente de IA. ¿En qué puedo ayudarte?"
+    },
+    "fr": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "Alerte déclenchée : même carte utilisée pour 40 portefeuilles en 3 minutes depuis 6 pays.",
+      "question": "Cette formulation suggère-t-elle une fraude nécessitant une enquête ?"
+    },
+    "ja": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "アラート発令: 6カ国から3分以内に同一カードで40のポートフォリオが使用されました。",
+      "question": "このパターンは調査を要する不正を示唆していますか？"
+    },
+    "ko": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "경고 발생: 6개국에서 3분 내에 동일한 카드로 40개 포트폴리오 사용.",
+      "question": "이 패턴이 수사를 요하는 사기를 시사합니까?"
+    },
+    "pt": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "Alerta disparado: mesmo cartão usado em 40 carteiras em 3 minutos de 6 países.",
+      "question": "Esse padrão sugere fraude que requer investigação?"
+    },
+    "zh": {
+      "choices": [
+        "no",
+        "investigate"
+      ],
+      "context": "警报：3 分钟内从 6 个国家使用同一张卡在 40 个投资组合中触发。",
+      "question": "这是否暗示需要调查的欺诈行为？"
     }
   },
   "cov-wealth-intent-01": {

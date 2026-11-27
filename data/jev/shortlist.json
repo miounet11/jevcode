@@ -4808,6 +4808,14 @@
     "text": "npm test           # vitest: renderer invariants, Jev request shapes, proxy, MIDI round-trip, inbox/match stubs"
   },
   {
+    "repo": "wuxie888/jev-yaba-wechat",
+    "name": "jev-yaba-wechat",
+    "file": "README.md",
+    "branch": "main",
+    "line": 105,
+    "text": "# Jev：负责判断；留空则使用本地模型"
+  },
+  {
     "repo": "wuyoscar/jev-skill",
     "name": "jev-skill",
     "file": "README.md",
