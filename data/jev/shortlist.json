@@ -160,6 +160,14 @@
     "text": "The evaluator here calls `POST /v1/systemone` at `https://api.typesafe.ai`, with the model id `jev-latest`."
   },
   {
+    "repo": "AgriciDaniel/gatekeeper",
+    "name": "gatekeeper",
+    "file": "README.md",
+    "branch": "main",
+    "line": 151,
+    "text": "v0.2.1. The starter thresholds (act 0.85, confirm 0.60 for Choice; 0.70 and 0.30 for Noul) are the documented illustrations from docs.typesafe.ai until your own bench over reviewed labels replaces them. The marketing-team bench scores 20 of 20, but its prompts are deliberately clear-cut: it shows the mechanics, not real-world accuracy. See [CHANGELOG.md](CHANGELOG.md)."
+  },
+  {
     "repo": "Ai-trainee/awesome-jev",
     "name": "awesome-jev",
     "file": "README.md",
@@ -534,6 +542,14 @@
     "branch": "main",
     "line": 3,
     "text": "<img src=\"docs/assets/jev-api-router-comparison.png\" alt=\"JevRouter — Jev supplies the decision model, JevRouter supplies the agent integration\" width=\"720\" />"
+  },
+  {
+    "repo": "bilune/jev-design",
+    "name": "jev-design",
+    "file": "README.md",
+    "branch": "main",
+    "line": 29,
+    "text": "`api.typesafe.ai` with that key. Setting `JEV_ROUTE=gateway` sends the same"
   },
   {
     "repo": "bladedevoff/stuntd",
@@ -1416,6 +1432,14 @@
     "text": "- `references/jev-integration.md` — integration patterns and code examples"
   },
   {
+    "repo": "fazlerocks/jev-adblock",
+    "name": "jev-adblock",
+    "file": "README.md",
+    "branch": "main",
+    "line": 109,
+    "text": "Never sent: form values, cookies, full URLs, or page text outside the candidate element. Pages containing a password field or a payment iframe are never analysed. Your API key is stored in the extension's local storage and sent only to `api.typesafe.ai`. There is no telemetry. See [PRIVACY.md](PRIVACY.md)."
+  },
+  {
     "repo": "FBddcz/embodied-jev",
     "name": "embodied-jev",
     "file": "README.md",
@@ -1670,6 +1694,14 @@
     "branch": "main",
     "line": 3,
     "text": "<img src=\"assets/jev-agent-skill-router-banner.png\" alt=\"A request enters a typed routing layer and branches to specialist skills, no skill or human review\" width=\"896\">"
+  },
+  {
+    "repo": "goodrahstar/jev-column-race",
+    "name": "jev-column-race",
+    "file": "README.md",
+    "branch": "main",
+    "line": 62,
+    "text": "On a public deployment (Vercel), the owner's keys are never used unless `ALLOW_LIVE_RACE=1` is set. Visitors can watch the recorded replays for free, or paste their own TypeSafe and Gemini keys to race live on their own credits. Keys travel in a POST body, never a URL. The server uses them only for that race's calls to `api.typesafe.ai` and `generativelanguage.googleapis.com`, with fixed models, and never stores, logs, or records them. Set `ALLOW_BYOK=0` to turn this off."
   },
   {
     "repo": "gopaljigaur/decide",
@@ -3950,6 +3982,14 @@
     "branch": "main",
     "line": 5,
     "text": "Jev Recall gives you LLM re-ranker quality retreival at semantic search prices and speed"
+  },
+  {
+    "repo": "SamGu-NRX/Caret",
+    "name": "Caret",
+    "file": "README.md",
+    "branch": "main",
+    "line": 16,
+    "text": "The product judge is [TypeSafe Jev](https://docs.typesafe.ai/introduction) (`TYPESAFE_API_KEY`, `--judge jev`). The Mac app defaults to `--judge pattern` so the loop works without a key; swap to `jev` in `~/.config/caret/dev.json` when you have one."
   },
   {
     "repo": "samtay32/jev-system-architect",

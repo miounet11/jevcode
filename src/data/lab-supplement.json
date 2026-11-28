@@ -2176,5 +2176,67 @@
         ]
       }
     }
+  },
+  {
+    "id": "cov-ecommerce-category-09",
+    "state": "Internal note: The GMV has been returning 500 for every request since 08:00.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-category-10",
+    "state": "Social post: Please add bulk delete for the order list.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "Which category best fits this ticket?",
+        "options": [
+          "bug",
+          "feature-request",
+          "question",
+          "incident"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-01",
+    "state": "Review posted: Possible data loss in the order backup job.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What risk level does this issue carry?",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    }
+  },
+  {
+    "id": "cov-ecommerce-risk-level-02",
+    "state": "Alert fired: The product listing may charge the wrong amount to buyer.",
+    "questions": {
+      "answer": {
+        "type": "choice",
+        "instructions": "What risk level does this issue carry?",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    }
   }
 ]
